@@ -729,7 +729,7 @@
           <button onClick="{{ openLogin }}" style="padding:8px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:transparent; color:#d4d8e2; font-weight:700; font-size:13px; cursor:pointer; font-family:'Manrope',sans-serif; white-space:nowrap;" style-hover="border-color:rgba(255,255,255,0.3);">Sign in</button>
         </sc-if>
         <sc-if value="{{ showGoPro }}" hint-placeholder-val="{{ true }}">
-          <button onClick="{{ openPaywall }}" style="padding:9px 16px; border-radius:10px; border:none; background:linear-gradient(180deg,#f3cf6e,#e8b84b); color:#1a1303; font-weight:700; font-size:13px; cursor:pointer; font-family:'Manrope',sans-serif; white-space:nowrap;" style-hover="background:linear-gradient(180deg,#f7d985,#eec055);">Go Pro</button>
+          <button onClick="{{ openPaywall }}" style="padding:9px 16px; border-radius:10px; border:none; background:linear-gradient(180deg,#f3cf6e,#e8b84b); color:#1a1303; font-weight:700; font-size:13px; cursor:pointer; font-family:'Manrope',sans-serif; white-space:nowrap;" style-hover="background:linear-gradient(180deg,#f7d985,#eec055);">Pro — Coming Soon</button>
         </sc-if>
       </div>
     </header>
@@ -3026,8 +3026,8 @@
         <div style="position:relative; border-radius:21px; background:linear-gradient(180deg,#15161e,#0d0f16); padding:30px;">
           <button onClick="{{ closePaywall }}" style="position:absolute; top:18px; right:18px; width:34px; height:34px; border-radius:9px; border:1px solid rgba(255,255,255,0.1); background:#11131c; color:#aab0c2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:rgba(255,255,255,0.3); color:#fff;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
           <span style="display:inline-block; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; letter-spacing:1px; color:#f0cd72;">UNLOCK MATCHUPCOACH</span>
-          <h2 style="margin:10px 0 6px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:26px; color:#fff;">Pick your plan — start free</h2>
-          <p style="margin:0 0 26px; font-size:14px; line-height:1.5; color:#aab0c2; max-width:620px;">A free champion every week, your lane for $4.99, the whole database for $9.99 — or lock in everything forever with a Founder Lifetime.</p>
+          <h2 style="margin:10px 0 6px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:26px; color:#fff;">Free full access — paid plans coming soon</h2>
+          <p style="margin:0 0 26px; font-size:14px; line-height:1.5; color:#aab0c2; max-width:620px;">Create a free account and the entire catalog unlocks — every champion, every matchup, every role. Paid plans (and the Founder Lifetime launch special) open soon at these prices.</p>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px;">
             <sc-for list="{{ tiers }}" as="t" hint-placeholder-count="4">
               <div style="position:relative; border-radius:16px; background:{{ t.ringBg }}; border:1px solid {{ t.ringBd }}; padding:18px 16px; display:flex; flex-direction:column;">
@@ -3047,7 +3047,7 @@
                 <sc-if value="{{ t.showNote }}" hint-placeholder-val="{{ false }}">
                   <div style="font-size:11px; line-height:1.45; color:{{ t.noteColor }}; margin-bottom:12px; font-weight:600;">{{ t.note }}</div>
                 </sc-if>
-                <button onClick="{{ t.choose }}" style="padding:10px; border-radius:10px; cursor:pointer; background:{{ t.btnBg }}; border:1px solid {{ t.btnBd }}; color:{{ t.btnColor }}; font-family:'Manrope',sans-serif; font-weight:700; font-size:13px;">{{ t.cta }}</button>
+                <button onClick="{{ t.choose }}" style="padding:10px; border-radius:10px; cursor:{{ t.btnCursor }}; background:{{ t.btnBg }}; border:1px solid {{ t.btnBd }}; color:{{ t.btnColor }}; font-family:'Manrope',sans-serif; font-weight:700; font-size:13px;">{{ t.cta }}</button>
               </div>
             </sc-for>
           </div>
@@ -3082,7 +3082,7 @@ class Component extends DCLogic {
     user: null,
     authMode: 'login', auName: '', auPass: '', auPass2: '', auShowPw: false, auRemember: true, auErr: '', auNotice: '', auBusy: false,
     pendingPlan: '', plan: 'all', planRole: 'top', planChamp: 'Aatrox', coStyle: 'embedded',
-    founders: null, serverWeek: null,
+    founders: null, serverWeek: null, pendingMU: null,
     cdNum: '', cdExp: '', cdCvc: '', cdName: '', cdErr: '', coBusy: false, coDone: false
   };
 
@@ -3207,10 +3207,15 @@ class Component extends DCLogic {
   }
   _finishAuth(u) {
     this._setSession(u, this.state.auRemember);
-    var pp = this.state.pendingPlan;
+    var pp = this.state.pendingPlan, mu = this.state.pendingMU;
+    if (mu) {
+      this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '', pendingMU: null });
+      this._resumeMU(mu);
+      return;
+    }
     if (pp === 'free') {
-      this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '' });
-      this.claimFree();
+      this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '', view: 'home', homeStep: 'role' });
+      window.scrollTo(0, 0);
       return;
     }
     this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '', plan: pp || this.state.plan, view: pp ? 'checkout' : 'home', coDone: false });
@@ -3249,10 +3254,12 @@ class Component extends DCLogic {
     if (!this.state.user) {
       this.setState({ showPaywall: false, pendingPlan: p });
       this.openAuth('signup', p === 'free'
-        ? 'Create a free account to unlock this week\u2019s champion \u2014 ' + this.weekChamp() + '. A new one rotates in every Tuesday.'
+        ? 'Create a free account and the entire catalog unlocks \u2014 every champion, every matchup, every role.'
         : 'Create an account (or sign in) to finish checkout \u2014 it takes 20 seconds.');
     } else if (p === 'free') {
-      this.claimFree();
+      // Already signed in = already has full access; drop them into the picker.
+      this.setState({ showPaywall: false, view: 'home', homeStep: 'role' });
+      window.scrollTo(0, 0);
     } else {
       this.setState({ showPaywall: false, view: 'checkout', plan: p, coDone: false, cdErr: '' });
       window.scrollTo(0, 0);
@@ -3316,8 +3323,24 @@ class Component extends DCLogic {
     return t;
   }
   openDemo(m) { this.setState({ view: 'demo', matchup: m, level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); window.scrollTo(0, 0); }
-  openGen(role, you, enemy) { this.setState({ view: 'demo', role: role, myChamp: you, enemyChamp: enemy, matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, search: '', cds: { Q: 0, W: 0, E: 0, R: 0 } }); window.scrollTo(0, 0); }
-  openJg(you, enemy) { this.setState({ view: 'demo', role: 'jungle', myChamp: you, enemyChamp: enemy, matchup: 'gen', search: '' }); window.scrollTo(0, 0); }
+  // Launch gate: the full catalog is free but requires an account. Signed-out
+  // users hitting any matchup are sent to signup; pendingMU resumes them into
+  // the exact matchup they wanted after auth.
+  _gated(pending) {
+    if (this.state.user) return false;
+    this.setState({ pendingMU: pending });
+    this.openAuth('signup', 'Create a free account and the entire catalog unlocks — every champion, every matchup, every role.');
+    return true;
+  }
+  _resumeMU(mu) {
+    if (!mu) return false;
+    if (mu.kind === 'jg') this.openJg(mu.you, mu.enemy);
+    else if (mu.kind === 'pick') this.pickEnemy(mu.enemy);
+    else this.openGen(mu.role, mu.you, mu.enemy);
+    return true;
+  }
+  openGen(role, you, enemy) { if (this._gated({ kind: 'gen', role: role, you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: role, myChamp: you, enemyChamp: enemy, matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, search: '', cds: { Q: 0, W: 0, E: 0, R: 0 } }); window.scrollTo(0, 0); }
+  openJg(you, enemy) { if (this._gated({ kind: 'jg', you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: 'jungle', myChamp: you, enemyChamp: enemy, matchup: 'gen', search: '' }); window.scrollTo(0, 0); }
   goHome() { this.setState({ view: 'home', homeStep: 'role', role: '', myChamp: '', enemyChamp: '', search: '', enemyJg: '' }); window.scrollTo(0, 0); }
   setJg(k) { this.setState(s => ({ enemyJg: s.enemyJg === k ? '' : k })); }
   setMyJg(k) { this.setState(s => ({ myJg: s.myJg === k ? '' : k })); }
@@ -3325,7 +3348,7 @@ class Component extends DCLogic {
   closePaywall() { this.setState({ showPaywall: false }); }
   setRole(r) { this.setState({ role: r, homeStep: 'you', search: '' }); }
   pickYou(c) { this.setState({ myChamp: c, homeStep: 'enemy', search: '' }); }
-  pickEnemy(c) { this.setState({ enemyChamp: c, view: 'demo', matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); window.scrollTo(0, 0); }
+  pickEnemy(c) { if (this._gated({ kind: 'pick', enemy: c })) return; this.setState({ enemyChamp: c, view: 'demo', matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); window.scrollTo(0, 0); }
   backStep() { this.setState(s => ({ homeStep: s.homeStep === 'enemy' ? 'you' : 'role', search: '' })); }
   setSearch(e) { this.setState({ search: e.target.value }); }
   setLevel(l) { this.setState({ level: l }); }
@@ -6135,7 +6158,7 @@ class Component extends DCLogic {
           isAuLogin: m === 'login', isAuSignup: m === 'signup', isAuForgot: m === 'forgot',
           auShowGoogle: m !== 'forgot', auShowPass: m !== 'forgot',
           authTitle: m === 'login' ? 'Welcome back' : m === 'signup' ? 'Create your account' : 'Reset your password',
-          authSub: m === 'login' ? 'Sign in to keep your matchup prep in one place.' : m === 'signup' ? 'Free account \u2014 your prep follows you. Pro is optional.' : 'Enter your username and we\u2019ll send a reset link to its email.',
+          authSub: m === 'login' ? 'Sign in to keep your matchup prep in one place.' : m === 'signup' ? 'Free account \u2014 the entire catalog unlocked: every champion, every matchup, every role.' : 'Enter your username and we\u2019ll send a reset link to its email.',
           auName: st.auName, setAuName: (e) => self.setState({ auName: e.target.value }),
           auPass: st.auPass, setAuPass: (e) => self.setState({ auPass: e.target.value }),
           auPass2: st.auPass2, setAuPass2: (e) => self.setState({ auPass2: e.target.value }),
@@ -6271,38 +6294,39 @@ class Component extends DCLogic {
         return items.concat(items);
       })(),
       tiers: [
-        { key: 'free', name: 'Champion of the Week', price: 'Free', period: '', cta: this.state.user ? 'Play this week\u2019s champion' : 'Create free account',
-          perks: ['Full access to all matchups for 1 champion', 'This week: ' + this.weekChamp(), 'Rotates every Tuesday', 'Account required'],
-          note: 'A new champion unlocks free every Tuesday \u2014 come back weekly.', noteColor: '#7cc8e8' },
-        { key: 'role', name: 'Lane Pass', price: '$4.99', period: '/mo', cta: 'Choose plan',
+        // Launch mode: a free account unlocks the ENTIRE catalog; paid tiers
+        // are visible (price anchoring) but disabled until payments open.
+        { key: 'free', name: 'Free Account', price: 'Free', period: 'during launch', featured: true,
+          cta: this.state.user ? 'You have full access \u2014 browse' : 'Create free account',
+          badgeText: '\u2726 FULL ACCESS', badgeBg: 'linear-gradient(180deg,#7fe3b8,#3ddc97)', badgeColor: '#06281a',
+          perks: ['Every champion', 'Every matchup', 'Every role', 'Jungle coach + counterpick database'],
+          note: 'Sign up free and the whole catalog is yours while we launch.', noteColor: '#7fe3b8' },
+        { key: 'role', name: 'Lane Pass', price: '$4.99', period: '/mo', cta: 'Coming soon', comingSoon: true,
           perks: ['One role only', 'Top OR Jungle OR Mid OR ADC OR Support', 'All current and future champions in that role'] },
-        { key: 'all', name: 'All Access', price: '$9.99', period: '/mo', cta: 'Go All Access', featured: true,
+        { key: 'all', name: 'All Access', price: '$9.99', period: '/mo', cta: 'Coming soon', comingSoon: true,
           badgeText: '\u2b50 MOST POPULAR', badgeBg: 'linear-gradient(180deg,#f3cf6e,#e8b84b)', badgeColor: '#1a1303',
           perks: ['Every champion', 'Every matchup', 'Every role', 'Search', 'Counterpick database', 'Future updates'] },
         { key: 'founder', name: 'Founder Lifetime',
-          price: (this.state.founders && this.state.founders.priceLabel) || '$24.99', period: 'one-time', cta: 'Become a Founder', founder: true,
+          price: (this.state.founders && this.state.founders.priceLabel) || '$24.99', period: 'one-time', cta: 'Coming soon', comingSoon: true, founder: true,
           soldOut: !!(this.state.founders && this.state.founders.soldOut),
           badgeText: '\ud83d\udd25 LAUNCH SPECIAL', badgeBg: 'linear-gradient(180deg,#ff8a5c,#ff5d6c)', badgeColor: '#1c0608',
           strike: '$49.99',
           perks: ['Everything forever', 'Founder badge', 'Discord role', 'Early feature access'],
-          note: (function (f) {
-            if (!f) return 'Only first 100 founders at $24.99 \u00b7 next 200 at $39.99 \u00b7 then gone forever.';
-            if (f.bracket === 'first100') return f.remaining + ' of 100 founder seats left at $24.99 \u00b7 next 200 at $39.99 \u00b7 then gone forever.';
-            return 'First 100 claimed \u2014 ' + f.remaining + ' seats left at $39.99 \u00b7 then gone forever.';
-          })(this.state.founders), noteColor: '#ff9d7a' }
+          note: 'Only first 100 founders at $24.99 \u00b7 next 200 at $39.99 \u00b7 then gone forever.', noteColor: '#ff9d7a' }
       ].filter(t => !t.soldOut).map(t => ({
         name: t.name, price: t.price, period: t.period, perks: t.perks, cta: t.cta,
         showBadge: !!t.badgeText, badgeText: t.badgeText || '', badgeBg: t.badgeBg || '', badgeColor: t.badgeColor || '',
         showStrike: !!t.strike, strike: t.strike || '',
         showNote: !!t.note, note: t.note || '', noteColor: t.noteColor || '#8a90a2',
-        choose: () => this.choosePlan(t.key),
-        tickColor: t.founder ? '#ff8a5c' : t.featured ? '#f0cd72' : '#3ddc97',
-        ringBd: t.featured ? 'rgba(232,184,75,0.6)' : t.founder ? 'rgba(255,93,108,0.45)' : 'rgba(255,255,255,0.08)',
-        ringBg: t.featured ? 'linear-gradient(180deg,rgba(232,184,75,0.1),#11131c)' : t.founder ? 'linear-gradient(180deg,rgba(255,93,108,0.08),#11131c)' : '#11131c',
-        priceColor: t.featured ? '#f0cd72' : t.founder ? '#ff9d7a' : '#ece7e1',
-        btnBg: t.featured ? 'linear-gradient(180deg,#f3cf6e,#e8b84b)' : t.founder ? 'linear-gradient(180deg,#ff8a5c,#ff5d6c)' : 'rgba(255,255,255,0.05)',
-        btnColor: t.featured ? '#1a1303' : t.founder ? '#1c0608' : '#dfe2ec',
-        btnBd: (t.featured || t.founder) ? 'transparent' : 'rgba(255,255,255,0.14)'
+        choose: t.comingSoon ? (() => {}) : (() => this.choosePlan(t.key)),
+        btnCursor: t.comingSoon ? 'default' : 'pointer',
+        tickColor: t.founder ? '#ff8a5c' : t.featured ? '#7fe3b8' : '#3ddc97',
+        ringBd: t.featured ? 'rgba(61,220,151,0.55)' : t.founder ? 'rgba(255,93,108,0.45)' : 'rgba(255,255,255,0.08)',
+        ringBg: t.featured ? 'linear-gradient(180deg,rgba(61,220,151,0.1),#11131c)' : t.founder ? 'linear-gradient(180deg,rgba(255,93,108,0.08),#11131c)' : '#11131c',
+        priceColor: t.featured ? '#7fe3b8' : t.founder ? '#ff9d7a' : '#ece7e1',
+        btnBg: t.comingSoon ? 'rgba(255,255,255,0.04)' : t.featured ? 'linear-gradient(180deg,#7fe3b8,#3ddc97)' : 'rgba(255,255,255,0.05)',
+        btnColor: t.comingSoon ? '#6b7185' : t.featured ? '#06281a' : '#dfe2ec',
+        btnBd: t.comingSoon ? 'rgba(255,255,255,0.1)' : t.featured ? 'transparent' : 'rgba(255,255,255,0.14)'
       })),
       role: MU.role,
       take: MU.take || null,

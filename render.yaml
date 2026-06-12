@@ -1,0 +1,21 @@
+# Render blueprint — creates the MatchupCoach web service from this repo.
+# In Render: New + > Blueprint > pick this repo, and it reads this file.
+# The starter plan + 1GB disk (~$7.25/mo total) is required so accounts and
+# the founder counter PERSIST — free instances wipe their disk on every
+# restart/deploy, which would reset all users.
+services:
+  - type: web
+    name: matchupcoach
+    runtime: node
+    plan: starter
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    disk:
+      name: matchupcoach-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /data
+      - key: PAYMENTS_MODE
+        value: demo   # flip to "off" to disable simulated checkout until Stripe is wired

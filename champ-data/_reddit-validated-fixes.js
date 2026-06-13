@@ -112,7 +112,9 @@
       chogath: 55.3, tahmkench: 54.9, ksante: 49.9, poppy: 47.2, kayle: 46.6, kennen: 62.9,
       singed: 52.8, ryze: 55.0, rumble: 53.4, akali: 52.0, cassiopeia: 51.7, galio: 52.7,
       gwen: 46.1, jayce: 58.1, kassadin: 48.6, lucian: 52.4, maokai: 47.3, sylas: 50.1,
-      graves: 54.7, heimerdinger: 51.3, sejuani: 54.2, zac: 51.5, ziggs: 51.1, nautilus: 49.6
+      graves: 54.7, heimerdinger: 51.3, sejuani: 54.2, zac: 51.5, ziggs: 51.1, nautilus: 49.6,
+      trundle: 55.8, aurora: 51.3, ambessa: 54.0, akshan: 53.6, karma: 52.0, lillia: 45.9,
+      mel: 56.8, neeko: 58.0
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -7065,6 +7067,214 @@
         "Your R keeps you topped. His R is a pick/peel tool, not a 1v1 button.",
         "Even — your cleaver poke vs his CC. Out-sustain the lane.",
         "Even tank-ish — you out-poke; he's a teamfight CC frontliner."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'trundle',
+      win: ['Trundle', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Trundle', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Trundle’s window — his Q (Chomp) + sustain out-trade your early.' },
+        { when: 'Lvl 6', text: 'His R drains your resistances — but your regen out-lasts him.' },
+        { when: '1st item', text: 'Your spike — regen out-sustains his bite; out-poke him.' },
+        { when: 'Late', text: 'You out-sustain him — your regen beats his tank-buster sustain.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); out-sustain his bite with regen', 'Don’t fear his Q (AD steal) — you scale HP, not AD', 'Out-regen his sustain into the late game'],
+        foe: ['Bite (Q) to steal AD and heal', 'Zone you with E (Pillar) and out-sustain trades', 'Drain your resistances + HP with R in a long fight']
+      },
+      early: "Trundle out-trades you early — his Q (Chomp) bites and his sustain out-paces your weak early. But here's the thing: his Q steals AD, and you scale HP + regen, not AD, so it matters less than against a bruiser. Levels 1-2 are his; throw cleavers (Q), out-sustain his bite, and don't fear losing AD you don't rely on.",
+      mid: "His R (Subjugate) drains your resistances and HP in a long fight, so don't get dragged into an extended slugfest at his timing — but your regen + R out-last his sustain over the lane. Throw cleavers, out-poke him, and out-regen his bite. As a tank-buster he wants long fights; your healing out-paces his drain.",
+      late: "You out-sustain him — your regen beats his tank-buster sustain in the attrition war, and his AD-steal doesn't hurt an HP-scaling tank. The lane is favoured because you out-regen a sustain fighter. Respect his R drain in a committed fight, but out-poke and out-last him over the game. Build HP and play frontline.",
+      whys: [
+        "Trundle's Q (Chomp) + sustain out-trade your early. Throw cleavers. Levels 1-2 are his.",
+        "His Q steals AD — but you scale HP, not AD. It matters less than vs a bruiser.",
+        "Your cleaver out-pokes him; your regen out-sustains his bite.",
+        "Out-regen his sustain — your healing out-paces his bite over the lane.",
+        "His R drains your resistances — but your regen out-lasts him. Don't fight at his timing.",
+        "Your spike — regen out-sustains his bite; out-poke him.",
+        "You out-sustain him — your regen beats his tank-buster sustain. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'aurora',
+      win: ['Aurora', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Aurora’s window — her Q + E poke and self-heal chip your early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-sustain her poke — buy MR.' },
+        { when: '1st item', text: 'Your spike — regen + MR out-sustain her poke.' },
+        { when: 'Late', text: 'You out-sustain her — her poke can’t kill a regen tank.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR vs her magic', 'Out-sustain her Q/E poke with regen', 'Scale HP; she can’t kill a regen tank'],
+        foe: ['Poke with Q (bolt) + E (80% slow) and self-heal', 'Dodge your approach with W (dash + invisibility)', 'Zone and escape with R (untargetable rift)']
+      },
+      early: "Aurora pokes you with Q and E (80% slow) and self-heals off her passive — levels 1-2 are her poke window. Throw cleavers (Q) back, buy MR against her magic, and out-sustain her poke with regen. Her W (dash into invis) keeps her safe, but she has no way to kill a regen tank; just soak the poke and farm.",
+      mid: "Your R (Maximum Dosage) out-heals her poke, and your regen + MR out-sustain her magic. You won't catch a mobile Aurora, but she can't out-pace your healing. Throw cleavers, deny CS, and out-regen her poke. Don't chase her into her R rift; just out-sustain the lane and scale.",
+      late: "You out-sustain her — Aurora's poke can't out-pace your regen, and she has no kill pressure on a tank. She scales into a teamfight AP threat, so the game is about her burst in fights, not the 1v1 you out-sustain. Build MR + HP, soak her poke, and play frontline; in lane you out-regen her chip.",
+      whys: [
+        "Aurora pokes with Q + E and self-heals. Throw cleavers, buy MR. Levels 1-2 are hers.",
+        "Her W (dash into invis) keeps her safe — but she can't kill a regen tank.",
+        "Your cleaver pokes back; your regen + MR out-sustain her magic.",
+        "You won't catch a mobile Aurora — but she can't out-pace your healing.",
+        "Your R out-heals her poke; buy MR.",
+        "Your spike — regen + MR out-sustain her poke.",
+        "You out-sustain her — her poke can't kill a regen tank. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'ambessa',
+      win: ['Ambessa', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Ambessa', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Ambessa’s window — her dash combo bursts your early.' },
+        { when: 'Lvl 6', text: 'Her R (suppress) all-in — your HP + R out-heal it.' },
+        { when: '1st item', text: 'Your spike — regen out-sustains her physical combo.' },
+        { when: 'Late', text: 'You out-tank her — her burst can’t out-pace your regen.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); out-sustain her dash combo', 'Tank her R all-in with HP + R heal', 'Out-scale into HP her physical burst can’t crack'],
+        foe: ['Chain dashes (passive) into the Q → W combo', 'Brace with E (shield + counter-smash)', 'All-in with R (blink behind + suppress + stun)']
+      },
+      early: "Ambessa bursts you with her dash combo (Q → W) early — levels 1-2 are her window. Her damage is physical, though, which your HP + items handle better than true damage. Throw cleavers (Q) back, out-sustain her combo with regen, and don't get chunked low. You have no kill pressure, so soak her burst and farm.",
+      mid: "Her big spike is R (Public Execution): she blinks behind you, suppresses, and stuns for a full combo, so don't be at low HP when it's up — but your HP + R (Maximum Dosage) out-heal it. Throw cleavers, out-sustain her dash combo, and tank her burst; she's a skirmisher with no answer to a regen tank's healing.",
+      late: "You out-tank her — Ambessa's physical burst can't out-pace your regen once you stack HP, and your R out-heals her all-in. The lane is favoured because you out-sustain a burst skirmisher. Respect her R suppress timing, build HP, and out-last her; in fights your frontline soaks her combo. Scale and play frontline.",
+      whys: [
+        "Ambessa bursts you with her Q → W dash combo. Your HP handles physical damage. Levels 1-2 are hers.",
+        "Out-sustain her combo with regen — don't get chunked low.",
+        "Your cleaver pokes back; your regen out-sustains her physical combo.",
+        "Tank her burst — she can't out-pace a regen tank's healing.",
+        "Her R blinks behind you, suppresses + stuns — your HP + R out-heal it.",
+        "Your spike — regen out-sustains her physical combo.",
+        "You out-tank her — her burst can't out-pace your regen. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'akshan',
+      win: ['Akshan', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Akshan’s window — his Q + autos poke; you can’t catch him.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-sustain his poke — he can’t kill a tank.' },
+        { when: '1st item', text: 'Your spike — regen out-sustains his poke.' },
+        { when: 'Late', text: 'You out-sustain him — a ranged skirmisher can’t kill a regen tank.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); out-sustain his poke with regen', 'Hug minions; he can’t kill a regen tank', 'Punish his roams; scale HP'],
+        foe: ['Poke with Q (Avengerang) + passive double-shot', 'Swing around terrain with E (Heroic Swing)', 'Roam and pick with R (Comeuppance sniper)']
+      },
+      early: "Akshan pokes you with Q (Avengerang) and autos, and swings around with E — levels 1-2 are his poke window, and you can't catch a slippery skirmisher. But your regen heals his poke between waves. Throw cleavers (Q) back, hug your minions, and take the chip; he has no way to actually kill a regen tank.",
+      mid: "Your R (Maximum Dosage) out-heals his poke, and your regen out-sustains his chip. He kites with his swing, so you won't catch him, but he can't out-pace your healing. Throw cleavers, deny CS, and out-regen his poke. At 6 his R is a roam tool — when he leaves to pick elsewhere, punish his wave.",
+      late: "You out-sustain him — Akshan's poke can't out-pace your regen, and he can't kill a regen tank. He roams for picks with R and scales as a marksman/assassin, so the game is about his roam impact, not the 1v1 you out-sustain. Throw cleavers, track his roams, scale HP, and play frontline.",
+      whys: [
+        "Akshan pokes with Q + autos and swings around. Your regen heals it. Levels 1-2 are his.",
+        "You can't catch a slippery skirmisher. Hug minions, take the chip.",
+        "Your cleaver pokes back; your regen out-sustains his chip.",
+        "He kites with his swing — but can't out-pace your healing.",
+        "Your R out-heals his poke; he can't kill a tank.",
+        "Your spike — regen out-sustains his poke.",
+        "You out-sustain him — a ranged skirmisher can't kill a regen tank. Track his roams."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'karma',
+      win: ['Karma', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Karma’s window — her Q (Mantra) pokes your early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-sustain her poke — buy MR.' },
+        { when: '1st item', text: 'Your spike — regen + MR out-sustain her poke.' },
+        { when: 'Late', text: 'You out-sustain her — a poke/utility mage can’t kill a tank.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR vs her magic', 'Out-sustain her Q poke with regen', 'Scale HP; she can’t kill a regen tank'],
+        foe: ['Poke with Q (Inner Flame) — empowered by R (Mantra)', 'Root you with W (Focused Resolve) tether', 'Self-peel with E (shield + move speed)']
+      },
+      early: "Karma pokes you with Q (Mantra-empowered) — levels 1-2 are her poke window. Throw cleavers (Q) back, buy MR against her magic, and out-sustain her poke with regen. Her W (Focused Resolve) is a root tether, so don't let her hold it on you, but she's a poke/utility mage with no burst on a tank. Soak the poke and farm.",
+      mid: "Your R (Maximum Dosage) out-heals her poke, and your regen + MR out-sustain her magic. She shields herself with E and kites, but she can't out-pace your healing or kill a regen tank. Throw cleavers, deny CS, and out-regen her chip. Don't get caught in a full W tether, but otherwise out-sustain the lane.",
+      late: "You out-sustain her — Karma's poke can't out-pace your regen, and she has no kill pressure on a tank. She's a poke/utility mage who provides shields/roots for her team, so the game is about her utility in fights, not the 1v1 you out-sustain. Build MR + HP, soak her poke, and play frontline.",
+      whys: [
+        "Karma pokes with Q (Mantra). Throw cleavers, buy MR. Levels 1-2 are hers.",
+        "Her W (root tether) — don't let her hold it on you. She has no burst on a tank.",
+        "Your cleaver pokes back; your regen + MR out-sustain her magic.",
+        "She shields + kites — but can't out-pace your healing.",
+        "Your R out-heals her poke; buy MR.",
+        "Your spike — regen + MR out-sustain her poke.",
+        "You out-sustain her — a poke/utility mage can't kill a tank. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'lillia',
+      win: ['Lillia', 'Lillia', 'Skill', 'Lillia', 'Lillia', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Lillia’s window — her on-hit + passive burn shred your HP, kiting.' },
+        { when: 'Lvl 6', text: 'Her R sleep + mobility out-trade you; you can’t catch her.' },
+        { when: '1st item', text: 'She out-DPS your regen with AP on-hit + burn.' },
+        { when: '2+ items', text: 'You take over only if you survived — but it’s her lane.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR for her AP on-hit', 'Out-sustain what you can; you can’t catch her kite', 'Scale HP + MR; play frontline'],
+        foe: ['Kite with Q (swirl) movement + E (dash + slow)', 'Shred your HP with on-hit + passive burn', 'Set up picks with R (sleep)']
+      },
+      early: "Lillia is tricky for you — her AP on-hit damage plus her passive burn shred your big health bar, and her mobility (Q move speed + E dash) means you can't catch her. Levels 1-3 are hers. Throw cleavers (Q) from range, buy MR early, and out-sustain what poke you can; you can't punish a champion who kites you all day.",
+      mid: "Her R (Dream-Laden Bough) sleep sets up burst, and her constant mobility lets her kite and shred you while staying out of reach. Stack HP + MR (her damage is magic) to dilute her on-hit + burn, but don't expect to win trades. Throw cleavers, out-regen what you can, and don't get slept in a bad spot.",
+      late: "You take over only if you survived to a full HP + MR build — your durability eventually out-lasts her shred — but her AP on-hit + burn and mobility make this her lane. Build HP + MR, play for the frontline where your durability soaks her team, and don't try to catch a kiting Lillia. Scale and group.",
+      whys: [
+        "Lillia's on-hit + passive burn shred your HP, kiting. Buy MR. Levels 1-3 are hers.",
+        "Her mobility means you can't catch her. Out-sustain what poke you can.",
+        "Stack HP + MR — her damage is magic. Don't chase her kite.",
+        "Her R sleep + mobility out-trade you. Don't get slept in a bad spot.",
+        "She kites and shreds you out of reach. Throw cleavers, out-regen what you can.",
+        "She out-DPS your regen with AP on-hit + burn. Play frontline.",
+        "You take over only if you survived — but it's her lane. Scale and group."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'mel',
+      win: ['Mel', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Mel’s window — her Q (Radiant Volley) pokes your early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-sustain her poke — buy MR.' },
+        { when: '1st item', text: 'Your spike — regen + MR out-sustain her artillery poke.' },
+        { when: 'Late', text: 'You out-sustain her — a squishy poke mage can’t kill a tank.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR vs her magic', 'Out-sustain her Q poke with regen; dodge her E (root)', 'Scale HP; she can’t kill a regen tank'],
+        foe: ['Poke from range with Q (Radiant Volley)', 'Root you with E (Solar Snare) to land poke / R', 'Self-peel with W (shield + move speed)']
+      },
+      early: "Mel pokes you from range with Q (Radiant Volley) and roots you with E to land more — levels 1-2 are her poke window. Throw cleavers (Q) back, buy MR against her magic, and out-sustain her poke with regen. Her W reflects projectiles, but your cleaver still pokes when she's not bracing; soak the chip and farm. She can't kill a tank.",
+      mid: "Your R (Maximum Dosage) out-heals her poke, and your regen + MR out-sustain her artillery. Dodge her E (Solar Snare root) that sets up her damage, throw cleavers, and out-regen her chip. She's a squishy artillery mage with no way to out-pace a regen tank's healing; just out-sustain and farm.",
+      late: "You out-sustain her — Mel's poke can't out-pace your regen, and a squishy artillery mage can't kill a regen tank. She scales into a teamfight poke/execute threat (her R is global), so the game is about her teamfight, not the 1v1 you out-sustain. Build MR + HP, dodge her E, and play frontline.",
+      whys: [
+        "Mel pokes from range with Q (Radiant Volley). Throw cleavers, buy MR. Levels 1-2 are hers.",
+        "Her W reflects projectiles, but your cleaver pokes when she's not bracing.",
+        "Your cleaver pokes back; your regen + MR out-sustain her artillery.",
+        "Dodge her E (Solar Snare root) that sets up her damage. Out-regen her chip.",
+        "Your R out-heals her poke; buy MR.",
+        "Your spike — regen + MR out-sustain her artillery poke.",
+        "You out-sustain her — a squishy poke mage can't kill a tank. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'neeko',
+      win: ['Neeko', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Neeko’s window — her Q poke + E root chip your early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; her R + shroud burst can’t crack your HP.' },
+        { when: '1st item', text: 'Your spike — regen + MR out-sustain her poke.' },
+        { when: 'Late', text: 'You out-sustain her — a squishy burst mage can’t kill a tank.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR vs her magic', 'Out-sustain her Q poke with regen; dodge her E (root)', 'Tank her R burst with HP + R heal'],
+        foe: ['Poke with Q (Blooming Burst) and root with E', 'Disguise as a minion/ally with W (clone)', 'All-in with R (Pop Blossom AOE stun)']
+      },
+      early: "Neeko pokes you with Q (Blooming Burst) and roots you with E to set up damage — levels 1-2 are her poke window. Throw cleavers (Q) back, buy MR against her magic, and out-sustain her poke with regen. Her W disguises her, so don't get fooled by a clone, but she's a squishy burst mage with no answer to a tank. Soak the poke.",
+      mid: "Your R (Maximum Dosage) out-heals her poke, and your regen + MR out-sustain her magic. At 6 her R (Pop Blossom) is a delayed AOE stun, often from a disguise — dodge the windup. Her burst can't crack your HP + MR + R heal. Throw cleavers, dodge her E root, and out-regen her chip; she can't kill a regen tank.",
+      late: "You out-sustain her — Neeko's burst can't out-pace your regen + MR, and a squishy mage can't kill a regen tank. She's a teamfight burst/pick mage, so the game is about her combo in fights, not the 1v1 you out-sustain. Build MR + HP, dodge her R windup, and play frontline; in lane you out-regen her poke.",
+      whys: [
+        "Neeko pokes with Q and roots with E. Throw cleavers, buy MR. Levels 1-2 are hers.",
+        "Her W disguises her — don't get fooled by a clone. She has no answer to a tank.",
+        "Your cleaver pokes back; your regen + MR out-sustain her magic.",
+        "Dodge her E root that sets up her damage. Out-regen her chip.",
+        "Your R out-heals her poke; her R + shroud burst can't crack your HP.",
+        "Your spike — regen + MR out-sustain her poke.",
+        "You out-sustain her — a squishy burst mage can't kill a tank. Play frontline."
       ]
     }
   ];

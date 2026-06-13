@@ -159,6 +159,25 @@ const MIME = {
   '.ico': 'image/x-icon', '.pdf': 'application/pdf', '.woff2': 'font/woff2', '.txt': 'text/plain',
   '.xml': 'application/xml; charset=utf-8', '.webmanifest': 'application/manifest+json'
 };
+// Turn a URL slug ("kha-zix") back into a display champion name ("Kha'Zix").
+// Title-cases by default; a small map handles punctuation/multi-word names.
+const CHAMP_SLUG_FIX = {
+  'kha-zix': "Kha'Zix", 'vel-koz': "Vel'Koz", 'kai-sa': "Kai'Sa", 'cho-gath': "Cho'Gath",
+  'rek-sai': "Rek'Sai", 'k-sante': "K'Sante", 'bel-veth': "Bel'Veth", 'kog-maw': "Kog'Maw",
+  'dr-mundo': 'Dr. Mundo', 'nunu-willump': 'Nunu & Willump', 'jarvan-iv': 'Jarvan IV',
+  'aurelion-sol': 'Aurelion Sol', 'renata-glasc': 'Renata Glasc', 'leblanc': 'LeBlanc'
+};
+function prettyChamp(slug) {
+  if (CHAMP_SLUG_FIX[slug]) return CHAMP_SLUG_FIX[slug];
+  return slug.split('-').map(function (w) {
+    if (/^(ii|iii|iv|vi|vii|viii|ix)$/.test(w)) return w.toUpperCase();
+    return w.charAt(0).toUpperCase() + w.slice(1);
+  }).join(' ');
+}
+function htmlEsc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function sendStatic(res, rel) {
   if (rel === '') rel = 'index.html';
   let full = path.normalize(path.join(ROOT, rel));
@@ -166,12 +185,35 @@ function sendStatic(res, rel) {
   if (full.startsWith(ROOT) && !path.extname(full) && fs.existsSync(full + '.html')) full += '.html';
   // SPA fallback: deep links like /matchup/aatrox-vs-darius serve the app
   // (the page uses <base href="/"> so relative assets still resolve).
+  let mu = null;
   if (full.startsWith(ROOT) && !path.extname(full) && !fs.existsSync(full) && /^matchup\//.test(rel)) {
     full = path.join(ROOT, 'MatchupCoach.dc.html');
+    const mm = /^matchup\/(.+?)-vs-(.+?)\/?$/.exec(rel);
+    if (mm) mu = { you: prettyChamp(mm[1]), foe: prettyChamp(mm[2]), slug: rel.replace(/\/+$/, '') };
   }
   if (!full.startsWith(ROOT) || !fs.existsSync(full) || !fs.statSync(full).isFile()) {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     return res.end('404');
+  }
+  // For matchup deep-links, inject a per-page <title>/canonical/OG so social
+  // scrapers and search engines see a tailored card without running the app's JS.
+  if (mu) {
+    let html = fs.readFileSync(full, 'utf8');
+    const url = PUBLIC_URL + '/' + mu.slug;
+    const pair = mu.you + ' vs ' + mu.foe;
+    const ogTitle = htmlEsc(pair + ' — MatchupCoach.gg');
+    const desc = htmlEsc('How to play ' + pair + ': power spikes, cooldown timers, wave plan, and build path for the matchup.');
+    html = html
+      .replace(/<title>[\s\S]*?<\/title>/, '<title>Matchup — ' + htmlEsc(pair) + ' | MatchupCoach.gg</title>')
+      .replace(/(<meta name="description" content=")[^"]*(">)/, '$1' + desc + '$2')
+      .replace(/(<link rel="canonical" href=")[^"]*(">)/, '$1' + htmlEsc(url) + '$2')
+      .replace(/(<meta property="og:title" content=")[^"]*(">)/, '$1' + ogTitle + '$2')
+      .replace(/(<meta property="og:description" content=")[^"]*(">)/, '$1' + desc + '$2')
+      .replace(/(<meta property="og:url" content=")[^"]*(">)/, '$1' + htmlEsc(url) + '$2')
+      .replace(/(<meta name="twitter:title" content=")[^"]*(">)/, '$1' + ogTitle + '$2')
+      .replace(/(<meta name="twitter:description" content=")[^"]*(">)/, '$1' + desc + '$2');
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    return res.end(html);
   }
   const ext = path.extname(full).toLowerCase();
   res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });

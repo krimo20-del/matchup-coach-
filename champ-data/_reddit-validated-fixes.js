@@ -67,7 +67,9 @@
       garen: 53.2, renekton: 53.2, sett: 50.8, fiora: 49.7, teemo: 49.6, vayne: 52.6,
       mordekaiser: 53.6, nasus: 53.4, camille: 51.6, jax: 48.2, quinn: 45.7, aatrox: 51.0,
       irelia: 53.8, riven: 50.8, sion: 53.0, ornn: 50.4, malphite: 49.0, pantheon: 49.9,
-      kled: 49.4, urgot: 48.2, olaf: 49.8, tryndamere: 49.1, illaoi: 51.9, vladimir: 47.9
+      kled: 49.4, urgot: 48.2, olaf: 49.8, tryndamere: 49.1, illaoi: 51.9, vladimir: 47.9,
+      shen: 53.0, swain: 52.2, trundle: 52.2, warwick: 51.6, volibear: 51.7, wukong: 48.0,
+      yasuo: 54.1, yone: 51.9, yorick: 50.0, gnar: 50.8, gragas: 54.3, gangplank: 48.9
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -2544,6 +2546,318 @@
         "He can pool mid-execute to survive your R — time it for when W is down.",
         "His AP sustain starts out-healing your bleed. Snowball before his items.",
         "Two items in, full-AP Vlad kites and bursts you. You own early — close it before his spike."
+      ]
+    },
+    {
+      a: 'darius', b: 'shen',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed out-trade his weak base damage.' },
+        { when: 'Lvl 6', text: 'R executes him; track his R when he globals to punish the wave.' },
+        { when: '1st item', text: 'Still your stomp — bleed + Might beat a low-damage Shen.' },
+        { when: 'Late', text: 'Shen is a teamfight peeler; you own the lane 1v1.' }
+      ],
+      wants: {
+        you: ['Out-trade his weak damage and bait his taunt (E)', 'Punish the wave when he R-globals away', 'Snowball — his solo kill pressure is near zero'],
+        foe: ['Farm even and scale; his solo pressure is low', 'Use R to impact other lanes globally', 'Become a teamfight engage / peel frontliner']
+      },
+      early: "You out-bully Shen — he has weak base damage and almost no solo kill pressure, so levels 1-3 are decisively yours. Land E and your bleed + Q shred him; his Q (sword) is his only poke and his E (taunt) is his only peel, so bait the taunt before you commit. He just wants to farm and scale for the map, not duel you.",
+      mid: "Keep him bleeding. Your all-in out-trades him through every level, and your R executes him off stacks. The real game is tracking his R (Stand United) — when he globals to save a teammate, shove and punish his wave for free CS and plates. Don't let his map value snowball other lanes while you sit even; make him pay for leaving.",
+      late: "Shen is a teamfight engage/peeler, not a laner — you win the 1v1 all game. You should have a big lead by now: your bleed + Might dwarf his low-damage frame. Keep shoving and force him to choose between farming and roaming, and the match comes down to who uses Shen's global better, not the duel you own.",
+      whys: [
+        "Shen has weak base damage and no kill pressure. E + bleed out-trade him — levels 1-3 are yours.",
+        "His Q (sword) is his only poke. Trade when it's down and you out-damage him easily.",
+        "Bait his E (taunt) — his only peel — then all-in. Your bleed shreds him.",
+        "Keep punishing — your all-in out-trades him. Watch for his R global.",
+        "R executes him off stacks. When he globals away, shove and punish his wave.",
+        "Still your stomp — bleed + Might beat a low-damage Shen. Take plates, snowball.",
+        "Late he's a teamfight peeler; you own the lane. The game is about his global, not the 1v1."
+      ]
+    },
+    {
+      a: 'darius', b: 'swain',
+      win: ['Darius', 'Darius', 'Darius', 'Skill', 'Skill', 'Skill', 'Swain'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed crush his weak melee-mage early.' },
+        { when: 'Lvl 6', text: 'Kill him fast — his R drain out-sustains a drawn-out fight.' },
+        { when: '1st item', text: 'Even — your bleed vs his W poke + soul-fragment sustain.' },
+        { when: '2+ items', text: 'Swain takes over — full-build drain-tank out-sustains your bleed.' }
+      ],
+      wants: {
+        you: ['Land E + bleed before his R drain ramps', 'Dodge his E (Nevermove root) all-in setup', 'Kill him fast — short, decisive trades beat his drain'],
+        foe: ['Land E (root) to set up his all-in', 'Stack soul fragments and out-sustain with W poke', 'Scale into a drain-tank teamfighter with R']
+      },
+      early: "Levels 1-3 are yours — Swain is a weak melee-range mage early, and your E + bleed crush him. His one threat is E (Nevermove), a root that sets up his all-in, so never get rooted from bush range. Land your own E, stack Hemorrhage, and deny his soul-fragment passive stacks that fuel his ultimate. Punish him before he comes online.",
+      mid: "His R (Demonic Ascension) drain is dangerous in a long fight, so kill him FAST — burst him with your bleed all-in before R ramps, and don't sit in the ult radius trading. Bait or dodge his E root before you commit. Through the mid-game it's even-ish: your bleed beats him in short trades, his drain wins drawn-out ones.",
+      late: "Swain takes over at full build — he becomes a drain-tank teamfighter who out-sustains your bleed in long fights. The lane is even overall because you crush his early and he out-scales the late. Snowball your level 1-3 dominance, force short decisive all-ins (not drain-fests), and close the lane before his items make him unkillable.",
+      whys: [
+        "Swain is a weak melee-mage early. E + bleed crush him — levels 1-3 are yours.",
+        "His E (root) is his all-in setup — never get rooted from bush. Land your own E first.",
+        "Your bleed all-in out-trades a pre-6 Swain. Deny his soul-fragment stacks.",
+        "Even as his W poke + sustain ramp. Force short trades, not drawn-out ones.",
+        "His R drain wins long fights — kill him FAST. Don't sit in the ult radius.",
+        "Even — your bleed vs his sustain. Short decisive all-ins beat his drain.",
+        "Full-build Swain is a drain-tank that out-sustains your bleed. Win early, close it out."
+      ]
+    },
+    {
+      a: 'darius', b: 'trundle',
+      win: ['Darius', 'Darius', 'Darius', 'Skill', 'Skill', 'Skill', 'Trundle'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed out-trade him before his sustain ramps.' },
+        { when: 'Lvl 6', text: 'His R drains your resistances — burst him before the long fight.' },
+        { when: '1st item', text: 'Even — bait his Q (Chomp) which steals your AD bleed.' },
+        { when: '2+ items', text: 'Trundle takes over — sustain + R drain out-grind your all-in.' }
+      ],
+      wants: {
+        you: ['Land E + bleed before his sustain comes online', 'Bait his Q (Chomp) — it steals your AD (and bleed)', 'Win short trades before his R drains your resists'],
+        foe: ['Bite (Q) to steal your AD and heal', 'Zone you with E (Pillar) and out-sustain trades', 'Drain your resistances + HP with R in a long fight']
+      },
+      early: "Levels 1-3 are yours — land E and your bleed out-trades Trundle before his sustain ramps. His Q (Chomp) steals your AD — and since your bleed scales off AD, a bite weakens your whole kit — so bait it before you commit. His E (pillar) can zone or peel; play around it. Press your early bleed advantage before his items.",
+      mid: "It evens out as his sustain comes online. His R (Subjugate) drains your resistances and HP in a long fight, so don't get dragged into an extended slugfest on his terms — burst him with your bleed all-in and back off if his R flips it. Bait the Chomp, then E-Q-W and stack Hemorrhage. Keep trades short and decisive.",
+      late: "Trundle takes over at two items — his sustain + R drain out-grind your bleed, and he's a tank-buster who melts your resistances. The lane is even overall: you bully early, he out-sustains late. Snowball your level 1-3 edge, force short all-ins where your bleed bursts him before his R ramps, and close the lane before his scaling.",
+      whys: [
+        "E + bleed out-trade him before his sustain ramps. Levels 1-3 are yours.",
+        "His Q (Chomp) steals your AD — and your bleed. Bait it before you commit.",
+        "Your bleed all-in beats a low-sustain Trundle. Press the early advantage.",
+        "Even as his sustain comes online — play around his E pillar zone.",
+        "His R drains your resistances + HP — burst him before the long fight, back off if R flips it.",
+        "Even — bait the Chomp, force short decisive trades. Stack bleed fast.",
+        "Two items in, sustain + R drain out-grind your all-in. Win early, close it out."
+      ]
+    },
+    {
+      a: 'darius', b: 'warwick',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Warwick', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed crush a weak-early Warwick.' },
+        { when: 'Lvl 6', text: 'Warwick’s window — his R (suppress) all-in; stay healthy.' },
+        { when: '1st item', text: 'Even — your bleed vs his low-HP lifesteal; keep your HP up.' },
+        { when: 'Late', text: 'You edge it — out-bleed his sustain when his R is down.' }
+      ],
+      wants: {
+        you: ['Out-trade his weak early before his lifesteal ramps', 'Stay healthy so his R all-in can’t finish you', 'Land E + bleed and out-DPS his Q lifesteal'],
+        foe: ['Sustain with Q lifesteal (huge when you’re low)', 'Chase you down with W (move speed on low HP)', 'All-in with R (point-blank suppress)']
+      },
+      early: "Levels 1-3 are yours — Warwick is a weak early laner, and your E + bleed crush him before his lifesteal ramps. His Q heals more the lower you are and his W gives chase speed, but early he can't out-trade your all-in. Punish him, stack Hemorrhage, and just don't drop low yourself — his kit feeds on your missing health.",
+      mid: "His all-in is R (Infinite Duress) — a point-blank suppress that locks you for a full combo, so don't get caught at low HP in his jump range at 6. Outside the ult your bleed out-trades him. Bait or respect the R, keep your HP topped (so his Q lifesteal and R execute-feel can't finish you), and force trades where his lifesteal can't out-heal your bleed.",
+      late: "You edge it — in the extended fight your bleed out-grinds his Q lifesteal, especially if you keep your HP up so his low-health bonuses don't trigger. Force the all-ins, deny him the low-HP windows his kit feeds on, and don't walk into a R suppress while chunked. The lane is yours early and slightly yours late if you respect the ult.",
+      whys: [
+        "Warwick is a weak early laner. E + bleed crush him — levels 1-3 are yours.",
+        "His Q heals more the lower you are. Win the trade but don't drop low.",
+        "Your full combo out-trades him. Stack bleed while he's weak and item-less.",
+        "You out-trade through 4-5 — keep your HP up so his low-HP bonuses don't kick in.",
+        "His R is a point-blank suppress all-in — don't get caught low in his jump range.",
+        "Even — your bleed vs his lifesteal. Force the all-in, stay healthy.",
+        "You edge it late — out-bleed his sustain when his R is down. Deny the low windows."
+      ]
+    },
+    {
+      a: 'darius', b: 'volibear',
+      win: ['Darius', 'Darius', 'Skill', 'Skill', 'Volibear', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — E + bleed out-trade him before his W heal.' },
+        { when: 'Lvl 6', text: 'Volibear’s window — his R (dive + tanky) is a strong all-in.' },
+        { when: '1st item', text: 'Even — your bleed vs his W lifesteal; commit fully, not chip.' },
+        { when: 'Late', text: 'Even — out-bleed his sustain on his Q/R cooldowns.' }
+      ],
+      wants: {
+        you: ['Land E + bleed before his W (bite) heal ramps', 'Dodge his Q empowerment (the stun) before all-in', 'Commit fully — chip just feeds his W lifesteal'],
+        foe: ['All-in with Q (slow + stun) into W (bite heal)', 'Sustain through trades with W lifesteal', 'Dive with R (untargetable tower, tanky)']
+      },
+      early: "Levels 1-2 are yours — land E and your bleed out-trades Volibear before his W (bite) heal ramps. His Q slows and empowers his next hit (a stun if he closes), and his W heals off you, so commit fully rather than chip; a half-hearted trade just feeds his lifesteal. Dodge his Q empowerment to deny the stun, then stack Hemorrhage.",
+      mid: "Level 6 is his window — R (Stratospheric Force) is a dive that disables your tower and makes him tanky, a strong all-in if you're caught low. Don't fight him at low HP when R is up; bait it or fight before 6. Outside the ult your bleed all-in out-trades his sustain when you commit fully and dodge the Q stun.",
+      late: "Even into late — your bleed versus his W lifesteal. Force fights on his Q and R cooldowns, where your Hemorrhage out-grinds his sustain. Commit fully to all-ins (chip feeds his heal), stay above the HP where his R-dive kills you, and out-last him in the extended brawl. The lane is yours early, his at the R window, even overall.",
+      whys: [
+        "E + bleed out-trade him before his W heal ramps. Levels 1-2 are yours — commit fully.",
+        "His W (bite) heals off you. Chip just feeds him — all-in or don't.",
+        "Even as his sustain ramps — dodge the Q empowerment to deny the stun, then commit.",
+        "Force full trades where your bleed beats his lifesteal, not short ones.",
+        "His R is a tanky tower-dive all-in — don't get caught low when it's up.",
+        "Even — your bleed vs his W lifesteal. Force trades on his Q/R cooldowns.",
+        "Even late — out-bleed his sustain. Commit fully, stay above his R-dive threshold."
+      ]
+    },
+    {
+      a: 'darius', b: 'wukong',
+      win: ['Darius', 'Skill', 'Skill', 'Wukong', 'Wukong', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Your window — E + bleed before his Q shred + clone come online.' },
+        { when: 'Lvl 4–6', text: 'Wukong’s window — clone (W) jukes your E + combo; E-R all-in.' },
+        { when: '1st item', text: 'He out-trades on the clone — bait the W before you pull.' },
+        { when: 'Late', text: 'Tricky — his cooldown burst beats your bleed if the clone juke lands.' }
+      ],
+      wants: {
+        you: ['Land E level 1 before his clone + Q shred', 'Bait the clone (W) before you commit your pull', 'Punish him on his E / R cooldowns'],
+        foe: ['Out-trade with Q (armor shred) auto-resets', 'Juke your E + combo with the clone (W)', 'All-in with E-dash into R (spin knockup)']
+      },
+      early: "Your one clean window is level 1, before Wukong's clone and Q shred come online — land E and your bleed out-trades him. From level 2 on, his Q shreds your armour and resets his auto, and his clone (W) lets him juke your E-pull and your combo, dodging the bleed all-in. Don't waste your E on a clone; bait the W first.",
+      mid: "Levels 4-6 are his window — clone juke into E (dash) + R (spin knockup) is a real burst all-in that can chunk you before your bleed ramps. This is a tricky lane because the clone negates your engage. Bait the W out, then land E on the real Wukong and stack Hemorrhage. Don't all-in into a fresh clone — you'll pull the wrong one and eat his combo.",
+      late: "Tricky into late — Wukong's damage is cooldown-reliant burst, and if his clone juke lands he out-trades your bleed. Your path is punishing his E/R downtime: when his combo is on cooldown, land E and your bleed out-grinds him. Bait the clone before every all-in, and don't get caught by the W juke at low HP. It tips his way if he plays the clone well.",
+      whys: [
+        "Level 1 — E + bleed before his clone + Q shred. Your one clean window.",
+        "His Q shreds armour and resets his auto. His clone jukes your E — don't waste it.",
+        "Bait the clone (W) before you pull. Don't engage into a juke.",
+        "His window — clone into E-R knockup is a burst all-in. Don't be low when it's up.",
+        "Survive the juke + knockup, then your bleed stabilizes. Track his cooldowns.",
+        "He out-trades on the clone — bait the W, then land E on the real him.",
+        "Tricky late — his cooldown burst beats your bleed if the juke lands. Punish his downtime."
+      ]
+    },
+    {
+      a: 'darius', b: 'yasuo',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Yasuo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E-pull locks him through his dashes; bleed crushes him.' },
+        { when: 'Lvl 6', text: 'R executes him; he needs a knockup for his R, which he lacks solo.' },
+        { when: '1st item', text: 'Still your stomp — deny CS so his crit spike comes late.' },
+        { when: '2+ items', text: 'Yasuo takes over — crit item spikes out-DPS your bleed.' }
+      ],
+      wants: {
+        you: ['Land E (pull) — he can’t dash out once it lands', 'Stack bleed and execute his squishy frame', 'Win before his crit item spikes (2 items)'],
+        foe: ['Poke with Q tornado and dash on minions (E)', 'Shield your trades with his passive', 'Scale into a crit hypercarry at 2 items']
+      },
+      early: "You crush Yasuo early — your E (Apprehend) is a positional pull he can't dash out of once it lands, so his whole mobility kit (E through minions, dashes) doesn't save him. Land E, stack bleed, and his passive shield won't out-trade your Hemorrhage. His windwall (W) blocks projectiles, but your kit is melee, so it barely matters. Levels 1-3 are yours.",
+      mid: "Keep stomping. Your all-in out-trades him and your R executes his squishy frame off bleed stacks. At 6 his R needs a knockup to use, which he lacks solo, so he has no burst all-in to answer yours — deny him a setup and just run him down. Keep him off CS: his only path back is a crit spike, so every denied minion delays it.",
+      late: "Yasuo takes over at two items — IE + crit out-DPS your bleed and he duels back. The lane is favoured because you dominate the early-mid; you must convert it. Snowball off the E-pull all-ins, deny his farm, take his tower, and end before his crit spike. A farmed Yasuo flips the 1v1, so close the game on your lead.",
+      whys: [
+        "E-pull locks him — he can't dash out once it lands. Stack bleed; levels 1-3 are yours.",
+        "His passive shield won't out-trade your bleed. His windwall barely matters vs melee. All-in.",
+        "Your full combo crushes him — E, then Q-W and stack Hemorrhage.",
+        "Keep him off CS — his only comeback is a crit spike. Deny it.",
+        "R executes him off bleed; his R needs a knockup he lacks solo. Run him down.",
+        "Still your stomp — deny farm so his crit spike comes late. Take his tower.",
+        "Two items in, crit out-DPS your bleed. You own early — close the game on your lead."
+      ]
+    },
+    {
+      a: 'darius', b: 'yone',
+      win: ['Darius', 'Darius', 'Darius', 'Skill', 'Skill', 'Skill', 'Yone'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E-pull catches him through his dashes; bleed crushes him.' },
+        { when: 'Lvl 6', text: 'R executes him; punish him after he commits E (spirit form).' },
+        { when: '1st item', text: 'Even — your bleed vs his mobility; land E to lock him.' },
+        { when: '2+ items', text: 'Yone takes over — crit + mobility out-DPS your bleed.' }
+      ],
+      wants: {
+        you: ['Land E (pull) to cancel his Q dash / E mobility', 'Punish him after he commits E (he’s locked into the return)', 'Win before his crit item spikes'],
+        foe: ['Poke with Q and dash on the third cast', 'Retreat with E (spirit form snaps him back)', 'All-in with R (knockup) and scale to crit']
+      },
+      early: "Levels 1-3 are yours — your E (Apprehend) cancels Yone's mobility, locking him in your bleed where his Q dash and E can't save him. Land E and your Hemorrhage out-trades him; don't whiff the pull on a dashing Yone. His passive shields and crit make him slippery, but pinned in your combo he loses the early trades. Punish before he scales.",
+      mid: "Keep punishing. Your bleed out-trades him and your R executes off stacks. His E (spirit form) lets him commit then snap back to safety, so punish him after he uses it — he's locked into the return path and can't escape your E. At 6 his R is a knockup all-in, but pinned by your pull he rarely lands the setup. Deny his farm.",
+      late: "Yone takes over at two items — crit + his mobility out-DPS and kite your bleed, and his E/R make him slippery. The lane is even because you out-trade his early-mid and he scales past you. Snowball off the E-pull all-ins, land your pulls cleanly, and build a lead before his crit items flip the duel. Don't let him free-poke into scaling.",
+      whys: [
+        "E-pull cancels his mobility — locked in your bleed, his dashes can't save him. Levels 1-3 are yours.",
+        "Don't whiff E on a dashing Yone. Land it and your Hemorrhage out-trades him.",
+        "Your full combo crushes a pinned Yone. Stack bleed, force the trade.",
+        "Even as his crit comes online — punish him after he commits E (locked into the return).",
+        "R executes him off stacks. Pinned by your pull, his R setup rarely lands.",
+        "Even — your bleed vs his mobility. Land E to lock him; deny his farm.",
+        "Two items in, crit + mobility out-DPS your bleed. You own early — close before he scales."
+      ]
+    },
+    {
+      a: 'darius', b: 'yorick',
+      win: ['Darius', 'Darius', 'Darius', 'Skill', 'Yorick', 'Skill', 'Yorick'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed out-trade him before Maiden + ghouls.' },
+        { when: 'Lvl 6', text: 'Yorick’s window — Maiden (R) + W cage answer your all-in.' },
+        { when: '1st item', text: 'Even — burst him 1v1 off his cage cooldown.' },
+        { when: '2+ items', text: 'Yorick takes over — Maiden + ghouls out-DPS your bleed.' }
+      ],
+      wants: {
+        you: ['Land E + bleed before Maiden and ghouls are online', 'Bait his W (cage) — don’t get trapped mid-fight', 'Burst him 1v1 before his sustained ghoul DPS'],
+        foe: ['Wall you in with W (cage) and pile on ghouls', 'Ramp sustained damage with Maiden (R)', 'Out-DPS you late and splitpush with Maiden']
+      },
+      early: "Levels 1-3 are yours — land E and your bleed out-trades Yorick before his ghouls and Maiden are up. While he's just a melee juggernaut with mist ghouls, punish him; don't let him free-farm into his power spike. His E (mist) marks you for ghoul damage, so dodge it where you can, and stack Hemorrhage before he comes online.",
+      mid: "His W (Dark Procession) is a ghoul cage that traps you mid-fight — never all-in when it's up, and bait it before you commit. At 6 his Maiden (R) ramps his sustained damage, so don't sit in a wall of ghouls trading; pick your moment when his cage is down and burst him 1v1 with your bleed, where your all-in still wins.",
+      late: "Yorick takes over in the extended fight — Maiden plus a full ghoul pack out-DPS your bleed, and he splitpushes with Maiden pressure. The lane is even because you crush the early and he out-grinds the late. Snowball your level 1-3 edge, deny his farm, and end before his 2-item Maiden setup. Don't get caged in a side lane late.",
+      whys: [
+        "E + bleed out-trade him before Maiden. Levels 1-3 are yours — punish the melee juggernaut.",
+        "Dodge his E (mist mark) and don't let him free-farm to his spike.",
+        "Your bleed all-in beats a pre-Maiden Yorick. Force the trade, deny his setup.",
+        "Even as Maiden nears — bait his W cage before committing.",
+        "Maiden (R) ramps his DPS — don't trade in a ghoul wall. Burst him 1v1 off cage cooldown.",
+        "Even — burst him 1v1 when his cage is down. Your bleed all-in wins the short fight.",
+        "Two items in, Maiden + ghouls out-DPS your bleed. You own early — end it before his scaling."
+      ]
+    },
+    {
+      a: 'darius', b: 'gnar',
+      win: ['Gnar', 'Skill', 'Darius', 'Darius', 'Skill', 'Darius', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Mini Gnar kites and pokes — farm through the boomerang chip.' },
+        { when: 'Mini form', text: 'Your window — land E on Mini Gnar and bleed deletes him.' },
+        { when: 'Mega form', text: 'Mega Gnar’s W stun + R wall answer your all-in — avoid walls.' },
+        { when: 'Late', text: 'Even — the lane swings on his rage bar, not the clock.' }
+      ],
+      wants: {
+        you: ['Land E on Mini Gnar — he can’t kite your pull', 'All-in when he’s Mini / out of rage', 'Avoid walls and dodge Mega Gnar’s W stun'],
+        foe: ['Poke + kite in Mini form with Q (boomerang) + E hop', 'Build rage, transform, and W-stun you for burst', 'Use Mega R to knock you into walls / tower']
+      },
+      early: "Gnar's threat is his rage bar, not his level. In Mini form he's a squishy ranged kite — Q boomerang poke, E hop — and your E-pull is the answer: land it on Mini Gnar and he can't kite, so your bleed deletes him. Farm through his Mini poke, watch his rage, and look for the pull window before he transforms.",
+      mid: "Time your all-ins to his form. Land E on a Mini, out-of-rage Gnar and your bleed crushes his squishy frame. Don't commit when he's about to transform: Mega Gnar's W stuns you and his combo chunks, and his R can knock you into a wall. Bait or wait out the Mega window, then catch him Mini again with your pull.",
+      late: "Even — the lane swings on his rage management, not the game clock. In teamfights respect Mega Gnar's R (a wall-pin AOE), but in the side lane you out-duel Mini Gnar whenever you land E. Keep punishing his Mini windows with the pull + bleed, dodge the Mega W stun, and never let him combo you against a wall.",
+      whys: [
+        "Mini Gnar pokes and kites. Farm through the chip — your E-pull catches him when he's Mini.",
+        "He builds rage as he pokes. Land E on Mini Gnar before he transforms to Mega.",
+        "Your window — E on Mini Gnar and bleed deletes his squishy frame.",
+        "All-in when he's Mini and out of rage — he can't kite your pull.",
+        "Mega Gnar's W stuns and bursts — don't get caught, stay off walls for his R.",
+        "Catch him Mini again with E + bleed. Avoid the Mega-form windows.",
+        "Even — it swings on his rage, not the clock. Out-duel Mini, dodge Mega's W, avoid walls."
+      ]
+    },
+    {
+      a: 'darius', b: 'gragas',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed out-trade him; bait his W (damage reduction).' },
+        { when: 'Lvl 6', text: 'R executes him; don’t get knocked under tower by his R (cask).' },
+        { when: '1st item', text: 'Your bleed + Might beat his poke; force every all-in.' },
+        { when: 'Late', text: 'You hold the edge — out-bleed his sustain in the extended fight.' }
+      ],
+      wants: {
+        you: ['Bait his W (damage reduction) before you commit', 'Land E before he E-dashes away', 'Out-bleed his Q poke in the extended fight'],
+        foe: ['Poke with Q (cask) and heal with W', 'Engage or escape with E (body slam stun)', 'Knock you out of position with R (cask)']
+      },
+      early: "You out-bully Gragas — levels 1-3 are yours. He pokes with Q (cask) and his W reduces incoming damage while healing, so don't dump your combo into a raised W; bait it first, then land E and your bleed out-trades him. His E (body slam) is a dash-stun for engage or escape, so try to pull him before he can E away.",
+      mid: "Keep him bleeding. Bait the W, then E-Q-W and your Hemorrhage + Might out-trade his poke. Your R executes him off stacks. At 6 watch his R (Explosive Cask) — it can knock you under his tower or peel you off — so don't all-in near his turret. Land E to pin him, stack bleed, and force the extended fight he loses.",
+      late: "You hold the edge — your bleed out-grinds his Q poke and W sustain in the extended fight. Force the all-ins, bait the W, and don't get cask'd out of position. Snowball your early dominance into towers and plates; Gragas is a utility/teamfight pick late, not a duelist who beats your bleed. The lane stays yours.",
+      whys: [
+        "E + bleed out-trade him — bait his W (damage reduction) first. Levels 1-3 are yours.",
+        "His E (body slam) is a dash-stun. Land your pull before he can E away.",
+        "Your bleed all-in beats his poke. Force the trade once his W is down.",
+        "Keep him bleeding — your Hemorrhage + Might out-trade his Q poke.",
+        "R executes him off stacks. Don't all-in near his tower — his R can knock you in.",
+        "Your bleed + Might beat his poke. Force every all-in, bait the W.",
+        "You hold the edge late — out-bleed his sustain. Don't get cask'd out of position."
+      ]
+    },
+    {
+      a: 'darius', b: 'gangplank',
+      win: ['Darius', 'Darius', 'Skill', 'Skill', 'Skill', 'Skill', 'Gangplank'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — E-pull catches a squishy GP; bleed crushes him.' },
+        { when: 'Lvl 6', text: 'Even — his W cleanses your slow; your E-pull still lands instantly.' },
+        { when: '1st item', text: 'GP’s spike — his crit Q + barrels start to out-poke you.' },
+        { when: '2+ items', text: 'Gangplank takes over — crit + barrel chains out-DPS your bleed.' }
+      ],
+      wants: {
+        you: ['Land E (pull) — a caught GP is squishy and dies to bleed', 'Detonate or dodge his barrels (E)', 'Win before his crit items come online'],
+        foe: ['Poke with Q (Parrrley) and chain barrels (E)', 'Cleanse your slow / CC with W (Remove Scurvy)', 'Out-scale into a crit + barrel teamfight threat']
+      },
+      early: "Levels 1-2 are yours — Gangplank pokes with Q (Parrrley) and sets up barrels (E), but he's squishy with no escape, so land E (Apprehend) and your bleed crushes him. Don't let him free-poke from range; walk him down behind minions and destroy his barrels before they chain. Catch him once and the bleed all-in ends him.",
+      mid: "It evens through the mid-game — his W (Remove Scurvy) cleanses CC and heals, but it can't stop your E-pull (an instant grab), so you can still catch him; just don't waste your slow into a ready W. Keep destroying his barrels so he can't combo them, and force trades where his squishy frame loses to your bleed before his crit items.",
+      late: "Gangplank takes over at two items — crit Q + chained barrels out-DPS your bleed and his R (Cannon Barrage) zones the map. The lane is even because you crush him early and he crushes late. Press your spike, land E to delete him before he's online, deny his barrel setups, and end the lane before his crit items make the poke lethal.",
+      whys: [
+        "GP pokes with Q but is squishy with no escape. Land E and your bleed crushes him. Levels 1-2 are yours.",
+        "Destroy his barrels (E) before they chain. Walk him down behind minions.",
+        "Even — his W cleanses CC but not your instant E-pull. Catch him, don't waste the slow.",
+        "Keep popping barrels and force trades on his squishy frame.",
+        "His crit spike nears — force the all-in before his items. Land E, stack bleed.",
+        "GP's first item flips it — crit Q + barrels out-poke you. Close before that.",
+        "Two items in, crit + barrels out-DPS your bleed. You own early — end it before his scaling."
       ]
     }
   ];

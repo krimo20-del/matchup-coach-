@@ -3295,30 +3295,23 @@ class Component extends DCLogic {
   // first favoured window from the level table.
   _composeTldr(MU) {
     var d = (MU.difficulty || 'EVEN').toUpperCase();
-    var lead = d.indexOf('FAVOURED') >= 0 ? 'You\u2019re favoured \u2014 '
-      : d.indexOf('HARD') >= 0 ? 'Hard lane \u2014 '
-      : d.indexOf('TRICKY') >= 0 ? 'Tricky \u2014 '
-      : d.indexOf('MIRROR') >= 0 ? 'Mirror \u2014 '
-      : 'Even lane \u2014 ';
+    var lead = d.indexOf('FAVOURED') >= 0 ? 'This one\u2019s in your favour. '
+      : d.indexOf('HARD') >= 0 ? 'Rough lane \u2014 respect it early. '
+      : d.indexOf('TRICKY') >= 0 ? 'Coin-flip lane, so play it clean. '
+      : d.indexOf('MIRROR') >= 0 ? 'It\u2019s a mirror \u2014 outplay him. '
+      : 'Even fight, small mistakes decide it. ';
     var wc = (MU.winCon || MU.win || '').trim();
     if (wc) {
-      wc = (wc.match(/^[^.!?]*[.!?]?/) || [wc])[0].trim(); // first sentence only \u2014 the rest lives in the breakdown
-      // Keep the headline short enough that the punish/window tail survives
-      // txtN's 180-char clause trim.
-      if (wc.length > 105) {
-        var cwc = wc.lastIndexOf(', ', 100);
-        if (cwc > 30) wc = wc.slice(0, cwc);
-      }
-      wc = wc.charAt(0).toLowerCase() + wc.slice(1);
-      if (!/[.!?]$/.test(wc)) wc += '.';
-    } else wc = 'win your spike windows, not his.';
-    var bits = [];
-    if (MU.key && MU.key.name && MU.key.cd) bits.push('Punish every ' + MU.key.name.split(' (')[0] + ' (' + MU.key.cd + ')');
+      wc = (wc.match(/^[^.!?]*[.!?]?/) || [wc])[0].trim(); // first sentence only
+      if (wc.length > 78) { var cwc = wc.lastIndexOf(', ', 74); wc = cwc > 24 ? wc.slice(0, cwc) : wc.slice(0, 76); }
+      wc = wc.charAt(0).toLowerCase() + wc.slice(1).replace(/[.!?]+$/, '');
+    } else wc = 'win your spike windows, not his';
     var rows = this._phaseRows(MU), win = null;
     for (var i = 0; i < rows.length; i++) { if (rows[i].who === 'A') { win = rows[i].label; break; } }
-    if (win) bits.push((bits.length ? 'your' : 'Your') + ' window is ' + win.toLowerCase());
-    else bits.push(bits.length ? 'never take the flat all-in' : 'Never take the flat all-in');
-    return lead + wc + ' ' + bits.join(' \u2014 ') + '.';
+    var tail;
+    if (MU.key && MU.key.name && MU.key.cd) tail = 'Bait his ' + MU.key.name.split(' (')[0] + ' (' + MU.key.cd + '), then go' + (win ? ' \u2014 your window\u2019s ' + win.toLowerCase() + '.' : '.');
+    else tail = win ? 'Your window\u2019s ' + win.toLowerCase() + '.' : 'Don\u2019t force the flat all-in.';
+    return lead + 'The plan: ' + wc + '. ' + tail;
   }
   // Champion of the Week \u2014 free-tier rotation, anchored to Tuesdays (UTC).
   weekChamp() {
@@ -6593,9 +6586,9 @@ class Component extends DCLogic {
         var foe = (MU.champB && MU.champB.name) || 'him';
         var rows = self._phaseRows(MU), win = null;
         for (var i = 0; i < rows.length; i++) { if (rows[i].who === 'A') { win = rows[i].label; break; } }
-        var tail = 'Vs ' + foe + ' specifically: ';
-        if (MU.key && MU.key.name && MU.key.cd) tail += 'bait ' + MU.key.name.split(' (')[0] + ' and act inside its ' + MU.key.cd + ' window' + (win ? ', strongest at ' + win.toLowerCase() + '.' : ' — never the flat all-in.');
-        else tail += win ? 'your strongest window is ' + win.toLowerCase() + ' — force the lane there.' : 'win through waves and the map, not flat all-ins.';
+        var tail;
+        if (MU.key && MU.key.name && MU.key.cd) tail = 'Against ' + foe + ', it really comes down to one button: bait out his ' + MU.key.name.split(' (')[0] + ', and the moment it’s on cooldown (' + MU.key.cd + ') you’ve got your window' + (win ? ' — you’re hardest to deal with around ' + win.toLowerCase() + '.' : ' to make something happen.');
+        else tail = win ? 'Against ' + foe + ', your best window is ' + win.toLowerCase() + ' — shape the lane so the fight happens there.' : 'Against ' + foe + ', don’t force a coin-flip all-in — win it through waves, vision, and the map instead.';
         return base + ' ' + tail;
       })(this),
       // TL;DR is COMPOSED from the data shown on this page (verdict, win

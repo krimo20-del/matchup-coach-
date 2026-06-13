@@ -76,6 +76,15 @@
       sylas: 50.8, graves: 54.3, heimerdinger: 48.6, sejuani: 50.3, zac: 54.0, ziggs: 49.1,
       akshan: 51.1, ambessa: 53.8, aurora: 51.2, karma: 53.1, lillia: 55.0, mel: 57.2,
       nautilus: 50.2, neeko: 52.5
+    },
+    // ===== GAREN (top) — real lolalytics win rates (Emerald+, patch 16.12) =====
+    // Garen wins short Q-silence trades then disengages to regen (passive), and runs
+    // squishies down with Q→E→R (Demacian Justice % true-damage execute). His W
+    // (damage reduction + tenacity) blunts burst combos. He loses to true-damage
+    // duelists who ignore his armour (Camille) and gets kited by mobile carries late.
+    garen: {
+      darius: 50.6, aatrox: 52.0, fiora: 48.8, teemo: 51.3, jax: 55.6, trundle: 52.6,
+      renekton: 53.7, sett: 50.9, mordekaiser: 51.4, vayne: 52.0, camille: 46.7, nasus: 56.8
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -100,7 +109,11 @@
       var win = (champ === 'aatrox' && da === 'FAVOURED')
         ? ['Skill', 'Skill', disp(champ), disp(champ), disp(champ), disp(champ), SCALER[en] ? disp(en) : 'Skill']
         : null;
-      FIX.push({ a: champ, b: en, da: da, db: mirrorDiff(da), win: win });
+      // fwd: this verdict is forward-only — each champion's page shows its OWN
+      // lolalytics number/verdict. The reverse page gets ITS verdict from the
+      // opponent's own table (once that champ is processed), not a mirror guess,
+      // since the two pages are independent samples that can straddle a boundary.
+      FIX.push({ a: champ, b: en, da: da, db: mirrorDiff(da), win: win, fwd: true });
     });
   });
 
@@ -3697,6 +3710,318 @@
         "Your edge — deny CS before her burst scaling.",
         "You own the 1v1 — she's a teamfight pick mage. Don't facecheck her clones; press your edge."
       ]
+    },
+    {
+      a: 'garen', b: 'darius',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Garen'],
+      spikes: [
+        { when: 'Lvl 1–5', text: 'Darius’s window — his E-pull + bleed out-trade you. Use W to survive.' },
+        { when: 'Lvl 6', text: 'His R executes off bleed — stay above the threshold, W the all-in.' },
+        { when: '1st item', text: 'It stabilizes — your regen + W shield even out his bleed trades.' },
+        { when: 'Late', text: 'You edge it — you out-scale tanky while his bleed falls off.' }
+      ],
+      wants: {
+        you: ['Use W (damage reduction) to survive his bleed all-in', 'Q-silence to cut his combo, then disengage to regen', 'Out-scale him tanky — his bleed falls off late'],
+        foe: ['Land E (pull) to start the bleed all-in', 'Stack Hemorrhage and R-execute you', 'Win before your regen + tankiness come online']
+      },
+      early: "Darius owns the early — his E (Apprehend) pull yanks you into his bleed, and his Q heals while his passive shreds you. Don't get pulled: stand away from him, last-hit carefully, and use W (Courage) to eat his all-in damage when he commits. Your Q silences his combo for a short trade, but levels 1-5 are his window — survive without feeding the snowball.",
+      mid: "Watch his R (Noxian Guillotine): it executes you off five bleed stacks, so keep your HP above the threshold and pop W to survive the all-in. Q-silence him to cut the combo, then disengage and regen with your passive — don't sit in a drawn-out bleed war you lose. From your first item the lane stabilizes as your tankiness catches up.",
+      late: "You edge it late — you out-scale Darius into a tanky bruiser while his front-loaded bleed falls off, and your R execute + Villain mark stay relevant. Survive his level 1-5 window with W and regen, deny the snowball, and the back half is yours. Don't get caught by a low-HP R, but in the extended game your durability wins.",
+      whys: [
+        "Darius's E-pull starts the bleed all-in. Stand back, last-hit, use W to survive — levels 1-5 are his.",
+        "His Q heals and his passive bleeds you. Q-silence to cut a trade, then disengage and regen.",
+        "His full combo off the E hurts. Pop W (damage reduction) to eat it; don't trade into the pull.",
+        "Keep your HP up and regen between trades. Don't bleed out in a long fight.",
+        "His R executes off bleed stacks — stay above the threshold, W the all-in.",
+        "It stabilizes — your regen + W shield even out his bleed trades. Hold the lane.",
+        "You edge it late — out-scale him tanky while his bleed falls off. Your R stays relevant."
+      ]
+    },
+    {
+      a: 'garen', b: 'aatrox',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — Q-silence trades beat his weak early.' },
+        { when: 'Lvl 3–6', text: 'Aatrox’s window — his sustain out-heals your short trades.' },
+        { when: '1st item', text: 'His Eclipse spike — out-sustains your Q-E; trade short, then regen.' },
+        { when: 'Late', text: 'Even — your R execute + tankiness vs his drain-tank sustain.' }
+      ],
+      wants: {
+        you: ['Win short Q-silence trades at level 1-2', 'Trade then disengage — don’t let him heal a long fight', 'Use R execute + Villain to punish him low'],
+        foe: ['Out-sustain your short trades with his healing', 'Space the Q sweetspot and W-pull you in', 'Drain-tank the extended fight you can’t disengage']
+      },
+      early: "Levels 1-2 are your window — Aatrox is one of the weakest early juggernauts, and your Q-silence trade beats him before his combo and sustain come online. Poke with Q, eat little in return, and don't let him reach his level-3 spike for free. Once his sustain is up, short decisive trades are your friend, not drawn-out fights.",
+      mid: "From 3 his sustain flips it — he out-heals your short trades and his W-pull locks you in his Q sweetspot. Don't sit in an extended fight his drain-tank wins; trade with Q-silence to deny his combo, then disengage and regen with your passive. His Eclipse spike at first item out-sustains your damage, so pick your trades and don't overstay.",
+      late: "Even into late — your R execute + Villain mark and tanky scaling versus his drain-tank sustain. You can't out-DPS his healing in a long fight, so play for short bursts, R-execute him when he's low, and rely on your durability. Don't get caught in a sustained 1v1 where his lifesteal grinds you down; force the fight on your terms.",
+      whys: [
+        "Aatrox is weak early. Your Q-silence trade beats him at level 1-2 — punish before his spike.",
+        "Poke with Q and don't let him reach level 3 for free. Short trades favour you.",
+        "His sustain comes online — he out-heals your short trades. Trade then disengage.",
+        "Don't sit in an extended fight his drain-tank wins. Q-silence, then regen.",
+        "His W-pull locks you in his sweetspot. Pop W, trade short, don't overstay.",
+        "His Eclipse spike out-sustains your Q-E. Pick your trades, regen between them.",
+        "Even late — your R execute + tankiness vs his sustain. Burst short, don't grind long."
+      ]
+    },
+    {
+      a: 'garen', b: 'fiora',
+      win: ['Garen', 'Skill', 'Skill', 'Skill', 'Skill', 'Skill', 'Fiora'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Your window — Q-silence + E out-trade her before her parry mastery.' },
+        { when: 'Lvl 3+', text: 'Her W (Riposte) parries your Q or E — don’t telegraph your combo.' },
+        { when: '1st item', text: 'Even — bait her parry, then Q-silence; she out-trades if she lands it.' },
+        { when: '2+ items', text: 'Fiora takes over — vitals + true damage ignore your W armour.' }
+      ],
+      wants: {
+        you: ['Q-silence + E early before she masters the parry', 'Bait her W (Riposte) before committing Q or E', 'Trade short, then disengage and regen'],
+        foe: ['Parry (W) your Q or E for the stun', 'Proc vitals — true damage ignores your W armour', 'Out-scale into a one-item-spike duelist']
+      },
+      early: "Level 1 is your window — your Q-silence + E spin out-trade Fiora before she has the tools or timing to punish you. Her whole game is W (Riposte): it parries your Q or E and stuns you, flipping the trade. Early, she's less able to threaten, so press your Q-silence advantage and poke her down before she gets going.",
+      mid: "From 3 it's a parry chess match — don't telegraph your Q or E into her W, because a parried ability is a lost trade and a free vital. Bait the W (feint, then commit), and your short trade still wins if she wastes it. Her vitals deal true damage that ignores your W armour, so don't sit in a long fight; trade with Q-silence, then disengage and regen.",
+      late: "Fiora out-scales you. Two items in, her vitals + true damage shred through your W and tankiness, and her duelling overtakes your short trades. The lane is even overall — you bully level 1 and short windows, she takes the extended late. Press your early edge, bait her parry, and don't let her proc vitals in a drawn-out 1v1.",
+      whys: [
+        "Q-silence + E out-trade her at level 1, before her parry mastery. Press the early.",
+        "Her W parries your Q or E for a stun. Don't telegraph; bait it first.",
+        "Vitals deal true damage that ignores your W armour. Trade short, then regen.",
+        "Don't sit in a long fight — Q-silence, disengage, and reset with your passive.",
+        "Bait the Riposte, then commit. She out-trades only if she lands it.",
+        "Even — your short trade beats a wasted parry. Force it before her items.",
+        "Two items in she flips it — vitals + true damage shred your W. She wins the late duel."
+      ]
+    },
+    {
+      a: 'garen', b: 'teemo',
+      win: ['Teemo', 'Teemo', 'Skill', 'Garen', 'Garen', 'Garen', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Teemo pokes and blinds your E/autos — farm, your regen heals it.' },
+        { when: 'Lvl 4–6', text: 'Your window — Q (cleanse + MS) runs him down through the blind.' },
+        { when: '1st item', text: 'You out-sustain his poke; force the all-in on his blind cooldown.' },
+        { when: 'Late', text: 'He becomes a shroom/splitpush map problem — close lane early.' }
+      ],
+      wants: {
+        you: ['Use Q (cleanse + move speed) to run him down', 'Out-sustain his poke with your passive regen', 'All-in on his blind cooldown — he has no escape'],
+        foe: ['Blind your E spin + autos every trade', 'Poke you down and stack shrooms', 'Survive and scale into splitpush + vision']
+      },
+      early: "Teemo's blind (Q) shuts off your E spin and autos, so levels 1-2 he pokes you and you can't trade back cleanly. But your passive regen heals his poke between waves, so don't panic — last-hit, take the chip, and wait for your run-down window. His move-speed kite is annoying, but he has no escape once you reach him.",
+      mid: "Your window opens with Q (Decisive Strike) — it cleanses his blind's slow and gives you move speed to close the gap and run him down. Bait the blind, then Q-in, E-spin, and silence him so he can't reposition. At 6 your R executes him. He can't kite a Garen who out-sustains his poke and sticks with Q; force the all-in when his blind is down.",
+      late: "Teemo stops being a laner and becomes a map problem — shrooms on objectives, splitpush, vision. You win the straight 1v1 once you reach him, so close the lane early before his scaling utility matters. Don't facecheck shroom-walled brush near objectives, and use Q's cleanse to push through his slows when you commit.",
+      whys: [
+        "Teemo's blind shuts off your E + autos. Farm — your regen heals the poke. Levels 1-2 are his.",
+        "He pokes and kites with move speed. Take the chip, wait for your Q window.",
+        "Your Q cleanses his blind's slow and gives MS. Bait the blind, then run him down.",
+        "Q-in, E-spin, silence him — he can't reposition. Out-sustain the poke.",
+        "Your R executes him. All-in on his blind cooldown; he has no escape.",
+        "You out-sustain his poke — force the all-in when his blind is down.",
+        "He becomes a shroom/splitpush problem. Close lane early; don't facecheck brush."
+      ]
+    },
+    {
+      a: 'garen', b: 'jax',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Jax'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence cuts his combo; W blunts his burst.' },
+        { when: 'Lvl 6', text: 'R executes him; your W reduces his E-empowered all-in.' },
+        { when: '1st item', text: 'Still your edge — silence + W shut down his combo reliance.' },
+        { when: '2+ items', text: 'Jax takes over — his item scaling out-duels you late.' }
+      ],
+      wants: {
+        you: ['Q-silence to cut his combo before he E-stuns', 'Use W (damage reduction) to blunt his burst', 'Win before his item spikes; R-execute him low'],
+        foe: ['Dodge your spin with E (Counterstrike) and stun back', 'Stall the lane and scale to his item spikes', 'Out-duel you late with Grandmaster’s + Jax items']
+      },
+      early: "You out-trade Jax early — your Q silences his combo (he can't dump his E-W-Q burst while silenced), and your W (Courage) reduces the damage of whatever he does land. His E (Counterstrike) dodges your E spin and stuns, so don't dump your spin into a held E; Q-silence him first, then commit. Levels 1-3 are yours.",
+      mid: "Keep punishing. Q-silence cuts his combo reliance, W blunts his Counterstrike-empowered burst, and your E spin out-damages his short trades. At 6 your R executes him off your sustained pressure. Bait his E (make him pop Counterstrike), then Q-E and trade; his burst can't break a tanky, silencing Garen with W up.",
+      late: "Jax is one of the best scaling duelists in the game — two items in, his Grandmaster's passive + item spikes out-duel you and he wins the extended 1v1. The lane is favoured because you crush his early-mid with silence + W; you must convert it. Press your lead, R-execute him, and close the lane before his item scaling flips the duel.",
+      whys: [
+        "Q-silence cuts his combo and W blunts his burst. Levels 1-3 are yours.",
+        "His E (Counterstrike) dodges your spin and stuns. Q-silence first, then commit.",
+        "Your E spin out-damages his short trades. Bait his E, then Q-E.",
+        "Keep punishing — silence + W shut down his combo reliance.",
+        "R executes him; your W reduces his E-empowered all-in.",
+        "Still your edge — force the all-in before his item spikes.",
+        "Two items in his scaling out-duels you. Close the lane before late, or it's his."
+      ]
+    },
+    {
+      a: 'garen', b: 'trundle',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Skill', 'Trundle'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence + E out-trade him before his sustain.' },
+        { when: 'Lvl 6', text: 'His R drains your resistances + W shield — burst short, then regen.' },
+        { when: '1st item', text: 'Your edge — bait his Q (Chomp), which steals your AD.' },
+        { when: '2+ items', text: 'Trundle takes over — sustain + R drain out-grind your trades.' }
+      ],
+      wants: {
+        you: ['Q-silence + E out-trade him before his sustain ramps', 'Bait his Q (Chomp) — it steals your AD', 'Trade short, then disengage and regen'],
+        foe: ['Bite (Q) to steal your AD and heal', 'Zone you with E (Pillar) and out-sustain trades', 'Drain your resistances + W with R in a long fight']
+      },
+      early: "Levels 1-3 are yours — your Q-silence + E spin out-trade Trundle before his sustain ramps. His Q (Chomp) steals your AD and heals him, so bait it before you commit; a bite weakens your whole trade. His E (pillar) zones and peels, so play around it. Press your early Q-silence advantage and don't let his sustain take over.",
+      mid: "His R (Subjugate) drains your resistances — including the armour/MR your W (Courage) stacks — in a long fight, so don't get dragged into an extended slugfest. Burst him with Q-E in a short window, then disengage and regen with your passive. Bait the Chomp, trade, and back off before his R and sustain flip the drawn-out fight.",
+      late: "Trundle takes over at two items — his sustain + R drain out-grind your trades, and as a tank-buster he melts your resistances. The lane is favoured because you bully the early, so press it. Force short Q-silence trades, R-execute him when low, and close the lane before his scaling. Don't let him out-sustain a long fight; keep it short.",
+      whys: [
+        "Q-silence + E out-trade him before his sustain ramps. Levels 1-3 are yours.",
+        "His Q (Chomp) steals your AD. Bait it before you commit your trade.",
+        "His E pillar zones and peels. Trade short when his Q is down, then regen.",
+        "Keep punishing — your Q-silence beats his early. Don't let his sustain ramp.",
+        "His R drains your resistances + W in a long fight — burst short, then disengage.",
+        "Your edge — bait the Chomp, then Q-E. Force short trades.",
+        "Two items in, sustain + R drain out-grind you. Keep it short; close the lane early."
+      ]
+    },
+    {
+      a: 'garen', b: 'renekton',
+      win: ['Renekton', 'Renekton', 'Skill', 'Garen', 'Garen', 'Garen', 'Garen'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Renekton’s window — empowered Q + W stun out-trade you. Use W.' },
+        { when: 'Lvl 4–6', text: 'Your window — silence his fury combo; out-scale his falloff.' },
+        { when: '1st item', text: 'Your edge — your tankiness + R beat a falling-off Renekton.' },
+        { when: 'Late', text: 'You out-scale — Renekton has no late; your durability wins.' }
+      ],
+      wants: {
+        you: ['Survive his level 1-2 with W (damage reduction)', 'Q-silence his fury combo, then out-scale him', 'Out-last his falloff — you’re tankier late'],
+        foe: ['Bully levels 1-2 with empowered Q + W stun', 'Use double-E to engage and escape your trades', 'Snowball the early before you out-scale']
+      },
+      early: "Renekton's early is his window — empowered Q heals and chunks, his W is a point-blank stun, and double-E lets him dash in and out. Levels 1-2 he out-trades you; pop W (Courage) to reduce his burst, don't get caught by the stun-combo, and concede a little CS rather than feed his fury snowball. Survive his peak.",
+      mid: "From 4-6 the lane swings to you. Q-silence shuts off his fury combo, and as a front-loaded champion he starts to fall off while you only get tankier. Trade with Q-E when his W stun is down, use W to blunt his all-in, and deny him the snowball. Your R executes him if he over-stays his fading power window.",
+      late: "You out-scale him — Renekton has essentially no late game while your tankiness, regen, and R execute keep growing. Survive his level 1-2 spike with W, weather the fury window, and the back half is decisively yours. Don't trade into a fresh W stun, but once he falls off, you run the lane and the side-lane 1v1.",
+      whys: [
+        "Renekton's empowered Q + W stun out-trade you early. Pop W to survive — levels 1-2 are his.",
+        "His double-E engages and escapes. Concede a little CS, don't feed the fury snowball.",
+        "Your window opens — Q-silence his fury combo when his W is down.",
+        "He starts to fall off while you get tankier. Trade with Q-E, deny the snowball.",
+        "Your R executes a falling-off Renekton. Use W to blunt his all-in.",
+        "Your edge — your tankiness + R beat him now. Press the lane.",
+        "You out-scale — he has no late. Survive the early, then run the 1v1."
+      ]
+    },
+    {
+      a: 'garen', b: 'sett',
+      win: ['Garen', 'Garen', 'Skill', 'Skill', 'Skill', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — Q-silence + E out-trade his short-range early.' },
+        { when: 'Lvl 6', text: 'His W (true damage) + R answer you — W reduces it; trade short.' },
+        { when: '1st item', text: 'Even — bait his W (Haymaker) when his grit is empty.' },
+        { when: 'Late', text: 'Even juggernaut brawl — your R execute vs his grit burst.' }
+      ],
+      wants: {
+        you: ['Q-silence + E out-trade his short-range punches', 'Use W to reduce his Haymaker (true damage)', 'Trade when his grit is empty, then disengage'],
+        foe: ['Build grit, then W (Haymaker) for a true-damage chunk', 'Land E (Facebreaker stun) into his combo', 'Pull you in with R for an all-in']
+      },
+      early: "Levels 1-2 are your window — Sett's kit is short-range, and your Q-silence + E spin out-trade his early before he's banked grit. His W (Haymaker) deals true damage scaled off the grit he stores from taking hits, so don't feed it: trade when his grit is empty, pop W to reduce the Haymaker, and press your early Q advantage.",
+      mid: "It evens around 6 — his W (true damage) and E (Facebreaker) stun set up a real all-in, and his R pulls you in. Your W (Courage) reduces the Haymaker's burst, but don't sit in a long fight feeding his grit. Bait his W when it's empty, trade short with Q-E, then disengage and regen. Watch his E-stun-into-W combo.",
+      late: "Even juggernaut brawl — your R execute + tankiness versus his grit-shield true-damage burst. Both of you want the all-in, so it hinges on grit management and CC timing. Trade short when his grit is low, use W to blunt the Haymaker, and R-execute him when low. Don't all-in into a full grit Haymaker; keep the fights on your terms.",
+      whys: [
+        "Q-silence + E out-trade his short-range early. Levels 1-2 are yours.",
+        "His W (Haymaker) scales off grit. Trade when it's empty; pop W to reduce it.",
+        "Even as his grit comes online — bait the W before you commit.",
+        "Don't feed his grit in a long fight. Trade short, then regen.",
+        "His E stuns into W and his R pulls you in — W reduces it; trade short.",
+        "Even — bait his W when his grit is empty, then Q-E.",
+        "Even brawl late — your R execute vs his grit burst. Keep fights short."
+      ]
+    },
+    {
+      a: 'garen', b: 'mordekaiser',
+      win: ['Garen', 'Garen', 'Skill', 'Skill', 'Mordekaiser', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — Q-silence stops his Q; W (MR) blunts his magic.' },
+        { when: 'Lvl 6', text: 'Morde’s window — R (Realm) isolates you 1v1; don’t int it.' },
+        { when: '1st item', text: 'Even — W gives MR; trade short, then regen the magic chip.' },
+        { when: 'Late', text: 'Even — your R execute + MR vs his isolated R damage.' }
+      ],
+      wants: {
+        you: ['Q-silence to stop his Q before it lands', 'Build/use W for MR against his magic damage', 'Respect his R (Realm) at 6 — fight when it’s down'],
+        foe: ['Land E (pull) into Q for his trade pattern', 'Isolate you with R (Realm) and win the 1v1', 'Stack passive shield + AP to out-sustain you']
+      },
+      early: "Levels 1-2 are your window — your Q silences Morde before he can land his Q (his main damage), and your W (Courage) stacks MR to blunt his magic. Don't let him E-pull you into his Q combo or stack his passive shield freely. Poke with Q-silence trades, use your MR, and press the early before his ramp.",
+      mid: "Level 6 is HIS window — Realm of Death (R) drags you into an isolated 1v1, steals your stats, and his sustained magic damage is strong inside it. Don't int the Realm at low HP; play around its cooldown. Your W's MR and damage reduction help you survive it, but respect the timing. Outside R, your Q-silence + short trades hold the lane.",
+      late: "Even into late — your R execute + Villain mark and W's MR versus his isolated Realm damage. He out-sustains a long fight with his passive shield, so trade short with Q-silence, regen between, and burst him with R when low. Build MR (your W helps), respect the Realm windows, and the lane stays roughly even — slightly yours if you dodge his R timings.",
+      whys: [
+        "Q-silence stops his Q before it lands; W gives MR. Levels 1-2 are your window.",
+        "Don't let him E-pull you into Q or stack his shield. Poke with Q-silence.",
+        "He out-sustains a long fight with his shield. Trade short, then regen.",
+        "Build/use W's MR — his magic chip hurts less. Keep trades short.",
+        "His R isolates you and steals your stats — his window. Don't int it; W helps you survive.",
+        "Even — W's MR blunts his magic. Trade short, regen the chip.",
+        "Even late — your R execute + MR vs his Realm damage. Respect the R timings."
+      ]
+    },
+    {
+      a: 'garen', b: 'vayne',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Vayne'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q (cleanse + MS) runs her down; silence stops her kite.' },
+        { when: 'Lvl 6', text: 'R executes her squishy frame — all-in on her tumble cooldown.' },
+        { when: '1st item', text: 'Still your stomp — deny CS so she never scales.' },
+        { when: '2+ items', text: 'Do-or-die: at 2+ items Vayne out-scales the entire map.' }
+      ],
+      wants: {
+        you: ['Use Q (cleanse + move speed) to run her down', 'Silence her so she can’t kite, then E + R', 'Kill her before crit items or she becomes unbeatable'],
+        foe: ['Kite with tumble (Q) + autos, stay off walls', 'Condemn (E) you on a wall to peel the all-in', 'Survive lane and scale into a %-HP hypercarry']
+      },
+      early: "You run Vayne down early — she's short-range and squishy, and your Q (Decisive Strike) cleanses her slows and gives you move speed to close, while the silence stops her from repositioning. Her tumble (Q) and Condemn (E) buy distance, but stand off walls so she can't stun you, deny her CS, and your Q-E shred her tiny health bar. Levels 1-3 are yours.",
+      mid: "Hard-stomp window. Q-in, silence, E-spin, and at 6 your R executes her squishy frame off her own missing health. All-in on her tumble cooldown — she has no sustain and folds to your combo. Her whole game is scaling, so deny every minion: every denied CS delays the hypercarry she becomes. Dive her with jungle help if she's behind.",
+      late: "Do-or-die. If Vayne survived to two crit items she out-scales the entire map — her %-HP true damage shreds even a tanky Garen, and she kites your run-down. You had to kill her early and end the game; if she's farmed, the late game is hers. Press your massive early lead into objectives before her power curve arrives.",
+      whys: [
+        "Your Q cleanses her slows + gives MS to run her down. Silence stops her kite. Levels 1-3 are yours.",
+        "Stand off walls so she can't Condemn-stun you. Deny CS, starve her scaling.",
+        "Q-in, silence, E-spin — she folds. She has no sustain and can't kite a cleansing Garen.",
+        "Hard-stomp — every all-in on her tumble cooldown is a kill. Keep her broke.",
+        "R executes her squishy frame off her missing HP. Dive with jungle.",
+        "Still your stomp — deny CS, take her tower, end the game.",
+        "Do-or-die: at 2+ items she out-scales everyone. Close the game on your lead."
+      ]
+    },
+    {
+      a: 'garen', b: 'camille',
+      win: ['Skill', 'Camille', 'Camille', 'Camille', 'Camille', 'Skill', 'Camille'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Your window — Q-silence trade before her E-Q combo spikes.' },
+        { when: 'Lvl 2–6', text: 'Camille’s window — her E-Q true damage ignores your W armour.' },
+        { when: '1st item', text: 'She out-trades you — her true damage shreds your tankiness.' },
+        { when: '2+ items', text: 'Camille takes over — R isolation + true damage win the side lane.' }
+      ],
+      wants: {
+        you: ['Q-silence a short trade at level 1, then disengage', 'Stand off terrain so her E can’t stun you', 'Bait her E (escape) — but she out-trades you most windows'],
+        foe: ['Out-trade you with E-Q (hookshot) true damage + shield', 'Her true damage ignores your W armour', 'Isolate and 1v1 you with R in the side lane']
+      },
+      early: "This is a hard lane — Camille's E-Q (hookshot into empowered auto) does true damage that ignores your W (Courage) armour, and her shield blunts your trade back. Level 1 is your only real window before her combo spikes: a quick Q-silence poke. Stand away from terrain so her E can't stun you, and don't get caught in an extended trade her true damage wins.",
+      mid: "Camille owns the mid-levels. Her E-Q out-trades you, her true damage shreds your tankiness, and she resets trades by hookshotting away. Your Q-silence can interrupt her if you catch the combo, but she out-trades most windows. Trade short, disengage, and regen with your passive — don't sit in a fight where her true damage and shield grind you down.",
+      late: "Camille takes over — two items in, her R isolation + true damage win the side-lane 1v1 outright, and your W armour does nothing against her. The lane is tricky and tilted her way. Your best path is the level-1 window and short Q-silence pokes; if it goes even into late, she wins the duel. Play safe and rely on your R execute + team.",
+      whys: [
+        "Camille's E-Q true damage ignores your W armour. Q-silence a short trade at level 1 — your window.",
+        "Stand off terrain so her E can't stun you. Her combo out-trades you from level 2.",
+        "Her true damage shreds your tankiness. Trade short, disengage, regen.",
+        "She resets trades by hookshotting away. Don't chase into her item spikes.",
+        "Your Q-silence can interrupt her combo, but she out-trades most windows.",
+        "She out-trades you — her true damage beats your W. Play short and safe.",
+        "Two items in, R isolation + true damage win the side lane. Rely on R execute + team."
+      ]
+    },
+    {
+      a: 'garen', b: 'nasus',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Nasus'],
+      spikes: [
+        { when: 'Lvl 1–5', text: 'Your window — Q-silence + E bully him off Q stacks.' },
+        { when: 'Lvl 6', text: 'R executes him; his W (Wither) cripples your run-down — bait it.' },
+        { when: '1st item', text: 'Still your stomp — deny stacks so his scaling never arrives.' },
+        { when: '2+ items', text: 'Nasus takes over — stacked Q + tanky body out-grind you.' }
+      ],
+      wants: {
+        you: ['Bully his weak early — Q-silence + E deny his stacks', 'Bait his W (Wither) before you all-in', 'Snowball before his stacks + items come online'],
+        foe: ['Stack Q on every last-hit, even under tower', 'Cripple your run-down with W (Wither)', 'Out-scale into a stacked, tanky late-game monster']
+      },
+      early: "You hard-bully Nasus — he's one of the weakest early laners, and your Q-silence + E spin deny his Q stacks and zone him off CS. His W (Wither) cripples your move speed and attack speed, shutting off your run-down, so bait it before you commit (your Q cleanse helps vs the slow). Press every trade, starve his stacks, and own levels 1-5.",
+      mid: "Keep stomping. Your Q-E out-trade a low-stack Nasus, and at 6 your R executes him. His W cripple is his main tool against you, so bait or cleanse it, then all-in. Every Q stack you deny and every plate you take delays the monster he becomes — zone him hard and snowball before his scaling arrives.",
+      late: "Nasus takes over at two items — a stacked Q on a tanky body out-grinds your trades, and his Wither shuts off your kite-and-execute. The lane is favoured because you crush the entire early game and he crushes the very late. You MUST snowball this into a game-ending lead; deny his stacks and end before his Q makes him unbeatable.",
+      whys: [
+        "Nasus is weak early. Q-silence + E bully him off Q stacks. Levels 1-5 are yours.",
+        "His W (Wither) cripples your run-down. Bait it — your Q cleanse helps vs the slow.",
+        "Your Q-E out-trade a low-stack Nasus. Zone him off CS, deny stacks.",
+        "Keep stomping — every denied stack delays his scaling. Take plates.",
+        "R executes him; bait his W, then all-in. Don't let him stack freely.",
+        "Still your stomp — starve his farm so his scaling never arrives.",
+        "Two items in, stacked Q + tanky body out-grind you. End the game before that."
+      ]
     }
   ];
   window.MC_MATCHUP_EXTRA = window.MC_MATCHUP_EXTRA || {};
@@ -3749,7 +4074,7 @@
     FIX.forEach(function (f) {
       [F, D].forEach(function (store) {
         patch(store, f.a, f.b, f.da, f.win);
-        patch(store, f.b, f.a, f.db, f.win);
+        if (!f.fwd) patch(store, f.b, f.a, f.db, f.win);   // hand-set pairs stay mirrored; WR-generated verdicts are forward-only
       });
     });
     applyContent();

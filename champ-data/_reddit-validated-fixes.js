@@ -108,7 +108,9 @@
       irelia: 46.2, riven: 49.9, sion: 54.4, ornn: 51.9, malphite: 57.4, pantheon: 54.3,
       kled: 47.1, urgot: 50.7, olaf: 48.0, tryndamere: 48.6, illaoi: 49.3, vladimir: 49.0,
       shen: 49.5, swain: 58.7, warwick: 48.4, volibear: 59.5, wukong: 56.2, yasuo: 51.8,
-      yone: 45.4, yorick: 50.0, gnar: 53.9, gragas: 54.9, gangplank: 55.1, quinn: 49.2
+      yone: 45.4, yorick: 50.0, gnar: 53.9, gragas: 54.9, gangplank: 55.1, quinn: 49.2,
+      chogath: 55.3, tahmkench: 54.9, ksante: 49.9, poppy: 47.2, kayle: 46.6, kennen: 62.9,
+      singed: 52.8, ryze: 55.0, rumble: 53.4, akali: 52.0, cassiopeia: 51.7, galio: 52.7
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -6437,6 +6439,318 @@
         "Her R roams for picks — punish the wave when she leaves.",
         "Your spike — regen out-sustains her poke; deny her roams.",
         "Even — she roams for picks; you out-sustain the lane. Play the map."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'chogath',
+      win: ['Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver (Q) %-HP poke out-sustains his weak early.' },
+        { when: 'Lvl 6', text: 'Respect his R (true-damage execute) when you’re low.' },
+        { when: '1st item', text: 'Your regen + Q poke win the tank-scaling race.' },
+        { when: 'Late', text: 'Even tank mirror — your regen edges his stacked HP.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke his weak early; deny his Q stacks', 'Dodge his Q (rupture) + W (silence)', 'Out-sustain the tank-scaling race with regen'],
+        foe: ['Land Q (knockup) into W (silence) for a trade', 'Farm safely and stack HP with R (Feast)', 'Scale into an unkillable true-damage teamfight tank']
+      },
+      early: "Levels 1-3 are yours — Cho'Gath is a weak-early tank scaler, and your cleaver (Q) %-HP magic poke chips him while he tries to last-hit. Dodge his Q (Rupture knockup) and don't get silenced by his W. Throw cleavers, deny his CS, and out-sustain his weak early; you have the better lane sustain in this tank mirror.",
+      mid: "Keep poking and out-sustaining. Your cleaver out-pokes him and your regen out-lasts the lane, but respect his R (Feast): it's a true-damage execute that ignores your HP, so don't get caught low. Deny his farm to keep him off HP stacks; this is a slow tank-vs-tank scaling race you edge with superior regen.",
+      late: "It's an even tank mirror with your regen as the edge — both of you stack HP and don't die in lane, but your cleaver poke + sustain give you the farming advantage. His stacked Q + true-damage R make him a strong teamfighter, so the game decides in fights. In the side-lane 1v1 you out-poke and out-sustain him.",
+      whys: [
+        "Cho is weak early. Cleaver %-HP poke out-sustains his early. Levels 1-3 are yours.",
+        "Dodge his Q (rupture) and W (silence). Deny his CS and Q stacks.",
+        "Your cleaver out-pokes him; your regen out-lasts the lane.",
+        "It's a tank-scaling race — deny his farm to keep him off HP stacks.",
+        "Respect his R (true-damage execute) when you're low — it ignores your HP.",
+        "Your regen + Q poke win the tank-scaling race.",
+        "Even tank mirror — your regen edges his stacked HP. Decides in fights."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'tahmkench',
+      win: ['Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver-poke his weak early; he has no waveclear.' },
+        { when: 'Lvl 6', text: 'His W (Devour) grey health resets poke — out-sustain him anyway.' },
+        { when: '1st item', text: 'Your regen + Q poke out-last his grey-health sustain.' },
+        { when: 'Late', text: 'Even tank-ish — you out-poke; he peels for his team.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke his weak early; deny CS (no waveclear)', 'Out-sustain his grey health with regen', 'Win the tank-sustain race; scale HP'],
+        foe: ['Tank your poke with grey health (passive)', 'Reposition with W (Devour escape)', 'Scale into a tanky teamfight peeler / saver']
+      },
+      early: "Levels 1-3 are yours — Tahm Kench has a weak early and no waveclear, so your cleaver (Q) pokes him while he struggles to farm. Throw cleavers, pin him, and deny CS; don't walk into a W (Devour) for a free grey-health trade, but otherwise you out-poke and out-sustain his weak early.",
+      mid: "His grey health (passive) banks your poke as a healing shield, resetting your cleaver pressure — but you're a regen tank, so you just keep poking and healing. Throw cleavers from range, deny CS, and out-sustain. His W can reposition him, but he has no way to actually beat a regen tank in the 1v1.",
+      late: "It's an even tank-ish lane where you out-poke — Tahm becomes a teamfight peeler/saver, and you're a frontline. In the side-lane 1v1 your cleaver poke + regen edge his grey-health sustain. Scale HP, contribute your frontline, and out-sustain the lane; he can't kill you and you out-poke him.",
+      whys: [
+        "Tahm has no waveclear and a weak early. Cleaver-poke him. Levels 1-3 are yours.",
+        "Don't walk into a W (Devour) grey-health trade. Pin him, deny CS.",
+        "His grey health banks your poke — but you out-sustain and keep poking.",
+        "Throw cleavers from range, deny CS. He can't beat a regen tank 1v1.",
+        "His W resets poke and repositions him — out-sustain him anyway.",
+        "Your regen + Q poke out-last his grey-health sustain.",
+        "Even tank-ish — you out-poke; he peels for his team. Scale frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'ksante',
+      win: ['Skill', 'Skill', 'Dr. Mundo', 'Skill', 'Skill', 'Skill', "K'Sante"],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Even — cleaver-poke him; he’s weak before items too.' },
+        { when: 'Lvl 6', text: 'His R (All Out) duel form — don’t get caught at low HP.' },
+        { when: '1st item', text: 'Even — your regen vs his tankiness; out-poke with cleaver.' },
+        { when: '2+ items', text: 'K’Sante takes over — tanky stance + items out-sustain your poke.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke him; out-sustain with regen', 'Don’t get caught by his R (All Out) duel form low', 'Win the scaling race with superior regen'],
+        foe: ['Block your poke with W (damage reduction)', 'Knock you with Q and dash with E (shield)', 'Pop R (All Out) to duel, or stay tanky to scale']
+      },
+      early: "Levels 1-3 are even-to-yours — K'Sante is weak before items, and your cleaver (Q) pokes him while you out-sustain his trades. His W blocks damage (including a cleaver), his Q knocks back, and his E dashes + shields, but he can't out-poke a regen tank early. Throw cleavers, out-sustain, and farm the scaling race.",
+      mid: "His big spike is R (All Out): he sheds tankiness to become a high-damage duelist with extra dashes, so don't get caught at low HP when it's up. Outside of it, your cleaver out-pokes his tankier stance and your regen out-sustains. It's an even tank-ish race; deny his farm and out-regen the lane.",
+      late: "K'Sante takes over at two items — his tank stance plus item sustain out-grind your poke, and his R lets him pick the duel. The lane is even because you both scale, but his itemized kit edges your regen late. Build HP, out-sustain what you can, and play frontline; deny his farm early so his scaling comes late.",
+      whys: [
+        "K'Sante is weak pre-item. Cleaver-poke him, out-sustain his trades. Even-to-yours early.",
+        "His W blocks damage (including a cleaver). He can't out-poke a regen tank early.",
+        "Your cleaver out-pokes him; out-sustain the scaling race.",
+        "Even — your regen vs his tankiness. Deny his farm.",
+        "His R (All Out) is a burst duel form — don't get caught low.",
+        "Even — out-poke with cleaver; out-regen the lane.",
+        "Two items in, tank stance + items out-sustain your poke. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'poppy',
+      win: ['Poppy', 'Poppy', 'Skill', 'Skill', 'Poppy', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Poppy’s window — her W passive + Q out-trade your weak early.' },
+        { when: 'Lvl 6', text: 'Her R knocks you off; she peels and out-trades a tank.' },
+        { when: '1st item', text: 'She out-trades + out-tanks you; out-sustain what you can.' },
+        { when: '2+ items', text: 'You take over only if you out-scaled her tankiness.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke (Q) from range; out-sustain with regen', 'Stand off walls so her E can’t stun you', 'Scale HP; out-regen her into the late game'],
+        foe: ['Stun you into a wall with E (Heroic Charge)', 'Out-trade with her W passive + Q zone', 'Scale to a tanky teamfight peeler']
+      },
+      early: "Poppy is tricky for you — she out-trades your weak early with her W passive and Q (Hammer Shock) zone, and she builds tanky so your poke struggles to matter. Levels 1-3 are hers. Throw cleavers (Q) from range, stand off walls so her E can't stun you, and out-sustain her poke; you have no kill pressure to punish her.",
+      mid: "She continues to edge you — her R (Keeper's Verdict) knocks you off and she peels well, and a tank-vs-tank lane where she out-trades is frustrating. Throw cleavers, dodge her E into walls, and out-regen what you can. You won't kill her, and she chips you, so focus on farming and not falling behind.",
+      late: "You take over only if you out-scaled her — your HP + regen eventually out-last her chip, but she builds tanky and peels, so it's close. The lane is tricky because she out-trades a tank and provides utility. Build HP, out-sustain, and play frontline; she's more of a teamfight peeler late, where you can out-scale her dueling.",
+      whys: [
+        "Poppy out-trades your weak early with W passive + Q. Throw cleavers from range. Levels 1-3 are hers.",
+        "Stand off walls so her E can't stun you. Out-sustain her poke.",
+        "She builds tanky — your poke struggles. You have no kill pressure to punish her.",
+        "Throw cleavers, dodge her E into walls. Out-regen what you can.",
+        "Her R knocks you off; she peels and out-trades a tank.",
+        "She out-trades + out-tanks you. Out-sustain, don't fall behind.",
+        "You take over only if you out-scaled her tankiness. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'kayle',
+      win: ['Dr. Mundo', 'Skill', 'Skill', 'Skill', 'Skill', 'Kayle', 'Kayle'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver-poke a weak Kayle; you can’t kill her though.' },
+        { when: 'Lvl 6', text: 'Even — neither has kill pressure; deny her CS.' },
+        { when: 'Lvl 11', text: 'Kayle’s spike — her ranged form + E (%-HP magic) melt your tankiness.' },
+        { when: '2+ items', text: 'Kayle takes over — her %-HP on-hit shreds even a full-HP Mundo.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke her weak early; deny CS + XP', 'Pressure her off the wave — but you can’t kill her', 'Build MR; her E is %-HP magic that melts tanks'],
+        foe: ['Survive the early and farm safely', 'Hit level 11 (ranged form) to flip the lane', 'Shred your HP with E (%-HP magic on-hit)']
+      },
+      early: "Levels 1-3 you out-poke a weak Kayle with cleavers — but here's the problem: you have no kill pressure, so you can't punish the weakest early-game champion the way a bully would. Throw cleavers, deny her CS and XP, and pressure her off the wave, but you can't end the lane. She just needs to survive and scale.",
+      mid: "It's even-ish through the mid — neither of you threatens a kill, so it's a farming contest. Deny her CS relentlessly; her whole game is scaling. Buy MR early, because her E (%-HP magic on-hit) is built to melt tanks, and her ranged form at 11 will let her poke your big health bar from safety.",
+      late: "Kayle takes over — at level 11 her ranged form out-ranges you, and her E's %-HP magic on-hit melts even a full-HP Mundo (the more HP you have, the more it hurts). This is the tank's nightmare. You had to deny her farm and let your team end early; if she scaled, build MR + HP to survive a few seconds for your team, but you can't 1v1 her.",
+      whys: [
+        "Cleaver-poke a weak Kayle — but you can't kill her (no burst). Levels 1-3 are yours.",
+        "Deny her CS + XP — her whole game is scaling. Pressure her off the wave.",
+        "It's a farming contest — you can't end the lane. Buy MR early.",
+        "Her E is %-HP magic that melts tanks. Build MR.",
+        "Her ranged form at 11 pokes your HP from safety. Deny her farm.",
+        "Kayle's spike — ranged form + E melt your tankiness.",
+        "Kayle takes over — her %-HP on-hit shreds even a full-HP Mundo. Let team end early."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'kennen',
+      win: ['Skill', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even — his Q pokes, but your regen heals it; cleaver out-pokes.' },
+        { when: 'Lvl 3–6', text: 'Your window — regen out-sustains his poke; cleaver chips him.' },
+        { when: '1st item', text: 'You out-sustain him hard — buy MR; his poke can’t out-pace regen.' },
+        { when: 'Late', text: 'You own the lane — a squishy Kennen can’t kill a regen tank.' }
+      ],
+      wants: {
+        you: ['Cleaver (Q) out-pokes him — it’s a skillshot, not blocked by blind', 'Out-sustain his poke with regen + MR', 'Scale HP; his poke can’t kill a regen tank'],
+        foe: ['Poke you with Q (shuriken) from range', 'Kite with E (Lightning Rush move speed)', 'Burst you with R (stun) + E when you’re low']
+      },
+      early: "This is one of your best lanes. Kennen pokes with Q (shuriken), but your regen heals it between waves, and your cleaver (Q) is a skillshot that out-pokes him — his blind doesn't stop it (it only blocks autos). Throw cleavers, soak his poke, buy MR, and out-sustain him; he can't out-pace a regen tank's healing.",
+      mid: "Your window — your regen + MR out-sustain his poke completely, and your cleaver chips his squishy frame. He can't kill a regen tank with poke, and his R (Slicing Maelstrom) burst is blunted by your MR + huge HP + R heal. Throw cleavers, pressure him off CS, and out-sustain everything he does.",
+      late: "You own the lane — a squishy Kennen simply cannot kill a regen tank who out-sustains his poke and buys MR. Your cleaver out-pokes him all game. He scales into a teamfight AOE-stun threat, so the game is about his teamfight, not the 1v1 you dominate. Build MR + HP, out-sustain, and play frontline.",
+      whys: [
+        "Even — his Q pokes, but your regen heals it; cleaver out-pokes. Blind doesn't stop a skillshot.",
+        "Throw cleavers, soak his poke. Buy MR.",
+        "Your window — regen out-sustains his poke; cleaver chips him.",
+        "His R burst is blunted by your MR + HP + R heal. Pressure him off CS.",
+        "You out-sustain him hard — his poke can't out-pace regen.",
+        "You out-sustain him — buy MR; his poke can't out-pace regen.",
+        "You own the lane — a squishy Kennen can't kill a regen tank. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'singed',
+      win: ['Skill', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Even — he proxies/kites; you out-farm and out-sustain.' },
+        { when: 'Lvl 6', text: 'Your R out-heals his poison; out-sustain the poison war.' },
+        { when: '1st item', text: 'Your spike — regen out-sustains his poison + poke.' },
+        { when: 'Late', text: 'You out-sustain him; he splitpushes — match side pressure.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); out-sustain his poison with regen', 'Match his proxy CS instead of chasing', 'Out-regen the poison war; scale HP'],
+        foe: ['Proxy the wave and kite you through poison', 'Fling (E) you into bad spots with goo + R', 'Out-macro the lane without committing']
+      },
+      early: "Singed proxies and kites through his poison — levels 1-3 are an even farming lane where neither kills the other. You can't catch a kiting Singed, but your regen out-sustains his poison trail, and your cleaver (Q) pokes him when he steps up. Match his proxy CS, don't chase through poison, and out-farm him.",
+      mid: "Your R (Maximum Dosage) out-heals his poison, and your regen wins the poison-vs-regen attrition war. Throw cleavers, don't tower-dive a Singed who kites, and out-sustain. It's a tank-vs-tank macro lane; you out-regen his poison and match his farm, so don't tilt-chase him into bad spots.",
+      late: "You out-sustain him — your regen beats his poison damage in the attrition, and you out-farm a proxy Singed. He splitpushes with his proxy/macro game, so match his side-lane pressure or group. Scale HP, out-regen the poison, and don't get flung into your tower. The lane is a sustain race you win.",
+      whys: [
+        "Singed proxies and kites through poison. You out-farm + out-sustain. Even early.",
+        "You can't catch a kiting Singed. Match his CS, don't chase through poison.",
+        "Your cleaver pokes him when he steps up. Out-regen the poison.",
+        "Throw cleavers, don't tower-dive. Out-sustain the poison war.",
+        "Your R out-heals his poison. Out-sustain the poison war.",
+        "Your spike — regen out-sustains his poison + poke.",
+        "You out-sustain him; he splitpushes — match side pressure or group."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'ryze',
+      win: ['Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Skill', 'Dr. Mundo', 'Ryze'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver-poke a weak-early Ryze; buy MR.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-sustain his Q-E poke with regen + MR.' },
+        { when: '1st item', text: 'Your spike — HP + MR (Spirit Visage) out-last his poke.' },
+        { when: '2+ items', text: 'Ryze takes over — mana-stacked, his %-output DPS shreds you.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke his weak early; buy MR (Spirit Visage)', 'Out-sustain his Q-E poke with regen + MR', 'Win the early-mid before his item scaling'],
+        foe: ['Poke with Q-E spread combo from range', 'Lock you with W (root) to kite', 'Out-scale into a tanky, high-DPS mana mage']
+      },
+      early: "Levels 1-3 are yours — Ryze is weak early, and your cleaver (Q) out-pokes him while your regen + MR out-sustain his Q-E poke. Buy MR early (Spirit Visage boosts your healing too). Don't get rooted from bush by his W, throw cleavers, deny his mana/item stacking, and out-sustain his early magic.",
+      mid: "Your R (Maximum Dosage) out-heals his poke, and your HP + MR out-sustain his Q-E spread. Keep poking with cleavers and deny his CS; every minute that passes moves him toward his item scaling. Buy Spirit Visage for MR + boosted regen, and out-sustain a poke-reliant mage through the mid-game.",
+      late: "Ryze takes over at two items — mana-stacked, his high-output magic DPS shreds even your HP, and his root + poke control the fight. The lane is favoured early because you out-poke and out-sustain his weak phase, but his scaling eventually beats a tank. Build MR + HP, out-regen the early-mid, and play frontline once he scales.",
+      whys: [
+        "Ryze is weak early. Cleaver-poke him, buy MR. Levels 1-3 are yours.",
+        "Don't get rooted from bush (his W). Deny his mana/item stacking.",
+        "Your cleaver out-pokes him; your regen + MR out-sustain his poke.",
+        "Buy Spirit Visage — MR + boosted regen. Deny his CS.",
+        "Your R out-heals his poke. Out-sustain his Q-E with regen + MR.",
+        "Your spike — HP + MR out-last his poke.",
+        "Two items in, mana-stacked, his %-output DPS shreds you. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'rumble',
+      win: ['Rumble', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Rumble', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Rumble’s window — his Q (Flamespitter) pokes your early.' },
+        { when: 'Lvl 6', text: 'Dodge his R (Equalizer) zone; out-sustain his poke otherwise.' },
+        { when: '1st item', text: 'Your spike — regen + MR out-sustain his flamespitter.' },
+        { when: 'Late', text: 'You out-sustain him — your regen beats his AP poke.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR vs his magic poke', 'Out-sustain his Q (Flamespitter) with regen', 'Dodge his R (Equalizer) fire zone; scale HP'],
+        foe: ['Poke with Q (Flamespitter) in his Heat window', 'Kite with W (shield + MS) and E (harpoon slow)', 'Zone you with R (Equalizer) and overheat burst']
+      },
+      early: "Rumble pokes you with Q (Flamespitter), strong in his Heat window — levels 1-2 are his poke phase. Throw cleavers (Q) back, buy MR against his magic, and out-sustain his poke with regen. He kites with W (shield + MS) and E (slow), but he can't out-poke a regen tank long-term; just soak the flamespitter and farm.",
+      mid: "Your R (Maximum Dosage) out-heals his poke, and your regen + MR out-sustain his flamespitter. At 6 respect his R (The Equalizer) — a long fire zone — so don't sit in it. Throw cleavers, out-regen his Heat poke, and deny CS; you out-sustain an AP poke fighter over a long lane.",
+      late: "You out-sustain him — your regen + MR beat his AP poke in the attrition war. Rumble is a kite-and-poke fighter with no answer to a regen tank's healing. Build MR (Spirit Visage), dodge his R zone, and out-regen his flamespitter. Scale HP and play frontline; the lane is a sustain race you win.",
+      whys: [
+        "Rumble's Q (Flamespitter) pokes your early. Throw cleavers, buy MR. Levels 1-2 are his.",
+        "He kites with W + E. He can't out-poke a regen tank long-term.",
+        "Your cleaver pokes back; your regen out-sustains his flamespitter.",
+        "Out-regen his Heat poke. Deny CS.",
+        "Dodge his R (Equalizer) zone — don't sit in the fire. Out-sustain otherwise.",
+        "Your spike — regen + MR out-sustain his flamespitter.",
+        "You out-sustain him — your regen beats his AP poke. Build MR."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'akali',
+      win: ['Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill', 'Skill', 'Skill', 'Akali'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver-poke a squishy Akali; out-sustain her.' },
+        { when: 'Lvl 6', text: 'Her R + shroud all-in chunks you — your R + HP out-heal it.' },
+        { when: '1st item', text: 'Even — your regen vs her burst; out-sustain her poke.' },
+        { when: '2+ items', text: 'Akali takes over — her assassin item spikes out-burst you.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke her squishy frame; out-sustain her poke', 'Tank her R all-in with HP + R heal; buy MR', 'Scale HP; deny her CS before her item spikes'],
+        foe: ['Poke with Q and hide in W (shroud) to reset', 'All-in with E + R dashes at level 6', 'Scale into a burst assassin with item spikes']
+      },
+      early: "Levels 1-3 are yours — Akali is a squishy assassin with no sustain, and your cleaver (Q) pokes her while your regen out-sustains her Q poke. She hides in W (shroud) to reset, but she can't out-poke a regen tank. Throw cleavers, pressure her off CS, buy MR, and out-sustain; you tank her early damage easily.",
+      mid: "Her R + shroud all-in at 6 chunks you, but your HP + R (Maximum Dosage) heal it back — you're one of the few who survive her burst and out-sustain it. Buy MR (Spirit Visage). Throw cleavers, deny her CS, and tank her combo; she can't kill a regen tank with MR and a huge health pool.",
+      late: "Akali takes over at two items — her assassin item spikes let her burst even your HP from shroud before your regen matters. The lane is even because you out-sustain her early-mid, but her scaling flips it. Build MR + HP, deny her farm, and play frontline; a fed Akali bursts you, but a poor one can't crack your sustain.",
+      whys: [
+        "Akali is squishy with no sustain. Cleaver-poke her, out-sustain her poke. Levels 1-3 are yours.",
+        "She hides in shroud (W) to reset — but can't out-poke a regen tank.",
+        "Throw cleavers, pressure her off CS. Buy MR, tank her early.",
+        "Even — your regen vs her burst. Deny her CS.",
+        "Her R + shroud all-in chunks you — your R + HP out-heal it. Buy MR.",
+        "Even — your regen vs her burst. Out-sustain her poke.",
+        "Akali takes over — her item spikes out-burst you. Build MR, play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'cassiopeia',
+      win: ['Cassiopeia', 'Skill', 'Skill', 'Skill', 'Skill', 'Dr. Mundo', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Cassio’s window — her Q/W poison %-HP pokes your big HP.' },
+        { when: 'Lvl 6', text: 'Even — buy MR; your regen out-sustains her poison.' },
+        { when: '1st item', text: 'Your spike — HP + MR (Spirit Visage) out-last her poison.' },
+        { when: '2+ items', text: 'You take over — regen + MR out-sustain her DPS poke.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR (Spirit Visage)', 'Out-sustain her poison with regen + MR', 'Out-regen the poison war; scale HP'],
+        foe: ['Poke you out with Q/W poison from range', 'Ground you with W (Miasma) — but you have no dash', 'Scale into an unkitable DPS mage with Rylai’s / Liandry’s']
+      },
+      early: "Cassiopeia pokes you with Q/W poison that deals %-HP magic — designed to chip big health bars like yours — so levels 1-3 are her poke window. Throw cleavers (Q) back, buy MR early, and out-sustain her poison with regen. Her W (Miasma) grounds you, but you don't rely on dashes, so it mostly just slows you.",
+      mid: "It's even through the mid — her poison chips you, but your regen + MR out-sustain it. Buy Spirit Visage: MR plus boosted healing is ideal against a poison DPS mage. Throw cleavers, don't path through her poison cloud, and out-regen her poke. She out-ranges you, but she can't out-pace your healing.",
+      late: "You take over — two items of HP + MR (Spirit Visage) out-last her poison, and your amplified regen + R out-heal her DPS. She scales into an unkitable mage with Rylai's/Liandry's, but you're built to out-sustain even a poison DPS threat with enough MR. The lane is her poke vs your regen; build MR and win the attrition.",
+      whys: [
+        "Cassio's Q/W poison is %-HP magic — built to chip your big HP. Buy MR. Levels 1-3 are hers.",
+        "Throw cleavers back. Her W grounds you, but you don't rely on dashes.",
+        "Out-sustain her poison with regen + MR. Don't path through the cloud.",
+        "Buy Spirit Visage — MR + boosted healing vs a poison mage.",
+        "Even — buy MR; your regen out-sustains her poison.",
+        "Your spike — HP + MR (Spirit Visage) out-last her poison.",
+        "You take over — regen + MR out-sustain her DPS poke. Win the attrition."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'galio',
+      win: ['Galio', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Galio’s window — his Q (windblast) pokes your early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; his R is a global, not a 1v1 button.' },
+        { when: '1st item', text: 'Your spike — regen + MR out-sustain his magic poke.' },
+        { when: 'Late', text: 'You out-sustain the lane — he’s a teamfight frontliner.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR vs his magic', 'Out-sustain his Q poke with regen + MR', 'Punish the wave when he R-globals away'],
+        foe: ['Poke with Q (windblast) and soak with W', 'Taunt you with a channeled W (Shield of Durand)', 'Roam / impact the map with global R']
+      },
+      early: "Galio pokes you with Q (windblast) and soaks damage with W — levels 1-2 are his poke window. Throw cleavers (Q) back, buy MR against his magic, and out-sustain his poke with regen. He's a tanky control mage with low kill pressure on you, so just soak the Q and farm; you out-sustain him.",
+      mid: "Your R (Maximum Dosage) out-heals his poke, and your regen + MR out-sustain his magic. His R (Hero's Entrance) is a global peel/engage for other lanes — when he ults away to help a teammate, shove and punish his wave for CS and plates. Throw cleavers, out-regen his poke, and deny the roam value.",
+      late: "You out-sustain the lane — your regen + MR beat his magic poke in the attrition. Galio scales into a teamfight frontliner with global presence, and you're a frontline too, so the game decides in fights. In the side-lane 1v1 you out-regen him. Build MR, throw cleavers, and play your frontline; deny his global value.",
+      whys: [
+        "Galio pokes with Q (windblast). Throw cleavers, buy MR. Levels 1-2 are his.",
+        "He soaks with W and has low kill pressure on you. Soak the Q and farm.",
+        "Your cleaver pokes back; your regen + MR out-sustain his magic.",
+        "Out-regen his poke. Deny his CS.",
+        "Your R out-heals his poke; his R is a global, not a 1v1 button.",
+        "Your spike — regen + MR out-sustain his magic poke.",
+        "You out-sustain the lane — he's a teamfight frontliner. Deny his global."
       ]
     }
   ];

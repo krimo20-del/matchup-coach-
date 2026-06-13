@@ -92,7 +92,9 @@
       drmundo: 55.3, chogath: 51.8, tahmkench: 53.2, ksante: 58.1, poppy: 52.7, kayle: 47.3,
       kennen: 52.7, singed: 54.5, ryze: 55.8, rumble: 57.6, akali: 55.8, cassiopeia: 51.1,
       galio: 52.7, gwen: 57.8, jayce: 52.1, kassadin: 50.9, lucian: 54.7, maokai: 51.8,
-      sylas: 51.6, graves: 53.1, heimerdinger: 50.9, sejuani: 51.3, zac: 51.2, ziggs: 56.6
+      sylas: 51.6, graves: 53.1, heimerdinger: 50.9, sejuani: 51.3, zac: 51.2, ziggs: 56.6,
+      nautilus: 52.9, aurora: 55.7, ambessa: 53.7, akshan: 49.3, karma: 53.8, lillia: 51.3,
+      mel: 61.2, neeko: 55.2
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -5277,6 +5279,214 @@
         "Force him to burn satchel, then run him down on its cooldown.",
         "Your edge — a caught Ziggs dies. Bait the W first, then Q-close.",
         "Even-to-yours late — close on his satchel cooldown. Your run-down beats his poke."
+      ]
+    },
+    {
+      a: 'garen', b: 'nautilus',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Skill', 'Nautilus'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — dodge his Q (hook), then Q-silence + E out-trade him.' },
+        { when: 'Lvl 6', text: 'R executes him; his R (knockup) is a pick/peel tool, not a duel button.' },
+        { when: '1st item', text: 'Still your edge — he has low damage; deny his farm.' },
+        { when: 'Late', text: 'Nautilus out-tanks you — he scales to a CC frontliner.' }
+      ],
+      wants: {
+        you: ['Dodge his Q (Dredge Line hook) — it starts everything', 'Q-silence + E out-trade his low damage', 'Snowball before he builds tanky'],
+        foe: ['Hook you in with Q (Dredge Line)', 'Chunk with W (shield + on-hit) + E (AOE)', 'Lock you down with R + passive root for a gank']
+      },
+      early: "Levels 1-3 are yours — Nautilus is a CC tank with low damage, and his whole trade starts with the Q hook (Dredge Line). Dodge it and he has nothing; eat it and he gets a free W (shield + bonus damage) and E on you. Sidestep the hook from bush range, then Q-silence + E and your trades beat his low-damage frame.",
+      mid: "Keep punishing. Without the hook he can't engage, and his W shield + E poke don't out-trade your Q-E. Your R executes him. At 6 his R is a single-target knockup — a pick/peel tool that's dangerous with a jungler around (his passive also roots), but in a straight duel it doesn't beat you. Dodge the hook, run him down, and track his R for ganks.",
+      late: "Nautilus out-tanks you eventually — he scales into a teamfight CC frontliner with resistances your trades crack less over time. The lane is favoured because you bully the early and he out-tanks the late. Snowball your level 1-3 dominance, deny his farm, and end before his tankiness matters. Respect his R + jungler for picks, but never fear the 1v1.",
+      whys: [
+        "Nautilus' trade starts with the Q hook. Dodge it from bush range and he has nothing.",
+        "Eat the hook and he gets a free W + E. Sidestep it — that's the whole matchup.",
+        "Q-silence + E out-trade his low-damage frame. Force the trade.",
+        "Without the hook he can't engage. Keep punishing; deny his farm.",
+        "R executes him; his R is a pick/peel tool, not a duel button. You win the 1v1.",
+        "Still your edge — he has low damage. Snowball before he builds tanky.",
+        "Nautilus out-tanks you late — he scales to a CC frontliner. End early."
+      ]
+    },
+    {
+      a: 'garen', b: 'aurora',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Aurora'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence + E run her down; W for MR.' },
+        { when: 'Lvl 6', text: 'R executes her; her R rift escape — bait it, don’t over-chase.' },
+        { when: '1st item', text: 'Still your stomp — deny farm before her AP scaling.' },
+        { when: 'Late', text: 'Even-to-yours — your mobility + MR + R beat her kite.' }
+      ],
+      wants: {
+        you: ['Q-silence + E her squishy frame; W for MR', 'Run her down with Q when her W (dash) is down', 'Punish her after she commits her W escape'],
+        foe: ['Poke with Q (bolt) + E (80% slow) and self-heal', 'Dodge your run-down with W (dash + invisibility)', 'Zone and escape with R (untargetable rift)']
+      },
+      early: "Levels 1-3 are yours — Aurora is a mobile AP skirmisher, but your Q-silence + E + Q-run-down crush her. Her Q pokes, her E slows you 80% while recoiling her back, and her passive heals her, but your Q (Decisive Strike) cleanses the slow and gives chase speed, and your W stacks MR. Her only real escape is W (a dash into invis); don't commit while it's up.",
+      mid: "Keep stomping. Run her down with Q when her W dash is on cooldown — Q-silence cuts her combo, W blunts her burst, and your R executes her. Bait the W out (force her to use it), then re-engage. Her level-6 R creates a rift she can dash through to become untargetable, so don't over-chase into it — bait it and punish.",
+      late: "Even-to-yours into late — her mobility and poke versus your run-down + MR + R execute. You win whenever you reach her, which your Q's move speed lets you do. Force fights on her W cooldown, punish her after she commits an escape, build MR, and don't chase into her R rift. She scales, so close the lane before her items.",
+      whys: [
+        "Q-silence + E run down a mobile Aurora; W for MR. Levels 1-3 are yours.",
+        "Your Q cleanses her E slow + gives chase speed. Don't commit while her W is up.",
+        "Your Q-E out-trade her — run her down when her W dash is down.",
+        "Bait her W out, then re-engage. W blunts her burst.",
+        "R executes her; her R rift is an escape — bait it, don't over-chase.",
+        "Still your stomp — deny farm before her AP scaling.",
+        "Even-to-yours late — your mobility + MR + R beat her kite. Close before her items."
+      ]
+    },
+    {
+      a: 'garen', b: 'ambessa',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Ambessa', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence cuts her dash combo; W blunts her burst.' },
+        { when: 'Lvl 6', text: 'Ambessa’s window — her R (blink + suppress) is a hard all-in; W it.' },
+        { when: '1st item', text: 'Your edge — Q-silence + E out-trade her combo.' },
+        { when: 'Late', text: 'You hold it — your tankiness + R vs her mobility.' }
+      ],
+      wants: {
+        you: ['Q-silence to cut her dash combo', 'W (damage reduction) to blunt her burst + her R', 'Out-trade her with Q-E; R-execute low'],
+        foe: ['Chain dashes (passive) into the Q → W combo', 'Brace your burst with E (shield + counter-smash)', 'All-in with R (blink behind + suppress + stun)']
+      },
+      early: "Levels 1-3 are yours — your Q silences Ambessa's combo and your W blunts her burst. Her passive grants free dashes, her Q enables her W (line slam) for burst, and her E (Repudiation) braces for a shield then smashes harder if it absorbed your damage — so don't dump your spin into her E. Q-silence her when she commits, then E. Bully her early.",
+      mid: "Through the mid-game your Q-silence + W hold the trades — she out-bursts in a short dash-combo window, but a silenced Ambessa can't chain it. Her big spike is R (Public Execution): she blinks behind you, suppresses, and stuns for a full combo, so pop W (Courage) to survive it and don't be at low HP when it's up. Respect that all-in window.",
+      late: "You hold the edge — your tankiness + R execute versus her mobility, and your Q-silence shuts down her combo whenever she commits. The lane is favoured because you bully the early and trade well throughout. Q-silence her dash combo, W her burst, R-execute her low, and play around her R (the suppress is her main kill threat). Don't get caught low.",
+      whys: [
+        "Q-silence cuts her dash combo; W blunts her burst. Levels 1-3 are yours.",
+        "Her E (Repudiation) shields then smashes harder if it absorbed your hit. Don't spin into it.",
+        "A silenced Ambessa can't chain her combo. Q-silence, then E.",
+        "Your Q-E out-trade her — force the trade after her dashes are spent.",
+        "Her R blinks behind you, suppresses and stuns — pop W to survive it, don't be low.",
+        "Your edge — Q-silence + E out-trade her combo.",
+        "You hold it — your tankiness + R vs her mobility. Play around her R."
+      ]
+    },
+    {
+      a: 'garen', b: 'akshan',
+      win: ['Akshan', 'Skill', 'Garen', 'Garen', 'Skill', 'Garen', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Akshan pokes with Q + autos and swings — farm, regen heals it.' },
+        { when: 'Lvl 4–6', text: 'Your window — Q (move speed) runs him down through his swing.' },
+        { when: '1st item', text: 'You catch him — Q-silence + R execute delete a squishy Akshan.' },
+        { when: 'Late', text: 'Even — he kites and roams; you win when you catch him.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close his poke + swing kite', 'Q-silence + R-execute a squishy Akshan once you catch him', 'Deny his roams; punish the wave when he leaves'],
+        foe: ['Poke with Q (Avengerang) + passive double-shot', 'Swing around terrain with E (Heroic Swing)', 'Roam and pick with R (Comeuppance sniper)']
+      },
+      early: "Akshan is a slippery ranged skirmisher — he pokes with Q (Avengerang) and autos, and his E (Heroic Swing) lets him swing off terrain to kite and reposition. Levels 1-2 he out-ranges you; hug minions, let your regen heal the chip, and don't chase his swing into open ground. Wait for your run-down window.",
+      mid: "Your window opens with Q (Decisive Strike) — its move speed closes the gap his swing tries to keep. Q-in, silence (stops his combo), E-spin, and at 6 your R executes his squishy frame. The hard part is he resets the swing constantly; bait the E, then commit on its cooldown. Don't get poked low chasing in open ground.",
+      late: "Even into late — Akshan kites with his swing and roams for picks with R, and you win the exchange when you catch him. Hug minions to deny free poke, close on his E cooldown with Q, and punish his roams by taking the wave. If he swings freely he chips you; your whole game is the Q-run-down that catches him.",
+      whys: [
+        "Akshan pokes with Q + autos and swings around terrain. Regen heals it. Levels 1-2 are his.",
+        "His E (Heroic Swing) kites off terrain. Don't chase into open ground.",
+        "Your window — Q's move speed runs him down through his swing.",
+        "He resets the swing constantly. Bait the E, then commit on its cooldown.",
+        "Q-silence + R execute a squishy Akshan once you catch him.",
+        "You catch him — close on his E cooldown with Q. Deny his roams.",
+        "Even late — he kites and roams. You win when you catch him; punish his roams."
+      ]
+    },
+    {
+      a: 'garen', b: 'karma',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Karma'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence + E run down a squishy Karma.' },
+        { when: 'Lvl 6', text: 'R executes her; bait her E (shield) before committing.' },
+        { when: '1st item', text: 'Your edge — she has no kill threat; deny her farm.' },
+        { when: 'Late', text: 'You own the 1v1 — she’s a poke/utility mage, not a duelist.' }
+      ],
+      wants: {
+        you: ['Q-silence + E + run-down her squishy frame', 'Bait her E (shield + MS) before you all-in', 'Don’t get kited by her W (root tether)'],
+        foe: ['Poke with Q (Inner Flame) — empowered by R (Mantra)', 'Root you with W (Focused Resolve) tether', 'Self-peel with E (shield + move speed)']
+      },
+      early: "Levels 1-3 are yours — Karma pokes with Q (Mantra-empowered) and peels herself with E (shield + move speed), but she's squishy and your Q-silence + E + Q-run-down crush her. Her W (Focused Resolve) is a tether that roots if she channels it fully — Q-silence or break it, and don't trade into a fresh E shield. Run her down.",
+      mid: "Your Q (Decisive Strike) gives the move speed to close her kite, and Q-silence stops her combo. Bait the E, then E-spin and your R executes her squishy frame. Don't get rooted by a full W tether mid-engage; close the distance fast or break line of sight. Once you're on her with no shield up, she folds.",
+      late: "You own the 1v1 — Karma is a poke/utility mage, not a side-lane duelist. If you reach her she dies, and your Q-run-down + R make it quick. Press the lane, deny her poke by hugging minions, and don't get kited by W + E. Her value is utility for her team, not beating you one-on-one. Snowball your dominance.",
+      whys: [
+        "Karma pokes with Q and shields with E. Q-silence + E run her down — levels 1-3 are yours.",
+        "Her W (Focused Resolve) tethers and roots. Q-silence or break it; close fast.",
+        "Your Q-E out-trade a squishy Karma — bait the E, then commit.",
+        "Don't get kited by W + E. Q-close when her shield is down.",
+        "R executes her; bait her E (shield) before committing.",
+        "Your edge — she has no kill threat. Deny her farm, snowball.",
+        "You own the 1v1 — she's a poke/utility mage. Hug minions, press your edge."
+      ]
+    },
+    {
+      a: 'garen', b: 'lillia',
+      win: ['Garen', 'Garen', 'Garen', 'Skill', 'Skill', 'Skill', 'Lillia'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q (move speed) closes her kite; silence + E.' },
+        { when: 'Lvl 6', text: 'R executes her; don’t get put to sleep by her R (Dream-Laden Bough).' },
+        { when: '1st item', text: 'Your edge — run her down with Q before her AP scaling.' },
+        { when: '2+ items', text: 'Lillia takes over — AP on-hit + mobility kite and shred you.' }
+      ],
+      wants: {
+        you: ['Use Q (cleanse her E slow + MS) to close her kite', 'Q-silence + E her squishy frame; W for MR', 'Win before her AP scaling comes online'],
+        foe: ['Kite with Q (swirl) movement + E (dash + slow)', 'Stack passive burn and scale AP on-hit', 'Set up ganks / picks with R (sleep)']
+      },
+      early: "Levels 1-3 are yours — Lillia is a mobile AP skirmisher who kites, but your Q (Decisive Strike) cleanses her E slow and gives move speed to close, and your W stacks MR. Her Q (Blooming Blows) ramps her move speed and her E is a dash + slow, so Q-in to stick, silence her combo, and E-spin. She has no hard early trade.",
+      mid: "Keep punishing. Q closes her kite, Q-silence cuts her combo, and your R executes her. At 6 respect her R (Dream-Laden Bough): a delayed sleep that sets up a burst all-in or a gank, so don't get drowsy-then-slept in a bad spot. Run her down on her dash cooldown and deny her farm before her AP scaling.",
+      late: "Lillia takes over at two items — AP on-hit damage plus her constant mobility let her kite and shred you while staying out of reach. The lane is even because you out-trade her early and she scales past you. Snowball off the Q-run-down, R-execute her, build a lead before her items flip the duel. Don't get slept and bursted.",
+      whys: [
+        "Your Q cleanses her E slow + gives MS to close her kite. W for MR. Levels 1-3 are yours.",
+        "She has no hard early trade. Q-in to stick, silence her combo, E-spin.",
+        "Your Q-E out-trade a pinned Lillia. Run her down on her dash cooldown.",
+        "Keep punishing — deny her farm before her AP scaling.",
+        "R executes her; her R is a delayed sleep — don't get slept in a bad spot.",
+        "Your edge — run her down with Q before her AP scaling.",
+        "Two items in, AP on-hit + mobility kite and shred you. Close before she scales."
+      ]
+    },
+    {
+      a: 'garen', b: 'mel',
+      win: ['Mel', 'Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Mel pokes from range with Q — hug minions, your regen heals it.' },
+        { when: 'Lvl 2–6', text: 'Your window — Q (move speed) runs her down; silence + R-execute.' },
+        { when: '1st item', text: 'Your stomp — a caught Mel dies; dodge her E (root).' },
+        { when: 'Late', text: 'You own the 1v1 — she’s a teamfight poke mage with no escape.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close her poke; W for MR', 'Q-silence + R-execute a squishy Mel once you catch her', 'Dodge her E (Solar Snare root) that sets up her damage'],
+        foe: ['Poke from range with Q (Radiant Volley)', 'Root you with E (Solar Snare) to land poke / R', 'Self-peel with W (shield + move speed)']
+      },
+      early: "Mel is a squishy artillery mage and one of your best lanes — at level 1 she pokes you with Q (Radiant Volley) and her E (Solar Snare) roots you to land more. Her W (Rebuttal) reflects projectiles, but your kit isn't projectile-based, so it does nothing against you. Hug minions, let your regen heal the early poke, and dodge the E root.",
+      mid: "Your window opens fast — Mel has no real escape but the W move-speed, and she's squishy. Your Q (Decisive Strike) closes the gap her poke tries to keep, and once you reach her, Q-silence + E + R-execute delete her. Dodge or bait the E root (it sets up her damage and R), then commit. You run her down and she can't kite a Q-empowered Garen.",
+      late: "You own the 1v1 — if you reach Mel she dies, full stop, and your Q-mobility + W's MR + R execute mean you always reach her. Her threat is ranged poke and her R (a global mark-execute in teamfights), not the side-lane duel. Close on her W cooldown, build MR, and end the lane. Dodge the E and you win every all-in.",
+      whys: [
+        "Mel pokes from range with Q. Hug minions, your regen heals it. Level 1 is hers.",
+        "Your window — Q's move speed runs her down. W for MR.",
+        "Her W reflects projectiles but your kit isn't projectile-based — it does nothing. Keep closing.",
+        "Dodge her E (Solar Snare root) that sets up her poke. Then commit.",
+        "Q-silence + R-execute a squishy Mel once you reach her.",
+        "Your stomp — a caught Mel dies. Close on her W cooldown, build MR.",
+        "You own the 1v1 — she's a teamfight poke mage. Dodge the E and win every all-in."
+      ]
+    },
+    {
+      a: 'garen', b: 'neeko',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Neeko'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence + E run down her squishy frame.' },
+        { when: 'Lvl 6', text: 'R executes her; dodge her R (Pop Blossom AOE stun) windup.' },
+        { when: '1st item', text: 'Your edge — deny CS before her burst scaling.' },
+        { when: 'Late', text: 'You own the 1v1 — she’s a teamfight burst mage, not a duelist.' }
+      ],
+      wants: {
+        you: ['Q-silence + E + run down her squishy frame', 'Bait/Q-silence her E (root) before you commit', 'Dodge her R (stun) windup at level 6'],
+        foe: ['Poke with Q (Blooming Burst) and root with E', 'Disguise as a minion/ally with W (clone)', 'All-in with R (Pop Blossom AOE stun)']
+      },
+      early: "Levels 1-3 are yours — Neeko pokes with Q and her E (Tangle-Barbs) roots you to set up damage, but she's squishy and built for picks, not dueling. Your Q-silence + E + Q-run-down crush her. Her W disguises her (as a minion or ally), so don't get fooled by a clone. Q-silence the E or dodge it, then run her down.",
+      mid: "Keep stomping. Q-silence her combo, E-spin, and your R executes her squishy frame. At 6 respect her R (Pop Blossom): a delayed AOE stun she leaps in with, often from a disguise, so watch the windup and don't get caught flat-footed. Run her down with Q's move speed; she can't trade back.",
+      late: "You own the 1v1 — Neeko is a teamfight burst/pick mage, not a side-lane duelist. If you reach her she dies, and your Q-run-down + R make it instant. Press the lane, deny her roams (her R + disguise are pick tools), and don't facecheck a 'minion' that might be her W clone. The duel is always yours; snowball your dominance.",
+      whys: [
+        "Neeko pokes with Q and roots with E, but she's squishy. Q-silence + E run her down.",
+        "Her W disguises her as a minion or ally — don't get fooled by a clone. Dodge the root.",
+        "Your Q-E out-trade her squishy frame — Q-silence the E, then commit.",
+        "Keep her off farm — deny the burst scaling. Run her down.",
+        "R executes her; dodge her R (Pop Blossom) AOE stun windup at 6.",
+        "Your edge — deny CS before her burst scaling.",
+        "You own the 1v1 — she's a teamfight pick mage. Don't facecheck her clones; press your edge."
       ]
     }
   ];

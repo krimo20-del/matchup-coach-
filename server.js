@@ -30,8 +30,8 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 // ours. Subscriptions need Price IDs from your Stripe dashboard; the founder
 // one-time charge uses a dynamic amount that matches the live ladder.
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
-const STRIPE_PRICE_ROLE = process.env.STRIPE_PRICE_ROLE || ''; // Lane Pass $4.99/mo price id
-const STRIPE_PRICE_ALL = process.env.STRIPE_PRICE_ALL || '';   // All Access $9.99/mo price id
+const STRIPE_PRICE_ROLE = process.env.STRIPE_PRICE_ROLE || ''; // Lane Pass $2.99/mo price id
+const STRIPE_PRICE_ALL = process.env.STRIPE_PRICE_ALL || '';   // Everything $4.99/mo price id
 const PUBLIC_URL = (process.env.PUBLIC_URL || 'https://matchupcoach.gg').replace(/\/+$/, '');
 const STRIPE_ON = !!STRIPE_SECRET_KEY;
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -56,6 +56,11 @@ const newToken = () => crypto.randomBytes(32).toString('hex');
 const newSalt = () => crypto.randomBytes(16).toString('base64');
 const hashPw = (pw, salt) =>
   crypto.pbkdf2Sync(pw, Buffer.from(salt, 'base64'), 100000, 32, 'sha256').toString('base64');
+// Constant-time compare so password verification can't be timing-probed.
+function safeEq(a, b) {
+  const ba = Buffer.from(String(a)), bb = Buffer.from(String(b));
+  return ba.length === bb.length && crypto.timingSafeEqual(ba, bb);
+}
 
 // ---------- helpers ----------
 function founderState() {
@@ -180,20 +185,25 @@ function htmlEsc(s) {
   return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// True only when `full` is ROOT itself or genuinely inside it — startsWith(ROOT)
+// alone would also match a sibling dir sharing ROOT's name prefix (e.g.
+// "<root>-backup"), so require the path separator.
+function withinRoot(full) { return full === ROOT || full.startsWith(ROOT + path.sep); }
+
 function sendStatic(res, rel) {
   if (rel === '') rel = 'index.html';
   let full = path.normalize(path.join(ROOT, rel));
   // Extensionless pretty URLs: /privacy -> privacy.html
-  if (full.startsWith(ROOT) && !path.extname(full) && fs.existsSync(full + '.html')) full += '.html';
+  if (withinRoot(full) && !path.extname(full) && fs.existsSync(full + '.html')) full += '.html';
   // SPA fallback: deep links like /matchup/aatrox-vs-darius serve the app
   // (the page uses <base href="/"> so relative assets still resolve).
   let mu = null;
-  if (full.startsWith(ROOT) && !path.extname(full) && !fs.existsSync(full) && /^matchup\//.test(rel)) {
+  if (withinRoot(full) && !path.extname(full) && !fs.existsSync(full) && /^matchup\//.test(rel)) {
     full = path.join(ROOT, 'MatchupCoach.dc.html');
     const mm = /^matchup\/(.+?)-vs-(.+?)\/?$/.exec(rel);
     if (mm) mu = { you: prettyChamp(mm[1]), foe: prettyChamp(mm[2]), slug: rel.replace(/\/+$/, '') };
   }
-  if (!full.startsWith(ROOT) || !fs.existsSync(full) || !fs.statSync(full).isFile()) {
+  if (!withinRoot(full) || !fs.existsSync(full) || !fs.statSync(full).isFile()) {
     const notFound = path.join(ROOT, '404.html');
     if (fs.existsSync(notFound)) {
       res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
@@ -264,7 +274,7 @@ async function handleApi(req, res, pathname, ip) {
     const u = users[key];
     if (!u) return sendJson(res, 404, { error: 'No account found with that username - create one below.' });
     if (u.google && !u.hash) return sendJson(res, 400, { error: 'That account uses Google sign-in - use the Google button above.' });
-    if (hashPw(String(b.pass || ''), u.salt) !== u.hash) return sendJson(res, 401, { error: 'Wrong password - try again, or reset it below.' });
+    if (!safeEq(hashPw(String(b.pass || ''), u.salt), u.hash)) return sendJson(res, 401, { error: 'Wrong password - try again, or reset it below.' });
     return sendJson(res, 200, { token: newSession(key), user: publicUser(u) });
   }
 
@@ -316,9 +326,9 @@ async function handleApi(req, res, pathname, ip) {
     const planObj = { type: plan };
     if (plan === 'role') {
       planObj.role = ['top', 'jungle', 'mid', 'bot', 'support'].includes(b.role) ? b.role : 'top';
-      charged = '$4.99/mo';
+      charged = '$2.99/mo';
     } else if (plan === 'all') {
-      charged = '$9.99/mo';
+      charged = '$4.99/mo';
     } else {
       if (u.plan && u.plan.type === 'founder') {
         return sendJson(res, 200, { user: publicUser(u), charged: 'already a founder - not charged', founders: founderState() });
@@ -412,6 +422,9 @@ async function handleApi(req, res, pathname, ip) {
 http.createServer((req, res) => {
   let pathname;
   try { pathname = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch (e) { pathname = '/'; }
+  // Don't let browsers MIME-sniff responses; deny framing (clickjacking).
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
   if (pathname === '/api' || pathname.startsWith('/api/')) {
     handleApi(req, res, pathname, ip).catch(() => sendJson(res, 500, { error: 'Server error.' }));

@@ -252,6 +252,21 @@
     im.src = url;
     el.setAttribute('data-ci-done', name);
   }
+  function fillSplashBg(el) {
+    var name = el.getAttribute('data-champ-splash') || '';
+    if (!name || el.getAttribute('data-cs-done') === name) return;
+    var url = splash(name);
+    if (!url) return;
+    var im = new Image();
+    im.onload = function () {
+      el.style.backgroundImage = "url('" + url + "')";
+      el.style.backgroundSize = 'cover';
+      el.style.backgroundPosition = 'center 22%';
+    };
+    im.src = url; // if it 404s, the tinted panel just stays art-less
+    el.setAttribute('data-cs-done', name);
+  }
+
   function fillIconText(el) {
     var mode = el.getAttribute('data-icontext') || 'all';
     var text = normTxt(el.textContent).replace(/\s+/g, ' ');
@@ -300,7 +315,7 @@
   function start() {
     queueScan();
     new MutationObserver(queueScan).observe(document.body, {
-      subtree: true, childList: true, attributes: true, attributeFilter: ['placeholder', 'data-ab', 'data-champ-icon', 'data-icontext']
+      subtree: true, childList: true, attributes: true, attributeFilter: ['placeholder', 'data-ab', 'data-champ-icon', 'data-champ-splash', 'data-icontext']
     });
     // Safety-net rescan (same idempotent retry pattern as the data fix files):
     // catches anything a missed mutation or wedged preload left unfilled.
@@ -313,6 +328,7 @@
     loadDicts();
     document.querySelectorAll('[data-ab], [aria-label^="ab:"]').forEach(fillAb);
     document.querySelectorAll('[data-champ-icon]').forEach(fillChampIcon);
+    document.querySelectorAll('[data-champ-splash]').forEach(fillSplashBg);
     document.querySelectorAll('[data-icontext]').forEach(fillIconText);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);

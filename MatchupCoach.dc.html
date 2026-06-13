@@ -949,7 +949,7 @@
 
       <div style="position:relative; display:flex; align-items:stretch; gap:0; flex-wrap:nowrap;">
         <!-- Champion A -->
-        <div style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end;">
+        <div data-champ-splash="{{ champA.name }}" style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; background:#11131c;">
           <div style="position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(72deg, {{ champA.tintRgba }}, transparent 62%), linear-gradient(0deg, rgba(11,9,8,0.94), rgba(11,9,8,0.1) 62%, transparent);"></div>
           <div style="position:absolute; top:22px; left:26px; z-index:2; pointer-events:none; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:1px; color:{{ champA.label }}; font-weight:700;">YOUR CHAMPION</div>
           <div style="position:relative; z-index:2; padding:26px; pointer-events:none;">
@@ -975,7 +975,7 @@
         </div>
 
         <!-- Champion B -->
-        <div style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-end; text-align:right;">
+        <div data-champ-splash="{{ champB.name }}" style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-end; text-align:right; background:#11131c;">
           <div style="position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(-72deg, {{ champB.tintRgba }}, transparent 62%), linear-gradient(0deg, rgba(11,9,8,0.94), rgba(11,9,8,0.1) 62%, transparent);"></div>
           <div style="position:absolute; top:22px; right:26px; z-index:2; pointer-events:none; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:1px; color:{{ champB.label }}; font-weight:700;">ENEMY CHAMPION</div>
           <div style="position:relative; z-index:2; padding:26px; pointer-events:none;">
@@ -2180,7 +2180,7 @@
       <div style="position:absolute; inset:0; background:radial-gradient(620px 280px at 14% 0%, {{ jv.champA.glow }}, transparent 60%), radial-gradient(620px 280px at 86% 0%, {{ jv.champB.glow }}, transparent 60%); pointer-events:none;"></div>
 
       <div style="position:relative; display:flex; align-items:stretch; gap:0; flex-wrap:nowrap;">
-        <div style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end;">
+        <div data-champ-splash="{{ jv.champA.name }}" style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; background:#11131c;">
           <div style="position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(72deg, {{ jv.champA.tintRgba }}, transparent 62%), linear-gradient(0deg, rgba(11,9,8,0.94), rgba(11,9,8,0.1) 62%, transparent);"></div>
           <div style="position:absolute; top:22px; left:26px; z-index:2; pointer-events:none; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:1px; color:{{ jv.champA.label }}; font-weight:700;">YOUR JUNGLER</div>
           <div style="position:relative; z-index:2; padding:26px; pointer-events:none;">
@@ -2191,7 +2191,7 @@
         <div style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; padding:0 6px; position:relative; z-index:3;">
           <div style="width:62px; height:62px; border-radius:50%; background:linear-gradient(140deg,#0e2419,#07120d); border:1px solid rgba(61,220,151,0.4); display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:19px; color:#7fe3b8; box-shadow:0 0 0 8px rgba(11,9,8,0.7), 0 10px 30px -8px rgba(0,0,0,0.85);">VS</div>
         </div>
-        <div style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-end; text-align:right;">
+        <div data-champ-splash="{{ jv.champB.name }}" style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-end; text-align:right; background:#11131c;">
           <div style="position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(-72deg, {{ jv.champB.tintRgba }}, transparent 62%), linear-gradient(0deg, rgba(11,9,8,0.94), rgba(11,9,8,0.1) 62%, transparent);"></div>
           <div style="position:absolute; top:22px; right:26px; z-index:2; pointer-events:none; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:1px; color:{{ jv.champB.label }}; font-weight:700;">ENEMY JUNGLER</div>
           <div style="position:relative; z-index:2; padding:26px; pointer-events:none;">
@@ -6417,12 +6417,24 @@ class Component extends DCLogic {
           left: FIX[l] || l, right: FIX[r] || r,
           aInit: init(l), bInit: init(r) };
       }),
-      heroStats: [
-        { n: '170+', t: 'champions covered' },
-        { n: '5', t: 'roles, every lane' },
-        { n: '31,600', t: 'phase windows rated' },
-        { n: '490', t: 'jungle duel reports' }
-      ],
+      heroStats: (function(self){
+        var R = window.ROSTERS || {}, total = 0;
+        ['top', 'mid', 'bot', 'support'].forEach(function(role){
+          var pool = (R[role] || []).reduce(function(a, g){ return a + g.c.length; }, 0);
+          total += pool * pool;
+        });
+        var JG = window.JG_DB || {};
+        Object.keys(JG).forEach(function(k){ total += Object.keys(JG[k]).length; });
+        var jgTimers = Object.keys(window.JUNGLE_INTEL || {}).length;
+        var fmt = function(n){ return n.toLocaleString('en-US'); };
+        var matchups = total ? (Math.floor(total / 100) * 100) : 11600;
+        return [
+          { n: '170+', t: 'champions covered' },
+          { n: fmt(matchups) + '+', t: 'matchups covered' },
+          { n: '31,600', t: 'phase windows rated' },
+          { n: jgTimers ? String(jgTimers) : '49', t: 'jungle tracking timers' }
+        ];
+      })(this),
       // Hero matchup box — wired inputs with autocomplete; Enter analyzes.
       heroYou: this.state.heroYou, heroFoe: this.state.heroFoe, heroErr: this.state.heroErr, hasHeroErr: !!this.state.heroErr,
       setHeroYou: (e) => this.setState({ heroYou: e.target.value, heroErr: '' }),

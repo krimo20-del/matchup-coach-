@@ -1081,6 +1081,84 @@
           </div>
         </div>
 
+        <!-- ===== YOUR JUNGLER — INVADE RISK + GANK SYNC (home) ===== -->
+        <div style="margin-top:24px; border-radius:20px; padding:1px; background:linear-gradient(140deg,rgba(70,198,245,0.55),rgba(70,198,245,0.12),rgba(70,198,245,0.04));">
+          <div style="border-radius:19px; background:linear-gradient(180deg,#0e1620,#0c0e15); padding:20px 22px;">
+            <div style="display:flex; align-items:center; gap:11px; margin-bottom:6px; flex-wrap:wrap;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#46c6f5" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:19px;">Your Jungler — Invade Risk &amp; Gank Sync</span>
+            </div>
+            <div style="margin-bottom:12px;"><span style="display:inline-block; padding:5px 13px; border-radius:8px; background:rgba(70,198,245,0.14); border:1px solid rgba(70,198,245,0.45); font-family:'Chakra Petch',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:0.8px; color:#7cc8e8;">PICK YOUR JUNGLER ↓</span></div>
+            <div style="font-size:12.5px; color:#8a90a2; margin-bottom:14px;">Pick YOUR jungler — see how invadable their first clear is against the enemy you picked above, and how to chain your CC with their ganks. <b style="color:#aab0c2;">Dot colour = how invadable they are early.</b></div>
+
+            <div style="border-radius:16px; border:1px solid rgba(255,255,255,0.07); background:linear-gradient(180deg,#12141d,#0d0f16); padding:16px; margin-bottom:14px;">
+              <div style="display:flex; flex-wrap:wrap; gap:16px;">
+                <sc-for list="{{ myJgGroups }}" as="grp" hint-placeholder-count="4">
+                  <div style="flex:1 1 200px; min-width:180px;">
+                    <div style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.8px; color:#7d8499; font-weight:700; margin-bottom:9px;">{{ grp.g }}</div>
+                    <div style="display:flex; flex-wrap:wrap; gap:7px;">
+                      <sc-for list="{{ grp.champs }}" as="j" hint-placeholder-count="5">
+                        <button onClick="{{ j.onClick }}" style="display:inline-flex; align-items:center; gap:7px; padding:7px 12px; border-radius:9px; cursor:pointer; font-family:'Manrope',sans-serif; font-weight:700; font-size:12.5px; background:{{ j.bg }}; border:1px solid {{ j.bd }}; color:{{ j.color }};" style-hover="border-color:rgba(255,255,255,0.28);">
+                          <span data-champ-icon="{{ j.name }}" style="flex:0 0 auto; width:20px; height:20px; border-radius:6px; background:#1c2030; border:1.5px solid {{ j.dot }};"></span>{{ j.name }}
+                        </button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <sc-if value="{{ myJgNotPicked }}" hint-placeholder-val="{{ true }}">
+              <div style="border-radius:16px; border:1px dashed rgba(255,255,255,0.12); background:#0c0e15; padding:28px 24px; text-align:center;">
+                <div style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; color:#c7ccdb; margin-bottom:5px;">Select YOUR jungler above</div>
+                <div style="font-size:12.5px; color:#7d8499;">Their invade risk this game and your gank-sync playbook will load here.</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ myJgPicked }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:13px;">
+                <div style="border-radius:14px; border:1px solid rgba(255,255,255,0.07); border-left:3px solid {{ myJgSel.vulnColor }}; background:#11131c; padding:17px;">
+                  <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
+                    <span data-champ-icon="{{ myJgSel.name }}" style="flex:0 0 auto; width:26px; height:26px; border-radius:7px; background:#1c2030; border:1px solid rgba(255,255,255,0.18);"></span>
+                    <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:15px; color:#eef0f6;">{{ myJgSel.name }} — Invade Risk</span>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <div style="display:flex; gap:4px;">
+                        <sc-for list="{{ myJgSel.vulnSegs }}" as="v" hint-placeholder-count="5">
+                          <span style="width:16px; height:8px; border-radius:3px; background:{{ v.color }};"></span>
+                        </sc-for>
+                      </div>
+                      <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11.5px; color:{{ myJgSel.vulnColor }};">{{ myJgSel.vulnLabel }}</span>
+                    </div>
+                  </div>
+                  <div style="font-size:12.5px; line-height:1.55; color:#c2c8d6; text-wrap:pretty; margin-bottom:12px;">{{ myJgSel.invadeNote }}</div>
+                  <div style="border-radius:11px; padding:12px 13px; background:{{ myJgSel.cross.tone }}12; border:1px solid {{ myJgSel.cross.tone }}44;">
+                    <div style="font-family:'Chakra Petch',sans-serif; font-size:10.5px; letter-spacing:0.7px; font-weight:700; color:{{ myJgSel.cross.tone }}; margin-bottom:5px;">{{ myJgSel.cross.label }}</div>
+                    <div style="font-size:12px; line-height:1.5; color:#d2d7e2; text-wrap:pretty;">{{ myJgSel.cross.text }}</div>
+                  </div>
+                </div>
+
+                <div style="border-radius:14px; border:1px solid rgba(61,220,151,0.25); border-left:3px solid #3ddc97; background:linear-gradient(180deg,rgba(61,220,151,0.05),#11131c); padding:17px;">
+                  <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
+                    <span data-champ-icon="{{ myJgSel.name }}" style="flex:0 0 auto; width:26px; height:26px; border-radius:7px; background:#1c2030; border:1px solid rgba(255,255,255,0.18);"></span>
+                    <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:15px; color:#eef0f6;">Gank Sync — {{ myJgSel.name }}</span>
+                    <span style="padding:3px 10px; border-radius:7px; font-family:'Chakra Petch',sans-serif; font-size:9.5px; font-weight:700; letter-spacing:0.5px; color:{{ myJgSel.syncOrderColor }}; background:{{ myJgSel.syncOrderColor }}1f; border:1px solid {{ myJgSel.syncOrderColor }}55;">{{ myJgSel.syncOrderLabel }}</span>
+                  </div>
+                  <div style="font-size:12.5px; line-height:1.55; color:#c2c8d6; text-wrap:pretty; margin-bottom:12px;">{{ myJgSel.sync }}</div>
+                  <sc-if value="{{ myJgSel.hasFollow }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex; align-items:flex-start; gap:9px; padding:11px 12px; border-radius:11px; background:rgba(70,198,245,0.07); border:1px solid rgba(70,198,245,0.25);">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7cc8e8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto; margin-top:2px;"><path d="M13 2L3 14h7l-1 8 10-12h-7z"></path></svg>
+                      <div>
+                        <div style="font-family:'Chakra Petch',sans-serif; font-size:9.5px; letter-spacing:0.7px; color:#7cc8e8; font-weight:700; margin-bottom:3px;">YOUR FOLLOW-UP COMBO</div>
+                        <div style="font-size:12.5px; font-weight:700; color:#e7ecf5;">{{ myJgSel.followName }} <span style="color:#7cc8e8; font-family:'Chakra Petch',sans-serif;">{{ myJgSel.followKeys }}</span></div>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
 
         <!-- ===== TODAY'S FREE CHAMPIONS (one per role, daily) ===== -->
         <div style="margin-top:24px; border-radius:16px; border:1px solid rgba(127,227,184,0.25); background:linear-gradient(180deg,rgba(127,227,184,0.06),#0c0e15); padding:16px 18px;">
@@ -1089,43 +1167,12 @@
             <span style="padding:3px 9px; border-radius:7px; background:rgba(127,227,184,0.16); border:1px solid rgba(127,227,184,0.45); font-family:'Chakra Petch',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.6px; color:#7fe3b8;">FREE · ROTATES DAILY</span>
             <span style="font-size:11.5px; color:#7d8499;">— one per role, free to study today</span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr)); gap:9px;">
+          <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:7px;">
             <sc-for list="{{ freeToday }}" as="ft" hint-placeholder-count="5">
-              <button onClick="{{ ft.onClick }}" style="display:flex; align-items:center; gap:9px; padding:9px 11px; border-radius:11px; cursor:pointer; background:#11131c; border:1px solid rgba(255,255,255,0.07); border-left:2.5px solid {{ ft.accent }}; font-family:'Manrope',sans-serif; text-align:left; transition:all 0.15s;" style-hover="border-color:{{ ft.accent }}88; transform:translateY(-2px);">
-                <span data-champ-icon="{{ ft.champ }}" style="flex:0 0 auto; width:34px; height:34px; border-radius:8px; background:#1c2030; border:1px solid rgba(255,255,255,0.12);"></span>
-                <span style="display:flex; flex-direction:column; min-width:0;">
-                  <span style="font-family:'Chakra Petch',sans-serif; font-size:8.5px; font-weight:700; letter-spacing:0.6px; color:{{ ft.accent }};">{{ ft.label }}</span>
-                  <span style="font-size:12.5px; font-weight:700; color:#dfe2ec; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ ft.champ }}</span>
-                </span>
-              </button>
-            </sc-for>
-          </div>
-        </div>
-
-        <div style="margin-top:30px;">
-          <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
-            <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:15px; color:#f4efe8; letter-spacing:0.3px;">Sample matchups</span>
-            <span style="font-family:'Chakra Petch',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.6px; color:#3ddc97; padding:3px 8px; border-radius:6px; background:rgba(61,220,151,0.12); border:1px solid rgba(61,220,151,0.32); white-space:nowrap;">FRESH DAILY</span>
-            <span style="flex:1; height:1px; background:rgba(255,255,255,0.07);"></span>
-            <span style="font-size:11.5px; color:#7d8499; white-space:nowrap;">5 featured lanes — tap to open</span>
-          </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:13px;">
-            <sc-for list="{{ showcase }}" as="c" hint-placeholder-count="5">
-              <button onClick="{{ c.onClick }}" style="position:relative; overflow:hidden; text-align:left; border-radius:16px; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg,#13151f,#0c0e15); padding:0; cursor:pointer; transition:transform 0.16s, border-color 0.16s, box-shadow 0.16s; font-family:'Manrope',sans-serif;" style-hover="transform:translateY(-4px); border-color:rgba(232,184,75,0.5); box-shadow:0 20px 44px -26px rgba(0,0,0,0.9);">
-                <div style="position:relative; height:78px; overflow:hidden; display:flex; align-items:center; justify-content:center; gap:0;">
-                  <span style="position:absolute; inset:0; background:linear-gradient(110deg, {{ c.a }}33, transparent 52%, {{ c.b }}33);"></span>
-                  <span style="position:absolute; left:-20px; top:-20px; width:90px; height:90px; border-radius:50%; background:radial-gradient(circle, {{ c.a }}55, transparent 70%); filter:blur(6px);"></span>
-                  <span style="position:absolute; right:-20px; bottom:-20px; width:90px; height:90px; border-radius:50%; background:radial-gradient(circle, {{ c.b }}55, transparent 70%); filter:blur(6px);"></span>
-                  <span data-champ-icon="{{ c.left }}" style="position:relative; display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:10px; background:{{ c.a }}; box-shadow:0 4px 16px -3px {{ c.a }}; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:rgba(8,10,14,0.85);">{{ c.aInit }}</span>
-                  <span style="position:relative; z-index:2; margin:0 -8px; width:30px; height:30px; border-radius:50%; background:#0c0e15; border:1px solid rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; color:#f0cd72;">VS</span>
-                  <span data-champ-icon="{{ c.right }}" style="position:relative; display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:10px; background:{{ c.b }}; box-shadow:0 4px 16px -3px {{ c.b }}; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:rgba(8,10,14,0.85);">{{ c.bInit }}</span>
-                  <span style="position:absolute; top:9px; left:11px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:9.5px; letter-spacing:0.8px; color:#fff; opacity:0.85;">{{ c.role }}</span>
-                </div>
-                <div style="padding:13px 15px 15px;">
-                  <div style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:15.5px; color:#f4efe8; margin-bottom:5px;">{{ c.champs }}</div>
-                  <div style="font-size:12px; line-height:1.45; color:#9aa0b3; text-wrap:pretty; margin-bottom:10px;">{{ c.blurb }}</div>
-                  <div style="display:inline-flex; align-items:center; gap:6px; font-family:'Chakra Petch',sans-serif; font-size:9.5px; font-weight:700; letter-spacing:0.7px; color:#f0cd72; white-space:nowrap;">OPEN THE FULL BRIEF <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></div>
-                </div>
+              <button onClick="{{ ft.onClick }}" style="display:flex; flex-direction:column; align-items:center; gap:7px; padding:11px 5px; border-radius:11px; cursor:pointer; background:#11131c; border:1px solid rgba(255,255,255,0.07); border-top:2.5px solid {{ ft.accent }}; font-family:'Manrope',sans-serif; text-align:center; min-width:0; transition:all 0.15s;" style-hover="border-color:{{ ft.accent }}88; transform:translateY(-2px);">
+                <span data-champ-icon="{{ ft.champ }}" style="flex:0 0 auto; width:40px; height:40px; border-radius:9px; background:#1c2030; border:1px solid rgba(255,255,255,0.12);"></span>
+                <span style="font-family:'Chakra Petch',sans-serif; font-size:8.5px; font-weight:700; letter-spacing:0.5px; color:{{ ft.accent }};">{{ ft.label }}</span>
+                <span style="width:100%; font-size:11px; font-weight:700; color:#dfe2ec; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ ft.champ }}</span>
               </button>
             </sc-for>
           </div>
@@ -1634,46 +1681,6 @@
       </div>
     </section>
 
-    <!-- ===== COOLDOWN CHEAT SHEET ===== -->
-    <section style="margin-top:30px;">
-      <div style="display:flex; align-items:center; gap:12px; margin-bottom:5px; flex-wrap:wrap;">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#46c6f5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2M9 2h6"></path></svg>
-        <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:21px;">Cooldown Cheat Sheet</span>
-        <span style="padding:3px 9px; border-radius:7px; background:rgba(61,220,151,0.13); border:1px solid rgba(61,220,151,0.34); color:#7fe3b8; font-size:10px; font-weight:700; letter-spacing:0.6px; font-family:'Chakra Petch',sans-serif;">TAP TO TRACK</span>
-      </div>
-      <div style="font-size:13px; color:#8a90a2; margin-bottom:16px;">{{ champB.name }}'s full kit — passive plus Q / W / E / R key points. Tap a tracked ability the moment he uses it, then punish the window.</div>
-
-      <div style="display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:10px;">
-        <sc-for list="{{ abilities }}" as="ab" hint-placeholder-count="5">
-          <div onClick="{{ ab.trigger }}" style="position:relative; min-width:0; border-radius:14px; padding:12px 13px; background:{{ ab.cardBg }}; border:1px solid {{ ab.cardBd }}; cursor:{{ ab.cursor }}; transition:background 0.25s, border-color 0.25s; overflow:hidden; display:flex; flex-direction:column;">
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-              <span aria-hidden="true" aria-label="ab:{{ champB.name }}|{{ ab.k }}" style="flex:0 0 auto; width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; color:{{ ab.color }}; background:{{ ab.color }}1f; border:1px solid {{ ab.color }}55;">{{ ab.k }}</span>
-              <span style="flex:1 1 0; min-width:0; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; line-height:1.25; color:#eef0f6; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">{{ ab.name }}</span>
-              <span style="flex:0 0 auto; padding:2px 6px; border-radius:5px; background:#1a1d28; border:1px solid rgba(255,255,255,0.1); font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:9.5px; color:#c7ccdb; white-space:nowrap;">{{ ab.cd }}</span>
-            </div>
-            <div style="font-size:10px; color:#8a90a2; margin-bottom:6px; font-weight:600;">{{ ab.status }}</div>
-            <div style="font-size:11.5px; line-height:1.42; color:#aab0c2; text-wrap:pretty; flex:1 1 auto;">{{ ab.note }}</div>
-
-            <sc-if value="{{ ab.trackable }}" hint-placeholder-val="{{ true }}">
-              <div style="margin-top:10px; height:6px; border-radius:99px; background:rgba(255,255,255,0.08); overflow:hidden;">
-                <div style="height:100%; width:{{ ab.pct }}%; border-radius:99px; background:linear-gradient(90deg,#3ddc97,#46c6f5); transition:width 0.9s linear;"></div>
-              </div>
-            </sc-if>
-
-            <sc-if value="{{ ab.showWindow }}" hint-placeholder-val="{{ false }}">
-              <div style="margin-top:9px; padding:8px 10px; border-radius:10px; background:rgba(61,220,151,0.14); border:1px solid rgba(61,220,151,0.55); animation:mc-flash 0.9s ease-in-out infinite;">
-                <div style="display:flex; align-items:center; gap:6px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; color:#3ddc97;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><path d="M13 2L3 14h7l-1 8 10-12h-7z"></path></svg>
-                  <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ ab.windowTitle }} · {{ ab.remaining }}s</span>
-                </div>
-                <div style="font-size:10.5px; color:#bfeed6; margin-top:3px; line-height:1.4;">{{ ab.windowSub }}</div>
-              </div>
-            </sc-if>
-          </div>
-        </sc-for>
-      </div>
-    </section>
-
     <!-- ===== ENEMY GAMEPLAN + 30s PLAN ===== -->
     <section style="margin-top:18px; display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px;">
 
@@ -1982,6 +1989,46 @@
         </div>
       </div>
       </sc-if>
+    </section>
+
+    <!-- ===== COOLDOWN CHEAT SHEET (below Skill Max Order) ===== -->
+    <section style="margin-top:30px;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:5px; flex-wrap:wrap;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#46c6f5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2M9 2h6"></path></svg>
+        <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:21px;">Cooldown Cheat Sheet</span>
+        <span style="padding:3px 9px; border-radius:7px; background:rgba(61,220,151,0.13); border:1px solid rgba(61,220,151,0.34); color:#7fe3b8; font-size:10px; font-weight:700; letter-spacing:0.6px; font-family:'Chakra Petch',sans-serif;">TAP TO TRACK</span>
+      </div>
+      <div style="font-size:13px; color:#8a90a2; margin-bottom:16px;">{{ champB.name }}'s full kit — passive plus Q / W / E / R key points. Tap a tracked ability the moment he uses it, then punish the window.</div>
+
+      <div style="display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:10px;">
+        <sc-for list="{{ abilities }}" as="ab" hint-placeholder-count="5">
+          <div onClick="{{ ab.trigger }}" style="position:relative; min-width:0; border-radius:14px; padding:12px 13px; background:{{ ab.cardBg }}; border:1px solid {{ ab.cardBd }}; cursor:{{ ab.cursor }}; transition:background 0.25s, border-color 0.25s; overflow:hidden; display:flex; flex-direction:column;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+              <span aria-hidden="true" aria-label="ab:{{ champB.name }}|{{ ab.k }}" style="flex:0 0 auto; width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; color:{{ ab.color }}; background:{{ ab.color }}1f; border:1px solid {{ ab.color }}55;">{{ ab.k }}</span>
+              <span style="flex:1 1 0; min-width:0; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; line-height:1.25; color:#eef0f6; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">{{ ab.name }}</span>
+              <span style="flex:0 0 auto; padding:2px 6px; border-radius:5px; background:#1a1d28; border:1px solid rgba(255,255,255,0.1); font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:9.5px; color:#c7ccdb; white-space:nowrap;">{{ ab.cd }}</span>
+            </div>
+            <div style="font-size:10px; color:#8a90a2; margin-bottom:6px; font-weight:600;">{{ ab.status }}</div>
+            <div style="font-size:11.5px; line-height:1.42; color:#aab0c2; text-wrap:pretty; flex:1 1 auto;">{{ ab.note }}</div>
+
+            <sc-if value="{{ ab.trackable }}" hint-placeholder-val="{{ true }}">
+              <div style="margin-top:10px; height:6px; border-radius:99px; background:rgba(255,255,255,0.08); overflow:hidden;">
+                <div style="height:100%; width:{{ ab.pct }}%; border-radius:99px; background:linear-gradient(90deg,#3ddc97,#46c6f5); transition:width 0.9s linear;"></div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ ab.showWindow }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:9px; padding:8px 10px; border-radius:10px; background:rgba(61,220,151,0.14); border:1px solid rgba(61,220,151,0.55); animation:mc-flash 0.9s ease-in-out infinite;">
+                <div style="display:flex; align-items:center; gap:6px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; color:#3ddc97;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><path d="M13 2L3 14h7l-1 8 10-12h-7z"></path></svg>
+                  <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ ab.windowTitle }} · {{ ab.remaining }}s</span>
+                </div>
+                <div style="font-size:10.5px; color:#bfeed6; margin-top:3px; line-height:1.4;">{{ ab.windowSub }}</div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
     </section>
 
     <!-- ===== WAVE & ROAM COACH (horizontal) ===== -->
@@ -5957,6 +6004,20 @@ class Component extends DCLogic {
           })(),
           full: FULL, diffRating: FULL.diffRating, carryRating: FULL.carryRating
         });
+        // Smooth single-stage "Even" dips: a window flanked by the SAME owner on
+        // both sides belongs to that owner — a power curve doesn't blink neutral
+        // for one stage between two same-owner stages. Stops the favour timeline
+        // and level table from showing a blank/no-favour gap mid-curve
+        // (reported example: Jhin vs Tristana, "First item").
+        (function(){
+          var ph = d.phases || [], lt = d.levelTable || [];
+          for (var i = 1; i < ph.length - 1; i++) {
+            if (ph[i].w === 'X' && ph[i - 1].w === ph[i + 1].w && ph[i - 1].w !== 'X') {
+              ph[i].w = ph[i - 1].w;
+              if (lt[i] && lt[i - 1]) { lt[i].tone = lt[i - 1].tone; lt[i].who = lt[i - 1].who; }
+            }
+          }
+        })();
       }
       const EK = (window.ENEMY_KITS || {})[slug(enemy)] || null;
       const ab = {
@@ -7068,8 +7129,12 @@ class Component extends DCLogic {
           bName: (MU.champB && MU.champB.name) || 'Enemy',
           segs: ph.map(function(p){
             var g = p.tone === '#3ddc97', r = p.tone === '#ff5d6c';
-            var a = seg('#3ddc97', g);  // YOU = always green; bright/striped when you own the window
-            var b = seg('#ff5d6c', r);  // ENEMY = always red; bright/striped when they own it
+            var even = !g && !r;
+            // YOU = always green / ENEMY = always red; the owner's bar is bright + striped.
+            // An even window shows a clear amber bar on BOTH rows (matches the EVEN
+            // legend) instead of two dim bars that read as a blank/missing window.
+            var a = even ? { bg: '#e8b84b3d', anim: 'none' } : seg('#3ddc97', g);
+            var b = even ? { bg: '#e8b84b3d', anim: 'none' } : seg('#ff5d6c', r);
             return { label: p.p, tip: (p.who || '') + ' \u00b7 ' + (p.s || ''), aBg: a.bg, aAnim: a.anim, bBg: b.bg, bAnim: b.anim };
           })
         };

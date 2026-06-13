@@ -37,7 +37,7 @@
     },
     mage: {
       label: 'Mage / Artillery', summHigh: ['Flash', 'Teleport'], summLow: ['Flash', 'Ignite'],
-      keystone: 'Electrocute', primaryTree: 'Domination', primary: ['Cheap Shot', 'Eyeball Collection', 'Treasure Hunter'],
+      keystone: 'Electrocute', primaryTree: 'Domination', primary: ['Cheap Shot', 'Grisly Mementos', 'Treasure Hunter'],
       secondaryTree: 'Sorcery', secondary: ['Manaflow Band', 'Scorch'],
       shards: ['Adaptive Force', 'Adaptive Force', 'Health'],
       start: ["Doran's Ring", 'Health Potion'], boots: 'Sorcerer’s Shoes',
@@ -46,7 +46,7 @@
     },
     assassin: {
       label: 'Assassin', summHigh: ['Flash', 'Ignite'], summLow: ['Flash', 'Ignite'],
-      keystone: 'Electrocute', primaryTree: 'Domination', primary: ['Sudden Impact', 'Eyeball Collection', 'Ultimate Hunter'],
+      keystone: 'Electrocute', primaryTree: 'Domination', primary: ['Sudden Impact', 'Grisly Mementos', 'Ultimate Hunter'],
       secondaryTree: 'Sorcery', secondary: ['Absolute Focus', 'Gathering Storm'],
       shards: ['Adaptive Force', 'Adaptive Force', 'Health'],
       start: ["Doran's Blade", 'Health Potion'], boots: 'Ionian Boots of Lucidity',

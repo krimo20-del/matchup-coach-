@@ -38,12 +38,20 @@
   window.MC_REAL_WR = window.MC_REAL_WR || {};
   var WR = {
     aatrox: {
+      // losses (lolalytics Emerald+) — scalers, ranged poke, mobile skirmishers
       kayle: 44.9, singed: 45.1, kennen: 45.6, cassiopeia: 46.2, ornn: 47.6, zed: 47.7,
-      irelia: 47.9, malphite: 48.3, urgot: 49.0, kled: 49.1, wukong: 49.5, aurora: 49.6,
-      fiora: 49.8, illaoi: 49.8, gangplank: 49.9, sylas: 50.2, riven: 50.3, ryze: 50.3,
-      gragas: 50.4, tryndamere: 50.6, quinn: 50.6, jayce: 50.7, camille: 54.5, teemo: 53.9,
-      vladimir: 55.3, poppy: 55.7, varus: 55.9, naafiri: 56.0, drmundo: 56.3, swain: 57.1,
-      tahmkench: 58.3
+      irelia: 47.9, malphite: 48.3,
+      // even (~49-52%)
+      urgot: 49.0, kled: 49.1, wukong: 49.5, aurora: 49.8, fiora: 49.8, illaoi: 49.8,
+      gangplank: 49.9, sylas: 50.5, yone: 50.8, pantheon: 50.7, garen: 51.2, volibear: 51.2,
+      gnar: 51.3, warwick: 51.3, renekton: 51.1, olaf: 51.7, darius: 51.8, riven: 50.3,
+      ryze: 50.3, gragas: 50.4, tryndamere: 50.6, quinn: 50.6, jayce: 50.7, jax: 52.1,
+      nasus: 52.4, ambessa: 52.4, heimerdinger: 52.4, yasuo: 52.5,
+      // favoured (>=52.5%)
+      ksante: 52.8, gwen: 52.9, trundle: 53.0, mordekaiser: 53.1, sett: 53.2, sion: 53.4,
+      chogath: 53.7, yorick: 53.8, rumble: 53.9, teemo: 53.9, akali: 53.9, vayne: 54.1,
+      camille: 54.5, shen: 54.5, vladimir: 55.3, poppy: 55.7, varus: 55.9, naafiri: 56.0,
+      drmundo: 56.3, swain: 57.1, tahmkench: 58.2
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane

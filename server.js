@@ -11,6 +11,7 @@
 //                 use until real payments (Stripe) are wired.
 'use strict';
 const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -19,6 +20,10 @@ const PORT = parseInt(process.env.PORT, 10) || 8123;
 const ROOT = __dirname;
 const DATA_DIR = process.env.DATA_DIR || path.join(ROOT, 'server-data');
 const PAYMENTS_MODE = process.env.PAYMENTS_MODE || 'demo';
+// Real Google Sign-In: set GOOGLE_CLIENT_ID to a Google Cloud OAuth web client
+// id whose authorized origins include https://matchupcoach.gg. Unset = the
+// frontend hides the Google button entirely (no shared demo account).
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 // ---------- persistence ----------
@@ -81,6 +86,16 @@ function readBody(req) {
   });
 }
 
+function fetchJson(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, (r) => {
+      let raw = '';
+      r.on('data', (c) => { raw += c; if (raw.length > 65536) r.destroy(); });
+      r.on('end', () => { try { resolve({ status: r.statusCode, json: JSON.parse(raw) }); } catch (e) { reject(e); } });
+    }).on('error', reject);
+  });
+}
+
 // Tiny per-IP throttle on auth endpoints (public internet hygiene).
 const hits = new Map();
 function throttled(ip) {
@@ -116,6 +131,7 @@ async function handleApi(req, res, pathname, ip) {
   const route = req.method + ' ' + pathname;
 
   if (route === 'GET /api/health') return sendJson(res, 200, { ok: true, ts: Date.now() });
+  if (route === 'GET /api/config') return sendJson(res, 200, { googleClientId: GOOGLE_CLIENT_ID || null });
   if (route === 'GET /api/founders') return sendJson(res, 200, founderState());
   if (route === 'GET /api/weekchamp') {
     // Tuesday-anchored UTC week index; the client maps index -> champion pool.
@@ -152,10 +168,25 @@ async function handleApi(req, res, pathname, ip) {
   }
 
   if (route === 'POST /api/google') {
-    // Demo SSO until a real Google OAuth client is configured.
-    const key = 'riftgamer';
+    // Real Google Sign-In: the frontend sends the Google ID token (JWT); we
+    // verify it with Google and key the account on the stable Google user id,
+    // so every person gets their OWN account.
+    if (!GOOGLE_CLIENT_ID) return sendJson(res, 503, { error: 'Google sign-in is not configured yet - use a username and password.' });
+    const b = await readBody(req);
+    const cred = String(b.credential || '');
+    if (!cred || cred.length > 4096) return sendJson(res, 400, { error: 'Missing Google credential.' });
+    let info;
+    try {
+      const r = await fetchJson('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(cred));
+      info = r.status === 200 ? r.json : null;
+    } catch (e) { info = null; }
+    if (!info || info.aud !== GOOGLE_CLIENT_ID || info.email_verified !== 'true' || !info.sub) {
+      return sendJson(res, 401, { error: 'Google sign-in could not be verified - try again.' });
+    }
+    const key = 'google:' + info.sub;
     if (!users[key]) {
-      users[key] = { name: 'RiftGamer', salt: '', hash: '', plan: null, google: true, created: Date.now() };
+      const display = String(info.given_name || info.name || String(info.email || 'Player').split('@')[0]).slice(0, 24);
+      users[key] = { name: display, salt: '', hash: '', plan: null, google: true, email: info.email || '', created: Date.now() };
       saveJson('users.json', users);
     }
     return sendJson(res, 200, { token: newSession(key), user: publicUser(users[key]) });

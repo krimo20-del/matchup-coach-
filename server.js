@@ -168,9 +168,11 @@ const CHAMP_SLUG_FIX = {
   'aurelion-sol': 'Aurelion Sol', 'renata-glasc': 'Renata Glasc', 'leblanc': 'LeBlanc'
 };
 function prettyChamp(slug) {
+  // Names with roman numerals or punctuation (e.g. Jarvan IV, Kha'Zix) live in
+  // the fix map; everything else just title-cases. NB: do NOT uppercase roman
+  // numerals in the fallback — "vi" is the champion Vi, not the number six.
   if (CHAMP_SLUG_FIX[slug]) return CHAMP_SLUG_FIX[slug];
   return slug.split('-').map(function (w) {
-    if (/^(ii|iii|iv|vi|vii|viii|ix)$/.test(w)) return w.toUpperCase();
     return w.charAt(0).toUpperCase() + w.slice(1);
   }).join(' ');
 }

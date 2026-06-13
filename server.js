@@ -194,6 +194,11 @@ function sendStatic(res, rel) {
     if (mm) mu = { you: prettyChamp(mm[1]), foe: prettyChamp(mm[2]), slug: rel.replace(/\/+$/, '') };
   }
   if (!full.startsWith(ROOT) || !fs.existsSync(full) || !fs.statSync(full).isFile()) {
+    const notFound = path.join(ROOT, '404.html');
+    if (fs.existsSync(notFound)) {
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+      return res.end(fs.readFileSync(notFound));
+    }
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     return res.end('404');
   }

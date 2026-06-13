@@ -110,7 +110,9 @@
       shen: 49.5, swain: 58.7, warwick: 48.4, volibear: 59.5, wukong: 56.2, yasuo: 51.8,
       yone: 45.4, yorick: 50.0, gnar: 53.9, gragas: 54.9, gangplank: 55.1, quinn: 49.2,
       chogath: 55.3, tahmkench: 54.9, ksante: 49.9, poppy: 47.2, kayle: 46.6, kennen: 62.9,
-      singed: 52.8, ryze: 55.0, rumble: 53.4, akali: 52.0, cassiopeia: 51.7, galio: 52.7
+      singed: 52.8, ryze: 55.0, rumble: 53.4, akali: 52.0, cassiopeia: 51.7, galio: 52.7,
+      gwen: 46.1, jayce: 58.1, kassadin: 48.6, lucian: 52.4, maokai: 47.3, sylas: 50.1,
+      graves: 54.7, heimerdinger: 51.3, sejuani: 54.2, zac: 51.5, ziggs: 51.1, nautilus: 49.6
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -6751,6 +6753,318 @@
         "Your R out-heals his poke; his R is a global, not a 1v1 button.",
         "Your spike — regen + MR out-sustain his magic poke.",
         "You out-sustain the lane — he's a teamfight frontliner. Deny his global."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'gwen',
+      win: ['Dr. Mundo', 'Skill', 'Skill', 'Skill', 'Skill', 'Gwen', 'Gwen'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver-poke a weak Gwen; you can’t kill her.' },
+        { when: 'Lvl 6', text: 'Even — don’t chase her into W (mist); out-sustain her poke.' },
+        { when: '1st item', text: 'Gwen’s spike — her Q true damage shreds your HP.' },
+        { when: '2+ items', text: 'Gwen takes over — AP + true damage melt even a full-HP Mundo.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke her weak early; deny CS', 'Don’t chase into her W (mist); buy MR', 'Pressure her before her AP + true-damage scaling'],
+        foe: ['Hide in W (mist) — untargetable from outside', 'Shred your HP with Q (true damage)', 'Out-scale into a tank-melting AP bruiser']
+      },
+      early: "Levels 1-3 you out-poke a weak-early Gwen with cleavers — but you have no kill pressure to punish her, and she scales into a tank-shredder. Throw cleavers, deny her CS, and pressure her off the wave, but you can't end the lane. Her Q deals true damage that ignores your HP, so don't feed clean procs.",
+      mid: "It's even-ish through the mid — her W (Hallowed Mist) makes her untargetable from outside the cloud, so don't chase her in. Buy MR, out-sustain her poke with regen, and deny her CS. Her true-damage Q is built to melt tanks, so every minute she farms moves her toward beating your HP.",
+      late: "Gwen takes over at two items — her AP scaling and true damage melt even a full-HP Mundo, and her W keeps her safe while she snips. This is a tank's nightmare. You had to deny her farm and let your team end early; if she scaled, build MR + HP to survive for your team, but you can't 1v1 her true damage. Play frontline.",
+      whys: [
+        "Cleaver-poke a weak Gwen — but you can't kill her (no burst). Levels 1-3 are yours.",
+        "Her Q is true damage that ignores your HP. Don't feed clean procs.",
+        "Deny her CS — she scales into a tank-shredder. Pressure her off the wave.",
+        "Don't chase into her W (mist). Buy MR, out-sustain her poke.",
+        "Her Q true damage shreds your HP. Build MR.",
+        "Gwen's spike — her true damage starts to melt your tankiness.",
+        "Gwen takes over — AP + true damage melt even a full-HP Mundo. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'jayce',
+      win: ['Jayce', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Jayce’s window — his cannon Q + W poke your early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals his poke; he can’t kill a regen tank.' },
+        { when: '1st item', text: 'Your spike — regen out-sustains his poke; he falls off.' },
+        { when: 'Late', text: 'You take over — your HP shrugs off a falling-off Jayce.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); out-sustain his poke with regen', 'Tank his poke — he can’t kill a regen tank', 'Out-scale his falloff into an HP tank'],
+        foe: ['Poke from range with cannon Q + W (Hyper Charge)', 'Burst with the melee E-knockback → Q combo', 'Snowball the early poke before you out-sustain']
+      },
+      early: "Jayce pokes you hard early — cannon Q (Shock Blast) through W, plus his melee E-knockback combo — so levels 1-2 are his poke window. Throw cleavers (Q) back, take the poke (your regen heals it between waves), and don't step into a gate-empowered Shock Blast. You have no kill pressure, so just soak it and farm.",
+      mid: "Your R (Maximum Dosage) out-heals his poke, and your regen out-sustains his chip — crucially, Jayce is squishy and has no way to actually kill a regen tank once you're stacking HP. Throw cleavers, out-sustain his poke, and deny CS. He's trying to chunk you before you scale, but your healing out-paces it.",
+      late: "You take over — Jayce is a lane bully who falls off, while your HP + regen only grow. His poke can't out-pace your healing once you have items, and your frontline buries his squishy frame in fights. Survive his level 1-2 poke, out-sustain the mid-game, and the back half is decisively yours.",
+      whys: [
+        "Jayce pokes hard — cannon Q + W. Throw cleavers, your regen heals it. Levels 1-2 are his.",
+        "Don't step into a gate-empowered Shock Blast. Soak the poke and farm.",
+        "Your cleaver pokes back; your regen out-sustains his chip.",
+        "He's squishy and can't kill a regen tank. Out-sustain his poke.",
+        "Your R out-heals his poke; he can't kill a regen tank.",
+        "Your spike — regen out-sustains his poke; he falls off.",
+        "You take over — your HP shrugs off a falling-off Jayce."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'kassadin',
+      win: ['Dr. Mundo', 'Skill', 'Skill', 'Skill', 'Skill', 'Skill', 'Kassadin'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver-poke a weak Kassadin; you can’t kill him.' },
+        { when: 'Lvl 6', text: 'Even — neither has kill pressure; deny his CS.' },
+        { when: '1st item', text: 'Even — buy MR; deny his farm to delay his spike.' },
+        { when: '2+ items', text: 'Kassadin takes over — his magic burst + Riftwalk out-scale you.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke his weak early; deny CS + XP', 'Buy MR; pressure him — but you can’t kill him', 'Deny his farm before his level 16 spike'],
+        foe: ['Survive lane with Q (spell shield) and farm', 'Blink away with R (Riftwalk) — you can’t catch him', 'Out-scale into an unkillable late-game assassin']
+      },
+      early: "Levels 1-3 you out-poke a weak Kassadin with cleavers — but you have no kill pressure to punish the weakest early-game champion, so you can't end the lane. Throw cleavers, deny his CS and XP, and pressure him off the wave. His Q is a spell shield that blocks one cleaver, but he can't trade with you either.",
+      mid: "It's even — neither of you threatens a kill, so it's a farming contest. Buy MR (Spirit Visage helps), deny his CS relentlessly, and out-sustain. His whole game is scaling, so every minute he farms is bad for you. You can't catch him once he has R (Riftwalk), so just deny and pressure.",
+      late: "Kassadin takes over at two items and level 16 — his Riftwalk magic burst out-scales the game and he becomes nearly unkillable. The lane is even because you out-poke his weak early but can't punish it, and he out-scales late. Build MR + HP, deny his farm to delay the inevitable, and play frontline; a farmed Kassadin out-damages a tank.",
+      whys: [
+        "Cleaver-poke a weak Kassadin — but you can't kill him (no burst). Levels 1-3 are yours.",
+        "His Q blocks one cleaver, but he can't trade you. Deny his CS + XP.",
+        "It's a farming contest — buy MR, deny his farm.",
+        "Pressure him off the wave — his whole game is scaling.",
+        "Even — neither has kill pressure. Deny his CS.",
+        "Even — buy MR; deny his farm to delay his spike.",
+        "Kassadin takes over — his magic burst + Riftwalk out-scale you. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'lucian',
+      win: ['Lucian', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Lucian’s window — his Q + passive poke; you can’t catch him.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-sustain his poke — he can’t kill a tank.' },
+        { when: '1st item', text: 'Your spike — regen out-sustains his poke.' },
+        { when: 'Late', text: 'You out-sustain him — a poke marksman can’t kill a regen tank.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); out-sustain his poke with regen', 'Hug minions; he can’t kill a regen tank', 'Scale HP; out-regen his chip'],
+        foe: ['Poke with Q (line) + passive double-shot', 'Dash around with E (Relentless Pursuit)', 'Kite you and scale into a DPS marksman']
+      },
+      early: "Lucian out-ranges you and pokes with Q + passive double-shot — levels 1-2 are his poke window, and you can't catch a mobile marksman. But your regen heals his poke between waves. Throw cleavers (Q) back, hug your minions to limit the Q, and take the chip; he has no way to actually kill a regen tank.",
+      mid: "Your R (Maximum Dosage) out-heals his poke, and your regen out-sustains his chip. He dashes around with E, so you won't catch him, but he can't out-pace your healing either. Throw cleavers, deny CS where you can, and out-sustain; a poke marksman simply can't kill a regen tank in lane.",
+      late: "You out-sustain him — Lucian's poke can't out-pace your regen, and he has no kill pressure on a tank. He scales as a DPS marksman, so the game is about teamfights, not the 1v1 you out-sustain. Throw cleavers, scale HP, and play frontline; in lane you out-regen his chip and farm safely.",
+      whys: [
+        "Lucian pokes with Q + passive. Your regen heals it. Levels 1-2 are his.",
+        "You can't catch a mobile marksman. Hug minions, take the chip.",
+        "Your cleaver pokes back; your regen out-sustains his chip.",
+        "He can't out-pace your healing. Out-sustain his poke.",
+        "Your R out-heals his poke; he can't kill a regen tank.",
+        "Your spike — regen out-sustains his poke.",
+        "You out-sustain him — a poke marksman can't kill a regen tank. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'maokai',
+      win: ['Maokai', 'Maokai', 'Skill', 'Skill', 'Maokai', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Maokai’s window — his saplings + passive out-sustain and out-trade you.' },
+        { when: 'Lvl 6', text: 'His R (root wave) + sustain out-trade a tank.' },
+        { when: '1st item', text: 'He out-sustains you — a sustain tank out-regens your regen.' },
+        { when: '2+ items', text: 'Even tank mirror — your HP vs his roots + sustain.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); out-sustain what you can', 'Dodge his W (root) and sapling (E) zone', 'Scale HP; play the slow tank-scaling race'],
+        foe: ['Poke + sustain with E (saplings) and passive heal', 'Root you with W (Twisted Advance)', 'Out-tank you and lock you down with R (root wave)']
+      },
+      early: "Maokai is tricky for you — he's a sustain tank who out-trades your poke with saplings (E) and his passive heal, and his W (Twisted Advance) roots you. Levels 1-3 are his. Throw cleavers (Q) from range, dodge the W root and sapling zone, and out-sustain what you can; in a tank mirror, his sustain edges yours early.",
+      mid: "His R (Nature's Grasp) is a long root wave that locks you, and his sapling + passive sustain out-heal your poke. You can't out-trade a sustain tank who builds resistances and heals off saplings. Throw cleavers, deny CS, and out-regen the lane — but he edges the tank-vs-tank sustain race through the mid-game.",
+      late: "It's an even tank mirror late — your HP + regen versus his roots + sapling sustain. Neither kills the other; it's a farming and frontline contest. He out-sustained you early, but two items of HP even it out. Build HP, dodge his roots, and play frontline; the lane is a wash that decides in teamfights, not the 1v1.",
+      whys: [
+        "Maokai's saplings + passive out-sustain and out-trade you. Throw cleavers. Levels 1-3 are his.",
+        "Dodge his W (root) and sapling zone. Out-sustain what you can.",
+        "He out-sustains a tank — his saplings + passive out-heal your poke.",
+        "Throw cleavers, deny CS — he edges the tank sustain race.",
+        "His R (root wave) + sustain out-trade a tank.",
+        "He out-sustains you — a sustain tank out-regens your regen.",
+        "Even tank mirror — your HP vs his roots + sustain. Decides in fights."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'sylas',
+      win: ['Sylas', 'Skill', 'Skill', 'Skill', 'Skill', 'Dr. Mundo', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Sylas’s window — his Q poke + W heal out-trade your early.' },
+        { when: 'Lvl 6', text: 'Even — buy MR; your regen matches his W sustain.' },
+        { when: '1st item', text: 'Your spike — HP + MR out-sustain his magic poke.' },
+        { when: '2+ items', text: 'You take over — your regen out-lasts his W sustain.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR (Spirit Visage)', 'Out-sustain his Q poke + W heal with regen', 'Out-regen him into the late game'],
+        foe: ['Poke with Q (double whip) and heal with W', 'Dash + chain-stun you with E', 'Steal and turn your R against you']
+      },
+      early: "Sylas pokes you with Q (double whip) and heals off it (W), so levels 1-3 favour his poke-and-sustain. Throw cleavers (Q) back, buy MR against his magic, and out-sustain. His E is a dash + chain stun, but he has no burst on a tank. Deny CS and soak his poke; you out-sustain him long-term.",
+      mid: "It's even through the mid — his W heals his trades, but your regen matches it, and your MR blunts his magic. His R can steal your ultimate (a stolen Maximum Dosage is a big heal for him), so bait it or play around it. Buy Spirit Visage (MR + boosted regen), throw cleavers, and out-sustain his poke.",
+      late: "You take over — two items of HP + MR (Spirit Visage) out-sustain his magic poke, and your regen out-lasts his W sustain in the attrition. Sylas out-scales squishies, but you're built to out-regen even a sustain skirmisher with enough MR. Build MR, throw cleavers, and win the long game; the lane is his poke vs your superior regen.",
+      whys: [
+        "Sylas pokes with Q + heals with W. Throw cleavers, buy MR. Levels 1-3 are his.",
+        "His E is a dash + chain stun, but he has no burst on a tank. Soak his poke.",
+        "Out-sustain his Q poke + W heal with regen.",
+        "His R steals your ult — bait it or play around it. Buy Spirit Visage.",
+        "Even — buy MR; your regen matches his W sustain.",
+        "Your spike — HP + MR out-sustain his magic poke.",
+        "You take over — your regen out-lasts his W sustain. Build MR."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'graves',
+      win: ['Graves', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Graves'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Graves’s window — his shotgun Q burst chunks your early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals his burst; out-tank his pre-item all-in.' },
+        { when: '1st item', text: 'Your spike — HP + regen out-last his cooldown burst.' },
+        { when: '2+ items', text: 'Graves takes over — his DPS scaling out-trades your regen.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); out-sustain his burst with regen', 'Tank his shotgun with HP — heal it back', 'Out-scale; win before his DPS items'],
+        foe: ['Burst you with shotgun Q + E (dash + armor)', 'Blind + slow you with W (Smoke Screen)', 'Out-trade you late with his marksman DPS']
+      },
+      early: "Graves bursts you with his shotgun Q early — levels 1-2 are his burst window, and his W (Smoke Screen) blinds and slows. Throw cleavers (Q) back, take the burst (your HP + regen handle it), and don't sit in his smoke. You have no kill pressure, so just soak his cooldown burst and farm; your regen heals it back.",
+      mid: "Your R (Maximum Dosage) out-heals his burst, and your HP + regen out-last his cooldown-reliant damage. Throw cleavers, out-sustain his shotgun trades, and deny CS. He's trying to burst you before you scale, but your healing out-paces his Q-E cooldowns; punish him after he dumps his combo.",
+      late: "Graves takes over at two items — his marksman DPS out-trades even your regen once itemized. The lane is favoured early because you out-sustain his cooldown burst, but his DPS scaling eventually beats a tank. Out-regen the early-mid, build HP, and play frontline; a fed Graves out-DPSes you, but a poor one can't crack your sustain.",
+      whys: [
+        "Graves bursts you with shotgun Q. Your HP + regen handle it. Levels 1-2 are his.",
+        "His W (smoke) blinds and slows. Don't sit in it; soak the burst and farm.",
+        "Your cleaver pokes back; your regen out-sustains his shotgun trades.",
+        "His burst is cooldown-reliant — your healing out-paces it. Punish his combo downtime.",
+        "Your R out-heals his burst; out-tank his pre-item all-in.",
+        "Your spike — HP + regen out-last his cooldown burst.",
+        "Graves takes over — his DPS scaling out-trades your regen. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'heimerdinger',
+      win: ['Heimerdinger', 'Heimerdinger', 'Skill', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Heimer’s window — his turrets zone your CS and poke.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-sustain his turret poke — buy MR.' },
+        { when: '1st item', text: 'Your spike — regen + MR out-sustain his zone poke.' },
+        { when: 'Late', text: 'You out-sustain him — his poke can’t kill a regen tank.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR vs his magic', 'Out-sustain his turret poke with regen', 'Clear turrets; he can’t kill a regen tank'],
+        foe: ['Zone your CS with H-28 turrets (Q)', 'Poke with W (rockets) and stun with E (grenade)', 'Wall you off and scale his turret damage with R']
+      },
+      early: "Heimerdinger zones you with turrets (Q) — they deny your CS and poke you — and his E (grenade) stuns. Levels 1-2 are his zone window. Throw cleavers (Q) to clear turrets and poke him, buy MR against his magic, and out-sustain the turret poke with regen. Don't facecheck for the grenade; soak the chip and farm.",
+      mid: "Your R (Maximum Dosage) out-heals his poke, and your regen + MR out-sustain his turret zone. Clear his turrets with cleavers when you can, dodge the E stun, and out-regen his chip. He's squishy and immobile, but you have no kill pressure to punish that — just out-sustain his poke and deny CS.",
+      late: "You out-sustain him — Heimer's turret poke can't out-pace your regen, and he can't kill a regen tank. He scales his turret damage with R and walls off chokes for teamfights, so the game is about his zone control in fights, not the 1v1 you out-sustain. Build MR + HP, clear turrets, and play frontline.",
+      whys: [
+        "Heimer's turrets (Q) zone your CS and poke you. Throw cleavers, buy MR. Levels 1-2 are his.",
+        "His E (grenade) stuns. Don't facecheck; clear turrets with cleavers.",
+        "Out-sustain his turret poke with regen. Clear turrets when you can.",
+        "Dodge the E stun. Out-regen his chip — he can't kill a regen tank.",
+        "Your R out-heals his poke; buy MR.",
+        "Your spike — regen + MR out-sustain his zone poke.",
+        "You out-sustain him — his poke can't kill a regen tank. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'sejuani',
+      win: ['Skill', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver-poke her low-damage early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; her R is a teamfight stun, not a 1v1 button.' },
+        { when: '1st item', text: 'Your spike — regen + Q poke win the tank-scaling race.' },
+        { when: 'Late', text: 'Even-to-yours — you out-poke; she’s a teamfight engage tank.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke her low-damage early', 'Dodge her Q (charge); out-sustain with regen', 'Win the tank-scaling race with superior regen'],
+        foe: ['Engage with Q (charge knockup)', 'Stack Frost (E) for a stun, farm and scale', 'Become a teamfight engage tank with R']
+      },
+      early: "Levels 1-3 are yours — Sejuani is a weak early laner with low damage, and your cleaver (Q) out-pokes her while you out-sustain. Dodge her Q (charge knockup), don't let her free-stack Frost (E), and farm; it's a tank-vs-tank scaling race where your cleaver poke + regen give you the lane edge.",
+      mid: "Keep poking and out-sustaining. Your cleaver out-pokes her low-damage kit, and your R keeps you topped. Her R is a long-range engage stun for teamfights, not a 1v1 button, so don't fear it in lane — just don't get chain-CC'd into her jungler. Deny CS and out-regen the lane.",
+      late: "It's even-to-yours — Sejuani scales into a teamfight engage tank, and you out-poke her in the side lane. Neither kills the other (two tanks), but your cleaver %-HP poke + regen edge her. The game decides in fights where her engage matters; in lane you hold the sustain advantage. Scale HP and play frontline.",
+      whys: [
+        "Sejuani is a weak early laner with low damage. Cleaver-poke her. Levels 1-3 are yours.",
+        "Dodge her Q (charge). Don't let her free-stack Frost (E).",
+        "Your cleaver out-pokes her low-damage kit. Out-sustain.",
+        "It's a tank-scaling race — your regen + Q poke win the lane.",
+        "Your R keeps you topped. Her R is a teamfight stun, not a 1v1 button.",
+        "Your spike — regen + Q poke win the tank-scaling race.",
+        "Even-to-yours — you out-poke; she's a teamfight engage tank."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'zac',
+      win: ['Dr. Mundo', 'Dr. Mundo', 'Skill', 'Skill', 'Skill', 'Dr. Mundo', 'Zac'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver-poke a weak-early Zac; step on his blobs.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-poke a low-damage Zac.' },
+        { when: '1st item', text: 'Your spike — regen + Q poke edge the tank-scaling race.' },
+        { when: '2+ items', text: 'Even-to-his — Zac’s HP stacking matches your regen tank.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke his weak early; step on his blobs', 'Deny CS; out-sustain the tank race with regen', 'Win the scaling race with superior lane poke'],
+        foe: ['Poke with Q (stretchy arm) and farm safely', 'Sustain with passive blobs + W', 'Scale into an HP-stacking teamfight tank with R']
+      },
+      early: "Levels 1-3 are yours — Zac is a weak early laner with low kill pressure, and your cleaver (Q) out-pokes him. Step on his passive blobs so he can't pick them up to heal, throw cleavers, and deny CS. It's a tank-vs-tank scaling race where your cleaver poke + regen give you the early lane edge.",
+      mid: "Keep poking. Your cleaver out-pokes his Q + W, and your R keeps you topped. Deny his blobs to cut his sustain, and out-regen the lane. His R at 6 is a teamfight engage, not a 1v1 button. This is a slow tank race; your superior lane sustain and poke keep you ahead.",
+      late: "It's even-to-his — Zac stacks HP into a teamfight tank, and your regen edges his sustain in the side-lane race, but both of you scale into unkillable frontlines. Neither dies in lane. Build HP, deny his blobs, and play frontline; the game decides in fights where his engage matters more than the lane poke you edge.",
+      whys: [
+        "Zac is a weak early laner. Cleaver-poke him, step on his blobs. Levels 1-3 are yours.",
+        "Deny his blobs to cut his sustain. Throw cleavers, deny CS.",
+        "Your cleaver out-pokes his Q + W. Out-sustain the tank race.",
+        "It's a slow tank race — your poke + regen keep you ahead.",
+        "Your R keeps you topped. His R is teamfight engage, not a 1v1 button.",
+        "Your spike — regen + Q poke edge the tank-scaling race.",
+        "Even-to-his — Zac's HP stacking matches your regen tank. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'ziggs',
+      win: ['Ziggs', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Ziggs’s window — his Q out-ranges and pokes you.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-sustain his poke — buy MR.' },
+        { when: '1st item', text: 'Your spike — regen + MR out-sustain his artillery poke.' },
+        { when: 'Late', text: 'You out-sustain him — his poke can’t kill a regen tank.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR vs his magic', 'Out-sustain his Q poke with regen; hug minions', 'Scale HP; he can’t kill a regen tank'],
+        foe: ['Poke from max range with Q (bouncing bomb)', 'Zone you with E (minefield) and nuke with R', 'Escape your approach with W (Satchel Charge)']
+      },
+      early: "Ziggs out-ranges everything and pokes you with Q (bouncing bomb) — levels 1-2 are his artillery window, and you can't catch him (W satchel escape). But your regen heals his poke between waves. Throw cleavers (Q) back, buy MR, hug minions to limit the Q, and don't path through his minefield. Soak the chip and farm.",
+      mid: "Your R (Maximum Dosage) out-heals his poke, and your regen + MR out-sustain his artillery. You won't catch a kiting Ziggs, but he can't out-pace your healing or kill a regen tank. Throw cleavers, out-regen his poke, and deny CS where you can. It's a poke-vs-regen lane you out-sustain.",
+      late: "You out-sustain him — Ziggs's poke can't out-pace your regen, and he has no kill pressure on a tank. He scales as a teamfight artillery mage, so the game is about his zone damage in fights, not the 1v1 you out-sustain. Build MR + HP, soak his poke, and play frontline; in lane you out-regen his chip.",
+      whys: [
+        "Ziggs out-ranges you with Q poke. Your regen heals it. Levels 1-2 are his.",
+        "You can't catch him (W satchel). Hug minions, buy MR, soak the chip.",
+        "Your cleaver pokes back; your regen out-sustains his artillery.",
+        "Don't path through his minefield. Out-regen his poke.",
+        "Your R out-heals his poke; buy MR.",
+        "Your spike — regen + MR out-sustain his artillery poke.",
+        "You out-sustain him — his poke can't kill a regen tank. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'nautilus',
+      win: ['Nautilus', 'Skill', 'Dr. Mundo', 'Skill', 'Skill', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Nautilus’s window — his Q hook + W on-hit out-trade your early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-poke a low-damage Nautilus.' },
+        { when: '1st item', text: 'Even — your cleaver poke vs his CC; out-sustain the lane.' },
+        { when: 'Late', text: 'Even tank-ish — you out-poke; he’s a teamfight CC frontliner.' }
+      ],
+      wants: {
+        you: ['Dodge his Q (hook); cleaver-poke his low damage', 'Out-sustain his W on-hit trades with regen', 'Win the tank race with cleaver poke + regen'],
+        foe: ['Hook you in with Q (Dredge Line)', 'Chunk with W (shield + on-hit) + E (AOE)', 'Lock you down with R + passive root for a gank']
+      },
+      early: "Nautilus's trade starts with the Q hook — levels 1-2 he can chunk you with W (shield + on-hit) + E if he lands it. Dodge the hook from bush range; eat it and he gets a free combo. Throw cleavers (Q) to poke his low-damage frame, and out-sustain his trades with regen. He's a CC tank with low damage, so just dodge and poke.",
+      mid: "Without the hook he can't engage, and his W + E don't out-trade your cleaver poke + regen. Your R keeps you topped. At 6 his R is a single-target knockup — a pick/peel tool dangerous with a jungler, but not a 1v1 button. Dodge the hook, out-poke his low damage, and out-sustain the tank race.",
+      late: "It's an even tank-ish lane where you out-poke — Nautilus becomes a teamfight CC frontliner, and you're a frontline too. In the side-lane 1v1 your cleaver poke + regen edge his low-damage kit. Scale HP, dodge his hook, and play frontline; the game decides in fights where his CC chains matter more than the lane poke you edge.",
+      whys: [
+        "Nautilus's Q hook starts his trade. Dodge it from bush range. Levels 1-2 are his.",
+        "Eat the hook and he gets a free W + E. Sidestep it, cleaver-poke his low damage.",
+        "Without the hook he can't engage. Out-sustain his W on-hit trades.",
+        "Your cleaver out-pokes his low-damage frame. Out-regen the lane.",
+        "Your R keeps you topped. His R is a pick/peel tool, not a 1v1 button.",
+        "Even — your cleaver poke vs his CC. Out-sustain the lane.",
+        "Even tank-ish — you out-poke; he's a teamfight CC frontliner."
       ]
     }
   ];

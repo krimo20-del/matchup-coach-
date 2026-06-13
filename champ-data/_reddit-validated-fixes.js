@@ -23,7 +23,7 @@
   var FIX = [
     { a: 'darius',   b: 'garen',       da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Garen'] },
     { a: 'camille',  b: 'fiora',       da: 'FAVOURED', db: 'TRICKY',   win: ['Fiora', 'Skill', 'Skill', 'Skill', 'Skill', 'Camille', 'Camille'] },
-    { a: 'renekton', b: 'darius',      da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Renekton', 'Renekton', 'Renekton', 'Skill', 'Skill', 'Darius'] },
+    // (renekton/darius removed — real lolalytics has Darius FAVOURED 53.2%, not Renekton; handled in CONTENT)
     { a: 'darius',   b: 'nasus',       da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Nasus'] },
     { a: 'darius',   b: 'mordekaiser', da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Mordekaiser', 'Skill', 'Skill'] },
     { a: 'fiora',    b: 'jax',         da: 'EVEN',     db: 'EVEN',     win: ['Skill', 'Skill', 'Skill', 'Skill', 'Skill', 'Fiora', 'Fiora'] },
@@ -56,20 +56,38 @@
       galio: 52.6, kassadin: 48.9, lucian: 50.6, akshan: 47.0, graves: 51.9, ziggs: 54.5,
       karma: 51.3, neeko: 53.5, maokai: 48.0, sejuani: 51.8, zac: 56.2, lillia: 52.3,
       nautilus: 51.2, mel: 56.2
+    },
+    // ===== DARIUS (top) — real lolalytics win rates (Emerald+, patch 16.12) =====
+    // Darius is the inverse of Aatrox: a hyper early-mid lane bully whose E-pull +
+    // Hemorrhage bleed + R execute win almost every melee all-in levels 1-9. His
+    // favoured lanes give HIM the early window; he loses to rangers who kite his E
+    // (Quinn/Jayce/Teemo) and hard scalers who survive to out-item him. Windows are
+    // set per-matchup in CONTENT (early-weighted), not by the Aatrox auto-pattern.
+    darius: {
+      garen: 53.2, renekton: 53.2, sett: 50.8, fiora: 49.7, teemo: 49.6, vayne: 52.6,
+      mordekaiser: 53.6, nasus: 53.4, camille: 51.6, jax: 48.2, quinn: 45.7, aatrox: 51.0
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
   var SCALER = { vladimir: 1, kassadin: 1, nasus: 1, chogath: 1, camille: 1, vayne: 1, kayle: 1, ryze: 1, gangplank: 1, kled: 1, cassiopeia: 1, yorick: 1, akali: 1, gwen: 1, ksante: 1, yasuo: 1 };
   function diffFromWr(wr) { return wr >= 52.5 ? 'FAVOURED' : wr >= 48.5 ? 'EVEN' : wr >= 45.5 ? 'TRICKY' : 'HARD'; }
   function mirrorDiff(d) { return d === 'FAVOURED' ? 'TRICKY' : d === 'EVEN' ? 'EVEN' : 'FAVOURED'; }
+  // REAL tracks which (champ|enemy) ordered pairs came from that champ's OWN
+  // lolalytics page, so a later champ's mirror write never clobbers a real number
+  // (e.g. aatrox/vs/darius = 51.8 and darius/vs/aatrox = 50.97 are independent
+  // samples — each page keeps its own real value instead of forcing 100-x).
+  var REAL = {};
   Object.keys(WR).forEach(function (champ) {
     var m = WR[champ];
     Object.keys(m).forEach(function (en) {
       var wr = m[en], da = diffFromWr(wr);
-      window.MC_REAL_WR[champ] = window.MC_REAL_WR[champ] || {}; window.MC_REAL_WR[champ][en] = wr;
-      window.MC_REAL_WR[en] = window.MC_REAL_WR[en] || {}; window.MC_REAL_WR[en][champ] = Math.round((100 - wr) * 10) / 10;
-      // window override only for the favoured lanes (where the "Aatrox owns L1" bug lives)
-      var win = (da === 'FAVOURED')
+      window.MC_REAL_WR[champ] = window.MC_REAL_WR[champ] || {}; window.MC_REAL_WR[champ][en] = wr; REAL[champ + '|' + en] = 1;
+      window.MC_REAL_WR[en] = window.MC_REAL_WR[en] || {};
+      if (!REAL[en + '|' + champ]) window.MC_REAL_WR[en][champ] = Math.round((100 - wr) * 10) / 10;
+      // Aatrox-specific early-skip auto-window (his "weakest early" pattern). Other
+      // champs (Darius is an early bully) get diff-only here — their windows come
+      // from the bespoke CONTENT entries below, which are early-weighted instead.
+      var win = (champ === 'aatrox' && da === 'FAVOURED')
         ? ['Skill', 'Skill', disp(champ), disp(champ), disp(champ), disp(champ), SCALER[en] ? disp(en) : 'Skill']
         : null;
       FIX.push({ a: champ, b: en, da: da, db: mirrorDiff(da), win: win });
@@ -1900,6 +1918,318 @@
         "His R (root wave) locks you for his combo — his window. Don't get rooted into a full trade.",
         "He out-tanks and out-sustains you with resistances. You can't crack a built Maokai.",
         "Maokai scales to a CC tank that out-sustains your DPS. Win early or play for tempo elsewhere."
+      ]
+    },
+    {
+      a: 'darius', b: 'garen',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Garen'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E-pull into Q outer-edge + bleed out-trades his Q-silence.' },
+        { when: 'Lvl 6', text: 'R executes him off bleed stacks — he can’t regen through Noxian Might.' },
+        { when: '1st item', text: 'Your spike + bleed beats his short Q trade; force every all-in.' },
+        { when: 'Late', text: 'He out-scales tanky + R — close the lane before he stacks resists.' }
+      ],
+      wants: {
+        you: ['Land E (pull) to start the bleed all-in', 'Stack Hemorrhage and execute with R', 'Win before he builds tanky and out-regens you'],
+        foe: ['Q-silence to cut your combo, then disengage to regen', 'Spin (E) + passive regen to negate your bleed chip', 'Out-scale tanky and R-execute you when low']
+      },
+      early: "You out-bully Garen early — land E (Apprehend) and your Q outer-edge + W bleed shred him before his passive regen matters. His Q silences you for a short burst trade, so don't let him kite the silence into a disengage-and-regen; stick to him with W's slow and keep the bleed stacking. Levels 1-3 are yours.",
+      mid: "Keep him bleeding. At 5 stacks Noxian Might makes your Q apply full Hemorrhage and your damage spikes — he can't out-regen that. Your R executes him off the bleed, and a kill refreshes it. Don't chase him through his spin (E) into open ground where he regens; pin him with E and W and force the extended all-in he loses.",
+      late: "Garen out-scales you if the game drags — he builds tanky, his passive regen ramps, and his R executes you when you're low. Your edge is the early-mid stomp, so press it: snowball off the bleed all-ins, take his tower, and end the lane before his resistances make your bleed tickle. Don't let a fed-elsewhere Garen flip the side lane.",
+      whys: [
+        "E-pull into Q outer-edge + bleed out-trades his Q-silence. Stick to him — level 1 is yours.",
+        "Don't let him kite the silence into a regen reset. Keep W's slow on him and bleed.",
+        "Your full combo + bleed beats his short trade. Force the all-in, deny the disengage.",
+        "Keep him bleeding — Noxian Might at 5 stacks spikes your damage past his regen.",
+        "R executes him off bleed stacks and resets on the kill. He can't regen through Might.",
+        "Your spike beats his Q trade. Force every all-in; snowball before he builds tanky.",
+        "He out-scales tanky + R-execute late. Close the lane early before his resists matter."
+      ]
+    },
+    {
+      a: 'darius', b: 'renekton',
+      win: ['Darius', 'Renekton', 'Renekton', 'Renekton', 'Skill', 'Darius', 'Darius'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Your window — bleed + W out-trade him before his Fury combo is online.' },
+        { when: 'Lvl 2–4', text: 'Renekton’s window — empowered Q sustain + stun out-trade you. Give ground.' },
+        { when: '1st item', text: 'Your bleed + Might flip it back — he falls off, you don’t.' },
+        { when: '2+ items', text: 'You out-scale him — Renekton has no late; your all-in wins.' }
+      ],
+      wants: {
+        you: ['Win the level 1 all-in before his Fury combo', 'Survive his level 2-5, then out-scale him', 'Land E + bleed and execute once he falls off'],
+        foe: ['Bully levels 2-5 with empowered Q + W stun', 'Use double-E to dodge your pull and trade', 'Snowball the early before you out-scale']
+      },
+      early: "Level 1 is actually yours — your Hemorrhage bleed + Crippling Strike (W) out-trade Renekton before his Fury-empowered combo is online, so you can win the first all-in if he over-commits. But levels 2-5 flip to him: empowered Q heals and chunks, his W stuns, and double-E lets him dodge your pull. Concede that window — don't feed his snowball.",
+      mid: "Survive his level 2-5 spike, then the lane swings back. Renekton is front-loaded and falls off; you are not. Once you hit your first item your bleed + Noxian Might out-trade his fury, and his early kill pressure dries up. Land E to pin him, stack Hemorrhage, and punish him for over-staying his power window.",
+      late: "You out-scale him flatly. Renekton has essentially no late game while your bleed all-in + R execute only get stronger. The lane is favoured for you overall (you win level 1 and the back half) — you just have to weather his fury window in the middle. Don't die levels 2-5, then take over.",
+      whys: [
+        "Your bleed + W out-trade him at level 1, before his Fury combo. Punish an over-commit.",
+        "Levels 2-4 are his — empowered Q + W stun out-trade you. Give ground, don't feed the snowball.",
+        "His double-E dodges your pull and trades back. Survive this window; don't die to fury.",
+        "Concede the mid-levels and farm — his power is front-loaded and about to expire.",
+        "Around 6 it stabilizes — your bleed catches up as his fury edge fades.",
+        "Your first item + Might flip it back. Land E, stack bleed, punish his fall-off.",
+        "You out-scale him — he has no late. Your all-in + R execute win; he can't fight back."
+      ]
+    },
+    {
+      a: 'darius', b: 'sett',
+      win: ['Darius', 'Darius', 'Skill', 'Skill', 'Sett', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — E-pull + bleed out-trade him before his grit + W.' },
+        { when: 'Lvl 6', text: 'Sett’s window — full-grit W (true damage) + E stun answer your all-in.' },
+        { when: '1st item', text: 'Even — bleed vs grit; whoever lands their CC (your E / his E) wins.' },
+        { when: 'Late', text: 'Even juggernaut brawl — your bleed execute vs his true-damage burst.' }
+      ],
+      wants: {
+        you: ['Land E (pull) and stack bleed before he banks grit', 'Trade when his W (Haymaker) grit is empty', 'Execute him with R off Hemorrhage stacks'],
+        foe: ['Bank grit, then W (Haymaker) for a true-damage chunk', 'Land E (Facebreaker stun) into his combo', 'Pull you in with R and out-trade your bleed']
+      },
+      early: "You win the early — land E and your bleed + W out-trade Sett before he's banked grit for his W (Haymaker). Trade when his grit is empty; a fully-loaded Haymaker does true damage that hurts, so don't sit in a long fight feeding it. Levels 1-2 are yours; punish him before his W comes online.",
+      mid: "Level 6 is his window — full grit W + E (Facebreaker) stun answer your all-in, and his R pulls you in for an even brawl. The lane is even here: it comes down to whose CC lands. If you land E and he has empty grit, you win; if he stuns you into a loaded Haymaker, he does. Bait his W before you commit your combo.",
+      late: "Even juggernaut brawl — your bleed + R execute versus his grit-shield true-damage burst. Both of you want the extended all-in, so it hinges on CC timing and grit management. Force trades when his grit is low, stack Hemorrhage for the execute, and don't all-in into a full Haymaker. Slightly your favour early, his at 6.",
+      whys: [
+        "E-pull + bleed out-trade him before he banks grit. Level 1-2 are yours — punish early.",
+        "Trade when his W grit is empty; a loaded Haymaker does true damage. Don't feed it.",
+        "Even as his grit comes online — bait the W before you commit your combo.",
+        "Keep bleed on him and force short trades, not long ones his grit wins.",
+        "His window: full-grit W + E stun answer your all-in. Don't get stunned into a Haymaker.",
+        "Even — whoever lands CC wins. Land E on empty grit and you take the trade.",
+        "Even brawl late — your bleed execute vs his burst. Stack Hemorrhage, time your E."
+      ]
+    },
+    {
+      a: 'darius', b: 'fiora',
+      win: ['Darius', 'Darius', 'Skill', 'Skill', 'Skill', 'Skill', 'Fiora'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — E-pull + bleed before she can parry-punish you.' },
+        { when: 'Lvl 3+', text: 'Her W (Riposte) parries your E or Q — don’t telegraph your combo.' },
+        { when: '1st item', text: 'Even — bait the parry, then all-in; she out-trades if she lands it.' },
+        { when: '2+ items', text: 'Fiora takes over — vitals + true damage shred you in the long fight.' }
+      ],
+      wants: {
+        you: ['Land E + bleed early before her parry mastery matters', 'Bait her W (Riposte) before committing Q/E', 'Win before her vital + item scaling'],
+        foe: ['Parry (W) your E-pull or Q for the stun', 'Proc vitals to shred and heal through your bleed', 'Out-scale into a one-item-spike duelist']
+      },
+      early: "Levels 1-2 are yours — land E and stack bleed before Fiora has the tools or the parry timing to punish you. Her whole game is W (Riposte): it parries your E-pull or your Q and stuns you, flipping the trade. Early, she's less able to threaten the all-in, so press your bleed advantage before she gets going.",
+      mid: "From level 3 it's a parry chess match — don't telegraph your E or Q, because a parried pull is a lost trade and a free vital. Bait the W out (feint, then commit), and your bleed all-in still wins if she wastes it. Force short, decisive trades on her parry cooldown; don't let her proc vitals and heal through your Hemorrhage in a drawn-out fight.",
+      late: "Fiora out-scales you. Two items in, her vitals + true damage shred even a tanky Darius and her duelling overtakes your bleed. The lane is even overall — you bully the early, she takes the late. Snowball your level 1-2 edge, bait her parry through the mid-game, and close the lane before her item spike flips the side-lane 1v1.",
+      whys: [
+        "E-pull + bleed before she can parry-punish — levels 1-2 are yours. Press the early.",
+        "Her W parries your E or Q for a stun. Don't telegraph; bait it before you commit.",
+        "Parry chess — feint, then all-in. A parried pull is a lost trade and a free vital.",
+        "Force short trades on her W cooldown; don't let her proc vitals and out-heal your bleed.",
+        "Even — bait the Riposte, then commit. She out-trades only if she lands it.",
+        "Your bleed all-in still wins a wasted parry. Force it before her items.",
+        "Two items in she flips it — vitals + true damage shred you. She wins the late duel."
+      ]
+    },
+    {
+      a: 'darius', b: 'teemo',
+      win: ['Teemo', 'Teemo', 'Skill', 'Darius', 'Skill', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Teemo’s window — his blind (Q) shuts off your W bleed autos.' },
+        { when: 'Lvl 3–6', text: 'Your window — land E + Q and the all-in kills him through a blind.' },
+        { when: '1st item', text: 'Even — he pokes + shrooms; you win when you catch him with E.' },
+        { when: 'Late', text: 'He becomes a splitpush/shroom map problem — end lane early.' }
+      ],
+      wants: {
+        you: ['Land E (pull) to catch him — he has no escape', 'All-in through the blind; your Q + bleed don’t need autos', 'Kill him before his shrooms + splitpush scale'],
+        foe: ['Blind your W (Crippling Strike) and auto-bleed', 'Poke with Q + autos and stack shrooms', 'Survive and scale into splitpush + map control']
+      },
+      early: "Teemo's blind (Q) is the early problem — it shuts off your autos and W (Crippling Strike), which is how you apply bleed. Levels 1-2 he pokes you and blinds your trades; don't walk up to auto into a blind. The good news: he's short-range and escape-less, and your Q + bleed don't fully rely on autos, so you're never far from a kill window.",
+      mid: "This is your takeover. Land E (Apprehend) and he has no way out — your Q outer-edge + bleed kill him even through a blind, since the blind only stops autos, not your spin or your pull. Bait the blind, then E-Q-W and stack Hemorrhage. Once you catch him with E, a squishy escape-less Teemo dies; his poke can't out-damage your all-in.",
+      late: "Teemo stops being a laner and becomes a map problem — shrooms on objectives, splitpush, vision. You win every straight 1v1 if you catch him, so close the lane early before his scaling utility matters. Don't facecheck shroom-walled brush near objectives, and don't chase him through a minefield; make him fight you in lane where your E ends it.",
+      whys: [
+        "Teemo's blind (Q) shuts off your W bleed autos. Don't auto into a blind — levels 1-2 are his.",
+        "He pokes you while your autos are blinded. Farm, wait for your E window.",
+        "Your window opens — land E and his short range can't escape. All-in.",
+        "Q outer-edge + bleed kill him through a blind (it only stops autos). Catch him with E and commit.",
+        "Bait the blind, then E-Q-W. A squishy escape-less Teemo dies to your all-in.",
+        "Even — he pokes and shrooms, you win when you land E. Force the catch.",
+        "He becomes a splitpush/shroom map problem. End lane early; don't facecheck his brush."
+      ]
+    },
+    {
+      a: 'darius', b: 'vayne',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Vayne'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — land E and a squishy Vayne dies to bleed + Q.' },
+        { when: 'Lvl 6', text: 'R executes her off bleed stacks — she can’t survive your all-in.' },
+        { when: '1st item', text: 'Still your stomp — deny CS so she never scales.' },
+        { when: '2+ items', text: 'Do-or-die: at 2+ items Vayne out-scales the entire map.' }
+      ],
+      wants: {
+        you: ['Land E (pull) — she has no escape but Condemn', 'Deny CS relentlessly to starve her scaling', 'Kill her before crit items or she becomes unbeatable'],
+        foe: ['Kite with tumble (Q) + autos, stay off walls', 'Condemn (E) you on a wall to peel the all-in', 'Survive lane and scale into a %-HP hypercarry']
+      },
+      early: "You crush Vayne early — she's short-range, squishy, and her only peel is Condemn (E), which needs a wall behind you. Land your E (Apprehend) and she's dead: Q outer-edge + bleed shred her tiny health bar, and her tumble can't out-trade a pull. Stand away from walls so she can't stun you, deny her CS relentlessly, and punish every step she takes toward a minion.",
+      mid: "Hard-stomp window. With Noxian Might your Q applies full bleed and your R executes her off stacks — a single all-in ends her. Her tumble + Condemn buy a few seconds but can't escape your E. Keep her starved of farm: her entire game is scaling, so every denied minion delays the carry she becomes. Dive her with any jungle help.",
+      late: "Do-or-die. If Vayne survived to two crit items she out-scales the entire map — her %-HP true damage shreds even a tanky Darius. You had to kill her early and end the game; if she's farmed, the late game is hers, full stop. Press your massive early lead into objectives and towers before her power curve arrives.",
+      whys: [
+        "Land E and a squishy Vayne dies to bleed + Q. Stand off walls so she can't Condemn-stun you.",
+        "Her tumble can't out-trade your pull. Deny CS — starve her scaling.",
+        "Your full combo deletes her. Catch her with E and she has no answer but Condemn.",
+        "Hard-stomp — every all-in on her tumble cooldown is a kill. Keep her broke.",
+        "R executes her off bleed stacks. She can't survive your all-in — dive with jungle.",
+        "Still your stomp at one item. Deny CS, take her tower, end the game.",
+        "Do-or-die: at 2+ items she out-scales everyone. You needed her dead — close the game early."
+      ]
+    },
+    {
+      a: 'darius', b: 'mordekaiser',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Mordekaiser', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–4', text: 'Your window — E-pull + bleed out-trade his short-range Q.' },
+        { when: 'Lvl 6', text: 'Morde’s window — his R (Realm) isolates you; don’t int the 1v1.' },
+        { when: '1st item', text: 'Outside his R, your bleed all-in beats his first AP item.' },
+        { when: 'Late', text: 'You edge it — out-bleed his magic DPS when his R is down.' }
+      ],
+      wants: {
+        you: ['Land E + bleed before his passive shield stacks', 'Respect his R (Death Realm) at 6 — fight when it’s down', 'Stack Hemorrhage and execute outside the Realm'],
+        foe: ['Pull you in with E into his Q for the trade', 'Isolate you with R (Realm) and win the 1v1', 'Stack passive shield + AP to out-sustain your bleed']
+      },
+      early: "You out-trade Morde early — land E and your bleed + Q outer-edge beat his short-range Q before his passive shield (Indestructible) stacks up. Don't let him pull you (E) into his Q while you're already bleeding for him, but in a straight trade levels 1-4 are yours. Keep Hemorrhage stacking and don't let him free-farm his shield passive.",
+      mid: "Level 6 is HIS window: Realm of Death (R) drags you into an isolated 1v1, steals your stats, and his sustained magic damage is strong inside it. Don't int the Realm at low HP — play around its cooldown. Once R is down, you're back in control: your bleed all-in and R execute out-trade him, and his first AP item doesn't save him.",
+      late: "You edge the matchup — outside his R window your bleed + execute out-grind his magic DPS. Respect the level-6 (and later) Realm timings: don't get caught low when R is up. Otherwise force the all-ins, stack Hemorrhage, and execute him before his AP scaling stabilizes. The lane is yours if you play around the one button that beats you.",
+      whys: [
+        "E-pull + bleed out-trade his short-range Q before his shield stacks. Level 1-4 are yours.",
+        "Don't let him E-pull you into Q while you're bleeding for him. Trade on your terms.",
+        "Your Q outer-edge + bleed beat his trade. Keep Hemorrhage stacking.",
+        "Keep him off his passive-shield farm. Force the bleed all-in through level 4-5.",
+        "His R isolates you and steals your stats — his window. Don't int the Realm at low HP.",
+        "Outside R, your bleed all-in beats his first AP item. Execute him when Realm is down.",
+        "You edge it late — out-bleed his magic DPS off-Realm. Respect the R, win everything else."
+      ]
+    },
+    {
+      a: 'darius', b: 'nasus',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Nasus'],
+      spikes: [
+        { when: 'Lvl 1–5', text: 'Your window — bully him off Q stacks; E + bleed crush a weak Nasus.' },
+        { when: 'Lvl 6', text: 'R executes him; his W (Wither) only slows your chase, not the kill.' },
+        { when: '1st item', text: 'Still your stomp — deny stacks so his scaling never arrives.' },
+        { when: '2+ items', text: 'Nasus takes over — stacked Q + tanky body out-grind your bleed.' }
+      ],
+      wants: {
+        you: ['Zone him off Q stacks relentlessly', 'Land E + bleed and all-in his weak early', 'Snowball before his stacks + items come online'],
+        foe: ['Stack Q on every last-hit, even under tower', 'Cripple your all-in with W (Wither)', 'Out-scale into a stacked, tanky late-game monster']
+      },
+      early: "You hard-bully Nasus — he's one of the weakest early laners and you're one of the strongest. Land E (Apprehend) and your bleed + Q outer-edge crush him, and every trade zones him off Q stacks. His W (Wither) cripples your movement and attack speed, so bait it before you commit; otherwise farm-denial is the whole game. Starve his stacks from minute one.",
+      mid: "Keep stomping. Your all-in out-trades a low-stack Nasus flatly, and at 6 your R executes him off bleed — his R (tanky + lifesteal) helps him survive but doesn't win the 1v1. Bait the Wither, then E-Q-W and stack Hemorrhage. Every Q stack you deny and every plate you take delays the monster he becomes.",
+      late: "Nasus takes over at two items — a stacked Q on a tanky body out-grinds your bleed and his Wither shuts off your all-in. The lane is favoured because you crush the entire early game and he crushes the very late. You MUST snowball this into a lead big enough to end before his stacks matter; a farmed Nasus out-scales you.",
+      whys: [
+        "Nasus is weak early and you're a bully. Land E + bleed and crush him; zone his Q stacks.",
+        "His W (Wither) cripples your all-in. Bait it, then commit and deny his farm.",
+        "Your combo out-trades a low-stack Nasus flatly. Force trades, deny stacks.",
+        "Keep him off Q — every denied stack delays his scaling. Take plates and snowball.",
+        "R executes him off bleed; his R only helps him survive, not win. Bait Wither, all-in.",
+        "Still your stomp at one item. Starve his farm so his scaling never arrives.",
+        "Two items in, stacked Q + tanky body out-grind your bleed. End the game before that."
+      ]
+    },
+    {
+      a: 'darius', b: 'camille',
+      win: ['Darius', 'Darius', 'Skill', 'Skill', 'Skill', 'Camille', 'Camille'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — E-pull + bleed out-trade her before her E-Q spike.' },
+        { when: 'Lvl 3–6', text: 'Even — her E-Q true damage + shield trade back; bait her E escape.' },
+        { when: '1st item', text: 'Camille’s spike — her item power + R isolation start to win.' },
+        { when: '2+ items', text: 'Camille takes over — R + true damage shred you in a pick.' }
+      ],
+      wants: {
+        you: ['Land E + bleed early before her E-Q combo spikes', 'Bait her E (hookshot escape) before you all-in', 'Win the lane before her item + R scaling'],
+        foe: ['Out-trade with E-Q (hookshot) true damage + shield', 'Reset trades with the E escape, then poke again', 'Isolate and 1v1 you with R in the side lane late']
+      },
+      early: "Levels 1-2 are yours — land E and your bleed + Q out-trade Camille before her E-Q (hookshot) combo and shield come fully online. Stand away from terrain so her E can't stun you, and punish her early with the pull she can't answer yet. Get Hemorrhage stacking before she has the tools to reset trades.",
+      mid: "From 3 it evens out — her E-Q does true damage and shields her, and she resets trades by hookshotting away to poke again. Bait her E (the escape) before you all-in; without it she can't get out of your pull + bleed. Force the extended fight where your sustain through bleed beats her burst-then-wait, and don't chase a reset into her item spikes.",
+      late: "Camille takes over from her first item — her power spikes hard, and at two items her R isolation + true damage shred you in a pick. The lane is even overall: you bully the early, she wins the mid-to-late. Snowball your level 1-2 edge, bait her E to land your all-ins, and close the lane before her scaling makes the side-lane 1v1 hers.",
+      whys: [
+        "E-pull + bleed out-trade her before her E-Q spike. Levels 1-2 are yours — punish early.",
+        "Stand off terrain so her E can't stun you. Get bleed stacking before she has her tools.",
+        "Even from 3 — her E-Q true damage + shield trade back. Bait her E escape first.",
+        "Force the extended fight where bleed beats her burst. Don't chase her reset.",
+        "Her item spike starts to win — bait the E, then all-in before she's fully online.",
+        "Camille's first item flips it — her power + R isolation start to take over.",
+        "Two items in, R + true damage shred you in a pick. You win early; she wins late."
+      ]
+    },
+    {
+      a: 'darius', b: 'jax',
+      win: ['Darius', 'Skill', 'Skill', 'Jax', 'Jax', 'Jax', 'Jax'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Your only clean window — E + bleed before his E (Counterstrike).' },
+        { when: 'Lvl 3+', text: 'Jax’s window — his E dodges your Q/W and stuns; don’t all-in into it.' },
+        { when: '1st item', text: 'He out-trades on his E cooldown — bait Counterstrike, then commit.' },
+        { when: '2+ items', text: 'Jax takes over — his item scaling out-duels your bleed.' }
+      ],
+      wants: {
+        you: ['All-in level 1 before his E (Counterstrike) is online', 'Bait his E, then E-pull + bleed on its cooldown', 'Win before his item spikes out-scale you'],
+        foe: ['Dodge your combo with E (Counterstrike) and stun back', 'Stall the lane and scale to his item spikes', 'Out-duel you late with Grandmaster’s + Jax items']
+      },
+      early: "Your one clean window is level 1, before Jax has E (Counterstrike) — land your bleed + W and you out-trade him. From level 2-3 on, his E is the whole matchup: it dodges your Q and W autos and stuns you if you trade into it, blunting your bleed all-in. Don't commit your combo while Counterstrike is up.",
+      mid: "This is a tricky lane because his E negates your strength. Bait it out — make him pop Counterstrike, then E-pull and stack bleed on its cooldown. If you all-in into a held E, you eat a stun and lose the trade. Be patient, punish his E downtime, and don't let him scale freely; your damage is on a clock against his.",
+      late: "Jax out-scales you hard — two items in, his Grandmaster's passive + item spikes out-duel your bleed and he wins the extended 1v1. The lane is tricky and tips toward him over time. Your only path is to punish his E cooldowns early and snowball a lead before he comes online; if it goes even into late, the duel is his.",
+      whys: [
+        "Level 1 — all-in with bleed + W before his E is online. Your one clean window.",
+        "From 2 his E dodges your Q/W and stuns. Don't trade into a held Counterstrike.",
+        "Bait the E, then E-pull + bleed on its cooldown. Punish his downtime.",
+        "His window — he out-trades when E is up. Be patient, force his Counterstrike first.",
+        "Don't all-in into a fresh E or you eat the stun. Trade only when it's down.",
+        "He out-trades on his E cooldown. Bait it, commit bleed, deny his scaling.",
+        "Two items in his item scaling out-duels your bleed. Snowball early or lose late."
+      ]
+    },
+    {
+      a: 'darius', b: 'quinn',
+      win: ['Quinn', 'Quinn', 'Skill', 'Quinn', 'Quinn', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Quinn’s window — autos + Q (blind) poke and kite your bleed off.' },
+        { when: 'Lvl 6', text: 'She roams (R) — punish the wave, but don’t get picked stepping up.' },
+        { when: '1st item', text: 'Your only kills come from landing E — she’s squishy if you catch her.' },
+        { when: 'Late', text: 'Tricky — she pokes and roams; you win only when you land E.' }
+      ],
+      wants: {
+        you: ['Land E (pull) — a caught Quinn dies to bleed', 'Hug minions through her Q (blind) + auto poke', 'Punish her roams; deny CS when you can'],
+        foe: ['Poke with autos + Q (Blinding Assault) and kite', 'Vault (E) over you to reset and dodge your pull', 'Roam with R (Behind Enemy Lines) for picks']
+      },
+      early: "Quinn is a hard lane for you — she's ranged, pokes with autos + Q (which blinds your bleed autos), and her E (Vault) hops over you to dodge your pull and reset. Levels 1-2 she out-ranges and kites you; hug your minions to limit the poke, don't walk up into a blind, and accept some chip. You can't bleed what you can't touch.",
+      mid: "Your only kills come from landing E — a caught Quinn is squishy and dies to your bleed all-in, but she rarely gives you the window (Vault + blind keep her safe). Bait the E (Vault), then pull on its cooldown. At 6 her R is a roam tool; when she leaves to make a play, punish her wave for CS and plates rather than chasing.",
+      late: "Tricky into late — Quinn pokes and roams for picks, and you only win the exchange when you actually land E on her. Hug minions to deny free poke, close on her Vault cooldown, and punish her roams on the map. If she kites freely she chips you down; your entire game is the one clean E-pull that lets your bleed finish her.",
+      whys: [
+        "Quinn out-ranges you and her Q blinds your bleed autos. Hug minions — levels 1-2 are hers.",
+        "Her E (Vault) hops over you to dodge the pull and reset. Don't step into open ground.",
+        "Brief window — if her Vault is down, land E and a squishy Quinn dies to bleed.",
+        "She kites your bleed off with poke + mobility. Bait the Vault before you commit.",
+        "Her R roams for picks — punish the wave when she leaves; don't get caught stepping up.",
+        "Your kills come from landing E. Close on her Vault cooldown; otherwise she kites.",
+        "Tricky late — she pokes and roams. You win only when you land E; deny her roams."
+      ]
+    },
+    {
+      a: 'darius', b: 'aatrox',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Aatrox', 'Aatrox'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E-pull + bleed crush Aatrox’s weak early.' },
+        { when: 'Lvl 6', text: 'Both ult — R executes him off bleed before his healing stabilizes.' },
+        { when: '1st item', text: 'Aatrox flips it — his Eclipse sustain out-heals your bleed.' },
+        { when: '2+ items', text: 'Aatrox takes over — drain-tank sustain out-grinds your all-in.' }
+      ],
+      wants: {
+        you: ['Bully his weak early — land E + bleed levels 1-3', 'Execute him with R before his sustain comes online', 'Win the lane before his Eclipse spike flips it'],
+        foe: ['Survive your early all-in, then out-sustain you', 'Space the Q sweetspot to out-trade your bleed', 'Out-scale into a drain-tank that out-heals Hemorrhage']
+      },
+      early: "You bully Aatrox's early — he's one of the weakest level 1-3 juggernauts and you're one of the strongest. Land E (Apprehend) and your bleed + Q out-trade him before his combo and sustain come online. Don't get caught spacing into his Q sweetspot, but in a straight all-in levels 1-3 are decisively yours. Stack Hemorrhage and force the issue early.",
+      mid: "Around 6 it's a knife's edge — both ult, and your R can execute him off bleed stacks before his healing stabilizes the fight. This is your last big window: if you've kept him low and bleeding, the execute closes it. Once he hits his first item (Eclipse), his sustain starts out-healing your bleed and the lane flips, so press hard now.",
+      late: "Aatrox out-scales you — his drain-tank sustain out-heals your Hemorrhage in the extended fight, and two items in he out-grinds your all-in. The lane is even overall: you own the early, he owns the late. You have to convert your level 1-3 dominance into a lead and end before his Eclipse spike; if it goes even, his healing takes over.",
+      whys: [
+        "E-pull + bleed crush Aatrox's weak early — levels 1-3 are decisively yours. Force the all-in.",
+        "He can't out-trade your bleed yet. Stack Hemorrhage and bully him off the wave.",
+        "Your full combo out-trades a weak-early Aatrox. Keep him low and bleeding.",
+        "Keep the pressure — every bleed stack sets up your level-6 execute window.",
+        "Both ult — R executes him off bleed before his healing stabilizes. Your last big window.",
+        "His Eclipse spike flips it — his sustain out-heals your bleed. You needed the lead by now.",
+        "Two items in, his drain-tank out-grinds your all-in. You own early; he owns late — end it first."
       ]
     }
   ];

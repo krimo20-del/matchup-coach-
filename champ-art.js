@@ -240,9 +240,16 @@
     if (!name || el.getAttribute('data-ci-done') === name || !ver) return;
     var id = idFor(name);
     if (!id) return;
-    el.style.backgroundImage = "url('" + BASE + '/cdn/' + ver + '/img/champion/' + id + ".png')";
-    el.style.backgroundSize = 'cover';
-    el.style.backgroundPosition = 'center';
+    var url = BASE + '/cdn/' + ver + '/img/champion/' + id + '.png';
+    // Preload so the fallback initials only disappear if the portrait exists.
+    var im = new Image();
+    im.onload = function () {
+      el.style.backgroundImage = "url('" + url + "')";
+      el.style.backgroundSize = 'cover';
+      el.style.backgroundPosition = 'center';
+      el.style.color = 'transparent'; // hide fallback initials behind the art
+    };
+    im.src = url;
     el.setAttribute('data-ci-done', name);
   }
   function fillIconText(el) {

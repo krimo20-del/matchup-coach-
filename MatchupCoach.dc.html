@@ -780,8 +780,9 @@
     <div style="position:relative; overflow:hidden; border-top:1px solid rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.05); background:rgba(10,12,18,0.6); padding:11px 0; margin-bottom:26px; -webkit-mask-image:linear-gradient(90deg, transparent, black 8%, black 92%, transparent); mask-image:linear-gradient(90deg, transparent, black 8%, black 92%, transparent);">
       <div style="display:inline-flex; align-items:center; gap:34px; white-space:nowrap; animation:mc-marquee 42s linear infinite; padding-left:34px;">
         <sc-for list="{{ ticker }}" as="tk" hint-placeholder-count="12">
-          <span style="display:inline-flex; align-items:center; gap:9px; flex:0 0 auto;">
-            <span style="width:6px; height:6px; border-radius:50%; background:{{ tk.c }}; box-shadow:0 0 8px {{ tk.c }};"></span>
+          <span style="display:inline-flex; align-items:center; gap:8px; flex:0 0 auto;">
+            <span data-champ-icon="{{ tk.a }}" style="flex:0 0 auto; width:20px; height:20px; border-radius:5px; background:#1c2030; border:1px solid rgba(255,255,255,0.14);"></span>
+            <span data-champ-icon="{{ tk.b }}" style="flex:0 0 auto; width:20px; height:20px; border-radius:5px; background:#1c2030; border:1px solid rgba(255,255,255,0.14);"></span>
             <span style="font-family:'Manrope',sans-serif; font-weight:700; font-size:12.5px; color:#c7ccdb;">{{ tk.m }}</span>
             <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:9.5px; letter-spacing:0.7px; color:{{ tk.c }}; padding:2px 7px; border-radius:5px; background:rgba(255,255,255,0.04); border:1px solid {{ tk.c }}44;">{{ tk.d }}</span>
           </span>
@@ -822,9 +823,9 @@
                   <span style="position:absolute; inset:0; background:linear-gradient(110deg, {{ c.a }}33, transparent 52%, {{ c.b }}33);"></span>
                   <span style="position:absolute; left:-20px; top:-20px; width:90px; height:90px; border-radius:50%; background:radial-gradient(circle, {{ c.a }}55, transparent 70%); filter:blur(6px);"></span>
                   <span style="position:absolute; right:-20px; bottom:-20px; width:90px; height:90px; border-radius:50%; background:radial-gradient(circle, {{ c.b }}55, transparent 70%); filter:blur(6px);"></span>
-                  <span style="position:relative; display:flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:10px; background:{{ c.a }}; box-shadow:0 4px 16px -3px {{ c.a }}; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:rgba(8,10,14,0.85);">{{ c.aInit }}</span>
+                  <span data-champ-icon="{{ c.left }}" style="position:relative; display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:10px; background:{{ c.a }}; box-shadow:0 4px 16px -3px {{ c.a }}; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:rgba(8,10,14,0.85);">{{ c.aInit }}</span>
                   <span style="position:relative; z-index:2; margin:0 -8px; width:30px; height:30px; border-radius:50%; background:#0c0e15; border:1px solid rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; color:#f0cd72;">VS</span>
-                  <span style="position:relative; display:flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:10px; background:{{ c.b }}; box-shadow:0 4px 16px -3px {{ c.b }}; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:rgba(8,10,14,0.85);">{{ c.bInit }}</span>
+                  <span data-champ-icon="{{ c.right }}" style="position:relative; display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:10px; background:{{ c.b }}; box-shadow:0 4px 16px -3px {{ c.b }}; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:rgba(8,10,14,0.85);">{{ c.bInit }}</span>
                   <span style="position:absolute; top:9px; left:11px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:9.5px; letter-spacing:0.8px; color:#fff; opacity:0.85;">{{ c.role }}</span>
                 </div>
                 <div style="padding:13px 15px 15px;">
@@ -6410,9 +6411,11 @@ class Component extends DCLogic {
         { id: 'bot2', role: 'BOT', champs: 'Draven vs Tristana', blurb: 'Pure aggression mirror \u2014 axes vs resets, the lane ends by 10 minutes.', a: '#f0883d', b: '#46c6f5', onClick: () => this.openGen('bot', 'Draven', 'Tristana') }
       ].map(function(c){
         var init = function(n){ var w = n.split(/[\s'\u2019]+/).filter(Boolean); return (w.length > 1 ? w.map(function(x){ return x.charAt(0); }).join('') : n.slice(0, 2)).slice(0, 2).toUpperCase(); };
+        var FIX = { 'Blitz': 'Blitzcrank' }; // display short-names -> Data Dragon names for art
+        var l = c.champs.split(' vs ')[0], r = c.champs.split(' vs ')[1];
         return { id: c.id, role: c.role, champs: c.champs, blurb: c.blurb, a: c.a, b: c.b, onClick: c.onClick,
-          left: c.champs.split(' vs ')[0], right: c.champs.split(' vs ')[1],
-          aInit: init(c.champs.split(' vs ')[0]), bInit: init(c.champs.split(' vs ')[1]) };
+          left: FIX[l] || l, right: FIX[r] || r,
+          aInit: init(l), bInit: init(r) };
       }),
       heroStats: [
         { n: '170+', t: 'champions covered' },
@@ -6458,7 +6461,10 @@ class Component extends DCLogic {
           { m: 'Ahri vs Zed', d: 'EVEN', c: '#e8b84b' },
           { m: 'Draven vs Tristana', d: 'FAVOURED', c: '#3ddc97' }
         ];
-        return items.concat(items);
+        return items.concat(items).map(function(t){
+          var p = t.m.split(' vs ');
+          return { m: t.m, d: t.d, c: t.c, a: p[0], b: p[1] };
+        });
       })(),
       tiers: [
         // Launch mode: a free account unlocks the ENTIRE catalog; paid tiers

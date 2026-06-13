@@ -824,7 +824,60 @@
         </div>
         <div style="text-align:center; margin-top:16px; font-size:12.5px; color:#7d8499;">All five roles live — every champion, every lane matchup.</div>
 
+        <!-- ===== ENEMY JUNGLE TRACKER (laner tool) ===== -->
+        <div style="margin-top:42px; border-radius:18px; padding:1px; background:linear-gradient(150deg,rgba(70,198,245,0.55),rgba(155,140,255,0.25));">
+          <div style="border-radius:17px; background:linear-gradient(180deg,#10141f,#0c0e15); padding:20px 22px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; flex-wrap:wrap;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#46c6f5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+              <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:18px; color:#eaf2ff;">Enemy Jungle Tracker</span>
+              <span style="padding:3px 9px; border-radius:7px; background:rgba(70,198,245,0.14); border:1px solid rgba(70,198,245,0.4); font-family:'Chakra Petch',sans-serif; font-size:9.5px; font-weight:700; letter-spacing:0.6px; color:#7cc8e8;">FOR LANERS</span>
+            </div>
+            <div style="font-size:12.5px; color:#8a90a2; margin-bottom:16px;">Tap the lane where you last saw the enemy jungler. We count the seconds and tell you the moment their cross-map gank window opens.</div>
+            <div style="display:flex; gap:9px; flex-wrap:wrap; margin-bottom:16px;">
+              <sc-for list="{{ jgTracker.sides }}" as="sd" hint-placeholder-count="3">
+                <button onClick="{{ sd.onClick }}" style="flex:1 1 90px; padding:13px 10px; border-radius:12px; cursor:pointer; background:{{ sd.bg }}; border:1px solid {{ sd.bd }}; color:{{ sd.color }}; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; letter-spacing:0.6px; transition:all 0.15s;">Saw them {{ sd.label }}</button>
+              </sc-for>
+            </div>
+            <sc-if value="{{ jgTracker.active }}" hint-placeholder-val="{{ true }}">
+              <div style="border-radius:14px; background:#0b0e16; border:1px solid {{ jgTracker.color }}55; border-left:3px solid {{ jgTracker.color }}; padding:15px 17px;">
+                <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:9px;">
+                  <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:30px; color:{{ jgTracker.color }}; line-height:1; font-variant-numeric:tabular-nums;">{{ jgTracker.clock }}</span>
+                  <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; letter-spacing:0.7px; color:{{ jgTracker.color }};">{{ jgTracker.status }}</span>
+                  <button onClick="{{ jgTracker.reset }}" style="margin-left:auto; padding:7px 13px; border-radius:9px; cursor:pointer; background:#11131c; border:1px solid rgba(255,255,255,0.14); color:#aab0c2; font-family:'Manrope',sans-serif; font-weight:700; font-size:12px;">Reset</button>
+                </div>
+                <div style="height:6px; border-radius:99px; background:rgba(255,255,255,0.08); overflow:hidden; margin-bottom:10px;"><div style="height:100%; width:{{ jgTracker.pct }}%; background:{{ jgTracker.color }}; border-radius:99px; transition:width 1s linear;"></div></div>
+                <div style="font-size:13px; line-height:1.5; color:#d7dbe6; font-weight:600; text-wrap:pretty;">{{ jgTracker.sub }}</div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <!-- ===== POPULAR MATCHUPS BY ROLE ===== -->
         <div style="margin-top:42px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+            <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:15px; color:#f4efe8; letter-spacing:0.3px;">Most popular matchups</span>
+            <span style="font-size:11.5px; color:#7d8499;">— the lanes people look up most, by role</span>
+          </div>
+          <sc-for list="{{ popularGroups }}" as="pg" hint-placeholder-count="5">
+            <div style="margin-bottom:18px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:9px;">
+                <span style="width:8px; height:8px; border-radius:50%; background:{{ pg.accent }}; box-shadow:0 0 8px {{ pg.accent }};"></span>
+                <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; letter-spacing:0.9px; color:{{ pg.accent }};">{{ pg.label }}</span>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr)); gap:8px;">
+                <sc-for list="{{ pg.items }}" as="m" hint-placeholder-count="7">
+                  <button onClick="{{ m.onClick }}" style="display:flex; align-items:center; gap:8px; padding:8px 11px; border-radius:11px; cursor:pointer; background:#11131c; border:1px solid rgba(255,255,255,0.07); font-family:'Manrope',sans-serif; text-align:left; transition:all 0.15s;" style-hover="border-color:{{ pg.accent }}88; background:#171a24;">
+                    <span data-champ-icon="{{ m.a }}" style="flex:0 0 auto; width:30px; height:30px; border-radius:8px; background:#1c2030; border:1px solid rgba(255,255,255,0.1);"></span>
+                    <span data-champ-icon="{{ m.b }}" style="flex:0 0 auto; width:30px; height:30px; border-radius:8px; background:#1c2030; border:1px solid rgba(255,255,255,0.1); margin-left:-14px;"></span>
+                    <span style="min-width:0; font-size:11.5px; font-weight:700; color:#dfe2ec; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ m.label }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:24px;">
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
             <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:15px; color:#f4efe8; letter-spacing:0.3px;">Sample matchups</span>
             <span style="font-family:'Chakra Petch',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.6px; color:#3ddc97; padding:3px 8px; border-radius:6px; background:rgba(61,220,151,0.12); border:1px solid rgba(61,220,151,0.32); white-space:nowrap;">FULLY BUILT</span>
@@ -3036,6 +3089,7 @@ class Component extends DCLogic {
     founders: null, serverWeek: null, pendingMU: null, googleClientId: null,
     stripeEnabled: false, payOk: false, payErr: '', stripeBusy: false,
     heroYou: '', heroFoe: '', heroErr: '',
+    jgSeenAt: null, jgSeenSide: '', jgClock: 0,
     cdNum: '', cdExp: '', cdCvc: '', cdName: '', cdErr: '', coBusy: false, coDone: false
   };
 
@@ -3106,10 +3160,16 @@ class Component extends DCLogic {
       this.setState(s => {
         const cds = { ...s.cds };
         for (const k in cds) if (cds[k] > 0) cds[k] -= 1;
-        return { seconds: s.seconds > 0 ? s.seconds - 1 : 0, cds };
+        const next = { seconds: s.seconds > 0 ? s.seconds - 1 : 0, cds };
+        if (s.jgSeenAt != null) next.jgClock = s.jgClock + 1; // home JG tracker tick
+        return next;
       });
     }, 1000);
   }
+  // Home-page enemy-jungle tracker: tap the lane you last saw the enemy
+  // jungler; we count up and tell laners when the cross-map gank window opens.
+  jgSpot(side) { this.setState({ jgSeenSide: side, jgSeenAt: Date.now(), jgClock: 0 }); }
+  jgReset() { this.setState({ jgSeenSide: '', jgSeenAt: null, jgClock: 0 }); }
   componentWillUnmount() { clearInterval(this._t); clearInterval(this._gsi); window.removeEventListener('popstate', this._onPop); }
 
   // ---- accounts / checkout ----
@@ -6441,6 +6501,44 @@ class Component extends DCLogic {
       })(),
       payOk: this.state.payOk, payErr: this.state.payErr, hasPayErr: !!this.state.payErr,
       dismissPay: () => this.setState({ payOk: false, payErr: '' }),
+      // Home: enemy-jungle tracker for laners.
+      jgTracker: (function(self){
+        var s = self.state, active = s.jgSeenAt != null, t = s.jgClock || 0;
+        var mm = Math.floor(t / 60), ss2 = t % 60, clock = mm + ':' + (ss2 < 10 ? '0' : '') + ss2;
+        var status, color, sub;
+        if (t < 30) { status = 'SAFE TO PUSH'; color = '#3ddc97'; sub = 'Enemy jungler just shown ' + (s.jgSeenSide || 'away') + ' — they’re across the map. Shove and trade freely now.'; }
+        else if (t < 48) { status = 'CAUTION'; color = '#ff8b3d'; sub = 'They’ve had time to start pathing your way. Drop a ward and stop overextending.'; }
+        else { status = 'GANK WINDOW OPEN'; color = '#ff5d6c'; sub = 'They can reach your lane now — hug tower, hold your flash, and respot them before you commit.'; }
+        return {
+          active: active, clock: clock, status: status, color: color, sub: sub,
+          seenSide: s.jgSeenSide, pct: Math.min(100, Math.round(t / 48 * 100)),
+          reset: () => self.jgReset(),
+          sides: ['TOP', 'MID', 'BOT'].map(function(sd){
+            var on = s.jgSeenSide === sd;
+            return { label: sd, onClick: () => self.jgSpot(sd),
+              bg: on ? 'rgba(70,198,245,0.18)' : '#11131c', bd: on ? 'rgba(70,198,245,0.55)' : 'rgba(255,255,255,0.12)', color: on ? '#7cc8e8' : '#c7ccdb' };
+          })
+        };
+      })(this),
+      // Home: 6-7 popular matchups per role with champion portraits.
+      popularGroups: (function(self){
+        var DATA = {
+          top: ['Darius/Garen', 'Aatrox/Fiora', 'Fiora/Jax', 'Riven/Renekton', 'Camille/Sett', 'Mordekaiser/Darius', 'Sett/Garen'],
+          jungle: ['Lee Sin/Kha\'Zix', 'Graves/Kindred', 'Viego/Lee Sin', 'Kayn/Kha\'Zix', 'Vi/Jarvan IV', 'Master Yi/Warwick', 'Hecarim/Graves'],
+          mid: ['Zed/Ahri', 'Yasuo/Zed', 'Ahri/Sylas', 'Katarina/Lux', 'Syndra/Orianna', 'Yone/Akali', 'Fizz/Ahri'],
+          bot: ['Caitlyn/Jinx', 'Draven/Tristana', 'Jhin/Jinx', 'Kai\'Sa/Caitlyn', 'Ezreal/Jhin', 'Lucian/Caitlyn', 'Vayne/Jinx'],
+          support: ['Morgana/Blitzcrank', 'Thresh/Nautilus', 'Leona/Lulu', 'Lulu/Brand', 'Pyke/Thresh', 'Nautilus/Senna', 'Rakan/Xerath']
+        };
+        var META = { top: { label: 'TOP', accent: '#f0883d' }, jungle: { label: 'JUNGLE', accent: '#3ddc97' }, mid: { label: 'MID', accent: '#46c6f5' }, bot: { label: 'ADC', accent: '#ff8bd0' }, support: { label: 'SUPPORT', accent: '#9b8cff' } };
+        return ['top', 'jungle', 'mid', 'bot', 'support'].map(function(role){
+          return { role: role, label: META[role].label, accent: META[role].accent,
+            items: DATA[role].map(function(pair){
+              var p = pair.split('/'), a = p[0], b = p[1];
+              return { a: a, b: b, label: a + ' vs ' + b,
+                onClick: role === 'jungle' ? (() => self.openJg(a, b)) : (() => self.openGen(role, a, b)) };
+            }) };
+        });
+      })(this),
       paywallTitle: this.state.stripeEnabled ? 'Free account, or go Pro' : 'Free full access — paid plans coming soon',
       paywallSub: this.state.stripeEnabled
         ? 'Create a free account for the whole catalog, or unlock a paid plan below. Checkout is handled securely by Stripe.'

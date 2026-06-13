@@ -116,7 +116,9 @@ const MIME = {
 };
 function sendStatic(res, rel) {
   if (rel === '') rel = 'index.html';
-  const full = path.normalize(path.join(ROOT, rel));
+  let full = path.normalize(path.join(ROOT, rel));
+  // Extensionless pretty URLs: /privacy -> privacy.html
+  if (full.startsWith(ROOT) && !path.extname(full) && fs.existsSync(full + '.html')) full += '.html';
   if (!full.startsWith(ROOT) || !fs.existsSync(full) || !fs.statSync(full).isFile()) {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     return res.end('404');

@@ -519,6 +519,214 @@
         "Your Eclipse spike beats his first AP item. Once R is down, force the all-in — your sustain wins it.",
         "You hold the edge late — out-heal his magic DPS in long fights. Respect the Realm, grind everything else."
       ]
+    },
+    {
+      a: 'aatrox', b: 'irelia',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Irelia', 'Irelia', 'Irelia'],
+      spikes: [
+        { when: 'Lvl 2–3', text: 'Your small window — combo her before she stacks her passive.' },
+        { when: 'Lvl 6', text: 'Irelia’s window — R (stun) + stacks flip the extended fight.' },
+        { when: '1st item', text: 'She out-DPS you once stacked — her W blunts your burst.' },
+        { when: '2+ items', text: 'Irelia takes over — Q resets + true damage kite and shred you.' }
+      ],
+      wants: {
+        you: ['All-in early before she stacks her passive', 'Bait her W (Defiant Dance) before committing', 'Win before her items — she out-DPS you stacked'],
+        foe: ['Stack passive on minions, then out-trade you', 'Blunt your burst with W damage reduction', 'Q-reset around the fight and scale to items']
+      },
+      early: "Irelia is weak before she stacks her passive, so your only real window is a level 2-3 all-in before she's ramped. Her W (Defiant Dance) is the problem — it reduces your burst and stuns if you trade into the channel — so bait it out first. Deny her minion resets and don't let her free-stack off the wave.",
+      mid: "Once she has stacks and items, she out-DPS you. Her Q resets on kills and low minions let her reposition through your combo, and at 6 her R is a ranged stun that starts the fight on her terms. Take short trades only when her W is down; don't sit in an extended fight you no longer win.",
+      late: "Irelia takes over. Stacked, with two items, her on-hit damage and Q resets shred you while she dances out of your sweetspot. This is a tricky lane — your edge is the early window, so press it; if it goes even into the mid-game, the duel tilts to her.",
+      whys: [
+        "Irelia is weak before she stacks. Level 1 is even — set up so you can punish before she ramps.",
+        "Your window opens at 2 — combo her before the passive stacks. Don't let her free-stack off the wave.",
+        "Now or never early: all-in while she's unstacked. Bait her W first — it blunts your burst and stuns.",
+        "She starts to out-trade you as stacks build. Take short trades only; don't commit into a fresh W.",
+        "Her R is a ranged stun that opens the fight on her terms. Respect it — don't get caught stepping up.",
+        "Stacked + one item she out-DPS you; her W eats your burst. Trade only on her W cooldown.",
+        "Two items in she kites and shreds you with Q resets + true damage. Your edge was early — late is hers."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'malphite',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Skill', 'Malphite', 'Malphite'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Even farm lane — his Q poke + shield blunt your trades.' },
+        { when: 'Lvl 3–5', text: 'Small window — all-in when his passive shield is popped.' },
+        { when: '1st item', text: 'His armour stacking starves your AD — you can’t crack him.' },
+        { when: 'Late', text: 'Malphite scales to a teamfight R; lane goes even-to-his.' }
+      ],
+      wants: {
+        you: ['All-in when his passive shield is down', 'Force trades before he stacks armour', 'Snowball early — you can’t kill a built Malphite'],
+        foe: ['Poke with Q (slow) and farm behind the shield', 'Stack armour to neutralise your AD', 'Scale to a teamfight R (Unstoppable Force)']
+      },
+      early: "Malphite just wants to farm behind his Q poke and passive shield — and his W armour directly cuts your AD, so you can't simply out-trade him. It's an even farm lane early. Your only openings come when his passive shield is popped: catch him mid-poke without it and punish.",
+      mid: "You get a small window in the levels 3-5 range when his shield is down and his armour is still low — all-in then. Once he starts stacking armour items, your damage falls off a cliff and you physically can't kill him. Don't waste resources chipping a tank who just out-sustains it.",
+      late: "Malphite scales into a teamfight monster — his R (Unstoppable Force) is a game-swinging engage and his armour neutralises your whole damage profile. The lane drifts from even to his. Snowball early off the shield windows or accept you won't crack him, and play for tempo elsewhere.",
+      whys: [
+        "Malphite pokes with Q and shields with his passive. Level 1 is even — farm, don't force into the shield.",
+        "His W armour cuts your AD trades. Wait for the shield to pop before you step up.",
+        "Your window: all-in when his passive shield is down and his armour is still low.",
+        "He starts stacking armour — your damage drops. Take the trade only on a popped shield.",
+        "Even-to-his now; you can't crack a stacking tank. Don't waste resources chipping him.",
+        "His armour items neutralise your AD. You physically can't kill a built Malphite — play elsewhere.",
+        "He scales to a teamfight R. The lane goes from even to his — snowball early or play for tempo."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'ornn',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Ornn', 'Ornn', 'Ornn'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Even — his Q poke + brittle out-trade once the combo is online.' },
+        { when: 'Lvl 6', text: 'Ornn’s window — brittle (W) + R knockup flip the all-in.' },
+        { when: '1st item', text: 'He out-sustains and out-tanks you; his upgrades come free.' },
+        { when: 'Late', text: 'Ornn scales to an unkillable teamfight tank with item upgrades.' }
+      ],
+      wants: {
+        you: ['All-in before his brittle (W passive) combo is online', 'Dodge his Q (pillar) so he can’t brittle-detonate', 'Win early — you can’t out-tank a built Ornn'],
+        foe: ['Brittle you with W, then detonate for bonus + slow', 'Poke with Q and out-sustain your trades', 'Scale to an unkillable tank with free item upgrades']
+      },
+      early: "Ornn is genuinely tank-favoured into bruisers like you — his W passive (Brittle) makes you take bonus damage and lets him detonate it with any CC, and his Q pillar pokes from range. Levels 1-3 are even on farm, but the moment his brittle combo is online he out-trades you. Dodge the Q so he can't set up the detonation.",
+      mid: "From 6 the lane tilts to him — his R knockup detonates brittle for a big swing, and he out-sustains your poke while building tanky. You can't out-tank an Ornn who upgrades his items for free. Take trades only when his W is down, and never walk into a Q-pillar that sets up the brittle.",
+      late: "Ornn scales into an unkillable teamfight tank — free item upgrades, two engage tools, and resistances your AD can't punch through. The lane drifts to his. Your only path is to win the early before his brittle and items come online; if it goes even, you simply can't kill him late.",
+      whys: [
+        "Ornn's Q pokes and his W brittle makes you take bonus damage. Level 1 is even — don't feed the combo.",
+        "He out-trades once brittle is online. Dodge the Q-pillar so he can't detonate it on you.",
+        "Your small window: all-in before his brittle combo and armour come together.",
+        "He out-sustains your poke and builds tanky. Trade only when his W is down.",
+        "His R detonates brittle for a big swing — his window. Respect the knockup, don't all-in into it.",
+        "He out-tanks you with free item upgrades. You can't crack him — don't waste resources.",
+        "Ornn scales to an unkillable teamfight tank. The lane goes to his — win early or not at all."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'sett',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades his short-range punches — space the sweetspot.' },
+        { when: 'Lvl 6', text: 'Respect his W (true damage) when his grit is full — bait it first.' },
+        { when: '1st item', text: 'Your Eclipse spike beats his — force the all-in.' },
+        { when: 'Late', text: 'You hold the edge — out-sustain his burst in extended fights.' }
+      ],
+      wants: {
+        you: ['Space the Q sweetspot outside his punch range', 'Bait his W (Haymaker) before it’s loaded with grit', 'Out-sustain his burst in the extended fight'],
+        foe: ['Build grit, then W (Haymaker) for a true-damage chunk', 'Land E (Facebreaker stun) into his combo', 'Pull you in with R for an all-in']
+      },
+      early: "You hold the edge — Sett's kit is short-range and you out-space it. His threat is the W (Haymaker): true damage scaled off the grit he banks from taking hits, so don't feed it. Space your Q sweetspot outside his punch range, and his level 1-3 can't match your trade.",
+      mid: "Bait the W before it's loaded. If you trade when his grit is empty, his Haymaker is weak and you win the exchange clean. Watch his E (Facebreaker) stun setting up the W, and at 6 his R pulls you in for the all-in — but your sustain out-lasts his front-loaded burst once the W is spent.",
+      late: "You hold the matchup. Sett is a burst-then-nothing fighter; once you eat or bait his Haymaker, your healing grinds him down in the extended fight. Your Eclipse spike beats his, and by two items the lane is comfortably yours. Just respect the grit-loaded W and the R engage.",
+      whys: [
+        "Sett's punches are short-range. Space the Q sweetspot and you out-trade his weak early.",
+        "His W (Haymaker) scales off banked grit. Don't feed it — trade when his grit is empty.",
+        "Your full combo out-trades his short kit. Space the sweetspot, force the trade.",
+        "Bait the W before it's loaded. With empty grit his Haymaker is weak and you win clean.",
+        "His E stuns into W and his R pulls you in. Respect the engage, but your sustain out-lasts his burst.",
+        "Your Eclipse spike beats his. Once the W is spent, force the all-in — your healing wins it.",
+        "You hold the edge late — out-heal his front-loaded burst in long fights. Respect the grit W."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'sion',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades him — dodge his Q (charged knockup).' },
+        { when: 'Lvl 6', text: 'You win the 1v1; his R is an engage tool, not a duel button.' },
+        { when: '1st item', text: 'Your Eclipse spike dwarfs his — take tower.' },
+        { when: 'Late', text: 'Sion becomes a teamfight tank; you won lane long ago.' }
+      ],
+      wants: {
+        you: ['Dodge his Q (charged knockup) — it’s his only burst', 'Out-trade his weak early before he stacks tanky', 'Snowball lane — he just wants to farm and scale'],
+        foe: ['Land the charged Q knockup for a trade', 'Farm safely (even dead, via passive) and scale', 'Become a teamfight engage tank with R']
+      },
+      early: "You out-trade Sion's weak early — his only real threat is the charged Q, a telegraphed knockup you can sidestep. Don't stand still while he winds it up. Without the Q he has no answer to your combo, and his passive means he just wants to farm and scale, not duel you.",
+      mid: "You win every 1v1. Dodge the Q, then E-in W-pull Q-sweetspot — his W shield and E poke don't out-trade your sustain. His R is a long-range engage for the map, not a button that wins the duel, so don't panic when he ults; just don't get knocked into his team.",
+      late: "Sion becomes a teamfight tank and engage threat, but in lane he never beats you. You should have a lead by now — your Eclipse spike dwarfs his, so take his tower and snowball. The game becomes about who uses Sion's R engage better, not the 1v1, which you own.",
+      whys: [
+        "Sion's charged Q is his only burst — telegraphed and dodgeable. Sidestep it and his early collapses.",
+        "Without the Q he can't trade. Dodge it, then punish — your combo out-damages his.",
+        "Full combo out-trades him hard. Dodge the knockup and force the all-in.",
+        "His W shield + E poke don't beat your sustain. Win every extended trade.",
+        "His R is map engage, not a duel button. You win the 1v1 — just don't get knocked into his team.",
+        "Your Eclipse spike dwarfs his. Take tower and snowball — he can't fight you.",
+        "Late he's a teamfight tank; you won lane long ago. The game is about his R, not the 1v1."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'nasus',
+      win: ['Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Nasus'],
+      spikes: [
+        { when: 'Lvl 2–5', text: 'Your window — bully him off Q stacks before he scales.' },
+        { when: 'Lvl 6', text: 'You win the 1v1; his W (Wither) only slows your chase.' },
+        { when: '1st item', text: 'Your Eclipse spike crushes a low-stack Nasus — force it.' },
+        { when: '2+ items', text: 'Nasus takes over — stacked Q + tanky scaling out-duel you.' }
+      ],
+      wants: {
+        you: ['Deny Q stacks relentlessly — zone him off CS', 'All-in early before his stacks and items', 'Snowball lane so his scaling never matters'],
+        foe: ['Stack Q on every last-hit, even under tower', 'Slow your all-in with W (Wither) and survive', 'Out-scale into a stacked, tanky late-game monster']
+      },
+      early: "Nasus is the ultimate scaler and weak early — your whole job is to deny his Q stacks. Zone him off the wave, deny last-hits, and bully him whenever he steps up to farm. His W (Wither) cripples your attack speed and movement, so don't waste it — bait the W before you all-in.",
+      mid: "This is your window. You out-trade a low-stack Nasus easily, and at 6 his R (tanky + lifesteal) doesn't make him a duelist — it just helps him survive. Keep zoning his CS, force all-ins on his W cooldown, and build the biggest lead you can before his stacks and items come online.",
+      late: "Nasus takes over at two items. A stacked Q on a tanky body out-duels you flatly, and his W shuts off your chase. The lane is even on paper precisely because you crush early and he crushes late — so press every inch of the early game, and end it before his scaling makes him unkillable.",
+      whys: [
+        "Nasus is weak early and lives to stack Q. Level 1 is even — set up to zone his CS.",
+        "Your window opens — bully him off the wave and deny every Q stack you can.",
+        "You out-trade a low-stack Nasus. Bait his W (Wither) before you all-in.",
+        "Keep zoning. Every denied stack delays the monster he becomes. Force trades on his W cooldown.",
+        "His R is survival, not a duel button — you still win the 1v1. Snowball the lead.",
+        "Your Eclipse spike crushes a low-stack Nasus. Force the all-in, take his tower.",
+        "Two items in, stacked Q + tanky body out-duel you. You own early; he owns late — end it first."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'trundle',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades him — but his Q (Chomp) steals your AD.' },
+        { when: 'Lvl 6', text: 'You hold the 1v1; his R drains your resistances in a long fight.' },
+        { when: '1st item', text: 'Your Eclipse spike beats his — force the all-in.' },
+        { when: 'Late', text: 'You edge it — out-DPS his sustain before his tank-buster scaling.' }
+      ],
+      wants: {
+        you: ['Bait his Q (Chomp) — it steals your AD', 'Win the all-in before his R drains your resistances', 'Out-DPS his sustain in the extended fight'],
+        foe: ['Bite (Q) to steal your AD and heal', 'Zone you with E (Pillar) and out-sustain trades', 'Drain your resistances + HP with R in a long fight']
+      },
+      early: "You hold the edge but Trundle isn't free — his Q (Chomp) steals your AD and heals him, and his E pillar can peel or zone you. Space your Q sweetspot and bait his bite before you commit; if he wastes Q on a minion, your trade window is open. Through levels 3-5 your combo out-trades his.",
+      mid: "You win the 1v1 if you respect the R. Trundle's ult (Subjugate) drains your resistances and HP in a long fight, so don't get dragged into an extended slugfest on his terms — burst him on your spike and disengage if his R flips it. His sustain is real, so commit only when you can finish.",
+      late: "You edge the matchup — your DPS out-paces his sustain before he scales into a tank-buster. Your Eclipse spike beats his first item. Keep trades short and decisive so his R-drain never tips the long fight, and the lane stays yours. Don't let him out-sustain a drawn-out poke war.",
+      whys: [
+        "Trundle's Q steals your AD and heals him. Bait the bite before you commit your combo.",
+        "His E pillar zones and peels. Space the sweetspot, trade when his Q is on a minion.",
+        "Your full combo out-trades him — but mind the stolen AD. Force the trade on his Q cooldown.",
+        "You out-trade through 4-5. Keep it short; his sustain wins a drawn-out fight.",
+        "His R drains your resistances + HP in a long fight. Burst on your spike, disengage if R flips it.",
+        "Your Eclipse spike beats his. Force a short, decisive all-in — don't let his R tip it.",
+        "You edge it late — out-DPS his sustain. Keep trades short before his tank-buster scaling."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'chogath',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', "Cho'Gath"],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades him — dodge his Q (rupture) + W (silence).' },
+        { when: 'Lvl 6', text: 'You win the 1v1; respect his R true-damage execute when low.' },
+        { when: '1st item', text: 'Your Eclipse spike crushes a low-stack Cho — force it.' },
+        { when: '2+ items', text: 'Cho takes over — stacked HP + true-damage R make him unkillable.' }
+      ],
+      wants: {
+        you: ['Dodge his Q (rupture) and W (scream silence)', 'All-in early before he stacks HP off his R', 'Snowball lane before his tank scaling takes over'],
+        foe: ['Land Q (knockup) into W (silence) for a trade', 'Farm safely and stack HP with R (Feast)', 'Scale into an unkillable true-damage teamfight tank']
+      },
+      early: "Cho'Gath is a weak-early tank scaler — you out-trade him so long as you dodge his combo. His Q (Rupture) is a telegraphed knockup and his W (Feral Scream) silences; sidestep the Q and his trade falls apart. Don't get silenced mid-combo. He just wants to farm and stack, so deny what you can.",
+      mid: "You win the 1v1 through the mid-game. Dodge the Q-W and your sustain out-trades him easily — but respect his R (Feast): it's a true-damage execute that ignores your healing, so don't all-in while you're low. Zone his CS and force trades to keep him off his HP stacks.",
+      late: "Cho takes over at two items. Stacked HP off his R plus true damage make him an unkillable teamfight tank your AD can't punch through. The lane is favoured because you own the early — so press it, deny his farm, and build a lead before his scaling makes him irrelevant to kill.",
+      whys: [
+        "Cho is weak early. Dodge his Q (rupture) knockup and his trade collapses. Level 1 is even.",
+        "His W silences mid-combo. Sidestep the Q first so he can't chain it.",
+        "Your full combo out-trades a weak-early Cho. Dodge the Q-W and force the trade.",
+        "You out-trade through the mid-game. Zone his CS to keep him off HP stacks.",
+        "His R is a true-damage execute that ignores your healing — don't all-in while low.",
+        "Your Eclipse spike crushes a low-stack Cho. Force the all-in, deny his farm.",
+        "Two items in, stacked HP + true damage make him unkillable. You own early — end it first."
+      ]
     }
   ];
   window.MC_MATCHUP_EXTRA = window.MC_MATCHUP_EXTRA || {};

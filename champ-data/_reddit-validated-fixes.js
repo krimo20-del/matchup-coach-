@@ -51,7 +51,11 @@
       ksante: 52.8, gwen: 52.9, trundle: 53.0, mordekaiser: 53.1, sett: 53.2, sion: 53.4,
       chogath: 53.7, yorick: 53.8, rumble: 53.9, teemo: 53.9, akali: 53.9, vayne: 54.1,
       camille: 54.5, shen: 54.5, vladimir: 55.3, poppy: 55.7, varus: 55.9, naafiri: 56.0,
-      drmundo: 56.3, swain: 57.1, tahmkench: 58.2
+      drmundo: 56.3, swain: 57.1, tahmkench: 58.2,
+      // off-meta / flex opponents — real lolalytics Emerald+ top-lane samples (patch 16.12)
+      galio: 52.6, kassadin: 48.9, lucian: 50.6, akshan: 47.0, graves: 51.9, ziggs: 54.5,
+      karma: 51.3, neeko: 53.5, maokai: 48.0, sejuani: 51.8, zac: 56.2, lillia: 52.3,
+      nautilus: 51.2, mel: 56.2
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -1532,6 +1536,370 @@
         "Her R blinks behind you, suppresses and stuns for a full combo — don't be low when it's up.",
         "Your Eclipse spike edges her — out-sustain her burst. Force the long all-in, bait the E.",
         "Even late — your sustain vs her mobility + R. Play around the suppress; don't get caught low."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'galio',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades him — bait his W (damage reduction) first.' },
+        { when: 'Lvl 6', text: 'You win the 1v1; his R is a global peel, not a duel button.' },
+        { when: '1st item', text: 'Your Eclipse spike beats a tanky-but-passive Galio.' },
+        { when: 'Late', text: 'He’s a teamfight tank-mage; you own the lane 1v1.' }
+      ],
+      wants: {
+        you: ['Bait his W (damage reduction) before committing', 'Out-trade his poke once W is down', 'Snowball the lane — he’s a scaling teamfighter'],
+        foe: ['Poke with Q (windblast) and farm safely', 'Soak your burst with W (damage reduction + taunt)', 'Roam / impact the map with global R']
+      },
+      early: "Galio pokes with Q (a windblast) and farms safely behind his W (Shield of Durand), which reduces incoming damage and taunts if he channels it. Don't dump your combo into a raised W — it eats your burst and can taunt you. Last-hit through the Q poke and wait to bait the W; his early kill pressure on you is low.",
+      mid: "Once you bait the W, your combo out-trades him — he's a tanky control mage, not a duelist. His E (dash + knockup) is his engage/escape; respect it but don't fear his 1v1. At 6 his R is a global peel/engage for other lanes, not a button that beats you — when he ults away, punish the wave. Keep him pinned and deny the roam value.",
+      late: "Galio scales into a teamfight tank-mage with global presence, but in lane the 1v1 was never his — you out-trade and out-pressure him. Your Eclipse spike beats his passive, tanky frame. Press the lane, take his tower, and don't let his R swing other lanes; the duel is yours all game.",
+      whys: [
+        "Galio pokes with Q and soaks damage with W. Don't trade into a raised W — bait it first.",
+        "His W reduces damage and can taunt. Wait it out, then your combo out-trades him.",
+        "Bait the W, then all-in — he's a tanky mage, not a duelist. Force the trade.",
+        "You out-trade him through the mid-game. Respect his E knockup but don't fear the 1v1.",
+        "His R is a global peel/engage, not a duel button. When he ults away, punish the wave.",
+        "Your Eclipse spike beats a tanky-but-passive Galio. Take his tower, snowball.",
+        "He's a teamfight tank-mage late — you own the lane 1v1. Deny his roam, press your edge."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'ziggs',
+      win: ['Ziggs', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Ziggs pokes from max range with Q — hug minions, take the chip.' },
+        { when: 'Lvl 6', text: 'Catch him — he’s squishy; W-pull past his satchel and all-in.' },
+        { when: '1st item', text: 'Your Eclipse spike deletes him if you reach him.' },
+        { when: 'Late', text: 'You own the 1v1 — close the gap; his only escape is W (satchel).' }
+      ],
+      wants: {
+        you: ['Hug minions to dodge his Q bomb poke', 'Catch him with W-pull — he’s squishy and dies', 'Bait his W (satchel) escape before you commit'],
+        foe: ['Poke from max range with Q (bouncing bomb)', 'Escape your gap-close with W (Satchel Charge)', 'Zone you with E (minefield) and nuke with R']
+      },
+      early: "Ziggs is pure artillery — his Q (bouncing bomb) out-ranges everything and pokes you whenever you step to CS, and his E lays a slowing minefield to keep you out. He has no stun, but his W (Satchel Charge) blasts him to safety. Levels 1-2, hug your minions to body-block the Q, take the chip your sustain heals, and don't path through the minefield.",
+      mid: "Your whole game is closing the gap. Ziggs is squishy and immobile except for the W satchel — bait or eat it, then W-pull him and your combo deletes him. He can't kite a healing juggernaut once you're on top of him with no satchel up. Force him to burn W early, then all-in on its cooldown.",
+      late: "You own the 1v1 — if you reach Ziggs he dies, full stop. His threat is range and zone control, not the duel. Close on his satchel cooldown, deny him free poke by hugging minions, and end the lane. Don't get chunked sieging his minefield; pick your gap-close and commit when his escape is down.",
+      whys: [
+        "Ziggs out-ranges you with Q bomb poke. Hug minions to block it; take the chip you heal back.",
+        "His E minefield zones you out. Don't path through it — wait for your window to close.",
+        "Your combo deletes a squishy Ziggs — close the gap and force the trade.",
+        "He has no stun, only the W satchel escape. Bait it, then commit.",
+        "Catch him — W-pull past the satchel and all-in. He can't kite you once you're on him.",
+        "Your Eclipse spike kills him outright if you reach him. Close on his W cooldown.",
+        "You own the 1v1 — his only escape is W. Force the gap-close, deny the poke, end it."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'neeko',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades her squishy frame — bait the E (root).' },
+        { when: 'Lvl 6', text: 'Don’t get caught by her R (AOE stun) into burst — dodge the windup.' },
+        { when: '1st item', text: 'Your Eclipse spike deletes a one-item Neeko — force it.' },
+        { when: 'Late', text: 'You own the 1v1 — she’s a teamfight burst mage, not a duelist.' }
+      ],
+      wants: {
+        you: ['Bait her E (root) before you commit', 'Catch her with W-pull — she’s squishy and dies', 'Dodge her R (stun) windup at level 6'],
+        foe: ['Poke with Q (Blooming Burst) and root with E', 'Disguise as a minion/ally with W (clone)', 'All-in with R (Pop Blossom AOE stun)']
+      },
+      early: "Neeko pokes with Q (Blooming Burst) and her E (Tangle-Barbs) roots you to set up damage, but she's squishy and her kit is built for picks, not dueling. Her W disguises her (as a minion or ally) — don't get fooled by a clone. Levels 1-3, last-hit through the poke, dodge the E root (it's her whole setup), and your combo out-trades her up close.",
+      mid: "Bait the E root, then all-in — once it's down she has no way to stop your combo and her squishy frame folds. At 6 respect her R (Pop Blossom): a delayed AOE stun she leaps in with, often from a disguise, so watch the windup and don't get caught flat-footed. Land W-pull and she dies; she can't trade back in a straight fight.",
+      late: "You own the 1v1 — Neeko is a teamfight burst/pick mage, not a side-lane duelist. If you reach her she dies, and your Eclipse spike makes that instant. Press the lane, deny her roams (her R + disguise are pick tools), and don't facecheck a 'minion' that might be her W clone. The duel is always yours.",
+      whys: [
+        "Neeko pokes with Q and roots with E, but she's squishy. Bait the E, then out-trade her.",
+        "Her W disguises her as a minion or ally — don't get fooled by a clone. Farm and respect the root.",
+        "Your combo out-trades her squishy frame — bait the E root, then commit.",
+        "You out-trade her up close. Keep her off farm and deny the roam setup.",
+        "Her R (Pop Blossom) is a delayed AOE stun, often from a disguise — dodge the windup.",
+        "Your Eclipse spike deletes a one-item Neeko. W-pull and force the all-in.",
+        "You own the 1v1 — she's a teamfight pick mage. Don't facecheck her clones; press your edge."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'zac',
+      win: ['Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Zac'],
+      spikes: [
+        { when: 'Lvl 2–5', text: 'Your window — Zac is a weak early laner. Bully him off CS.' },
+        { when: 'Lvl 6', text: 'Out-DPS his passive blob heals — don’t let him reset the fight.' },
+        { when: '1st item', text: 'Your Eclipse spike crushes a pre-tank Zac — snowball.' },
+        { when: '2+ items', text: 'Zac takes over — stacked HP + heals make him a teamfight tank.' }
+      ],
+      wants: {
+        you: ['Bully his weak early — he has low kill pressure', 'Deny CS + his passive blobs (bring grievous wounds)', 'Snowball before his HP/heal tank scaling'],
+        foe: ['Poke with Q (stretchy arm) and farm safely', 'Sustain with passive blobs + W', 'Scale into an HP-stacking teamfight tank with R']
+      },
+      early: "Zac is a weak early laner — his Q (stretchy-arm grab) pokes and his W chips, but he has little kill pressure and just wants to farm and scale. This is your window: bully him off the wave levels 2-5, deny CS, and step on his passive blobs so he can't pick them up to heal. Don't let him free-farm into his tank spike.",
+      mid: "Keep stomping. Your combo out-trades and out-heals him, and his passive blob-heals only delay it — bring grievous wounds (Executioner's/Bramble) so his sustain stops mattering. At 6 his R is a teamfight engage, not a 1v1 button; out-DPS his heals, deny the reset, and snowball the lead before he stacks HP.",
+      late: "Zac takes over at two items — stacked HP plus his passive and blob heals make him an unkillable teamfight tank your AD can't punch through. The lane is heavily favoured because you crush the early; press it, deny his farm, and build a lead so his late-game tankiness never matters. Antiheal keeps your edge.",
+      whys: [
+        "Zac is a weak early laner with low kill pressure. Bully him off CS — this is your window.",
+        "Step on his passive blobs so he can't heal. Out-trade his weak early.",
+        "Your combo out-trades him — deny CS and force trades while he's squishy.",
+        "Keep stomping — every denied stack of farm delays his tank spike. Bring grievous wounds.",
+        "His R is a teamfight engage, not a duel button. Out-DPS his blob heals, deny the reset.",
+        "Your Eclipse spike crushes a pre-tank Zac. Snowball, take his tower.",
+        "Two items in, stacked HP + heals make him a teamfight tank. You own early — end it first."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'mel',
+      win: ['Mel', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Mel pokes from range with Q — hug minions, take the chip.' },
+        { when: 'Lvl 6', text: 'Catch her — she’s squishy; bait her W shield, then W-pull and all-in.' },
+        { when: '1st item', text: 'Your Eclipse spike deletes her if you reach her.' },
+        { when: 'Late', text: 'You own the 1v1 — she’s a teamfight poke mage with no escape but W.' }
+      ],
+      wants: {
+        you: ['Hug minions through her Q (Radiant Volley) poke', 'Dodge her E (Solar Snare root) — it sets up her damage', 'Catch her with W-pull — she’s squishy and dies'],
+        foe: ['Poke from range with Q (Radiant Volley)', 'Root you with E (Solar Snare) to land poke / R', 'Self-peel with W (shield + move speed)']
+      },
+      early: "Mel is a squishy artillery mage — her Q (Radiant Volley) rains bolts on you from range and her E (Solar Snare) roots you to land more poke. Her W (Rebuttal) reflects enemy projectiles, but your kit is melee so it's just a shield + move-speed peel against you. Levels 1-2, hug your minions to limit the Q, dodge the E root, and take the chip your sustain heals.",
+      mid: "Once you can close, she folds — Mel has no real escape but the W move-speed, and she's squishy. Dodge or bait the E root (it's how she sets up her damage and R), bait the W shield, then W-pull and your combo deletes her. Force her to burn W, then all-in on its cooldown; she can't trade back up close.",
+      late: "You own the 1v1 — if you reach Mel she dies. Her threat is ranged poke and her R (a global mark-execute in teamfights), not the side-lane duel. Close on her W cooldown, deny free poke by hugging minions, and end the lane. Don't get rooted into her full combo; dodge the E and you win every all-in.",
+      whys: [
+        "Mel pokes from range with Q (Radiant Volley). Hug minions, take the chip you heal back.",
+        "Her E (Solar Snare) roots you to set up poke. Dodge it — don't get chained into her combo.",
+        "Your combo deletes a squishy Mel — close the gap and force the trade.",
+        "Her W reflects projectiles but you're melee — it's just a shield + MS peel. Keep closing.",
+        "Catch her — bait the W shield, then W-pull and all-in. She can't trade back up close.",
+        "Your Eclipse spike kills her if you reach her. Close on her W cooldown.",
+        "You own the 1v1 — she's a teamfight poke mage. Dodge the E root and win every all-in."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'kassadin',
+      win: ['Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Kassadin'],
+      spikes: [
+        { when: 'Lvl 1–5', text: 'Your window — Kassadin is one of the weakest early champs. Bully him.' },
+        { when: 'Lvl 6', text: 'His R (Riftwalk) gives an escape — all-in before he can blink away.' },
+        { when: '1st item', text: 'Your Eclipse spike crushes him — but the clock is ticking.' },
+        { when: '2+ items', text: 'Kassadin takes over — at 16 + items he out-scales the game.' }
+      ],
+      wants: {
+        you: ['Bully his brutal early — deny CS and XP relentlessly', 'All-in before his R (Riftwalk) escape', 'Snowball huge before his level 16 / item spike'],
+        foe: ['Survive lane with Q (spell shield) and farm', 'Blink away from your all-in with R (Riftwalk)', 'Out-scale into an unkillable late-game assassin']
+      },
+      early: "Kassadin is one of the weakest early-game champions in the game and you are a juggernaut who spikes at 3 — this is a hard stomp window. His Q gives a spell shield (it blocks one ability, so don't waste your combo into it) and his E slows, but he can't trade with you. Bully him off every CS, deny XP, and starve his scaling from minute one.",
+      mid: "Keep him broke. Your combo out-trades him flatly through the mid-game; all-in repeatedly and zone him off the wave. At 6 his R (Riftwalk) gives a blink escape, so engage before he can flash-blink away and dive him under tower with any jungle help. Every level and item you deny delays the carry he becomes.",
+      late: "Kassadin takes over hard at two items and level 16 — his Riftwalk stacking burst out-scales the entire game and he becomes nearly unkillable. The lane is even on paper precisely because you crush the early and he crushes the late. You MUST snowball lane into a game-ending lead; if he farms to his spike, you simply lose the late game.",
+      whys: [
+        "Kassadin is one of the weakest early champs. You spike at 3 — bully him off every CS.",
+        "His Q is a spell shield — don't waste your combo into it. Otherwise he can't trade you.",
+        "Your combo out-trades him flatly. Deny CS + XP — starve his scaling.",
+        "Keep him broke through the mid-game. Every denied minion delays his spike.",
+        "His R (Riftwalk) is a blink escape — all-in before he can flash-blink away. Dive with jungle.",
+        "Your Eclipse spike crushes him — but the clock's ticking. Build a game-ending lead now.",
+        "Two items + level 16 he out-scales everyone. You crush early or you lose late — snowball hard."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'lucian',
+      win: ['Lucian', 'Skill', 'Aatrox', 'Skill', 'Skill', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Lucian pokes with Q + passive double-shot — hug minions.' },
+        { when: 'Lvl 6', text: 'Catch him — W-pull through his E dash and your combo deletes him.' },
+        { when: '1st item', text: 'Your Eclipse spike beats a one-item Lucian — force it.' },
+        { when: 'Late', text: 'Even — he pokes and kites; you own the all-in when you land W.' }
+      ],
+      wants: {
+        you: ['Hug minions through his Q + passive double-shot poke', 'Catch him with W-pull when his E dash is down', 'Force the all-in — he’s squishy and folds up close'],
+        foe: ['Poke with Q (line) + passive double-shot', 'Dash around your combo with E (Relentless Pursuit)', 'Kite you and scale into a DPS marksman']
+      },
+      early: "Lucian top is a ranged lane bully — his Q (Piercing Light) pokes through minions, his passive double-shot adds chip after every ability, and his E (Relentless Pursuit) dashes to reposition. Levels 1-2 he out-ranges and pokes you; hug your minions to limit the Q, last-hit carefully, and take the chip your sustain heals back.",
+      mid: "Your window is catching him — Lucian is squishy and relies on the E dash to stay safe. Land W-pull when his E is down and your combo deletes him; he can't kite a healing juggernaut once he's locked in your sweetspot. Bait the E (force him to dash early), then all-in on its cooldown. Don't get poked low chasing him in open ground.",
+      late: "Even into late — Lucian pokes and kites with his dashes and scales as a DPS marksman, but he never wins the all-in once you land W. The duel comes down to whether you catch him: hug minions to deny free poke, close on his E cooldown, and your Eclipse spike beats his. If he kites freely he chips you; if you land W, he dies.",
+      whys: [
+        "Lucian pokes with Q + passive double-shot from range. Hug minions, take the chip you heal.",
+        "His E (Relentless Pursuit) dashes to reposition. Don't chase into open ground — wait for a clean W.",
+        "Catch him — W-pull when his E is down and your combo deletes a squishy Lucian.",
+        "He kites with the E dash. Bait it out, then all-in on its cooldown.",
+        "Don't get poked low chasing. Force the fight when his dash is down.",
+        "Your Eclipse spike beats a one-item Lucian. Land W, force the all-in.",
+        "Even late — he pokes and kites, but loses the all-in when you land W. Catch him and he dies."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'graves',
+      win: ['Skill', 'Graves', 'Graves', 'Skill', 'Skill', 'Aatrox', 'Aatrox'],
+      spikes: [
+        { when: 'Lvl 2–3', text: 'Graves’ window — shotgun Q burst + E dash out-trade you early.' },
+        { when: 'Lvl 6', text: 'Even — don’t get blinded (W smoke) mid all-in; bait it first.' },
+        { when: '1st item', text: 'Your Eclipse spike flips it — out-sustain his burst.' },
+        { when: 'Late', text: 'You edge it — your sustain out-grinds his cooldown burst.' }
+      ],
+      wants: {
+        you: ['Survive his strong level 2-3 burst, then scale', 'Bait his W (smoke screen blind) before committing', 'Out-sustain his shotgun burst in the long fight'],
+        foe: ['Burst you with shotgun Q + E (dash + armor)', 'Blind + slow you with W (Smoke Screen)', 'Kite with his dash and out-trade short fights']
+      },
+      early: "Graves out-trades you early — his Q (shotgun double-shot) is heavy point-blank burst, his E dashes and stacks armour for the trade, and his W (Smoke Screen) blinds and slows you to shut off your autos. Levels 2-3 are his window. Don't brawl into a full shotgun-E combo; take the poke, last-hit, and respect that his early burst beats yours.",
+      mid: "It evens out around 6 — your sustain starts matching his burst. The key is his W smoke: don't all-in through the blind (it cancels your auto-attacks mid-combo), so bait it first or fight when it's down. His damage is cooldown-reliant burst, so punish him after he dumps Q-E, when he has to wait for cooldowns.",
+      late: "You edge the matchup — in the extended fight your healing out-grinds his cooldown burst, and once you have items his shotgun stops chunking you. Your Eclipse spike flips the lane. Force long trades where his burst-then-wait loses to your sustain, bait the smoke blind, and don't get caught by a fresh shotgun-E combo while low.",
+      whys: [
+        "Graves' shotgun Q + E burst out-trade you early. Don't brawl into the full combo — take the poke.",
+        "His E dashes and stacks armour for the trade. Levels 2-3 are his — survive, don't contest.",
+        "Still his window — his burst beats yours pre-item. Last-hit and wait for your spike.",
+        "Your sustain starts matching him. Bait his W smoke before you commit anything.",
+        "Don't all-in through his W blind — it cancels your autos. Bait it, then fight.",
+        "Your Eclipse spike flips it — out-sustain his burst. Punish him after he dumps Q-E.",
+        "You edge it late — your heal out-grinds his cooldown burst. Force the long fight."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'karma',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Skill', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'She pokes with Q and shields herself — bait the shield, then trade.' },
+        { when: 'Lvl 6', text: 'Catch her — W-pull and your combo deletes a squishy Karma.' },
+        { when: '1st item', text: 'Your Eclipse spike beats her if you reach her.' },
+        { when: 'Late', text: 'You own the 1v1 — she’s a poke/utility mage, not a duelist.' }
+      ],
+      wants: {
+        you: ['Bait her E (shield + MS) before you all-in', 'Catch her with W-pull — she’s squishy and folds', 'Don’t get kited by her W (root tether)'],
+        foe: ['Poke with Q (Inner Flame) — empowered by R (Mantra)', 'Root you with W (Focused Resolve) tether', 'Self-peel with E (shield + move speed)']
+      },
+      early: "Karma pokes with her Q (Inner Flame, empowered by her R Mantra) and peels herself with E (a shield + move speed). Her W (Focused Resolve) is a tether that roots if she channels it fully — don't let her hold it on you while she kites. Levels 1-3, last-hit through the poke, bait or break the W tether, and don't trade into a fresh E shield.",
+      mid: "Your path is catching her — Karma is squishy and her only defensive tools are the E shield and the W kite. Bait the E, then W-pull and your combo deletes her. Don't get rooted by a full W tether mid-engage; close the distance fast or break line of sight on it. Once you're on her with no shield up, she folds.",
+      late: "You own the 1v1 — Karma is a poke/utility mage, not a side-lane duelist. If you reach her she dies, and your Eclipse spike makes it quick. Press the lane, deny her poke by hugging minions, and don't get kited by W + E. Her value is utility for her team, not beating you one-on-one.",
+      whys: [
+        "Karma pokes with Q (Mantra-empowered) and shields with E. Bait the shield before you trade.",
+        "Her W (Focused Resolve) tethers and roots if she channels it. Break it or close fast.",
+        "Your combo out-trades a squishy Karma — bait the E, then commit.",
+        "Don't get kited by W + E. Force the gap-close when her shield is down.",
+        "Catch her — W-pull and your combo deletes her. She can't trade back up close.",
+        "Your Eclipse spike beats her if you reach her. Force the all-in.",
+        "You own the 1v1 — she's a poke/utility mage. Hug minions, deny the poke, press your edge."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'sejuani',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades her weak early — dodge her Q (charge).' },
+        { when: 'Lvl 6', text: 'You win the 1v1; her R is a teamfight stun, not a duel button.' },
+        { when: '1st item', text: 'Your Eclipse spike beats a low-damage Sejuani — snowball.' },
+        { when: 'Late', text: 'She’s a teamfight tank; you own the lane 1v1.' }
+      ],
+      wants: {
+        you: ['Out-trade her weak early before she stacks tanky', 'Dodge her Q (charge) and avoid the Frost (E) stun', 'Snowball — she has low solo kill pressure'],
+        foe: ['Engage with Q (charge knockup)', 'Stack Frost (E) for a stun, farm and scale', 'Become a teamfight engage tank with R']
+      },
+      early: "Sejuani is a weak early laner with low damage — she wants to farm and scale into a teamfight tank. Her Q is a charge knockup (dodgeable) and her E stacks Frost for a stun, but in lane she can't out-trade you. Levels 1-3 your combo wins; dodge the Q, don't let her free-stack Frost on you, and bully her off CS.",
+      mid: "You win every 1v1. Her W cleaves and her passive adds true damage, but it's not enough to beat your sustain — out-trade her and keep her off farm. At 6 her R is a long-range engage stun for teamfights, not a button that wins the duel, so don't fear it in lane; just don't get chain-CC'd into her jungler.",
+      late: "Sejuani scales into a teamfight engage tank, but in the side lane she never beats you. Your Eclipse spike beats her low-damage frame, so press the lane and take her tower. The game becomes about her R engage in fights, not the 1v1 — which you own. Snowball your early edge before her tankiness matters.",
+      whys: [
+        "Sejuani is a weak early laner with low damage. Dodge her Q charge — your combo out-trades her.",
+        "Don't let her free-stack Frost (E) for the stun. Bully her off CS while she's weak.",
+        "Your combo out-trades her — force the trade, deny her farm.",
+        "You out-trade her through the mid-game. Her cleave + true damage can't beat your sustain.",
+        "Her R is a teamfight engage stun, not a duel button. You win the 1v1 — don't get chain-CC'd.",
+        "Your Eclipse spike beats a low-damage Sejuani. Snowball, take her tower.",
+        "She's a teamfight tank late — you own the lane 1v1. Press your early edge."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'lillia',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Skill', 'Aatrox', 'Lillia'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades her — W-pull catches her through the kite.' },
+        { when: 'Lvl 6', text: 'Don’t get put to sleep by her R (Dream-Laden Bough) chain-CC.' },
+        { when: '1st item', text: 'Your Eclipse spike beats a one-item Lillia — force it.' },
+        { when: '2+ items', text: 'Lillia takes over — AP on-hit + mobility kite and shred you.' }
+      ],
+      wants: {
+        you: ['Catch her with W-pull through her E dash + Q kite', 'All-in before her AP scaling comes online', 'Punish her after she commits her E dash'],
+        foe: ['Kite with Q (swirl) movement + E (dash + slow)', 'Stack passive burn and scale AP on-hit', 'Set up ganks / picks with R (sleep)']
+      },
+      early: "Lillia is a mobile AP skirmisher who kites — her Q (Blooming Blows) deals AOE and ramps her move speed, and her E (Watch Out!) is a dash + slow. She has no hard early trade; your combo out-trades her if you catch her. Levels 1-3, land W-pull to cancel her kite and lock her in your sweetspot, and don't whiff your combo chasing a dancing Lillia.",
+      mid: "Your window is catching her — bait or punish her E dash (she's committed after it), then W-pull and out-trade her. At 6 respect her R (Dream-Laden Bough): a delayed sleep that sets up a burst all-in or a gank, so don't get drowsy-then-slept in a bad spot. Keep her off farm; her whole game is scaling AP on-hit.",
+      late: "Lillia takes over at two items — AP on-hit damage plus her constant mobility let her kite and shred you while staying out of your sweetspot. The lane is even because you out-trade her early and she scales past you. Press your spike, land your W-pulls, and build a lead before her items flip the duel. Don't get slept and bursted.",
+      whys: [
+        "Lillia kites with Q move speed + E dash. W-pull cancels the kite — catch her and you out-trade.",
+        "She has no hard early trade. Don't whiff your combo chasing — wait for a clean W.",
+        "Your combo out-trades her once locked. Force the trade after her E dash is down.",
+        "Punish her after she commits E (she's stuck on the return). Land W first.",
+        "Her R is a delayed sleep that sets up burst or ganks — don't get slept in a bad spot.",
+        "Your Eclipse spike beats a one-item Lillia. Land W, force the all-in.",
+        "Two items in, AP on-hit + mobility kite and shred you. You own early — close before she scales."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'nautilus',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Dodge his Q (hook) — without it he can’t start a trade.' },
+        { when: 'Lvl 6', text: 'You win the 1v1; his R (single-target knockup) is a peel/pick tool.' },
+        { when: '1st item', text: 'Your Eclipse spike beats a low-damage Nautilus.' },
+        { when: 'Late', text: 'He’s a CC tank for teamfights; you own the lane 1v1.' }
+      ],
+      wants: {
+        you: ['Dodge his Q (Dredge Line hook) — it starts everything', 'Out-trade his low damage once the hook is down', 'Snowball — he’s a teamfight CC tank, not a duelist'],
+        foe: ['Hook you in with Q (Dredge Line)', 'Chunk with W (shield + bonus on-hit) + E (AOE)', 'Lock you down with R + passive root for a gank']
+      },
+      early: "Nautilus is a CC tank with low damage — his whole trade starts with the Q hook (Dredge Line). Dodge it and he has nothing; eat it and he gets a free W (shield + bonus damage) and E AOE on you. Levels 1-3, respect the hook from bush range, sidestep it, and once it's down your combo out-trades his low-damage frame.",
+      mid: "You win the 1v1. Without the hook he can't engage, and his W shield + E poke don't out-trade your sustain. At 6 his R is a single-target knockup — a pick/peel tool that's dangerous with a jungler around (his passive also roots), but in a straight duel it doesn't beat you. Dodge the hook, punish, and deny ganks by tracking his R.",
+      late: "Nautilus scales into a teamfight CC tank, but in lane the 1v1 is yours — he can't out-damage your sustain and his engage relies on the hook you dodge. Your Eclipse spike beats his low-damage frame. Press the lane, take his tower, and respect his R + jungler for picks, but never fear him one-on-one.",
+      whys: [
+        "Nautilus' trade starts with the Q hook. Dodge it from bush range and he has nothing.",
+        "Eat the hook and he gets a free W + E on you. Sidestep it — that's the whole matchup.",
+        "Once the hook is down your combo out-trades his low-damage frame. Force the trade.",
+        "You out-trade him — his W shield + E poke don't beat your sustain. Keep punishing.",
+        "His R is a single-target knockup pick/peel tool — dangerous with a jungler. You win the 1v1.",
+        "Your Eclipse spike beats a low-damage Nautilus. Take his tower, snowball.",
+        "He's a teamfight CC tank late — you own the lane 1v1. Respect his R for picks, not the duel."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'akshan',
+      win: ['Akshan', 'Akshan', 'Skill', 'Akshan', 'Skill', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Akshan pokes with Q + autos and swings around terrain — hard to catch.' },
+        { when: 'Lvl 6', text: 'His R sniper poke + roam pressure — don’t get picked stepping up.' },
+        { when: '1st item', text: 'Catch him with W-pull and he dies — but he’s slippery.' },
+        { when: 'Late', text: 'Tricky — he kites and roams; you only win when you land W.' }
+      ],
+      wants: {
+        you: ['Hug minions through his Q (boomerang) + auto poke', 'Catch him with W-pull when his E swing is down', 'Deny his roams — track him and punish the wave'],
+        foe: ['Poke with Q (Avengerang) + passive double-shot', 'Swing around terrain with E (Heroic Swing)', 'Roam and pick with R (Comeuppance sniper)']
+      },
+      early: "Akshan is a slippery ranged skirmisher — he pokes with Q (Avengerang, which returns) and autos, and his E (Heroic Swing) lets him swing off terrain to kite, dodge, and reposition around you. Levels 1-3 he out-ranges and out-mobilities you; hug your minions to limit the poke, don't chase his swing into open ground, and accept some chip. This is a tricky lane.",
+      mid: "Your only path is catching him — when his E swing is on cooldown, land W-pull and your combo deletes his squishy frame. The problem is he rarely gives that window: the swing resets and kites you constantly. Bait the E, then commit. At 6 his R (Comeuppance) is long-range execute-poke and a roam threat, so don't get caught stepping up, and track him when he leaves lane.",
+      late: "Tricky into late — Akshan kites with his swing and roams for picks with R, and you only win the exchange when you actually land W on him. Hug minions to deny free poke, close on his E cooldown, and punish his roams by taking the wave. If he swings freely he chips and escapes; your whole game is the one clean W-pull that catches him.",
+      whys: [
+        "Akshan pokes with Q + autos and swings around terrain. He out-ranges you — hug minions, take chip.",
+        "His E (Heroic Swing) kites and repositions off terrain. Don't chase it into open ground.",
+        "Brief window — if his swing is down, W-pull and punish. Otherwise he kites you.",
+        "He resets the swing constantly. Bait the E, then commit your combo when it's down.",
+        "His R is long-range execute-poke + a roam threat — don't get picked stepping up. Track him.",
+        "Catch him with W-pull and he dies — but he's slippery. Close on his E cooldown.",
+        "Tricky late — he kites and roams. You only win when you land W; deny his roams, hug minions."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'maokai',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Maokai', 'Maokai', 'Maokai'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Small window — all-in before his sustain + roots come online.' },
+        { when: 'Lvl 6', text: 'Maokai’s window — his R (root wave) + sapling sustain flip it.' },
+        { when: '1st item', text: 'He out-sustains and out-tanks you; you can’t crack him.' },
+        { when: 'Late', text: 'Maokai scales to a CC tank that out-sustains your DPS.' }
+      ],
+      wants: {
+        you: ['All-in early before his sustain + W root', 'Dodge his W (root) and the sapling (E) zone', 'Win early — you can’t out-tank a built Maokai'],
+        foe: ['Poke + sustain with E (saplings) and passive heal', 'Root you with W (Twisted Advance)', 'Out-tank you and lock you down with R (root wave)']
+      },
+      early: "Maokai is tank-favoured into bruisers like you — his passive heals him off spells, his E (saplings) pokes and zones, and his W (Twisted Advance) roots you for a free trade. Levels 1-3 are your only real window: all-in before his sustain and roots make him unkillable. Dodge the W root and don't path through his sapling zone.",
+      mid: "From 6 the lane tilts to him — his R (Nature's Grasp) is a long root wave that locks you for his combo, and his sapling + passive sustain out-heal your poke. You can't out-tank a Maokai who builds resistances and heals off every ability. Take trades only when his W is down, and never get rooted into a full combo.",
+      late: "Maokai scales into a CC tank that out-sustains your DPS and locks you down — resistances your AD can't punch through, plus two roots. The lane drifts to his. Your only path is winning the early before his sustain and items come online; if it goes even, you simply can't kill him, so play for tempo elsewhere and let your team handle late Maokai.",
+      whys: [
+        "Maokai heals off spells and zones with saplings. Level 1 is even — don't feed his sustain.",
+        "His W (Twisted Advance) roots you for a free trade. Dodge it; don't path through saplings.",
+        "Your small window: all-in before his sustain + roots make him unkillable.",
+        "He out-sustains your poke with saplings + passive. Trade only when his W is down.",
+        "His R (root wave) locks you for his combo — his window. Don't get rooted into a full trade.",
+        "He out-tanks and out-sustains you with resistances. You can't crack a built Maokai.",
+        "Maokai scales to a CC tank that out-sustains your DPS. Win early or play for tempo elsewhere."
       ]
     }
   ];

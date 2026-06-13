@@ -809,6 +809,18 @@
       </div>
     </div>
 
+    <!-- laner strip — popular champions scrolling, reverse direction -->
+    <div style="position:relative; overflow:hidden; border-bottom:1px solid rgba(255,255,255,0.05); background:rgba(10,12,18,0.45); padding:9px 0; margin-bottom:26px; -webkit-mask-image:linear-gradient(90deg, transparent, black 8%, black 92%, transparent); mask-image:linear-gradient(90deg, transparent, black 8%, black 92%, transparent);">
+      <div style="display:inline-flex; align-items:center; gap:24px; white-space:nowrap; animation:mc-marquee 50s linear infinite reverse; padding-left:24px;">
+        <sc-for list="{{ lanerStrip }}" as="ln" hint-placeholder-count="16">
+          <span style="display:inline-flex; align-items:center; gap:7px; flex:0 0 auto;">
+            <span data-champ-icon="{{ ln.name }}" style="flex:0 0 auto; width:24px; height:24px; border-radius:6px; background:#1c2030; border:1px solid rgba(255,255,255,0.12);"></span>
+            <span style="font-family:'Manrope',sans-serif; font-weight:700; font-size:12px; color:#aab0c2;">{{ ln.name }}</span>
+          </span>
+        </sc-for>
+      </div>
+    </div>
+
     <section style="max-width:1180px; margin:0 auto; padding:8px 28px 72px;">
       <sc-if value="{{ isStepRole }}" hint-placeholder-val="{{ true }}">
         <div style="text-align:center; margin-bottom:22px;">
@@ -2693,7 +2705,7 @@
             <div style="border-radius:11px; background:#11131c; border:1px solid rgba(255,255,255,0.07); padding:11px 13px;">
               <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:7px;">
                 <span style="font-family:'Chakra Petch',sans-serif; font-size:9.5px; letter-spacing:0.7px; color:#7d8499; font-weight:700;">{{ m.label }}</span>
-                <span style="font-family:'Chakra Petch',sans-serif; font-size:11.5px; font-weight:700; color:{{ m.col }};">{{ m.v }}/5</span>
+                <span style="font-family:'Chakra Petch',sans-serif; font-size:14px; font-weight:800; color:{{ m.col }};">{{ m.pct }}%</span>
               </div>
               <div style="height:6px; border-radius:99px; background:rgba(255,255,255,0.07); overflow:hidden; margin-bottom:6px;">
                 <div style="height:100%; width:{{ m.pct }}%; border-radius:99px; background:{{ m.col }};"></div>
@@ -6357,8 +6369,8 @@ class Component extends DCLogic {
           tone: intelRaw.tone || '#46c6f5', role: intelRaw.role || '', tags: intelRaw.tags || '', clearStyle: intelRaw.clearStyle || '', startLabel: intelRaw.startLabel || '', spike: intelRaw.spike || '', clearSpeed: intelRaw.clearSpeed || '', crit: (intelRaw.critFrom || '?') + '\u2013' + (intelRaw.critTo || '?'),
           meters: [
             { label: 'GANK PRESSURE', v: intelRaw.gank, max: 5, col: intelRaw.gank >= 4 ? '#ff5d6c' : intelRaw.gank >= 3 ? '#ff8b3d' : '#3ddc97', note: 'how hard they hunt lanes early' },
-            { label: 'INVADES YOU', v: intelRaw.invadeTend, max: 5, col: intelRaw.invadeTend >= 4 ? '#ff5d6c' : intelRaw.invadeTend >= 3 ? '#ff8b3d' : '#3ddc97', note: 'odds they walk into YOUR jungle' },
-            { label: 'INVADABLE', v: intelRaw.invadeVuln, max: 5, col: intelRaw.invadeVuln >= 4 ? '#3ddc97' : intelRaw.invadeVuln >= 3 ? '#e8b84b' : '#ff8b3d', note: 'how safely YOU can invade them' }
+            { label: 'THEY INVADE', v: intelRaw.invadeTend, max: 5, col: intelRaw.invadeTend >= 4 ? '#ff5d6c' : intelRaw.invadeTend >= 3 ? '#ff8b3d' : '#3ddc97', note: 'how often they walk into YOUR jungle' },
+            { label: 'THEY GET INVADED', v: intelRaw.invadeVuln, max: 5, col: intelRaw.invadeVuln >= 4 ? '#3ddc97' : intelRaw.invadeVuln >= 3 ? '#e8b84b' : '#ff8b3d', note: 'how safely YOU can invade them' }
           ].filter(function(m){ return m.v != null; }).map(function(m){ m.pct = Math.round((m.v / m.max) * 100); return m; }),
           invadeNote: intelRaw.invadeNote || '', foeUp: (foe || '').toUpperCase()
         } : null
@@ -6576,6 +6588,11 @@ class Component extends DCLogic {
           var p = t.m.split(' vs ');
           return { m: t.m, d: t.d, c: t.c, a: p[0], b: p[1] };
         });
+      })(),
+      // Second moving strip — popular laners scrolling across (portraits).
+      lanerStrip: (function(){
+        var laners = ['Aatrox', 'Darius', 'Garen', 'Fiora', 'Camille', 'Riven', 'Sett', 'Mordekaiser', 'Ahri', 'Zed', 'Yasuo', 'Yone', 'Sylas', 'Katarina', 'Syndra', 'Orianna', 'Caitlyn', 'Jinx', 'Jhin', 'Kai\'Sa', 'Ezreal', 'Lucian', 'Vayne', 'Draven', 'Thresh', 'Lulu', 'Leona', 'Nautilus', 'Morgana', 'Karma', 'Senna', 'Pyke'];
+        return laners.concat(laners).map(function(n){ return { name: n }; });
       })(),
       payOk: this.state.payOk, payErr: this.state.payErr, hasPayErr: !!this.state.payErr,
       dismissPay: () => this.setState({ payOk: false, payErr: '' }),

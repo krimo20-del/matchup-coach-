@@ -55,7 +55,7 @@
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
-  var SCALER = { vladimir: 1, kassadin: 1, nasus: 1, chogath: 1, camille: 1, vayne: 1, kayle: 1, ryze: 1, gangplank: 1, kled: 1, cassiopeia: 1 };
+  var SCALER = { vladimir: 1, kassadin: 1, nasus: 1, chogath: 1, camille: 1, vayne: 1, kayle: 1, ryze: 1, gangplank: 1, kled: 1, cassiopeia: 1, yorick: 1, akali: 1, gwen: 1, ksante: 1, yasuo: 1 };
   function diffFromWr(wr) { return wr >= 52.5 ? 'FAVOURED' : wr >= 48.5 ? 'EVEN' : wr >= 45.5 ? 'TRICKY' : 'HARD'; }
   function mirrorDiff(d) { return d === 'FAVOURED' ? 'TRICKY' : d === 'EVEN' ? 'EVEN' : 'FAVOURED'; }
   Object.keys(WR).forEach(function (champ) {
@@ -727,6 +727,266 @@
         "Your Eclipse spike crushes a low-stack Cho. Force the all-in, deny his farm.",
         "Two items in, stacked HP + true damage make him unkillable. You own early — end it first."
       ]
+    },
+    {
+      a: 'aatrox', b: 'drmundo',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 2–5', text: 'Your window — Mundo can’t fight back. Bully him off every CS.' },
+        { when: 'Lvl 6', text: 'Out-DPS his R heal — don’t let him reset and walk away.' },
+        { when: '1st item', text: 'Your Eclipse spike crushes a tanky-but-toothless Mundo.' },
+        { when: 'Late', text: 'He scales to a regen tank — bring grievous wounds; you won lane.' }
+      ],
+      wants: {
+        you: ['Bully his feeble early — he has no kill pressure', 'Deny CS and snowball before his HP scaling', 'Bring grievous wounds for his R + passive regen'],
+        foe: ['Throw cleavers (Q) and farm through your poke', 'Survive to his R heal and HP/regen scaling', 'Become a tanky cleaver-throwing frontliner']
+      },
+      early: "Dr. Mundo is one of your best lanes — he has zero kill pressure early and can only chuck cleavers (Q) while he farms. He literally cannot fight you levels 1-5. Bully him off the wave, deny CS, and start the snowball; the only thing he threatens is poking with Q, which your sustain laughs off.",
+      mid: "Keep stomping. Your combo out-damages and out-heals him through 6 — and when he ults (a big heal + move speed + AD), don't panic: out-DPS the heal and don't let him reset the fight and stroll away. Pick up grievous wounds (Executioner's/Bramble) so his regen stops mattering, then force the all-ins.",
+      late: "Mundo scales into a tanky, regen-heavy cleaver frontliner, but you won this lane in the first five levels. With antiheal his sustain is cut and your lead holds. Don't let a fed-from-elsewhere Mundo become a problem — close his tower and translate the early stomp to the map.",
+      whys: [
+        "Mundo has no early kill pressure — only cleaver (Q) poke. Step up and deny CS; he can't punish you.",
+        "Still toothless — your sustain eats his Q poke. Keep bullying him off the wave.",
+        "Your combo out-damages and out-heals him. Force trades; he can't fight back.",
+        "You stomp this window — deny CS relentlessly and snowball before his HP scaling.",
+        "His R is a big heal + AD — out-DPS it, don't let him reset and walk away. Bring grievous wounds.",
+        "Your Eclipse spike crushes a tanky-but-toothless Mundo. Take his tower.",
+        "He scales to a regen tank — antiheal keeps your lead. You won lane long ago; play the map."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'naafiri',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades her squishy, sustain-less kit.' },
+        { when: 'Lvl 6', text: 'Her all-in window (R packmates + W dash) — don’t be low when it’s up.' },
+        { when: '1st item', text: 'Your Eclipse spike deletes a one-item Naafiri — force it.' },
+        { when: 'Late', text: 'She’s a roaming assassin; you own the 1v1 — deny her roams.' }
+      ],
+      wants: {
+        you: ['Out-sustain her poke — she has no healing', 'Catch her with W-pull; she only has one dash out', 'Punish her squishy frame before she roams'],
+        foe: ['Poke with Q (packmate daggers) and stack damage', 'All-in with W + R when you’re low', 'Roam with R to snowball other lanes']
+      },
+      early: "Naafiri top is a squishy AD assassin with no sustain — exactly what your drain-tank style crushes. Her Q (packmate daggers) pokes and her W is a dash that deals burst, but she has to commit to trade, and your healing erases her poke. Don't get caught by a full Q-W combo at low HP, but otherwise farm and wait for your spike.",
+      mid: "From 3 your combo out-trades her — E in, W-pull, Q-sweetspot, and she has only one dash to escape. Her one real window is level 6: R summons extra packmates and gives her dashes for an all-in burst, so don't be sitting at low HP when it's up. Healthy, you out-sustain and out-duel her every time.",
+      late: "Naafiri becomes a roaming assassin who looks for picks across the map — but in a straight lane 1v1 you own her. Deny her roams by shoving and tracking her, punish her squishy frame whenever she steps up, and don't let her snowball off other lanes. The duel is never hers.",
+      whys: [
+        "Naafiri is squishy with no sustain. Her Q pokes but your healing erases it. Farm and wait.",
+        "She has to commit to trade. Don't eat a full W-Q at low HP; otherwise out-sustain the poke.",
+        "Your combo out-trades her — W-pull and she has one dash out. Force the trade.",
+        "You out-duel her healthy. Keep her honest and deny the roam-setup.",
+        "Her R (packmates + dashes) is a burst all-in — don't be low when it's up. Healthy, you win it.",
+        "Your Eclipse spike deletes a one-item Naafiri. Force the all-in, take her tower.",
+        "She's a roaming assassin late — you own the 1v1. Shove, track her, deny the picks."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'varus',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo punishes his squishy, escape-less frame.' },
+        { when: 'Lvl 6', text: 'His R (root chain) is his only peel — bait it, then all-in.' },
+        { when: '1st item', text: 'Your Eclipse spike deletes a one-item Varus — close it.' },
+        { when: 'Late', text: 'He’s a teamfight poke carry; you own the 1v1 — end lane early.' }
+      ],
+      wants: {
+        you: ['Walk through his poke — sustain beats Q/E chip', 'Bait his R (root) before you commit the all-in', 'Kill him before he scales into a poke carry'],
+        foe: ['Poke with Q (Piercing Arrow) + E (slow zone) from range', 'Stack W blight and kite back', 'Root you with R and scale to a teamfight carry']
+      },
+      early: "Varus top pokes with Q (Piercing Arrow) and his E slow-zone, but he's a squishy marksman with no dash — his only escape is the R root, which is a peel, not a getaway. Walk through the chip (your sustain heals it), hug your minions to dodge the charged Q, and wait to close the gap.",
+      mid: "Once you reach him he folds. E in, W-pull, Q-sweetspot — he can't kite a healing juggernaut sitting on top of him. His one defensive tool is R (a root chain): bait it or eat it on the way in, and once it's down he's dead. Don't all-in into a held R, but the moment it's gone, commit.",
+      late: "Varus scales into a teamfight poke/DPS carry, but he never wins the lane 1v1 — your sustain and gap-close beat his entire kit. End the lane early so his scaling never matters, deny his CS, and don't let him farm safely into relevance. The duel is always yours.",
+      whys: [
+        "Varus pokes with Q + E but has no dash. Your sustain heals the chip — hug minions, dodge the charged Q.",
+        "He kites with the E slow, not an escape. Walk it down; your healing out-paces his poke.",
+        "Your combo punishes his squishy frame — W-pull and he can't kite you. Force the trade.",
+        "You own the gap-close. Keep walking him down; his poke can't out-damage your sustain.",
+        "His R root is his only peel — bait it or eat it on entry, then all-in once it's down.",
+        "Your Eclipse spike deletes a one-item Varus. Close the lane, take his tower.",
+        "He's a teamfight poke carry late — you own the 1v1. End lane early so his scaling never matters."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'poppy',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-damages her low base damage — out-trade her.' },
+        { when: 'Lvl 6', text: 'Her R can knock you away — don’t get walled, but you out-DPS her.' },
+        { when: '1st item', text: 'Your Eclipse spike beats her — she has no kill threat.' },
+        { when: 'Late', text: 'She’s a tanky peeler; you won the 1v1 lane.' }
+      ],
+      wants: {
+        you: ['Out-trade her low damage with your combo', 'Stand off walls so her E (stun) can’t pin you', 'Win the lane she can’t kill you in'],
+        foe: ['Stun you into a wall with E (Heroic Charge)', 'Stop your E dash with her W passive', 'Scale to a tanky teamfight peeler']
+      },
+      early: "Poppy is durable and annoying but deals low damage — she can't actually kill you. Her threats are positional: E (Heroic Charge) stuns you if it slams you into a wall, and her W passive grounds you and can stop your E dash if you're next to her. Stand away from terrain, farm, and don't feed her the wall-stun.",
+      mid: "Your sustain and combo simply out-damage her. Trade freely when you're not near a wall — she has no way to win the damage race. Watch her W when you go to E-dash in (it can cancel the dash), so close with care, but once you're on her, Q-sweetspot and W-pull grind her down. Her low kill pressure means you can play aggressive.",
+      late: "Poppy scales into a tanky teamfight peeler with a big R disengage, but the lane 1v1 was never hers — she can't out-damage your sustain. You won this lane; convert it. Don't get caught next to a wall in a side-lane skirmish, but otherwise you hold the edge all game in the duel.",
+      whys: [
+        "Poppy deals low damage and can't kill you. Stand off walls so her E can't stun you. Farm freely.",
+        "Her threats are positional, not damage. Out-trade her with your combo away from terrain.",
+        "Your combo out-damages her — Q-sweetspot, W-pull. She has no answer in the damage race.",
+        "You out-trade her easily. Mind her W canceling your E-dash, but press the aggression.",
+        "Her R can knock you off, but she can't out-DPS you. Don't get walled; otherwise you win.",
+        "Your Eclipse spike beats her — she has no kill threat. Take tower.",
+        "She's a tanky peeler late — you won the 1v1. Don't get wall-stunned in side lane; hold your edge."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'yorick',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Yorick'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades him before Maiden — punish him now.' },
+        { when: 'Lvl 6', text: 'Maiden (R) ramps his sustained damage — don’t fight in his ghoul wall.' },
+        { when: '1st item', text: 'Your Eclipse spike beats him 1v1 — force it off his cage cooldown.' },
+        { when: '2+ items', text: 'Yorick takes over — Maiden + ghouls out-DPS you in extended fights.' }
+      ],
+      wants: {
+        you: ['All-in before Maiden and ghouls are online', 'Bait his W (cage) — don’t get trapped mid-fight', 'Burst him 1v1 before his sustained ghoul DPS'],
+        foe: ['Wall you in with W (cage) and pile on ghouls', 'Ramp sustained damage with Maiden (R)', 'Out-DPS you late and splitpush with Maiden']
+      },
+      early: "Yorick out-sustains and out-DPSes you in a long fight once his ghouls and Maiden are up, so your edge is the early game before that. Levels 1-3 your raw combo out-trades him — punish him while he's just a melee juggernaut with mist ghouls (E mark + W). Don't let him free-farm into his power spike.",
+      mid: "His W (Dark Procession) is a ghoul cage that traps you mid-fight — never all-in when it's up, and bait it before you commit. At 6 his Maiden (R) ramps his sustained damage hard, so don't sit in a wall of ghouls trading; pick your moment when his cage is down and burst him 1v1, where your combo still wins.",
+      late: "Yorick takes over in the extended fight — Maiden plus a full ghoul pack out-DPS your sustain, and he'll splitpush with Maiden's pressure. The lane is favoured because you crush the early; press it, deny his farm, and end it before his 2-item Maiden setup out-grinds you. Don't get caged in a side lane late.",
+      whys: [
+        "Yorick is just a melee juggernaut early. Your combo out-trades him before Maiden — punish now.",
+        "Don't let him free-farm to his spike. Trade while he's only got mist ghouls.",
+        "Your full combo out-trades a pre-Maiden Yorick. Force the trade, deny his setup.",
+        "Keep punishing — every level before 6 is your window. Bait his W cage before committing.",
+        "Maiden (R) ramps his sustained DPS. Don't trade in a ghoul wall; burst him 1v1 off cage cooldown.",
+        "Your Eclipse spike beats him 1v1. Force the all-in when his cage is down.",
+        "Two items in, Maiden + ghouls out-DPS your sustain. You own early — end it before his scaling."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'rumble',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Close the gap — your combo beats his short-range flamespitter.' },
+        { when: 'Lvl 6', text: 'Dodge his R (Equalizer) zone — don’t fight inside the fire.' },
+        { when: '1st item', text: 'Your Eclipse spike beats his — force the all-in.' },
+        { when: 'Late', text: 'You hold the edge — out-sustain his magic poke if you close.' }
+      ],
+      wants: {
+        you: ['Close the gap past his shield (W) and slow (E)', 'Dodge his R (Equalizer) fire zone', 'Out-sustain his Q flamespitter poke'],
+        foe: ['Poke with Q (Flamespitter) in his Heat window', 'Kite with W (shield + MS) and E (harpoon slow)', 'Zone you with R (Equalizer) and overheat burst']
+      },
+      early: "Rumble pokes with his Q (Flamespitter) — strong when he's in the Heat/Danger Zone — and kites with W (shield + move speed) and E (harpoon slow). Your job is to close the gap: his damage is all short-range AP, and once you're on him with your sustain, his squishy frame loses. Walk through the poke behind minions and force him to use W early.",
+      mid: "Once you stick to him he can't escape your combo. Bait his W shield/MS, eat the E slow on the way in, then E-W-Q and out-sustain the flamespitter. At 6 respect his R (The Equalizer) — a long fire zone that zones and burns — don't fight inside it, and don't let an overheated Rumble dump full burst on you in the fire. Close on his cooldowns.",
+      late: "You hold the matchup — Rumble is a kite-and-poke AP fighter, and your sustain + gap-close beat him whenever you reach him. Your Eclipse spike beats his first item. Keep forcing the gap-close, deny the kite, and respect only his R zone in skirmishes. If you close, you win; if he kites freely, you stall — so make him fight.",
+      whys: [
+        "Rumble's Q flamespitter pokes but it's short-range AP. Walk through it behind minions and close the gap.",
+        "He kites with W (shield + MS) and E (slow). Bait the W early, then commit when it's down.",
+        "Your combo beats his squishy frame once you stick. Eat the E slow, E-in, force the trade.",
+        "Stick to him — he can't escape your combo. Out-sustain the flamespitter and grind him down.",
+        "His R (Equalizer) is a fire zone — don't fight inside it. Dodge it, then all-in on the clean ground.",
+        "Your Eclipse spike beats his. Force the all-in when his W is down.",
+        "You hold the edge late — out-sustain his poke if you close. Make him fight; don't let him kite free."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'akali',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Akali'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades her squishy, sustain-less early.' },
+        { when: 'Lvl 6', text: 'Her all-in spikes with R (two dashes) — don’t be low when it’s up.' },
+        { when: '1st item', text: 'Your Eclipse spike beats a one-item Akali — force it.' },
+        { when: '2+ items', text: 'Akali takes over — her assassin item spikes out-burst you.' }
+      ],
+      wants: {
+        you: ['Out-sustain her Q poke — she has no healing', 'Punish her in/around shroud (W) — your pull is positional', 'Kill her before her assassin item spikes'],
+        foe: ['Poke with Q and hide in W (shroud) to reset', 'All-in with E + R dashes at level 6', 'Scale into a burst assassin with item spikes']
+      },
+      early: "Akali is a slippery AP assassin but squishy with no sustain — your drain-tank style beats her in a straight lane. Her Q pokes and her W (Twilight Shroud) gives invisibility to dodge and reset, but she can't out-trade your healing. Don't waste your combo chasing her into shroud; farm, and punish when she steps up to poke.",
+      mid: "From 3 you out-trade her — your W-pull is a positional zone, not a target lock, so it can still catch her near shroud, and once you land it she's in your Q-sweetspot with only E to escape. Her real spike is level 6: R gives her two dashes for an all-in burst, so don't be low when it's up. Healthy, your sustain out-lasts her combo.",
+      late: "Akali scales into a high-burst assassin — at two items her combo can delete you before your sustain matters, and she roams for picks. The lane is favoured because you crush her early and mid; press it, deny her farm, and build a lead before her item spikes flip the duel. Don't get caught low with her R up.",
+      whys: [
+        "Akali is squishy with no sustain. Her Q pokes but can't beat your healing. Farm and wait.",
+        "Don't chase her into shroud (W). Punish her when she steps up to trade.",
+        "Your combo out-trades her — W-pull is positional, it catches her near shroud. Force the trade.",
+        "You out-duel her healthy. Keep her off farm; deny the roam setup.",
+        "Her R gives two dashes for an all-in burst — don't be low when it's up. Healthy, you win.",
+        "Your Eclipse spike beats a one-item Akali. Force the all-in, take her tower.",
+        "Two items in her assassin spikes out-burst you. You own early-mid — end it before she scales."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'gwen',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Gwen'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades her weak early — punish before she scales.' },
+        { when: 'Lvl 6', text: 'Don’t chase her into W (mist) — you can’t hit her from outside it.' },
+        { when: '1st item', text: 'Your Eclipse spike beats a one-item Gwen — force it now.' },
+        { when: '2+ items', text: 'Gwen takes over — her AP scaling + true damage shred you.' }
+      ],
+      wants: {
+        you: ['All-in early before her item scaling', 'Don’t chase her into the W (mist) — fight her outside it', 'Win the lane before her two-item spike'],
+        foe: ['Hide in W (mist) — untargetable from outside', 'Poke with Q (true damage) and scale', 'Out-scale into an AP bruiser that shreds tanks']
+      },
+      early: "Gwen has a weak early game and scales into a tank-shredding AP bruiser, so your window is now. Levels 1-3 your combo out-trades her — punish her before she gets going. Her Q deals true damage on the final snip and her E gives attack speed + a dash, but early she can't match your trade. Deny her farm and force the issue.",
+      mid: "Her W (Hallowed Mist) is the key — inside it she's untargetable to anything from outside the cloud, so don't chase her into it; you'll just whiff your combo. Force her to fight outside the mist, where your sustain and W-pull win. Keep her off CS — every minion she misses delays the scaling that beats you.",
+      late: "Gwen takes over at two items — her AP scaling and true damage shred even a tanky Aatrox, and her W keeps her safe while she snips you down. The lane is favoured because you crush the early; you must build a lead before her spike. If it goes even into the mid-game, her scaling flips the duel — so close it fast.",
+      whys: [
+        "Gwen is weak early and scales hard. Your combo out-trades her now — punish before she gets going.",
+        "Her Q true damage + E dash come online, but she can't match your early trade. Deny her farm.",
+        "Your full combo out-trades a weak-early Gwen. Force the all-in, take CS off her.",
+        "Keep her off farm — every missed minion delays her scaling. Out-trade her outside the mist.",
+        "Her W (mist) makes her untargetable from outside — don't chase in. Fight her on open ground.",
+        "Your Eclipse spike beats a one-item Gwen. Force it now, before her two-item spike.",
+        "Two items in, her AP + true damage shred you. You own early — close the lane before she scales."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'ksante',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', "K'Sante"],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades a pre-item K’Sante — punish him now.' },
+        { when: 'Lvl 6', text: 'His R (All Out) turns him into a duelist — respect the burst window.' },
+        { when: '1st item', text: 'Your Eclipse spike beats him before he’s tanky — force it.' },
+        { when: '2+ items', text: 'K’Sante takes over — tanky stance + items out-sustain you.' }
+      ],
+      wants: {
+        you: ['All-in before his items make him tanky', 'Bait his W (block) — don’t feed it your burst', 'Punish him outside his R duel form'],
+        foe: ['Block your combo with W (damage reduction)', 'Knock you with Q and dash with E', 'Pop R (All Out) to duel, or stay tanky to scale']
+      },
+      early: "K'Sante is weak before items and scales into a tanky skirmisher, so your edge is the early game. Levels 1-3 your combo out-trades him — his Q is a knockback, his E a dash + shield, but he can't match your raw trade yet. His W blocks damage and reduces it (and can interrupt), so don't dump your burst into a held W; bait it first.",
+      mid: "His big spike is R (All Out): he sheds tankiness to become a high-damage duelist with extra dashes, so respect that burst window — don't all-in a fresh R at low HP. Outside of it, your sustain out-trades his tankier stance. Bait his W block, then commit your combo, and keep him off the items that make him unkillable.",
+      late: "K'Sante takes over at two items — his tank stance plus item sustain out-grinds you, and his R lets him pick the duel terms. The lane is favoured because you crush him early; press it, deny his farm, and build a lead before his scaling. If it reaches late even, his tankiness and R flip the side-lane 1v1.",
+      whys: [
+        "K'Sante is weak pre-item. Your combo out-trades him now — punish before he scales.",
+        "His Q knocks back and E dashes + shields, but he can't match your early trade. Force it.",
+        "Your full combo out-trades a pre-item K'Sante. Bait his W block, then commit.",
+        "Keep punishing — deny his farm so his item spikes come late. Trade on his W cooldown.",
+        "His R (All Out) makes him a burst duelist — respect it at low HP. Outside R, you out-trade him.",
+        "Your Eclipse spike beats him before he's tanky. Force the all-in, take his tower.",
+        "Two items in, tank stance + items out-sustain you. You own early — end it before his scaling."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'yasuo',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Yasuo'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades him — W-pull catches him through his dashes.' },
+        { when: 'Lvl 6', text: 'He needs a knockup for R — deny the setup, you out-sustain his burst.' },
+        { when: '1st item', text: 'Your Eclipse spike beats a one-item Yasuo — force it.' },
+        { when: '2+ items', text: 'Yasuo takes over — crit item spikes out-DPS your sustain.' }
+      ],
+      wants: {
+        you: ['Catch him with W-pull through his E dashes', 'Out-sustain his shield-and-poke trades', 'Win before his crit item spikes (2 items)'],
+        foe: ['Poke with Q tornado and dash on minions (E)', 'Shield your trades with his passive', 'Scale into a crit hypercarry at 2 items']
+      },
+      early: "Yasuo dashes around with E (through minions) and pokes with Q, and his passive shield blunts your poke — but he's melee-range and your W-pull is a positional lock he can't dash out of once it lands. His windwall (W) mostly doesn't matter against you since your Q is melee, not a projectile. Farm, and look to catch him stepping up for CS.",
+      mid: "From 3 you out-trade him — land W to cancel his mobility, then Q-sweetspot through his shield; your sustain out-lasts his trade. At 6 his R needs a knockup to use, which he lacks solo, so deny him a setup and he has no burst all-in. Healthy, you win every duel; just don't let him free-poke you down with Q from range.",
+      late: "Yasuo scales into a crit hypercarry — at two items (IE + crit) his DPS out-paces your sustain and the duel flips. The lane is favoured because you out-trade his early and mid; press it, deny his farm, and build a lead before his crit spike. If it goes even into late, his items take over the 1v1 — so close it.",
+      whys: [
+        "Yasuo dashes with E and pokes with Q, but your W-pull locks him — he can't dash out once it lands.",
+        "His windwall barely matters vs your melee Q. Farm and catch him stepping up for CS.",
+        "Your combo out-trades him — W to cancel mobility, Q-sweetspot through his shield. Force it.",
+        "You out-duel him healthy. Don't let him free-poke with Q; close and trade on your terms.",
+        "His R needs a knockup he lacks solo — deny the setup and he has no all-in. You out-sustain his burst.",
+        "Your Eclipse spike beats a one-item Yasuo. Force the all-in before his crit spike.",
+        "Two items in (IE + crit) he out-DPS your sustain. You own early-mid — close before he scales."
+      ]
     }
   ];
   window.MC_MATCHUP_EXTRA = window.MC_MATCHUP_EXTRA || {};
@@ -744,6 +1004,13 @@
         var i = stageIdx(p.label); if (i < 0) return;
         if (c.win && c.win[i]) p.side = c.win[i];   // keep windows locked to the whys
         if (c.whys && c.whys[i]) p.why = c.whys[i];
+      });
+      // Mirror the favour-timeline SIDE onto the reverse matchup so b-vs-a shows the
+      // same windows (win[] uses absolute display names, so it reads correctly from
+      // either page). Whys/breakdown stay a-perspective on the a-vs-b page only.
+      var rev = F[c.b] && F[c.b][c.a];
+      if (rev && rev.phases && c.win) rev.phases.forEach(function (p) {
+        var i = stageIdx(p.label); if (i >= 0 && c.win[i]) p.side = c.win[i];
       });
     });
   }

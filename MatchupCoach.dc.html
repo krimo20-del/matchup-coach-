@@ -761,11 +761,17 @@
       </div>
 
       <div style="margin:34px auto 0; max-width:740px; display:flex; align-items:center; gap:8px; background:#10141f; border:1px solid rgba(255,255,255,0.09); border-radius:16px; padding:8px; flex-wrap:wrap; box-shadow:0 24px 56px -30px rgba(0,0,0,0.95);">
-        <input placeholder="Enter your champion" style="flex:1 1 190px; min-width:150px; padding:13px 15px; border-radius:11px; border:1px solid rgba(255,255,255,0.07); background:#0b0e16; color:#ece7e1; font-size:14px; font-family:'Manrope',sans-serif; outline:none;">
+        <input value="{{ heroYou }}" onChange="{{ setHeroYou }}" onKeyDown="{{ heroKey }}" list="mc-champs" placeholder="Enter your champion" style="flex:1 1 190px; min-width:150px; padding:13px 15px; border-radius:11px; border:1px solid rgba(255,255,255,0.07); background:#0b0e16; color:#ece7e1; font-size:14px; font-family:'Manrope',sans-serif; outline:none;">
         <span style="flex:0 0 auto; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:13px; color:#f0cd72; padding:0 4px;">VS</span>
-        <input placeholder="Enter enemy champion" style="flex:1 1 190px; min-width:150px; padding:13px 15px; border-radius:11px; border:1px solid rgba(255,255,255,0.07); background:#0b0e16; color:#ece7e1; font-size:14px; font-family:'Manrope',sans-serif; outline:none;">
-        <button onClick="{{ openPaywall }}" style="flex:0 0 auto; padding:13px 20px; border-radius:11px; border:none; background:linear-gradient(180deg,#46c6f5,#2a9fd6); color:#06121a; font-weight:700; font-size:14px; cursor:pointer; font-family:'Manrope',sans-serif; white-space:nowrap;" style-hover="background:linear-gradient(180deg,#5fd2ff,#34a8e0);">Analyze Matchup</button>
+        <input value="{{ heroFoe }}" onChange="{{ setHeroFoe }}" onKeyDown="{{ heroKey }}" list="mc-champs" placeholder="Enter enemy champion" style="flex:1 1 190px; min-width:150px; padding:13px 15px; border-radius:11px; border:1px solid rgba(255,255,255,0.07); background:#0b0e16; color:#ece7e1; font-size:14px; font-family:'Manrope',sans-serif; outline:none;">
+        <button onClick="{{ heroGo }}" style="flex:0 0 auto; padding:13px 20px; border-radius:11px; border:none; background:linear-gradient(180deg,#46c6f5,#2a9fd6); color:#06121a; font-weight:700; font-size:14px; cursor:pointer; font-family:'Manrope',sans-serif; white-space:nowrap;" style-hover="background:linear-gradient(180deg,#5fd2ff,#34a8e0);">Analyze Matchup</button>
       </div>
+      <datalist id="mc-champs">
+        <sc-for list="{{ champPool }}" as="cn" hint-placeholder-count="20"><option value="{{ cn }}"></option></sc-for>
+      </datalist>
+      <sc-if value="{{ hasHeroErr }}" hint-placeholder-val="{{ false }}">
+        <div style="margin:10px auto 0; max-width:740px; font-size:12.5px; font-weight:700; color:#ff8b96;">{{ heroErr }}</div>
+      </sc-if>
       <div style="margin-top:12px; font-size:12.5px; color:#7d8499;">Free showcase matchups below — no signup required ↓</div>
       </div>
     </section>
@@ -951,9 +957,20 @@
           </div>
         </div>
 
-        <!-- VS -->
-        <div style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; padding:0 6px; position:relative; z-index:3;">
+        <!-- VS + estimated head-to-head win rate -->
+        <div style="flex:0 0 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; padding:0 6px; position:relative; z-index:3;">
           <div style="width:62px; height:62px; border-radius:50%; background:linear-gradient(140deg,#241a0e,#120d07); border:1px solid rgba(232,184,75,0.4); display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:19px; color:#f0cd72; box-shadow:0 0 0 8px rgba(11,9,8,0.7), 0 10px 30px -8px rgba(0,0,0,0.85);">VS</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding:7px 11px; border-radius:11px; background:rgba(11,9,8,0.85); border:1px solid rgba(255,255,255,0.14); box-shadow:0 8px 24px -8px rgba(0,0,0,0.8);">
+            <div style="font-family:'Chakra Petch',sans-serif; font-size:8.5px; letter-spacing:1.1px; color:#8a90a2; font-weight:700; white-space:nowrap;">EST. WIN RATE</div>
+            <div style="display:flex; align-items:center; gap:7px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; white-space:nowrap;">
+              <span style="color:{{ wrATone }};">{{ wrA }}</span>
+              <span style="color:#5a6072; font-size:10px;">vs</span>
+              <span style="color:{{ wrBTone }};">{{ wrB }}</span>
+            </div>
+            <div style="width:92px; height:5px; border-radius:99px; overflow:hidden; background:{{ wrBTone }}55; display:flex;">
+              <span style="width:{{ wrAPct }}%; background:{{ wrATone }}; border-radius:99px 0 0 99px;"></span>
+            </div>
+          </div>
         </div>
 
         <!-- Champion B -->
@@ -1841,6 +1858,7 @@
       <div style="display:flex; align-items:center; gap:11px; margin-bottom:6px; flex-wrap:wrap;">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7fe3b8" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"></path><path d="M9 3v15M15 6v15"></path></svg>
         <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:21px;">Enemy Jungle — Tracking Cheat Sheet</span>
+        <span style="padding:4px 11px; border-radius:8px; background:rgba(255,93,108,0.14); border:1px solid rgba(255,93,108,0.45); font-family:'Chakra Petch',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.8px; color:#ff8b96;">PICK THE ENEMY JUNGLER ↓</span>
       </div>
       <div style="font-size:12.5px; color:#8a90a2; margin-bottom:10px;">Pick the enemy jungler — full roster, every role. Get their leashless start, clear path, gank-risk level, and the exact window they show up top. <b style="color:#aab0c2;">Dot colour = early gank risk.</b></div>
       <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:9px; background:rgba(232,184,75,0.08); border:1px solid rgba(232,184,75,0.3); margin-bottom:14px;">
@@ -2054,6 +2072,7 @@
         <div style="display:flex; align-items:center; gap:11px; margin-bottom:6px; flex-wrap:wrap;">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#46c6f5" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:19px;">Your Jungler — Invade Risk &amp; Gank Sync</span>
+          <span style="padding:4px 11px; border-radius:8px; background:rgba(70,198,245,0.14); border:1px solid rgba(70,198,245,0.45); font-family:'Chakra Petch',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.8px; color:#7cc8e8;">PICK YOUR JUNGLER ↓</span>
         </div>
         <div style="font-size:12.5px; color:#8a90a2; margin-bottom:14px;">Pick YOUR jungler — see how invadable their first clear is against this enemy, and how to chain your CC with their ganks. <b style="color:#aab0c2;">Dot colour = how invadable they are early.</b></div>
 
@@ -3126,6 +3145,7 @@ class Component extends DCLogic {
     authMode: 'login', auName: '', auPass: '', auPass2: '', auShowPw: false, auRemember: true, auErr: '', auNotice: '', auBusy: false,
     pendingPlan: '', plan: 'all', planRole: 'top', planChamp: 'Aatrox', coStyle: 'embedded',
     founders: null, serverWeek: null, pendingMU: null, googleClientId: null,
+    heroYou: '', heroFoe: '', heroErr: '',
     cdNum: '', cdExp: '', cdCvc: '', cdName: '', cdErr: '', coBusy: false, coDone: false
   };
 
@@ -3135,6 +3155,10 @@ class Component extends DCLogic {
       if (rawSess) this.setState({ user: JSON.parse(rawSess) });
     } catch (e) {}
     if (window.CHAMP_ART) window.CHAMP_ART.onReady(() => this.forceUpdate());
+    // Back/forward buttons walk the app's own views instead of leaving the site.
+    try { history.replaceState({ mc: { view: 'home', homeStep: 'role', role: '', myChamp: '', enemyChamp: '', matchup: 'mid', authMode: 'login', plan: 'all' } }, ''); } catch (e) {}
+    this._onPop = (e) => { if (e.state && e.state.mc) { this.setState(e.state.mc); window.scrollTo(0, 0); } };
+    window.addEventListener('popstate', this._onPop);
     if (window.MC_API) window.MC_API.available().then(ok => {
       if (!ok) return;
       // Server is authoritative: live founder ladder, weekly rotation index,
@@ -3182,7 +3206,7 @@ class Component extends DCLogic {
       });
     }, 1000);
   }
-  componentWillUnmount() { clearInterval(this._t); clearInterval(this._gsi); }
+  componentWillUnmount() { clearInterval(this._t); clearInterval(this._gsi); window.removeEventListener('popstate', this._onPop); }
 
   // ---- accounts / checkout ----
   _accts() { try { return JSON.parse(localStorage.getItem('mc_accounts') || '{}'); } catch (e) { return {}; } }
@@ -3194,7 +3218,7 @@ class Component extends DCLogic {
       else { sessionStorage.setItem('mc_session', raw); localStorage.removeItem('mc_session'); }
     } catch (e) {}
   }
-  openAuth(mode, notice) { this.setState({ view: 'auth', authMode: mode || 'login', auErr: '', auNotice: notice || '', auPass: '', auPass2: '' }); window.scrollTo(0, 0); }
+  openAuth(mode, notice) { this.setState({ view: 'auth', authMode: mode || 'login', auErr: '', auNotice: notice || '', auPass: '', auPass2: '' }); this._top(); this._nav(); }
   authSwitch(mode) { this.setState({ authMode: mode, auErr: '', auNotice: '' }); }
   // API-first auth: when the backend answers /api/health the server owns
   // accounts/sessions; otherwise fall back to the localStorage demo store
@@ -3420,7 +3444,7 @@ class Component extends DCLogic {
     if (!/[.!?]$/.test(t)) t += '.';
     return t;
   }
-  openDemo(m) { this.setState({ view: 'demo', matchup: m, level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); window.scrollTo(0, 0); }
+  openDemo(m) { this.setState({ view: 'demo', matchup: m, level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); this._top(); this._nav(); }
   // Launch gate: the full catalog is free but requires an account. Signed-out
   // users hitting any matchup are sent to signup; pendingMU resumes them into
   // the exact matchup they wanted after auth.
@@ -3437,16 +3461,61 @@ class Component extends DCLogic {
     else this.openGen(mu.role, mu.you, mu.enemy);
     return true;
   }
-  openGen(role, you, enemy) { if (this._gated({ kind: 'gen', role: role, you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: role, myChamp: you, enemyChamp: enemy, matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, search: '', cds: { Q: 0, W: 0, E: 0, R: 0 } }); window.scrollTo(0, 0); }
-  openJg(you, enemy) { if (this._gated({ kind: 'jg', you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: 'jungle', myChamp: you, enemyChamp: enemy, matchup: 'gen', search: '' }); window.scrollTo(0, 0); }
-  goHome() { this.setState({ view: 'home', homeStep: 'role', role: '', myChamp: '', enemyChamp: '', search: '', enemyJg: '' }); window.scrollTo(0, 0); }
+  openGen(role, you, enemy) { if (this._gated({ kind: 'gen', role: role, you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: role, myChamp: you, enemyChamp: enemy, matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, search: '', cds: { Q: 0, W: 0, E: 0, R: 0 } }); this._top(); this._nav(); }
+  openJg(you, enemy) { if (this._gated({ kind: 'jg', you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: 'jungle', myChamp: you, enemyChamp: enemy, matchup: 'gen', search: '' }); this._top(); this._nav(); }
+  // Scroll to top reliably: immediately AND after the (heavy) re-render lands.
+  _top() {
+    window.scrollTo(0, 0);
+    setTimeout(function(){ window.scrollTo(0, 0); }, 80);
+    setTimeout(function(){ window.scrollTo(0, 0); }, 350);
+  }
+  // Browser-history integration: every major view change pushes a snapshot so
+  // the Back button walks the app instead of leaving the site.
+  _pushNav() {
+    var s = this.state;
+    try { history.pushState({ mc: { view: s.view, homeStep: s.homeStep, role: s.role, myChamp: s.myChamp, enemyChamp: s.enemyChamp, matchup: s.matchup, authMode: s.authMode, plan: s.plan } }, ''); } catch (e) {}
+  }
+  _nav() { setTimeout(() => this._pushNav(), 0); }
+  // All champions across every roster (cached) — powers autocomplete + the
+  // hero analyze box.
+  _allChamps() {
+    if (this._champPool) return this._champPool;
+    var pool = [], R = window.ROSTERS || {};
+    for (var role in R) (R[role] || []).forEach(g => g.c.forEach(n => { if (pool.indexOf(n) === -1) pool.push(n); }));
+    pool.sort();
+    if (pool.length) this._champPool = pool;
+    return pool;
+  }
+  _resolveChamp(q) {
+    q = (q || '').trim().toLowerCase();
+    if (!q) return null;
+    var pool = this._allChamps();
+    var qs = q.replace(/[^a-z0-9]/g, '');
+    for (var i = 0; i < pool.length; i++) { if (pool[i].toLowerCase() === q || pool[i].toLowerCase().replace(/[^a-z0-9]/g, '') === qs) return pool[i]; }
+    var pre = pool.filter(function(n){ return n.toLowerCase().indexOf(q) === 0; });
+    return pre.length ? pre[0] : null;
+  }
+  heroAnalyze() {
+    var a = this._resolveChamp(this.state.heroYou), b = this._resolveChamp(this.state.heroFoe);
+    if (!a || !b) { this.setState({ heroErr: 'Type both champions and pick them from the suggestions — then hit Analyze.' }); return; }
+    this.setState({ heroErr: '' });
+    var R = window.ROSTERS || {}, lanes = ['top', 'mid', 'bot', 'support'], role = null;
+    for (var i = 0; i < lanes.length; i++) {
+      var pool = (R[lanes[i]] || []).reduce(function(acc, g){ return acc.concat(g.c); }, []);
+      if (pool.indexOf(a) >= 0 && pool.indexOf(b) >= 0) { role = lanes[i]; break; }
+    }
+    if (!role && window.JG_DB && window.JG_DB[a]) { this.openJg(a, (window.JG_DB[a][b] ? b : Object.keys(window.JG_DB[a])[0])); return; }
+    if (!role) for (var k = 0; k < lanes.length; k++) { var p2 = (R[lanes[k]] || []).reduce(function(acc, g){ return acc.concat(g.c); }, []); if (p2.indexOf(a) >= 0) { role = lanes[k]; break; } }
+    this.openGen(role || 'top', a, b);
+  }
+  goHome() { this.setState({ view: 'home', homeStep: 'role', role: '', myChamp: '', enemyChamp: '', search: '', enemyJg: '' }); this._top(); this._nav(); }
   setJg(k) { this.setState(s => ({ enemyJg: s.enemyJg === k ? '' : k })); }
   setMyJg(k) { this.setState(s => ({ myJg: s.myJg === k ? '' : k })); }
   openPaywall() { this.setState({ showPaywall: true }); }
   closePaywall() { this.setState({ showPaywall: false }); }
   setRole(r) { this.setState({ role: r, homeStep: 'you', search: '' }); }
   pickYou(c) { this.setState({ myChamp: c, homeStep: 'enemy', search: '' }); }
-  pickEnemy(c) { if (this._gated({ kind: 'pick', enemy: c })) return; this.setState({ enemyChamp: c, view: 'demo', matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); window.scrollTo(0, 0); }
+  pickEnemy(c) { if (this._gated({ kind: 'pick', enemy: c })) return; this.setState({ enemyChamp: c, view: 'demo', matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); this._top(); this._nav(); }
   backStep() { this.setState(s => ({ homeStep: s.homeStep === 'enemy' ? 'you' : 'role', search: '' })); }
   setSearch(e) { this.setState({ search: e.target.value }); }
   setLevel(l) { this.setState({ level: l }); }
@@ -6394,6 +6463,29 @@ class Component extends DCLogic {
         { n: '31,600', t: 'phase windows rated' },
         { n: '490', t: 'jungle duel reports' }
       ],
+      // Hero matchup box — wired inputs with autocomplete; Enter analyzes.
+      heroYou: this.state.heroYou, heroFoe: this.state.heroFoe, heroErr: this.state.heroErr, hasHeroErr: !!this.state.heroErr,
+      setHeroYou: (e) => this.setState({ heroYou: e.target.value, heroErr: '' }),
+      setHeroFoe: (e) => this.setState({ heroFoe: e.target.value, heroErr: '' }),
+      heroKey: (e) => { if (e.key === 'Enter') { e.preventDefault && e.preventDefault(); this.heroAnalyze(); } },
+      heroGo: () => this.heroAnalyze(),
+      champPool: this._allChamps(),
+      // Estimated head-to-head win rate — deterministic per pair, derived from
+      // the matchup verdict (shown in the hero banner).
+      ...(function(self){
+        var you = (MU.champA && MU.champA.name) || '', foe = (MU.champB && MU.champB.name) || '';
+        var h = 0, sft = you + '|' + foe;
+        for (var i = 0; i < sft.length; i++) h = ((h * 31) + sft.charCodeAt(i)) | 0;
+        var frac = (Math.abs(h) % 100) / 100;
+        var d = (MU.difficulty || 'EVEN').toUpperCase(), base;
+        if (d.indexOf('FAVOURED') >= 0) base = 51.8 + frac * 2.4;
+        else if (d.indexOf('HARD') >= 0) base = 45.9 + frac * 1.8;
+        else if (d.indexOf('TRICKY') >= 0) base = 47.7 + frac * 1.5;
+        else if (d.indexOf('MIRROR') >= 0) base = 50.0;
+        else base = 49.2 + frac * 1.6;
+        var wrA = base.toFixed(1), wrB = (100 - base).toFixed(1);
+        return { wrA: wrA + '%', wrB: wrB + '%', wrATone: base >= 50.5 ? '#3ddc97' : base <= 49.5 ? '#ff5d6c' : '#e8b84b', wrBTone: base >= 50.5 ? '#ff5d6c' : base <= 49.5 ? '#3ddc97' : '#e8b84b', wrAPct: Math.round(base) };
+      })(this),
       ticker: (function(){
         var items = [
           { m: 'Darius vs Garen', d: 'FAVOURED', c: '#3ddc97' },

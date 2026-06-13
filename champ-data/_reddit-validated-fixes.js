@@ -95,6 +95,16 @@
       sylas: 51.6, graves: 53.1, heimerdinger: 50.9, sejuani: 51.3, zac: 51.2, ziggs: 56.6,
       nautilus: 52.9, aurora: 55.7, ambessa: 53.7, akshan: 49.3, karma: 53.8, lillia: 51.3,
       mel: 61.2, neeko: 55.2
+    },
+    // ===== DR. MUNDO (top) — real lolalytics win rates (Emerald+, patch 16.12) =====
+    // Mundo is a weak-early, scale-forever regen tank: cleaver (Q) %-HP poke +
+    // passive cleaver-heals + R (Maximum Dosage huge heal) make him unkillable late.
+    // His favoured lanes concede the early to bullies, then out-tank them at 2 items.
+    // He loses to %-HP / true damage that ignores his HP (Sett's grit W, Garen's R,
+    // Aatrox's drain) and to antiheal + sustained DPS.
+    drmundo: {
+      darius: 56.6, garen: 47.1, aatrox: 45.2, fiora: 50.5, vayne: 50.1, teemo: 54.2,
+      renekton: 56.0, sett: 45.2, mordekaiser: 50.7, jax: 56.8, nasus: 52.5, camille: 52.0
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -5487,6 +5497,318 @@
         "R executes her; dodge her R (Pop Blossom) AOE stun windup at 6.",
         "Your edge — deny CS before her burst scaling.",
         "You own the 1v1 — she's a teamfight pick mage. Don't facecheck her clones; press your edge."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'darius',
+      win: ['Darius', 'Darius', 'Skill', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Darius’s window — his E-pull + bleed bully you. Don’t get pulled.' },
+        { when: 'Lvl 6', text: 'Your R out-heals his bleed; stay above his execute threshold.' },
+        { when: '1st item', text: 'Your spike — HP + regen out-sustain his bleed. Force trades.' },
+        { when: '2+ items', text: 'You take over — your HP shrugs off his falling-off bleed.' }
+      ],
+      wants: {
+        you: ['Survive his early bleed without dying; don’t eat the E', 'Out-sustain the Hemorrhage with regen + R', 'Out-scale into an unkillable HP tank'],
+        foe: ['Land E (pull) to start the bleed all-in', 'Stack Hemorrhage and R-execute when you’re low', 'Win before your HP + regen out-sustain him']
+      },
+      early: "Darius owns the early — his E (Apprehend) pull yanks you into his bleed, and his Q heals while his passive shreds you. Don't get pulled: throw cleavers (Q) from range, last-hit safely, and respect his level 1-5 all-in. You have no kill pressure yet, so just survive without dying or feeding the snowball.",
+      mid: "Watch his R (Noxian Guillotine): it executes you off five bleed stacks, so keep your HP up with passive cleaver-heals and your W, and don't all-in while bleeding. From your first item your HP and regen start out-sustaining his bleed — his Hemorrhage can't out-pace your healing once you stack health. Stay above his execute line and farm to your spike.",
+      late: "You take over — your HP shrugs off Darius's bleed as he falls off, and your R (Maximum Dosage) out-heals his entire all-in. This is why the lane is yours: he's front-loaded, you're not. Survive his early window, scale HP + regen, and by two items his bleed tickles while you become an unkillable frontliner. Don't feed a low-HP R, then out-scale him.",
+      whys: [
+        "Darius's E-pull starts the bleed all-in. Throw cleavers from range, don't get pulled. Levels 1-5 are his.",
+        "His Q heals and his passive bleeds you. Last-hit safely; you have no kill pressure yet.",
+        "Survive — don't trade into the pull. Your scaling beats his front-loaded bleed.",
+        "Keep your HP up with cleaver-heals + W. Don't all-in while bleeding.",
+        "His R executes off bleed stacks — stay above the threshold; your R out-heals his all-in.",
+        "Your spike — HP + regen out-sustain his bleed. Force trades now.",
+        "You take over — your HP shrugs off his falling-off bleed. Out-scale him."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'garen',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–5', text: 'Garen’s window — Q-silence + E out-trade you; his regen matches yours.' },
+        { when: 'Lvl 6', text: 'His R is % missing-HP true damage — it punches through your HP.' },
+        { when: '1st item', text: 'Bring no help here — his R execute beats your scaling.' },
+        { when: '2+ items', text: 'You finally out-tank his trades — but respect his R when low.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q) and out-sustain with regen', 'Stay above his R (Demacian Justice) execute threshold', 'Out-scale into HP he can’t fully punch through'],
+        foe: ['Q-silence + E out-trade your cleaver poke', 'Execute you with R (% missing-HP true damage)', 'Deny your scaling with grievous wounds']
+      },
+      early: "Garen out-trades you — his Q-silence + E out-damage your cleaver poke, and his passive regen matches your sustain, so a poke war goes nowhere. Levels 1-5 are his. Throw cleavers (Q) from range, farm safely, and don't get caught in his Q-silence-into-spin trade. You have no kill pressure, so scale.",
+      mid: "His R (Demacian Justice) is the problem — it's % missing-HP true damage that ignores your HP and regen, so a chunked Mundo is always in execute range. Stay healthy, don't dive a fight where he can R-execute you, and lean on your passive cleaver-heals + W. Your scaling is slower to matter here than in most lanes because his R answers it.",
+      late: "You eventually out-tank his basic trades — two items of HP and his Q-E can't crack you — but respect his R execute and Villain mark, which threaten you in a way most champs can't. The lane is tricky: bring grievous wounds isn't your job (he has none vs you), but stay above his R threshold and out-scale his trades. Don't feed a low-HP execute.",
+      whys: [
+        "Garen's Q-silence + E out-trade your cleaver poke. His regen matches yours. Levels 1-5 are his.",
+        "A poke war goes nowhere — his passive regen heals it. Farm and scale.",
+        "Don't get caught in his Q-silence-into-spin trade. Throw cleavers from range.",
+        "Keep your HP up — his trades chip you toward his R execute range.",
+        "His R is % missing-HP true damage — it punches through your HP. Stay healthy.",
+        "His R execute beats your scaling here. Stay above the threshold.",
+        "You finally out-tank his trades at 2 items — but respect his R when low."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'aatrox',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even-ish — throw cleavers; neither has kill pressure yet.' },
+        { when: 'Lvl 3–6', text: 'Aatrox’s window — his sustain + combo out-trade your poke.' },
+        { when: '1st item', text: 'His Eclipse + drain out-heal your regen war.' },
+        { when: 'Late', text: 'Hard lane — his sustained DPS + healing out-grind your HP.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q) and farm — don’t get W-pulled', 'Out-sustain with regen; stack HP to dilute his DPS', 'Scale and play for teamfights, not the 1v1'],
+        foe: ['Space the Q sweetspot and W-pull you in', 'Out-heal your regen with his drain-tank sustain', 'Grind your HP down with sustained DPS + grievous']
+      },
+      early: "It's roughly even at levels 1-2 — both of you are weak and just farm, you with cleaver (Q) poke. From level 3 Aatrox out-trades you: his combo + sustain beat your poke, and his W-pull locks you into his Q sweetspot. Don't get pulled; throw cleavers from range and respect that he has the kill pressure you lack.",
+      mid: "This is a hard lane because Aatrox is a drain-tank who out-sustains your regen — his Eclipse spike and healing out-pace your passive cleaver-heals, and his sustained DPS grinds your HP. Stack health to dilute his damage, but don't expect to win trades. Farm, take what cleaver poke you can, and don't feed his combo.",
+      late: "Aatrox out-grinds you — his sustained DPS + healing beat your HP + regen in a straight 1v1, and if he buys grievous wounds your sustain falls apart. The lane is his. Scale HP, play for teamfights where your frontline matters more than the duel, and don't try to out-sustain a drain-tank one-on-one.",
+      whys: [
+        "Even at 1-2 — throw cleavers, farm. Neither has kill pressure yet.",
+        "From 3 his combo + sustain out-trade your poke. Don't get W-pulled.",
+        "His W-pull locks you in his sweetspot. Throw cleavers from range, don't get caught.",
+        "He out-sustains your regen — stack HP to dilute his DPS, don't expect to win trades.",
+        "His Eclipse + drain out-heal your regen war. Farm and scale.",
+        "His sustained DPS grinds your HP. Play for teamfights, not the 1v1.",
+        "Hard lane — his DPS + healing out-grind your HP. Scale, play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'fiora',
+      win: ['Fiora', 'Skill', 'Skill', 'Skill', 'Skill', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Fiora’s window — her vitals + true damage chip your HP early.' },
+        { when: 'Lvl 3–6', text: 'Even — her true damage ignores your HP, but you out-sustain it.' },
+        { when: '1st item', text: 'Your HP + regen start to out-last her sustained shred.' },
+        { when: '2+ items', text: 'You take over — your HP tank shrugs off all but her true damage.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q) and out-sustain her vital procs', 'Stack HP + regen to out-last her shred', 'Scale into a tank she can’t fully crack'],
+        foe: ['Proc vitals — true damage ignores your HP', 'Parry (W) your cleaver / E with Riposte', 'Out-scale into a one-item-spike duelist']
+      },
+      early: "Fiora's vitals deal true damage that ignores your HP, so she chips you in a way most champs can't — level 1 is hers. Her W (Riposte) can parry your cleaver or E smash. Throw cleavers (Q) from range, don't feed clean vital procs, and farm; you out-sustain her early poke with regen even if her true damage stings.",
+      mid: "It's even through the mid-game — her true damage shreds, but your passive cleaver-heals + W + R out-sustain it if you don't get bursted. Don't stand still in her Q range feeding vitals, and bait her parry before you smash with E. Your HP starts to matter as you stack health; she can't kill you if you keep healing.",
+      late: "You take over — two items of HP and regen out-last her sustained shred, and your R (Maximum Dosage) out-heals her duel. She's one of the few who threaten you with true damage, but a fully-stacked Mundo out-sustains even that. Scale HP, space her vitals, and by late you're the unkillable frontline she can't crack.",
+      whys: [
+        "Fiora's vitals deal true damage that ignores your HP. Level 1 is hers — don't feed clean procs.",
+        "Her W parries your cleaver or E. Bait it before you smash.",
+        "Even — her true damage shreds, but your regen out-sustains it if you don't get bursted.",
+        "Don't stand still in her Q range feeding vitals. Throw cleavers, heal between.",
+        "Your HP starts to matter — she can't kill you if you keep healing.",
+        "Your HP + regen out-last her sustained shred. Force the long fight.",
+        "You take over — your HP tank shrugs off all but her true damage. Scale."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'vayne',
+      win: ['Dr. Mundo', 'Dr. Mundo', 'Skill', 'Skill', 'Skill', 'Skill', 'Vayne'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — cleaver (Q) pokes a squishy Vayne; she’s weak early.' },
+        { when: 'Lvl 6', text: 'Even — her tumble + Condemn kite you; you out-sustain her poke.' },
+        { when: '1st item', text: 'Her %-HP true damage (W) starts to shred your tankiness.' },
+        { when: '2+ items', text: 'Vayne takes over — %-HP true damage melts even a full-HP Mundo.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke her squishy early frame', 'Deny CS to delay her %-HP true-damage scaling', 'Force the issue before her crit items'],
+        foe: ['Kite with tumble (Q) + autos; stay safe', 'Shred your HP with W (%-HP true damage)', 'Out-scale into a tank-melting hypercarry']
+      },
+      early: "Levels 1-2 are actually yours — Vayne is short-range and squishy, and your cleaver (Q) pokes her while she's weak. Throw cleavers whenever she steps to CS, deny her farm, and pressure her early; she has no sustain and your HP shrugs off her tiny early damage. Her whole game is scaling, so make her miss CS.",
+      mid: "It evens out as she comes online — her tumble (Q) and Condemn (E) kite you, and you can't catch a mobile Vayne, but your regen out-sustains her poke through the mid-game. Keep denying her CS; her Silver Bolts (W) deal %-HP true damage that's designed to melt tanks like you, so every minute she farms is a minute toward your demise.",
+      late: "Vayne takes over hard — at two crit items her W's %-HP true damage melts even a full-HP Mundo, and she kites you forever. This is the tank's nightmare. You had to deny her farm and end the game early; if she scaled, the late game is hers. Build HP to survive a few seconds longer for your team, but don't expect to 1v1 her.",
+      whys: [
+        "Vayne is squishy early. Cleaver-poke her — she's weak and you have HP. Levels 1-2 are yours.",
+        "Deny her CS — her whole game is scaling. Pressure her early.",
+        "Even — her tumble + Condemn kite you, but you out-sustain her poke.",
+        "Keep denying CS — her W (%-HP true damage) is built to melt tanks.",
+        "You out-sustain her poke through mid — but every minute she farms hurts you.",
+        "Her %-HP true damage starts to shred your tankiness. Force the issue before crit.",
+        "Vayne takes over — %-HP true damage melts even a full-HP Mundo. End the game early."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'teemo',
+      win: ['Skill', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even — his blind doesn’t stop your cleaver (Q); trade poke.' },
+        { when: 'Lvl 3–6', text: 'Your window — your regen out-sustains his poke; Q out-pokes him.' },
+        { when: '1st item', text: 'You out-sustain him hard — his poke can’t out-pace your regen.' },
+        { when: 'Late', text: 'He becomes a shroom/splitpush problem — you won lane.' }
+      ],
+      wants: {
+        you: ['Cleaver (Q) out-pokes him — blind doesn’t stop it', 'Out-sustain his poke with regen + passive heals', 'Scale HP; his poke can’t kill a regen tank'],
+        foe: ['Blind your autos (but not your Q) and poke', 'Stack shrooms on chokes and objectives', 'Survive and scale into a splitpush threat']
+      },
+      early: "Levels 1-2 are even — Teemo pokes you, but here's the key: his blind (Q) only stops auto-attacks, NOT your cleaver (Q), which is a skillshot. So you can out-poke him with cleavers while his blind does little to your kit. Throw cleavers, take his auto poke (your regen heals it), and farm.",
+      mid: "Your window — your regen + passive cleaver-heals out-sustain his poke, and your cleaver out-pokes his blind-reliant trades. He can't out-damage a regen tank; every poke you eat, you heal back. At 6 your R makes you even more unkillable. Pressure him off CS with cleavers and don't path through his shrooms.",
+      late: "Teemo stops being a laner and becomes a map problem — shrooms on objectives and splitpush. You won the lane (he can't kill a regen tank), so the late game is about his global utility, not the 1v1. Scale HP, sweep shrooms with control wards, and don't facecheck brush near objectives.",
+      whys: [
+        "Even at 1-2 — his blind stops autos but NOT your cleaver (Q skillshot). Trade poke.",
+        "Throw cleavers and take his auto poke — your regen heals it.",
+        "Your window — your regen out-sustains his poke; cleaver out-pokes him.",
+        "He can't out-damage a regen tank. Every poke you eat, you heal back.",
+        "Your R makes you unkillable. Pressure him off CS with cleavers.",
+        "You out-sustain him hard — his poke can't out-pace your regen.",
+        "He becomes a shroom/splitpush problem — you won lane. Sweep shrooms."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'renekton',
+      win: ['Renekton', 'Renekton', 'Renekton', 'Skill', 'Skill', 'Dr. Mundo', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Renekton’s window — empowered Q + W stun bully your weak early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals his fury burst; stabilize the lane.' },
+        { when: '1st item', text: 'Your spike — HP + regen out-sustain his falling-off fury.' },
+        { when: '2+ items', text: 'You take over — your HP shrugs off a falling-off Renekton.' }
+      ],
+      wants: {
+        you: ['Survive his level 1-3 fury aggression', 'Out-sustain his trades with regen + R', 'Out-scale his falloff into an HP tank'],
+        foe: ['Bully levels 1-3 with empowered Q + W stun', 'Use double-E to engage and escape', 'Snowball the early before you out-scale him']
+      },
+      early: "Renekton's early is his window — empowered Q heals and chunks, his W is a point-blank stun, and double-E lets him dash in and out. Levels 1-3 he bullies your weak early. Throw cleavers (Q) from range, don't eat the stun-combo, and concede CS rather than feed his fury. You have no kill pressure — just survive.",
+      mid: "Around 6 the lane stabilizes — your R (Maximum Dosage) out-heals his fury burst, and as a front-loaded champion he starts to fall off while your HP + regen catch up. Stop respecting him quite so much: throw cleavers, out-sustain his trades, and deny him the snowball until your first item.",
+      late: "You take over — Renekton has no late game while your HP and regen only grow. Once you have items his fury can't crack you, and your R out-heals everything. Survive his level 1-3 window, scale, and by two items you're an unkillable frontline while he's irrelevant. The late game is decisively yours.",
+      whys: [
+        "Renekton's empowered Q + W stun bully your weak early. Throw cleavers from range. Levels 1-3 are his.",
+        "His double-E engages and escapes. Concede CS, don't feed the fury snowball.",
+        "Don't eat the stun-combo. Survive — your scaling beats his fury.",
+        "It stabilizes — out-sustain his trades, deny the snowball.",
+        "Your R out-heals his fury burst. Stabilize the lane.",
+        "Your spike — HP + regen out-sustain his falling-off fury. Force trades.",
+        "You take over — your HP shrugs off a falling-off Renekton. Out-scale him."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'sett',
+      win: ['Sett', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Sett’s window — his W (true damage) shreds your HP. Don’t feed grit.' },
+        { when: 'Lvl 6', text: 'His E-stun into W + R answer your scaling — survive it.' },
+        { when: '1st item', text: 'He out-trades you — his true damage ignores your HP.' },
+        { when: '2+ items', text: 'You finally out-tank him — but his W still cuts through HP.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); don’t feed his W (grit) true damage', 'Out-sustain with regen; stack HP to dilute his burst', 'Scale and play frontline, not the 1v1'],
+        foe: ['Build grit, then W (Haymaker) for true-damage chunks', 'Land E (Facebreaker stun) into his combo', 'Pull you in with R and out-trade your HP']
+      },
+      early: "This is a hard lane — Sett's W (Haymaker) deals true damage scaled off the grit he banks from taking hits, and true damage ignores your HP entirely. Levels 1-3 are his. Throw cleavers from range, don't feed his grit by trading into him, and farm safely; his burst out-trades your poke and sustain.",
+      mid: "Sett out-trades you — his E (Facebreaker) stun sets up a grit-loaded W that chunks you regardless of your HP, and his R pulls you in for the all-in. Don't sit in his W range feeding grit. Stack HP to survive his burst, out-sustain with regen between his cooldowns, but don't expect to win trades. Scale.",
+      late: "You eventually out-tank his basic damage at two items, but his W's true damage still cuts through your HP in a way most champs can't, so the lane stays uncomfortable. Play for the frontline rather than the 1v1: your HP soaks his team's damage in fights even if Sett personally out-trades you. Don't feed his grit; scale and group.",
+      whys: [
+        "Sett's W (Haymaker) is true damage off grit — it ignores your HP. Don't feed grit. Levels 1-3 are his.",
+        "Throw cleavers from range; don't trade into him and bank his grit.",
+        "His burst out-trades your poke and sustain. Farm safely.",
+        "Stack HP to survive his burst; out-sustain between his cooldowns.",
+        "His E-stun into W + R answer your scaling — survive it, don't sit in W range.",
+        "He out-trades you — his true damage ignores your HP. Scale, play frontline.",
+        "You out-tank his basic damage at 2 items, but his W still cuts through HP."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'mordekaiser',
+      win: ['Mordekaiser', 'Skill', 'Skill', 'Skill', 'Mordekaiser', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Morde’s window — his Q + passive out-poke your cleaver early.' },
+        { when: 'Lvl 6', text: 'Morde’s window — his R (Realm) isolates you 1v1; play safe.' },
+        { when: '1st item', text: 'Even — buy MR; your regen out-sustains his magic outside R.' },
+        { when: '2+ items', text: 'You take over — your HP + MR shrug off his magic DPS.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR vs his magic', 'Respect his R (Death Realm) at 6 — don’t int it', 'Out-scale into HP + MR he can’t out-damage'],
+        foe: ['Pull you in with E into Q for his trade', 'Isolate you with R (Realm) and win the 1v1', 'Stack passive shield + AP to out-sustain you']
+      },
+      early: "Morde out-pokes you early — his Q and passive (the rings) out-damage your cleaver, and his E can pull you into his Q combo. Levels 1-2 are his. Throw cleavers from range, don't get E-pulled, don't let him stack his passive freely, and buy MR. You have no kill pressure, so farm and scale.",
+      mid: "Level 6 is his window — Realm of Death (R) drags you into an isolated 1v1, steals your stats, and his sustained magic damage is strong inside it. Don't int the Realm at low HP; play around its cooldown. Outside R, your regen + MR start to out-sustain his magic. Buy MR (Spirit Visage is great — it boosts your healing too).",
+      late: "You take over — two items of HP + MR shrug off his magic DPS, and Spirit Visage amplifies your already-huge regen and R heal. The lane is even-favoured because he out-pokes the early and you out-tank the late. Respect the level-6 Realm timings, buy MR, and by late his magic tickles while you're an unkillable frontline.",
+      whys: [
+        "Morde's Q + passive out-poke your cleaver. Throw cleavers from range, buy MR. Levels 1-2 are his.",
+        "Don't get E-pulled into his Q combo or let him stack his passive.",
+        "Farm and scale — you have no kill pressure. Buy MR early.",
+        "Outside his R, your regen + MR out-sustain his magic. Stay healthy.",
+        "His R isolates you and steals your stats — don't int it at low HP.",
+        "Even — buy MR (Spirit Visage); your regen out-sustains his magic outside R.",
+        "You take over — your HP + MR shrug off his magic DPS. Spirit Visage boosts your heals."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'jax',
+      win: ['Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Skill', 'Jax'],
+      spikes: [
+        { when: 'Lvl 1–4', text: 'Your window — cleaver-poke + regen out-sustain a weak-early Jax.' },
+        { when: 'Lvl 6', text: 'Your R out-heals his burst; out-tank his pre-item all-in.' },
+        { when: '1st item', text: 'Even — his item scaling starts to out-DPS your regen.' },
+        { when: '2+ items', text: 'Jax takes over — Grandmaster’s + items out-DPS your HP.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke + out-sustain a weak-early Jax', 'Out-tank his pre-item all-in with HP + R', 'Snowball your early before his item spikes'],
+        foe: ['Dodge nothing — but stall the lane and scale', 'All-in with E (Counterstrike) once itemized', 'Out-DPS your HP late with Grandmaster’s + items']
+      },
+      early: "Levels 1-4 are yours — Jax is weak before items, and your cleaver (Q) poke + regen out-sustain his early. His E (Counterstrike) dodges autos and stuns, but it doesn't stop your cleaver, and his early damage can't out-pace your healing. Throw cleavers, pressure him off CS, and build a lead while he's weak.",
+      mid: "You out-tank his pre-item all-in — your R (Maximum Dosage) out-heals his burst, and your HP soaks his Counterstrike-empowered trade. Keep poking with cleavers and denying his farm. The clock is the enemy here: every item Jax gets, his Grandmaster's passive + on-hit ramps closer to out-DPSing your regen, so press your early lead.",
+      late: "Jax takes over at two items — his Grandmaster's passive + item spikes out-DPS even your HP and regen, and he out-duels you late. The lane is favoured because you crush his weak early; you must convert it. Snowball off the cleaver poke, deny his farm, and end before his item scaling flips the duel. A farmed Jax beats a Mundo who didn't snowball.",
+      whys: [
+        "Jax is weak pre-item. Cleaver-poke + regen out-sustain his early. Levels 1-4 are yours.",
+        "His E (Counterstrike) dodges autos but not your cleaver. Pressure him off CS.",
+        "His early damage can't out-pace your healing. Build a lead.",
+        "Keep poking — deny his farm so his item spikes come late.",
+        "Your R out-heals his burst; out-tank his pre-item all-in.",
+        "Even — his item scaling starts to out-DPS your regen. Press your lead.",
+        "Two items in, Grandmaster's + items out-DPS your HP. Snowball early or lose late."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'nasus',
+      win: ['Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Skill', 'Skill', 'Nasus'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver-poke a weak-early Nasus; deny his Q stacks.' },
+        { when: 'Lvl 6', text: 'Even — both scale; out-poke him while denying farm.' },
+        { when: '1st item', text: 'Even — your HP vs his stacking Q; keep him off CS.' },
+        { when: '2+ items', text: 'Nasus takes over — stacked Q + Wither out-grind your HP.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke + deny his Q stacks early', 'Keep him off CS to delay his scaling', 'Out-poke him; both scale but deny his farm'],
+        foe: ['Stack Q on every last-hit, even under tower', 'Cripple your kite with W (Wither)', 'Out-scale into a stacked, tanky monster']
+      },
+      early: "Levels 1-3 are yours — Nasus is weak early, and your cleaver (Q) pokes him while he tries to last-hit. This is a tank-vs-tank scaling race, so the key is denying his Q stacks: poke him off the wave, deny CS, and pressure him. His W (Wither) cripples your movement, but you have no all-in to peel anyway, so just poke and deny.",
+      mid: "It's even as both of you scale — you out-poke him with cleavers (his %-current-HP nature mirrors yours), but neither has kill pressure. Keep him off CS: every Q stack you deny delays the stacked monster he becomes. Your regen out-sustains the lane; this is a farming contest where stack denial decides the late game.",
+      late: "Nasus takes over if he stacked — a fully-stacked Q on a tanky body out-grinds your HP, and his Wither shuts off any kiting. The lane is even on paper because you both scale, but his stacked Q out-DPSes your regen late. Deny his farm relentlessly early; if he stacked freely, he out-scales even you. Build HP and play frontline.",
+      whys: [
+        "Nasus is weak early. Cleaver-poke him and deny his Q stacks. Levels 1-3 are yours.",
+        "Poke him off the wave — deny CS. His W cripples your kite, but you out-poke him.",
+        "Your cleaver out-pokes him. Keep denying stacks.",
+        "Even — both scale. Every denied Q stack delays his monster.",
+        "Your regen out-sustains the lane — it's a stack-denial farming contest.",
+        "Even — your HP vs his stacking Q. Keep him off CS.",
+        "Nasus takes over — stacked Q + Wither out-grind your HP. Deny his farm early."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'camille',
+      win: ['Camille', 'Camille', 'Skill', 'Skill', 'Skill', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Camille’s window — her E-Q true damage shreds your HP.' },
+        { when: 'Lvl 3–6', text: 'Even — her true damage ignores HP, but you out-sustain it.' },
+        { when: '1st item', text: 'Your HP + regen start to out-last her trades.' },
+        { when: '2+ items', text: 'You take over — your HP shrugs off all but her true damage.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); out-sustain her E-Q trades', 'Stack HP + regen to out-last her shred', 'Scale into a tank she can only chip'],
+        foe: ['Out-trade with E-Q (hookshot) true damage + shield', 'Her true damage ignores your HP', 'Isolate and 1v1 you with R in the side lane']
+      },
+      early: "Camille's E-Q (hookshot into empowered auto) does true damage that ignores your HP, and her shield blunts your poke back — levels 1-2 are hers. Stand away from terrain so her E can't stun you, throw cleavers (Q) from range, and don't feed her clean combos. You out-sustain her early poke with regen even though her true damage stings.",
+      mid: "It's even through the mid-game — her true damage shreds, but your passive cleaver-heals + W + R out-sustain it if you don't get bursted. Bait her E (the escape/reset), and don't chase her hookshot resets into bad spots. Your HP starts to matter as you stack health; she chips but can't kill you if you keep healing.",
+      late: "You take over — two items of HP and regen out-last her trades, and your R out-heals her duel. Her R isolation + true damage are her one threat that scales into you, but a fully-stacked Mundo out-sustains even that in the side lane. Scale HP, don't get caught alone early, and by late you're the frontline she can only chip.",
+      whys: [
+        "Camille's E-Q true damage ignores your HP. Levels 1-2 are hers — don't feed clean combos.",
+        "Stand off terrain so her E can't stun you. Throw cleavers from range.",
+        "Even — her true damage shreds, but your regen out-sustains it if you don't get bursted.",
+        "Bait her E reset; don't chase her hookshot into bad spots.",
+        "Your HP starts to matter — she chips but can't kill you if you keep healing.",
+        "Your HP + regen out-last her trades. Force the long fight.",
+        "You take over — your HP shrugs off all but her true damage. Scale."
       ]
     }
   ];

@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+<base href="/">
+<title>MatchupCoach.gg — LoL Loading-Screen Coach</title>
+<meta name="description" content="Challenger-level League of Legends matchup coaching — power spikes, cooldown timers, wave management, and build paths for every champion in every lane.">
+<script src="/support.js"></script>
 </head>
 <body>
 <x-dc>
@@ -73,6 +76,7 @@
 <script src="./champ-data/enemy-kits.js"></script>
 <script src="./champ-data/what-kills-me.js"></script>
 <script src="./champ-data/loadouts-by-class.js"></script>
+<script src="./champ-data/champ-gender.js"></script>
 <script src="./champ-data/rosters.js"></script>
 <script src="./champ-data/jungle-intel.js"></script>
 <script src="./champ-data/jungle-intel-2.js"></script>
@@ -1267,6 +1271,30 @@
             </sc-for>
           </div>
         </sc-if>
+
+        <!-- What each champ wants out of the matchup -->
+        <sc-if value="{{ champWants }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); gap:12px; margin-top:14px;">
+          <div style="border-radius:14px; background:linear-gradient(180deg,rgba(61,220,151,0.08),#11131c); border:1px solid rgba(61,220,151,0.28); padding:15px 16px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+              <span data-champ-icon="{{ champWants.you.name }}" style="flex:0 0 auto; width:26px; height:26px; border-radius:7px; background:#1c2030; border:1px solid rgba(61,220,151,0.4);"></span>
+              <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:13px; color:#7fe3b8;">What {{ champWants.you.name }} wants</span>
+            </div>
+            <sc-for list="{{ champWants.you.items }}" as="it" hint-placeholder-count="3">
+              <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:6px;"><span style="flex:0 0 auto; margin-top:6px; width:5px; height:5px; border-radius:50%; background:#3ddc97;"></span><span style="font-size:12.5px; line-height:1.5; color:#d7dbe6;">{{ it }}</span></div>
+            </sc-for>
+          </div>
+          <div style="border-radius:14px; background:linear-gradient(180deg,rgba(255,93,108,0.08),#11131c); border:1px solid rgba(255,93,108,0.28); padding:15px 16px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+              <span data-champ-icon="{{ champWants.foe.name }}" style="flex:0 0 auto; width:26px; height:26px; border-radius:7px; background:#1c2030; border:1px solid rgba(255,93,108,0.4);"></span>
+              <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:13px; color:#ff8b96;">What {{ champWants.foe.name }} wants</span>
+            </div>
+            <sc-for list="{{ champWants.foe.items }}" as="it" hint-placeholder-count="3">
+              <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:6px;"><span style="flex:0 0 auto; margin-top:6px; width:5px; height:5px; border-radius:50%; background:#ff5d6c;"></span><span style="font-size:12.5px; line-height:1.5; color:#d7dbe6;">{{ it }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
       </div>
     </section>
 
@@ -1276,7 +1304,7 @@
         <div style="border-radius:15px; background:linear-gradient(180deg,#101a15,#0d0f16); padding:17px; height:100%;">
           <div style="display:flex; align-items:center; gap:9px; margin-bottom:9px;">
             <span aria-label="ab:{{ champA.name }}|{{ holdBadge.letter }}" style="width:34px; height:34px; border-radius:9px; background:{{ holdBadge.bg }}; border:1px solid {{ holdBadge.bd }}; display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; color:{{ holdBadge.color }};">{{ holdBadge.letter }}</span>
-            <div><div style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:13.5px; color:#eafff5;">Ability to HOLD</div><div style="font-size:10.5px; color:#6fae90; font-weight:600;">Your tool to save</div></div>
+            <div><div style="display:flex; align-items:center; gap:7px;"><span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:13.5px; color:#eafff5;">Ability to HOLD</span><span style="font-family:'Chakra Petch',sans-serif; font-weight:800; font-size:11px; color:{{ holdBadge.color }}; background:{{ holdBadge.color }}22; border:1px solid {{ holdBadge.color }}66; border-radius:6px; padding:1px 7px;">{{ holdBadge.letter }}</span></div><div style="font-size:10.5px; color:#6fae90; font-weight:600;">Your tool to save</div></div>
           </div>
           <p style="margin:0; font-size:13px; line-height:1.5; color:#d7dbe6; text-wrap:pretty;">{{ holdText }}</p>
         </div>
@@ -1285,7 +1313,7 @@
         <div style="border-radius:15px; background:linear-gradient(180deg,#1a1013,#0d0f16); padding:17px; height:100%;">
           <div style="display:flex; align-items:center; gap:9px; margin-bottom:9px;">
             <span aria-label="ab:{{ champB.name }}|{{ watchBadge.letter }}" style="width:34px; height:34px; border-radius:9px; background:{{ watchBadge.bg }}; border:1px solid {{ watchBadge.bd }}; display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; color:{{ watchBadge.color }};">{{ watchBadge.letter }}</span>
-            <div><div style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:13.5px; color:#ffeef0;">Watch Out For</div><div style="font-size:10.5px; color:#c78891; font-weight:600;">His key threat</div></div>
+            <div><div style="display:flex; align-items:center; gap:7px;"><span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:13.5px; color:#ffeef0;">Watch Out For</span><span style="font-family:'Chakra Petch',sans-serif; font-weight:800; font-size:11px; color:{{ watchBadge.color }}; background:{{ watchBadge.color }}22; border:1px solid {{ watchBadge.color }}66; border-radius:6px; padding:1px 7px;">{{ watchBadge.letter }}</span></div><div style="font-size:10.5px; color:#c78891; font-weight:600;">Their key threat</div></div>
           </div>
           <p style="margin:0; font-size:13px; line-height:1.5; color:#d7dbe6; text-wrap:pretty;">{{ watchText }}</p>
         </div>
@@ -3112,6 +3140,9 @@ class Component extends DCLogic {
       if (rawSess) this.setState({ user: JSON.parse(rawSess) });
     } catch (e) {}
     if (window.CHAMP_ART) window.CHAMP_ART.onReady(() => this.forceUpdate());
+    try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+    // Deep link: /matchup/<you>-vs-<enemy> opens that matchup once data is ready.
+    this._openFromUrl();
     // Back/forward buttons walk the app's own views instead of leaving the site.
     try { history.replaceState({ mc: { view: 'home', homeStep: 'role', role: '', myChamp: '', enemyChamp: '', matchup: 'mid', authMode: 'login', plan: 'all' } }, ''); } catch (e) {}
     this._onPop = (e) => { if (e.state && e.state.mc) { this.setState(e.state.mc); window.scrollTo(0, 0); } };
@@ -3321,8 +3352,9 @@ class Component extends DCLogic {
     } else wc = 'win your spike windows, not his';
     var rows = this._phaseRows(MU), win = null;
     for (var i = 0; i < rows.length; i++) { if (rows[i].who === 'A') { win = rows[i].label; break; } }
+    var P = (window.MC_PRON ? window.MC_PRON((MU.champB && MU.champB.name) || '') : { p: 'his' });
     var tail;
-    if (MU.key && MU.key.name && MU.key.cd) tail = 'Bait his ' + MU.key.name.split(' (')[0] + ' (' + MU.key.cd + '), then go' + (win ? ' \u2014 your window\u2019s ' + win.toLowerCase() + '.' : '.');
+    if (MU.key && MU.key.name && MU.key.cd) tail = 'Bait ' + P.p + ' ' + MU.key.name.split(' (')[0] + ' (' + MU.key.cd + '), then go' + (win ? ' \u2014 your window\u2019s ' + win.toLowerCase() + '.' : '.');
     else tail = win ? 'Your window\u2019s ' + win.toLowerCase() + '.' : 'Don\u2019t force the flat all-in.';
     return lead + 'The plan: ' + wc + '. ' + tail;
   }
@@ -3448,19 +3480,53 @@ class Component extends DCLogic {
   }
   openGen(role, you, enemy) { if (this._gated({ kind: 'gen', role: role, you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: role, myChamp: you, enemyChamp: enemy, matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, search: '', cds: { Q: 0, W: 0, E: 0, R: 0 } }); this._top(); this._nav(); }
   openJg(you, enemy) { if (this._gated({ kind: 'jg', you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: 'jungle', myChamp: you, enemyChamp: enemy, matchup: 'gen', search: '' }); this._top(); this._nav(); }
-  // Scroll to top reliably: immediately AND after the (heavy) re-render lands.
+  // Scroll to top reliably: hit window + document + body, now and after the
+  // (heavy) re-render lands, so a matchup never opens scrolled into the middle.
   _top() {
-    window.scrollTo(0, 0);
-    setTimeout(function(){ window.scrollTo(0, 0); }, 80);
-    setTimeout(function(){ window.scrollTo(0, 0); }, 350);
+    var go = function(){ try { window.scrollTo(0, 0); document.documentElement.scrollTop = 0; document.body.scrollTop = 0; } catch (e) {} };
+    go();
+    requestAnimationFrame(go);
+    setTimeout(go, 60); setTimeout(go, 180); setTimeout(go, 420); setTimeout(go, 700);
   }
   // Browser-history integration: every major view change pushes a snapshot so
-  // the Back button walks the app instead of leaving the site.
+  // the Back button walks the app instead of leaving the site. On a matchup we
+  // also set an SEO-friendly title and URL slug.
   _pushNav() {
     var s = this.state;
+    try {
+      var path = location.pathname, title = 'MatchupCoach.gg — LoL Loading-Screen Coach';
+      if (s.view === 'demo' && s.myChamp && s.enemyChamp) {
+        var slug = function(n){ return (n || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''); };
+        path = '/matchup/' + slug(s.myChamp) + '-vs-' + slug(s.enemyChamp);
+        title = 'Matchup — ' + s.myChamp + ' vs ' + s.enemyChamp + ' | MatchupCoach.gg';
+      }
+      document.title = title;
+      history.pushState({ mc: { view: s.view, homeStep: s.homeStep, role: s.role, myChamp: s.myChamp, enemyChamp: s.enemyChamp, matchup: s.matchup, authMode: s.authMode, plan: s.plan } }, '', path);
+      return;
+    } catch (e) {}
     try { history.pushState({ mc: { view: s.view, homeStep: s.homeStep, role: s.role, myChamp: s.myChamp, enemyChamp: s.enemyChamp, matchup: s.matchup, authMode: s.authMode, plan: s.plan } }, ''); } catch (e) {}
   }
   _nav() { setTimeout(() => this._pushNav(), 0); }
+  // Resolve /matchup/<you>-vs-<enemy> from the URL and open it once rosters load.
+  _openFromUrl() {
+    var m = /^\/matchup\/(.+?)-vs-(.+?)\/?$/.exec(location.pathname || '');
+    if (!m) return;
+    var deslug = function(s){ return s.replace(/-/g, ' '); };
+    var tries = 0, self = this;
+    var go = setInterval(function(){
+      tries++;
+      if (!(window.ROSTERS && self._allChamps().length)) { if (tries > 40) clearInterval(go); return; }
+      clearInterval(go);
+      var a = self._resolveChamp(deslug(m[1])), b = self._resolveChamp(deslug(m[2]));
+      if (a && b) {
+        // pretend signed-in gate already cleared for deep links is handled by openGen
+        var R = window.ROSTERS || {}, lanes = ['top','mid','bot','support'], role = null;
+        for (var i = 0; i < lanes.length; i++) { var p = (R[lanes[i]]||[]).reduce(function(x,g){return x.concat(g.c);},[]); if (p.indexOf(a)>=0 && p.indexOf(b)>=0) { role = lanes[i]; break; } }
+        if (!role && window.JG_DB && window.JG_DB[a]) { self.openJg(a, b); return; }
+        self.openGen(role || 'top', a, b);
+      }
+    }, 120);
+  }
   // All champions across every roster (cached) — powers autocomplete + the
   // hero analyze box.
   _allChamps() {
@@ -5578,32 +5644,34 @@ class Component extends DCLogic {
           'Same kit, same spikes. This comes down to who knows the matchup deeper.'
         ]
       };
+      // Correct pronouns for the FOE (every he/his/him below refers to them).
+      const P = (window.MC_PRON ? window.MC_PRON(foe) : { s: 'he', o: 'him', p: 'his', S: 'He', P: 'His' });
       const headline = pick(HEAD[diff] || HEAD.EVEN);
       const classRead = {
-        Juggernaut: 'He\u2019s a juggernaut \u2014 all his pressure funnels through one engage button (' + key + '). Space it out and he\u2019s a melee minion with a scary ult and nowhere to put it.',
-        Diver: 'Divers only need one clean all-in. Deny ' + key + ' and he has to walk it back to lane like nothing happened.',
-        Tank: 'He\u2019s not built to kill you \u2014 he\u2019s built to outlast and scale. The lane is really about punishing the dead minutes before he itemizes.',
-        Mage: 'Ranged poke top is a patience test. Minion-block ' + key + ', freeze the wave, and make his jungler come babysit.',
-        Marksman: 'A ranged carry top is miserable for about eight minutes and then totally irrelevant if you didn\u2019t feed it. Farm, don\u2019t flame.',
-        Flex: 'He doesn\u2019t have one defining button \u2014 read what he commits first, then punish the gap while it\u2019s down.'
+        Juggernaut: P.S + '\u2019s a juggernaut \u2014 all ' + P.p + ' pressure funnels through one engage button (' + key + '). Space it out and ' + P.s + '\u2019s a melee minion with a scary ult and nowhere to put it.',
+        Diver: 'Divers only need one clean all-in. Deny ' + key + ' and ' + P.s + ' has to walk it back to lane like nothing happened.',
+        Tank: P.S + '\u2019s not built to kill you \u2014 ' + P.s + '\u2019s built to outlast and scale. The lane is really about punishing the dead minutes before ' + P.s + ' itemizes.',
+        Mage: 'Ranged poke is a patience test. Minion-block ' + key + ', freeze the wave, and make ' + P.p + ' jungler come babysit.',
+        Marksman: 'A ranged carry is miserable for about eight minutes and then totally irrelevant if you didn\u2019t feed it. Farm, don\u2019t flame.',
+        Flex: P.S + ' doesn\u2019t have one defining button \u2014 read what ' + P.s + ' commits first, then punish the gap while it\u2019s down.'
       };
       const line1 = classRead[foeClass] || classRead.Flex;
       let line2 = (diff === 'FAVOURED')
-        ? 'You own the early outright, so press it \u2014 every plate and recall advantage compounds before he can stabilize.'
+        ? 'You own the early outright, so press it \u2014 every plate and recall advantage compounds before ' + P.s + ' can stabilize.'
         : (diff === 'HARD')
-        ? 'He owns the first five levels, so your only job there is to not die and not feed. The lane swings to you on items and objectives \u2014 wait for it.'
+        ? P.S + ' owns the first five levels, so your only job there is to not die and not feed. The lane swings to you on items and objectives \u2014 wait for it.'
         : (diff === 'TRICKY')
         ? 'The early is a baiting game; the moment you survive to your first item the matchup quietly tilts your way.'
-        : 'Neither of you gets a free early \u2014 trade only on his cooldowns and let the lead snowball from discipline.';
+        : 'Neither of you gets a free early \u2014 trade only on ' + P.p + ' cooldowns and let the lead snowball from discipline.';
       if (carry !== null) {
-        if (carry >= 8) line2 += ' And don\u2019t kid yourself: if he gets one kill he takes over the map. Treat every trade like it matters.';
-        else if (carry <= 5) line2 += ' Even if he gets ahead his ceiling is low \u2014 you can almost always re-stabilize and farm back.';
+        if (carry >= 8) line2 += ' And don\u2019t kid yourself: if ' + P.s + ' gets one kill ' + P.s + ' takes over the map. Treat every trade like it matters.';
+        else if (carry <= 5) line2 += ' Even if ' + P.s + ' gets ahead ' + P.p + ' ceiling is low \u2014 you can almost always re-stabilize and farm back.';
       }
       const VERD = {
-        FAVOURED: 'Bully him off the map before 14 minutes \u2014 this is your game to lose.',
-        EVEN: 'Out-discipline him on cooldowns and the lead is yours.',
+        FAVOURED: 'Bully ' + P.o + ' off the map before 14 minutes \u2014 this is your game to lose.',
+        EVEN: 'Out-discipline ' + P.o + ' on cooldowns and the lead is yours.',
         TRICKY: 'Bait the ' + key + ', punish the whiff, scale up.',
-        HARD: 'Survive to two items, then make him regret picking into your scaling.',
+        HARD: 'Survive to two items, then make ' + P.o + ' regret picking into your scaling.',
         MIRROR: 'Win the cooldown war and the spike timings \u2014 that\u2019s the whole match.'
       };
       return { tag: TAG[diff] || 'PLAY IT SMART', accent: accent, headline: headline, body: [line1, line2].filter(Boolean), verdict: VERD[diff] || VERD.EVEN };
@@ -6435,7 +6503,11 @@ class Component extends DCLogic {
         { id: 'support', role: 'SUP', champs: 'Morgana vs Blitz', blurb: 'Win the hook war \u2014 one Black Shield flips the lane.', a: '#9b8cff', b: '#e8b84b', onClick: () => this.openGen('support', 'Morgana', 'Blitzcrank') },
         { id: 'top2', role: 'TOP', champs: 'Fiora vs Jax', blurb: 'The grandmaster duel \u2014 vitals against the dodge. Bait E, then riposte.', a: '#ff8bd0', b: '#9b8cff', onClick: () => this.openGen('top', 'Fiora', 'Jax') },
         { id: 'mid2', role: 'MID', champs: 'Zed vs Ahri', blurb: 'Assassin vs charm \u2014 whoever lands the first skillshot owns the lane.', a: '#c7ccdb', b: '#ff5d6c', onClick: () => this.openGen('mid', 'Zed', 'Ahri') },
-        { id: 'bot2', role: 'BOT', champs: 'Draven vs Tristana', blurb: 'Pure aggression mirror \u2014 axes vs resets, the lane ends by 10 minutes.', a: '#f0883d', b: '#46c6f5', onClick: () => this.openGen('bot', 'Draven', 'Tristana') }
+        { id: 'bot2', role: 'BOT', champs: 'Draven vs Tristana', blurb: 'Pure aggression mirror \u2014 axes vs resets, the lane ends by 10 minutes.', a: '#f0883d', b: '#46c6f5', onClick: () => this.openGen('bot', 'Draven', 'Tristana') },
+        { id: 'sup2', role: 'SUP', champs: 'Thresh vs Nautilus', nA: 'Thresh', nB: 'Nautilus', blurb: 'Hook war \u2014 whoever lands the first grab decides the 2v2.', a: '#3ddc97', b: '#46c6f5', onClick: () => this.openGen('support', 'Thresh', 'Nautilus') },
+        { id: 'jg2', role: 'JG', champs: 'Graves vs Kindred', nA: 'Graves', nB: 'Kindred', blurb: 'Early carry vs scaling marks \u2014 race the first clear and the scuttle.', a: '#f0883d', b: '#9b8cff', onClick: () => this.openJg('Graves', 'Kindred') },
+        { id: 'top3', role: 'TOP', champs: 'Aatrox vs Fiora', nA: 'Aatrox', nB: 'Fiora', blurb: 'Sweetspot Q vs vitals and Riposte \u2014 bait the parry, then commit.', a: '#d8333f', b: '#ff8bd0', onClick: () => this.openGen('top', 'Aatrox', 'Fiora') },
+        { id: 'mid3', role: 'MID', champs: 'Syndra vs Cassiopeia', nA: 'Syndra', nB: 'Cassiopeia', blurb: 'Burst vs sustained DPS \u2014 own the early before she out-scales you.', a: '#9b8cff', b: '#3ddc97', onClick: () => this.openGen('mid', 'Syndra', 'Cassiopeia') }
       ].map(function(c){
         var init = function(n){ var w = n.split(/[\s'\u2019]+/).filter(Boolean); return (w.length > 1 ? w.map(function(x){ return x.charAt(0); }).join('') : n.slice(0, 2)).slice(0, 2).toUpperCase(); };
         var FIX = { 'Blitz': 'Blitzcrank' }; // display short-names -> Data Dragon names for art
@@ -6599,8 +6671,9 @@ class Component extends DCLogic {
         var foe = (MU.champB && MU.champB.name) || 'him';
         var rows = self._phaseRows(MU), win = null;
         for (var i = 0; i < rows.length; i++) { if (rows[i].who === 'A') { win = rows[i].label; break; } }
+        var P = (window.MC_PRON ? window.MC_PRON(foe) : { p: 'his' });
         var tail;
-        if (MU.key && MU.key.name && MU.key.cd) tail = 'Against ' + foe + ', it really comes down to one button: bait out his ' + MU.key.name.split(' (')[0] + ', and the moment it’s on cooldown (' + MU.key.cd + ') you’ve got your window' + (win ? ' — you’re hardest to deal with around ' + win.toLowerCase() + '.' : ' to make something happen.');
+        if (MU.key && MU.key.name && MU.key.cd) tail = 'Against ' + foe + ', it really comes down to one button: bait out ' + P.p + ' ' + MU.key.name.split(' (')[0] + ', and the moment it’s on cooldown (' + MU.key.cd + ') you’ve got your window' + (win ? ' — you’re hardest to deal with around ' + win.toLowerCase() + '.' : ' to make something happen.');
         else tail = win ? 'Against ' + foe + ', your best window is ' + win.toLowerCase() + ' — shape the lane so the fight happens there.' : 'Against ' + foe + ', don’t force a coin-flip all-in — win it through waves, vision, and the map instead.';
         return base + ' ' + tail;
       })(this),
@@ -6616,24 +6689,25 @@ class Component extends DCLogic {
       wkm: (function(self){
         var foe = (MU.champB && MU.champB.name) || '';
         var W = (window.WKM_LINES || {})[slug(foe)] || [];
+        var P = (window.MC_PRON ? window.MC_PRON(foe) : { s: 'he', o: 'him', p: 'his' });
         var L = [];
         if (W[0]) L.push(W[0]);
         var rows = self._phaseRows(MU);
         if (rows.length) {
-          if (rows[0].who === 'E') L.push('Level 1 is his — concede the first trade and just hit the wave.');
+          if (rows[0].who === 'E') L.push('Level 1 belongs to ' + (foe || 'them') + ' — concede the first trade and just hit the wave.');
           else if (rows[0].who === 'A') L.push('Level 1 is YOURS — the real danger is coasting on it while the lane flips later.');
           else L.push('Level 1 is a knife-edge skill trade — take it on your terms or not at all.');
         }
         var diff = (MU.difficulty || '').toUpperCase();
-        if (diff.indexOf('HARD') >= 0 || diff.indexOf('TRICKY') >= 0) L.push('Let the first 3 waves push to you — fighting in his half of the lane is how you die.');
+        if (diff.indexOf('HARD') >= 0 || diff.indexOf('TRICKY') >= 0) L.push('Let the first 3 waves push to you — fighting in ' + P.p + ' half of the lane is how you die.');
         else if (diff.indexOf('FAVOURED') >= 0) L.push('What actually kills you here is over-chasing past river with no vision.');
         else L.push('First shove wins priority — don’t autopilot the opening 3 waves.');
-        if (MU.key && MU.key.name && MU.key.cd) L.push('If he burns ' + MU.key.name + (MU.key.slot ? ' (' + MU.key.slot + ')' : '') + ', you have ~' + MU.key.cd + ' to trade — take that window every time.');
+        if (MU.key && MU.key.name && MU.key.cd) L.push('If ' + P.s + ' burns ' + MU.key.name + (MU.key.slot ? ' (' + MU.key.slot + ')' : '') + ', you have ~' + MU.key.cd + ' to trade — take that window every time.');
         if (W[1]) L.push(W[1]);
         if (rows.length) {
           var win = null;
           for (var i = 0; i < rows.length; i++) { if (rows[i].who === 'A') { win = rows[i].label; break; } }
-          L.push(win ? 'Your first real all-in window: ' + win + '.' : 'You never win a flat all-in — wait for his mistake or your jungler.');
+          L.push(win ? 'Your first real all-in window: ' + win + '.' : 'You never win a flat all-in — wait for ' + P.p + ' mistake or your jungler.');
         }
         return L;
       })(this),
@@ -6837,6 +6911,21 @@ class Component extends DCLogic {
       buildStart: MU.buildStart,
       buildCore: MU.buildCore,
       buildBranches: MU.buildBranches,
+      // What each champion is trying to do in this lane (archetype-driven).
+      champWants: (function(){
+        var WANTS = {
+          Juggernaut: ['Get on top of you and stay there — every step back gives them free damage', 'Drag trades into long fights where their sustain and steroids win', 'Hit the first item spike, then all-in repeatedly'],
+          Diver: ['Bait a cooldown, then commit one clean all-in', 'Snowball a single kill into map pressure and dives', 'Use mobility to pick you off when you step up'],
+          Tank: ['Survive the early, soak the lane, and out-scale you', 'Set up ganks and roams rather than solo-kill', 'Itemize and become an unkillable frontline'],
+          Mage: ['Poke you down from max range and deny the wave', 'Hit level/item power spikes and zone you off CS', 'Punish any step-up with burst, then back off'],
+          Marksman: ['Farm safely for ~8 minutes, then take over with crit items', 'Avoid early all-ins and scale into the 2v2', 'Kite back and let range do the work'],
+          Flex: ['Read your cooldowns and punish the gaps', 'Find the trade pattern that favours their kit', 'Adapt — take whatever advantage the lane gives']
+        };
+        var you = (MU.champA && MU.champA.name) || '', foe = (MU.champB && MU.champB.name) || '';
+        var cy = (typeof CLASS_OF !== 'undefined' ? CLASS_OF[you] : '') || 'Flex';
+        var cf = (typeof CLASS_OF !== 'undefined' ? CLASS_OF[foe] : '') || 'Flex';
+        return { you: { name: you, items: WANTS[cy] || WANTS.Flex }, foe: { name: foe, items: WANTS[cf] || WANTS.Flex } };
+      })(),
       // Unified, consistent Runes/Summoners/Build for every lane page (same
       // structure across all roles, picture-forward — big icons, small labels).
       loadout: (function(self){

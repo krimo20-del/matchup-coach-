@@ -163,6 +163,11 @@ function sendStatic(res, rel) {
   let full = path.normalize(path.join(ROOT, rel));
   // Extensionless pretty URLs: /privacy -> privacy.html
   if (full.startsWith(ROOT) && !path.extname(full) && fs.existsSync(full + '.html')) full += '.html';
+  // SPA fallback: deep links like /matchup/aatrox-vs-darius serve the app
+  // (the page uses <base href="/"> so relative assets still resolve).
+  if (full.startsWith(ROOT) && !path.extname(full) && !fs.existsSync(full) && /^matchup\//.test(rel)) {
+    full = path.join(ROOT, 'MatchupCoach.dc.html');
+  }
   if (!full.startsWith(ROOT) || !fs.existsSync(full) || !fs.statSync(full).isFile()) {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     return res.end('404');

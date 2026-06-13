@@ -9,7 +9,7 @@
   // tree (2 runes), 3 shards, starting items, 3 core items, boots, 2 options.
   var A = {
     juggernaut: {
-      label: 'Juggernaut', summoners: ['Flash', 'Teleport'],
+      label: 'Juggernaut', summHigh: ['Flash', 'Teleport'], summLow: ['Flash', 'Ignite'],
       keystone: 'Conqueror', primaryTree: 'Precision', primary: ['Triumph', 'Legend: Alacrity', 'Last Stand'],
       secondaryTree: 'Resolve', secondary: ['Second Wind', 'Unflinching'],
       shards: ['Adaptive Force', 'Adaptive Force', 'Health'],
@@ -18,7 +18,7 @@
       options: [{ label: 'vs Heavy AD', items: ['Thornmail', 'Randuin’s Omen'] }, { label: 'vs Heavy AP', items: ['Maw of Malmortius', 'Spirit Visage'] }]
     },
     diver: {
-      label: 'Diver / Skirmisher', summoners: ['Flash', 'Ignite'],
+      label: 'Diver / Skirmisher', summHigh: ['Flash', 'Ignite'], summLow: ['Flash', 'Ignite'],
       keystone: 'Conqueror', primaryTree: 'Precision', primary: ['Triumph', 'Legend: Alacrity', 'Last Stand'],
       secondaryTree: 'Domination', secondary: ['Sudden Impact', 'Treasure Hunter'],
       shards: ['Adaptive Force', 'Adaptive Force', 'Health'],
@@ -27,7 +27,7 @@
       options: [{ label: 'vs Squishy', items: ['Serylda’s Grudge', 'Edge of Night'] }, { label: 'vs Tanks', items: ['Black Cleaver', 'Death’s Dance'] }]
     },
     tank: {
-      label: 'Tank / Vanguard', summoners: ['Flash', 'Teleport'],
+      label: 'Tank / Vanguard', summHigh: ['Flash', 'Teleport'], summLow: ['Flash', 'Teleport'],
       keystone: 'Grasp of the Undying', primaryTree: 'Resolve', primary: ['Demolish', 'Second Wind', 'Overgrowth'],
       secondaryTree: 'Precision', secondary: ['Triumph', 'Legend: Alacrity'],
       shards: ['Adaptive Force', 'Health', 'Health'],
@@ -36,7 +36,7 @@
       options: [{ label: 'vs AD', items: ['Frozen Heart', 'Randuin’s Omen'] }, { label: 'vs AP', items: ['Spirit Visage', 'Kaenic Rookern'] }]
     },
     mage: {
-      label: 'Mage / Artillery', summoners: ['Flash', 'Teleport'],
+      label: 'Mage / Artillery', summHigh: ['Flash', 'Teleport'], summLow: ['Flash', 'Ignite'],
       keystone: 'Electrocute', primaryTree: 'Domination', primary: ['Cheap Shot', 'Eyeball Collection', 'Treasure Hunter'],
       secondaryTree: 'Sorcery', secondary: ['Manaflow Band', 'Scorch'],
       shards: ['Adaptive Force', 'Adaptive Force', 'Health'],
@@ -45,7 +45,7 @@
       options: [{ label: 'vs Dive', items: ['Zhonya’s Hourglass', 'Banshee’s Veil'] }, { label: 'vs Tanks', items: ['Liandry’s Torment', 'Void Staff'] }]
     },
     assassin: {
-      label: 'Assassin', summoners: ['Flash', 'Ignite'],
+      label: 'Assassin', summHigh: ['Flash', 'Ignite'], summLow: ['Flash', 'Ignite'],
       keystone: 'Electrocute', primaryTree: 'Domination', primary: ['Sudden Impact', 'Eyeball Collection', 'Ultimate Hunter'],
       secondaryTree: 'Sorcery', secondary: ['Absolute Focus', 'Gathering Storm'],
       shards: ['Adaptive Force', 'Adaptive Force', 'Health'],
@@ -54,7 +54,7 @@
       options: [{ label: 'AD Assassin', items: ['Youmuu’s Ghostblade', 'Profane Hydra'] }, { label: 'vs Squishy', items: ['Void Staff', 'Zhonya’s Hourglass'] }]
     },
     marksman: {
-      label: 'Marksman / ADC', summoners: ['Flash', 'Heal'],
+      label: 'Marksman / ADC', summHigh: ['Flash', 'Heal'], summLow: ['Flash', 'Barrier'],
       keystone: 'Press the Attack', primaryTree: 'Precision', primary: ['Presence of Mind', 'Legend: Alacrity', 'Cut Down'],
       secondaryTree: 'Domination', secondary: ['Taste of Blood', 'Treasure Hunter'],
       shards: ['Adaptive Force', 'Attack Speed', 'Health'],
@@ -63,7 +63,7 @@
       options: [{ label: 'vs Tanks', items: ['Blade of the Ruined King', 'Lord Dominik’s Regards'] }, { label: 'Survivability', items: ['Bloodthirster', 'Phantom Dancer'] }]
     },
     enchanter: {
-      label: 'Enchanter Support', summoners: ['Flash', 'Ignite'],
+      label: 'Enchanter Support', summHigh: ['Flash', 'Ignite'], summLow: ['Flash', 'Exhaust'],
       keystone: 'Summon Aery', primaryTree: 'Sorcery', primary: ['Manaflow Band', 'Transcendence', 'Scorch'],
       secondaryTree: 'Inspiration', secondary: ['Biscuit Delivery', 'Cosmic Insight'],
       shards: ['Adaptive Force', 'Adaptive Force', 'Health'],
@@ -72,7 +72,7 @@
       options: [{ label: 'vs Poke', items: ['Mikael’s Blessing', 'Redemption'] }, { label: 'Peel', items: ['Shurelya’s Battlesong', 'Redemption'] }]
     },
     engage: {
-      label: 'Engage Support', summoners: ['Flash', 'Ignite'],
+      label: 'Engage Support', summHigh: ['Flash', 'Ignite'], summLow: ['Flash', 'Exhaust'],
       keystone: 'Aftershock', primaryTree: 'Resolve', primary: ['Font of Life', 'Bone Plating', 'Overgrowth'],
       secondaryTree: 'Inspiration', secondary: ['Biscuit Delivery', 'Cosmic Insight'],
       shards: ['Ability Haste', 'Health', 'Health'],
@@ -111,13 +111,8 @@
     }
     var base = A[key];
     var preset = JSON.parse(JSON.stringify(base));
-    if (role === 'jungle') { preset.summoners = ['Smite', 'Flash']; preset.start = ['Jungle Companion', 'Health Potion']; }
+    if (role === 'jungle') { preset.summHigh = ['Smite', 'Flash']; preset.summLow = ['Smite', 'Flash']; preset.start = ['Jungle Companion', 'Health Potion']; }
     preset.archetype = key;
-    // Elo line shown next to summoners (no prose paragraph).
-    preset.eloLine = role === 'bot' ? 'Emerald+ · standard ADC page'
-      : role === 'support' ? 'Emerald+ · standard support page'
-      : role === 'jungle' ? 'Emerald+ · standard jungle page'
-      : 'Emerald+ · standard ' + role + ' page';
     return preset;
   };
 })();

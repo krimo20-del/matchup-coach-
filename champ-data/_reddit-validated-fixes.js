@@ -987,6 +987,292 @@
         "Your Eclipse spike beats a one-item Yasuo. Force the all-in before his crit spike.",
         "Two items in (IE + crit) he out-DPS your sustain. You own early-mid — close before he scales."
       ]
+    },
+    {
+      a: 'aatrox', b: 'singed',
+      win: ['Singed', 'Singed', 'Skill', 'Singed', 'Skill', 'Singed', 'Singed'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Singed proxies and kites — don’t chase him through his poison.' },
+        { when: 'Lvl 6', text: 'His R + goo (W) makes him uncatchable — don’t tower-dive the chase.' },
+        { when: '1st item', text: 'He out-farms you via proxy; clean kills are scarce.' },
+        { when: 'Late', text: 'Proxy Singed is a macro problem, not a duel — answer on the map.' }
+      ],
+      wants: {
+        you: ['Catch him only when his goo (W) / R are down', 'Match his proxy CS instead of chasing', 'Ward flanks so he can’t fling you under tower'],
+        foe: ['Proxy the wave and kite you through poison', 'Fling (E) you under tower with goo + R', 'Out-macro the lane without ever fighting']
+      },
+      early: "Singed doesn't duel you — he proxies the wave behind your tower and kites you through his poison trail and goo (W slow). Chasing him is how you die: you eat poison, he flings (E) you under his tower, and his R makes him faster than you. Don't take the bait. Match his CS, hold your wave, and play for your jungler.",
+      mid: "Your only kill windows are the rare moments you catch him with goo and R down — and even then his slow and movement make it hard. At 6 his R is a big speed steroid; do not tower-dive a Singed who runs circles around you. Accept the lane is a farming contest and don't over-extend into ganks his kiting sets up.",
+      late: "Proxy Singed is a macro headache, not a 1v1 — he splitpushes and flings your carries in fights. You can't reliably solo-kill him, so answer him on the map: match his side-lane pressure, group with your team, and let your CC peel his fling. Don't tilt-chase; that's exactly the game he wants.",
+      whys: [
+        "Singed proxies behind your tower and kites through poison. Don't chase — match his CS, hold your wave.",
+        "His goo (W) slows you in the poison trail. Stepping in to trade just feeds the kite.",
+        "Rare window: if you catch him with W down you can trade — otherwise don't bite.",
+        "Chasing him through poison is how you die. Ward flanks, don't get flung under tower.",
+        "His R speed makes him uncatchable — never tower-dive the chase. Farm instead.",
+        "He out-farms you via proxy; clean kills are scarce. Play the map, not the bait.",
+        "Proxy Singed is a macro problem. Group, peel his fling, match side pressure — don't tilt-chase."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'kennen',
+      win: ['Kennen', 'Kennen', 'Skill', 'Kennen', 'Kennen', 'Kennen', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Kennen pokes you out with Q from range — farm and respect it.' },
+        { when: 'Lvl 6', text: 'His R (AOE stun) + E burst is a real kill threat — don’t get chunked low.' },
+        { when: '1st item', text: 'He pokes you down before you can close — buy MR, hug minions.' },
+        { when: 'Late', text: 'Catch him once (W-pull) and he dies — but he kites all game.' }
+      ],
+      wants: {
+        you: ['Hug minions to dodge his Q poke', 'Catch him with W-pull — he’s squishy and dies', 'Buy MR + close the gap on his E cooldown'],
+        foe: ['Poke you out with Q (shuriken) from range', 'Kite with E (Lightning Rush move speed)', 'Burst you with R (stun) + E when you’re low']
+      },
+      early: "Kennen out-ranges you and pokes with Q (shuriken) — a hard lane because you can't trade back at range, and his E (Lightning Rush) lets him dart in for a mark and back out. Hug your minions to body-block the Q, last-hit carefully, and accept some chip. Don't step into open ground where he free-pokes you.",
+      mid: "His damage ramps and at 6 his R (Slicing Maelstrom) is an AOE stun that, with a full E-Q-R combo, chunks you from range — don't be at low HP when it's up. Buy MR early. Your one path is to catch him: land W-pull when his E is down and delete his squishy frame, but he'll kite most attempts.",
+      late: "Kennen is squishy — land a full combo and he dies — but his whole game is kiting and poking so you rarely get the chance. He scales into a teamfight AOE-stun threat. Win by closing on his E cooldown in skirmishes, building MR, and not letting him free-poke you down before you reach him.",
+      whys: [
+        "Kennen out-ranges you with Q poke. Hug minions to block it; you can't trade back at range.",
+        "His E (Lightning Rush) darts in for a mark and out. Don't chase — farm and respect the poke.",
+        "Rare window: if his E is down, W-pull and punish his squishy frame. Otherwise he kites.",
+        "He pokes you down between trades. Buy MR, hug minions, don't step into open ground.",
+        "His R (AOE stun) + E combo bursts you from range — don't be low when it's up.",
+        "He out-pokes your gap-close. Close only on his E cooldown; otherwise he kites free.",
+        "Catch him once and he dies — but he kites all game. Build MR, close in skirmishes, deny the poke."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'urgot',
+      win: ['Skill', 'Urgot', 'Urgot', 'Skill', 'Skill', 'Aatrox', 'Aatrox'],
+      spikes: [
+        { when: 'Lvl 2–3', text: 'Urgot’s window — his W (shotgun knees) + Q out-trade you early.' },
+        { when: 'Lvl 6', text: 'His R can execute you low — keep your HP above the threshold.' },
+        { when: '1st item', text: 'Your Eclipse spike flips it — out-sustain his shield trades.' },
+        { when: 'Late', text: 'You edge it — your DPS + heal beat his shotgun poke.' }
+      ],
+      wants: {
+        you: ['Survive his strong level 2-3, then scale', 'Stay above his R execute threshold', 'Out-sustain his W shield trades mid-game'],
+        foe: ['Out-trade early with W (shotgun knees) + Q', 'Flip you with E into his shotgun stance', 'Execute you with R when you drop low']
+      },
+      early: "Urgot's early is strong — his W (shotgun knees) shreds you up close and his Q adds poke, so levels 2-3 are his window. His E flips over you and shields him. Don't sit in his W stance trading autos; take the poke on the chin, last-hit, and wait for your spike. Respect that he out-trades you right now.",
+      mid: "Your sustain catches up and flips the lane. Once you hit your first item you out-heal his shotgun trades — but watch his R (Fear Beyond Death): it executes you below a health threshold and refreshes, so keep your HP topped and don't all-in while low. Bait his E flip, then commit your combo.",
+      late: "You edge the matchup — your DPS and healing out-grind his shotgun poke in the extended fight. Stay above his R execute line and you win the duel. Press your item spikes, force the all-ins your sustain wins, and don't feed him a low-HP execute. Survive his strong early and the back half is yours.",
+      whys: [
+        "Urgot's early is strong — his W + Q out-trade you at 2-3. Don't contest; take the poke and farm.",
+        "His W (shotgun knees) shreds you up close. Don't sit in his stance trading autos.",
+        "Still his window — his E flip + shield wins the trade. Survive it, wait for your spike.",
+        "Your sustain starts catching up. Bait his E flip before you commit anything.",
+        "His R executes you below a threshold and refreshes — keep your HP up, don't all-in low.",
+        "Your Eclipse spike flips it — out-heal his shotgun trades. Start forcing the all-ins.",
+        "You edge it late — DPS + heal beat his poke. Stay above his execute line and you win."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'kled',
+      win: ['Kled', 'Kled', 'Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Kled’s window — mounted aggression + grab (Q) bully your weak early.' },
+        { when: 'Lvl 6', text: 'Dismount him — off Skaarl he’s weak; punish before he remounts.' },
+        { when: '1st item', text: 'Your Eclipse spike flips it — out-sustain his courage trades.' },
+        { when: 'Late', text: 'You out-scale — Kled falls off, your sustain takes over.' }
+      ],
+      wants: {
+        you: ['Survive his mounted early aggression', 'Dismount him, then punish before he remounts', 'Out-scale his falloff with your sustain'],
+        foe: ['Bully your weak early while mounted (Skaarl)', 'Grab you with Q and burst with W courage', 'Snowball before you out-scale him']
+      },
+      early: "Mounted Kled is a hyper-aggressive early bully — his Q (Beartrap) grabs you, his W stacks courage for burst, and he wants to all-in your weak levels 1-2. Don't feed the grab. Take the poke, deny what you can, and survive: his entire plan is to snowball before your sustain comes online.",
+      mid: "The key is dismounting him. Trade enough to strip Skaarl and off his mount Kled is weak and slow — punish that window hard before he restores courage and remounts. From around 5-6 your sustain flips the lane; bait his W burst, then E-W-Q and out-heal the trade. Don't let him reset and remount for free.",
+      late: "You out-scale him. Kled is a front-loaded early bully who falls off, while your sustain and DPS only grow. Survive the mounted aggression, punish every dismount, and by your item spikes the lane is yours. Don't chase a remounting Kled into his jungle — make him fight you in lane where you win the long game.",
+      whys: [
+        "Mounted Kled bullies your weak early with Q grab + W burst. Don't feed the grab — survive.",
+        "His courage stacks make level 1-2 his window. Take the poke, deny CS, wait it out.",
+        "Trade to dismount him — off Skaarl he's weak. Punish before he remounts.",
+        "Keep stripping his mount. Dismounted Kled is slow and vulnerable; that's your window.",
+        "Your sustain flips it now — bait his W burst, then E-W-Q and out-heal the trade.",
+        "Your Eclipse spike beats his — force the all-in, deny the remount reset.",
+        "You out-scale — Kled falls off. Punish dismounts, don't chase the remount; win the long game."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'wukong',
+      win: ['Skill', 'Skill', 'Skill', 'Wukong', 'Wukong', 'Aatrox', 'Aatrox'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Even — his Q (armor shred) out-trades short pokes; bait the clone.' },
+        { when: 'Lvl 4–6', text: 'Wukong’s window — clone (W) juke + E-R knockup all-in.' },
+        { when: '1st item', text: 'Your Eclipse spike flips it — out-sustain once his combo is down.' },
+        { when: 'Late', text: 'You edge it — your sustain beats his cooldown-reliant burst.' }
+      ],
+      wants: {
+        you: ['Bait his clone (W) before you commit', 'Out-sustain his burst once his combo is down', 'Punish him on his E / R cooldowns'],
+        foe: ['Out-trade with Q (armor shred) auto-resets', 'Juke your combo with the clone (W)', 'All-in with E-dash into R (spin knockup)']
+      },
+      early: "Wukong out-trades short exchanges early — his Q shreds your armour and resets his auto, and his clone (W) jukes your combo and disengages. Levels 1-3 are even on farm; don't dump your combo at a clone. Bait the W out, then trade when it's down. Respect that his Q makes his autos hurt more than you'd think.",
+      mid: "Levels 4-6 are his window — with E (dash) into R (spin knockup) plus the clone, he has a real burst all-in. Don't get caught at low HP when his combo is up, and watch for the clone juke mid-fight. Bait or eat the W, survive the knockup, and your sustain stabilizes the trade. Track his E and R cooldowns.",
+      late: "You edge it once you have items — Wukong's damage is cooldown-reliant burst, and when his combo is down your sustain out-grinds him. Punish him on his E/R cooldowns, bait the clone before committing, and out-heal the extended fight. Your Eclipse spike beats his; force the all-ins where his burst is down.",
+      whys: [
+        "Wukong's Q shreds armour and resets his auto. Even at 1 — don't trade into a clone.",
+        "His clone (W) jukes your combo. Bait it out before you commit anything.",
+        "Even on farm — trade when his W is down. His autos hit harder than they look (Q shred).",
+        "His window: E-dash into R knockup + clone is a burst all-in. Don't be low when it's up.",
+        "Survive the knockup and clone juke — then your sustain stabilizes. Track his cooldowns.",
+        "Your Eclipse spike flips it — out-sustain once his combo is down. Force the all-in.",
+        "You edge it late — his burst is cooldown-reliant. Punish his E/R downtime, out-heal the fight."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'illaoi',
+      win: ['Skill', 'Skill', 'Skill', 'Skill', 'Illaoi', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Fight OUTSIDE her tentacles — dodge her E (Test of Spirit).' },
+        { when: 'Lvl 6', text: 'Illaoi’s window — R spawns a wall of tentacles; never fight in them.' },
+        { when: '1st item', text: 'Even — whoever controls the tentacle ground wins the trade.' },
+        { when: 'Late', text: 'Don’t side-lane in her tentacle nest; fight on open ground.' }
+      ],
+      wants: {
+        you: ['Fight on open ground away from her tentacles', 'Dodge her E (Test of Spirit) — it rips your soul', 'All-in her when her tentacles aren’t set up'],
+        foe: ['Spawn tentacles and fight inside them', 'Rip your soul with E (Test of Spirit)', 'Slam you with empowered W in her tentacle zone']
+      },
+      early: "Illaoi is all about positioning. Inside her tentacle field she does monstrous damage; out of it she's slow and beatable. Her E (Test of Spirit) rips your soul — dodge it, because letting her hit it means she can beat your spirit-vessel for huge damage. Levels 1-3, fight only on open ground away from her tentacles, and don't path into her Q slams.",
+      mid: "Level 6 is her window — R (Leap of Faith) spawns a wall of tentacles and turns any fight into a beating. Never all-in her standing in her nest; you'll get slammed from five directions. Bait her R or fight before it, drag her onto fresh ground where her tentacles aren't, and your sustain wins the open duel.",
+      late: "The lane stays a positioning chess match — whoever controls the tentacle ground wins the trade. Don't side-lane into her nest late; her R + tentacles shred you and your team in a contained fight. Pull her onto open ground, dodge the E, and fight when her tentacles are down. Respect her teamfight, win the spacing.",
+      whys: [
+        "Illaoi is lethal inside her tentacles, weak outside. Fight on open ground; dodge her E soul-rip.",
+        "Don't let her land E (Test of Spirit) — beating your vessel deals huge damage. Sidestep it.",
+        "Even on open ground — all-in her when no tentacles are set up nearby.",
+        "Don't path into her Q slams or stand by her tentacles. Drag the fight to fresh ground.",
+        "Her R spawns a tentacle wall — never fight inside it. Bait the R or fight before 6.",
+        "Even — whoever owns the tentacle ground wins. Force fights where hers are down.",
+        "Don't side-lane into her nest late. Pull her to open ground, dodge E, win the spacing."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'gangplank',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Skill', 'Aatrox', 'Gangplank'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'He pokes with Q (Parrrley) — close and punish his squishy frame.' },
+        { when: 'Lvl 6', text: 'Even — his W cleanses your slow; bait it before you all-in.' },
+        { when: '1st item', text: 'Your Eclipse spike beats a one-item GP — force it before barrels.' },
+        { when: '2+ items', text: 'Gangplank takes over — crit + barrel chains out-DPS you.' }
+      ],
+      wants: {
+        you: ['Close the gap and punish his squishy frame', 'Detonate or dodge his barrels (E)', 'Win before his crit items come online'],
+        foe: ['Poke with Q (Parrrley) and chain barrels (E)', 'Cleanse your CC + slow with W (Remove Scurvy)', 'Out-scale into a crit + barrel teamfight threat']
+      },
+      early: "Gangplank pokes with Q (Parrrley) and sets up barrels (E), but he's squishy and has no escape — once you close, your combo punishes him hard. Don't let him free-poke from range; walk him down behind minions and destroy his barrels before they chain. Levels 1-3 you out-trade him if you reach him.",
+      mid: "It's even through 6 — his W (Remove Scurvy) cleanses your W-pull slow and heals, so bait it before you all-in or your engage fizzles. Keep destroying his barrels so he can't combo them, and force trades where his squishy frame loses to your sustain. Don't get chunked by a full barrel-Q chain from range.",
+      late: "Gangplank takes over at two items — crit Q + chained barrels out-DPS your sustain and his R (Cannon Barrage) zones the map. The lane is even because you crush him early-mid and he crushes late. Press your spike, deny his farm and barrel setups, and end it before his crit items make the poke lethal.",
+      whys: [
+        "GP pokes with Q but is squishy with no escape. Close the gap and punish — don't eat free poke.",
+        "Destroy his barrels (E) before they chain. Walk him down behind minions.",
+        "Your combo punishes him once you reach him. Force the trade on his squishy frame.",
+        "Even through here — keep popping barrels and deny the poke chain.",
+        "His W cleanses your slow and heals — bait it before you all-in, or your engage fizzles.",
+        "Your Eclipse spike beats a one-item GP. Force the all-in before his crit comes online.",
+        "Two items in, crit + barrels out-DPS you. You own early — end it before his scaling."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'sylas',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Skill', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your combo out-trades him — but his W heals the trade back.' },
+        { when: 'Lvl 6', text: 'He can steal your R — bait it, and don’t all-in into his E stun.' },
+        { when: '1st item', text: 'Your Eclipse spike edges his — force the extended fight.' },
+        { when: 'Late', text: 'Roughly even — both sustain; whoever lands their combo wins.' }
+      ],
+      wants: {
+        you: ['Catch him with W-pull through his E dash', 'Out-DPS his W self-heal in the extended fight', 'Bait his E (chain stun) before committing'],
+        foe: ['Poke with Q (double whip) and heal with W', 'Dash + chain-stun you with E', 'Steal and turn your R against you']
+      },
+      early: "Sylas is an AP skirmisher with his own sustain — his Q (double whip) pokes and his W heals off it, so a poke war favours him. Your edge is the all-in: your combo out-trades his, but his W heals the trade back, so you need to commit fully, not chip. Land W-pull to stop his E dash and lock him in your Q-sweetspot.",
+      mid: "Respect two things: his E is a two-part dash + chain stun (don't all-in into a held E), and his R steals YOUR ultimate — a stolen Aatrox R is a strong all-in, so bait it out or fight when it's down. Through the mid-game your sustain and his roughly cancel; whoever lands their combo cleanly wins the trade.",
+      late: "Roughly even into late — both of you sustain through fights, so the duel comes down to who lands their key ability (your W-pull vs his E stun) and who spikes first. Your Eclipse edges his first item in an extended fight. Force the long all-in, out-DPS his self-heal, and don't hand him a free stolen-R window.",
+      whys: [
+        "Sylas pokes with Q and heals with W — a poke war favours him. Commit to all-ins, not chip.",
+        "His W heals the trade back. You out-trade only if you fully commit, not poke.",
+        "Your combo out-trades him — W-pull to stop his E dash, then Q-sweetspot. Force it.",
+        "Even sustain trades — land your full combo or don't bother. Bait his E first.",
+        "His E is a dash + chain stun and his R steals yours — bait both before you all-in.",
+        "Your Eclipse spike edges his — force the extended fight where you out-DPS his heal.",
+        "Even late — both sustain. Whoever lands their combo wins; deny his stolen-R window."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'yone',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Skill', 'Aatrox', 'Yone'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your combo out-trades him — W-pull catches him mid-dash.' },
+        { when: 'Lvl 6', text: 'His R (knockup dash) is a strong all-in — don’t be low when it’s up.' },
+        { when: '1st item', text: 'Your Eclipse spike edges a one-item Yone — force it.' },
+        { when: '2+ items', text: 'Yone takes over — crit + mobility out-DPS your sustain.' }
+      ],
+      wants: {
+        you: ['Catch him with W-pull through his Q dash / E', 'Out-sustain his trades before his crit items', 'Punish him after he commits E (spirit form)'],
+        foe: ['Poke with Q and dash on the third cast', 'Retreat with E (spirit form snaps him back)', 'All-in with R (knockup) and scale to crit']
+      },
+      early: "Yone is a mobile skirmisher — his Q dashes on the third cast, his E (spirit form) lets him commit then snap back to safety, and his passive gives shields and crit. Your answer is W-pull: land it to cancel his mobility and lock him in your sweetspot. Levels 1-3 your combo out-trades him if you catch him; don't swing at a dashing Yone.",
+      mid: "His big window is R (Fate Sealed) — a knockup dash all-in, often comboed off E, that chunks you, so don't sit at low HP when it's up. Punish him after he commits E: he's locked into the return path. Through the mid-game your sustain out-lasts his trades when you land W; force the fight after his dashes are spent.",
+      late: "Yone takes over at two items — crit + his mobility let him out-DPS and kite your sustain, and his E/R make him slippery. The lane is even because you out-trade his early-mid and he scales past you. Press your spike, land your W-pulls, and build a lead before his crit items flip the duel. Don't let him free-poke into scaling.",
+      whys: [
+        "Yone dashes with Q and darts with E. W-pull cancels his mobility — catch him and you win the trade.",
+        "Don't swing at a dashing Yone. Wait for a clean W, then commit your combo.",
+        "Your combo out-trades him once locked. Force the trade after his dash is down.",
+        "Even trades — punish him after he commits E (he's locked into the return). Land W first.",
+        "His R (knockup dash) is a strong all-in off E — don't be low when it's up.",
+        "Your Eclipse spike edges a one-item Yone. Force the all-in on his dash cooldowns.",
+        "Two items in, crit + mobility out-DPS your sustain. You own early — close before he scales."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'olaf',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your combo out-trades him early — dodge his axe (Q).' },
+        { when: 'Lvl 6', text: 'His R makes him CC-immune — don’t rely on W-pull to peel his all-in.' },
+        { when: '1st item', text: 'Your Eclipse spike beats his — out-sustain his reckless trades.' },
+        { when: 'Late', text: 'You edge it — your sustain out-grinds his lifesteal in long fights.' }
+      ],
+      wants: {
+        you: ['Dodge his axe (Q) — without it he can’t slow/chase', 'Out-sustain his reckless lifesteal trades', 'Kite his R (CC-immune) — don’t rely on W to peel'],
+        foe: ['Pick up his axe (Q) to slow and out-trade you', 'Ramp attack speed + lifesteal as he drops low', 'Go CC-immune with R for an unstoppable all-in']
+      },
+      early: "Olaf out-trades recklessly — his Q axe slows you and his passive gives attack speed and lifesteal as his HP drops, so a careless brawl can favour him. The counter is the axe: if he misses Q (or you make him walk to pick it up), he can't slow or chase you. Dodge it, and your combo out-trades him early.",
+      mid: "His R (Ragnarok) is the key — it makes him CC-immune, so your W-pull and knockup won't peel his all-in once it's active. Don't rely on CC to stop a R'd Olaf; kite the duration or pre-empt the fight before he ults. Your sustain out-lasts his reckless trades when his axe is down and his R isn't up.",
+      late: "You edge the matchup — in an extended fight your healing out-grinds his lifesteal, and outside his R window you control him by dodging the axe. Your Eclipse spike beats his. Force trades on his Q and R cooldowns, out-sustain the brawl, and don't get baited into an all-in the moment his Ragnarok is up.",
+      whys: [
+        "Olaf's Q axe slows and sets up his trade. Dodge it — without the axe he can't chase you.",
+        "His passive ramps attack speed + lifesteal as he drops low. Don't brawl carelessly into it.",
+        "Your combo out-trades him when his axe is down. Force the trade on the Q cooldown.",
+        "You out-trade through 4-5 — keep dodging the axe and out-sustaining the brawl.",
+        "His R makes him CC-immune — W-pull won't peel his all-in. Kite the duration or fight before 6.",
+        "Your Eclipse spike beats his — out-sustain his reckless trades. Force the all-in.",
+        "You edge it late — your heal out-grinds his lifesteal. Fight on his Q/R cooldowns."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'warwick',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your combo out-trades him — he’s a weak laner before items.' },
+        { when: 'Lvl 6', text: 'His R is a point-blank suppress all-in — don’t get caught low.' },
+        { when: '1st item', text: 'Your Eclipse spike beats his — out-DPS his lifesteal.' },
+        { when: 'Late', text: 'You edge it — your sustain out-grinds his low-HP healing.' }
+      ],
+      wants: {
+        you: ['Out-trade his weak early before his lifesteal ramps', 'Stay healthy so his R all-in can’t finish you', 'Out-DPS his Q lifesteal in the extended fight'],
+        foe: ['Sustain with Q lifesteal (huge when you’re low)', 'Chase you down with W (move speed on low HP)', 'All-in with R (point-blank suppress)']
+      },
+      early: "Warwick is a weak laner before items — his Q heals him (more the lower you are) and his W gives chase speed, but early he can't out-trade your combo. Punish that: levels 1-3 you win the trade. Just don't drop low yourself, because his Q lifesteal scales off your missing health and his W will run you down.",
+      mid: "His all-in is R (Infinite Duress) — a point-blank suppress that locks you for a full combo, so don't get caught at low HP within his jump range. Outside the ult, your combo out-trades him and your sustain matches his. Bait or respect the R, stay healthy, and force trades where his lifesteal can't out-heal your DPS.",
+      late: "You edge it — in the extended fight your healing out-grinds his Q lifesteal, especially if you keep your HP up so his low-health bonuses don't trigger. Your Eclipse spike beats his. Force the all-ins, deny him the low-HP windows his kit feeds on, and don't walk into a R suppress while chunked.",
+      whys: [
+        "Warwick is a weak early laner. Your combo out-trades him at 1-3 — punish before his items.",
+        "His Q heals more the lower you are. Win the trade but don't drop low into his lifesteal.",
+        "Your full combo out-trades him. Force the trade while he's weak and item-less.",
+        "You out-trade through 4-5 — keep your HP up so his low-health bonuses don't kick in.",
+        "His R is a point-blank suppress all-in — don't get caught low in his jump range.",
+        "Your Eclipse spike beats his — out-DPS his lifesteal. Force the all-in, stay healthy.",
+        "You edge it late — your heal out-grinds his low-HP healing. Deny him the low windows."
+      ]
     }
   ];
   window.MC_MATCHUP_EXTRA = window.MC_MATCHUP_EXTRA || {};

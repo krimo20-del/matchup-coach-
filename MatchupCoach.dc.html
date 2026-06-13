@@ -7297,7 +7297,12 @@ class Component extends DCLogic {
       })(),
       dos: (MU.dos || []).map((x) => { var o = typeof x === 'string' ? { t: x, d: '' } : x; return { t: this.txtN(o.t, 2), d: o.d ? this.txtN(o.d, 2) : '' }; }),
       donts: (MU.donts || []).map((x) => { var o = typeof x === 'string' ? { t: x, d: '' } : x; return { t: this.txtN(o.t, 2), d: o.d ? this.txtN(o.d, 2) : '' }; }),
-      spikes: MU.spikes,
+      spikes: (function(){
+        var yN = (MU.champA && MU.champA.name) || '', fN = (MU.champB && MU.champB.name) || '';
+        var _s = function(n){ return String(n || '').toLowerCase().replace(/[^a-z0-9]/g, ''); };
+        var ex = (window.MC_MATCHUP_EXTRA || {})[_s(yN)]; ex = ex && ex[_s(fN)];
+        return (ex && ex.spikes) ? ex.spikes : MU.spikes;
+      })(),
       enemy: (MU.enemy || []).map((x) => this.txtN(x, 2)),
       youWant: (function(self){ var seen = {}; return (MU.youWant || (MU.dos || []).map(function(x){ return typeof x === 'string' ? x : (x && x.t ? x.t : ''); }).filter(Boolean).slice(0, 5)).map(function(x){ return self.txtN(x, 2); }).filter(function(s){ var k = s.toLowerCase(); if (!s || seen[k]) return false; seen[k] = 1; return true; }); })(this),
       checklist,
@@ -7375,6 +7380,10 @@ class Component extends DCLogic {
       buildBranches: MU.buildBranches,
       // What each champion is trying to do in this lane (archetype-driven).
       champWants: (function(){
+        var youN = (MU.champA && MU.champA.name) || '', foeN = (MU.champB && MU.champB.name) || '';
+        var _sl = function(n){ return String(n || '').toLowerCase().replace(/[^a-z0-9]/g, ''); };
+        var _ex = (window.MC_MATCHUP_EXTRA || {})[_sl(youN)]; _ex = _ex && _ex[_sl(foeN)];
+        if (_ex && _ex.wants) return { you: { name: youN, items: _ex.wants.you }, foe: { name: foeN, items: _ex.wants.foe } };
         var WANTS = {
           Juggernaut: ['Get on top of you and stay there — every step back gives them free damage', 'Drag trades into long fights where their sustain and steroids win', 'Hit the first item spike, then all-in repeatedly'],
           Diver: ['Bait a cooldown, then commit one clean all-in', 'Snowball a single kill into map pressure and dives', 'Use mobility to pick you off when you step up'],

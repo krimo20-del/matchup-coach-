@@ -31,7 +31,12 @@
   var FIX = [
     { a: 'darius',   b: 'garen',       da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Garen'] },
     { a: 'camille',  b: 'fiora',       da: 'FAVOURED', db: 'TRICKY',   win: ['Fiora', 'Skill', 'Skill', 'Skill', 'Skill', 'Camille', 'Camille'] },
-    { a: 'renekton', b: 'darius',      da: 'FAVOURED', db: 'TRICKY',   win: ['Renekton', 'Renekton', 'Renekton', 'Skill', 'Skill', 'Skill', 'Skill'] },
+    // Renekton vs Darius — Renekton favoured overall (dominates the early GAME),
+    // but that edge is L2-5: combo online + Fury for short hit-and-run trades.
+    // LEVEL 1 belongs to DARIUS — Renekton has one ability and no Fury (empowered
+    // stun offline), so a prolonged auto-heavy all-in is won by Darius's Hemorrhage
+    // bleed + Crippling Strike. Darius also scales relatively better very late.
+    { a: 'renekton', b: 'darius',      da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Renekton', 'Renekton', 'Renekton', 'Skill', 'Skill', 'Darius'] },
     { a: 'darius',   b: 'nasus',       da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Nasus'] },
     { a: 'darius',   b: 'mordekaiser', da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Mordekaiser', 'Skill', 'Skill'] },
     // Jax vs Fiora — near-even (~50/50), slight Fiora in the late 1v1 (parry + %-HP

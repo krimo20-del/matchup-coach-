@@ -33,7 +33,14 @@
     { a: 'camille',  b: 'fiora',       da: 'FAVOURED', db: 'TRICKY',   win: ['Fiora', 'Skill', 'Skill', 'Skill', 'Skill', 'Camille', 'Camille'] },
     { a: 'renekton', b: 'darius',      da: 'FAVOURED', db: 'TRICKY',   win: ['Renekton', 'Renekton', 'Renekton', 'Skill', 'Skill', 'Skill', 'Skill'] },
     { a: 'darius',   b: 'nasus',       da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Nasus'] },
-    { a: 'darius',   b: 'mordekaiser', da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Mordekaiser', 'Skill', 'Skill'] }
+    { a: 'darius',   b: 'mordekaiser', da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Mordekaiser', 'Skill', 'Skill'] },
+    // Jax vs Fiora — near-even (~50/50), slight Fiora in the late 1v1 (parry + %-HP
+    // true damage). Was over-rated all-Jax. Whoever burns the defensive (Counter
+    // Strike / Riposte) first loses the trade.
+    { a: 'fiora',    b: 'jax',         da: 'EVEN',     db: 'EVEN',     win: ['Skill', 'Skill', 'Skill', 'Skill', 'Skill', 'Fiora', 'Fiora'] },
+    // Malphite vs Tryndamere — Malphite hard-counters (54-55%): Trynd's early
+    // all-in pressure gives way to Malphite's armor stacking + R lockdown.
+    { a: 'malphite', b: 'tryndamere',  da: 'FAVOURED', db: 'HARD',     win: ['Tryndamere', 'Tryndamere', 'Skill', 'Skill', 'Malphite', 'Malphite', 'Malphite'] }
   ];
 
   function stageIdx(label) {

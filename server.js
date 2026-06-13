@@ -28,7 +28,7 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 // Stripe (hosted Checkout). Set STRIPE_SECRET_KEY (sk_live_… or sk_test_…) to
 // turn on real payments; the customer enters their card on Stripe's page, not
 // ours. Subscriptions need Price IDs from your Stripe dashboard; the founder
-// one-time charge uses a dynamic amount that matches the live ladder.
+// one-time charge is a flat $24.99 Lifetime Member.
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
 const STRIPE_PRICE_ROLE = process.env.STRIPE_PRICE_ROLE || ''; // Lane Pass $2.99/mo price id
 const STRIPE_PRICE_ALL = process.env.STRIPE_PRICE_ALL || '';   // Everything $4.99/mo price id
@@ -63,11 +63,12 @@ function safeEq(a, b) {
 }
 
 // ---------- helpers ----------
+// Flat Lifetime Member pricing — a one-time $24.99 that never sells out (matches
+// the frontend's "Lifetime Member $24.99" tier). `claimed` is still tracked for
+// analytics / the member number, but no longer gates price or availability.
 function founderState() {
   const c = founders.claimed | 0;
-  if (c < 100) return { claimed: c, soldOut: false, price: 24.99, priceLabel: '$24.99', bracket: 'first100', remaining: 100 - c, nextPrice: '$39.99' };
-  if (c < 300) return { claimed: c, soldOut: false, price: 39.99, priceLabel: '$39.99', bracket: 'next200', remaining: 300 - c, nextPrice: null };
-  return { claimed: c, soldOut: true, price: null, priceLabel: null, bracket: 'gone', remaining: 0, nextPrice: null };
+  return { claimed: c, soldOut: false, price: 24.99, priceLabel: '$24.99', bracket: 'lifetime', remaining: null, nextPrice: null };
 }
 const publicUser = (u) => ({ name: u.name, plan: u.plan || null, google: !!u.google });
 function newSession(key) {
@@ -143,6 +144,18 @@ function stripeApi(method, apiPath, params) {
     if (body) req.write(body);
     req.end();
   });
+}
+
+// Real client IP behind Render's proxy. X-Forwarded-For is "client, …, edge":
+// a malicious client can prepend a fake IP, but it lands on the LEFT, while the
+// trusted edge appends the true peer on the RIGHT. So take the Nth-from-right,
+// where N = the number of proxy hops we trust (Render is 1 by default). Using
+// the leftmost value would let anyone evade the throttle by rotating a fake IP.
+const TRUSTED_PROXY_HOPS = parseInt(process.env.TRUSTED_PROXY_HOPS, 10) || 1;
+function clientIp(req) {
+  const xff = String(req.headers['x-forwarded-for'] || '').split(',').map((s) => s.trim()).filter(Boolean);
+  if (xff.length) return xff[Math.max(0, xff.length - TRUSTED_PROXY_HOPS)];
+  return String(req.socket.remoteAddress || '').trim();
 }
 
 // Tiny per-IP throttle on auth endpoints (public internet hygiene).
@@ -340,10 +353,10 @@ async function handleApi(req, res, pathname, ip) {
       charged = '$4.99/mo';
     } else {
       if (u.plan && u.plan.type === 'founder') {
-        return sendJson(res, 200, { user: publicUser(u), charged: 'already a founder - not charged', founders: founderState() });
+        return sendJson(res, 200, { user: publicUser(u), charged: 'already a Lifetime Member - not charged', founders: founderState() });
       }
       const fs2 = founderState();
-      if (fs2.soldOut) return sendJson(res, 410, { error: 'Founder Lifetime is sold out - all 300 seats are claimed.' });
+      if (fs2.soldOut) return sendJson(res, 410, { error: 'Lifetime Member is unavailable right now.' });
       founders.claimed = (founders.claimed | 0) + 1;
       saveJson('founders.json', founders);
       planObj.founderNum = founders.claimed;
@@ -373,14 +386,14 @@ async function handleApi(req, res, pathname, ip) {
       'line_items[0][quantity]': 1
     };
     if (plan === 'founder') {
-      if (u.plan && u.plan.type === 'founder') return sendJson(res, 400, { error: 'You already own Founder Lifetime.' });
+      if (u.plan && u.plan.type === 'founder') return sendJson(res, 400, { error: 'You already own Lifetime Member.' });
       const fs2 = founderState();
-      if (fs2.soldOut) return sendJson(res, 410, { error: 'Founder Lifetime is sold out.' });
+      if (fs2.soldOut) return sendJson(res, 410, { error: 'Lifetime Member is unavailable.' });
       params.mode = 'payment';
-      // Dynamic amount so the Stripe charge always matches the live ladder price.
+      // Flat $24.99 Lifetime Member one-time charge.
       params['line_items[0][price_data][currency]'] = 'usd';
       params['line_items[0][price_data][unit_amount]'] = Math.round(fs2.price * 100);
-      params['line_items[0][price_data][product_data][name]'] = 'MatchupCoach — Founder Lifetime';
+      params['line_items[0][price_data][product_data][name]'] = 'MatchupCoach — Lifetime Member';
     } else {
       const priceId = plan === 'all' ? STRIPE_PRICE_ALL : STRIPE_PRICE_ROLE;
       if (!priceId) return sendJson(res, 503, { error: 'This plan is not configured yet.' });
@@ -434,7 +447,7 @@ http.createServer((req, res) => {
   // Don't let browsers MIME-sniff responses; deny framing (clickjacking).
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-  const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+  const ip = clientIp(req);
   if (pathname === '/api' || pathname.startsWith('/api/')) {
     handleApi(req, res, pathname, ip).catch(() => sendJson(res, 500, { error: 'Server error.' }));
   } else {

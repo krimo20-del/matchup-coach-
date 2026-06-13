@@ -190,8 +190,17 @@ function htmlEsc(s) {
 // "<root>-backup"), so require the path separator.
 function withinRoot(full) { return full === ROOT || full.startsWith(ROOT + path.sep); }
 
+// Backend source, deploy config, VCS, dependencies, and on-disk state are never
+// web-served even though they sit in the repo root (no secrets live in them, but
+// there's no reason to hand out the server's own source/config).
+const DENY = /^(server\.js|package(-lock)?\.json|render\.yaml|deploy\.md|\.git|\.claude|server-data|node_modules)(\/|$)/i;
 function sendStatic(res, rel) {
   if (rel === '') rel = 'index.html';
+  if (DENY.test(rel) || /(^|\/)\.env/i.test(rel)) {
+    const nf = path.join(ROOT, '404.html');
+    if (fs.existsSync(nf)) { res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' }); return res.end(fs.readFileSync(nf)); }
+    res.writeHead(404, { 'Content-Type': 'text/plain' }); return res.end('404');
+  }
   let full = path.normalize(path.join(ROOT, rel));
   // Extensionless pretty URLs: /privacy -> privacy.html
   if (withinRoot(full) && !path.extname(full) && fs.existsSync(full + '.html')) full += '.html';

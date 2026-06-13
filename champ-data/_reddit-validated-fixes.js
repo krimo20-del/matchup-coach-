@@ -311,6 +311,214 @@
         "Her poke and your sustain roughly cancel; whoever spikes first edges it. Buy Merc's + grievous wounds.",
         "She out-scales the poke war — Rylai's + Liandry's kite and ground you forever. You needed the all-in earlier; late is hers."
       ]
+    },
+    {
+      a: 'aatrox', b: 'renekton',
+      win: ['Renekton', 'Renekton', 'Renekton', 'Renekton', 'Skill', 'Aatrox', 'Aatrox'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Renekton’s window — empowered Q sustain + stun (W) out-trade your weak early. Give ground.' },
+        { when: 'Lvl 6', text: 'Both ult — the lane stabilizes; stop feeding his snowball.' },
+        { when: '1st item', text: 'Your Eclipse spike flips the lane — start forcing all-ins.' },
+        { when: 'Late', text: 'You out-scale hard — Renekton falls off, your sustain takes over.' }
+      ],
+      wants: {
+        you: ['Survive his level 1-5 without dying, then scale', 'Bait his W (stun) and E dashes before you commit', 'Out-scale him — your power curve dwarfs his late'],
+        foe: ['Snowball the early all-in with empowered Q + stun', 'Use fury dashes (E-E) to engage and escape', 'Convert an early lead before you out-scale him']
+      },
+      early: "Renekton is the canonical early bully and you are the weakest early juggernaut — this window is his. His empowered Q heals and chunks, his W is a point-blank stun, and double-E lets him dash in and out of any trade. Don't try to win levels 1-4: concede CS if you must, dodge the stun, and just survive without dying or getting dove.",
+      mid: "Around 6 the lane stabilizes — both of you have R, and his fury burst stops being enough to kill a healing Aatrox. Stop over-respecting him: bait the W stun and his E dashes, then take measured trades. Your job through this window is to deny him the snowball until your first item arrives.",
+      late: "You out-scale him hard. Renekton is a front-loaded champion who falls off a cliff, while your sustain and DPS only grow — once you hit Eclipse the lane is yours, and by two items it isn't close. Survive his early and the late game is a free win.",
+      whys: [
+        "Renekton's empowered Q out-trades your weak early and heals it back. Don't contest — last-hit and respect the all-in.",
+        "His W is a point-blank stun into burst. Stay out of dash range; give up a CS rather than eat the stun combo.",
+        "Double-E lets him engage and escape any trade. This is his hardest window — survive, don't trade into fury.",
+        "He'll keep forcing all-ins while he's ahead on the curve. Dodge the stun, deny the snowball, wait for 6.",
+        "Both have R now — your healing pulls you out of his burst range. The lane stabilizes; stop over-respecting him.",
+        "Your Eclipse spike flips it — now your sustain beats his fury trades. Start forcing the all-ins you avoided early.",
+        "He falls off and you take over — two items in, your DPS + healing dwarf his. The late game is a free win."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'darius',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Aatrox', 'Aatrox'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Darius’s window — his grab (E) + bleed win every early all-in. Don’t get pulled.' },
+        { when: 'Lvl 6', text: 'Both ult — his R executes off bleed stacks; play around your healing.' },
+        { when: '1st item', text: 'Your spike flips it — space the Q sweetspot, out-sustain the bleed.' },
+        { when: 'Late', text: 'You out-scale — Darius falls off, your DPS + heal grind him down.' }
+      ],
+      wants: {
+        you: ['Avoid his E (pull) — never get yanked into the bleed', 'Space the Q sweetspot from max range', 'Scale past his early and out-sustain the Hemorrhage'],
+        foe: ['Land E (Apprehend) to start the all-in', 'Stack Hemorrhage bleed and R-execute', 'Win before your sustain and items come online']
+      },
+      early: "Darius owns this early — his E pull yanks you into the bleed stacks, his Q heals, and his passive shreds you. The whole lane is his Apprehend (E): if he lands it, he wins the trade. Stand away from him, never get pulled, and don't walk up to contest CS into a level-1 Darius.",
+      mid: "Level 6 is the dangerous spike — his R (Noxian Guillotine) executes you off five bleed stacks and the cooldown refreshes on a kill. Play around your healing: keep your HP above execute range, bait the E, and don't take a long trade while you're bleeding. One bad pull here ends you.",
+      late: "Once you hit your first item the lane flips. You space the Q sweetspot, out-sustain the bleed, and your scaling leaves him behind — Darius is front-loaded and you are not. Survive the E and the level-6 execute window, and the late game is comfortably yours.",
+      whys: [
+        "Darius's E pull starts every all-in into his bleed. Stand back, last-hit at range, never get yanked in.",
+        "His Q heals and his passive bleeds you out. Don't contest trades — give CS rather than stack Hemorrhage.",
+        "A full early combo off the E will kill you. This is his window; survive it, don't trade into the pull.",
+        "He'll keep fishing for the E. Space it, deny the grab, and don't bleed out walking to CS.",
+        "His R executes off bleed stacks and resets on a kill. Stay above execute HP, bait the E, lean on your healing.",
+        "Your first item flips it — now you space the sweetspot and out-sustain the bleed. Start taking the trades.",
+        "You out-scale him flatly. Darius falls off; your DPS + healing grind him down. Late game is yours."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'jax',
+      win: ['Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill', 'Aatrox', 'Jax'],
+      spikes: [
+        { when: 'Lvl 2–5', text: 'Your window — bait Counterstrike (E), then all-in while it’s down.' },
+        { when: 'Lvl 6', text: 'Both ult — even fight; don’t dump your combo into a fresh E.' },
+        { when: '1st item', text: 'Your Eclipse spike beats a one-item Jax — force it now.' },
+        { when: '2+ items', text: 'Jax takes over — his item scaling out-duels you late.' }
+      ],
+      wants: {
+        you: ['Bait Counterstrike (E), then all-in on its cooldown', 'Win the mid-game before his item spikes', 'Grind short trades on his E cooldown with your sustain'],
+        foe: ['Dodge your combo with Counterstrike (E) and stun back', 'Stall the lane and scale to his item spikes', 'Out-duel you late with Grandmaster’s + Jax items']
+      },
+      early: "Jax's E (Counterstrike) is the entire matchup — it dodges your Q sweetspot and stuns you if you trade into it. The trick is patience: don't throw your combo while E is up. Bait it out (poke, then back off during the two seconds), and once it's down you have a free window on a weak-early Jax.",
+      mid: "This is your window. With your Q cooldown low you out-trade him every time Counterstrike is down — E in, W-pull, Q-sweetspot, then disengage before he can re-E. At 6 it's an even ult-vs-ult fight, so don't blow your combo into a fresh E; make him respect the bait first.",
+      late: "Jax is one of the best scaling duelists in the game — two items in, his Grandmaster's passive + item spikes out-DPS your sustain and he wins the extended 1v1. You have to press your mid-game lead and close the lane before then. If it goes even into late, the duel belongs to Jax.",
+      whys: [
+        "Jax's E negates your combo and stuns you. Level 1 is even — don't commit into a held Counterstrike.",
+        "Now you can punish: bait the E, then E-in W-pull while it's down. He's weak early and can't answer.",
+        "Full combo online — every time Counterstrike is down you out-trade him. Force those windows.",
+        "Keep grinding short trades on his E cooldown. Your sustain wins the war he can't disengage.",
+        "Both ult now — it's an even all-in. Don't dump your combo into a fresh E; make him use it first.",
+        "Your Eclipse spike beats a one-item Jax. This is your last clean window — force the all-in before he scales.",
+        "Two items in he flips it — Grandmaster's + item spikes out-duel you. Close the lane before late, or it's his."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'garen',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 2–3', text: 'Your combo out-damages his Q-silence trade — bait the Q, then all-in.' },
+        { when: 'Lvl 6', text: 'Your R out-sustains his execute — stay above his Demacian Justice threshold.' },
+        { when: '1st item', text: 'Eclipse spike — you win every extended fight; force them.' },
+        { when: 'Late', text: 'Roughly even — his tankiness vs your DPS; teamfights diverge by role.' }
+      ],
+      wants: {
+        you: ['Force extended fights where your sustain beats his regen', 'Bait the Q (silence) before you commit', 'Stay above his R execute threshold with your healing'],
+        foe: ['Land Q (silence) for a short burst trade, then disengage', 'Use passive regen to negate your poke', 'Execute you with R (Demacian Justice) when low']
+      },
+      early: "Garen wants short, sharp trades — Q silences you and adds burst, then he spins (E) and walks away to regen it all with his passive. Don't try to poke him; his regen erases it. Last-hit, dodge the Q-silence if you can, and wait for your level-3 combo to turn the extended fight in your favour.",
+      mid: "Your sustain beats his regen in any long fight. Bait the Q, then E-in W-pull Q-sweetspot — once you're past the silence he can't out-trade your healing. At 6 watch his R: Demacian Justice executes low targets, so keep your HP topped with your drain and you stay out of its range while you grind him down.",
+      late: "It evens out — Garen builds tanky and his regen + R stay relevant, while your DPS and sustain scale the other way. In lane you hold the edge through extended-fight sustain; in teamfights you diverge — he's a frontline diver, you're a drain-tank bruiser. Press the lane edge while you have it.",
+      whys: [
+        "Garen's Q silences and bursts, then his passive regens it back. Don't poke into the regen — wait for your spike.",
+        "His Q-silence shuts off your combo for a short trade. Bait it, then commit once it's down.",
+        "Now your combo out-damages his trade. Bait the Q, E-in W-pull — your sustain wins the extended fight.",
+        "Long fights are yours: his regen can't keep up with your healing. Force extended trades, not short ones.",
+        "His R executes low targets — keep your HP up with your drain and you stay out of Demacian Justice range.",
+        "Your Eclipse spike wins every extended all-in. Force them while you hold the mid-game edge.",
+        "It evens late — his tankiness + regen vs your DPS. You edge lane; teamfights diverge by role."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'pantheon',
+      win: ['Pantheon', 'Pantheon', 'Pantheon', 'Skill', 'Skill', 'Aatrox', 'Aatrox'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Pantheon’s window — Q poke + W stun chunk your weak early. Survive it.' },
+        { when: 'Lvl 6', text: 'Both ult — lane stabilizes as he starts to fall off.' },
+        { when: '1st item', text: 'Your spike flips it — Pantheon drops off, you take over.' },
+        { when: 'Late', text: 'You out-scale hard — he’s an early-game champ with no late.' }
+      ],
+      wants: {
+        you: ['Survive his early poke + all-in without dying', 'Wait out his fall-off, then scale past him', 'Punish his short range once your items come online'],
+        foe: ['Bully your weak early with Q (spear) + W (stun)', 'All-in before level 6 while he holds the edge', 'Roam with R to snowball elsewhere before falling off']
+      },
+      early: "Pantheon is a brutal early bully into your weakest phase — his Q spear pokes from range, his W is a point-click stun into burst, and his E blocks your trades back. Levels 1-3 are his to win. Don't contest: farm at max range, dodge what you can, and accept you'll lose some CS. Your only job here is to not die and not get dove.",
+      mid: "Around 6 the lane starts to stabilize as he falls off — his early burst stops one-shotting a healing Aatrox, and your sustain catches up. Be careful of his R roaming to other lanes if he can't kill you. Hold the wave, deny the dive, and wait for your item spike to arrive.",
+      late: "You out-scale him completely. Pantheon is a front-loaded early-game champion with essentially no late game, while you only get stronger — once you hit Eclipse you win every all-in, and by two items he can't fight you at all. Survive the early, then take the lane and the map.",
+      whys: [
+        "Pantheon's Q out-ranges you and his W stuns into burst. Level 1 is his — last-hit at range, don't contest.",
+        "His point-click W stun sets up a burst you can't trade back into. Dodge it, give CS, survive.",
+        "His E blocks your trades while he pokes. This is his hardest window — don't all-in, just farm and live.",
+        "He starts to fall off here — your sustain catches up. Hold the wave, watch for his roam (R).",
+        "Both ult now and his burst can't kill a healing you. Lane stabilizes; deny the dive and wait to spike.",
+        "Your Eclipse spike flips it — now you out-sustain and out-DPS him. Start forcing the all-ins.",
+        "You out-scale completely — he has no late game. Two items in he can't fight you. Take the lane."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'fiora',
+      win: ['Skill', 'Skill', 'Skill', 'Skill', 'Skill', 'Aatrox', 'Fiora'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Even and parry-dependent — don’t telegraph your Q sweetspot into her W.' },
+        { when: 'Lvl 6', text: 'Your R is a big window — but she can parry the knockup; bait it first.' },
+        { when: '1st item', text: 'Your Eclipse spike edges a one-item Fiora in a long fight.' },
+        { when: '2+ items', text: 'Fiora takes over — vitals + true damage shred you late.' }
+      ],
+      wants: {
+        you: ['Bait her parry (W) before committing Q or R', 'Win the extended fight with sustain before she scales', 'Deny her vital procs by spacing your stance'],
+        foe: ['Parry (W) your Q sweetspot or R for the stun', 'Proc vitals to shred and heal in the duel', 'Out-scale into a one-item-spike duelist']
+      },
+      early: "The whole lane is her W (Riposte). Fiora parries your Q sweetspot or your R knockup — landing it stuns you and wins the trade, wasting it hands you a free all-in. Levels 1-3 are even and skill-dependent: don't telegraph your sweetspot, vary your timing, and don't commit a combo while her parry is up.",
+      mid: "Bait the parry, then punish. If you can force her W early — or read it — your sustain wins the extended fight. At 6 your R is a huge swing, but she can Riposte the knockup, so make her burn it first. Space her vitals: every one she procs shreds your armour and heals her, so don't stand still in her Q range.",
+      late: "Fiora out-scales you. Two items in, her vitals + true damage shred even a tanky Aatrox and her duelling overtakes your sustain. The lane is roughly even early and skill-decided through mid; if it reaches late even, the side-lane 1v1 is hers. Press your item spike while you have the edge.",
+      whys: [
+        "Fiora's W parries your sweetspot or R. Level 1 is even — don't telegraph the Q, vary your timing.",
+        "She'll Riposte your committal abilities for a stun. Bait it before you swing the sweetspot.",
+        "Vitals shred and heal her. Space your stance, don't stand in her Q angle, keep the trade neutral.",
+        "Still parry-dependent — read the W, punish the whiff, don't feed a clean Riposte. Even window.",
+        "Your R is a big all-in, but she can parry the knockup. Make her burn W first, then commit the ult.",
+        "Your Eclipse spike edges a one-item Fiora in a long fight. Force the extended trade while you're ahead.",
+        "Two items in she flips it — vitals + true damage shred you. She wins the late side-lane duel."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'riven',
+      win: ['Skill', 'Skill', 'Skill', 'Skill', 'Skill', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Even — she out-mobilities you; land W-pull to lock her down.' },
+        { when: 'Lvl 6', text: 'Both ult — your R out-sustains her burst in a long fight.' },
+        { when: '1st item', text: 'Your Eclipse spike edges her one-item all-in.' },
+        { when: '2+ items', text: 'Roughly even — both spike; skill and cooldowns decide.' }
+      ],
+      wants: {
+        you: ['Land W (pull) to cancel her mobility and lock her in', 'Win the extended fight with sustain, not the burst trade', 'Punish her cooldowns after she dumps her combo'],
+        foe: ['Dodge your sweetspot with Q dashes + E shield', 'Burst you in a short trade, then disengage', 'Animation-cancel combos to out-tempo your cooldowns']
+      },
+      early: "Riven out-mobilities you — three Q dashes and an E shield/dash let her dodge your Q sweetspot and dance around your combo. Your answer is the W (pull): land it and she's locked in your Q zone with no escape. Levels 1-3 are even and mechanics-driven; don't swing the sweetspot at empty air while she dashes.",
+      mid: "Don't try to win her short burst trade — win the long one. Your sustain out-lasts her combo: eat the initial burst, land W to hold her, then Q-sweetspot and heal through it. At 6 your R turns the extended fight in your favour. Punish her after she dumps her combo, when all her dashes are on cooldown.",
+      late: "Roughly even into late — both spike on items and cooldowns, and the duel comes down to who lands their key ability (your W-pull vs her dodge-and-burst). You hold a slight sustain edge in long fights; she holds the tempo edge in short ones. Force the extended all-in where your healing matters most.",
+      whys: [
+        "Riven's Q dashes and E dodge your sweetspot. Level 1 is even — don't swing at air, wait for a clean W.",
+        "She dances around your combo with mobility. Land the W-pull to cancel it and lock her in your Q zone.",
+        "Her burst comes in a short window; your sustain wins the long one. Hold her with W, heal through it.",
+        "Punish her after she dumps her dashes — that's when she's stuck and your combo lands clean.",
+        "Both ult now — your R out-sustains her burst in an extended fight. Force the long trade, not the short.",
+        "Your Eclipse spike edges her one-item all-in. Land W, commit the combo, out-heal the trade.",
+        "Even into late — both spike. The duel hinges on your W-pull vs her dodge. Force the fight where sustain wins."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'mordekaiser',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Mordekaiser', 'Aatrox', 'Aatrox'],
+      spikes: [
+        { when: 'Lvl 3', text: 'Your combo out-trades his short-range Q — space the sweetspot.' },
+        { when: 'Lvl 6', text: 'Morde’s window — his R (Realm) isolates you 1v1; play safe at low HP.' },
+        { when: '1st item', text: 'Your Eclipse spike beats his first AP item — force the all-in.' },
+        { when: 'Late', text: 'You hold the edge — out-sustain his magic DPS in extended fights.' }
+      ],
+      wants: {
+        you: ['Space the Q sweetspot outside his short Q range', 'Respect his R (Death Realm) at 6 — don’t int it', 'Out-sustain his magic DPS in the extended fight'],
+        foe: ['Land E (pull) into Q for his trade pattern', 'Isolate you with R (Realm) and win the 1v1', 'Stack passive shield + AP to out-sustain you']
+      },
+      early: "You hold the edge here but Morde isn't free — his Q is a chunky short-range hit and his E pulls you in for it. Space the Q sweetspot from outside his range, don't get yanked, and don't let him stack his passive (the rings around you) for the bonus magic damage. Through levels 3-5 your combo out-trades his.",
+      mid: "Level 6 is HIS window: Realm of Death (R) drags you into an isolated 1v1, steals a chunk of your stats, and his sustained magic damage is strong inside it. Don't fight him at low HP when his R is up — play around it. Once it's down, you're back in control: your sustain and DPS beat his in a straight extended fight.",
+      late: "You hold the matchup. Outside his R window your healing out-lasts his magic DPS, and your Eclipse spike beats his first AP item. The lane is favoured — just respect the level-6 Realm timing and don't hand him an isolated kill. Force the all-ins when his R is down and you grind him out.",
+      whys: [
+        "Morde's Q is short-range and his E sets it up. Space the sweetspot outside his range — don't get pulled in.",
+        "Don't let him stack his passive for bonus magic damage. Trade when his Q is down and you come out ahead.",
+        "Your full combo out-trades his short-range kit. Space the sweetspot and force the trade.",
+        "You out-trade him through 4-5 — keep spacing the Q, deny the E-pull, stay healthy for his ult.",
+        "His R isolates you 1v1 and steals your stats — his window. Don't fight low; wait it out, then re-engage.",
+        "Your Eclipse spike beats his first AP item. Once R is down, force the all-in — your sustain wins it.",
+        "You hold the edge late — out-heal his magic DPS in long fights. Respect the Realm, grind everything else."
+      ]
     }
   ];
   window.MC_MATCHUP_EXTRA = window.MC_MATCHUP_EXTRA || {};

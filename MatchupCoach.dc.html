@@ -71,6 +71,7 @@
 <script src="./champ-art.js"></script>
 <script src="./api-client.js"></script>
 <script src="./champ-data/enemy-kits.js"></script>
+<script src="./champ-data/what-kills-me.js"></script>
 <script src="./champ-data/rosters.js"></script>
 <script src="./champ-data/jungle-intel.js"></script>
 <script src="./champ-data/jungle-intel-2.js"></script>
@@ -987,6 +988,25 @@
           </div>
         </div>
       </div>
+
+      <!-- WHAT KILLS ME IN LANE -->
+      <sc-if value="{{ wkm }}" hint-placeholder-val="{{ true }}">
+      <div style="position:relative; padding:0 26px 16px;">
+        <div style="border-radius:14px; background:linear-gradient(180deg,rgba(255,93,108,0.09),#11131c); border:1px solid rgba(255,93,108,0.35); border-left:3px solid #ff5d6c; padding:15px 17px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ff5d6c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.86l-8.2 14.2A2 2 0 0 0 3.84 21h16.32a2 2 0 0 0 1.74-2.94l-8.2-14.2a2 2 0 0 0-3.4 0z"></path></svg>
+            <span style="font-family:'Chakra Petch',sans-serif; font-size:12px; letter-spacing:1.2px; color:#ff8b96; font-weight:700;">WHAT KILLS ME IN LANE</span>
+            <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; color:#8a90a2; font-weight:700;">{{ champAName }} vs {{ champBNameUp }}</span>
+          </div>
+          <sc-for list="{{ wkm }}" as="wl" hint-placeholder-count="6">
+            <div style="display:flex; gap:9px; align-items:flex-start; padding:4px 0;">
+              <span style="flex:0 0 auto; margin-top:2px; width:15px; height:15px; border-radius:4px; background:rgba(255,93,108,0.15); border:1px solid rgba(255,93,108,0.4); display:flex; align-items:center; justify-content:center; color:#ff8b96; font-size:9px; font-weight:800;">✕</span>
+              <span style="font-size:13.5px; line-height:1.5; color:#e6e9f2; font-weight:600;">{{ wl }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
 
       <!-- volatility bar -->
       <div style="position:relative; padding:0 26px 16px;">
@@ -2216,6 +2236,25 @@
           </div>
         </div>
       </div>
+
+      <!-- WHAT KILLS ME IN THE JUNGLE -->
+      <sc-if value="{{ jv.wkm }}" hint-placeholder-val="{{ true }}">
+      <div style="position:relative; padding:0 26px 16px;">
+        <div style="border-radius:14px; background:linear-gradient(180deg,rgba(255,93,108,0.09),#11131c); border:1px solid rgba(255,93,108,0.35); border-left:3px solid #ff5d6c; padding:15px 17px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ff5d6c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.86l-8.2 14.2A2 2 0 0 0 3.84 21h16.32a2 2 0 0 0 1.74-2.94l-8.2-14.2a2 2 0 0 0-3.4 0z"></path></svg>
+            <span style="font-family:'Chakra Petch',sans-serif; font-size:12px; letter-spacing:1.2px; color:#ff8b96; font-weight:700;">WHAT KILLS ME IN THE JUNGLE</span>
+            <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; color:#8a90a2; font-weight:700;">{{ jv.champA.name }} vs {{ jv.champB.name }}</span>
+          </div>
+          <sc-for list="{{ jv.wkm }}" as="jwl" hint-placeholder-count="6">
+            <div style="display:flex; gap:9px; align-items:flex-start; padding:4px 0;">
+              <span style="flex:0 0 auto; margin-top:2px; width:15px; height:15px; border-radius:4px; background:rgba(255,93,108,0.15); border:1px solid rgba(255,93,108,0.4); display:flex; align-items:center; justify-content:center; color:#ff8b96; font-size:9px; font-weight:800;">✕</span>
+              <span style="font-size:13.5px; line-height:1.5; color:#e6e9f2; font-weight:600;">{{ jwl }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
 
       <div style="position:relative; padding:0 26px 16px;">
         <div style="border-radius:14px; background:#11131c; border:1px solid rgba(255,255,255,0.06); padding:14px 16px;">
@@ -5566,6 +5605,7 @@ class Component extends DCLogic {
         take: makeCoachTake(champName, enemy, d.diff, d.win, keyShort, parseInt(d.carryRating, 10) || null),
         tldr: d.tldr, breakdown: d.breakdown,
         levelTable: d.levelTable || null, waveBoxes: d.waveBoxes || null, diffRating: d.diffRating || '', carryRating: d.carryRating || '', full: d.full || null, tradeGood: d.tradeGood || '', tradeBad: d.tradeBad || '',
+        key: d.key || null,
         holdText: holdText, watchText: watchText, tipText: tipText,
         holdLetter: ((holdText || '').match(/\(([QWER])\)/) || [])[1] || 'R', watchLetter: sl,
         phases: (d.phases || []).map(function(p){ return { p: p.p, s: p.s, who: p.w === 'A' ? champName : (p.w === 'E' ? enemy : 'Even'), tone: p.w === 'A' ? '#3ddc97' : (p.w === 'E' ? '#ff5d6c' : '#e8b84b') }; }),
@@ -6121,6 +6161,27 @@ class Component extends DCLogic {
             })
           };
         })(),
+        // "WHAT KILLS ME" \u2014 enemy-jungler death rules: curated signature
+        // mechanics (WKM_LINES) + this pair's duel/spike windows from the DB.
+        wkm: (function(){
+          var W = (window.WKM_LINES || {})[jslug(foe)] || [];
+          var L = [];
+          if (W[0]) L.push(W[0]);
+          var s0 = jStages[0] || null;
+          if (s0) {
+            if (s0.tone === '#ff5d6c') L.push('Levels 1\u20133 duels are HIS \u2014 give the first scuttle fight, full-clear instead.');
+            else if (s0.tone === '#3ddc97') L.push('He can\u2019t duel you early \u2014 what kills you is him GANKING instead: track his first clear and counter-gank.');
+            else L.push('Early duels are coin-flips \u2014 only take them with an HP or buff advantage.');
+          }
+          if (intelRaw && (intelRaw.critFrom || intelRaw.critTo)) L.push('His kill window is ' + (intelRaw.critFrom || '?') + '\u2013' + (intelRaw.critTo || '?') + ' \u2014 play your lanes safe and ward YOUR camps during it.');
+          var s4 = jStages[4] || null;
+          if (s4 && s4.tone === '#ff5d6c') L.push('At 6 his ult flips the duel (' + s4.adv + ') \u2014 stop taking 50/50 smite fights once he hits it.');
+          else if (s4 && s4.tone === '#3ddc97') L.push('Your 6 beats his \u2014 but only while it\u2019s up; he kills you in the gap between your ults.');
+          if (W[1]) L.push(W[1]);
+          var s5 = jStages[5] || null;
+          if (s5 && s5.adv) L.push('Respect his first-item spike (' + s5.adv.replace(/ Spike$/, '') + ') \u2014 never coin-flip an objective fight inside it.');
+          return L;
+        })(),
         intel: intelRaw ? {
           tone: intelRaw.tone || '#46c6f5', role: intelRaw.role || '', tags: intelRaw.tags || '', clearStyle: intelRaw.clearStyle || '', startLabel: intelRaw.startLabel || '', spike: intelRaw.spike || '', clearSpeed: intelRaw.clearSpeed || '', crit: (intelRaw.critFrom || '?') + '\u2013' + (intelRaw.critTo || '?'),
           meters: [
@@ -6348,6 +6409,33 @@ class Component extends DCLogic {
       tldr: this.txtN(MU.tldr || ('Win the lane by executing your win condition: ' + (MU.winCon || '').charAt(0).toLowerCase() + (MU.winCon || '').slice(1)), 2),
       tradeGood: MU.tradeGood || '', tradeBad: MU.tradeBad || '',
       tldrShort: this.txtN((MU.tldr || MU.winCon || '').replace(/\bhis the\b/g, 'his').replace(/\bthe the\b/g, 'the'), 3),
+      // "WHAT KILLS ME IN LANE" — death rules for this exact pair: curated
+      // enemy signature mechanics (WKM_LINES) + this matchup's own level-1
+      // ownership, wave plan, punishable cooldown, and first all-in window.
+      wkm: (function(){
+        var foe = (MU.champB && MU.champB.name) || '';
+        var W = (window.WKM_LINES || {})[slug(foe)] || [];
+        var L = [];
+        if (W[0]) L.push(W[0]);
+        var lt = MU.levelTable || null;
+        if (lt && lt.length) {
+          if (lt[0].w === 'E') L.push('Level 1 is his — concede the first trade and just hit the wave.');
+          else if (lt[0].w === 'A') L.push('Level 1 is YOURS — the real danger is coasting on it while the lane flips later.');
+          else L.push('Level 1 is a knife-edge skill trade — take it on your terms or not at all.');
+        }
+        var diff = (MU.difficulty || '').toUpperCase();
+        if (diff.indexOf('HARD') >= 0 || diff.indexOf('TRICKY') >= 0) L.push('Let the first 3 waves push to you — fighting in his half of the lane is how you die.');
+        else if (diff.indexOf('FAVOURED') >= 0) L.push('What actually kills you here is over-chasing past river with no vision.');
+        else L.push('First shove wins priority — don’t autopilot the opening 3 waves.');
+        if (MU.key && MU.key.name && MU.key.cd) L.push('If he burns ' + MU.key.name + (MU.key.slot ? ' (' + MU.key.slot + ')' : '') + ', you have ~' + MU.key.cd + ' to trade — take that window every time.');
+        if (W[1]) L.push(W[1]);
+        if (lt && lt.length) {
+          var win = null;
+          for (var i = 0; i < lt.length; i++) { if (lt[i].w === 'A') { win = lt[i].p; break; } }
+          L.push(win ? 'Your first real all-in window: ' + win + '.' : 'You never win a flat all-in — wait for his mistake or your jungler.');
+        }
+        return L;
+      })(),
       breakdown: MU.breakdown || MU.winCon,
       breakdownParts: (function(){
         var norm = function(t){

@@ -334,7 +334,9 @@
       found.forEach(function (f) {
         if (!f.url) return;
         var im = document.createElement('img');
-        im.src = f.url; im.alt = f.name; im.title = f.name;
+        // Decorative: the item/rune/summoner name is already in the adjacent
+        // text, so keep the hover title but hide the icon from screen readers.
+        im.src = f.url; im.alt = ''; im.setAttribute('aria-hidden', 'true'); im.title = f.name;
         im.style.cssText = 'width:20px;height:20px;border-radius:5px;border:1px solid rgba(255,255,255,0.22);display:inline-block;';
         strip.appendChild(im);
       });

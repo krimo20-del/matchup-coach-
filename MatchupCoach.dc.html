@@ -1371,7 +1371,7 @@
         <div style="flex:0 0 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; padding:0 6px; position:relative; z-index:3;">
           <div style="width:62px; height:62px; border-radius:50%; background:linear-gradient(140deg,#241a0e,#120d07); border:1px solid rgba(232,184,75,0.4); display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:19px; color:#f0cd72; box-shadow:0 0 0 8px rgba(11,9,8,0.7), 0 10px 30px -8px rgba(0,0,0,0.85);">VS</div>
           <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding:7px 11px; border-radius:11px; background:rgba(11,9,8,0.85); border:1px solid rgba(255,255,255,0.14); box-shadow:0 8px 24px -8px rgba(0,0,0,0.8);">
-            <div style="font-family:'Chakra Petch',sans-serif; font-size:8.5px; letter-spacing:1.1px; color:#8a90a2; font-weight:700; white-space:nowrap;">EST. WIN RATE</div>
+            <div style="font-family:'Chakra Petch',sans-serif; font-size:8.5px; letter-spacing:1.1px; color:#8a90a2; font-weight:700; white-space:nowrap;">{{ wrLabel }}</div>
             <div style="display:flex; align-items:center; gap:7px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; white-space:nowrap;">
               <span style="color:{{ wrATone }};">{{ wrA }}</span>
               <span style="color:#5a6072; font-size:10px;">vs</span>
@@ -6926,21 +6926,29 @@ class Component extends DCLogic {
       heroKey: (e) => { if (e.key === 'Enter') { e.preventDefault && e.preventDefault(); this.heroAnalyze(); } },
       heroGo: () => this.heroAnalyze(),
       champPool: this._allChamps(),
-      // Estimated head-to-head win rate — deterministic per pair, derived from
-      // the matchup verdict (shown in the hero banner).
+      // Head-to-head win rate. If a REAL win rate (from lolalytics, in
+      // window.MC_REAL_WR[you][foe]) exists for this pair, show that; otherwise
+      // fall back to a deterministic estimate derived from the verdict.
       ...(function(self){
         var you = (MU.champA && MU.champA.name) || '', foe = (MU.champB && MU.champB.name) || '';
-        var h = 0, sft = you + '|' + foe;
-        for (var i = 0; i < sft.length; i++) h = ((h * 31) + sft.charCodeAt(i)) | 0;
-        var frac = (Math.abs(h) % 100) / 100;
-        var d = (MU.difficulty || 'EVEN').toUpperCase(), base;
-        if (d.indexOf('FAVOURED') >= 0) base = 51.8 + frac * 2.4;
-        else if (d.indexOf('HARD') >= 0) base = 45.9 + frac * 1.8;
-        else if (d.indexOf('TRICKY') >= 0) base = 47.7 + frac * 1.5;
-        else if (d.indexOf('MIRROR') >= 0) base = 50.0;
-        else base = 49.2 + frac * 1.6;
+        var sl = function(n){ return String(n || '').toLowerCase().replace(/[^a-z0-9]/g, ''); };
+        var WR = window.MC_REAL_WR || {};
+        var real = (WR[sl(you)] && typeof WR[sl(you)][sl(foe)] === 'number') ? WR[sl(you)][sl(foe)] : null;
+        var base, isReal = false;
+        if (real != null) { base = real; isReal = true; }
+        else {
+          var h = 0, sft = you + '|' + foe;
+          for (var i = 0; i < sft.length; i++) h = ((h * 31) + sft.charCodeAt(i)) | 0;
+          var frac = (Math.abs(h) % 100) / 100;
+          var d = (MU.difficulty || 'EVEN').toUpperCase();
+          if (d.indexOf('FAVOURED') >= 0) base = 51.8 + frac * 2.4;
+          else if (d.indexOf('HARD') >= 0) base = 45.9 + frac * 1.8;
+          else if (d.indexOf('TRICKY') >= 0) base = 47.7 + frac * 1.5;
+          else if (d.indexOf('MIRROR') >= 0) base = 50.0;
+          else base = 49.2 + frac * 1.6;
+        }
         var wrA = base.toFixed(1), wrB = (100 - base).toFixed(1);
-        return { wrA: wrA + '%', wrB: wrB + '%', wrATone: base >= 50.5 ? '#3ddc97' : base <= 49.5 ? '#ff5d6c' : '#e8b84b', wrBTone: base >= 50.5 ? '#ff5d6c' : base <= 49.5 ? '#3ddc97' : '#e8b84b', wrAPct: Math.round(base) };
+        return { wrA: wrA + '%', wrB: wrB + '%', wrLabel: isReal ? 'WIN RATE · LOLALYTICS' : 'EST. WIN RATE', wrATone: base >= 50.5 ? '#3ddc97' : base <= 49.5 ? '#ff5d6c' : '#e8b84b', wrBTone: base >= 50.5 ? '#ff5d6c' : base <= 49.5 ? '#3ddc97' : '#e8b84b', wrAPct: Math.round(base) };
       })(this),
       ticker: (function(){
         var items = [

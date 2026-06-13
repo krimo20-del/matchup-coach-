@@ -1,77 +1,68 @@
 // _reddit-validated-fixes.js — hand-validated matchup corrections.
 //
-// Loaded LAST (after _phase-accuracy-fixes.js). Each entry below was
-// cross-referenced one-by-one against current win-rate / counter data
-// (lolalytics, mobalytics, counterstats, metabot — the same numbers the
-// community/Reddit consensus is built on) and corrects the matchup VERDICT
-// (diff) + the 7-stage FAVOUR WINDOWS where the generated data was wrong.
+// Loaded LAST (after _phase-accuracy-fixes.js). Cross-references matchups against
+// current win-rate / counter data (lolalytics primarily — Emerald+ samples) and
+// corrects the VERDICT (diff) + the 7-stage FAVOUR WINDOWS where the generated
+// data was wrong. Where a real win rate is known it is also written to
+// window.MC_REAL_WR so the app shows the REAL number (not the verdict estimate)
+// AND the verdict is derived from that number, so they can never disagree.
 //
-// `win` is who owns each lane stage, in order:
+// `win` (optional) = who owns each lane stage, in order:
 //   [Level 1, Level 2, Level 3, Levels 4-5, Level 6, First item, 2+ items]
-//   — a champion display name, or 'Skill' for an even window.
-// It is written to BOTH champions' pages so the timeline + level table agree.
-// Same idempotent retry pattern as the other fix files; a longer loop so this
-// layer settles AFTER the generated phase layers (it is the source of truth).
-//
-// ===== TOP LANE (validated June 2026) =====
-//  • Darius vs Garen — Darius wins (51-52% WR): wins L1-3 trades + 6 all-in;
-//    Garen only sustains back. Was mis-rated HARD-for-Darius.
-//  • Camille vs Fiora — Camille slight edge (~52%) and out-scales; Fiora's only
-//    edge is the early parry/vital window. Was over-rated Fiora-FAVOURED.
-//  • Renekton vs Darius — Renekton favoured, dominates the first 15 min; the
-//    early windows belong to Renekton (were handed to Darius).
-//  • Darius vs Nasus — textbook early-bully vs scaler: Darius owns the whole
-//    lane, Nasus takes over at 2+ items / late. Was all-Darius incl. late.
-//  • Darius vs Mordekaiser — Darius slight edge, wins pre-6; Morde spikes at 6
-//    with R-isolation. Level-6 window belongs to Morde.
+//   — a champion display name, or 'Skill' for an even window. null = don't touch.
+// Same idempotent retry pattern as the other fix files; longest loop so this layer
+// settles AFTER the generated phase layers (it is the source of truth).
 (function () {
   'use strict';
   var TONE = { FAVOURED: '#3ddc97', HARD: '#ff5d6c', EVEN: '#e8b84b', TRICKY: '#ff8b3d', MIRROR: '#e8b84b' };
   var STAGES = ['level 1', 'level 2', 'level 3', 'levels 4-5', 'level 6', 'first item', '2+ items'];
+  var DISP = { chogath: "Cho'Gath", drmundo: 'Dr. Mundo', ksante: "K'Sante", tahmkench: 'Tahm Kench' };
+  function disp(s) { return DISP[s] || (s.charAt(0).toUpperCase() + s.slice(1)); }
+
+  // ===== hand-set top-lane pairs (verdict + windows) =====
   var FIX = [
     { a: 'darius',   b: 'garen',       da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Garen'] },
     { a: 'camille',  b: 'fiora',       da: 'FAVOURED', db: 'TRICKY',   win: ['Fiora', 'Skill', 'Skill', 'Skill', 'Skill', 'Camille', 'Camille'] },
-    // Renekton vs Darius — Renekton favoured overall (dominates the early GAME),
-    // but that edge is L2-5: combo online + Fury for short hit-and-run trades.
-    // LEVEL 1 belongs to DARIUS — Renekton has one ability and no Fury (empowered
-    // stun offline), so a prolonged auto-heavy all-in is won by Darius's Hemorrhage
-    // bleed + Crippling Strike. Darius also scales relatively better very late.
     { a: 'renekton', b: 'darius',      da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Renekton', 'Renekton', 'Renekton', 'Skill', 'Skill', 'Darius'] },
     { a: 'darius',   b: 'nasus',       da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Nasus'] },
     { a: 'darius',   b: 'mordekaiser', da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Mordekaiser', 'Skill', 'Skill'] },
-    // Jax vs Fiora — near-even (~50/50), slight Fiora in the late 1v1 (parry + %-HP
-    // true damage). Was over-rated all-Jax. Whoever burns the defensive (Counter
-    // Strike / Riposte) first loses the trade.
     { a: 'fiora',    b: 'jax',         da: 'EVEN',     db: 'EVEN',     win: ['Skill', 'Skill', 'Skill', 'Skill', 'Skill', 'Fiora', 'Fiora'] },
-    // Malphite vs Tryndamere — Malphite hard-counters (54-55%): Trynd's early
-    // all-in pressure gives way to Malphite's armor stacking + R lockdown.
-    { a: 'malphite', b: 'tryndamere',  da: 'FAVOURED', db: 'HARD',     win: ['Tryndamere', 'Tryndamere', 'Skill', 'Skill', 'Malphite', 'Malphite', 'Malphite'] },
-
-    // ===== AATROX (top) — validated June 2026 =====
-    // Aatrox profile (researched): one of the WEAKEST level 1-3 in the game; first
-    // real spike at level 3, strongest ~level 7 (2x Q + Serrated Dirk) and 15-25min
-    // mid-game. So Aatrox should NOT own level 1 in any lane — even/behind L1-2,
-    // takes over L3-6 + first item, scaler opponents reclaim 2+ items.
-    //  • vs Camille — Aatrox 54.5% (dominates early-mid; Camille out-scales). Was EVEN.
-    { a: 'aatrox', b: 'camille',     da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Camille'] },
-    //  • vs Wukong — Wukong 52-59% (decoy/nimbus hit-and-run out-trades). Was EVEN.
-    { a: 'aatrox', b: 'wukong',      da: 'TRICKY',   db: 'FAVOURED', win: ['Wukong', 'Wukong', 'Skill', 'Skill', 'Skill', 'Skill', 'Aatrox'] },
-    //  • vs Vayne — Aatrox counters her (no escape vs pull-knockup); she scales very late. Was EVEN.
-    { a: 'aatrox', b: 'vayne',       da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Vayne'] },
-    //  • vs Tahm Kench — Aatrox's single best matchup (bullies a weak laner). Was EVEN.
-    { a: 'aatrox', b: 'tahmkench',   da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'] },
-    //  • vs Kayle — Aatrox stomps LANE but Kayle wins the GAME (44% Aatrox): EVEN, with
-    //    Aatrox owning early-mid and Kayle owning 2+ items / late. Was FAVOURED (overstated).
-    { a: 'aatrox', b: 'kayle',       da: 'EVEN',     db: 'EVEN',   win: ['Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Kayle'] },
-    //  • window-only fixes (verdict already right) — strip Aatrox's bogus level-1 ownership;
-    //    scaler opponents reclaim 2+ items.
-    { a: 'aatrox', b: 'chogath',     da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', "Cho'Gath"] },
-    { a: 'aatrox', b: 'nasus',       da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Nasus'] },
-    { a: 'aatrox', b: 'sion',        da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'] },
-    { a: 'aatrox', b: 'vladimir',    da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Vladimir'] },
-    { a: 'aatrox', b: 'kassadin',    da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Kassadin'] },
-    { a: 'aatrox', b: 'drmundo',     da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'] }
+    { a: 'malphite', b: 'tryndamere',  da: 'FAVOURED', db: 'HARD',     win: ['Tryndamere', 'Tryndamere', 'Skill', 'Skill', 'Malphite', 'Malphite', 'Malphite'] }
   ];
+
+  // ===== AATROX (top) — real lolalytics win rates (Emerald+, patch 26.12) =====
+  // The verdict AND the displayed win rate both come from these numbers. Aatrox is
+  // one of the WEAKEST level 1-3 champions in the game, so his favoured lanes use a
+  // "no level-1" window (even L1-2, Aatrox owns L3 -> first item; hard-scalers take
+  // 2+ items). Sources: lolalytics aatrox/vs/<x> + aatrox/counters.
+  window.MC_REAL_WR = window.MC_REAL_WR || {};
+  var WR = {
+    aatrox: {
+      kayle: 44.9, singed: 45.1, kennen: 45.6, cassiopeia: 46.2, ornn: 47.6, zed: 47.7,
+      irelia: 47.9, malphite: 48.3, urgot: 49.0, kled: 49.1, wukong: 49.5, aurora: 49.6,
+      fiora: 49.8, illaoi: 49.8, gangplank: 49.9, sylas: 50.2, riven: 50.3, ryze: 50.3,
+      gragas: 50.4, tryndamere: 50.6, quinn: 50.6, jayce: 50.7, camille: 54.5, teemo: 53.9,
+      vladimir: 55.3, poppy: 55.7, varus: 55.9, naafiri: 56.0, drmundo: 56.3, swain: 57.1,
+      tahmkench: 58.3
+    }
+  };
+  // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
+  var SCALER = { vladimir: 1, kassadin: 1, nasus: 1, chogath: 1, camille: 1, vayne: 1, kayle: 1, ryze: 1, gangplank: 1, kled: 1, cassiopeia: 1 };
+  function diffFromWr(wr) { return wr >= 52.5 ? 'FAVOURED' : wr >= 48.5 ? 'EVEN' : wr >= 45.5 ? 'TRICKY' : 'HARD'; }
+  function mirrorDiff(d) { return d === 'FAVOURED' ? 'TRICKY' : d === 'EVEN' ? 'EVEN' : 'FAVOURED'; }
+  Object.keys(WR).forEach(function (champ) {
+    var m = WR[champ];
+    Object.keys(m).forEach(function (en) {
+      var wr = m[en], da = diffFromWr(wr);
+      window.MC_REAL_WR[champ] = window.MC_REAL_WR[champ] || {}; window.MC_REAL_WR[champ][en] = wr;
+      window.MC_REAL_WR[en] = window.MC_REAL_WR[en] || {}; window.MC_REAL_WR[en][champ] = Math.round((100 - wr) * 10) / 10;
+      // window override only for the favoured lanes (where the "Aatrox owns L1" bug lives)
+      var win = (da === 'FAVOURED')
+        ? ['Skill', 'Skill', disp(champ), disp(champ), disp(champ), disp(champ), SCALER[en] ? disp(en) : 'Skill']
+        : null;
+      FIX.push({ a: champ, b: en, da: da, db: mirrorDiff(da), win: win });
+    });
+  });
 
   function stageIdx(label) {
     var l = String(label || '').toLowerCase();
@@ -81,11 +72,8 @@
     return -1;
   }
   function setWindows(entry, win) {
-    if (!entry || !entry.phases) return;
-    entry.phases.forEach(function (p) {
-      var i = stageIdx(p.label);
-      if (i >= 0 && win[i]) p.side = win[i];
-    });
+    if (!entry || !entry.phases || !win) return;
+    entry.phases.forEach(function (p) { var i = stageIdx(p.label); if (i >= 0 && win[i]) p.side = win[i]; });
   }
   function patch(store, slug, enemy, diff, win) {
     if (!store || !store[slug] || !store[slug][enemy]) return;

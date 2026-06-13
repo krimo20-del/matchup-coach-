@@ -69,7 +69,9 @@
       irelia: 53.8, riven: 50.8, sion: 53.0, ornn: 50.4, malphite: 49.0, pantheon: 49.9,
       kled: 49.4, urgot: 48.2, olaf: 49.8, tryndamere: 49.1, illaoi: 51.9, vladimir: 47.9,
       shen: 53.0, swain: 52.2, trundle: 52.2, warwick: 51.6, volibear: 51.7, wukong: 48.0,
-      yasuo: 54.1, yone: 51.9, yorick: 50.0, gnar: 50.8, gragas: 54.3, gangplank: 48.9
+      yasuo: 54.1, yone: 51.9, yorick: 50.0, gnar: 50.8, gragas: 54.3, gangplank: 48.9,
+      drmundo: 46.6, chogath: 53.1, tahmkench: 49.6, ksante: 50.6, poppy: 49.6, kayle: 48.8,
+      kennen: 47.1, singed: 54.5, ryze: 51.3, rumble: 49.7, akali: 55.1, cassiopeia: 49.7
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -2858,6 +2860,318 @@
         "His crit spike nears — force the all-in before his items. Land E, stack bleed.",
         "GP's first item flips it — crit Q + barrels out-poke you. Close before that.",
         "Two items in, crit + barrels out-DPS your bleed. You own early — end it before his scaling."
+      ]
+    },
+    {
+      a: 'darius', b: 'drmundo',
+      win: ['Darius', 'Darius', 'Skill', 'Skill', 'Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — E + bleed before his HP + regen come online.' },
+        { when: 'Lvl 6', text: 'His R heal + regen out-sustain your bleed — kill him before he resets.' },
+        { when: '1st item', text: 'He out-tanks your bleed — Bramble/antiheal is mandatory.' },
+        { when: 'Late', text: 'Mundo takes over — HP-stacking regen tank shrugs off Hemorrhage.' }
+      ],
+      wants: {
+        you: ['Land E + bleed early before his HP scaling', 'Buy grievous wounds (Bramble) for his regen + R', 'Snowball fast — you can’t out-bleed a built Mundo'],
+        foe: ['Throw cleavers (Q) and farm through your bleed', 'Out-sustain Hemorrhage with passive regen + R heal', 'Stack HP and become an unkillable regen tank']
+      },
+      early: "This is a tricky lane — Mundo out-sustains your bleed. Your one window is levels 1-2 before his HP and regen ramp: land E and stack Hemorrhage while he's still squishy. He just throws cleavers (Q) and farms, but his passive regen and HP scaling mean your bleed stops mattering quickly. Punish hard early or not at all.",
+      mid: "From 6 he tilts the lane — his R is a massive heal + AD, and his regen shrugs off your Hemorrhage in any drawn-out fight. Grievous wounds (Bramble Vest / Executioner's) is mandatory: without antiheal you literally cannot out-damage his sustain. Kill him fast before his R resets the fight, or don't commit at all.",
+      late: "Mundo takes over — a full-HP-stacking regen tank that your AD bleed can't crack, and his cleavers chunk you while he out-sustains everything. The lane is tricky because he out-scales your damage profile. Snowball the level 1-2 window into a real lead, build antiheal, and end the game before his HP makes Hemorrhage irrelevant.",
+      whys: [
+        "E + bleed before his HP + regen come online. Levels 1-2 are your only real window.",
+        "He throws cleavers and farms. Punish hard now — his sustain ramps fast.",
+        "His passive regen starts out-sustaining your bleed. Buy grievous wounds.",
+        "You can't out-bleed his regen without antiheal. Bramble Vest is mandatory.",
+        "His R heal + regen reset the fight — kill him fast or don't commit.",
+        "He out-tanks your bleed. Snowball your early window or you fall behind.",
+        "Mundo takes over — HP-stacking regen tank shrugs off Hemorrhage. End the game early."
+      ]
+    },
+    {
+      a: 'darius', b: 'chogath',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', "Cho'Gath"],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed crush him; dodge his Q (rupture) + W (silence).' },
+        { when: 'Lvl 6', text: 'R executes him; respect his R true-damage chunk when you’re low.' },
+        { when: '1st item', text: 'Still your stomp — deny stacks so his HP scaling never arrives.' },
+        { when: '2+ items', text: 'Cho takes over — stacked HP + true-damage R out-tank your bleed.' }
+      ],
+      wants: {
+        you: ['Land E + bleed before he stacks HP off his R', 'Dodge his Q (rupture) and W (scream silence)', 'Snowball before his tank scaling takes over'],
+        foe: ['Land Q (knockup) into W (silence) for a trade', 'Farm safely and stack HP with R (Feast)', 'Scale into an unkillable true-damage teamfight tank']
+      },
+      early: "You crush Cho'Gath early — he's a weak-early tank scaler, and your E + bleed out-trade him as long as you dodge his combo. His Q (Rupture) is a telegraphed knockup and his W (Feral Scream) silences; sidestep the Q and his trade falls apart. Land your pull, stack Hemorrhage, and deny the farm that lets him stack. Levels 1-3 are decisively yours.",
+      mid: "Keep stomping. Your bleed all-in out-trades a low-stack Cho, and your R executes him off Hemorrhage — but respect his R (Feast): it's a true-damage nuke that can chunk you when you're low, so don't all-in at low HP. Zone his CS to keep him off HP stacks, and dive him with jungle help if he's already behind.",
+      late: "Cho takes over at two items — stacked HP off his R plus true damage make him a teamfight tank your AD bleed can't crack. The lane is favoured because you dominate the early; you must convert it. Snowball off the level 1-5 stomp, deny his farm, and end before his HP stacking makes Hemorrhage tickle.",
+      whys: [
+        "Cho is weak early. Dodge his Q (rupture) and E + bleed crush him. Levels 1-3 are yours.",
+        "His W silences mid-combo. Sidestep the Q first so he can't chain it.",
+        "Your full combo out-trades a weak-early Cho. Stack bleed, deny his farm.",
+        "Keep him off HP stacks — zone his CS. Your all-in out-trades him.",
+        "R executes him off bleed; respect his R true-damage chunk when you're low.",
+        "Still your stomp at one item. Deny stacks so his scaling never arrives.",
+        "Two items in, stacked HP + true damage out-tank your bleed. End the game early."
+      ]
+    },
+    {
+      a: 'darius', b: 'tahmkench',
+      win: ['Darius', 'Darius', 'Skill', 'Skill', 'Skill', 'Tahm Kench', 'Tahm Kench'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — E + bleed punish his weak early before grey health.' },
+        { when: 'Lvl 6', text: 'His W (Devour) grey health resets your bleed — burst him fast.' },
+        { when: '1st item', text: 'Even — he out-sustains with grey health; commit to fast kills.' },
+        { when: 'Late', text: 'Tahm takes over — tanky grey-health frontliner shrugs your bleed.' }
+      ],
+      wants: {
+        you: ['Land E + bleed before his grey health + tank items', 'Burst him fast — grey health (W passive) heals your bleed off', 'Pin him under tower; he has no waveclear'],
+        foe: ['Tank your bleed with grey health (passive)', 'Reposition out of your pull with W (Devour escape)', 'Scale into a tanky teamfight peeler / saver']
+      },
+      early: "Levels 1-2 are your window — Tahm Kench has a weak early and no waveclear, so land E and your bleed punishes him before his grey health and tank items come online. Don't walk into a W (Devour) animation for a free grey-health trade, but otherwise pin him and deny CS; he just wants to survive and scale.",
+      mid: "His grey health (passive) is the problem — it banks a chunk of the damage you deal as a shield that heals back, which resets your bleed pressure. Burst him fast in a single committed all-in rather than chipping, and stack Hemorrhage quickly. His W can also reposition him out of your pull, so don't let him W away mid-fight to safety.",
+      late: "Tahm takes over — he becomes a tanky grey-health frontliner/peeler who shrugs off your bleed and saves his carries. The lane is even because you bully the early and he out-sustains the late. Snowball your level 1-2 window, force fast committed kills before his grey health resets, and end before his tank items make Hemorrhage irrelevant.",
+      whys: [
+        "Tahm has no waveclear and a weak early. E + bleed punish him — levels 1-2 are yours.",
+        "Don't walk into a W (Devour) for a free grey-health trade. Pin him, deny CS.",
+        "His grey health banks your damage as a healing shield. Burst fast, don't chip.",
+        "Commit to single fast all-ins — drawn-out bleed just feeds his grey health.",
+        "His W resets your bleed and can reposition him out of your pull. Burst him fast.",
+        "Even — he out-sustains with grey health. Commit to fast kills before it resets.",
+        "Tahm takes over — tanky grey-health frontliner shrugs your bleed. End early."
+      ]
+    },
+    {
+      a: 'darius', b: 'ksante',
+      win: ['Darius', 'Darius', 'Darius', 'Skill', 'Skill', 'Skill', "K'Sante"],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed out-trade a pre-item K’Sante.' },
+        { when: 'Lvl 6', text: 'His R (All Out) turns him into a duelist — respect the burst window.' },
+        { when: '1st item', text: 'Even — bait his W (block), which can interrupt your combo.' },
+        { when: '2+ items', text: 'K’Sante takes over — tanky stance + items out-sustain your bleed.' }
+      ],
+      wants: {
+        you: ['Land E + bleed before his items make him tanky', 'Bait his W (block) — don’t feed it your combo', 'Win before his R duel form + item scaling'],
+        foe: ['Block your combo with W (damage reduction)', 'Knock you with Q and dash with E (shield)', 'Pop R (All Out) to duel, or stay tanky to scale']
+      },
+      early: "Levels 1-3 are yours — K'Sante is weak before items, and your E + bleed out-trade him. His W blocks damage and can interrupt (don't dump your combo into a held W), his Q knocks back, and his E dashes + shields. Bait the W, then land E and stack Hemorrhage. Press your early bleed advantage before his item spikes arrive.",
+      mid: "His big spike is R (All Out): he sheds tankiness to become a high-damage duelist with extra dashes, so respect that burst window — don't all-in a fresh R at low HP. Outside of it, your bleed out-trades his tankier stance. Bait his W block, then commit your combo, and keep him off the items that make him unkillable.",
+      late: "K'Sante takes over at two items — his tank stance plus item sustain out-grind your bleed, and his R lets him pick the duel terms. The lane is even because you crush him early and he out-scales late. Snowball your level 1-3 edge, deny his farm, and end the lane before his scaling flips the side-lane 1v1.",
+      whys: [
+        "K'Sante is weak pre-item. E + bleed out-trade him — levels 1-3 are yours.",
+        "His W blocks and can interrupt. Don't dump your combo into a held W — bait it.",
+        "Your bleed all-in out-trades a pre-item K'Sante. Force the trade, deny his farm.",
+        "Keep punishing — deny his farm so his item spikes come late.",
+        "His R (All Out) makes him a burst duelist — respect it at low HP.",
+        "Even — bait his W block, then commit. Out-trade his tankier stance.",
+        "Two items in, tank stance + items out-sustain your bleed. End it before his scaling."
+      ]
+    },
+    {
+      a: 'darius', b: 'poppy',
+      win: ['Darius', 'Darius', 'Darius', 'Skill', 'Skill', 'Skill', 'Poppy'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed out-damage her low base damage.' },
+        { when: 'Lvl 6', text: 'R executes her; her R knockback only delays your all-in.' },
+        { when: '1st item', text: 'Still your edge — she has no kill threat; deny her farm.' },
+        { when: 'Late', text: 'Poppy out-tanks you — she scales to a teamfight peeler.' }
+      ],
+      wants: {
+        you: ['Land E + bleed — she can’t out-damage you', 'Stand off walls so her E (stun) can’t pin you', 'Snowball before she builds tanky'],
+        foe: ['Stun you into a wall with E (Heroic Charge)', 'Stop dash-engages with her W passive', 'Scale to a tanky teamfight peeler']
+      },
+      early: "Levels 1-3 are yours — Poppy deals low damage and can't out-trade your E + bleed. Her threats are positional: E (Heroic Charge) stuns you if it slams you into a wall, so stand away from terrain. Her W passive grounds dash-users, but your E is a pull, not a dash, so it lands fine. Punish her low damage and stack Hemorrhage.",
+      mid: "Your bleed simply out-damages her. Trade freely away from walls — she has no way to win the damage race. Her R (Keeper's Verdict) can knock you away to delay your all-in, but it doesn't save her from a committed bleed combo. Land E, stack Hemorrhage, and keep her off farm; her low kill pressure means you dictate the lane.",
+      late: "Poppy out-tanks you eventually — she builds resistances and becomes a teamfight peeler with a big R disengage, and your AD bleed cracks her less over time. The lane is even because you bully the early and she out-tanks the late. Snowball your level 1-3 dominance, take plates, and end before her tankiness makes Hemorrhage tickle.",
+      whys: [
+        "Poppy deals low damage. E + bleed out-damage her — levels 1-3 are yours.",
+        "Her E stuns you into a wall. Stand off terrain; her W doesn't stop your pull (it's not a dash).",
+        "Your bleed out-damages her. Force the trade away from walls.",
+        "Keep her off farm — she has no kill threat. Stack Hemorrhage and pressure.",
+        "R executes her; her R knockback only delays your all-in.",
+        "Still your edge — deny her farm before she builds tanky.",
+        "Poppy out-tanks you late — she scales to a teamfight peeler. End early."
+      ]
+    },
+    {
+      a: 'darius', b: 'kayle',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Kayle'],
+      spikes: [
+        { when: 'Lvl 1–5', text: 'Your window — Kayle is the weakest early champ. E + bleed stomp her.' },
+        { when: 'Lvl 6', text: 'R executes her; her R (invuln) only delays it. All-in on cooldown.' },
+        { when: '1st item', text: 'Still your stomp — trap her under tower, deny CS + XP.' },
+        { when: 'Lvl 11 / 16', text: 'Kayle’s spikes — ranged form (11) + untouchable R (16) win the game.' }
+      ],
+      wants: {
+        you: ['Trap her under tower; deny CS and XP relentlessly', 'Land E + bleed on every cooldown pre-11', 'Build a game-ending lead before her level 11 spike'],
+        foe: ['Survive the brutal early and farm safely', 'Hit level 11 (ranged form) to flip the lane', 'Reach level 16 R and become an unkillable carry']
+      },
+      early: "You stomp the LANE — Kayle is the single weakest early champion in the game and you're the strongest bully. Land E and your bleed deletes her; she has no escape and can't trade back. But the matchup is rated even because she wins the GAME if she scales, so your whole job from minute one is to deny her: trap her under tower and starve CS + XP.",
+      mid: "Free-kill territory. She dies to a single bleed all-in, so all-in on every cooldown and perma-zone her off the wave. Your R executes her, and her R (Intervention invuln) only delays the kill — wait it out, then finish. Dive her under tower with any jungle help; you must build a lead so big she's irrelevant before level 11.",
+      late: "This is why it's even despite you crushing lane: at level 11 her ranged form out-ranges you, and by 16 her R makes her an untouchable carry. You must win the GAME early — end it on the map with your lead — or you simply lose it late. Snowball the lane stomp into objectives and towers; don't let a farmed Kayle reach her spikes.",
+      whys: [
+        "Kayle is the weakest level-1 in the game. E + bleed stomp her — but you can't let her scale.",
+        "She has no escape and dies to one combo. Trap her under tower, deny CS + XP.",
+        "All-in on cooldown — she can't fight back. Perma-zone her off the wave.",
+        "Keep her broke — every denied minion delays her 11/16 spikes. Dive with jungle.",
+        "R executes her; her R (invuln) only delays it. Wait it out, then finish.",
+        "Still your stomp — build a game-ending lead before level 11.",
+        "Why it's even: at 11 she out-ranges you, by 16 she's untouchable. Win the game early or lose late."
+      ]
+    },
+    {
+      a: 'darius', b: 'kennen',
+      win: ['Kennen', 'Kennen', 'Skill', 'Kennen', 'Kennen', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Kennen pokes you out with Q from range — hug minions, take the chip.' },
+        { when: 'Lvl 6', text: 'His R (AOE stun) + E burst is a real kill threat — don’t get chunked low.' },
+        { when: '1st item', text: 'He pokes you down before you can land E — buy MR, hug minions.' },
+        { when: 'Late', text: 'Catch him once (E) and bleed deletes him — but he kites all game.' }
+      ],
+      wants: {
+        you: ['Land E (pull) — a caught Kennen dies to bleed', 'Hug minions to dodge his Q poke', 'Buy MR + close the gap on his E cooldown'],
+        foe: ['Poke you out with Q (shuriken) from range', 'Kite with E (Lightning Rush move speed)', 'Burst you with R (stun) + E when you’re low']
+      },
+      early: "Kennen out-ranges you and pokes with Q (shuriken) — a hard lane because you can't trade back at range, and his E (Lightning Rush) lets him dart in and out. Hug your minions to body-block the Q, last-hit carefully, and accept the chip. You can't bleed what you can't catch, so don't step into open ground where he free-pokes.",
+      mid: "His damage ramps and at 6 his R (Slicing Maelstrom) is an AOE stun that, with E-Q, chunks you from range — don't be at low HP when it's up. Buy MR early. Your only path is to land E: a caught Kennen is squishy and your bleed deletes him, but he'll kite most attempts with his E and movement. Catch him on his E cooldown.",
+      late: "Kennen is squishy — land E and your bleed ends him — but his whole game is kiting and poking, so you rarely get the chance. He scales into a teamfight AOE-stun threat. Win by closing on his E cooldown in skirmishes, building MR, and not letting him free-poke you down before your pull lands. Tricky and tilted his way if he kites well.",
+      whys: [
+        "Kennen out-ranges you with Q poke. Hug minions — you can't trade back at range.",
+        "His E (Lightning Rush) darts in and out. Don't chase — farm and respect the poke.",
+        "Land E and a squishy Kennen dies to bleed — but he kites most attempts.",
+        "He pokes you down between trades. Buy MR, hug minions, don't step into open ground.",
+        "His R (AOE stun) + E combo bursts you from range — don't be low when it's up.",
+        "He out-pokes your gap-close. Land E only on his E cooldown.",
+        "Catch him once and bleed deletes him — but he kites all game. Build MR, close in skirmishes."
+      ]
+    },
+    {
+      a: 'darius', b: 'singed',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E-pull catches him mid-proxy; bleed punishes the kite.' },
+        { when: 'Lvl 6', text: 'R executes him; his R speed can’t outrun a landed E + bleed.' },
+        { when: '1st item', text: 'Your edge holds — keep catching him with E on his fling cooldown.' },
+        { when: 'Late', text: 'He splitpushes; you won lane — match his side pressure or group.' }
+      ],
+      wants: {
+        you: ['Land E (pull) — it cancels his kite and starts the bleed', 'Punish his fling (E) cooldown with your pull', 'Snowball before he proxies into a farm lead'],
+        foe: ['Proxy the wave and kite you through poison', 'Fling (E) you into bad spots with goo + R', 'Out-macro the lane without committing']
+      },
+      early: "Unlike most melees, you actually beat Singed — your E (Apprehend) is the answer to his kite. Land it as he flings or walks up, and your bleed punishes him before his R speed can carry him away. Don't chase him blindly through poison, but when he steps in to fling or proxy near you, pull him and stack Hemorrhage. Levels 1-3 are yours if you land E.",
+      mid: "Keep catching him. Your R executes him off bleed, and his R speed steroid can't outrun a landed pull + slow (W). Punish his E (Fling) cooldown — after he flings, he's committed and your E lands clean. Don't tower-dive a Singed who can kite, but in lane your pull turns his hit-and-run game into a kill every time it connects.",
+      late: "Singed becomes a splitpush/proxy menace, but you won the lane — your E-pull denied his kite all game. Match his side-lane pressure or group with your team and let your CC peel his fling in fights. Don't tilt-chase him through poison, but you hold the lane edge; convert it into towers and tempo before his macro pressure mounts.",
+      whys: [
+        "Your E-pull cancels his kite. Land it mid-proxy and bleed punishes him. Levels 1-3 are yours.",
+        "Don't chase blindly through poison. Wait for him to step up, then pull.",
+        "Your bleed all-in beats him once you land E. Punish his fling cooldown.",
+        "Keep catching him — after he flings he's committed and your E lands clean.",
+        "R executes him; his R speed can't outrun a landed E + slow.",
+        "Your edge holds — keep pulling him on his fling cooldown. Snowball.",
+        "He splitpushes late; you won lane. Match his side pressure or group — don't tilt-chase."
+      ]
+    },
+    {
+      a: 'darius', b: 'ryze',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Skill', 'Ryze'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed crush a weak-early Ryze.' },
+        { when: 'Lvl 6', text: 'R executes him; dodge his W (root) — it’s his only lock.' },
+        { when: '1st item', text: 'Still your stomp — deny CS so his item scaling comes late.' },
+        { when: '2+ items', text: 'Ryze takes over — mana-stacked, tanky, he out-DPS your bleed.' }
+      ],
+      wants: {
+        you: ['Land E + bleed early before his item scaling', 'Dodge his W (root) — bait it before you commit', 'Snowball before he stacks mana + items'],
+        foe: ['Poke with Q-E spread combo from range', 'Lock you with W (root) to kite', 'Out-scale into a tanky, high-DPS mana mage']
+      },
+      early: "Ryze is weak early and scales into a tanky DPS mage, so your window is now. He pokes with Q (E spreads it), and his W is a point-blank root — his only hard CC. Levels 1-3 your E + bleed crush him; punish before he gets items. Don't get rooted from bush range into a full Q-combo, but otherwise land your pull and stack Hemorrhage.",
+      mid: "Dodging his W root is the whole mid-game. If he whiffs it, he has no way to stop your all-in — E in, Q-W, and his squishy frame folds to your bleed. Bait the W before you commit, and your R executes him off stacks. Keep him off CS and deny his mana/item stacking — every minute moves the matchup toward him.",
+      late: "Ryze takes over at two items — stacked mana plus tank items make him a high-DPS, hard-to-kill mage, and his root + poke control the fight. The lane is even because you crush his early and he out-scales the late. Press your spike hard, deny his farm, and end the lane before his item spikes flip the duel.",
+      whys: [
+        "Ryze is weak early and scales hard. E + bleed crush him now — punish before his items.",
+        "His Q-E poke chips but he can't match your trade. Land your pull, stack bleed.",
+        "Your full combo out-trades a weak-early Ryze. Dodge his W root, then all-in.",
+        "Keep punishing — bait the W before you commit. Every level before his items is yours.",
+        "R executes him; dodge his W (root) — his only lock. Without it your all-in deletes him.",
+        "Still your stomp — deny CS so his item scaling comes late.",
+        "Two items in, mana-stacked and tanky, he out-DPS your bleed. End it before he scales."
+      ]
+    },
+    {
+      a: 'darius', b: 'rumble',
+      win: ['Darius', 'Darius', 'Skill', 'Skill', 'Rumble', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — land E past his kite; bleed crushes his squishy frame.' },
+        { when: 'Lvl 6', text: 'Dodge his R (Equalizer) zone — don’t bleed-fight inside the fire.' },
+        { when: '1st item', text: 'Even — close the gap on his W (shield) cooldown, then E + bleed.' },
+        { when: 'Late', text: 'Even — you win if you catch him; he wins if he kites free.' }
+      ],
+      wants: {
+        you: ['Land E to close past his W (shield) + E (slow) kite', 'Dodge his R (Equalizer) fire zone', 'Burst him with bleed once you stick'],
+        foe: ['Poke with Q (Flamespitter) in his Heat window', 'Kite with W (shield + MS) and E (harpoon slow)', 'Zone you with R (Equalizer) and overheat burst']
+      },
+      early: "Levels 1-2 are your window — Rumble pokes with Q (Flamespitter) and kites with W (shield + move speed) and E (harpoon slow), but he's squishy AP, so land E (Apprehend) and your bleed crushes him. Walk through the poke behind minions, bait his W shield, and pull him in. Once you stick to him, his short-range damage can't out-trade your Hemorrhage.",
+      mid: "It's even through the mid-game — his kite vs your pull. Bait his W shield/MS, eat the E slow on the way in, then land E and stack bleed. At 6 respect his R (The Equalizer): a long fire zone that zones and burns, so don't bleed-fight inside it. Don't let an overheated Rumble dump full burst on you in the fire; close on his cooldowns.",
+      late: "Even into late — you win if you catch him, he wins if he kites free. Rumble is a kite-and-poke AP fighter; your E-pull + bleed beat him whenever you reach him, but a good Rumble plays around your pull cooldown with his shield and slow. Keep forcing the gap-close, dodge his R zone, and make him fight rather than letting him kite.",
+      whys: [
+        "Rumble's Q pokes but he's squishy AP. Land E past his kite and bleed crushes him. Levels 1-2 are yours.",
+        "He kites with W (shield + MS) and E (slow). Bait the W, then pull.",
+        "Even — close past his kite on his W cooldown, then E + bleed.",
+        "Stick to him — his short-range damage can't out-trade your Hemorrhage.",
+        "His R (Equalizer) is a fire zone — don't bleed-fight inside it. Dodge it first.",
+        "Even — close on his cooldowns. Don't eat an overheated burst in the fire.",
+        "Even late — you win if you catch him, he wins if he kites. Make him fight."
+      ]
+    },
+    {
+      a: 'darius', b: 'akali',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Akali'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — land E and bleed deletes her squishy, sustain-less frame.' },
+        { when: 'Lvl 6', text: 'R executes her; her R dashes can’t escape a landed pull.' },
+        { when: '1st item', text: 'Still your stomp — deny CS before her assassin item spikes.' },
+        { when: '2+ items', text: 'Akali takes over — her item spikes out-burst you if you’re low.' }
+      ],
+      wants: {
+        you: ['Land E (pull) — drag her out of shroud and bleed her', 'Out-sustain her Q poke — she has no healing', 'Kill her before her assassin item spikes'],
+        foe: ['Poke with Q and hide in W (shroud) to reset', 'All-in with E + R dashes at level 6', 'Scale into a burst assassin with item spikes']
+      },
+      early: "You crush Akali early — she's a squishy AP assassin with no sustain, and your E + bleed delete her. Her Q pokes and her W (Twilight Shroud) gives invis to dodge and reset, but your E is a positional pull that drags her out of position regardless. Land E, stack Hemorrhage, and her poke can't out-trade your bleed. Levels 1-3 are decisively yours.",
+      mid: "Keep stomping. Your bleed all-in out-trades her and your R executes her off stacks — her E and R dashes can't escape a landed pull. Her real threat is level 6: R gives her two dashes for a burst all-in, so don't be at low HP when it's up. Healthy, you run her down; deny her CS so her item spikes come late.",
+      late: "Akali takes over at two items — her assassin item spikes let her burst you from shroud before your bleed matters, and she roams for picks. The lane is favoured because you dominate the early-mid; you must convert it. Snowball off the E-pull all-ins, deny her farm, and end before her items flip the duel. Don't get caught low with her R up.",
+      whys: [
+        "Akali is squishy with no sustain. E + bleed delete her — levels 1-3 are yours.",
+        "Your E drags her out of shroud regardless of invis. Land it and stack bleed.",
+        "Your full combo out-trades her — her poke can't beat your Hemorrhage.",
+        "Keep her off farm — deny the assassin item spikes. Run her down.",
+        "R executes her; her R dashes can't escape a landed pull. Don't be low at 6, though.",
+        "Still your stomp — deny CS before her item spikes.",
+        "Two items in, her spikes out-burst you if low. You own early — end it before she scales."
+      ]
+    },
+    {
+      a: 'darius', b: 'cassiopeia',
+      win: ['Cassiopeia', 'Cassiopeia', 'Darius', 'Darius', 'Skill', 'Skill', 'Cassiopeia'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Cassio’s window — she out-ranges and pokes you with Q/W poison.' },
+        { when: 'Lvl 3–5', text: 'Your window — land E and bleed crushes her squishy frame.' },
+        { when: '1st item', text: 'Even — buy MR; her poke vs your all-in if you reach her.' },
+        { when: '2+ items', text: 'Cassiopeia takes over — Rylai’s / Liandry’s kite and ground you.' }
+      ],
+      wants: {
+        you: ['Hug minions through her Q/W poison poke', 'Land E (pull) — a caught Cassio dies to bleed', 'All-in before her item scaling; buy MR early'],
+        foe: ['Poke you out with Q/W poison from range', 'Ground you with W (Miasma) to slow your chase', 'Scale into an unkitable DPS mage with Rylai’s / Liandry’s']
+      },
+      early: "Levels 1-2 are hers — Cassiopeia out-ranges you and pokes with Q/W poison you can't trade back into, and her W (Miasma) grounds you to keep you off her. Hug your caster minions, last-hit through the chip, and don't path through her poison cloud. Your job early is to not get poked too low before you can reach her.",
+      mid: "Levels 3-5 are your window — land E (Apprehend) and a squishy Cassiopeia dies to your bleed all-in. The grounding from her W slows your chase but your pull is instant, so look for the catch when her Miasma is down. Don't sit in a poke war you lose; force the single all-in where your Hemorrhage ends her.",
+      late: "Cassiopeia takes over at two items — Rylai's + Liandry's let her kite and ground you forever, out-DPSing your bleed if you can't reach her. The lane is even-ish because she pokes early and you all-in mid, but late tilts to her. Buy MR, land your E-pulls when her W is down, and end the lane before her scaling makes her unkitable.",
+      whys: [
+        "Cassio out-ranges you and pokes with Q/W poison. Hug minions — levels 1-2 are hers.",
+        "Her W (Miasma) grounds you. Don't path through the cloud; wait for your window.",
+        "Your window — land E and bleed crushes her squishy frame.",
+        "All-in when her Miasma is down — your pull is instant and your bleed ends her.",
+        "Even — your all-in if you reach her. Buy MR for her poke.",
+        "Even — her poke vs your bleed. Force the catch when W is down.",
+        "Two items in, Rylai's + Liandry's kite and ground you. End the lane before her scaling."
       ]
     }
   ];

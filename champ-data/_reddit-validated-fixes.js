@@ -104,7 +104,9 @@
     // Aatrox's drain) and to antiheal + sustained DPS.
     drmundo: {
       darius: 56.6, garen: 47.1, aatrox: 45.2, fiora: 50.5, vayne: 50.1, teemo: 54.2,
-      renekton: 56.0, sett: 45.2, mordekaiser: 50.7, jax: 56.8, nasus: 52.5, camille: 52.0
+      renekton: 56.0, sett: 45.2, mordekaiser: 50.7, jax: 56.8, nasus: 52.5, camille: 52.0,
+      irelia: 46.2, riven: 49.9, sion: 54.4, ornn: 51.9, malphite: 57.4, pantheon: 54.3,
+      kled: 47.1, urgot: 50.7, olaf: 48.0, tryndamere: 48.6, illaoi: 49.3, vladimir: 49.0
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -5809,6 +5811,318 @@
         "Your HP starts to matter — she chips but can't kill you if you keep healing.",
         "Your HP + regen out-last her trades. Force the long fight.",
         "You take over — your HP shrugs off all but her true damage. Scale."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'irelia',
+      win: ['Irelia', 'Irelia', 'Skill', 'Skill', 'Irelia', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Irelia’s window — once stacked, her on-hit shreds your HP.' },
+        { when: 'Lvl 6', text: 'Her R + true damage chunk you — don’t get caught stacked-on.' },
+        { when: '1st item', text: 'She out-DPS your regen with on-hit + true damage.' },
+        { when: '2+ items', text: 'You finally out-tank her if you stacked HP — but it’s close.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke her before she stacks her passive', 'Deny her minion Q-resets and CS', 'Stack HP to out-last her on-hit shred late'],
+        foe: ['Stack passive on minions, then out-DPS you', 'Shred your HP with on-hit + true damage', 'Q-reset around you and scale to items']
+      },
+      early: "Irelia out-DPSes you once she stacks — her on-hit damage and true damage shred your HP in a way raw tankiness can't stop. Levels 1-2, cleaver-poke her before she's stacked and deny her minion Q-resets; she's weak unstacked. Don't let her free-farm into the carry that melts your health bar.",
+      mid: "She controls the mid-game — stacked, her Q resets and on-hit shred out-pace your regen, and at 6 her R is a ranged stun into a true-damage combo. Don't get caught when she's stacked. Throw cleavers to poke and slow her, deny CS to keep her weak, and lean on your passive heals; you can't win a straight DPS race here.",
+      late: "It's tricky — if you stacked HP you eventually out-last her on-hit shred, but a fed Irelia melts even a full-HP Mundo with true damage. Deny her farm early so she never gets there. Build HP, play for the frontline where your durability soaks her team's damage, and don't expect to win the side-lane 1v1 if she scaled.",
+      whys: [
+        "Irelia out-DPSes you stacked. Cleaver-poke her before she stacks. Levels 1-2 are hers.",
+        "Deny her minion Q-resets — she's weak unstacked. Don't let her free-farm.",
+        "Her on-hit + true damage shred your HP. Poke and slow with cleavers, don't DPS-race.",
+        "Keep her off CS — every denied stack delays the carry that melts you.",
+        "Her R + true damage chunk you — don't get caught when she's stacked.",
+        "She out-DPS your regen with on-hit + true damage. Deny her farm.",
+        "You out-tank her if you stacked HP — but it's close. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'riven',
+      win: ['Riven', 'Riven', 'Skill', 'Skill', 'Skill', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Riven’s window — her combo burst out-trades your weak early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals her burst; out-tank the all-in.' },
+        { when: '1st item', text: 'Your HP + regen start to out-last her combo.' },
+        { when: '2+ items', text: 'You take over — your HP shrugs off her burst-then-wait.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); out-sustain her combo burst', 'Stack HP to dilute her physical damage', 'Out-scale into a tank her combo can’t crack'],
+        foe: ['Burst you with her Q-E-auto combo', 'Animation-cancel to maximize her short window', 'Snowball the early before you out-scale']
+      },
+      early: "Riven's combo burst out-trades your weak early — levels 1-2 are hers. She has no sustain, though, and her damage is physical (your HP + items handle it better than true damage). Throw cleavers (Q) from range, don't get caught by a full Q-E-auto combo, and farm; you have no kill pressure, so just survive her aggression.",
+      mid: "Around 6 your R (Maximum Dosage) out-heals her combo, and your HP + regen start to out-last her burst-then-wait pattern. She spikes on her item but can't out-sustain you — eat the burst, heal it back with passive cleaver-heals + W, and outlast her. Don't all-in (you have no burst), just tank and scale.",
+      late: "You take over — your HP shrugs off her physical combo as you stack health, and your R out-heals her all-in. Riven is a snowball champion; if she didn't get a lead early, your scaling buries her. Survive her level 1-2 window, out-sustain the mid-game, and by two items you're an unkillable frontline she can't burst.",
+      whys: [
+        "Riven's combo burst out-trades your weak early. Throw cleavers from range. Levels 1-2 are hers.",
+        "She has no sustain and her damage is physical. Don't eat a full combo; farm.",
+        "Eat the burst, heal it back — out-last her burst-then-wait pattern.",
+        "Your regen out-sustains her combo. Tank and scale; you have no burst.",
+        "Your R out-heals her burst. Out-tank the all-in.",
+        "Your HP + regen out-last her combo. Scale.",
+        "You take over — your HP shrugs off her burst. Outlast her snowball window."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'sion',
+      win: ['Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver (Q) %-HP poke out-sustains his weak early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-poke a low-damage Sion.' },
+        { when: '1st item', text: 'Your regen + Q poke out-last him in the scaling race.' },
+        { when: 'Late', text: 'Sion is a teamfight tank; you out-poke the lane 1v1.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke his weak early; out-sustain him', 'Dodge his Q (charged knockup)', 'Win the tank-scaling race with regen + %-HP poke'],
+        foe: ['Land the charged Q knockup for a trade', 'Farm safely (even dead, via passive) and scale', 'Become a teamfight engage tank with R']
+      },
+      early: "Levels 1-3 are yours — Sion is a weak early laner, and your cleaver (Q) deals %-current-HP magic damage that pokes a tank effectively. Throw cleavers, dodge his charged Q (a telegraphed knockup), and out-sustain his weak trades with regen. This is a tank-vs-tank scaling race, and you have the better lane sustain.",
+      mid: "Keep poking. Your cleaver out-pokes his W shield + E, and your R (Maximum Dosage) keeps you topped up. Sion just wants to farm and scale for teamfights, so deny him CS where you can and out-sustain the lane. His R is a long-range engage for the map, not a 1v1 button — don't get knocked into his team.",
+      late: "Sion becomes a teamfight engage tank, but in the lane 1v1 you out-poke and out-sustain him. You won't kill each other (two tanks), but your cleaver %-HP poke + regen give you the edge. The game becomes about teamfight engage; in the side lane you hold the advantage. Scale HP and contribute your frontline.",
+      whys: [
+        "Sion is a weak early laner. Cleaver %-HP poke out-sustains his early. Levels 1-3 are yours.",
+        "Dodge his charged Q (telegraphed knockup). Throw cleavers, out-sustain his trades.",
+        "Your cleaver out-pokes his W shield + E. Deny CS, out-sustain.",
+        "It's a tank-scaling race — your regen + %-HP poke win the lane.",
+        "Your R keeps you topped. His R is map engage — don't get knocked into his team.",
+        "Your regen + Q poke out-last him in the scaling race.",
+        "Sion is a teamfight tank; you out-poke the lane 1v1. Scale frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'ornn',
+      win: ['Ornn', 'Skill', 'Skill', 'Skill', 'Ornn', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Ornn’s window — his brittle (W) + Q poke out-trade you.' },
+        { when: 'Lvl 6', text: 'Ornn’s window — brittle + R detonation chunk your HP.' },
+        { when: '1st item', text: 'Even — your regen vs his tankiness; out-poke with cleaver.' },
+        { when: 'Late', text: 'Even tank mirror — your regen out-sustains, his upgrades out-tank.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke (Q) and out-sustain with regen', 'Dodge his Q (pillar) so he can’t brittle-detonate', 'Win the scaling race with superior lane sustain'],
+        foe: ['Brittle you with W, then detonate for bonus + slow', 'Poke with Q and out-trade with brittle', 'Scale to an unkillable tank with free item upgrades']
+      },
+      early: "Ornn out-trades you early — his brittle (W) makes you take bonus damage he detonates with CC, and his Q pillar pokes. Levels 1-3 are his. Throw cleavers (Q) from range to poke back, dodge the Q-pillar so he can't set up the brittle, and out-sustain with regen. It's a tank mirror, but his brittle gives him the early edge.",
+      mid: "His brittle + R detonation chunk your HP, so don't trade into a Q-pillar setup. Outside his brittle combo, your cleaver %-HP poke and regen keep pace. This is a slow tank-vs-tank scaling race; out-sustain the lane with passive heals + W, deny CS where you can, and don't feed his brittle.",
+      late: "It's an even tank mirror — your regen out-sustains, but his free item upgrades out-tank you, and his brittle keeps chipping. Neither kills the other in lane. Build HP and play for the frontline; your superior lane sustain gives you a slight farming edge, but the matchup is decided in teamfights, not the 1v1.",
+      whys: [
+        "Ornn's brittle (W) + Q poke out-trade you. Cleaver-poke back, dodge the pillar. Levels 1-3 are his.",
+        "Dodge his Q-pillar so he can't set up the brittle. Out-sustain with regen.",
+        "Don't trade into a brittle setup. Your cleaver pokes back; out-sustain.",
+        "It's a slow tank-scaling race. Deny CS, lean on passive heals + W.",
+        "His brittle + R detonation chunk your HP — his window. Don't feed the brittle.",
+        "Even — your regen vs his tankiness. Out-poke with cleaver.",
+        "Even tank mirror — your regen out-sustains, his upgrades out-tank. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'malphite',
+      win: ['Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Dr. Mundo', 'Skill', 'Dr. Mundo', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — cleaver (Q) is MAGIC %-HP — his armour does nothing.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-poke a tank who can’t stop your magic Q.' },
+        { when: '1st item', text: 'You out-poke + out-sustain him hard; deny his farm.' },
+        { when: 'Late', text: 'Malphite scales to a teamfight R; you own the lane 1v1.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke (Q) — magic %-HP bypasses his armour', 'Out-sustain with regen; deny his farm', 'Win the lane 1v1 with magic poke he can’t stack vs'],
+        foe: ['Poke with Q (slow) and farm behind the shield', 'Stack armour (useless vs your magic Q)', 'Scale to a teamfight R (Unstoppable Force)']
+      },
+      early: "Levels 1-3 are yours — and this is a great lane because your cleaver (Q) deals MAGIC damage scaling with the target's HP, so Malphite's whole identity (stacking armour) does nothing against your main poke. Throw cleavers at a tank who can't reduce them, out-sustain his Q poke, and pressure him off CS. His shield blocks one poke; your regen heals the rest.",
+      mid: "Keep poking. Malphite stacks armour to be tanky, but your magic %-HP cleaver ignores it and your regen out-sustains his poke — he simply can't win the lane trade. Your R keeps you topped. Deny his farm and pressure him; he's a teamfight scaler with no answer to your magic poke in the 1v1.",
+      late: "Malphite scales into a teamfight R (Unstoppable Force) threat, but in the side-lane 1v1 you own him — your magic cleaver pokes through his armour all game and your regen out-sustains him. The game becomes about his R engage in fights; in lane you hold a clear edge. Scale HP and contribute your frontline.",
+      whys: [
+        "Your cleaver (Q) is MAGIC %-HP — his armour does nothing. Levels 1-3 are yours.",
+        "Throw cleavers at a tank who can't reduce them. Out-sustain his Q poke.",
+        "His shield blocks one poke; your regen heals the rest. Pressure him off CS.",
+        "His armour stacking is useless vs your magic Q. Out-poke + out-sustain.",
+        "Your R keeps you topped. He can't win the lane trade.",
+        "You out-poke + out-sustain him hard. Deny his farm.",
+        "Malphite scales to a teamfight R; you own the lane 1v1. Scale frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'pantheon',
+      win: ['Pantheon', 'Pantheon', 'Skill', 'Skill', 'Skill', 'Dr. Mundo', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Pantheon’s window — Q poke + W stun bully your weak early.' },
+        { when: 'Lvl 6', text: 'Your R out-heals his burst; he starts to fall off.' },
+        { when: '1st item', text: 'Your spike — HP + regen out-sustain his fading poke.' },
+        { when: 'Late', text: 'You take over — Pantheon has no late; your HP buries him.' }
+      ],
+      wants: {
+        you: ['Survive his early poke + all-in; throw cleavers', 'Out-sustain his fading damage with regen', 'Out-scale his falloff into an HP tank'],
+        foe: ['Bully your weak early with Q (spear) + W (stun)', 'All-in before level 6 while ahead', 'Roam with R to snowball before falling off']
+      },
+      early: "Pantheon bullies your weak early — his Q spear pokes, his W is a point-click stun, and his E blocks your cleaver from one direction. Levels 1-2 are his. Throw cleavers (Q) from range, dodge the W-stun-into-burst, and accept some poke; your regen heals it between waves. You have no kill pressure, so just survive his peak.",
+      mid: "Around 6 your R (Maximum Dosage) out-heals his burst, and as a front-loaded champion Pantheon starts to fall off while your HP + regen catch up. Watch for his R roam if he can't kill you. Throw cleavers, out-sustain his fading poke, and farm to your first item where the lane flips to you.",
+      late: "You take over — Pantheon has essentially no late game while your HP and regen only grow. Once you have items his poke can't out-pace your healing, and your frontline buries his squishy frame in fights. Survive his level 1-2 window, scale, and the back half is decisively yours.",
+      whys: [
+        "Pantheon's Q + W stun bully your weak early. Throw cleavers from range. Levels 1-2 are his.",
+        "His E blocks your cleaver from one direction. Dodge the W-stun-into-burst.",
+        "Accept some poke — your regen heals it. Survive his peak.",
+        "He starts to fall off — out-sustain his fading poke. Watch his R roam.",
+        "Your R out-heals his burst. He starts to fall off.",
+        "Your spike — HP + regen out-sustain his fading poke. Force trades.",
+        "You take over — Pantheon has no late. Your HP buries him."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'kled',
+      win: ['Kled', 'Kled', 'Kled', 'Skill', 'Skill', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Kled’s window — mounted aggression + courage burst bully you.' },
+        { when: 'Lvl 6', text: 'Your R out-heals; out-tank a dismounted Kled.' },
+        { when: '1st item', text: 'Your spike — HP + regen out-sustain his falling-off aggression.' },
+        { when: '2+ items', text: 'You take over — your HP shrugs off a fallen-off Kled.' }
+      ],
+      wants: {
+        you: ['Survive his mounted early aggression; throw cleavers', 'Out-sustain his courage burst with regen', 'Out-scale his falloff into an HP tank'],
+        foe: ['Bully your weak early while mounted (Skaarl)', 'Grab you with Q and burst with W courage', 'Snowball before you out-scale him']
+      },
+      early: "Mounted Kled bullies your weak early — his Q (Beartrap) grabs you and his W stacks courage for burst, and you have no kill pressure to answer. Levels 1-3 are his. Throw cleavers (Q) from range, don't feed the grab, and concede CS rather than eat his stacked aggression. Just survive his peak window.",
+      mid: "Around 6 your R out-heals his burst, and as a front-loaded bully Kled starts to fall off while your HP + regen catch up. If you trade enough to dismount him, a dismounted Kled is weak and your cleaver pokes him freely. Out-sustain his fading aggression and farm to your spike.",
+      late: "You take over — Kled is a front-loaded early bully who falls off, while your HP and regen only grow. Once you have items his aggression can't crack you, and your frontline outlasts him. Survive his mounted early window, scale HP, and by two items you're unkillable while he's irrelevant.",
+      whys: [
+        "Mounted Kled's Q grab + W burst bully your weak early. Throw cleavers from range. Levels 1-3 are his.",
+        "Don't feed the grab. Concede CS, don't eat his stacked aggression.",
+        "Survive his peak — your scaling beats his front-loaded burst.",
+        "He starts to fall off — out-sustain his aggression. Poke a dismounted Kled.",
+        "Your R out-heals his burst. Out-tank a dismounted Kled.",
+        "Your spike — HP + regen out-sustain his falling-off aggression.",
+        "You take over — your HP shrugs off a fallen-off Kled. Out-scale him."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'urgot',
+      win: ['Urgot', 'Urgot', 'Skill', 'Skill', 'Urgot', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Urgot’s window — his W (shotgun) %-HP shred melts tanks like you.' },
+        { when: 'Lvl 6', text: 'His R executes you off % missing HP — stay healthy.' },
+        { when: '1st item', text: 'Even — his shotgun shreds, but your regen out-sustains poke.' },
+        { when: '2+ items', text: 'You take over — your HP out-lasts him if you survive his shred.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); stay above his R execute threshold', 'Out-sustain his poke with regen between his W cooldowns', 'Out-scale into HP that out-lasts his shred'],
+        foe: ['Shred your HP with W (shotgun knees, %-HP)', 'Flip you with E into his shotgun stance', 'Execute you with R (% missing HP) when low']
+      },
+      early: "Urgot is built to kill tanks — his W (shotgun knees) deals %-HP damage that shreds your health bar, and his E flips you into his stance. Levels 1-3 are his. Throw cleavers (Q) from range, don't sit in his W stance feeding the shred, and keep your HP up; his kit is designed to out-trade durability like yours.",
+      mid: "His R (Fear Beyond Death) executes you below a % missing-HP threshold and refreshes, so stay healthy — a chunked Mundo is in execute range. Don't get flipped into his shotgun stance. Outside his W shred your regen out-sustains his poke, so heal between his cooldowns. It's even: his anti-tank kit vs your sustain.",
+      late: "You take over if you survive his shred — two items of HP out-last his shotgun, and your R out-heals his poke. The matchup is even because his %-HP W and R execute are designed to beat tanks, but a fully-stacked Mundo with regen out-sustains even that. Stay above his execute line, build HP, and out-scale his shred.",
+      whys: [
+        "Urgot's W (shotgun) %-HP shred melts tanks. Throw cleavers, don't sit in his stance. Levels 1-3 are his.",
+        "His E flips you into his shotgun. Stay at range, keep your HP up.",
+        "His kit is built to out-trade durability. Heal between his W cooldowns.",
+        "Outside his W shred, your regen out-sustains his poke.",
+        "His R executes you off % missing HP — stay healthy, don't get chunked low.",
+        "Even — his shotgun shreds, but your regen out-sustains poke.",
+        "You take over — your HP out-lasts him if you survive his shred. Scale."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'olaf',
+      win: ['Olaf', 'Olaf', 'Skill', 'Skill', 'Olaf', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Olaf’s window — his axe + %-HP true damage shred your HP.' },
+        { when: 'Lvl 6', text: 'His R goes CC-immune; his lifesteal-DPS out-trades you.' },
+        { when: '1st item', text: 'He out-DPS your regen with true damage + attack speed.' },
+        { when: '2+ items', text: 'You take over — your HP out-lasts him if you survived his shred.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); dodge his axe (Q) to slow his chase', 'Out-sustain with regen between his trades', 'Out-scale into HP that out-lasts his shred'],
+        foe: ['Pick up his axe (Q) to slow and out-trade you', 'Ramp attack speed + lifesteal as he drops low', 'Shred your HP with %-HP true damage (E + items)']
+      },
+      early: "Olaf out-trades you — his axe (Q) slows and his E + items deal %-HP true damage that shreds your health bar, exactly what a tank fears. Levels 1-3 are his. Throw cleavers (Q) from range, dodge his axe so he can't slow-chase you, and don't brawl into his reckless DPS; his ramping attack speed + lifesteal beat your regen early.",
+      mid: "His R (Ragnarok) makes him CC-immune (your cleaver slow won't peel him) and his lifesteal-DPS out-trades you through the mid-game. Stay healthy, dodge his axe, and out-sustain with regen between his trades. You have no kill pressure, so don't force fights his true damage wins.",
+      late: "You take over if you survived — two items of HP out-last his shred, and your R out-heals his DPS once your health pool is huge enough to dilute his %-HP true damage. The lane is tricky because his true damage is built to beat tanks, but a fully-stacked Mundo out-sustains it. Scale HP and play frontline.",
+      whys: [
+        "Olaf's axe + %-HP true damage shred your HP. Dodge the axe. Levels 1-3 are his.",
+        "His ramping attack speed + lifesteal beat your regen early. Don't brawl recklessly.",
+        "Throw cleavers from range; out-sustain between his trades.",
+        "Keep your HP up — his true damage chips your health pool.",
+        "His R goes CC-immune (your slow won't peel); his lifesteal-DPS out-trades you.",
+        "He out-DPS your regen with true damage + attack speed. Scale.",
+        "You take over — your HP out-lasts him if you survived his shred. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'tryndamere',
+      win: ['Dr. Mundo', 'Skill', 'Skill', 'Skill', 'Skill', 'Skill', 'Tryndamere'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — cleaver-poke a low-fury Trynd before crit.' },
+        { when: 'Lvl 6', text: 'His R (Undying Rage) survives; his crit-DPS out-trades you.' },
+        { when: '1st item', text: 'Even — his crit + W slow vs your regen.' },
+        { when: '2+ items', text: 'Tryndamere takes over — crit DPS shreds even your HP.' }
+      ],
+      wants: {
+        you: ['Cleaver-poke his low-fury early', 'Out-sustain his crit-DPS with regen between spins', 'Stack HP to dilute his crit late'],
+        foe: ['Spin (E) + crit with Q heal as fury builds', 'Reduce your healing-AD value with W', 'Scale into a crit duelist with R (can’t die 5s)']
+      },
+      early: "Levels 1-2 are yours — your cleaver (Q) pokes a low-fury Tryndamere before his crit and Q-heal come online. Fight him at low fury; high fury means crits and self-heal. His W reduces your AD (less relevant since you scale HP), but his crit-DPS ramps fast, so poke him while he's weak and don't let him free-stack fury.",
+      mid: "His crit-DPS out-trades you through the mid-game — spin (E) + crits shred your HP, and his Q heals off it. His R (Undying Rage) makes him unkillable for 5 seconds, so you can't burst him (not that you have burst anyway). Out-sustain with regen between his spins, but don't expect to win the DPS race; just tank and scale.",
+      late: "Tryndamere takes over at two crit items — his sustained crit DPS shreds even your HP, and his R keeps him alive through anything. The lane is even because you poke his weak early, but his crit scaling out-grinds your regen late. Build HP to survive longer for your team, but a fed Trynd out-DPSes a tank. Play frontline.",
+      whys: [
+        "Cleaver-poke a low-fury Trynd before crit. Levels 1-2 are yours.",
+        "Fight him at low fury — high fury means crits + self-heal. Don't let him stack.",
+        "His crit-DPS ramps fast. Poke while he's weak.",
+        "His spin + crits shred your HP — out-sustain with regen between spins.",
+        "His R survives anything (5s undying); his crit-DPS out-trades you.",
+        "Even — his crit + W slow vs your regen. Tank and scale.",
+        "Tryndamere takes over — crit DPS shreds even your HP. Play frontline."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'illaoi',
+      win: ['Illaoi', 'Skill', 'Skill', 'Skill', 'Illaoi', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Illaoi’s window — her tentacles shred your HP in her zone.' },
+        { when: 'Lvl 6', text: 'Illaoi’s window — R spawns a tentacle wall; never fight in it.' },
+        { when: '1st item', text: 'Even — fight on open ground; your regen out-sustains poke.' },
+        { when: 'Late', text: 'Even — your HP + regen vs her tentacle DPS; don’t side-lane her nest.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q) on open ground, away from tentacles', 'Dodge her E (Test of Spirit) soul-rip', 'Out-sustain her poke; scale HP'],
+        foe: ['Spawn tentacles and fight inside them', 'Rip your soul with E (Test of Spirit)', 'Slam you with empowered W in her tentacle zone']
+      },
+      early: "Illaoi shreds you inside her tentacle field — levels 1-3 are hers if you fight in her zone. Her E (Test of Spirit) rips your soul, and beating your vessel deals huge damage. Throw cleavers (Q) from open ground away from her tentacles, dodge the E, and don't path into her Q slams. Your regen out-sustains her poke on neutral ground.",
+      mid: "Level 6 is her window — R (Leap of Faith) spawns a wall of tentacles and turns any fight into a beating. Never fight in her nest; you'll get slammed from all sides. Throw cleavers from range, dodge the E soul-rip, and out-sustain her poke on open ground. You have no kill pressure, so poke and scale.",
+      late: "It's even — your HP + regen out-sustain her poke, but her tentacle DPS chips you in her zone. Don't side-lane into her nest, where her R + tentacles shred even a tank. On open ground your sustain holds; in her tentacle field you lose. Build HP, fight on neutral ground, and play for the frontline.",
+      whys: [
+        "Illaoi shreds you in her tentacle field. Fight on open ground; dodge her E. Levels 1-3 are hers.",
+        "Don't let her land E (Test of Spirit) — beating your vessel deals huge damage.",
+        "Throw cleavers from neutral ground; out-sustain her poke.",
+        "Don't path into her Q slams or stand by tentacles. Poke and scale.",
+        "Her R spawns a tentacle wall — never fight in it.",
+        "Even — fight on open ground; your regen out-sustains poke.",
+        "Even — your HP + regen vs her tentacle DPS. Don't side-lane her nest."
+      ]
+    },
+    {
+      a: 'drmundo', b: 'vladimir',
+      win: ['Vladimir', 'Skill', 'Skill', 'Skill', 'Skill', 'Vladimir', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Vlad’s window — his Q/E %-HP magic pokes your health bar.' },
+        { when: 'Lvl 6', text: 'Even — buy MR; your regen out-sustains his poke.' },
+        { when: '1st item', text: 'Vlad’s spike — his AP %-HP scaling shreds your tankiness.' },
+        { when: '2+ items', text: 'You take over — HP + MR (Spirit Visage) shrug off his magic.' }
+      ],
+      wants: {
+        you: ['Throw cleavers (Q); buy MR (Spirit Visage boosts your heals)', 'Out-sustain his poke with regen', 'Out-scale into HP + MR that dilutes his %-HP magic'],
+        foe: ['Poke with Q/E (%-HP magic) and self-heal', 'Pool (W) your burst — but you have none', 'Out-scale into a %-HP AP threat']
+      },
+      early: "Vlad's Q and E deal %-HP magic damage that pokes your big health bar effectively, and he self-heals — levels 1-3 are his poke window. Throw cleavers (Q) back (his pool W dodges burst, but you have none), buy MR early, and out-sustain with regen. Neither of you has kill pressure, so it's a poke-and-scale lane.",
+      mid: "It's even through the mid-game — his AP %-HP poke chips you, but your regen + MR out-sustain it. Buy Spirit Visage: it gives MR AND boosts your already-huge healing, which is perfect here. Throw cleavers, deny his Q stacks, and out-sustain his poke. Don't let him free-scale his AP.",
+      late: "You take over — two items of HP + MR (Spirit Visage especially) shrug off his %-HP magic, and your amplified regen + R out-heal his poke. Vlad out-scales most, but you're built to out-sustain even an AP %-HP threat with enough MR and healing. The lane is even early; build MR and you win the late attrition.",
+      whys: [
+        "Vlad's Q/E %-HP magic pokes your health bar. Buy MR, throw cleavers. Levels 1-3 are his.",
+        "He self-heals; his pool dodges burst (you have none). Out-sustain with regen.",
+        "Neither has kill pressure — it's a poke-and-scale lane. Deny his Q stacks.",
+        "Buy Spirit Visage — MR + boosted healing is perfect here.",
+        "Even — buy MR; your regen out-sustains his poke.",
+        "His AP %-HP scaling shreds tankiness — but your MR + heals dilute it.",
+        "You take over — HP + MR (Spirit Visage) shrug off his magic. Win the attrition."
       ]
     }
   ];

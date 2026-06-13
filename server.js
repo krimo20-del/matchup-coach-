@@ -24,6 +24,16 @@ const PAYMENTS_MODE = process.env.PAYMENTS_MODE || 'demo';
 // id whose authorized origins include https://matchupcoach.gg. Unset = the
 // frontend hides the Google button entirely (no shared demo account).
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+
+// Stripe (hosted Checkout). Set STRIPE_SECRET_KEY (sk_live_… or sk_test_…) to
+// turn on real payments; the customer enters their card on Stripe's page, not
+// ours. Subscriptions need Price IDs from your Stripe dashboard; the founder
+// one-time charge uses a dynamic amount that matches the live ladder.
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
+const STRIPE_PRICE_ROLE = process.env.STRIPE_PRICE_ROLE || ''; // Lane Pass $4.99/mo price id
+const STRIPE_PRICE_ALL = process.env.STRIPE_PRICE_ALL || '';   // All Access $9.99/mo price id
+const PUBLIC_URL = (process.env.PUBLIC_URL || 'https://matchupcoach.gg').replace(/\/+$/, '');
+const STRIPE_ON = !!STRIPE_SECRET_KEY;
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 // ---------- persistence ----------
@@ -39,6 +49,7 @@ function saveJson(name, obj) {
 const users = loadJson('users.json', {});
 const sessions = loadJson('sessions.json', {});
 const founders = loadJson('founders.json', { claimed: 0 });
+const fulfilled = loadJson('fulfilled.json', {}); // stripe session id -> true (idempotent fulfillment)
 
 // ---------- crypto ----------
 const newToken = () => crypto.randomBytes(32).toString('hex');
@@ -96,6 +107,39 @@ function fetchJson(url) {
   });
 }
 
+// Flatten a nested object into Stripe's form-encoded a[b][c]=v shape.
+function stripeEncode(obj, prefix, out) {
+  out = out || [];
+  for (const k of Object.keys(obj)) {
+    const v = obj[k];
+    const key = prefix ? prefix + '[' + k + ']' : k;
+    if (v && typeof v === 'object' && !Array.isArray(v)) stripeEncode(v, key, out);
+    else out.push(encodeURIComponent(key) + '=' + encodeURIComponent(v));
+  }
+  return out;
+}
+// Minimal Stripe REST client (no npm dependency). method: 'POST'|'GET'.
+function stripeApi(method, apiPath, params) {
+  return new Promise((resolve, reject) => {
+    const body = method === 'POST' && params ? stripeEncode(params).join('&') : '';
+    const fullPath = method === 'GET' && params ? apiPath + '?' + stripeEncode(params).join('&') : apiPath;
+    const req = https.request({
+      hostname: 'api.stripe.com', path: fullPath, method: method,
+      headers: Object.assign(
+        { 'Authorization': 'Bearer ' + STRIPE_SECRET_KEY },
+        method === 'POST' ? { 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(body) } : {}
+      )
+    }, (r) => {
+      let raw = '';
+      r.on('data', (c) => { raw += c; if (raw.length > 262144) r.destroy(); });
+      r.on('end', () => { try { resolve({ status: r.statusCode, json: JSON.parse(raw) }); } catch (e) { reject(e); } });
+    });
+    req.on('error', reject);
+    if (body) req.write(body);
+    req.end();
+  });
+}
+
 // Tiny per-IP throttle on auth endpoints (public internet hygiene).
 const hits = new Map();
 function throttled(ip) {
@@ -133,7 +177,7 @@ async function handleApi(req, res, pathname, ip) {
   const route = req.method + ' ' + pathname;
 
   if (route === 'GET /api/health') return sendJson(res, 200, { ok: true, ts: Date.now() });
-  if (route === 'GET /api/config') return sendJson(res, 200, { googleClientId: GOOGLE_CLIENT_ID || null });
+  if (route === 'GET /api/config') return sendJson(res, 200, { googleClientId: GOOGLE_CLIENT_ID || null, stripeEnabled: STRIPE_ON });
   if (route === 'GET /api/founders') return sendJson(res, 200, founderState());
   if (route === 'GET /api/weekchamp') {
     // Tuesday-anchored UTC week index; the client maps index -> champion pool.
@@ -234,6 +278,76 @@ async function handleApi(req, res, pathname, ip) {
     users[u.key].plan = planObj;
     saveJson('users.json', users);
     return sendJson(res, 200, { user: publicUser(users[u.key]), charged, founders: founderState() });
+  }
+
+  // ----- Real Stripe Checkout (hosted): create a session, redirect, confirm -----
+  if (route === 'POST /api/stripe/checkout') {
+    const u = authUser(req);
+    if (!u) return sendJson(res, 401, { error: 'Sign in to check out.' });
+    if (!STRIPE_ON) return sendJson(res, 503, { error: 'Payments are not switched on yet.' });
+    const b = await readBody(req);
+    const plan = String(b.plan || '');
+    if (!['role', 'all', 'founder'].includes(plan)) return sendJson(res, 400, { error: 'Unknown plan.' });
+    const role = ['top', 'jungle', 'mid', 'bot', 'support'].includes(b.role) ? b.role : 'top';
+
+    const params = {
+      success_url: PUBLIC_URL + '/?mc_checkout=success&session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: PUBLIC_URL + '/?mc_checkout=cancel',
+      client_reference_id: u.key,
+      'metadata[plan]': plan,
+      'metadata[role]': role,
+      'line_items[0][quantity]': 1
+    };
+    if (plan === 'founder') {
+      if (u.plan && u.plan.type === 'founder') return sendJson(res, 400, { error: 'You already own Founder Lifetime.' });
+      const fs2 = founderState();
+      if (fs2.soldOut) return sendJson(res, 410, { error: 'Founder Lifetime is sold out.' });
+      params.mode = 'payment';
+      // Dynamic amount so the Stripe charge always matches the live ladder price.
+      params['line_items[0][price_data][currency]'] = 'usd';
+      params['line_items[0][price_data][unit_amount]'] = Math.round(fs2.price * 100);
+      params['line_items[0][price_data][product_data][name]'] = 'MatchupCoach — Founder Lifetime';
+    } else {
+      const priceId = plan === 'all' ? STRIPE_PRICE_ALL : STRIPE_PRICE_ROLE;
+      if (!priceId) return sendJson(res, 503, { error: 'This plan is not configured yet.' });
+      params.mode = 'subscription';
+      params['line_items[0][price]'] = priceId;
+    }
+    try {
+      const r = await stripeApi('POST', '/v1/checkout/sessions', params);
+      if (r.status >= 400 || !r.json.url) return sendJson(res, 502, { error: (r.json.error && r.json.error.message) || 'Stripe could not start checkout.' });
+      return sendJson(res, 200, { url: r.json.url });
+    } catch (e) { return sendJson(res, 502, { error: 'Could not reach Stripe.' }); }
+  }
+
+  if (route === 'POST /api/stripe/confirm') {
+    const u = authUser(req);
+    if (!u) return sendJson(res, 401, { error: 'Sign in first.' });
+    if (!STRIPE_ON) return sendJson(res, 503, { error: 'Payments are not switched on.' });
+    const b = await readBody(req);
+    const sid = String(b.sessionId || '');
+    if (!/^cs_[A-Za-z0-9_]+$/.test(sid)) return sendJson(res, 400, { error: 'Bad session.' });
+    if (fulfilled[sid]) return sendJson(res, 200, { user: publicUser(users[u.key]), founders: founderState(), alreadyDone: true });
+    let sess;
+    try {
+      const r = await stripeApi('GET', '/v1/checkout/sessions/' + sid);
+      sess = r.json;
+    } catch (e) { return sendJson(res, 502, { error: 'Could not verify with Stripe.' }); }
+    if (!sess || sess.client_reference_id !== u.key) return sendJson(res, 403, { error: 'This checkout is not yours.' });
+    if (sess.payment_status !== 'paid' && sess.status !== 'complete') return sendJson(res, 402, { error: 'Payment not completed.' });
+    const plan = (sess.metadata && sess.metadata.plan) || '';
+    const role = (sess.metadata && sess.metadata.role) || 'top';
+    const planObj = { type: plan };
+    if (plan === 'role') planObj.role = role;
+    if (plan === 'founder') {
+      if (!(u.plan && u.plan.type === 'founder')) {
+        const fs2 = founderState();
+        if (!fs2.soldOut) { founders.claimed = (founders.claimed | 0) + 1; saveJson('founders.json', founders); planObj.founderNum = founders.claimed; }
+      } else { planObj.founderNum = u.plan.founderNum; }
+    }
+    fulfilled[sid] = true; saveJson('fulfilled.json', fulfilled);
+    users[u.key].plan = planObj; saveJson('users.json', users);
+    return sendJson(res, 200, { user: publicUser(users[u.key]), founders: founderState() });
   }
 
   return sendJson(res, 404, { error: 'No such endpoint.' });

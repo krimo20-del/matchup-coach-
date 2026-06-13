@@ -45,7 +45,32 @@
     { a: 'fiora',    b: 'jax',         da: 'EVEN',     db: 'EVEN',     win: ['Skill', 'Skill', 'Skill', 'Skill', 'Skill', 'Fiora', 'Fiora'] },
     // Malphite vs Tryndamere — Malphite hard-counters (54-55%): Trynd's early
     // all-in pressure gives way to Malphite's armor stacking + R lockdown.
-    { a: 'malphite', b: 'tryndamere',  da: 'FAVOURED', db: 'HARD',     win: ['Tryndamere', 'Tryndamere', 'Skill', 'Skill', 'Malphite', 'Malphite', 'Malphite'] }
+    { a: 'malphite', b: 'tryndamere',  da: 'FAVOURED', db: 'HARD',     win: ['Tryndamere', 'Tryndamere', 'Skill', 'Skill', 'Malphite', 'Malphite', 'Malphite'] },
+
+    // ===== AATROX (top) — validated June 2026 =====
+    // Aatrox profile (researched): one of the WEAKEST level 1-3 in the game; first
+    // real spike at level 3, strongest ~level 7 (2x Q + Serrated Dirk) and 15-25min
+    // mid-game. So Aatrox should NOT own level 1 in any lane — even/behind L1-2,
+    // takes over L3-6 + first item, scaler opponents reclaim 2+ items.
+    //  • vs Camille — Aatrox 54.5% (dominates early-mid; Camille out-scales). Was EVEN.
+    { a: 'aatrox', b: 'camille',     da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Camille'] },
+    //  • vs Wukong — Wukong 52-59% (decoy/nimbus hit-and-run out-trades). Was EVEN.
+    { a: 'aatrox', b: 'wukong',      da: 'TRICKY',   db: 'FAVOURED', win: ['Wukong', 'Wukong', 'Skill', 'Skill', 'Skill', 'Skill', 'Aatrox'] },
+    //  • vs Vayne — Aatrox counters her (no escape vs pull-knockup); she scales very late. Was EVEN.
+    { a: 'aatrox', b: 'vayne',       da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Vayne'] },
+    //  • vs Tahm Kench — Aatrox's single best matchup (bullies a weak laner). Was EVEN.
+    { a: 'aatrox', b: 'tahmkench',   da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'] },
+    //  • vs Kayle — Aatrox stomps LANE but Kayle wins the GAME (44% Aatrox): EVEN, with
+    //    Aatrox owning early-mid and Kayle owning 2+ items / late. Was FAVOURED (overstated).
+    { a: 'aatrox', b: 'kayle',       da: 'EVEN',     db: 'EVEN',   win: ['Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Kayle'] },
+    //  • window-only fixes (verdict already right) — strip Aatrox's bogus level-1 ownership;
+    //    scaler opponents reclaim 2+ items.
+    { a: 'aatrox', b: 'chogath',     da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', "Cho'Gath"] },
+    { a: 'aatrox', b: 'nasus',       da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Nasus'] },
+    { a: 'aatrox', b: 'sion',        da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'] },
+    { a: 'aatrox', b: 'vladimir',    da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Vladimir'] },
+    { a: 'aatrox', b: 'kassadin',    da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Kassadin'] },
+    { a: 'aatrox', b: 'drmundo',     da: 'FAVOURED', db: 'TRICKY', win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'] }
   ];
 
   function stageIdx(label) {

@@ -222,8 +222,9 @@ function sendStatic(res, rel) {
   let mu = null;
   if (withinRoot(full) && !path.extname(full) && !fs.existsSync(full) && /^matchup\//.test(rel)) {
     full = path.join(ROOT, 'MatchupCoach.dc.html');
-    const mm = /^matchup\/(.+?)-vs-(.+?)\/?$/.exec(rel);
-    if (mm) mu = { you: prettyChamp(mm[1]), foe: prettyChamp(mm[2]), slug: rel.replace(/\/+$/, '') };
+    // accept both the SEO path /matchup/leagueoflegends/lol/a-vs-b and the legacy /matchup/a-vs-b
+    const mm = /^matchup\/(?:leagueoflegends\/lol\/)?(.+?)-vs-(.+?)\/?$/.exec(rel);
+    if (mm) mu = { you: prettyChamp(mm[1]), foe: prettyChamp(mm[2]), aSlug: mm[1], bSlug: mm[2] };
   }
   if (!withinRoot(full) || !fs.existsSync(full) || !fs.statSync(full).isFile()) {
     const notFound = path.join(ROOT, '404.html');
@@ -238,7 +239,8 @@ function sendStatic(res, rel) {
   // scrapers and search engines see a tailored card without running the app's JS.
   if (mu) {
     let html = fs.readFileSync(full, 'utf8');
-    const url = PUBLIC_URL + '/' + mu.slug;
+    // canonical is always the SEO path, so a legacy /matchup/a-vs-b hit declares the new URL
+    const url = PUBLIC_URL + '/matchup/leagueoflegends/lol/' + mu.aSlug + '-vs-' + mu.bSlug;
     const pair = mu.you + ' vs ' + mu.foe;
     const ogTitle = htmlEsc(pair + ' — MatchupCoach.gg');
     const desc = htmlEsc('How to play ' + pair + ': power spikes, cooldown timers, wave plan, and build path for the matchup.');

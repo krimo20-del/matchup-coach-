@@ -88,7 +88,9 @@
       irelia: 57.2, riven: 57.8, sion: 52.3, ornn: 52.3, malphite: 51.9, pantheon: 53.2,
       kled: 53.1, urgot: 48.7, olaf: 54.8, tryndamere: 49.6, illaoi: 54.7, vladimir: 50.3,
       shen: 52.7, swain: 53.7, warwick: 53.1, volibear: 52.3, wukong: 50.8, yasuo: 54.8,
-      yone: 54.4, yorick: 50.1, gnar: 49.9, gragas: 53.6, gangplank: 51.1, quinn: 50.7
+      yone: 54.4, yorick: 50.1, gnar: 49.9, gragas: 53.6, gangplank: 51.1, quinn: 50.7,
+      drmundo: 55.3, chogath: 51.8, tahmkench: 53.2, ksante: 58.1, poppy: 52.7, kayle: 47.3,
+      kennen: 52.7, singed: 54.5, ryze: 55.8, rumble: 57.6, akali: 55.8, cassiopeia: 51.1
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -4649,6 +4651,318 @@
         "R executes her squishy frame. She can't kite a Q-empowered Garen.",
         "You catch her — Q-silence stops her kite; she's squishy and folds.",
         "Even — she roams late, you win when you catch her. Punish her roams."
+      ]
+    },
+    {
+      a: 'garen', b: 'drmundo',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence + E out-trade a low-HP Mundo.' },
+        { when: 'Lvl 6', text: 'R is % missing-HP true damage — it cuts through his regen.' },
+        { when: '1st item', text: 'Your edge — your R execute beats his HP; force trades.' },
+        { when: 'Late', text: 'Mundo out-tanks trades, but your R + Villain still threaten him.' }
+      ],
+      wants: {
+        you: ['Out-trade his weak early before his HP scaling', 'Use R (% missing-HP true damage) to punch through his regen', 'Q-silence + E; bring grievous wounds for his sustain'],
+        foe: ['Throw cleavers (Q) and farm through your trades', 'Out-sustain with passive regen + R heal', 'Stack HP and become an unkillable regen tank']
+      },
+      early: "Levels 1-3 are yours — Mundo has no early kill pressure and only chucks cleavers (Q), so your Q-silence + E out-trade him while he's still low-HP. Unlike most bruisers, you have an answer to his scaling: your R (Demacian Justice) deals true damage scaling with his missing health, punching through the regen tank he becomes. Bully him off CS now.",
+      mid: "Keep pressuring. Your Q-E out-trade his cleaver poke, and grievous wounds (bring it) cuts his regen and R heal. The key tool is your R — as a % missing-HP true-damage execute, it ignores his armour and HP stacking, so a chunked Mundo is always in execute range. Deny CS and snowball before his HP gets out of hand.",
+      late: "Mundo out-tanks your basic trades eventually — his HP + regen shrug off your Q-E — but your R execute and Villain mark keep threatening him in a way most champs can't. The lane is favoured because you bully the early and your R answers his scaling. Snowball the lead, bring antiheal, and use R to punish him whenever he's low.",
+      whys: [
+        "Mundo has no early kill pressure. Q-silence + E out-trade a low-HP Mundo. Levels 1-3 are yours.",
+        "He throws cleavers and farms. Bully him off CS while he's squishy.",
+        "Your Q-E out-trade his poke. Bring grievous wounds for his regen.",
+        "Keep pressuring — your R (% missing-HP true damage) punches through his tankiness.",
+        "R is % missing-HP true damage — it cuts through his regen. A chunked Mundo is in range.",
+        "Your edge — your R execute beats his HP. Force trades, snowball.",
+        "Mundo out-tanks trades late, but your R + Villain still threaten him. Antiheal + R."
+      ]
+    },
+    {
+      a: 'garen', b: 'chogath',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Skill', "Cho'Gath"],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence + E crush him; dodge his Q (rupture).' },
+        { when: 'Lvl 6', text: 'His R is true-damage — R-execute him before he stacks HP.' },
+        { when: '1st item', text: 'Still your edge — deny stacks so his HP scaling never arrives.' },
+        { when: '2+ items', text: 'Cho takes over — stacked HP + true-damage R out-tank you.' }
+      ],
+      wants: {
+        you: ['Q-silence his W (scream); dodge his Q (rupture)', 'Out-trade before he stacks HP off his R', 'Use R execute before his tank scaling'],
+        foe: ['Land Q (knockup) into W (silence) for a trade', 'Farm safely and stack HP with R (Feast)', 'Scale into an unkillable true-damage teamfight tank']
+      },
+      early: "Levels 1-3 are yours — Cho'Gath is a weak-early tank scaler, and your Q-silence + E out-trade him so long as you dodge his combo. His Q (Rupture) is a telegraphed knockup and his W (Feral Scream) silences; sidestep the Q, Q-silence him first so he can't chain it, and bully him off CS. Deny the farm that lets him stack.",
+      mid: "Keep him starved. Your Q-E out-trade a low-stack Cho, and your R (% missing-HP true damage) threatens him even as he builds HP — but respect his R (Feast), a true-damage nuke that chunks you when low. Don't trade at low HP. Zone his CS to keep him off HP stacks, and snowball before his scaling.",
+      late: "Cho takes over at two items — stacked HP off his R plus true damage make him a teamfight tank your trades can't crack. The lane is even-favoured because you dominate the early; convert it. Snowball off the early stomp, deny his farm, use R to punish him low, and end before his HP stacking makes you irrelevant.",
+      whys: [
+        "Cho is weak early. Q-silence + E crush him — dodge his Q (rupture). Levels 1-3 are yours.",
+        "His W silences mid-combo. Q-silence him first so he can't chain it.",
+        "Your Q-E out-trade a weak-early Cho. Zone his CS, deny stacks.",
+        "Keep him off HP stacks — your R threatens him even as he builds HP.",
+        "His R is a true-damage nuke — R-execute him before he stacks; don't trade low.",
+        "Still your edge — deny stacks so his scaling never arrives.",
+        "Two items in, stacked HP + true damage out-tank you. End the game early."
+      ]
+    },
+    {
+      a: 'garen', b: 'tahmkench',
+      win: ['Garen', 'Garen', 'Garen', 'Skill', 'Skill', 'Skill', 'Tahm Kench'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — Q-silence + E punish his weak early.' },
+        { when: 'Lvl 6', text: 'His W (Devour) grey health resets trades — R-execute him fast.' },
+        { when: '1st item', text: 'Even — he out-sustains with grey health; trade decisively.' },
+        { when: 'Late', text: 'Tahm takes over — tanky grey-health frontliner shrugs your trades.' }
+      ],
+      wants: {
+        you: ['Q-silence + E his weak early before grey health', 'R-execute fast — grey health (W passive) heals your trades off', 'Pin him under tower; he has no waveclear'],
+        foe: ['Tank your trades with grey health (passive)', 'Reposition out of position with W (Devour escape)', 'Scale into a tanky teamfight peeler / saver']
+      },
+      early: "Levels 1-2 are your window — Tahm Kench has a weak early and no waveclear, so your Q-silence + E punish him before his grey health and tank items come online. Don't walk into a W (Devour) for a free grey-health trade, but otherwise pin him, deny CS, and bully him; he just wants to survive and scale.",
+      mid: "His grey health (passive) banks a chunk of your damage as a healing shield, resetting your trade pressure. Burst him decisively — Q-silence, E-spin, and at 6 R-execute him (your true damage still threatens through grey health) rather than chipping. His W can reposition him out of your run-down, so don't let him W away mid-fight to safety.",
+      late: "Tahm takes over — he becomes a tanky grey-health frontliner/peeler who shrugs off your trades and saves his carries. The lane is favoured because you bully the early and he out-sustains the late. Snowball your level 1-2 window, force fast committed trades + R execute before his grey health resets, and end before his tank items make you irrelevant.",
+      whys: [
+        "Tahm has no waveclear and a weak early. Q-silence + E punish him — levels 1-2 are yours.",
+        "Don't walk into a W (Devour) for a free grey-health trade. Pin him, deny CS.",
+        "His grey health banks your damage as a healing shield. Burst decisively, don't chip.",
+        "Commit to single fast trades — drawn-out trades feed his grey health.",
+        "His W resets trades and repositions him. R-execute him fast through grey health.",
+        "Even — he out-sustains with grey health. Commit to fast trades + R.",
+        "Tahm takes over — tanky grey-health frontliner shrugs your trades. End early."
+      ]
+    },
+    {
+      a: 'garen', b: 'ksante',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', "K'Sante"],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence + E out-trade a pre-item K’Sante.' },
+        { when: 'Lvl 6', text: 'His R (All Out) duel form — W blunts it, R-execute him low.' },
+        { when: '1st item', text: 'Still your stomp — bait his W (block); deny his farm.' },
+        { when: '2+ items', text: 'K’Sante takes over — tanky stance + items out-sustain you.' }
+      ],
+      wants: {
+        you: ['Q-silence + E before his items make him tanky', 'Bait his W (block) — don’t feed it your spin', 'W blunts his R duel form; R-execute him low'],
+        foe: ['Block your combo with W (damage reduction)', 'Knock you with Q and dash with E (shield)', 'Pop R (All Out) to duel, or stay tanky to scale']
+      },
+      early: "Levels 1-3 are yours — K'Sante is weak before items, and your Q-silence + E out-trade him (this is one of your strongest lanes). His W blocks damage and can interrupt, so don't dump your spin into a held W; Q-silence him, bait the W, then E. His Q knocks back and his E dashes + shields, but he can't match your raw trade pre-item.",
+      mid: "His big spike is R (All Out): he sheds tankiness to become a high-damage duelist with extra dashes, so pop W (Courage) to blunt that burst and R-execute him when low. Outside of it, your Q-E out-trade his tankier stance. Bait his W block, then commit, and keep him off the items that make him unkillable.",
+      late: "K'Sante takes over at two items — his tank stance plus item sustain out-grind your trades, and his R lets him pick the duel terms. The lane is heavily favoured because you crush him early; convert it. Snowball your level 1-3 edge, R-execute him, deny his farm, and end before his scaling flips the side-lane 1v1.",
+      whys: [
+        "K'Sante is weak pre-item. Q-silence + E out-trade him — one of your best lanes. Levels 1-3 are yours.",
+        "His W blocks and can interrupt. Q-silence, bait the W, then E — don't feed it.",
+        "Your Q-E out-trade a pre-item K'Sante. Force the trade, deny his farm.",
+        "Keep punishing — deny his farm so his item spikes come late.",
+        "His R (All Out) is a burst duel form — W blunts it, R-execute him low.",
+        "Still your stomp — bait his W block, then commit. Snowball.",
+        "Two items in, tank stance + items out-sustain you. End it before his scaling."
+      ]
+    },
+    {
+      a: 'garen', b: 'poppy',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Skill', 'Poppy'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence + E out-damage her low base damage.' },
+        { when: 'Lvl 6', text: 'R executes her; her R knockback only delays your trade.' },
+        { when: '1st item', text: 'Still your edge — she has no kill threat; deny her farm.' },
+        { when: 'Late', text: 'Poppy out-tanks you — she scales to a teamfight peeler.' }
+      ],
+      wants: {
+        you: ['Q-silence + E out-damage her low damage', 'Stand off walls so her E (stun) can’t pin you', 'Snowball before she builds tanky'],
+        foe: ['Stun you into a wall with E (Heroic Charge)', 'Stop dash-engages with her W passive', 'Scale to a tanky teamfight peeler']
+      },
+      early: "Levels 1-3 are yours — Poppy deals low damage and can't out-trade your Q-silence + E. Her threats are positional: E (Heroic Charge) stuns you if it slams you into a wall, so stand away from terrain. Her W passive grounds dash-users, but you don't rely on dashes, so it barely affects you. Punish her low damage and bully her off CS.",
+      mid: "Your Q-E simply out-damage her. Trade freely away from walls — she has no way to win the damage race — and at 6 your R executes her. Her R (Keeper's Verdict) can knock you away to delay your trade, but it doesn't save her from your run-down. Q-silence, E-spin, and keep her off farm; her low kill pressure means you dictate the lane.",
+      late: "Poppy out-tanks you eventually — she builds resistances and becomes a teamfight peeler with a big R disengage, and your trades crack her less over time. The lane is favoured because you bully the early and she out-tanks the late. Snowball your level 1-3 dominance, take plates, and end before her tankiness makes your trades tickle.",
+      whys: [
+        "Poppy deals low damage. Q-silence + E out-damage her — levels 1-3 are yours.",
+        "Her E stuns you into a wall. Stand off terrain; her W doesn't affect your kit.",
+        "Your Q-E out-damage her. Force the trade away from walls.",
+        "Keep her off farm — she has no kill threat. Bully her.",
+        "R executes her; her R knockback only delays your trade.",
+        "Still your edge — deny her farm before she builds tanky.",
+        "Poppy out-tanks you late — she scales to a teamfight peeler. End early."
+      ]
+    },
+    {
+      a: 'garen', b: 'kayle',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Kayle'],
+      spikes: [
+        { when: 'Lvl 1–5', text: 'Your window — Kayle is the weakest early champ. Q-silence + E stomp her.' },
+        { when: 'Lvl 6', text: 'R executes her; her R (invuln) only delays it. All-in on cooldown.' },
+        { when: '1st item', text: 'Still your stomp — trap her under tower, deny CS + XP.' },
+        { when: 'Lvl 11 / 16', text: 'Kayle’s spikes — ranged form (11) + untouchable R (16) win the game.' }
+      ],
+      wants: {
+        you: ['Trap her under tower; deny CS and XP relentlessly', 'Q-silence + E + run-down on every cooldown pre-11', 'Build a game-ending lead before her level 11 spike'],
+        foe: ['Survive the brutal early and farm safely', 'Hit level 11 (ranged form) to flip the lane', 'Reach level 16 R and become an unkillable carry']
+      },
+      early: "You stomp the LANE — Kayle is the single weakest early champion, and your Q-silence + E + Q-run-down delete her. She has no escape and can't trade back. But the matchup is rated tricky because she wins the GAME if she scales, so your whole job from minute one is to deny her: trap her under tower and starve CS + XP.",
+      mid: "Free-kill territory. She dies to your combo, so all-in on every cooldown and perma-zone her off the wave. Your R executes her, and her R (Intervention invuln) only delays the kill — wait it out, then finish. Use Q's move speed to run her down, dive her under tower with jungle help; you must build a lead so big she's irrelevant before level 11.",
+      late: "This is why it's tricky despite you crushing lane: at level 11 her ranged form out-ranges you, and by 16 her R makes her an untouchable carry. You must win the GAME early — end it on the map with your lead — or you simply lose it late. Snowball the lane stomp into objectives and towers; don't let a farmed Kayle reach her spikes.",
+      whys: [
+        "Kayle is the weakest level-1 in the game. Q-silence + E stomp her — but you can't let her scale.",
+        "She has no escape and dies to your combo. Trap her under tower, deny CS + XP.",
+        "All-in on cooldown — run her down with Q. Perma-zone her off the wave.",
+        "Keep her broke — every denied minion delays her 11/16 spikes. Dive with jungle.",
+        "R executes her; her R (invuln) only delays it. Wait it out, then finish.",
+        "Still your stomp — build a game-ending lead before level 11.",
+        "Why it's tricky: at 11 she out-ranges you, by 16 she's untouchable. Win the game early or lose late."
+      ]
+    },
+    {
+      a: 'garen', b: 'kennen',
+      win: ['Kennen', 'Skill', 'Garen', 'Garen', 'Skill', 'Garen', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Kennen pokes with Q from range — farm, your regen heals it.' },
+        { when: 'Lvl 4–6', text: 'Your window — Q (move speed) + W (MR) close and run him down.' },
+        { when: '1st item', text: 'You catch him — Q-silence + R execute delete a squishy Kennen.' },
+        { when: 'Late', text: 'Even-to-yours — build MR; you win when you reach him.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close his poke; W for MR', 'Q-silence + R-execute a squishy Kennen once you catch him', 'Out-sustain his poke with your passive regen'],
+        foe: ['Poke you out with Q (shuriken) from range', 'Kite with E (Lightning Rush move speed)', 'Burst you with R (stun) + E when you’re low']
+      },
+      early: "Kennen out-ranges you and pokes with Q (shuriken), so levels 1-2 he chips you — but your passive regen heals it between waves, and your W stacks MR against his magic. Hug your minions, take the poke, and wait for your run-down window. Unlike most melees, you have the tools (Q move speed, W MR, regen) to beat a kiting Kennen.",
+      mid: "Your window opens with Q (Decisive Strike) — its move speed closes the gap his E tries to keep, and W (Courage) blunts his burst. Q-silence him when you reach him (it stops his combo), E-spin, and at 6 your R executes his squishy frame. Build MR, close on his E cooldown, and run him down; he can't kite a Q-empowered Garen forever.",
+      late: "Even-to-yours into late — Kennen kites and pokes, but your mobility + MR + R execute mean you win every time you reach him. Hug minions to deny free poke, build MR, and close on his E cooldown with Q. He scales into a teamfight AOE-stun threat, so close the lane and don't let him free-poke you down before your run-down lands.",
+      whys: [
+        "Kennen out-ranges you with Q poke. Hug minions — your regen heals it. Levels 1-2 are his.",
+        "His E (Lightning Rush) darts in and out. Take the poke, wait for your Q window.",
+        "Your Q (move speed) + W (MR) close the gap. Run him down.",
+        "Q-silence + E once you reach him — your regen out-sustains his poke.",
+        "R executes his squishy frame. Build MR, close on his E cooldown.",
+        "You catch him — Q-silence + R execute delete a squishy Kennen.",
+        "Even-to-yours late — build MR; you win when you reach him. Close the lane."
+      ]
+    },
+    {
+      a: 'garen', b: 'singed',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q (cleanse + MS) runs him down through his goo.' },
+        { when: 'Lvl 6', text: 'R executes him; his R speed can’t outrun a Q-empowered Garen.' },
+        { when: '1st item', text: 'Your edge — Q cleanses his goo slow; catch him on his fling cooldown.' },
+        { when: 'Late', text: 'He splitpushes; you won lane — match his side pressure or group.' }
+      ],
+      wants: {
+        you: ['Use Q (cleanse + move speed) to run him down through goo', 'Q-silence + E once you catch him; R-execute low', 'Punish his fling (E) cooldown'],
+        foe: ['Proxy the wave and kite you through poison', 'Fling (E) you into bad spots with goo + R', 'Out-macro the lane without committing']
+      },
+      early: "You beat Singed — your Q (Decisive Strike) cleanses his W (goo) slow and gives move speed, so you can actually run him down through his poison, unlike most champs he kites. Land Q, catch him as he flings or proxies, Q-silence and E-spin. Don't chase blindly into his team, but in lane your Q-mobility turns his kite game into a kill.",
+      mid: "Keep catching him. Your R executes him, and his R speed steroid can't outrun a Q-empowered Garen with cleanse. Punish his E (Fling) cooldown — after he flings, he's committed and your Q closes the gap clean. Don't tower-dive a Singed who can kite, but in lane your run-down beats his hit-and-run every time it connects.",
+      late: "Singed becomes a splitpush/proxy menace, but you won the lane — your Q-mobility denied his kite all game. Match his side-lane pressure or group with your team; your Q cleanse and run-down let you catch him in skirmishes too. Don't tilt-chase through poison, but you hold the lane edge — convert it into towers and tempo.",
+      whys: [
+        "Your Q cleanses his goo slow + gives MS to run him down. Levels 1-3 are yours.",
+        "Don't chase blindly into his team. Catch him as he flings or proxies.",
+        "Q-silence + E once you catch him. Your cleanse beats his slow.",
+        "Keep catching him — punish his fling cooldown with Q's move speed.",
+        "R executes him; his R speed can't outrun a Q-empowered Garen.",
+        "Your edge — Q cleanses his goo; catch him on his fling cooldown.",
+        "He splitpushes late; you won lane. Match his side pressure or group."
+      ]
+    },
+    {
+      a: 'garen', b: 'ryze',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Ryze'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence stops his combo; bully his weak early.' },
+        { when: 'Lvl 6', text: 'R executes him; dodge his W (root), then Q-silence + E.' },
+        { when: '1st item', text: 'Still your stomp — deny CS so his item scaling comes late.' },
+        { when: '2+ items', text: 'Ryze takes over — mana-stacked, tanky, he out-DPS you.' }
+      ],
+      wants: {
+        you: ['Q-silence to stop his Q-E combo', 'Bully his weak early before his item scaling', 'W for MR; run him down with Q, R-execute low'],
+        foe: ['Poke with Q-E spread combo from range', 'Lock you with W (root) to kite', 'Out-scale into a tanky, high-DPS mana mage']
+      },
+      early: "Levels 1-3 are yours — Ryze is weak early, and your Q silences his Q-E combo (his whole damage pattern) while your W stacks MR. Bully him off the wave with Q-E, deny his mana/item stacking, and don't get rooted from bush range into a full combo. Your Q's move speed closes the gap his poke tries to keep, and your regen heals the chip.",
+      mid: "Dodging his W root is the key — if he whiffs it, your Q-silence shuts off his combo and you run him down. Bait the W, then Q-in, silence, E-spin, and at 6 your R executes him. Keep him off CS and deny his mana/item stacking; every minute that passes moves the matchup toward him, so press now.",
+      late: "Ryze takes over at two items — stacked mana plus tank items make him a high-DPS, hard-to-kill mage, and his root + poke control the fight. The lane is favoured because you crush his early and he out-scales the late. Snowball your level 1-3 dominance, R-execute him, deny his farm, and end before his item spikes flip the duel.",
+      whys: [
+        "Ryze is weak early. Q-silence stops his combo — bully him. Levels 1-3 are yours.",
+        "Deny his mana/item stacking. W's MR + regen negate his poke.",
+        "Your Q-E out-trade a weak-early Ryze. Don't get rooted from bush.",
+        "Keep punishing — dodge his W root, then Q-silence + E and run him down.",
+        "R executes him; dodge his W (root), then commit.",
+        "Still your stomp — deny CS so his item scaling comes late.",
+        "Two items in, mana-stacked and tanky, he out-DPS you. End it before he scales."
+      ]
+    },
+    {
+      a: 'garen', b: 'rumble',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Rumble', 'Garen', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q (cleanse + MS) closes his kite; silence + E.' },
+        { when: 'Lvl 6', text: 'Dodge his R (Equalizer) zone; R-execute him outside the fire.' },
+        { when: '1st item', text: 'Your edge — run him down with Q; W for MR.' },
+        { when: 'Late', text: 'You hold it — your mobility + MR + R beat his kite.' }
+      ],
+      wants: {
+        you: ['Use Q (cleanse his E slow + MS) to close the gap', 'Q-silence + E his squishy frame; W for MR', 'Dodge his R (Equalizer) fire zone'],
+        foe: ['Poke with Q (Flamespitter) in his Heat window', 'Kite with W (shield + MS) and E (harpoon slow)', 'Zone you with R (Equalizer) and overheat burst']
+      },
+      early: "Levels 1-3 are yours — Rumble pokes with Q (Flamespitter) and kites with W (shield + MS) and E (harpoon slow), but your Q (Decisive Strike) cleanses his E slow and gives move speed to close, and your W stacks MR against his magic. Walk through the poke behind minions, Q-in, silence, and E-spin; his squishy frame folds once you stick.",
+      mid: "Once you close he can't escape your run-down. Q cleanses his slow, W blunts his flamespitter, and at 6 respect his R (The Equalizer) — a long fire zone — so don't fight inside it; R-execute him on clean ground. Don't let an overheated Rumble dump burst on you in the fire, but on open ground your mobility + MR win.",
+      late: "You hold the matchup — your Q-mobility, W's MR, and R execute beat a kite-and-poke Rumble whenever you reach him. Keep forcing the gap-close with Q, dodge his R zone, and run him down. If you close, you win; if he kites freely, you stall — so use Q's cleanse + move speed to make him fight on your terms.",
+      whys: [
+        "Your Q cleanses his E slow + gives MS to close. W for MR. Levels 1-3 are yours.",
+        "He kites with W (shield + MS) and E (slow). Q through it, then commit.",
+        "Q-silence + E his squishy frame once you stick. W blunts his flamespitter.",
+        "Run him down with Q — his short-range damage can't beat your trades.",
+        "His R (Equalizer) is a fire zone — dodge it, R-execute him on clean ground.",
+        "Your edge — run him down with Q; W for MR.",
+        "You hold it — your mobility + MR + R beat his kite. Make him fight."
+      ]
+    },
+    {
+      a: 'garen', b: 'akali',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Akali'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence + E run down a squishy, sustain-less Akali.' },
+        { when: 'Lvl 6', text: 'R executes her; her R dashes can’t escape a Q-empowered run-down.' },
+        { when: '1st item', text: 'Still your stomp — deny CS before her assassin item spikes.' },
+        { when: '2+ items', text: 'Akali takes over — her item spikes out-burst you if you’re low.' }
+      ],
+      wants: {
+        you: ['Q-silence + E her squishy frame; W blunts her burst', 'Run her down with Q; she has no sustain', 'Kill her before her assassin item spikes'],
+        foe: ['Poke with Q and hide in W (shroud) to reset', 'All-in with E + R dashes at level 6', 'Scale into a burst assassin with item spikes']
+      },
+      early: "Levels 1-3 are yours — Akali is a squishy AP assassin with no sustain, and your Q-silence + E + Q-run-down crush her. Her Q pokes and her W (Twilight Shroud) gives invis to dodge and reset, but your Q's move speed sticks to her and your W (Courage) blunts her burst. Don't waste resources chasing into shroud; punish when she steps up.",
+      mid: "Keep stomping. Q-silence cuts her combo, W blunts her burst, and at 6 your R executes her — her E and R dashes can't escape a Q-empowered run-down. Her real threat is level 6: R gives two dashes for an all-in burst, so don't be low when it's up. Healthy, you run her down; deny her CS so her item spikes come late.",
+      late: "Akali takes over at two items — her assassin item spikes let her burst you from shroud before your trades matter, and she roams for picks. The lane is favoured because you dominate the early-mid; convert it. Snowball off the Q-silence stomp, R-execute her, deny her farm, and end before her items flip the duel.",
+      whys: [
+        "Akali is squishy with no sustain. Q-silence + E run her down — levels 1-3 are yours.",
+        "Don't chase into shroud (W). Q sticks to her; W blunts her burst. Punish when she steps up.",
+        "Your Q-E out-trade her — her poke can't beat your damage.",
+        "Keep her off farm — deny the assassin item spikes. Run her down.",
+        "R executes her; her R dashes can't escape your Q run-down. Don't be low at 6.",
+        "Still your stomp — deny CS before her item spikes.",
+        "Two items in, her spikes out-burst you if low. End it before she scales."
+      ]
+    },
+    {
+      a: 'garen', b: 'cassiopeia',
+      win: ['Cassiopeia', 'Cassiopeia', 'Garen', 'Garen', 'Skill', 'Skill', 'Cassiopeia'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Cassio’s window — she out-ranges and pokes you with Q/W poison.' },
+        { when: 'Lvl 3–5', text: 'Your window — Q (cleanse + MS) runs her down; silence + R-execute.' },
+        { when: '1st item', text: 'Even — build MR; your run-down vs her poke + grounding.' },
+        { when: '2+ items', text: 'Cassiopeia takes over — Rylai’s / Liandry’s kite and ground you.' }
+      ],
+      wants: {
+        you: ['Use Q (cleanse + MS) to close through her poison', 'Q-silence + R-execute a squishy Cassio once you catch her', 'Build MR; out-sustain her poke with regen'],
+        foe: ['Poke you out with Q/W poison from range', 'Ground you with W (Miasma) to slow your chase', 'Scale into an unkitable DPS mage with Rylai’s / Liandry’s']
+      },
+      early: "Levels 1-2 are hers — Cassiopeia out-ranges you and pokes with Q/W poison you can't trade back into, and her W (Miasma) grounds you to keep you off her. Hug your caster minions, take the chip (your regen heals it), build MR, and don't path through her poison. Wait for your run-down window.",
+      mid: "Levels 3-5 are your window — your Q (Decisive Strike) cleanses her grounding/slow and gives move speed to close, and once you reach her, Q-silence + E + R-execute delete her squishy frame. Look for the catch when her Miasma is down. Don't sit in a poke war you lose; force the single run-down where your damage ends her.",
+      late: "Cassiopeia takes over at two items — Rylai's + Liandry's let her kite and ground you forever, out-DPSing your trades if you can't reach her. The lane is even because she pokes early and you run her down mid, but late tilts to her. Build MR, Q-close when her W is down, R-execute her, and end the lane before her scaling makes her unkitable.",
+      whys: [
+        "Cassio out-ranges you and pokes with Q/W poison. Hug minions — levels 1-2 are hers.",
+        "Her W (Miasma) grounds you. Don't path through it; build MR, regen the chip.",
+        "Your window — Q cleanses her grounding + gives MS to close. Run her down.",
+        "Q-silence + R-execute her squishy frame once you catch her.",
+        "All-in when her Miasma is down — Q closes and your damage ends her.",
+        "Even — build MR; your run-down vs her poke. Force the catch when W is down.",
+        "Two items in, Rylai's + Liandry's kite and ground you. End the lane before her scaling."
       ]
     }
   ];

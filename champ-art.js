@@ -252,6 +252,37 @@
     im.src = url;
     el.setAttribute('data-ci-done', name);
   }
+  // Big single icon for the loadout section. Carrier: aria-label="lo:KIND:Name"
+  // (KIND = item | rune | summ). Sets the icon as a cover background.
+  function loDictUrl(kind, name) {
+    var n = normTxt(name);
+    if (kind === 'summ') {
+      var key = n.replace(/[^a-z]/g, '');
+      // map common display names to the SUMM file keys
+      var alias = { teleport: 'teleport', flash: 'flash', ignite: 'ignite', ghost: 'ghost', heal: 'heal', barrier: 'barrier', exhaust: 'exhaust', cleanse: 'cleanse', smite: 'smite' };
+      var f = SUMM[alias[key] || key];
+      return f ? summUrl(f) : null;
+    }
+    var dict = kind === 'rune' ? runes : items;
+    if (!dict) return null;
+    for (var i = 0; i < dict.length; i++) if (dict[i].n === n) return dict[i].url;
+    // loose fallback: contains
+    for (var j = 0; j < dict.length; j++) if (dict[j].n.indexOf(n) >= 0 || n.indexOf(dict[j].n) >= 0) return dict[j].url;
+    return null;
+  }
+  function fillLoadoutIcon(el) {
+    var spec = (el.getAttribute('aria-label') || '').replace(/^lo:/, '');
+    if (!spec || el.getAttribute('data-lo-done') === spec) return;
+    var ci = spec.indexOf(':');
+    if (ci < 0) return;
+    var url = loDictUrl(spec.slice(0, ci), spec.slice(ci + 1));
+    if (!url) return;
+    el.style.backgroundImage = "url('" + url + "')";
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+    el.setAttribute('data-lo-done', spec);
+  }
+
   function fillSplashBg(el) {
     var name = el.getAttribute('data-champ-splash') || '';
     if (!name || el.getAttribute('data-cs-done') === name) return;
@@ -329,6 +360,7 @@
     document.querySelectorAll('[data-ab], [aria-label^="ab:"]').forEach(fillAb);
     document.querySelectorAll('[data-champ-icon]').forEach(fillChampIcon);
     document.querySelectorAll('[data-champ-splash]').forEach(fillSplashBg);
+    document.querySelectorAll('[aria-label^="lo:"]').forEach(fillLoadoutIcon);
     document.querySelectorAll('[data-icontext]').forEach(fillIconText);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);

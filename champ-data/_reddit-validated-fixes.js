@@ -72,6 +72,37 @@
     });
   });
 
+  // ===== per-matchup BREAKDOWN + level-by-level WHY rewrites =====
+  // Bespoke, level-specific text for matchups whose call changed (so the writeup
+  // matches the new verdict instead of contradicting it). early = levels 1-3,
+  // mid = levels 4-6, late = late game; whys[] = one line per stage
+  // [L1, L2, L3, L4-5, L6, first item, 2+ items].
+  var CONTENT = [
+    {
+      a: 'aatrox', b: 'teemo',
+      early: "Teemo's blind (Q) is the whole early game — it shuts off your Q autos and W, so don't step into auto range to throw a Q he can just blind. Farm safely with the tip of Q and accept you'll take a little poke. The good news: his poke can't out-damage your sustain, and he has no escape once you reach him.",
+      mid: "This is your takeover. With Serrated Dirk and your Q cooldown dropping you out-trade his poke and heal it back; bait the blind, then E in, W-pull, and Q-sweetspot. At 6 your R turns every all-in lethal — Teemo can't kite a healing juggernaut sitting on top of him with no dash.",
+      late: "You own the straight 1v1 all game, but Teemo stops being a laner and becomes a map problem — shrooms on objectives and splitpush. Win lane hard early so his scaling utility never matters, and never facecheck a brush near dragon/herald.",
+      whys: [
+        "His blind (Q) cancels your Q autos and W. At level 1 he can only poke — last-hit with Q range, stay out of his autos, and don't burn E chasing.",
+        "He'll blind the instant you step up. Bait the blind before you commit your own combo — once Q is down he has nothing to stop you.",
+        "With all three abilities you E in, W-pull, and Q-sweetspot through the blind window. One full combo halves a squishy, escape-less Teemo.",
+        "Your Q cooldown drops and sustain comes online — you out-trade his poke and heal it back. Engage every time his blind is on cooldown.",
+        "R + E runs him down: no dash, no escape, and your healing eats his DPS. This is your cleanest kill window of the lane.",
+        "Your Serrated/Eclipse spike outpaces his — keep forcing the all-in on his blind timer; he can't trade back.",
+        "You still win the duel, but his shrooms and splitpush start to matter. Respect mushroom walls around objectives and don't facecheck brush."
+      ]
+    }
+  ];
+  function applyContent() {
+    var F = window.CHAMP_FULL; if (!F) return;
+    CONTENT.forEach(function (c) {
+      var e = F[c.a] && F[c.a][c.b]; if (!e) return;
+      if (e.breakdown) { if (c.early) e.breakdown.early = c.early; if (c.mid) e.breakdown.mid = c.mid; if (c.late) e.breakdown.late = c.late; }
+      if (e.phases && c.whys) e.phases.forEach(function (p) { var i = stageIdx(p.label); if (i >= 0 && c.whys[i]) p.why = c.whys[i]; });
+    });
+  }
+
   function stageIdx(label) {
     var l = String(label || '').toLowerCase();
     var i = STAGES.indexOf(l);
@@ -99,6 +130,7 @@
         patch(store, f.b, f.a, f.db, f.win);
       });
     });
+    applyContent();
   }
   apply();
   if (typeof setTimeout === 'function') {

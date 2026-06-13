@@ -1273,6 +1273,266 @@
         "Your Eclipse spike beats his — out-DPS his lifesteal. Force the all-in, stay healthy.",
         "You edge it late — your heal out-grinds his low-HP healing. Deny him the low windows."
       ]
+    },
+    {
+      a: 'aatrox', b: 'gnar',
+      win: ['Gnar', 'Skill', 'Aatrox', 'Skill', 'Skill', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Mini Gnar pokes and kites — farm through the boomerang chip.' },
+        { when: 'Mega form', text: 'When he transforms, his W stun + burst are the danger — avoid walls.' },
+        { when: '1st item', text: 'Catch him in Mini form — your combo beats a squishy ranged Gnar.' },
+        { when: 'Late', text: 'Even — the lane swings on his rage bar, not the clock.' }
+      ],
+      wants: {
+        you: ['All-in when he’s in Mini form / out of rage', 'Dodge Mega Gnar’s W (stun) and avoid walls', 'Out-sustain the Mini-Gnar boomerang poke'],
+        foe: ['Poke + kite in Mini form with Q (boomerang) + E hop', 'Build rage, transform, and W-stun you for burst', 'Use Mega R to knock you into walls / tower']
+      },
+      early: "Gnar's threat is his rage bar, not his level. In Mini form he's a squishy ranged kite — Q boomerang poke, E hop to reposition — and you out-trade him the moment you reach him. The danger is when his rage fills and he transforms to Mega: a tanky form with a W stun and burst. Farm through the Mini poke and watch his rage.",
+      mid: "Time your aggression to his form. All-in when he's Mini and out of rage — your combo deletes a squishy ranged Gnar whose only escape is the E hop. Don't commit when he's about to transform: Mega Gnar's W stuns you and his combo chunks, and his R can knock you into a wall. Don't fight near terrain when he's Mega.",
+      late: "It's even — the lane swings on his rage management, not the game clock. In teamfights respect Mega Gnar's R (a wall-pin AOE), but in the side lane you out-duel Mini Gnar all day. Keep punishing his Mini windows, dodge the Mega W stun, and never let him combo you against a wall.",
+      whys: [
+        "Mini Gnar pokes and kites with Q boomerang + E hop. Farm through the chip — you out-trade him up close.",
+        "He builds rage as he pokes. Punish the Mini form before he can transform to Mega.",
+        "Your combo beats a squishy ranged Gnar — catch him in Mini form and all-in.",
+        "Watch his rage bar — don't commit right as he's about to transform to Mega.",
+        "Mega Gnar's W stuns and bursts — don't get caught, and stay off walls for his R.",
+        "Catch him Mini again — your combo deletes him. Avoid the Mega-form windows.",
+        "Even — it swings on his rage, not the clock. Out-duel Mini, dodge Mega's W, avoid walls."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'gragas',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Skill', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'He pokes with Q and reduces your damage with W — bait the W.' },
+        { when: 'Lvl 6', text: 'His R (cask) can peel or set up — don’t get knocked under tower.' },
+        { when: '1st item', text: 'Your Eclipse spike edges his — out-sustain the poke war.' },
+        { when: 'Late', text: 'Even — both sustain; whoever lands their engage wins.' }
+      ],
+      wants: {
+        you: ['Bait his W (damage reduction) before you commit', 'Dodge his E (body slam) — it stuns and escapes', 'Out-sustain his Q poke in the extended fight'],
+        foe: ['Poke with Q (cask) and heal with W', 'Engage or escape with E (body slam stun)', 'Knock you out of position with R (cask)']
+      },
+      early: "Gragas pokes with his Q (cask) and his W reduces incoming damage while healing him — so trading into a raised W is a waste. He also has an E (Body Slam) dash-stun for engage or escape. Levels 1-3, last-hit through the Q poke, don't dump your combo into his W, and wait to bait it before you commit.",
+      mid: "Bait the W, then all-in — once his damage reduction is down your combo out-trades him. Respect his E: it's a dash-stun he uses to escape your engage or to gap-close, so try to W-pull him before he can E away. At 6 his R (Explosive Cask) can knock you under his tower or peel you off — don't fight near his turret.",
+      late: "Even into late — both of you sustain through fights, so the duel comes down to who lands their engage (your W-pull vs his E-stun) and whether he can cask you out of position. Your Eclipse edges his first item. Force the extended trade, bait the W, and don't get knocked into a bad spot by his R.",
+      whys: [
+        "Gragas pokes with Q and heals/reduces damage with W. Don't trade into a raised W — bait it first.",
+        "His E (body slam) is a dash-stun for engage or escape. Mind it before you commit.",
+        "Bait the W, then your combo out-trades him. Force the trade once his damage-reduction is down.",
+        "Try to W-pull him before he can E away. Out-sustain the Q poke in the extended fight.",
+        "His R can knock you under tower or peel — don't fight near his turret when it's up.",
+        "Your Eclipse spike edges his — force the long all-in. Bait the W, deny the poke.",
+        "Even late — both sustain. Whoever lands their engage wins; don't get cask'd out of position."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'volibear',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Skill', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your combo out-trades him — but his W (bite) heals the trade back.' },
+        { when: 'Lvl 6', text: 'His R (dive + tanky) is a strong all-in — don’t get caught low.' },
+        { when: '1st item', text: 'Your Eclipse spike edges his — out-DPS his W lifesteal.' },
+        { when: 'Late', text: 'Even — your sustain vs his; force fights on his Q/R cooldowns.' }
+      ],
+      wants: {
+        you: ['Out-DPS his W (bite) self-heal in long fights', 'Dodge his Q (slow → empowered fist) all-in', 'Bait his R before committing your combo'],
+        foe: ['All-in with Q (slow + stun) into W (bite heal)', 'Sustain through trades with W lifesteal', 'Dive with R (untargetable tower, tanky)']
+      },
+      early: "Volibear is an aggressive sustain bruiser — his Q slows and empowers his next hit (a stun if he closes the distance), and his W (bite) heals him off you. Your combo out-trades him, but his W heals the trade back, so commit fully rather than chip. Don't get caught by a Q-into-W all-in when you're already low.",
+      mid: "Through the mid-game you trade roughly even with a slight edge — out-DPS his W heal in extended fights and dodge his Q empowerment to deny the stun. His big spike is R (Stratospheric Force): a dive that disables a tower and makes him tanky, so don't get caught low when it's up. Bait the R or fight before 6, then your sustain wins the long fight.",
+      late: "Even into late — your sustain versus his lifesteal. Force fights on his Q and R cooldowns, where your healing out-grinds his W. Your Eclipse spike edges his first item. Commit fully to all-ins (chip just feeds his heal), stay above the HP where his R-dive kills you, and out-last him in the extended brawl.",
+      whys: [
+        "Voli's Q slows + empowers (stun if he closes) and W heals off you. Your combo out-trades — but commit fully.",
+        "His W (bite) heals the trade back. Chip damage just feeds him — all-in or don't.",
+        "Your combo out-trades him — dodge the Q empowerment to deny the stun, then force it.",
+        "You edge the trades — out-DPS his W heal in the extended fight. Keep committing fully.",
+        "His R is a tanky tower-dive all-in — don't get caught low when it's up. Bait it or fight before 6.",
+        "Your Eclipse spike edges his — out-DPS his lifesteal. Force the all-in on his cooldowns.",
+        "Even late — your sustain vs his. Fight on his Q/R cooldowns; out-last him in the brawl."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'tryndamere',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Skill', 'Aatrox', 'Tryndamere'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your combo out-trades a low-fury Trynd — punish before his crit.' },
+        { when: 'Lvl 6', text: 'His R (Undying Rage) means you can’t burst him — bait it out.' },
+        { when: '1st item', text: 'Your Eclipse spike beats his — force it before his crit items.' },
+        { when: '2+ items', text: 'Tryndamere takes over — crit + R make him an unkillable duelist.' }
+      ],
+      wants: {
+        you: ['Out-trade his low-fury early before crit items', 'Bait his R (5s of undying) before you commit lethal', 'Win the lane before his crit scaling'],
+        foe: ['Spin (E) + crit with Q heal as fury builds', 'Reduce your AD with W and slow you', 'Scale into a crit duelist with R (can’t die 5s)']
+      },
+      early: "Tryndamere out-trades when his fury is high (Q heals, crits spike), so fight him when his fury bar is low. His W reduces your AD and slows, and his E is a spin gap-close/escape. Levels 1-3 your combo out-trades a low-fury Trynd — punish those windows before his crit items come online and deny him easy fury stacking.",
+      mid: "Respect his R (Undying Rage): for five seconds he can't drop below 1 HP, so blowing your full combo to 'kill' him just wastes it — he survives and crits you back. Bait the R out (force him to use it), then re-engage once it's down. Through the mid-game your sustain matches his; force trades when his fury and R are both low.",
+      late: "Tryndamere takes over at two items — crit + Undying Rage make him a duelist you can't burst, and his Q heal off crits out-sustains you. The lane is even because you out-trade his early and he out-scales late. Press your spike, deny his farm, and end the lane before his crit items flip the 1v1. Don't side-lane a fed Trynd late.",
+      whys: [
+        "Tryndamere spikes with fury (Q heal + crits). Fight him at low fury — your combo out-trades it.",
+        "His W cuts your AD and slows. Trade when his fury is low and punish before his crit items.",
+        "Your combo out-trades a low-fury Trynd. Force the trade, deny his fury stacking.",
+        "You out-trade through 4-5 — keep fighting on low-fury windows before he scales.",
+        "His R means he can't die for 5s — don't dump your combo to 'kill' him. Bait the R first.",
+        "Your Eclipse spike beats his — force it before his crit items. Re-engage after his R is down.",
+        "Two items in, crit + R make him an unkillable duelist. You own early — end it before he scales."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'quinn',
+      win: ['Quinn', 'Skill', 'Aatrox', 'Skill', 'Skill', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Quinn pokes with autos + Q (blind) — farm and respect the range.' },
+        { when: 'Lvl 6', text: 'Her R roams — punish the wave when she leaves, don’t get picked.' },
+        { when: '1st item', text: 'Catch her with W-pull — she’s squishy and dies to your combo.' },
+        { when: 'Late', text: 'Even — she roams for picks; you own the straight 1v1.' }
+      ],
+      wants: {
+        you: ['Hug minions through her auto + Q (blind) poke', 'Catch her with W-pull — she has only E (vault) to escape', 'Punish the wave when she roams with R'],
+        foe: ['Poke with autos + Q (Blinding Assault) from range', 'Vault over you with E for poke + reset', 'Roam with R (Behind Enemy Lines) to make plays']
+      },
+      early: "Quinn is a ranged lane bully — she pokes with autos and her Q (Blinding Assault) blinds your autos and chunks you, and her E (Vault) hops over you for a marked-target trade then resets. Levels 1-2 she out-ranges you; hug your minions to limit the poke, last-hit carefully, and don't step into open ground where she free-pokes.",
+      mid: "Once you can close, she folds — she's squishy and her only escape is the E vault. Land W-pull when her E is down and your combo deletes her. Her R (Behind Enemy Lines) is a roam tool: when she uses it to make a play elsewhere, punish her wave for free CS and plates rather than chasing. Don't get caught out by a roam.",
+      late: "Even — Quinn's late game is roaming for picks with her R, not winning the side-lane 1v1, which you own. Shove and track her: when she roams, take the wave; when she's in lane, threaten the all-in she can't survive. Build a lead, deny her pick potential, and don't facecheck for her vault-poke.",
+      whys: [
+        "Quinn pokes with autos + Q (blind) from range. Hug minions, last-hit carefully, respect the poke.",
+        "Her E (vault) hops over you for a trade and reset. Don't step into open ground.",
+        "Catch her with W-pull when her E is down — your combo deletes a squishy Quinn.",
+        "She's squishy with only the vault to escape. Force the all-in whenever you reach her.",
+        "Her R roams for picks — punish the wave when she leaves; don't chase or get caught.",
+        "Your Eclipse spike kills her outright. Force it, take her tower.",
+        "Even — she roams late, you own the 1v1. Shove, track her, deny the picks."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'jayce',
+      win: ['Jayce', 'Jayce', 'Skill', 'Jayce', 'Skill', 'Aatrox', 'Aatrox'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Jayce out-pokes you hard — cannon Q + W chunk you. Farm safe.' },
+        { when: 'Lvl 6', text: 'Even — his poke vs your sustain; don’t get bursted by his melee combo.' },
+        { when: '1st item', text: 'Your Eclipse spike flips it — close the gap and punish.' },
+        { when: 'Late', text: 'You out-scale — Jayce falls off, your sustain takes over.' }
+      ],
+      wants: {
+        you: ['Survive his early poke without dying', 'Close the gap past his cannon range, then all-in', 'Out-scale his falloff with your sustain'],
+        foe: ['Poke from range with cannon Q + W (Hyper Charge)', 'Burst with the melee E-knockback → Q combo', 'Snowball the early before you out-scale him']
+      },
+      early: "Jayce is one of the hardest early pokes in the game — his cannon-stance Q (Shock Blast) through W (Hyper Charge) chunks you from range before you can do anything, and his melee E-knockback into Q bursts you if you walk up. Levels 1-3 are his. Farm at max range, take the poke on the chin, and don't step into a gate-empowered Shock Blast.",
+      mid: "It stays his poke vs your sustain through the mid-game — heal the chip between trades and don't get caught by his full melee burst combo (E knockback into hammer Q). Be patient: he's trying to chunk you before you can close. Once you reach him with your combo he has to disengage, and his squishy frame can't trade back.",
+      late: "You out-scale him hard. Jayce is a lane bully who falls off — his poke stops one-shotting once you have items and sustain, while your DPS only grows. Survive his brutal early, close the gap on his cannon cooldown, and by your item spikes the lane flips entirely. Make him fight you up close, where he loses.",
+      whys: [
+        "Jayce out-pokes you hard — cannon Q + W chunk you from range. Farm safe, don't contest.",
+        "His melee E-knockback → Q bursts you if you walk up. Stay at max range, take the poke.",
+        "Still his window — don't step into a gate-empowered Shock Blast. Heal and survive.",
+        "His poke vs your sustain — heal the chip, don't get caught by the full burst combo.",
+        "Even at 6 — your sustain catches up. Close on his cannon cooldown, don't get poked low.",
+        "Your Eclipse spike flips it — close the gap and punish his squishy frame. Force the all-in.",
+        "You out-scale — Jayce falls off. Make him fight up close; your sustain takes over late."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'ryze',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Ryze'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your combo out-trades a weak-early Ryze — punish before he scales.' },
+        { when: 'Lvl 6', text: 'Dodge his W (root) — it’s his only lock; without it you all-in.' },
+        { when: '1st item', text: 'Your Eclipse spike beats him — force it before his item scaling.' },
+        { when: '2+ items', text: 'Ryze takes over — mana-stacked, tanky, he out-DPS you late.' }
+      ],
+      wants: {
+        you: ['All-in early before his item scaling', 'Dodge his W (root) — bait it before you commit', 'Win the lane before he stacks mana + items'],
+        foe: ['Poke with Q-E spread combo from range', 'Lock you with W (root) to kite', 'Out-scale into a tanky, high-DPS mana mage']
+      },
+      early: "Ryze is weak early and scales into a tanky DPS mage, so your window is now. He pokes with his Q (and E spreads it), and his W is a point-blank root — his only hard CC. Levels 1-3 your combo out-trades him; punish him before he gets items. Don't get rooted from bush range into a full Q-combo, but otherwise force the issue.",
+      mid: "The whole lane is dodging his W root. If he whiffs it, he has no way to stop your all-in — E in, W-pull, Q-sweetspot, and he's squishy enough to delete. Bait the W before you commit. Keep him off CS and deny his mana/item stacking, because every minute that passes moves the matchup toward him.",
+      late: "Ryze takes over at two items — stacked mana plus tank items make him a high-DPS, hard-to-kill mage, and his root + poke control the fight. The lane is even because you crush his early and he out-scales your late. Press your spike hard, deny his farm, and end the lane before his item spikes flip the duel.",
+      whys: [
+        "Ryze is weak early and scales hard. Your combo out-trades him now — punish before his items.",
+        "His Q-E poke chips but he can't match your trade yet. Deny his farm, force the issue.",
+        "Your full combo out-trades a weak-early Ryze. Dodge his W root, then all-in.",
+        "Keep punishing — bait the W before you commit. Every level before his items is yours.",
+        "Dodge his W (root) — it's his only lock. Without it your all-in deletes his squishy frame.",
+        "Your Eclipse spike beats him. Force the all-in before his mana + item scaling.",
+        "Two items in, mana-stacked and tanky, he out-DPS you. You own early — end it before he scales."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'heimerdinger',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'His turrets zone your CS — kill turrets, dodge the E stun.' },
+        { when: 'Lvl 6', text: 'Catch him — he’s squishy; W-pull past the turrets and all-in.' },
+        { when: '1st item', text: 'Your Eclipse spike deletes him if you reach him through the turrets.' },
+        { when: 'Late', text: 'Even — his turret zone vs your all-in; respect the E grenade stun.' }
+      ],
+      wants: {
+        you: ['Kill his turrets to break the zone, then all-in', 'Dodge his E (grenade stun) — it sets up his combo', 'Catch him with W-pull — he’s squishy and dies'],
+        foe: ['Zone your CS with H-28 turrets (Q)', 'Poke with W (rockets) and stun with E (grenade)', 'Wall you off and scale his turret damage with R']
+      },
+      early: "Heimerdinger zones you with his turrets (Q) — they deny your CS and poke you whenever you step up — and his E (grenade) stuns to set up his W rocket poke. Levels 1-3, focus turrets down when you can, dodge the E stun (it's his whole combo setup), and accept that last-hitting under his turret zone is awkward. Don't facecheck for the grenade.",
+      mid: "Your path to winning is catching him — Heimer is squishy and immobile, so if you W-pull him past his turrets and land your combo, he dies. The hard part is the E grenade stun, which interrupts your engage. Bait or dodge the E, then commit. Kill his turrets first so they can't kite you with their damage while he repositions.",
+      late: "Even — his turret zone control versus your all-in threat. He'll wall off chokes and his R upgrades his turret damage, but in a straight fight he's a squishy with no escape. Respect the E grenade stun, clear his turrets before you commit, and your combo deletes him whenever you reach him. Don't get poked out trying to siege his zone.",
+      whys: [
+        "Heimer's turrets (Q) zone your CS and poke you. Kill turrets when you can; last-hit is awkward.",
+        "His E (grenade) stuns to set up his W rockets. Dodge it — don't facecheck for the grenade.",
+        "Your combo deletes a squishy Heimer — W-pull him past the turrets and all-in.",
+        "Clear his turrets first so they can't kite you. Then force the trade on his immobile frame.",
+        "Catch him — he's squishy with no escape. Bait the E stun, then W-pull and combo.",
+        "Your Eclipse spike kills him if you reach him through the turrets. Force it.",
+        "Even — his turret zone vs your all-in. Respect the E stun, clear turrets, delete him when you reach him."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'aurora',
+      win: ['Skill', 'Skill', 'Aatrox', 'Skill', 'Aurora', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'She pokes with Q + E (slow) and self-heals — bait her W dash.' },
+        { when: 'Lvl 6', text: 'Aurora’s window — R zone + untargetability let her escape your all-in.' },
+        { when: '1st item', text: 'Your Eclipse spike edges her — catch her when W is down.' },
+        { when: 'Late', text: 'Even — her mobility + poke vs your sustain; land W to win.' }
+      ],
+      wants: {
+        you: ['Catch her with W-pull when her W (dash) is down', 'Out-sustain her Q/E poke in the extended fight', 'Punish her after she commits her W escape'],
+        foe: ['Poke with Q (bolt) + E (80% slow) and self-heal', 'Dodge your combo with W (dash + invisibility)', 'Zone and escape with R (untargetable rift)']
+      },
+      early: "Aurora is a mobile AP skirmisher with her own sustain — her Q pokes (recast for missing-HP damage), her E slows you 80% while recoiling her to safety, and her passive heals her off you. Her W is a dash into invisibility — her escape and repositioning tool. Levels 1-3, last-hit through the poke and don't commit your combo while her W is up to dodge it.",
+      mid: "Your window is catching her with W-pull when her W dash is on cooldown — locked in your sweetspot she can't kite, and your combo out-trades her. Bait the W out first (force her to use it to dodge), then re-engage. Her level-6 R creates a rift she can dash through to become untargetable, so it's a strong escape from your all-in — respect it.",
+      late: "Even into late — her mobility and poke versus your sustain. The duel comes down to whether you land W before she dashes; if you do, you out-trade and out-sustain her, and if she kites freely she pokes you down. Your Eclipse edges her first item. Force fights on her W cooldown, punish her after she commits an escape, and don't chase her into her R rift.",
+      whys: [
+        "Aurora pokes with Q + E (80% slow) and self-heals off you. Last-hit through it; don't commit into her W.",
+        "Her W is a dash into invisibility — her escape. Don't dump your combo while it's up to dodge.",
+        "Your combo out-trades her — W-pull when her dash is down and she can't kite. Force it.",
+        "Bait her W out first, then re-engage. Out-sustain her poke in the extended fight.",
+        "Her R rift lets her dash to untargetability — a strong escape from your all-in. Respect it.",
+        "Your Eclipse spike edges her — catch her when W is down and delete her squishy frame.",
+        "Even late — her mobility + poke vs your sustain. Land W to win; don't chase into her R rift."
+      ]
+    },
+    {
+      a: 'aatrox', b: 'ambessa',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Ambessa', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Even skirmish — bait her E (shield-brace) before you commit.' },
+        { when: 'Lvl 6', text: 'Ambessa’s window — her R (blink + suppress + stun) is a hard all-in.' },
+        { when: '1st item', text: 'Your Eclipse spike edges her — out-sustain her dash combo.' },
+        { when: 'Late', text: 'Even — both skirmish; your sustain vs her mobility + R engage.' }
+      ],
+      wants: {
+        you: ['Bait her E (Repudiation shield) before committing burst', 'Out-sustain her Q-W dash combo in the long fight', 'Respect her R (suppress) — don’t get caught low'],
+        foe: ['Chain dashes (passive) into the Q → W combo', 'Brace your burst with E (shield + counter-smash)', 'All-in with R (blink behind + suppress + stun)']
+      },
+      early: "Ambessa is a high-mobility AD skirmisher — her passive grants free dashes during her abilities, her Q (cone slash) enables her W (line slam) for a burst combo, and her E (Repudiation) braces for a shield then smashes, hitting harder if the shield absorbed your damage. So don't dump your burst into her E. Levels 1-3 are an even skirmish; bait the E before you commit.",
+      mid: "Through the mid-game your sustain holds the extended fight — she out-bursts in a short window with her dash combo, but you out-last her if you bait the E and don't get chunked early. Her big spike is R (Public Execution): she blinks behind you, suppresses, and stuns for a full combo, so don't be at low HP when it's up. Respect that all-in window.",
+      late: "Even into late — both of you skirmish, your sustain versus her mobility and R engage. Your Eclipse edges her first item in an extended fight. Force the long trade where your healing beats her burst, bait her E shield before committing, and play around her R (the suppress all-in is her main kill threat). Don't get caught alone at low HP.",
+      whys: [
+        "Ambessa chains dashes into a Q → W burst combo. Even skirmish at 1-3 — don't trade recklessly.",
+        "Her E (Repudiation) shields then smashes harder if it absorbed your hit. Don't dump burst into it.",
+        "Your combo out-trades once you bait the E. Force the trade after her shield is spent.",
+        "You out-last her in extended fights — out-sustain the dash combo. Keep it long, not bursty.",
+        "Her R blinks behind you, suppresses and stuns for a full combo — don't be low when it's up.",
+        "Your Eclipse spike edges her — out-sustain her burst. Force the long all-in, bait the E.",
+        "Even late — your sustain vs her mobility + R. Play around the suppress; don't get caught low."
+      ]
     }
   ];
   window.MC_MATCHUP_EXTRA = window.MC_MATCHUP_EXTRA || {};

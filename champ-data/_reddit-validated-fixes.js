@@ -84,7 +84,9 @@
     // duelists who ignore his armour (Camille) and gets kited by mobile carries late.
     garen: {
       darius: 50.6, aatrox: 52.0, fiora: 48.8, teemo: 51.3, jax: 55.6, trundle: 52.6,
-      renekton: 53.7, sett: 50.9, mordekaiser: 51.4, vayne: 52.0, camille: 46.7, nasus: 56.8
+      renekton: 53.7, sett: 50.9, mordekaiser: 51.4, vayne: 52.0, camille: 46.7, nasus: 56.8,
+      irelia: 57.2, riven: 57.8, sion: 52.3, ornn: 52.3, malphite: 51.9, pantheon: 53.2,
+      kled: 53.1, urgot: 48.7, olaf: 54.8, tryndamere: 49.6, illaoi: 54.7, vladimir: 50.3
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -4021,6 +4023,318 @@
         "R executes him; bait his W, then all-in. Don't let him stack freely.",
         "Still your stomp — starve his farm so his scaling never arrives.",
         "Two items in, stacked Q + tanky body out-grind you. End the game before that."
+      ]
+    },
+    {
+      a: 'garen', b: 'irelia',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Irelia'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence cuts her combo before she stacks.' },
+        { when: 'Lvl 6', text: 'R executes her; W blunts her stacked burst, silence stops the reset.' },
+        { when: '1st item', text: 'Still your stomp — deny her minion Q-resets and stacks.' },
+        { when: '2+ items', text: 'Irelia takes over — stacked Q resets + true damage out-grind you.' }
+      ],
+      wants: {
+        you: ['Q-silence to cut her combo and stun-channel', 'Deny her minion Q-resets and stacks', 'W (damage reduction) to blunt her stacked burst'],
+        foe: ['Stack passive on minions, then out-trade you', 'Blunt your trade with W (Defiant Dance)', 'Q-reset around your spin and scale to items']
+      },
+      early: "You hard-counter early Irelia — your Q silences her so she can't chain her Q-E-W combo, and she's weak before she stacks her passive anyway. Deny her minion Q-resets, poke with Q-silence, and don't let her free-stack off the wave. Her W (Defiant Dance) reduces your burst and stuns if you spin into the channel, so trade with Q first, then E.",
+      mid: "Keep her starved. Your W blunts her stacked burst, and a silenced Irelia can't reset or dance through your trades. At 6 your R executes her. Bait the W, then Q-silence, E-spin, and run her down with Q's move speed. Every Q stack you deny delays the carry she becomes — zone her hard off CS.",
+      late: "Irelia takes over at two items — stacked, her Q resets and on-hit true damage out-grind your trades and she dances out of your spin. The lane is favoured because you dominate the early; convert it. Snowball off the silence stomp, deny her farm, and end before her item + stack spike flips the side-lane duel.",
+      whys: [
+        "Q-silence cuts her combo before she stacks. She's weak early — levels 1-3 are yours.",
+        "Deny her minion Q-resets. Don't let her free-stack off the wave.",
+        "Her W blunts burst and stuns — Q-silence first, then E-spin.",
+        "Keep her starved off CS — every denied stack delays her carry spike.",
+        "R executes her; W blunts her stacked burst, silence stops the reset.",
+        "Still your stomp — run her down with Q's move speed. Snowball.",
+        "Two items in, stacked resets + true damage out-grind you. End it before that."
+      ]
+    },
+    {
+      a: 'garen', b: 'riven',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Riven'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence interrupts her combo mid-cast.' },
+        { when: 'Lvl 6', text: 'R executes her; W blunts her burst, silence cancels the all-in.' },
+        { when: '1st item', text: 'Still your stomp — silence shuts down her combo reliance.' },
+        { when: '2+ items', text: 'Riven takes over — her item spikes out-trade you late.' }
+      ],
+      wants: {
+        you: ['Q-silence mid-combo to cancel her burst', 'W (damage reduction) to eat her shielded all-in', 'Run her down with Q’s move speed; R-execute low'],
+        foe: ['Dodge your spin with Q dashes + E shield', 'Burst you in a short combo window', 'Animation-cancel to out-tempo you late']
+      },
+      early: "You hard-counter Riven — her entire game is her combo, and your Q silences it mid-cast, cancelling her burst. She out-mobilities you with Q dashes and an E shield, but a well-timed Q-silence shuts her down, and your W (Courage) eats the burst she does land. Levels 1-3 are decisively yours; punish her every time she commits.",
+      mid: "Keep punishing. Silence her combo, W her burst, E-spin for damage, and run her down with Q's move speed — she can't dance away from a silenced engage. At 6 your R executes her squishy frame. Bait her dashes, then Q-silence when she commits; she's stuck without her combo and folds to your trade.",
+      late: "Riven takes over only if she snowballs to items — two items in, her spikes let her out-trade you in the short window before your silence. The lane is heavily favoured because you shut down her combo early; you must convert it. Snowball off the silence stomp, R-execute her, and close the lane before her item scaling gives her enough burst to beat the silence.",
+      whys: [
+        "Q-silence interrupts her combo mid-cast, cancelling her burst. Levels 1-3 are yours.",
+        "Her Q dashes + E shield dodge your spin — but silence shuts her down when she commits.",
+        "W eats the burst she lands. Silence, W, then E-spin and run her down.",
+        "Bait her dashes, then Q-silence when she commits. She folds without her combo.",
+        "R executes her squishy frame; silence cancels the all-in.",
+        "Still your stomp — silence shuts down her combo reliance. Snowball.",
+        "Two items in her spikes out-trade you. Close the lane before her item scaling."
+      ]
+    },
+    {
+      a: 'garen', b: 'sion',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Skill', 'Skill', 'Sion'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence + E out-trade him; dodge his Q (charged knockup).' },
+        { when: 'Lvl 6', text: 'R executes him; his R is map engage, not a duel button.' },
+        { when: '1st item', text: 'Still your edge — out-trade a low-damage Sion.' },
+        { when: 'Late', text: 'Sion out-tanks you — he scales to a teamfight engage tank.' }
+      ],
+      wants: {
+        you: ['Dodge his Q (charged knockup), then Q-silence + E', 'Out-trade his weak early before he stacks tanky', 'Trade then regen — he just wants to farm and scale'],
+        foe: ['Land the charged Q knockup for a trade', 'Farm safely (even dead, via passive) and scale', 'Become a teamfight engage tank with R']
+      },
+      early: "Levels 1-3 are yours — you out-trade Sion's weak early. His only real threat is the charged Q (a telegraphed knockup you can sidestep), so don't stand still while he winds it up. Dodge it, then Q-silence and E-spin; without the Q he can't trade back, and his passive means he just wants to farm and scale, not fight you.",
+      mid: "Keep punishing. Your Q-E out-trade his W shield + E poke, and at 6 your R executes him. His R is a long-range engage for the map, not a 1v1 button, so don't panic when he ults — just don't get knocked into his team. Deny CS, regen between trades, and pressure him off the wave while he's a low-damage scaler.",
+      late: "Sion out-tanks you eventually — he scales into a teamfight engage tank with resistances your trades crack less over time. The lane is even-ish because you bully the early and he out-tanks the late. Snowball your level 1-3 edge, take plates, and end before his tankiness matters; the game becomes about his R engage, not the 1v1 you own early.",
+      whys: [
+        "Sion's charged Q is his only burst — dodge it, then Q-silence + E. Levels 1-3 are yours.",
+        "Without the Q he can't trade. Punish his weak early.",
+        "Your Q-E out-trade his W shield + E poke. Force the trade.",
+        "Keep punishing — deny CS while he's a low-damage scaler.",
+        "R executes him; his R is map engage, not a duel button. Don't get knocked into his team.",
+        "Still your edge — out-trade a low-damage Sion. Take plates.",
+        "Sion out-tanks you late — he scales to a teamfight engage tank. End early."
+      ]
+    },
+    {
+      a: 'garen', b: 'ornn',
+      win: ['Garen', 'Garen', 'Garen', 'Skill', 'Ornn', 'Skill', 'Ornn'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence + E out-trade him before his brittle combo.' },
+        { when: 'Lvl 6', text: 'Ornn’s window — brittle (W) + R detonation answer your trades.' },
+        { when: '1st item', text: 'He out-sustains and out-tanks you; his upgrades come free.' },
+        { when: 'Late', text: 'Ornn scales to an unkillable tank — close the lane early.' }
+      ],
+      wants: {
+        you: ['Q-silence + E before his brittle combo is online', 'Dodge his Q (pillar) so he can’t brittle-detonate', 'Win early — you can’t out-trade a built Ornn'],
+        foe: ['Brittle you with W, then detonate for bonus + slow', 'Poke with Q and out-sustain your trades', 'Scale to an unkillable tank with free item upgrades']
+      },
+      early: "Levels 1-3 are yours — your Q-silence + E spin out-trade Ornn before his brittle (W) combo comes online. His Q pillar pokes and his W makes you take bonus damage he can detonate with CC, so dodge the Q so he can't set up the brittle. Press your early Q advantage; your regen heals his poke between trades.",
+      mid: "From 6 the lane tilts to him — his R detonates brittle for a big swing, and he out-sustains your trades while building tanky. You can't out-trade an Ornn who upgrades his items for free. Q-silence and trade only when his W is down, use W (Courage) to blunt his brittle burst, and don't walk into a Q-pillar that sets up the detonation.",
+      late: "Ornn scales into an unkillable teamfight tank — free item upgrades, two engage tools, and resistances your trades can't crack. The lane is even because you bully the early and he out-tanks the late. Snowball your level 1-3 edge, take plates, and end before his brittle + items flip the matchup. A built Ornn doesn't fold to your trades.",
+      whys: [
+        "Q-silence + E out-trade him before his brittle combo. Levels 1-3 are yours — dodge his Q.",
+        "Don't let him land Q to set up the brittle. Press your early Q advantage.",
+        "Your Q-E out-trade a pre-brittle Ornn. Regen heals his poke between trades.",
+        "He starts to out-sustain — trade only when his W is down; W blunts his brittle burst.",
+        "His R detonates brittle for a big swing — his window. Don't trade into it.",
+        "He out-tanks you with free upgrades. You can't crack a built Ornn.",
+        "Ornn scales to an unkillable tank. Win the early or end the game before late."
+      ]
+    },
+    {
+      a: 'garen', b: 'malphite',
+      win: ['Garen', 'Garen', 'Skill', 'Skill', 'Skill', 'Malphite', 'Malphite'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — Q-silence + E before his armour + shield come online.' },
+        { when: 'Lvl 3–5', text: 'All-in when his passive shield is popped and armour is low.' },
+        { when: '1st item', text: 'His armour stacking starves your AD — you can’t crack him.' },
+        { when: 'Late', text: 'Malphite scales to a teamfight R; lane goes even-to-his.' }
+      ],
+      wants: {
+        you: ['Q-silence + E when his passive shield is down', 'Trade before he stacks armour', 'Snowball early — you can’t out-trade a built Malphite'],
+        foe: ['Poke with Q (slow) and farm behind the shield', 'Stack armour to neutralise your AD', 'Scale to a teamfight R (Unstoppable Force)']
+      },
+      early: "Levels 1-2 are your window — your Q-silence + E out-trade Malphite before his armour and passive shield are online. His W armour directly cuts your AD, so the longer the lane goes the less you hurt him. Catch him mid-poke without his shield, Q-silence, and E-spin; don't let him free-farm into armour. Your Q cleanse helps vs his slow.",
+      mid: "You get a small window levels 3-5 when his shield is down and his armour is still low — Q-silence and all-in then. Once he stacks armour items, your damage falls off and you can't crack him; don't waste resources chipping a tank who out-sustains it with his passive and your regen war goes nowhere. Catch him without the shield or accept the stall.",
+      late: "Malphite scales into a teamfight monster — his R (Unstoppable Force) is a game-swinging engage and his armour neutralises your AD. The lane drifts from even to his. Snowball early off the shield windows or accept you won't crack a built Malphite, and play for tempo elsewhere — roam, take plates, help other lanes with your R-execute pressure.",
+      whys: [
+        "Q-silence + E out-trade him before his armour + shield. Levels 1-2 are your window.",
+        "His W armour cuts your AD. Catch him when his shield pops; your Q cleanse beats his slow.",
+        "All-in when his passive shield is down and armour is still low.",
+        "He starts stacking armour — your damage drops. Trade only on a popped shield.",
+        "His armour items neutralise your AD. You can't crack a built Malphite.",
+        "Even-to-his now. Snowball your early windows or play elsewhere.",
+        "He scales to a teamfight R. The lane goes from even to his — win early or roam."
+      ]
+    },
+    {
+      a: 'garen', b: 'pantheon',
+      win: ['Pantheon', 'Pantheon', 'Skill', 'Garen', 'Garen', 'Garen', 'Garen'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Pantheon’s window — Q poke + W stun bully you. Use W to survive.' },
+        { when: 'Lvl 4–6', text: 'Your window — out-scale his falloff; Q-silence + regen take over.' },
+        { when: '1st item', text: 'You out-scale him — your tankiness + R beat his early kit.' },
+        { when: 'Late', text: 'You take over — Pantheon has no late; your durability wins.' }
+      ],
+      wants: {
+        you: ['Survive his early poke + stun with W (damage reduction)', 'Out-scale his falloff with regen + tankiness', 'Q-silence + E once his power fades; R-execute low'],
+        foe: ['Bully your early with Q (spear) + W (stun)', 'Block your trades with E (Aegis) from one side', 'Snowball before you out-scale him']
+      },
+      early: "Pantheon contests your early — his Q spear pokes, his W is a point-click stun, and his E (Aegis) blocks attacks from one direction, negating your autos/E spin. Levels 1-2 are his; don't walk into the W-stun-into-burst. Pop W (Courage) to reduce his burst, take the poke, and remember his E only blocks one way — angle your spin so his block faces the wrong direction.",
+      mid: "Levels 4-6 swing to you. Pantheon is front-loaded and starts falling off, while your tankiness and regen grow. Q-silence his combo, E-spin, and out-trade a fading Pantheon. Be wary of his R roam if he can't kill you, but in a straight fight the lane now tilts your way; your regen heals his poke and your R executes him.",
+      late: "You take over — Pantheon has essentially no late game while your tankiness + R execute + Villain keep scaling. The lane is favoured because he bullies the early and you own the rest. Survive his level 1-2 window with W, weather his poke, and grind him out; by your item spikes he can't fight you at all.",
+      whys: [
+        "Pantheon's Q + W stun bully your early. Pop W to survive — levels 1-2 are his.",
+        "His E blocks one direction — angle your spin so his block faces the wrong way.",
+        "Even as he starts to fall off — Q-silence his combo, regen the poke.",
+        "Your window — out-trade a fading Pantheon with Q-E. Watch his R roam.",
+        "Your regen heals his poke and your R executes him. Press the lane.",
+        "You out-scale him — your tankiness + R beat his early kit.",
+        "You take over — he has no late. Survive the early, then the lane is yours."
+      ]
+    },
+    {
+      a: 'garen', b: 'kled',
+      win: ['Kled', 'Skill', 'Garen', 'Garen', 'Skill', 'Garen', 'Garen'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Kled’s window — mounted aggression + grab (Q) bully you. Use W.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-silence + W blunt his all-in; out-scale his falloff.' },
+        { when: '1st item', text: 'Your edge — your tankiness + R beat a falling-off Kled.' },
+        { when: 'Late', text: 'You out-scale — Kled falls off; your durability wins.' }
+      ],
+      wants: {
+        you: ['Survive his mounted early with W (damage reduction)', 'Q-silence his all-in, then out-scale him', 'Out-last his falloff — you’re tankier late'],
+        foe: ['Bully your early while mounted with Q grab + W', 'Use E (dash) to engage and escape your trades', 'Snowball before you out-scale him']
+      },
+      early: "Mounted Kled's level 1-2 is his window — his Q (Beartrap) grabs you and his W stacks courage for burst. Pop W (Courage) to reduce his all-in, don't feed the grab, and concede a little CS rather than eat his fully-stacked aggression. Survive his peak; his entire plan is to snowball before you out-scale him.",
+      mid: "From 3 the lane swings to you. Q-silence his courage burst, W blunts the all-in, and you out-trade him as his front-loaded power starts to fade. Trade enough to dismount him — off Skaarl he's weak — then Q-E and run him down. Don't let him reset and remount for free; your R executes him if he over-stays.",
+      late: "You out-scale him — Kled is a front-loaded bully who falls off, while your tankiness + R execute only grow. Survive the mounted window with W, punish every dismount, and the back half is yours. Don't chase a remounting Kled into his jungle; make him fight you in lane where your durability wins the long game.",
+      whys: [
+        "Mounted Kled's Q grab + W burst bully your early. Pop W to survive — levels 1-2 are his.",
+        "Don't feed the grab. Concede a little CS, don't eat his stacked aggression.",
+        "Your window — Q-silence his burst, W blunts the all-in. Out-trade his fade.",
+        "Trade to dismount him — off Skaarl he's weak. Q-E and run him down.",
+        "Don't let him remount free. Your R executes him if he over-stays.",
+        "Your edge — your tankiness + R beat a falling-off Kled.",
+        "You out-scale — Kled falls off. Punish dismounts; your durability wins late."
+      ]
+    },
+    {
+      a: 'garen', b: 'urgot',
+      win: ['Skill', 'Urgot', 'Urgot', 'Skill', 'Urgot', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Your window — Q-silence trade before his W shotgun is online.' },
+        { when: 'Lvl 2–6', text: 'Urgot’s window — W (shotgun knees) + E flip out-trade you.' },
+        { when: '1st item', text: 'He out-trades you; W blunts it but his R executes you low.' },
+        { when: 'Late', text: 'Even-to-his — his shotgun shred + execute vs your tankiness.' }
+      ],
+      wants: {
+        you: ['Q-silence a short trade early, then disengage', 'Use W to blunt his shotgun + stay above R execute', 'Trade then regen — don’t sit in his W stance'],
+        foe: ['Out-trade with W (shotgun knees) + Q poke', 'Flip you with E into his shotgun stance', 'Execute you with R when your HP drops']
+      },
+      early: "Urgot out-trades you — his W (shotgun knees) shreds you up close, his Q pokes, and his E flips over you for a free trade. Level 1 is your window for a quick Q-silence poke before his W is online; from level 2 on, his shotgun out-damages your short trades. Pop W (Courage) to blunt his burst, don't sit in his W stance, and play for short Q-silence trades.",
+      mid: "Urgot owns the mid-levels. His shotgun + E flip beat your trades, and his R (Fear Beyond Death) executes you below a health threshold and refreshes on the kill. Stay above his execute line, use W to survive his all-in, and Q-silence to deny his combo. Trade short, then disengage and regen — don't get flipped into his stance for a free shotgun.",
+      late: "Even-to-his into late — his shotgun shred + execute versus your tankiness. Your W and regen let you survive, but he out-trades the extended fight. Play for short Q-silence trades, stay above his R execute, and rely on your durability + R-execute pressure. Don't feed him low-HP windows; keep the fights short and on your terms.",
+      whys: [
+        "Level 1 — Q-silence a short trade before his W shotgun is online. Your window.",
+        "From 2 his W (shotgun knees) out-trades you up close. Don't sit in his stance.",
+        "His E flips you into his shotgun. Pop W to blunt it; trade short.",
+        "Urgot owns the mid-levels. Q-silence his combo, regen between trades.",
+        "His R executes you below a threshold — stay above his execute line.",
+        "He out-trades you; W blunts it but his execute punishes you low.",
+        "Even-to-his late — short Q-silence trades, stay above his execute, rely on durability."
+      ]
+    },
+    {
+      a: 'garen', b: 'olaf',
+      win: ['Garen', 'Garen', 'Garen', 'Garen', 'Olaf', 'Garen', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q (cleanse) removes his axe slow; out-trade him.' },
+        { when: 'Lvl 6', text: 'Olaf’s window — R makes him CC-immune, so your Q-silence won’t stop him.' },
+        { when: '1st item', text: 'Your edge — W blunts his reckless burst; trade then regen.' },
+        { when: 'Late', text: 'You edge it — your tankiness + R vs his lifesteal.' }
+      ],
+      wants: {
+        you: ['Use Q (cleanse) to remove his axe (Q) slow', 'W (damage reduction) to blunt his reckless trades', 'Trade when his axe is down; R-execute low'],
+        foe: ['Pick up his axe (Q) to slow and out-trade you', 'Ramp attack speed + lifesteal as he drops low', 'Go CC-immune with R — your silence won’t stop him']
+      },
+      early: "Levels 1-3 are yours — your Q (Decisive Strike) cleanses Olaf's axe (Q) slow, which is the core of his kit, and gives you move speed to trade or disengage. His passive ramps attack speed + lifesteal as his HP drops, so don't let a reckless brawl drag on, but with your Q cleanse and W (Courage) blunting his burst, you out-trade his early.",
+      mid: "His R (Ragnarok) is the key problem — it makes him CC-immune, so your Q-silence won't stop his all-in once it's active. Don't rely on the silence to peel a R'd Olaf; fight before he ults or trade short and disengage during the duration. When his R is down and his axe is on cooldown, your Q-E + W out-trade his reckless trades.",
+      late: "You edge the matchup — your tankiness + R execute versus his lifesteal, and your Q cleanse keeps his axe slow off you. Trade when his axe is down, W his burst, R-execute him when low, and don't get baited into an all-in the moment his Ragnarok is up. Keep your HP healthy so his lifesteal-on-low-HP comeback never triggers.",
+      whys: [
+        "Your Q cleanses his axe slow — the core of his kit. Out-trade his early. Levels 1-3 are yours.",
+        "His passive ramps lifesteal as he drops low. Don't brawl recklessly into it.",
+        "Your Q-E + W out-trade him when his axe is down. Force the trade.",
+        "Keep trading on his axe cooldown; your cleanse beats his slow.",
+        "His R makes him CC-immune — your silence won't stop his all-in. Fight before 6 or trade short.",
+        "Your edge — W blunts his reckless burst. Trade then regen.",
+        "You edge it late — your tankiness + R vs his lifesteal. Stay healthy."
+      ]
+    },
+    {
+      a: 'garen', b: 'tryndamere',
+      win: ['Garen', 'Garen', 'Skill', 'Skill', 'Skill', 'Skill', 'Tryndamere'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — Q-silence + E out-trade a low-fury Trynd.' },
+        { when: 'Lvl 6', text: 'His R (Undying Rage) survives your R execute — bait it out.' },
+        { when: '1st item', text: 'Trynd’s crit scaling trades back — W blunts it; trade short.' },
+        { when: '2+ items', text: 'Tryndamere takes over — crit + R make him an unkillable duelist.' }
+      ],
+      wants: {
+        you: ['Out-trade his low-fury early with Q-E', 'Use Q (cleanse) vs his W slow + W (Courage) vs his crits', 'Bait his R (5s undying) before you R-execute'],
+        foe: ['Spin (E) + crit with Q heal as fury builds', 'Reduce your AD with W and slow you', 'Scale into a crit duelist with R (can’t die 5s)']
+      },
+      early: "Levels 1-2 are yours — your Q-silence + E out-trade a low-fury Tryndamere. Fight him when his fury bar is low; high fury means Q heals and crits spike. His W reduces your AD and slows, but your Q cleanses the slow and your W (Courage) blunts his crits. Press your early trades before his crit items come online.",
+      mid: "Respect his R (Undying Rage): for five seconds he can't drop below 1 HP, so your R execute won't kill him through it — wasting Demacian Justice into a fresh Undying is a mistake. Bait the R out (force him to use it), then re-engage and execute once it's down. Through the mid-game, W blunts his crits and your Q-E trade evenly when his R is on cooldown.",
+      late: "Tryndamere takes over at two items — crit + Undying Rage make him a duelist you can't execute, and his Q heal off crits out-sustains your trades. The lane is even because you out-trade his early and he out-scales the late. Snowball your level 1-2 edge, bait his R to land your kills, and end before his crit items flip the 1v1.",
+      whys: [
+        "Q-silence + E out-trade a low-fury Trynd. Fight him at low fury — levels 1-2 are yours.",
+        "His W cuts your AD and slows — your Q cleanses it, W blunts his crits. Trade early.",
+        "Even as his fury builds — Q heal + crits spike. Trade on low-fury windows.",
+        "Keep punishing low-fury Trynd; don't feed his fury stacking.",
+        "His R survives your execute (can't die 5s) — bait it, don't waste R.",
+        "His crit scaling trades back — W blunts it; trade short, re-engage after his R.",
+        "Two items in, crit + R make him unkillable. You own early — end it before he scales."
+      ]
+    },
+    {
+      a: 'garen', b: 'illaoi',
+      win: ['Garen', 'Garen', 'Garen', 'Skill', 'Illaoi', 'Garen', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q (move speed) lets you fight on open ground.' },
+        { when: 'Lvl 6', text: 'Illaoi’s window — R spawns a tentacle wall; never fight in it.' },
+        { when: '1st item', text: 'Your edge — Q-silence her E (Test of Spirit); out-sustain her poke.' },
+        { when: 'Late', text: 'You hold it — Q-mobility keeps you out of her tentacle nest.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to fight on open ground / leave her tentacles', 'Q-silence her E (Test of Spirit) soul-rip', 'Out-sustain her poke with passive regen'],
+        foe: ['Spawn tentacles and fight inside them', 'Rip your soul with E (Test of Spirit)', 'Slam you with empowered W in her tentacle zone']
+      },
+      early: "You're favoured — Illaoi is lethal inside her tentacle field but slow and beatable outside it, and your Q (Decisive Strike) gives you the move speed to fight on open ground or walk out of her nest. Her E (Test of Spirit) rips your soul; Q-silence or dodge it, because beating your vessel deals huge damage. Levels 1-3, fight on fresh ground and your regen heals her poke.",
+      mid: "Level 6 is her window — R (Leap of Faith) spawns a wall of tentacles and turns any fight into a beating. Never trade inside her nest; use Q's move speed to leave it or fight before her R. Q-silence her E so she can't set up the soul-vessel, out-sustain her poke with your passive, and run her down on open ground.",
+      late: "You hold the matchup — your Q-mobility keeps you out of her tentacle nest, your regen out-sustains her poke, and your R executes her. Don't side-lane into her tentacles where her R shreds you, but on open ground you win. Pull the fight to fresh ground, silence the E, and grind her out. Respect her teamfight, win the spacing.",
+      whys: [
+        "Your Q (move speed) lets you fight on open ground or leave her tentacles. Levels 1-3 are yours.",
+        "Q-silence or dodge her E (Test of Spirit) — beating your vessel deals huge damage.",
+        "Your regen heals her poke. Fight on fresh ground, away from tentacles.",
+        "Don't path into her Q slams. Use Q's mobility to control the spacing.",
+        "Her R spawns a tentacle wall — never fight in it. Use Q to leave it or fight before 6.",
+        "Your edge — Q-silence her E; out-sustain her poke. Run her down on open ground.",
+        "You hold it — Q-mobility keeps you out of her nest. Win the spacing; R-execute her."
+      ]
+    },
+    {
+      a: 'garen', b: 'vladimir',
+      win: ['Garen', 'Garen', 'Garen', 'Skill', 'Skill', 'Vladimir', 'Vladimir'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — Q-silence stops his Q; bully his weak early.' },
+        { when: 'Lvl 6', text: 'His pool (W) dodges your R execute + Q — bait it first.' },
+        { when: '1st item', text: 'Vlad’s spike — his AP sustain starts to out-heal your trades.' },
+        { when: '2+ items', text: 'Vladimir takes over — full-AP scaling kites and bursts you.' }
+      ],
+      wants: {
+        you: ['Q-silence to stop his Q before it lands', 'Bully his weak early before pool + scaling', 'Bait his Sanguine Pool (W) before you R-execute'],
+        foe: ['Pool (W) your R execute, Q, and trades — untargetable', 'Farm safely and stack health + AP toward Rylai’s', 'Out-scale into an unkillable late-game AP threat']
+      },
+      early: "Levels 1-3 are your window — Vladimir is one of the weakest early laners, and your Q silences his Q (his main poke) while your W stacks MR against his magic. Bully him off the wave with Q-E, deny his Q stacks, and don't let him farm safely. His only escape is pool (W), so press the early before he has it; your regen negates his poke.",
+      mid: "His W (Sanguine Pool) is the problem — it makes him untargetable, dodging your R execute, your Q, and your trade. Bait the pool out (force him to use it), then all-in when its long cooldown is up. Q-silence him, E-spin, and keep him low; deny his Q stacks. His AP sustain starts to out-heal your trades around his first item, so press now.",
+      late: "Vladimir takes over — full-AP Vlad with Rylai's/Cosmic Drive out-sustains and kites you, and his pool dodges your entire all-in on demand. The lane is even because you crush the early but he out-scales hard. You had to snowball the level 1-3 window into a lead; if it went even, the late game is his. Close it out before his second item, build MR.",
+      whys: [
+        "Vlad is one of the weakest early laners. Q-silence stops his Q — bully him. Levels 1-3 are yours.",
+        "Deny his Q stacks. Your W's MR and regen negate his poke. Press the early.",
+        "Your Q-E out-trade a pre-pool Vlad. Keep him low.",
+        "His W (pool) makes him untargetable — bait it before you R-execute or all-in.",
+        "He can pool mid-execute to survive your R — time it for when W is down.",
+        "His AP sustain starts out-healing your trades. Snowball before his items.",
+        "Two items in, full-AP Vlad kites and bursts you. Close it before his second item; build MR."
       ]
     }
   ];

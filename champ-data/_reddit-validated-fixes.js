@@ -73,7 +73,9 @@
       drmundo: 46.6, chogath: 53.1, tahmkench: 49.6, ksante: 50.6, poppy: 49.6, kayle: 48.8,
       kennen: 47.1, singed: 54.5, ryze: 51.3, rumble: 49.7, akali: 55.1, cassiopeia: 49.7,
       galio: 51.7, gwen: 50.6, jayce: 49.5, kassadin: 50.9, lucian: 52.3, maokai: 47.3,
-      sylas: 50.8, graves: 54.3, heimerdinger: 48.6, sejuani: 50.3, zac: 54.0, ziggs: 49.1
+      sylas: 50.8, graves: 54.3, heimerdinger: 48.6, sejuani: 50.3, zac: 54.0, ziggs: 49.1,
+      akshan: 51.1, ambessa: 53.8, aurora: 51.2, karma: 53.1, lillia: 55.0, mel: 57.2,
+      nautilus: 50.2, neeko: 52.5
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -3486,6 +3488,214 @@
         "Force him to burn satchel, then all-in on its cooldown.",
         "Your edge — a caught Ziggs dies. Bait the W first, then pull.",
         "Even late — close on his satchel cooldown. His only escape is W; land E and he dies."
+      ]
+    },
+    {
+      a: 'darius', b: 'akshan',
+      win: ['Akshan', 'Akshan', 'Darius', 'Skill', 'Skill', 'Darius', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Akshan pokes with Q + autos and swings around terrain — hug minions.' },
+        { when: 'Lvl 3–6', text: 'Your window — land E when his E (swing) is down and bleed deletes him.' },
+        { when: '1st item', text: 'Your edge — a caught Akshan dies; deny his roams.' },
+        { when: 'Late', text: 'Even — he kites and roams; you win when you land E.' }
+      ],
+      wants: {
+        you: ['Hug minions through his Q (boomerang) + auto poke', 'Land E when his E (swing) is down — bleed deletes him', 'Deny his roams; punish the wave when he leaves'],
+        foe: ['Poke with Q (Avengerang) + passive double-shot', 'Swing around terrain with E (Heroic Swing)', 'Roam and pick with R (Comeuppance sniper)']
+      },
+      early: "Akshan is a slippery ranged skirmisher — he pokes with Q (Avengerang) and autos, and his E (Heroic Swing) lets him swing off terrain to kite and reposition around you. Levels 1-2 he out-ranges and out-mobilities you; hug your minions to limit the poke, don't chase his swing into open ground, and accept some chip. Wait for your catch window.",
+      mid: "Your window is landing E — when his swing is on cooldown, pull him and your bleed deletes his squishy frame. The problem is he rarely gives that window: the swing resets and kites you. Bait the E, then commit your pull on its cooldown. At 6 his R (Comeuppance) is long-range execute-poke and a roam threat, so don't get caught stepping up, and track his roams.",
+      late: "Even into late — Akshan kites with his swing and roams for picks with R, and you only win the exchange when you land E. Hug minions to deny free poke, close on his E cooldown, and punish his roams by taking the wave. If he swings freely he chips you; your whole game is the one clean pull that lets your bleed finish him.",
+      whys: [
+        "Akshan pokes with Q + autos and swings around terrain. He out-ranges you — hug minions, take chip.",
+        "His E (Heroic Swing) kites off terrain. Don't chase it into open ground.",
+        "Your window — land E when his swing is down and bleed deletes him.",
+        "He resets the swing constantly. Bait the E, then pull on its cooldown.",
+        "His R is long-range execute-poke + a roam threat — don't get picked stepping up.",
+        "Your edge — a caught Akshan dies. Close on his E cooldown; deny his roams.",
+        "Even late — he kites and roams. You win when you land E; hug minions, punish roams."
+      ]
+    },
+    {
+      a: 'darius', b: 'ambessa',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Ambessa', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed out-trade her; bait her E (shield-brace).' },
+        { when: 'Lvl 6', text: 'Ambessa’s window — her R (blink + suppress) is a hard all-in.' },
+        { when: '1st item', text: 'Your edge — your bleed out-trades her dash combo.' },
+        { when: 'Late', text: 'You hold the edge — out-bleed her in the extended fight.' }
+      ],
+      wants: {
+        you: ['Land E + bleed before she chains her dash combo', 'Bait her E (Repudiation shield) before committing', 'Respect her R (suppress) — don’t get caught low'],
+        foe: ['Chain dashes (passive) into the Q → W combo', 'Brace your burst with E (shield + counter-smash)', 'All-in with R (blink behind + suppress + stun)']
+      },
+      early: "Levels 1-3 are yours — land E and your bleed out-trades Ambessa before she chains her dash combo. Her passive grants free dashes, her Q enables her W (line slam) for burst, and her E (Repudiation) braces for a shield then smashes harder if it absorbed your damage — so don't dump your combo into her E. Bait it, then pull her in and stack Hemorrhage.",
+      mid: "Through the mid-game your bleed holds the extended fight — she out-bursts in a short window with her dash combo, but you out-grind her once you land E and don't get chunked. Her big spike is R (Public Execution): she blinks behind you, suppresses, and stuns for a full combo, so don't be at low HP when it's up. Respect that all-in window.",
+      late: "You hold the edge — your bleed + R execute out-grind her in the extended fight, and a landed pull cancels her mobility. The lane is favoured because you bully the early and trade well throughout. Force the long all-in where your Hemorrhage beats her burst, bait her E shield, and play around her R (the suppress is her main kill threat). Don't get caught low.",
+      whys: [
+        "E + bleed out-trade her before her dash combo. Levels 1-3 are yours.",
+        "Her E (Repudiation) shields then smashes harder if it absorbed your hit. Don't dump burst into it.",
+        "Your bleed all-in out-trades her — bait the E, then pull her in.",
+        "You out-grind her in extended fights once you land E. Keep it long, not bursty.",
+        "Her R blinks behind you, suppresses and stuns for a full combo — don't be low when it's up.",
+        "Your edge — your bleed out-trades her dash combo. Force the long all-in.",
+        "You hold the edge late — out-bleed her in the extended fight. Play around her R."
+      ]
+    },
+    {
+      a: 'darius', b: 'aurora',
+      win: ['Darius', 'Darius', 'Darius', 'Skill', 'Aurora', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E + bleed out-trade her; she has no escape but W.' },
+        { when: 'Lvl 6', text: 'Aurora’s window — R zone + untargetability let her escape your all-in.' },
+        { when: '1st item', text: 'Even — catch her with E when her W (dash) is down.' },
+        { when: 'Late', text: 'Even — her mobility + poke vs your bleed; land E to win.' }
+      ],
+      wants: {
+        you: ['Land E when her W (dash) is down — bleed deletes her', 'Out-trade her Q/E poke before her item scaling', 'Punish her after she commits her W escape'],
+        foe: ['Poke with Q (bolt) + E (80% slow) and self-heal', 'Dodge your pull with W (dash + invisibility)', 'Zone and escape with R (untargetable rift)']
+      },
+      early: "Levels 1-3 are yours — Aurora is a mobile AP skirmisher, but land E and your bleed out-trades her. Her Q pokes (recast for missing-HP damage), her E slows you 80% while recoiling her back, and her passive heals her off you — but her only real escape is her W (a dash into invisibility). Don't commit your pull while her W is up to dodge it; bait it first.",
+      mid: "Your window is catching her when her W dash is on cooldown — pull her into your bleed and she can't kite. Bait the W out (force her to use it), then re-engage and stack Hemorrhage. Her level-6 R creates a rift she can dash through to become untargetable, so it's a strong escape from your all-in — respect it and commit when it's down.",
+      late: "Even into late — her mobility and poke versus your bleed. The duel comes down to whether you land E before she dashes; if you do, your Hemorrhage out-trades her, and if she kites freely she pokes you down. Force fights on her W cooldown, punish her after she commits an escape, and don't chase her into her R rift.",
+      whys: [
+        "E + bleed out-trade her — she has no escape but W. Levels 1-3 are yours.",
+        "Her W is a dash into invisibility. Don't commit your pull while it's up to dodge.",
+        "Your bleed all-in out-trades her — bait the W, then pull her in.",
+        "Catch her when her W dash is down — pull her into your bleed and she can't kite.",
+        "Her R rift lets her dash to untargetability — a strong escape. Respect it, commit when it's down.",
+        "Even — land E when her W is down. Out-trade her poke.",
+        "Even late — her mobility + poke vs your bleed. Land E to win; don't chase into her R rift."
+      ]
+    },
+    {
+      a: 'darius', b: 'karma',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Karma'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — land E and bleed deletes a squishy Karma.' },
+        { when: 'Lvl 6', text: 'R executes her; bait her E (shield) before committing.' },
+        { when: '1st item', text: 'Your edge — she has no kill threat; deny her farm.' },
+        { when: 'Late', text: 'You own the 1v1 — she’s a poke/utility mage, not a duelist.' }
+      ],
+      wants: {
+        you: ['Land E (pull) — a caught Karma dies to bleed', 'Bait her E (shield + MS) before you all-in', 'Don’t get kited by her W (root tether)'],
+        foe: ['Poke with Q (Inner Flame) — empowered by R (Mantra)', 'Root you with W (Focused Resolve) tether', 'Self-peel with E (shield + move speed)']
+      },
+      early: "Levels 1-3 are yours — land E and your bleed deletes a squishy Karma. She pokes with Q (Mantra-empowered) and peels herself with E (shield + move speed). Her W (Focused Resolve) is a tether that roots if she channels it fully — don't let her hold it on you while she kites, and don't trade into a fresh E shield. Pull her in and stack Hemorrhage.",
+      mid: "Your path is catching her — Karma is squishy and her only defensive tools are the E shield and the W kite. Bait the E, then E-pull and your bleed all-in deletes her; your R executes off stacks. Don't get rooted by a full W tether mid-engage; close the distance fast. Once you're on her with no shield up, she folds.",
+      late: "You own the 1v1 — Karma is a poke/utility mage, not a side-lane duelist. If you reach her she dies, and your bleed makes it quick. Press the lane, deny her poke by hugging minions, and don't get kited by W + E. Her value is utility for her team, not beating you one-on-one. Snowball your dominance.",
+      whys: [
+        "Karma pokes with Q and shields with E. Land E and bleed deletes her — levels 1-3 are yours.",
+        "Her W (Focused Resolve) tethers and roots if she channels it. Break it or close fast.",
+        "Your bleed all-in out-trades a squishy Karma — bait the E, then commit.",
+        "Don't get kited by W + E. Force the gap-close when her shield is down.",
+        "R executes her; bait her E (shield) before committing. She can't trade back.",
+        "Your edge — she has no kill threat. Deny her farm, snowball.",
+        "You own the 1v1 — she's a poke/utility mage. Hug minions, press your edge."
+      ]
+    },
+    {
+      a: 'darius', b: 'lillia',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Lillia'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E-pull cancels her kite; bleed crushes her.' },
+        { when: 'Lvl 6', text: 'R executes her; don’t get put to sleep by her R (Dream-Laden Bough).' },
+        { when: '1st item', text: 'Your edge — deny farm before her AP on-hit scaling.' },
+        { when: '2+ items', text: 'Lillia takes over — AP on-hit + mobility kite and shred you.' }
+      ],
+      wants: {
+        you: ['Land E to cancel her Q (swirl) + E (dash) kite', 'Punish her after she commits her E dash', 'Win before her AP scaling comes online'],
+        foe: ['Kite with Q (swirl) movement + E (dash + slow)', 'Stack passive burn and scale AP on-hit', 'Set up ganks / picks with R (sleep)']
+      },
+      early: "Levels 1-3 are yours — Lillia is a mobile AP skirmisher who kites, but your E (Apprehend) cancels her kite and locks her in your bleed. Her Q (Blooming Blows) ramps her move speed and her E is a dash + slow, so don't whiff your pull chasing a dancing Lillia; wait for a clean E, then stack Hemorrhage. She has no hard early trade.",
+      mid: "Keep punishing. Your bleed all-in out-trades her and your R executes off stacks. Punish her after she commits her E dash — she's locked on the return path and can't escape your pull. At 6 respect her R (Dream-Laden Bough): a delayed sleep that sets up a burst all-in or a gank, so don't get drowsy-then-slept in a bad spot.",
+      late: "Lillia takes over at two items — AP on-hit damage plus her constant mobility let her kite and shred you while staying out of your reach. The lane is favoured because you out-trade her early and she scales past you. Snowball off the E-pull all-ins, land your pulls, and build a lead before her items flip the duel. Don't get slept and bursted.",
+      whys: [
+        "Lillia kites with Q move speed + E dash. E-pull cancels it — levels 1-3 are yours.",
+        "She has no hard early trade. Don't whiff your pull chasing — wait for a clean E.",
+        "Your bleed all-in out-trades a pinned Lillia. Force the trade, deny her farm.",
+        "Punish her after she commits E (locked into the return). Land E first.",
+        "R executes her; her R is a delayed sleep — don't get slept in a bad spot.",
+        "Your edge — deny farm before her AP on-hit scaling.",
+        "Two items in, AP on-hit + mobility kite and shred you. End it before she scales."
+      ]
+    },
+    {
+      a: 'darius', b: 'mel',
+      win: ['Mel', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Mel pokes from range with Q — hug minions, take the chip.' },
+        { when: 'Lvl 2–6', text: 'Your window — land E past her poke and bleed deletes her.' },
+        { when: '1st item', text: 'Your stomp — a caught Mel dies; dodge her E (root).' },
+        { when: 'Late', text: 'You own the 1v1 — she’s a teamfight poke mage with no escape.' }
+      ],
+      wants: {
+        you: ['Hug minions through her Q (Radiant Volley) poke', 'Land E — a caught Mel dies to bleed (her W reflect is melee-proof)', 'Dodge her E (Solar Snare root) that sets up her damage'],
+        foe: ['Poke from range with Q (Radiant Volley)', 'Root you with E (Solar Snare) to land poke / R', 'Self-peel with W (shield + move speed)']
+      },
+      early: "Mel is a squishy artillery mage — at level 1 she pokes you with Q (Radiant Volley) from range and her E (Solar Snare) roots you to land more. Her W (Rebuttal) reflects projectiles, but your kit is melee so it's just a shield + move-speed peel against you — it can't stop your bleed. Hug minions through the early poke and dodge the E root.",
+      mid: "Your window opens fast — Mel has no real escape but the W move-speed, and she's squishy. Land E (Apprehend) past her poke and your bleed deletes her; a landed pull plus Hemorrhage ends her. Dodge or bait the E root (it's how she sets up her damage and R), then commit. This is one of your best lanes once you close the gap.",
+      late: "You own the 1v1 — if you reach Mel she dies, full stop. Her threat is ranged poke and her R (a global mark-execute in teamfights), not the side-lane duel. Close on her W cooldown, deny free poke by hugging minions, and end the lane. Don't get rooted into her combo; dodge the E and you win every all-in. Snowball your dominance.",
+      whys: [
+        "Mel pokes from range with Q (Radiant Volley). Hug minions, take the chip. Level 1 is hers.",
+        "Your window — land E past her poke and bleed deletes her squishy frame.",
+        "Her W reflects projectiles but you're melee — it can't stop your bleed. Keep closing.",
+        "Dodge her E (Solar Snare root) that sets up her poke. Then commit your pull.",
+        "A caught Mel dies — land E and stack Hemorrhage. One of your best lanes.",
+        "Your stomp — deny free poke, close on her W cooldown.",
+        "You own the 1v1 — she's a teamfight poke mage. Dodge the E and win every all-in."
+      ]
+    },
+    {
+      a: 'darius', b: 'nautilus',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Skill', 'Nautilus'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — dodge his Q (hook), then E + bleed out-trade him.' },
+        { when: 'Lvl 6', text: 'R executes him; his R (knockup) is a pick/peel tool, not a duel button.' },
+        { when: '1st item', text: 'Still your edge — he has low damage; deny his farm.' },
+        { when: 'Late', text: 'Nautilus out-tanks you — he scales to a CC frontliner.' }
+      ],
+      wants: {
+        you: ['Dodge his Q (Dredge Line hook) — it starts everything', 'E + bleed out-trade his low damage', 'Snowball before he builds tanky'],
+        foe: ['Hook you in with Q (Dredge Line)', 'Chunk with W (shield + on-hit) + E (AOE)', 'Lock you down with R + passive root for a gank']
+      },
+      early: "Levels 1-3 are yours — Nautilus is a CC tank with low damage, and his whole trade starts with the Q hook (Dredge Line). Dodge it and he has nothing; eat it and he gets a free W (shield + bonus damage) and E on you. Sidestep the hook from bush range, then land your own E and your bleed out-trades his low-damage frame.",
+      mid: "Keep punishing. Without the hook he can't engage, and his W shield + E poke don't out-trade your Hemorrhage. Your R executes him off stacks. At 6 his R is a single-target knockup — a pick/peel tool that's dangerous with a jungler around (his passive also roots), but in a straight duel it doesn't beat you. Dodge the hook, all-in, and track his R for ganks.",
+      late: "Nautilus out-tanks you eventually — he scales into a teamfight CC frontliner with resistances your bleed cracks less over time. The lane is even because you bully the early and he out-tanks the late. Snowball your level 1-3 dominance, deny his farm, and end before his tankiness matters. Respect his R + jungler for picks, but never fear the 1v1.",
+      whys: [
+        "Nautilus' trade starts with the Q hook. Dodge it from bush range and he has nothing.",
+        "Eat the hook and he gets a free W + E. Sidestep it — that's the whole matchup.",
+        "Land your own E and bleed out-trades his low-damage frame. Force the trade.",
+        "Without the hook he can't engage. Keep punishing; deny his farm.",
+        "R executes him; his R is a pick/peel tool, not a duel button. You win the 1v1.",
+        "Still your edge — he has low damage. Snowball before he builds tanky.",
+        "Nautilus out-tanks you late — he scales to a CC frontliner. End early; respect his R for picks."
+      ]
+    },
+    {
+      a: 'darius', b: 'neeko',
+      win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Neeko'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — land E and bleed deletes her squishy frame.' },
+        { when: 'Lvl 6', text: 'R executes her; dodge her R (Pop Blossom AOE stun) windup.' },
+        { when: '1st item', text: 'Your edge — deny CS before her burst scaling.' },
+        { when: 'Late', text: 'You own the 1v1 — she’s a teamfight burst mage, not a duelist.' }
+      ],
+      wants: {
+        you: ['Land E (pull) — a caught Neeko dies to bleed', 'Bait her E (root) before you commit', 'Dodge her R (stun) windup at level 6'],
+        foe: ['Poke with Q (Blooming Burst) and root with E', 'Disguise as a minion/ally with W (clone)', 'All-in with R (Pop Blossom AOE stun)']
+      },
+      early: "Levels 1-3 are yours — Neeko pokes with Q and her E (Tangle-Barbs) roots you to set up damage, but she's squishy and built for picks, not dueling. Land E and your bleed deletes her. Her W disguises her (as a minion or ally), so don't get fooled by a clone. Dodge the E root, pull her in, and stack Hemorrhage.",
+      mid: "Keep stomping. Bait the E root, then E-pull and your bleed all-in folds her squishy frame; your R executes off stacks. At 6 respect her R (Pop Blossom): a delayed AOE stun she leaps in with, often from a disguise, so watch the windup and don't get caught flat-footed. Land your pull and she dies; she can't trade back.",
+      late: "You own the 1v1 — Neeko is a teamfight burst/pick mage, not a side-lane duelist. If you reach her she dies, and your bleed makes it instant. Press the lane, deny her roams (her R + disguise are pick tools), and don't facecheck a 'minion' that might be her W clone. The duel is always yours; snowball your dominance.",
+      whys: [
+        "Neeko pokes with Q and roots with E, but she's squishy. Land E and bleed deletes her.",
+        "Her W disguises her as a minion or ally — don't get fooled by a clone. Dodge the root.",
+        "Your bleed all-in folds her squishy frame — bait the E root, then commit.",
+        "Keep her off farm — deny the burst scaling. Land your pull.",
+        "R executes her; dodge her R (Pop Blossom) AOE stun windup at 6.",
+        "Your edge — deny CS before her burst scaling.",
+        "You own the 1v1 — she's a teamfight pick mage. Don't facecheck her clones; press your edge."
       ]
     }
   ];

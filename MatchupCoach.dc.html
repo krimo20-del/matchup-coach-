@@ -943,7 +943,6 @@
       <div style="position:relative; display:flex; align-items:stretch; gap:0; flex-wrap:nowrap;">
         <!-- Champion A -->
         <div style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end;">
-          <image-slot id="{{ champA.slot }}" style="position:absolute; inset:0; z-index:0; width:100%; height:100%;" shape="rect" placeholder="{{ champA.slotHint }}"></image-slot>
           <div style="position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(72deg, {{ champA.tintRgba }}, transparent 62%), linear-gradient(0deg, rgba(11,9,8,0.94), rgba(11,9,8,0.1) 62%, transparent);"></div>
           <div style="position:absolute; top:22px; left:26px; z-index:2; pointer-events:none; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:1px; color:{{ champA.label }}; font-weight:700;">YOUR CHAMPION</div>
           <div style="position:relative; z-index:2; padding:26px; pointer-events:none;">
@@ -959,7 +958,6 @@
 
         <!-- Champion B -->
         <div style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-end; text-align:right;">
-          <image-slot id="{{ champB.slot }}" style="position:absolute; inset:0; z-index:0; width:100%; height:100%;" shape="rect" placeholder="{{ champB.slotHint }}"></image-slot>
           <div style="position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(-72deg, {{ champB.tintRgba }}, transparent 62%), linear-gradient(0deg, rgba(11,9,8,0.94), rgba(11,9,8,0.1) 62%, transparent);"></div>
           <div style="position:absolute; top:22px; right:26px; z-index:2; pointer-events:none; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:1px; color:{{ champB.label }}; font-weight:700;">ENEMY CHAMPION</div>
           <div style="position:relative; z-index:2; padding:26px; pointer-events:none;">
@@ -2195,7 +2193,6 @@
 
       <div style="position:relative; display:flex; align-items:stretch; gap:0; flex-wrap:nowrap;">
         <div style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end;">
-          <image-slot id="{{ jv.champA.slot }}" style="position:absolute; inset:0; z-index:0; width:100%; height:100%;" shape="rect" placeholder="{{ jv.champA.slotHint }}"></image-slot>
           <div style="position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(72deg, {{ jv.champA.tintRgba }}, transparent 62%), linear-gradient(0deg, rgba(11,9,8,0.94), rgba(11,9,8,0.1) 62%, transparent);"></div>
           <div style="position:absolute; top:22px; left:26px; z-index:2; pointer-events:none; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:1px; color:{{ jv.champA.label }}; font-weight:700;">YOUR JUNGLER</div>
           <div style="position:relative; z-index:2; padding:26px; pointer-events:none;">
@@ -2207,7 +2204,6 @@
           <div style="width:62px; height:62px; border-radius:50%; background:linear-gradient(140deg,#0e2419,#07120d); border:1px solid rgba(61,220,151,0.4); display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:19px; color:#7fe3b8; box-shadow:0 0 0 8px rgba(11,9,8,0.7), 0 10px 30px -8px rgba(0,0,0,0.85);">VS</div>
         </div>
         <div style="flex:1 1 0; min-width:200px; position:relative; min-height:256px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-end; text-align:right;">
-          <image-slot id="{{ jv.champB.slot }}" style="position:absolute; inset:0; z-index:0; width:100%; height:100%;" shape="rect" placeholder="{{ jv.champB.slotHint }}"></image-slot>
           <div style="position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(-72deg, {{ jv.champB.tintRgba }}, transparent 62%), linear-gradient(0deg, rgba(11,9,8,0.94), rgba(11,9,8,0.1) 62%, transparent);"></div>
           <div style="position:absolute; top:22px; right:26px; z-index:2; pointer-events:none; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:1px; color:{{ jv.champB.label }}; font-weight:700;">ENEMY JUNGLER</div>
           <div style="position:relative; z-index:2; padding:26px; pointer-events:none;">
@@ -3277,6 +3273,48 @@ class Component extends DCLogic {
     }
     try { localStorage.removeItem('mc_session'); sessionStorage.removeItem('mc_session'); } catch (e) {}
     this.setState({ user: null, view: 'home' });
+  }
+  // Normalize the two level-table row shapes into {label, who} where who is
+  // 'A' (your window), 'E' (his), or 'X' (skill/even). The phMap shape carries
+  // w directly; the FULL levelTable shape encodes the side in its tone color.
+  _phaseRows(MU) {
+    var src = (MU.phases && MU.phases.length) ? MU.phases : (MU.levelTable || []);
+    return src.map(function(r){
+      return {
+        label: r.p || r.stage || '',
+        who: r.w ? r.w : (r.tone === '#3ddc97' ? 'A' : r.tone === '#ff5d6c' ? 'E' : 'X')
+      };
+    }).filter(function(r){ return r.label; });
+  }
+  // TL;DR composer \u2014 builds the headline from the same data the page shows:
+  // verdict tone, the win condition, the punishable key cooldown, and your
+  // first favoured window from the level table.
+  _composeTldr(MU) {
+    var d = (MU.difficulty || 'EVEN').toUpperCase();
+    var lead = d.indexOf('FAVOURED') >= 0 ? 'You\u2019re favoured \u2014 '
+      : d.indexOf('HARD') >= 0 ? 'Hard lane \u2014 '
+      : d.indexOf('TRICKY') >= 0 ? 'Tricky \u2014 '
+      : d.indexOf('MIRROR') >= 0 ? 'Mirror \u2014 '
+      : 'Even lane \u2014 ';
+    var wc = (MU.winCon || MU.win || '').trim();
+    if (wc) {
+      wc = (wc.match(/^[^.!?]*[.!?]?/) || [wc])[0].trim(); // first sentence only \u2014 the rest lives in the breakdown
+      // Keep the headline short enough that the punish/window tail survives
+      // txtN's 180-char clause trim.
+      if (wc.length > 105) {
+        var cwc = wc.lastIndexOf(', ', 100);
+        if (cwc > 30) wc = wc.slice(0, cwc);
+      }
+      wc = wc.charAt(0).toLowerCase() + wc.slice(1);
+      if (!/[.!?]$/.test(wc)) wc += '.';
+    } else wc = 'win your spike windows, not his.';
+    var bits = [];
+    if (MU.key && MU.key.name && MU.key.cd) bits.push('Punish every ' + MU.key.name.split(' (')[0] + ' (' + MU.key.cd + ')');
+    var rows = this._phaseRows(MU), win = null;
+    for (var i = 0; i < rows.length; i++) { if (rows[i].who === 'A') { win = rows[i].label; break; } }
+    if (win) bits.push((bits.length ? 'your' : 'Your') + ' window is ' + win.toLowerCase());
+    else bits.push(bits.length ? 'never take the flat all-in' : 'Never take the flat all-in');
+    return lead + wc + ' ' + bits.join(' \u2014 ') + '.';
   }
   // Champion of the Week \u2014 free-tier rotation, anchored to Tuesdays (UTC).
   weekChamp() {
@@ -6406,21 +6444,24 @@ class Component extends DCLogic {
       diffTag: MU.diffTag,
       winLabel: MU.winLabel,
       winCon: this.txtN((MU.winCon || '').replace(/\bhis the\b/g, 'his').replace(/\bthe the\b/g, 'the'), 2),
-      tldr: this.txtN(MU.tldr || ('Win the lane by executing your win condition: ' + (MU.winCon || '').charAt(0).toLowerCase() + (MU.winCon || '').slice(1)), 2),
+      // TL;DR is COMPOSED from the data shown on this page (verdict, win
+      // condition, punishable cooldown, your spike window) so it always
+      // matches what the rest of the screen says — not a separate blurb.
+      tldr: this.txtN(this._composeTldr(MU), 2),
       tradeGood: MU.tradeGood || '', tradeBad: MU.tradeBad || '',
-      tldrShort: this.txtN((MU.tldr || MU.winCon || '').replace(/\bhis the\b/g, 'his').replace(/\bthe the\b/g, 'the'), 3),
+      tldrShort: this.txtN(this._composeTldr(MU).replace(/\bhis the\b/g, 'his').replace(/\bthe the\b/g, 'the'), 3),
       // "WHAT KILLS ME IN LANE" — death rules for this exact pair: curated
       // enemy signature mechanics (WKM_LINES) + this matchup's own level-1
       // ownership, wave plan, punishable cooldown, and first all-in window.
-      wkm: (function(){
+      wkm: (function(self){
         var foe = (MU.champB && MU.champB.name) || '';
         var W = (window.WKM_LINES || {})[slug(foe)] || [];
         var L = [];
         if (W[0]) L.push(W[0]);
-        var lt = MU.levelTable || null;
-        if (lt && lt.length) {
-          if (lt[0].w === 'E') L.push('Level 1 is his — concede the first trade and just hit the wave.');
-          else if (lt[0].w === 'A') L.push('Level 1 is YOURS — the real danger is coasting on it while the lane flips later.');
+        var rows = self._phaseRows(MU);
+        if (rows.length) {
+          if (rows[0].who === 'E') L.push('Level 1 is his — concede the first trade and just hit the wave.');
+          else if (rows[0].who === 'A') L.push('Level 1 is YOURS — the real danger is coasting on it while the lane flips later.');
           else L.push('Level 1 is a knife-edge skill trade — take it on your terms or not at all.');
         }
         var diff = (MU.difficulty || '').toUpperCase();
@@ -6429,13 +6470,13 @@ class Component extends DCLogic {
         else L.push('First shove wins priority — don’t autopilot the opening 3 waves.');
         if (MU.key && MU.key.name && MU.key.cd) L.push('If he burns ' + MU.key.name + (MU.key.slot ? ' (' + MU.key.slot + ')' : '') + ', you have ~' + MU.key.cd + ' to trade — take that window every time.');
         if (W[1]) L.push(W[1]);
-        if (lt && lt.length) {
+        if (rows.length) {
           var win = null;
-          for (var i = 0; i < lt.length; i++) { if (lt[i].w === 'A') { win = lt[i].p; break; } }
+          for (var i = 0; i < rows.length; i++) { if (rows[i].who === 'A') { win = rows[i].label; break; } }
           L.push(win ? 'Your first real all-in window: ' + win + '.' : 'You never win a flat all-in — wait for his mistake or your jungler.');
         }
         return L;
-      })(),
+      })(this),
       breakdown: MU.breakdown || MU.winCon,
       breakdownParts: (function(){
         var norm = function(t){

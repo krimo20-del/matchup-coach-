@@ -144,7 +144,9 @@
     // slow approach, drain tanks who out-sustain his grit, and true/%-HP damage.
     sett: {
       darius: 51.1, garen: 53.1, aatrox: 50.3, drmundo: 55.8, illaoi: 49.7, fiora: 56.5,
-      renekton: 50.1, mordekaiser: 55.4, jax: 51.6, nasus: 49.0, teemo: 55.3, vayne: 52.9
+      renekton: 50.1, mordekaiser: 55.4, jax: 51.6, nasus: 49.0, teemo: 55.3, vayne: 52.9,
+      irelia: 56.7, riven: 50.5, sion: 52.6, ornn: 47.9, malphite: 48.4, pantheon: 51.8,
+      kled: 53.7, urgot: 49.4, olaf: 52.0, tryndamere: 48.0, vladimir: 49.7, gnar: 51.4
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -9385,6 +9387,318 @@
         "At 6 your R grabs her out of a tumble. Look for the catch.",
         "Catch her with E — a squishy Vayne folds to your combo.",
         "Vayne takes over — %-HP true damage shreds you if she scaled. Kill her early."
+      ]
+    },
+    {
+      a: 'sett', b: 'irelia',
+      win: ['Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Sett', 'Irelia'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even — she’s weak unstacked; bank grit, look for E.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) out-brawl her.' },
+        { when: '1st item', text: 'Your W true damage out-trades a low-stack Irelia.' },
+        { when: '2+ items', text: 'Irelia takes over — stacked Q resets + true damage kite you.' }
+      ],
+      wants: {
+        you: ['Bank grit, then W (true damage) out-trades her', 'E-stun her — she can’t Q-reset out of a stun', 'Deny her minion stacks; win before her items'],
+        foe: ['Stack passive on minions, then out-DPS you', 'Blunt your trade with W (Defiant Dance)', 'Q-reset around your stun to kite']
+      },
+      early: "Irelia is weak before she stacks her passive — level 1-2 is even. Bank grit, deny her minion Q-resets, and look for your E-stun (Facebreaker). Her W (Defiant Dance) reduces your damage and stuns if you trade into it, so don't dump your combo into a raised W; bait it, then commit.",
+      mid: "Your window — E-stun her (she can't Q-reset out of a stun), then W with loaded grit for true damage. Your sustained brawl + tankiness out-trade a low-stack Irelia, and at 6 your R grabs her out of her dance. Keep her off CS to delay her item + stack spike, and force the all-in repeatedly.",
+      late: "Irelia takes over at two items — stacked, her Q resets and on-hit true damage let her kite around your stun and shred you. The lane is favoured because you crush her early-mid; convert it. Snowball off the E-stun + W all-ins, deny her farm, and end before her stacked carry form flips the duel.",
+      whys: [
+        "Irelia is weak unstacked. Bank grit, look for E. Level 1-2 is even.",
+        "Don't dump your combo into her W (Defiant Dance) — bait it first.",
+        "Your window — E-stun + W (true damage) out-brawl her.",
+        "E-stun her — she can't Q-reset out of a stun. Deny her stacks.",
+        "At 6 your R grabs her out of her dance. Force the all-in.",
+        "Your W true damage out-trades a low-stack Irelia.",
+        "Two items in, stacked resets + true damage kite you. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'riven',
+      win: ['Riven', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Riven’s window — her combo burst out-trades your early.' },
+        { when: 'Lvl 2–6', text: 'Your window — E-stun her combo; W (true damage) brawls.' },
+        { when: '1st item', text: 'Your grit + tankiness out-last her burst-then-wait.' },
+        { when: 'Late', text: 'Even — E-stun + W vs her combo; she flips it if she snowballs.' }
+      ],
+      wants: {
+        you: ['Bank grit from her combo, then W (true damage) her', 'E-stun her mid-combo to cancel her burst', 'Out-last her burst with grit + sustain'],
+        foe: ['Burst you with her Q-E-auto combo', 'Animation-cancel to maximize her short window', 'Snowball the early before you out-last her']
+      },
+      early: "Riven's combo burst out-trades you level 1 — she has no sustain, though, and her damage is physical (your grit + tankiness handle it). Bank grit from her combo, don't get caught by a full Q-E-auto, and look for your E-stun (Facebreaker) to cancel her burst mid-combo.",
+      mid: "Your window — E-stun her when she commits her combo (it cancels her dashes mid-air), then W with loaded grit for true damage. Your sustained brawl out-lasts her burst-then-wait pattern, and at 6 your R grabs her. Bank grit from her burst, then punish her when her combo's on cooldown.",
+      late: "It's even — your E-stun + W true damage versus her combo. Bank grit from her burst, E-stun to cancel it, then W-true-damage her; she can't out-burst your grit-loaded brawl. She flips it only if she snowballed a big lead. Punish her after she dumps her combo, when she's stuck.",
+      whys: [
+        "Riven's combo burst out-trades your early. Bank grit. Level 1 is hers.",
+        "Don't get caught by a full Q-E-auto. Look for your E-stun.",
+        "Your window — E-stun her combo; W (true damage) brawls.",
+        "E-stun her mid-combo to cancel her burst (cancels her dashes).",
+        "At 6 your R grabs her. Punish her combo downtime.",
+        "Your grit + tankiness out-last her burst-then-wait.",
+        "Even — E-stun + W vs her combo; she flips it if she snowballs."
+      ]
+    },
+    {
+      a: 'sett', b: 'sion',
+      win: ['Sett', 'Sett', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — W (true damage) + aggression bully a weak Sion.' },
+        { when: 'Lvl 6', text: 'Your window — R + E-stun all-in; dodge his charged Q.' },
+        { when: '1st item', text: 'Your W true damage out-trades his W shield + HP.' },
+        { when: 'Late', text: 'Sion becomes a teamfight tank; you won the lane 1v1.' }
+      ],
+      wants: {
+        you: ['W (true damage) + aggression bully his weak early', 'Dodge his charged Q (knockup); E-stun him', 'Out-brawl a low-damage Sion before he scales'],
+        foe: ['Land the charged Q knockup for a trade', 'Tank your damage with W shield + HP', 'Become a teamfight engage tank with R']
+      },
+      early: "Levels 1-3 are yours — Sion is a weak early laner, and your W (Haymaker) true damage + aggression bully him. Dodge his charged Q (a telegraphed knockup), bank grit, and W-true-damage him; his W shield soaks some, but your true damage cuts through. Bully him off CS while he's weak.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit for true damage, and R him at 6. His W (Soul Furnace) shield soaks your burst, so trade when it's down. He just wants to farm and scale, so deny CS and out-brawl a low-damage Sion before his teamfight tank form matters.",
+      late: "Sion becomes a teamfight engage tank, but in the lane 1v1 you out-brawl him — your W true damage cuts his HP, and he can't out-damage you. You should have a lead; his R is a long-range engage for the map, not a 1v1 button. Snowball your early dominance and take his tower.",
+      whys: [
+        "Sion is a weak early laner. W (true damage) + aggression bully him. Levels 1-3 are yours.",
+        "Dodge his charged Q (knockup). Bank grit, W-true-damage him.",
+        "Your W true damage cuts through his W shield. Bully him off CS.",
+        "Trade when his W shield is down. Deny CS.",
+        "Your window — R + E-stun all-in; dodge his charged Q.",
+        "Your W true damage out-trades his W shield + HP.",
+        "Sion becomes a teamfight tank; you won the lane 1v1."
+      ]
+    },
+    {
+      a: 'sett', b: 'ornn',
+      win: ['Ornn', 'Ornn', 'Skill', 'Skill', 'Ornn', 'Skill', 'Sett'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Ornn’s window — his brittle (W) + Q poke out-trade you.' },
+        { when: 'Lvl 6', text: 'Ornn’s window — brittle + R detonation chunk you.' },
+        { when: '1st item', text: 'He out-tanks your grit; your W true damage helps but it’s slow.' },
+        { when: 'Late', text: 'Tricky — he out-tanks you; you edge it only with grit + R.' }
+      ],
+      wants: {
+        you: ['Bank grit, then W (true damage) cuts his tankiness', 'Dodge his Q (pillar) so he can’t brittle-detonate', 'E-stun + R for the all-in; out-brawl when his W is down'],
+        foe: ['Brittle you with W, then detonate for bonus + slow', 'Poke with Q and out-sustain your grit', 'Scale to an unkillable tank with free upgrades']
+      },
+      early: "Ornn out-trades you early — his brittle (W) makes you take bonus damage he detonates with CC, and his Q pillar pokes. Levels 1-2 are his. Bank grit, dodge the Q-pillar so he can't set up the brittle, and don't trade into a brittle combo. Your W true damage is your one edge against his tankiness.",
+      mid: "From 6 the lane tilts to him — his R detonates brittle for a big swing, and he out-tanks your grit damage while building resistances. Your W (Haymaker) true damage cuts through, but it's slow against free item upgrades. E-stun him when his W is down, W-true-damage him, and don't walk into a Q-pillar brittle setup.",
+      late: "It's tricky — Ornn out-tanks your grit, his brittle keeps chipping, and his free upgrades out-scale you. Your W true damage + R let you edge a fight, but he's built to out-last bruisers. Bank grit, E-stun + W when his W is down, and look for R grabs. Both scale into teamfighters, so play for objectives; the 1v1 is uphill.",
+      whys: [
+        "Ornn's brittle (W) + Q poke out-trade you. Dodge the pillar. Levels 1-2 are his.",
+        "Bank grit; your W true damage is your edge. Don't trade into a brittle combo.",
+        "His R detonates brittle for a big swing. E-stun when his W is down.",
+        "His free upgrades out-scale you. W-true-damage him when his W is down.",
+        "His brittle + R detonation chunk you — don't walk into a Q-pillar setup.",
+        "He out-tanks your grit; your W true damage helps but it's slow.",
+        "Tricky — he out-tanks you; you edge it only with grit + R."
+      ]
+    },
+    {
+      a: 'sett', b: 'malphite',
+      win: ['Malphite', 'Malphite', 'Skill', 'Skill', 'Skill', 'Malphite', 'Sett'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Malphite’s window — his Q poke + shield blunt your trades.' },
+        { when: 'Lvl 3–5', text: 'Your window — W (true damage) when his shield is popped.' },
+        { when: '1st item', text: 'His armour reduces your Q/autos; W true damage is your edge.' },
+        { when: 'Late', text: 'Tricky — he out-tanks you; he scales to a teamfight R.' }
+      ],
+      wants: {
+        you: ['W (true damage) when his passive shield is down', 'Bank grit; your W ignores his armour', 'E-stun + R before he stacks armour'],
+        foe: ['Poke with Q (slow) and farm behind the shield', 'Stack armour to reduce your Q + autos', 'Scale to a teamfight R (Unstoppable Force)']
+      },
+      early: "Malphite pokes you with Q and farms behind his passive shield — levels 1-2 are his poke window, and his shield blunts your trades. Bank grit, take his Q poke to load your W, and look for a window when his shield is popped. His armour will reduce your Q + autos, but your W (Haymaker) true damage ignores it.",
+      mid: "Your one edge is your W's true damage, which his armour can't reduce — so trade when his passive shield is down (levels 3-5), E-stun him, and W with loaded grit. Once he stacks armour items, your Q + autos do little, and only your W matters. Don't waste resources chipping a shielded, armoured tank.",
+      late: "It's tricky — Malphite out-tanks you, his armour reduces most of your kit (except W true damage), and his R (Unstoppable Force) is a teamfight game-changer. Bank grit, land W-true-damage in your windows, and E-stun + R when his shield is down, but you can't crack a built Malphite. Snowball early or play for tempo.",
+      whys: [
+        "Malphite's Q poke + shield blunt your trades. Bank grit. Levels 1-2 are his.",
+        "Take his Q poke to load your W. Look for a popped shield.",
+        "Your W true damage ignores his armour — trade when his shield is down.",
+        "His armour reduces your Q + autos. Only your W matters then.",
+        "Don't waste resources chipping a shielded, armoured tank.",
+        "His armour reduces your Q/autos; W true damage is your edge.",
+        "Tricky — he out-tanks you; he scales to a teamfight R."
+      ]
+    },
+    {
+      a: 'sett', b: 'pantheon',
+      win: ['Pantheon', 'Pantheon', 'Skill', 'Sett', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Pantheon’s window — his Q poke + W stun bully your early.' },
+        { when: 'Lvl 4–6', text: 'Your window — grit W + E-stun out-brawl his fading early.' },
+        { when: '1st item', text: 'Your W true damage + tankiness out-scale him.' },
+        { when: 'Late', text: 'You take over — Pantheon has no late; your grit wins.' }
+      ],
+      wants: {
+        you: ['Survive his early poke + stun; bank grit', 'E-stun + W (true damage) out-brawl him from level 4', 'Out-scale his falloff with tankiness'],
+        foe: ['Bully your early with Q (spear) + W (stun)', 'Block your trades with E (Aegis)', 'Roam with R before falling off']
+      },
+      early: "Pantheon bullies your early — his Q spear pokes, his W is a point-click stun, and his E (Aegis) blocks your autos/trades from one direction. Levels 1-2 are his. Bank grit, dodge the W-stun-into-burst, and accept some poke. Don't over-commit while he's strong; survive his peak.",
+      mid: "Levels 4-6 swing to you — Pantheon is front-loaded and falls off, while your grit W + tankiness grow. E-stun him (Facebreaker), W with loaded grit for true damage, and out-brawl his fading early. At 6 your R grabs him. Watch his R roam if he can't kill you, but in a straight fight the lane tilts your way.",
+      late: "You take over — Pantheon has essentially no late game while your W true damage + tankiness + R only grow. Survive his level 1-2 poke window, bank grit, and out-brawl him from level 4 on. By your item spikes he can't fight you. The lane flips once you weather his early peak.",
+      whys: [
+        "Pantheon's Q + W stun bully your early. Bank grit. Levels 1-2 are his.",
+        "His E (Aegis) blocks your autos. Dodge the W-stun, survive his peak.",
+        "Your window — grit W + E-stun out-brawl his fading early.",
+        "E-stun him, W with loaded grit. Watch his R roam.",
+        "At 6 your R grabs him. The lane tilts your way.",
+        "Your W true damage + tankiness out-scale him.",
+        "You take over — Pantheon has no late; your grit wins."
+      ]
+    },
+    {
+      a: 'sett', b: 'kled',
+      win: ['Kled', 'Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Kled’s window — mounted aggression + grab bully your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + grit W; dismount him and brawl.' },
+        { when: '1st item', text: 'Your W true damage + tankiness out-scale his aggression.' },
+        { when: 'Late', text: 'You take over — Kled falls off; your grit + R win.' }
+      ],
+      wants: {
+        you: ['Survive his mounted early; bank grit', 'E-stun + W; dismount him, then out-brawl', 'Out-scale his falloff with tankiness'],
+        foe: ['Bully your early while mounted with Q grab + W', 'Use E (dash) to engage and escape your stun', 'Snowball before you out-scale him']
+      },
+      early: "Mounted Kled bullies your early — his Q (Beartrap) grabs you and his W stacks courage for burst. Levels 1-2 are his. Bank grit, don't feed the grab, and concede a little CS rather than eat his stacked aggression. Survive his peak while his courage is loaded.",
+      mid: "Levels 3-6 swing to you — E-stun him (Facebreaker), W with loaded grit for true damage, and dismount him. Off Skaarl he's weak, and a dismounted Kled folds to your brawl. At 6 your R grabs him. Out-brawl his fading aggression; don't let him remount for free.",
+      late: "You take over — Kled is a front-loaded bully who falls off, while your W true damage + tankiness + R only grow. Survive his mounted early, bank grit, and out-brawl him from level 3 on. By your item spikes his aggression can't out-trade your loaded Haymaker. The lane flips once you weather his peak.",
+      whys: [
+        "Mounted Kled's Q grab + W burst bully your early. Bank grit. Levels 1-2 are his.",
+        "Don't feed the grab. Concede a little CS, survive his peak.",
+        "Your window — E-stun + grit W; dismount him and brawl.",
+        "A dismounted Kled folds to your brawl. Don't let him remount free.",
+        "At 6 your R grabs him. Out-brawl his fading aggression.",
+        "Your W true damage + tankiness out-scale his aggression.",
+        "You take over — Kled falls off; your grit + R win."
+      ]
+    },
+    {
+      a: 'sett', b: 'urgot',
+      win: ['Urgot', 'Urgot', 'Skill', 'Skill', 'Sett', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Urgot’s window — his W (shotgun) + Q out-trade you.' },
+        { when: 'Lvl 6', text: 'Even — his R executes you low; bank grit, trade short.' },
+        { when: '1st item', text: 'Your W true damage answers his shotgun; trade on grit.' },
+        { when: 'Late', text: 'Even brawl — your grit W vs his shotgun shred + execute.' }
+      ],
+      wants: {
+        you: ['Bank grit from his shotgun, then W (true damage) him', 'E-stun him out of his shotgun stance', 'Stay above his R execute threshold'],
+        foe: ['Out-trade with W (shotgun knees) + Q poke', 'Flip you with E into his shotgun stance', 'Execute you with R when you drop low']
+      },
+      early: "Urgot out-trades you early — his W (shotgun knees) shreds you up close, his Q pokes, and his E flips over you. Levels 1-3 are his. Bank grit from his shotgun (use his damage to load your W), don't sit in his W stance, and look for your E-stun. His trade advantage is real before your grit is built.",
+      mid: "It evens out — your W (Haymaker) true damage answers his shotgun shred. E-stun him (Facebreaker) out of his stance, W with loaded grit, and R him at 6. Watch his R (Fear Beyond Death): it executes you below a threshold, so stay healthy and trade in short grit-bursts, not long fights.",
+      late: "It's an even juggernaut brawl — your grit W true damage versus his shotgun shred + execute. Bank grit from his damage, then E-stun + W-true-damage him. Stay above his R execute line, trade when your W is loaded, and don't get flipped into his stance for a free shotgun. The lane stays close.",
+      whys: [
+        "Urgot's W (shotgun) + Q out-trade you. Bank grit from his shotgun. Levels 1-3 are his.",
+        "Don't sit in his W stance. Use his damage to load your W; look for E-stun.",
+        "Your W true damage answers his shotgun shred. E-stun him out of his stance.",
+        "Trade in short grit-bursts. His E flips you into his stance — don't get caught.",
+        "His R executes you low — stay healthy, trade short.",
+        "Your W true damage answers his shotgun; trade on grit.",
+        "Even brawl — your grit W vs his shotgun shred + execute."
+      ]
+    },
+    {
+      a: 'sett', b: 'olaf',
+      win: ['Olaf', 'Skill', 'Sett', 'Sett', 'Olaf', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Olaf’s window — his axe + reckless DPS out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + grit W out-brawl him.' },
+        { when: 'Lvl 6', text: 'Olaf’s R goes CC-immune — your E-stun + R won’t hold him.' },
+        { when: 'Late', text: 'Even — out-brawl his lifesteal with grit when his R is down.' }
+      ],
+      wants: {
+        you: ['Bank grit, then W (true damage) out-trades him', 'E-stun him (when his R is down) to set up the all-in', 'Dodge his axe (Q) to deny his chase'],
+        foe: ['Pick up his axe (Q) to slow and out-trade you', 'Ramp attack speed + lifesteal as he drops low', 'Go CC-immune with R — your E-stun won’t hold him']
+      },
+      early: "Olaf out-trades you early — his axe (Q) slows and his ramping attack speed + lifesteal beat your poke before your grit is built. Levels 1-2 are his. Bank grit from his trades, dodge his axe to deny his chase, and look for your E-stun. Don't brawl into his reckless DPS before your W is loaded.",
+      mid: "Your window from level 3 — E-stun him (Facebreaker), W with loaded grit for true damage, and out-brawl him. But his R (Ragnarok) makes him CC-immune, so your E-stun and R won't hold him once it's active — fight before he ults or trade short during it. When his R is down, your grit W out-trades him.",
+      late: "It's even — your grit W true damage versus his reckless lifesteal. Bank grit from his trades, E-stun + W when his R is down, and out-brawl him. His R CC-immunity is the catch (your stun + R grab are useless then), so time your all-in for his R cooldown. Slightly his early, yours at the grit spike.",
+      whys: [
+        "Olaf's axe + reckless DPS out-trade your early. Dodge the axe. Levels 1-2 are his.",
+        "Bank grit from his trades. Don't brawl before your W is loaded.",
+        "Your window — E-stun + grit W out-brawl him.",
+        "When his R is down, your grit W out-trades him.",
+        "His R goes CC-immune — your E-stun + R won't hold him. Fight before 6.",
+        "Even — out-brawl his lifesteal with grit when his R is down.",
+        "Even — time your all-in for his R cooldown. Yours at the grit spike."
+      ]
+    },
+    {
+      a: 'sett', b: 'tryndamere',
+      win: ['Tryndamere', 'Skill', 'Sett', 'Skill', 'Skill', 'Skill', 'Tryndamere'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Trynd’s window — his crit DPS shreds you as fury ramps.' },
+        { when: 'Lvl 6', text: 'His R (Undying Rage) survives your all-in — he can’t die.' },
+        { when: '1st item', text: 'His crit DPS out-trades your grit; E-stun to burst him.' },
+        { when: '2+ items', text: 'Tryndamere takes over — crit + R out-duel you.' }
+      ],
+      wants: {
+        you: ['Bank grit, then E-stun + W to burst a low-fury Trynd', 'Fight him at low fury; dodge his spin (E) escape', 'Don’t waste R into his Undying Rage'],
+        foe: ['Spin (E) + crit with Q heal as fury builds', 'Reduce your damage with W; ramp crit DPS', 'Survive your all-in with R (can’t die 5s)']
+      },
+      early: "Tryndamere is tricky — his crit DPS shreds you as his fury ramps, and his W reduces your damage. Levels 1-2 are his once fury is up. Bank grit, fight him at low fury, and look for your E-stun (Facebreaker); his spin (E) can dodge your stun or escape, so time it carefully.",
+      mid: "His R (Undying Rage) makes him unable to die for 5 seconds, so even if you E-stun + W + R him, he survives and crits you back. Don't waste your R into a fresh Undying. Bank grit, E-stun him at low fury, and W with loaded grit, but his crit DPS is hard to out-trade in a long fight.",
+      late: "Tryndamere takes over — his crit DPS out-duels your grit, his R survives your burst, and his spin escapes your stun. The lane is tricky and his to win if he scaled. Bank grit, E-stun + W at low fury to burst him, and bait his R before you commit R. Without catching his low-fury windows, you struggle.",
+      whys: [
+        "Trynd's crit DPS shreds you as fury ramps. Fight at low fury. Levels 1-2 are his.",
+        "Bank grit. His spin (E) can dodge your stun — time it carefully.",
+        "Your window — E-stun + W to burst a low-fury Trynd.",
+        "His R survives your all-in (can't die 5s) — don't waste R into it.",
+        "His crit DPS out-trades your grit. E-stun to burst him.",
+        "His crit DPS out-trades your grit; E-stun to burst him.",
+        "Tryndamere takes over — crit + R out-duel you. Bait his R."
+      ]
+    },
+    {
+      a: 'sett', b: 'vladimir',
+      win: ['Vladimir', 'Skill', 'Sett', 'Sett', 'Skill', 'Vladimir', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Vlad’s window — his Q/E %-HP poke chips you; pool dodges your E.' },
+        { when: 'Lvl 6', text: 'Even — buy MR; E-stun + W when his pool is down.' },
+        { when: '1st item', text: 'Catch him with E — a caught Vlad folds to your W.' },
+        { when: '2+ items', text: 'Vladimir takes over — full-AP scaling out-DPS you.' }
+      ],
+      wants: {
+        you: ['E-stun + W when his pool (W) is down', 'Buy MR; bank grit from his poke', 'Win the early-mid before his AP scaling'],
+        foe: ['Poke with Q/E (%-HP magic) and self-heal', 'Pool (W) your E-stun + R — untargetable', 'Out-scale into a %-HP AP threat']
+      },
+      early: "Vladimir pokes you with Q/E (%-HP magic) and self-heals — levels 1-3 are his poke window, and his Sanguine Pool (W) can dodge your E-stun and R by going untargetable. Bank grit, buy MR, and look to E-stun him when his pool is on cooldown. Don't waste your E into a ready pool.",
+      mid: "It's even — bait his pool out, then E-stun him (Facebreaker) and W with loaded grit; a caught Vlad folds to your true damage + R. His pool also dodges your R, so time your engage for when W is down. Buy MR, deny his Q stacks, and out-brawl him before his items.",
+      late: "Vladimir takes over at two items — full-AP Vlad with Rylai's/Cosmic Drive out-DPS you and pools away from your E on demand. The lane is even because you can punish his weak early if you catch him, but he out-scales late. E-stun him on pool cooldowns, build MR, and end before his AP scaling flips it.",
+      whys: [
+        "Vlad's Q/E %-HP poke chips you; pool dodges your E. Buy MR. Levels 1-3 are his.",
+        "Don't waste your E into a ready pool. Bank grit.",
+        "Your window — E-stun + W when his pool is down; a caught Vlad folds.",
+        "His pool dodges your E + R — time your engage for when W is down.",
+        "Even — bait his pool, then E-stun + W. Deny his Q stacks.",
+        "Catch him with E — a caught Vlad folds to your W.",
+        "Vladimir takes over — full-AP scaling out-DPS you. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'gnar',
+      win: ['Gnar', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Mini Gnar’s window — he pokes and kites your approach.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-speed + E-stun catch Mini Gnar; W brawls.' },
+        { when: 'Mega form', text: 'Mega Gnar’s W stun + R can out-trade you — avoid walls.' },
+        { when: 'Late', text: 'Even — catch Mini Gnar with Q + E; avoid Mega’s W stun.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to catch Mini Gnar; E-stun him', 'W (true damage) brawls a caught Gnar', 'Avoid walls + Mega Gnar’s W stun'],
+        foe: ['Poke + kite in Mini form with Q (boomerang) + E hop', 'Build rage, transform, and W-stun you for burst', 'Use Mega R to knock you into walls']
+      },
+      early: "Mini Gnar pokes and kites your approach with his Q boomerang — levels 1-2 are his poke window, and a ranged Gnar is hard to catch. Bank grit, take the chip, and watch his rage bar. Use Q (Knuckle Down) move speed to close when you can, but don't over-commit when he's about to go Mega.",
+      mid: "Your window — when he's Mini and out of rage, use Q to close, E-stun him (Facebreaker), and W with loaded grit for true damage; a caught Mini Gnar folds. Don't commit when he's about to transform: Mega Gnar's W stuns and his R can knock you into a wall. Avoid terrain and catch his Mini windows.",
+      late: "It's even — the lane swings on his rage management. Use Q + E-stun to catch a Mini, out-of-rage Gnar and W-true-damage him; respect Mega Gnar's R wall-pin in skirmishes. Avoid walls (his Mega W stun), bank grit, and punish his Mini windows. Your R grabs him out of position.",
+      whys: [
+        "Mini Gnar pokes and kites your approach. Bank grit. Levels 1-2 are his.",
+        "Watch his rage bar. Use Q to close, but don't over-commit near Mega.",
+        "Your window — Q-speed + E-stun catch Mini Gnar; W brawls.",
+        "A caught Mini Gnar folds. Don't commit near his transform.",
+        "Mega Gnar's W stun + R can out-trade you — avoid walls.",
+        "Avoid Mega's W stun. Catch his Mini windows with Q + E.",
+        "Even — catch Mini Gnar with Q + E; avoid Mega's W stun."
       ]
     }
   ];

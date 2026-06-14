@@ -732,6 +732,7 @@
 <!-- bespoke per-champion matchup content (push to MC_WR_TABLES / MC_CONTENT_EXTRA; consumed by _reddit-validated-fixes.js) -->
 <script src="./champ-data/content/mordekaiser.js"></script>
 <script src="./champ-data/content/akali.js"></script>
+<script src="./champ-data/content/akshan.js"></script>
 <script src="./champ-data/_reddit-validated-fixes.js"></script>
 </helmet>
 <div style="min-height:100vh; font-family:'Manrope',system-ui,sans-serif; color:#ece7e1; background:radial-gradient(1200px 640px at 50% -10%, rgba(232,184,75,0.13), transparent 60%), radial-gradient(900px 520px at 88% 2%, rgba(240,115,74,0.08), transparent 55%), radial-gradient(820px 520px at 8% 1%, rgba(70,198,245,0.05), transparent 55%), #0b0908; padding-bottom:64px;">
@@ -1384,6 +1385,7 @@
               <span style="width:{{ wrAPct }}%; background:{{ wrATone }}; border-radius:99px 0 0 99px;"></span>
             </div>
             <div style="font-family:'Chakra Petch',sans-serif; font-size:8px; letter-spacing:0.6px; color:#6b7185; font-weight:700; white-space:nowrap;">{{ patch }}</div>
+            <div style="display:{{ wrSampleDisp }}; font-family:'Chakra Petch',sans-serif; font-size:7.5px; letter-spacing:0.3px; color:#e8b84b; font-weight:700; white-space:nowrap; margin-top:1px;">{{ wrSample }}</div>
           </div>
         </div>
 
@@ -6925,7 +6927,13 @@ class Component extends DCLogic {
           else base = 49.2 + frac * 1.6;
         }
         var wrA = base.toFixed(1), wrB = (100 - base).toFixed(1);
-        return { wrA: wrA + '%', wrB: wrB + '%', wrLabel: isReal ? 'WIN RATE · LOLALYTICS' : 'EST. WIN RATE', wrATone: base >= 50.5 ? '#3ddc97' : base <= 49.5 ? '#ff5d6c' : '#e8b84b', wrBTone: base >= 50.5 ? '#ff5d6c' : base <= 49.5 ? '#3ddc97' : '#e8b84b', wrAPct: Math.round(base) };
+        // sample size (lolalytics games for THIS pair) — flag a limited sample so a
+        // noisy low-game win rate on a niche lane is shown honestly, not as gospel.
+        var GG = window.MC_REAL_GAMES || {};
+        var games = (isReal && GG[sl(you)] && typeof GG[sl(you)][sl(foe)] === 'number') ? GG[sl(you)][sl(foe)] : null;
+        var limited = games != null && games < 100;
+        return { wrA: wrA + '%', wrB: wrB + '%', wrLabel: isReal ? 'WIN RATE · LOLALYTICS' : 'EST. WIN RATE', wrATone: base >= 50.5 ? '#3ddc97' : base <= 49.5 ? '#ff5d6c' : '#e8b84b', wrBTone: base >= 50.5 ? '#ff5d6c' : base <= 49.5 ? '#3ddc97' : '#e8b84b', wrAPct: Math.round(base),
+          wrSample: limited ? ('⚠ limited sample · ' + games + ' games') : '', wrSampleDisp: limited ? 'block' : 'none' };
       })(this),
       ticker: (function(){
         var items = [

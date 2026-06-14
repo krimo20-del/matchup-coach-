@@ -135,6 +135,16 @@
       zac: 51.7, ziggs: 52.4, maokai: 52.9, sylas: 53.3, graves: 49.3, nautilus: 54.7,
       quinn: 46.7, aurora: 47.3, ambessa: 51.3, akshan: 46.2, karma: 51.5, lillia: 52.0,
       mel: 63.4, neeko: 58.5
+    },
+    // ===== SETT (top) — real lolalytics win rates (Emerald+, patch 16.12) =====
+    // Sett is a juggernaut brawler: W (Haymaker) banks grit into a shield + true
+    // damage, E (Facebreaker) two-sided stun, R (Show Stopper) grab-and-slam. Strong
+    // short trades and all-ins; tanky and self-healing. He beats melee bruisers he
+    // can out-brawl and immobile targets, and loses to ranged pokers who kite his
+    // slow approach, drain tanks who out-sustain his grit, and true/%-HP damage.
+    sett: {
+      darius: 51.1, garen: 53.1, aatrox: 50.3, drmundo: 55.8, illaoi: 49.7, fiora: 56.5,
+      renekton: 50.1, mordekaiser: 55.4, jax: 51.6, nasus: 49.0, teemo: 55.3, vayne: 52.9
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -9063,6 +9073,318 @@
         "Watch her R (Pop Blossom) windup at 6, often from a disguise.",
         "Your tentacle DPS deletes a caught Neeko.",
         "You own the lane — she's a teamfight pick mage, not a duelist."
+      ]
+    },
+    {
+      a: 'sett', b: 'darius',
+      win: ['Darius', 'Darius', 'Skill', 'Skill', 'Sett', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Darius’s window — his E-pull + bleed out-trade you early.' },
+        { when: 'Lvl 6', text: 'Your window — R + grit W answer his all-in; don’t bleed out.' },
+        { when: '1st item', text: 'Even — bank grit, then W (true damage) chunks him.' },
+        { when: 'Late', text: 'Even brawl — your W true damage vs his bleed; trade on grit.' }
+      ],
+      wants: {
+        you: ['Bank grit from his bleed, then W (true damage) him', 'E-stun him to set up your combo + R', 'Don’t bleed out — trade when your W is loaded'],
+        foe: ['Pull you in with E (Apprehend) into the bleed', 'Stack Hemorrhage and R-execute when you’re low', 'Win the early before your grit + W come online']
+      },
+      early: "Darius out-trades you early — his E (Apprehend) pull yanks you into the bleed, and his Hemorrhage out-damages your early before your grit is built. Levels 1-2 are his. Don't get pulled; take the trade only when your W (Haymaker) has banked grit, and use the damage you take from him to load your W shield + true damage.",
+      mid: "Your window is the all-in — bank grit from his bleed, E-stun him (Facebreaker), and W him with a loaded Haymaker for true damage he can't tank. At 6 your R (Show Stopper) grabs him out of his combo. Don't bleed out in a long fight, though — his R executes you off stacks, so trade in short, grit-loaded bursts.",
+      late: "It's an even juggernaut brawl — your W true damage versus his Hemorrhage bleed. Bank grit from his damage, then W-true-damage him; the more he hits you, the harder your Haymaker. Trade when your W is loaded, E-stun to set up R, and don't get caught at low HP for his execute. Slightly his early, yours at the grit spike.",
+      whys: [
+        "Darius's E-pull + bleed out-trade your early. Don't get pulled. Levels 1-2 are his.",
+        "Take trades only when your W has banked grit. Use his damage to load it.",
+        "Bank grit from his bleed, then W (true damage) chunks him.",
+        "Don't bleed out in a long fight — trade in short grit-loaded bursts.",
+        "Your window — R + grit W answer his all-in. E-stun to set up R.",
+        "Even — bank grit, then W (true damage) chunks him.",
+        "Even brawl — your W true damage vs his bleed; trade on grit."
+      ]
+    },
+    {
+      a: 'sett', b: 'garen',
+      win: ['Garen', 'Garen', 'Skill', 'Skill', 'Skill', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Garen’s window — his Q-silence + E out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + grit W out-brawl him in extended fights.' },
+        { when: '1st item', text: 'Your W true damage cuts through his tankiness.' },
+        { when: 'Late', text: 'You edge it — out-brawl his short trades with grit + R.' }
+      ],
+      wants: {
+        you: ['Bank grit, then W (true damage) through his tankiness', 'E-stun him to start your combo + R', 'Force extended fights his short trades can’t win'],
+        foe: ['Q-silence to cut your combo, then disengage to regen', 'Spin (E) + passive regen to negate your damage', 'Execute you with R (Demacian Justice) when low']
+      },
+      early: "Garen wants short Q-silence trades then disengage-and-regen — levels 1-2 are his. His Q silences your combo and his passive regen erases your poke. Don't trade into a fresh Q; instead bank grit from his spin (E), and wait for your level-3 spike. His silence is his main tool against your kit.",
+      mid: "Your window — E-stun him (Facebreaker) to lock him for your combo, then W (Haymaker) with loaded grit; the true damage cuts through his tankiness and his regen can't out-heal it. Force extended fights his short trades can't win. At 6 your R grabs him out of his Q-silence disengage. Stay above his R execute threshold.",
+      late: "You edge it — your W true damage + grit out-brawl his short-trade-and-regen style. Bank grit from his Q-E, then E-stun and W-true-damage him; he can't disengage your R, and his regen doesn't beat your sustained brawl. Don't get caught low for his Demacian Justice, but in the extended fight you win.",
+      whys: [
+        "Garen's Q-silence + E out-trade your early. Don't trade into a fresh Q. Levels 1-2 are his.",
+        "Bank grit from his spin (E). Wait for your level-3 spike.",
+        "Your window — E-stun + grit W out-brawl him.",
+        "Force extended fights — his short trades can't win them.",
+        "Your W true damage cuts through his tankiness; his regen can't out-heal it.",
+        "Your W true damage cuts through his tankiness.",
+        "You edge it — out-brawl his short trades with grit + R."
+      ]
+    },
+    {
+      a: 'sett', b: 'aatrox',
+      win: ['Skill', 'Skill', 'Aatrox', 'Aatrox', 'Aatrox', 'Aatrox', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even — bank grit; both weak before your spikes.' },
+        { when: 'Lvl 3–6', text: 'Aatrox’s window — his sustain + combo out-trade you.' },
+        { when: '1st item', text: 'His Eclipse + drain out-heal your grit trades.' },
+        { when: 'Late', text: 'Even — E-stun + W true damage vs his drain; trade short.' }
+      ],
+      wants: {
+        you: ['Bank grit, then W (true damage) him in a short trade', 'E-stun him out of his Q sweetspot setup', 'Don’t get W-pulled into his combo'],
+        foe: ['Space the Q sweetspot and W-pull you in', 'Out-heal your trades with drain-tank sustain', 'Bait your E and W before committing']
+      },
+      early: "It's even early — both of you are weak before your spikes. Bank grit, poke with your passive, and don't get W-pulled into Aatrox's Q sweetspot. From level 3 his sustain comes online and he out-trades you, so don't brawl into his combo before your W is loaded; trade in short grit-bursts.",
+      mid: "Aatrox out-sustains you through the mid-game — his Eclipse spike + drain out-heal your grit trades, and his W-pull sets up his combo. E-stun him (Facebreaker) to interrupt his pull and start your combo, then W with loaded grit for true damage. Don't sit in a long fight his drain wins; burst him with E-W, then back off.",
+      late: "It's even — your E-stun + W true damage versus his drain-tank sustain. Bank grit from his combo, then E-stun and W-true-damage him in a short burst; his healing can't out-pace a loaded Haymaker. Don't get pulled into an extended drain-fight; trade short, use R to grab him, and the lane stays close.",
+      whys: [
+        "Even — bank grit; both weak before your spikes. Don't get W-pulled.",
+        "Don't brawl into his combo before your W is loaded. Trade short grit-bursts.",
+        "Aatrox's window — his sustain + combo out-trade you.",
+        "E-stun him to interrupt his pull, then W with loaded grit.",
+        "His Eclipse + drain out-heal your grit trades. Burst with E-W, back off.",
+        "Don't sit in a long fight his drain wins. Trade short.",
+        "Even — E-stun + W true damage vs his drain; trade short."
+      ]
+    },
+    {
+      a: 'sett', b: 'drmundo',
+      win: ['Sett', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill', 'Dr. Mundo'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — W (true damage) chunks him; he has no early pressure.' },
+        { when: 'Lvl 6', text: 'Your window — R + E-stun + true-damage W punish him.' },
+        { when: '1st item', text: 'Your W true damage ignores his HP — keep punishing.' },
+        { when: '2+ items', text: 'Mundo takes over — HP + regen out-last your grit damage.' }
+      ],
+      wants: {
+        you: ['W (true damage) ignores his HP — punish his weak early', 'E-stun + R for the all-in before his scaling', 'Snowball before his regen out-lasts you'],
+        foe: ['Throw cleavers (Q) and farm through your trades', 'Out-sustain your damage with regen + R', 'Stack HP — but your W true damage ignores it']
+      },
+      early: "Levels 1-3 are yours — Mundo has no early kill pressure, and your W (Haymaker) deals TRUE damage that ignores his HP, so his whole tankiness identity does less against you. Bank grit from his cleaver poke, then W-true-damage him; he can't out-trade your early and his regen hasn't ramped. Bully him off CS.",
+      mid: "Keep punishing — your W true damage cuts through his HP stacking, and your E-stun (Facebreaker) + R set up the all-in before his regen takes over. He'll cleaver-poke and farm, but you out-brawl him in your strong early-mid window. Bring grievous wounds for his R heal, and snowball your lead.",
+      late: "Mundo takes over at two items — his HP + regen out-last even your true-damage grit in the attrition, and his cleavers chip you while he out-sustains. The lane is favoured because you crush the early-mid (your W ignores his HP); convert it. Snowball off the W + E-stun all-ins, bring antiheal, and end before his regen makes him unkillable.",
+      whys: [
+        "Mundo has no early pressure and your W is TRUE damage. Punish him. Levels 1-3 are yours.",
+        "Bank grit from his cleaver poke, then W-true-damage him.",
+        "Your W true damage ignores his HP — bully him off CS.",
+        "Your E-stun + R set up the all-in before his regen ramps.",
+        "Your window — R + E-stun + true-damage W punish him.",
+        "Your W true damage ignores his HP — keep punishing. Bring antiheal.",
+        "Mundo takes over — HP + regen out-last your grit damage. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'illaoi',
+      win: ['Sett', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — W (true damage) + early aggression before her tentacles.' },
+        { when: 'Lvl 3–6', text: 'Illaoi’s window — she E’s you and slams in her tentacles.' },
+        { when: '1st item', text: 'She out-sustains you in her tentacle field; fight outside it.' },
+        { when: 'Late', text: 'Even — don’t fight in her tentacles; E-stun + W in the open.' }
+      ],
+      wants: {
+        you: ['W (true damage) + aggression before her tentacles set up', 'Don’t get E-vessel’d in her tentacle field', 'Fight on open ground, not in her zone'],
+        foe: ['Land E (Test of Spirit), then fight in her tentacles', 'Slam you with W + tentacles in her zone', 'Out-sustain your grit off the vessel']
+      },
+      early: "Your window is the early — before Illaoi's tentacles are set up, your W (Haymaker) true damage + aggression out-trade her. Levels 1-2, bank grit and W-true-damage her on open ground. Don't let her land E (Test of Spirit) and drag you into her tentacle field, where she out-DPSes and out-sustains you.",
+      mid: "From level 3 the lane tilts to her — she E's you, W's in, and slams you with tentacles in her zone, out-sustaining your grit off the vessel healing. Don't fight in her tentacle field. Bait her E, fight on open ground where her tentacles can't reach, and E-stun + W her there. At 6 her R wall is brutal if you're in it.",
+      late: "It's even — the lane is about positioning. Don't get caught in her tentacle nest, where she wins; fight in the open with E-stun + W true damage + R, where her tentacles don't help her. Bank grit, burst her on open ground, and don't let her E-vessel you into her zone. Control where the fight happens.",
+      whys: [
+        "Your window — W (true damage) + aggression before her tentacles. Levels 1-2 are yours.",
+        "Bank grit and W-true-damage her on open ground. Don't let her E you.",
+        "Illaoi's window — she E's you and slams in her tentacles.",
+        "Don't fight in her tentacle field. Fight on open ground.",
+        "Her R wall is brutal if you're in it. Bait her E.",
+        "She out-sustains you in her tentacle field; fight outside it.",
+        "Even — don't fight in her tentacles; E-stun + W in the open."
+      ]
+    },
+    {
+      a: 'sett', b: 'fiora',
+      win: ['Sett', 'Sett', 'Skill', 'Sett', 'Sett', 'Sett', 'Fiora'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — W (true damage) + grit out-trade her early.' },
+        { when: 'Lvl 6', text: 'R grabs her; she can parry it, so bait her W first.' },
+        { when: '1st item', text: 'Your W true damage out-trades her vital shred.' },
+        { when: '2+ items', text: 'Fiora flips it if she parries well — true damage shreds you.' }
+      ],
+      wants: {
+        you: ['Bank grit, then W (true damage) out-trades her vitals', 'E-stun her — she can’t parry a stun', 'Bait her W (Riposte) before R and combo'],
+        foe: ['Parry (W) your E-stun or R for the counter', 'Proc vitals — true damage shreds you', 'Out-duel you outside short trades']
+      },
+      early: "Your window is the early-mid — your W (Haymaker) banks grit from her pokes and the true damage out-trades Fiora's vitals, and you're tankier than she can shred early. Levels 1-2, bank grit and W-true-damage her. Her W (Riposte) can parry your E-stun or R, so don't telegraph them; bait the parry first.",
+      mid: "Keep brawling — E-stun her (she can't parry a stun if you bait her W first), then W with loaded grit. Your true damage + tankiness out-trade her vital shred. At 6 your R grabs her, but she can Riposte it, so make her burn W before you commit R. Force the extended fight your grit + sustain win.",
+      late: "Fiora flips it at two items if she parries well — her vitals + true damage shred even a tanky Sett, and a clean Riposte negates your E-stun or R. The lane is favoured because you out-brawl her early-mid; convert it. Bait her parry, E-stun + W her, and close the lane before her item spike turns the duel.",
+      whys: [
+        "Your W (true damage) + grit out-trade her early. Levels 1-2 are yours.",
+        "Her W (Riposte) parries your E-stun or R. Bait it first; don't telegraph.",
+        "Your W true damage out-trades her vital shred.",
+        "E-stun her (she can't parry a stun if you bait her W). Then W with grit.",
+        "R grabs her; she can parry it, so make her burn W first.",
+        "Your W true damage out-trades her vital shred.",
+        "Fiora flips it if she parries well — true damage shreds you."
+      ]
+    },
+    {
+      a: 'sett', b: 'renekton',
+      win: ['Renekton', 'Renekton', 'Skill', 'Sett', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Renekton’s window — empowered Q + W stun bully your early.' },
+        { when: 'Lvl 4–6', text: 'Your window — grit W + E-stun out-brawl his fading fury.' },
+        { when: '1st item', text: 'Your W true damage + tankiness out-scale him.' },
+        { when: 'Late', text: 'You edge it — Renekton falls off; your grit + R win extended.' }
+      ],
+      wants: {
+        you: ['Survive his early fury; bank grit', 'E-stun + W (true damage) out-brawl him from level 4', 'Out-scale his falloff with tankiness'],
+        foe: ['Bully levels 1-2 with empowered Q + W stun', 'Use double-E to engage and escape your stun', 'Snowball the early before you out-scale']
+      },
+      early: "Renekton's early is his window — empowered Q heals and chunks, his W stuns, and double-E lets him dodge your E-stun and trade. Levels 1-2 he bullies you. Bank grit from his fury combo, don't waste your E on his dash, and survive; concede a little CS rather than feed his snowball.",
+      mid: "Levels 4-6 swing to you — Renekton is front-loaded and falls off, while your grit W + tankiness grow. E-stun him (Facebreaker) when his fury combo is committed, then W with loaded grit for true damage. At 6 your R grabs him. Out-brawl his fading fury in the extended fight your sustain wins.",
+      late: "You edge it — Renekton has no late game while your W true damage + tankiness + R only grow. Survive his early fury, bank grit, and out-brawl him from level 4 on. By your item spikes his fury can't out-trade your loaded Haymaker. The lane flips once you weather his peak.",
+      whys: [
+        "Renekton's empowered Q + W stun bully your early. Bank grit. Levels 1-2 are his.",
+        "His double-E dodges your E-stun. Don't waste E on his dash; survive.",
+        "Your window — grit W + E-stun out-brawl his fading fury.",
+        "E-stun him when his fury combo is committed, then W with grit.",
+        "At 6 your R grabs him. Out-brawl his fading fury.",
+        "Your W true damage + tankiness out-scale him.",
+        "You edge it — Renekton falls off; your grit + R win extended."
+      ]
+    },
+    {
+      a: 'sett', b: 'mordekaiser',
+      win: ['Sett', 'Skill', 'Sett', 'Sett', 'Mordekaiser', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — W (true damage) + E-stun out-brawl his short Q.' },
+        { when: 'Lvl 6', text: 'Morde’s window — his R (Realm) isolates you 1v1.' },
+        { when: '1st item', text: 'Buy MR; your W true damage out-trades his magic.' },
+        { when: 'Late', text: 'You edge it — out-brawl him outside his R; trade on grit.' }
+      ],
+      wants: {
+        you: ['Bank grit, then W (true damage) out-trades his magic', 'E-stun him out of his Q combo', 'Respect his R (Realm) at 6 — don’t int it'],
+        foe: ['Pull you in with E into Q for his trade', 'Isolate you with R (Realm) and win the 1v1', 'Stack passive shield + AP to out-sustain you']
+      },
+      early: "Your window is the early — your W (Haymaker) true damage out-trades Morde's short-range Q, and your E-stun (Facebreaker) interrupts his combo. Levels 1-3, bank grit, buy MR, and W-true-damage him; don't let him E-pull you into his Q or freely stack his passive shield. You out-brawl him before his ramp.",
+      mid: "Level 6 is HIS window — Realm of Death (R) drags you into an isolated 1v1, steals your stats, and his magic is strong inside it. Don't int the Realm at low HP; play around its cooldown. Your W true damage + MR help you survive it. Outside R, E-stun + W out-brawl him.",
+      late: "You edge it — outside his R window, your W true damage + grit + tankiness out-brawl his magic. Buy MR, respect the level-6 (and later) Realm timings, and don't get caught low when R is up. Bank grit, E-stun + W him, and grab him with R when his Realm is down. The lane is yours if you dodge the one button.",
+      whys: [
+        "Your W (true damage) out-trades his short Q. E-stun his combo. Levels 1-3 are yours.",
+        "Bank grit, buy MR. Don't let him E-pull you into Q or stack his shield.",
+        "Your W true damage out-brawls his magic. Bank grit.",
+        "Don't let him stack his passive shield. E-stun + W him.",
+        "His R isolates you and steals your stats — don't int it.",
+        "Buy MR; your W true damage out-trades his magic.",
+        "You edge it — out-brawl him outside his R; trade on grit."
+      ]
+    },
+    {
+      a: 'sett', b: 'jax',
+      win: ['Skill', 'Sett', 'Sett', 'Sett', 'Skill', 'Sett', 'Jax'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Even — his E (Counterstrike) dodges your autos; bank grit.' },
+        { when: 'Lvl 2–6', text: 'Your window — E-stun + W (true damage) out-brawl a weak Jax.' },
+        { when: '1st item', text: 'Your W true damage out-trades a one-item Jax.' },
+        { when: '2+ items', text: 'Jax takes over — his item scaling out-duels you.' }
+      ],
+      wants: {
+        you: ['Bait his E (Counterstrike), then E-stun + W', 'Bank grit — his E dodges autos, not your W true damage', 'Win the early-mid before his item spikes'],
+        foe: ['Dodge your autos with E (Counterstrike) and stun', 'Stall the lane and scale to his item spikes', 'Out-duel you late with Grandmaster’s + items']
+      },
+      early: "Jax's E (Counterstrike) dodges your autos and stuns you, so don't dump your auto-combo into a held E — level 1 is even. Bank grit (his E doesn't reduce your W's true damage), and look to bait the Counterstrike. He's weak before items, so once his E is down you out-brawl him.",
+      mid: "Your window — Jax is weak before items, and your E-stun (Facebreaker) + W (true damage) out-brawl him. Bait his E (make him pop Counterstrike), then E-stun and W with loaded grit; his E can't dodge a stun or reduce true damage. At 6 your R grabs him. Force the all-in repeatedly through levels 2-6.",
+      late: "Jax is one of the best scaling duelists — two items in, his Grandmaster's passive + item spikes out-duel you. The lane is even because you crush his early-mid; you must convert it. Press your grit + E-stun all-ins, snowball, and close the lane before his item scaling flips the duel. Bait his E every time before you commit.",
+      whys: [
+        "Jax's E dodges your autos and stuns. Don't dump autos into a held E. Level 1 is even.",
+        "Bank grit — his E doesn't reduce your W's true damage. Bait the Counterstrike.",
+        "Your window — E-stun + W (true damage) out-brawl a weak Jax.",
+        "Bait his E, then E-stun and W with loaded grit.",
+        "At 6 your R grabs him. Force the all-in through 2-6.",
+        "Your W true damage out-trades a one-item Jax.",
+        "Two items in, his item scaling out-duels you. Close before late."
+      ]
+    },
+    {
+      a: 'sett', b: 'nasus',
+      win: ['Sett', 'Sett', 'Sett', 'Sett', 'Skill', 'Sett', 'Nasus'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — W (true damage) + aggression bully a weak Nasus.' },
+        { when: 'Lvl 6', text: 'Your window — R + E-stun all-in; deny his Q stacks.' },
+        { when: '1st item', text: 'Your W true damage out-trades a low-stack Nasus.' },
+        { when: '2+ items', text: 'Nasus takes over — stacked Q + tanky body out-last you.' }
+      ],
+      wants: {
+        you: ['W (true damage) + aggression bully his weak early', 'Deny his Q stacks; E-stun to zone his CS', 'Win the early-mid before his stacks + items'],
+        foe: ['Stack Q on every last-hit, even under tower', 'Cripple your aggression with W (Wither)', 'Out-scale into a stacked, tanky monster']
+      },
+      early: "Levels 1-3 are yours — Nasus is weak early, and your W (Haymaker) true damage + aggression bully him off his Q stacks. Bank grit, W-true-damage him, and zone him off CS; every stack you deny delays his scaling. His W (Wither) cripples your move speed, so bait it before you commit your combo.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit for true damage, and R him at 6. Keep denying his Q stacks and zoning his CS. The longer you keep him weak, the longer you delay the stacked monster he becomes. Bait his Wither, then all-in; out-brawl a low-stack Nasus easily.",
+      late: "Nasus takes over at two items if he stacked — a stacked Q on a tanky body out-lasts your grit damage, and his Wither shuts off your aggression. The lane is even because you crush his early-mid; convert it. Snowball off the W + E-stun all-ins, deny his stacks relentlessly, and end before his Q makes him unkillable.",
+      whys: [
+        "Nasus is weak early. W (true damage) + aggression bully him. Levels 1-3 are yours.",
+        "Deny his Q stacks; zone him off CS. Bait his W (Wither) before you commit.",
+        "Your W true damage out-trades a low-stack Nasus.",
+        "Keep denying stacks — every one delays his scaling. E-stun to zone.",
+        "Your window — R + E-stun all-in; deny his Q stacks.",
+        "Your W true damage out-trades a low-stack Nasus.",
+        "Two items in, stacked Q + tanky body out-last you. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'teemo',
+      win: ['Teemo', 'Teemo', 'Skill', 'Sett', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Teemo’s window — his blind shuts off your autos; take the chip.' },
+        { when: 'Lvl 4–6', text: 'Your window — Q-speed + E-stun catch him; W true damage.' },
+        { when: '1st item', text: 'Build tanky — his poke can’t kill you; catch him and W.' },
+        { when: 'Late', text: 'You win the fight if you reach him; he’s a map problem.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close his kite; E-stun him', 'W (true damage) doesn’t need autos — punish a blind', 'Build tanky to ignore his poke; catch and kill him'],
+        foe: ['Blind your autos every trade and kite with move speed', 'Poke you down and stack shrooms', 'Survive and scale into a splitpush threat']
+      },
+      early: "Teemo's blind (Q) shuts off your autos and your passive punches — levels 1-2 he pokes you and you can't trade back cleanly. But here's the key: your W (Haymaker) deals true damage that doesn't need autos, and you build tanky, so his poke chips but can't kill you. Take the chip, bank grit, and farm.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close his kite, E-stun him (Facebreaker), and W with loaded grit for true damage even through a blind. He can't kite a tanky Sett who closes with Q and locks him with E. Build tanky so his poke is irrelevant, and catch him for the kill at 6 with R.",
+      late: "You win the straight fight if you reach Teemo — your tankiness ignores his poke, and Q + E-stun let you catch him. He becomes a shroom/splitpush map problem, so close the lane and don't facecheck brush. In lane he can't kill a tank who closes the gap; on the map, respect his shrooms and vision.",
+      whys: [
+        "Teemo's blind shuts off your autos. Take the chip, bank grit. Levels 1-2 are his.",
+        "Your W true damage doesn't need autos — it punishes through a blind.",
+        "Your window — Q-speed + E-stun catch him; W true damage.",
+        "Build tanky so his poke is irrelevant. Catch him with Q + E.",
+        "At 6 your R grabs him. He can't kite a tanky Sett who closes.",
+        "Build tanky — his poke can't kill you; catch him and W.",
+        "You win the fight if you reach him; he's a map problem."
+      ]
+    },
+    {
+      a: 'sett', b: 'vayne',
+      win: ['Vayne', 'Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Vayne'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Vayne’s window — she pokes from range; you can’t catch her yet.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-speed + E-stun catch her; W deletes her.' },
+        { when: '1st item', text: 'Catch her with E — a squishy Vayne folds to your combo.' },
+        { when: '2+ items', text: 'Vayne takes over — %-HP true damage shreds you if she scaled.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close; E-stun her', 'W + R delete a squishy, caught Vayne', 'Kill her before she scales'],
+        foe: ['Kite with tumble (Q) + autos, stay off your E', 'Condemn (E) you to peel; never get caught', 'Scale into a %-HP true-damage hypercarry']
+      },
+      early: "Vayne pokes you from range and kites with tumble (Q) — levels 1-2 are her poke window, and you can't catch her yet. Take the chip, bank grit, and wait for your gap-close. She's short-range and squishy, so the moment you Q-close and E-stun her, she's in huge trouble.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close her kite, E-stun her (Facebreaker), and W with loaded grit; a squishy Vayne folds to your combo, and at 6 your R grabs her out of a tumble. Deny her CS relentlessly (her whole game is scaling), and look for the catch every time she steps up.",
+      late: "Vayne takes over if she survived to 2+ crit items — her %-HP true damage shreds even a tank, and she kites you forever. This is do-or-die: catch her with Q + E and kill her early. If she scaled, the late game is hers. Snowball your catch potential, deny her farm, and end before her power curve arrives.",
+      whys: [
+        "Vayne pokes from range and kites. You can't catch her yet. Levels 1-2 are hers.",
+        "Take the chip, bank grit. She's squishy once you close.",
+        "Your window — Q-speed + E-stun catch her; W deletes her.",
+        "A squishy Vayne folds to your combo. Deny her CS.",
+        "At 6 your R grabs her out of a tumble. Look for the catch.",
+        "Catch her with E — a squishy Vayne folds to your combo.",
+        "Vayne takes over — %-HP true damage shreds you if she scaled. Kill her early."
       ]
     }
   ];

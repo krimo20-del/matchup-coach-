@@ -146,7 +146,9 @@
       darius: 51.1, garen: 53.1, aatrox: 50.3, drmundo: 55.8, illaoi: 49.7, fiora: 56.5,
       renekton: 50.1, mordekaiser: 55.4, jax: 51.6, nasus: 49.0, teemo: 55.3, vayne: 52.9,
       irelia: 56.7, riven: 50.5, sion: 52.6, ornn: 47.9, malphite: 48.4, pantheon: 51.8,
-      kled: 53.7, urgot: 49.4, olaf: 52.0, tryndamere: 48.0, vladimir: 49.7, gnar: 51.4
+      kled: 53.7, urgot: 49.4, olaf: 52.0, tryndamere: 48.0, vladimir: 49.7, gnar: 51.4,
+      shen: 51.6, swain: 47.6, warwick: 52.5, volibear: 50.4, wukong: 52.4, yasuo: 54.8,
+      yone: 52.1, yorick: 57.6, gragas: 51.0, gangplank: 49.8, quinn: 52.4, kennen: 48.8
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -9699,6 +9701,318 @@
         "Mega Gnar's W stun + R can out-trade you — avoid walls.",
         "Avoid Mega's W stun. Catch his Mini windows with Q + E.",
         "Even — catch Mini Gnar with Q + E; avoid Mega's W stun."
+      ]
+    },
+    {
+      a: 'sett', b: 'shen',
+      win: ['Skill', 'Sett', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even — bank grit; he has weak base damage.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) out-brawl him.' },
+        { when: '1st item', text: 'Your W true damage cuts through his tankiness.' },
+        { when: 'Late', text: 'Even — track his R; he’s a teamfight peeler, you out-brawl.' }
+      ],
+      wants: {
+        you: ['Bank grit, then W (true damage) out-brawls him', 'E-stun him + R; punish the wave when he globals', 'Out-damage his weak base in extended fights'],
+        foe: ['Farm even and scale; his solo pressure is low', 'Use R to impact other lanes globally', 'Become a teamfight engage / peel frontliner']
+      },
+      early: "Level 1-2 is even — Shen has weak base damage and no kill pressure. Bank grit, poke with your passive, and look for your E-stun. He just wants to farm and scale for his global; his Q (sword) is his only poke and his E (taunt) his only peel, so don't over-respect him.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit for true damage, and out-brawl him; his weak damage can't match your grit, and your W cuts through his tankiness. At 6 your R grabs him. Track his R (Stand United): when he globals to save a teammate, shove and punish his wave.",
+      late: "It's even-to-yours — Shen is a teamfight engage/peeler, and in the side-lane 1v1 you out-brawl him with W true damage + grit. The game comes down to who uses his global better. Keep shoving, deny his roam value, and snowball your tentacle... your grit pressure. In lane, you edge him.",
+      whys: [
+        "Even — Shen has weak base damage. Bank grit, look for E. Level 1-2.",
+        "His Q + E (taunt) are his only tools. Don't over-respect him.",
+        "Your window — E-stun + W (true damage) out-brawl him.",
+        "Your W cuts through his tankiness. At 6 your R grabs him.",
+        "Track his R — when he globals away, punish the wave.",
+        "Your W true damage cuts through his tankiness.",
+        "Even — track his R; he's a teamfight peeler, you out-brawl."
+      ]
+    },
+    {
+      a: 'sett', b: 'swain',
+      win: ['Sett', 'Skill', 'Sett', 'Skill', 'Swain', 'Swain', 'Swain'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — aggression + W before his drain comes online.' },
+        { when: 'Lvl 6', text: 'Swain’s window — his R drain out-sustains your grit.' },
+        { when: '1st item', text: 'He out-sustains you; buy MR, kill him before R ramps.' },
+        { when: '2+ items', text: 'Swain takes over — drain-tank out-sustains your brawl.' }
+      ],
+      wants: {
+        you: ['Aggress early before his drain + soul stacks', 'E-stun + W; kill him fast before his R drain', 'Buy MR; deny his soul-fragment stacks'],
+        foe: ['Land E (Nevermove root) to set up his all-in', 'Stack soul fragments and out-sustain with W poke', 'Scale into a drain-tank teamfighter with R']
+      },
+      early: "Your window is the early — before Swain's drain and soul stacks are online, your aggression + W out-trade his weak melee-mage early. Levels 1-2, bank grit and W him. Don't get rooted from bush by his E (Nevermove), which sets up his all-in, and deny his soul-fragment stacks. Buy MR.",
+      mid: "Swain's window comes at 6 — his R (Demonic Ascension) drain out-sustains your grit damage in a long fight, and his soul stacks fuel it. Kill him fast before his R ramps: E-stun him (Facebreaker), W with loaded grit, and R him quickly. Don't sit in his ult radius letting him heal off you.",
+      late: "Swain takes over — a full-build drain-tank out-sustains your brawl, and his R heals through your grit damage. The lane is tricky because you bully his early but he out-scales. Buy MR, snowball your early aggression, force short decisive all-ins (not drain-fests), and end before his drain-tank form out-sustains you.",
+      whys: [
+        "Your window — aggression + W before his drain comes online. Levels 1-2 are yours.",
+        "Don't get rooted from bush (his E sets up the all-in). Buy MR.",
+        "Deny his soul-fragment stacks. E-stun + W him.",
+        "Kill him fast before his R drain ramps. Don't sit in the ult radius.",
+        "Swain's window — his R drain out-sustains your grit.",
+        "He out-sustains you; buy MR, kill him before R ramps.",
+        "Swain takes over — drain-tank out-sustains your brawl. Win early."
+      ]
+    },
+    {
+      a: 'sett', b: 'warwick',
+      win: ['Sett', 'Sett', 'Sett', 'Sett', 'Warwick', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — W (true damage) + aggression bully a weak WW.' },
+        { when: 'Lvl 6', text: 'Warwick’s window — his R (suppress) all-in; stay healthy.' },
+        { when: '1st item', text: 'Your W true damage out-trades his lifesteal; bring antiheal.' },
+        { when: 'Late', text: 'You edge it — out-brawl his lifesteal with grit + R.' }
+      ],
+      wants: {
+        you: ['W (true damage) + aggression bully his weak early', 'Stay above his R suppress threshold', 'Bring grievous wounds for his lifesteal'],
+        foe: ['Sustain with Q lifesteal (more when you’re low)', 'Chase you down with W (move speed on low HP)', 'All-in with R (point-blank suppress)']
+      },
+      early: "Levels 1-3 are yours — Warwick is a weak early laner, and your W (Haymaker) true damage + aggression bully him. Bank grit, W-true-damage him, and don't drop low (his Q heals more the lower you are). Bring grievous wounds to cut his lifesteal. Bully him off CS while he's weak.",
+      mid: "His all-in is R (Infinite Duress) — a point-blank suppress that locks you for his combo, so don't get caught at low HP in his jump range at 6. Outside the ult, your W true damage + E-stun out-brawl him. Keep your HP topped, bring antiheal, and force trades where his lifesteal can't out-heal your grit.",
+      late: "You edge it — your grit W true damage + R out-brawl his Q lifesteal, especially with antiheal cutting his sustain. Force the all-ins, deny him the low-HP windows his kit feeds on, and don't walk into a R suppress while chunked. The lane is yours early and slightly yours late if you respect the ult.",
+      whys: [
+        "Warwick is a weak early laner. W (true damage) + aggression bully him. Levels 1-3 are yours.",
+        "Don't drop low — his Q heals more then. Bring grievous wounds.",
+        "Your W true damage out-trades his early. Bully him off CS.",
+        "Keep your HP up — antiheal cuts his lifesteal.",
+        "His R is a point-blank suppress all-in — stay healthy, don't get caught low.",
+        "Your W true damage out-trades his lifesteal; bring antiheal.",
+        "You edge it — out-brawl his lifesteal with grit + R."
+      ]
+    },
+    {
+      a: 'sett', b: 'volibear',
+      win: ['Volibear', 'Skill', 'Sett', 'Sett', 'Volibear', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Voli’s window — his Q stun + W heal out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + grit W out-brawl him.' },
+        { when: 'Lvl 6', text: 'His R (dive + tanky) is a strong all-in — don’t get caught low.' },
+        { when: 'Late', text: 'Even brawl — your W true damage vs his W lifesteal.' }
+      ],
+      wants: {
+        you: ['Bank grit, then W (true damage) out-trades his bite', 'Dodge his Q empowerment (the stun); E-stun him', 'Out-brawl his lifesteal with grit'],
+        foe: ['All-in with Q (slow + stun) into W (bite heal)', 'Sustain through trades with W lifesteal', 'Dive with R (untargetable tower, tanky)']
+      },
+      early: "Voli's level 1-2 is his window — his Q empowerment is a stun if he closes, and his W (bite) heals off you. Bank grit, dodge his Q empowerment, and don't get caught in a Q-W all-in. Use his damage to load your W, and wait for your level-3 spike.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit for true damage, and out-brawl his bite-heal. At 6 his R (Stratospheric Force) is a tanky tower-dive all-in, so don't get caught low when it's up. Your W true damage cuts through his tankiness; trade when your grit is loaded.",
+      late: "It's an even brawl — your W true damage versus his W lifesteal. Bank grit from his trades, E-stun + W-true-damage him, and out-brawl his bite-heal with your grit. Respect his R-dive when you're low, and don't sit in a long fight his lifesteal wins; trade in grit-loaded bursts. Slightly his early, yours at the spike.",
+      whys: [
+        "Voli's Q stun + W heal out-trade your early. Dodge the stun. Levels 1-2 are his.",
+        "Don't get caught in a Q-W all-in. Use his damage to load your W.",
+        "Your window — E-stun + grit W out-brawl him.",
+        "Your W true damage cuts through his tankiness.",
+        "His R is a tanky tower-dive all-in — don't get caught low.",
+        "Even brawl — your W true damage vs his W lifesteal.",
+        "Even brawl — trade in grit-loaded bursts. Yours at the spike."
+      ]
+    },
+    {
+      a: 'sett', b: 'wukong',
+      win: ['Skill', 'Sett', 'Sett', 'Wukong', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even — his clone (W) can bait your combo; bank grit.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) out-brawl him.' },
+        { when: 'Lvl 4–6', text: 'Wukong’s window — clone juke + E-R knockup all-in.' },
+        { when: 'Late', text: 'You edge it — out-brawl his cooldown burst with grit + R.' }
+      ],
+      wants: {
+        you: ['Bank grit, then E-stun + W (true damage) him', 'Don’t commit your combo into his clone (W)', 'Out-brawl his cooldown-reliant burst'],
+        foe: ['Out-trade with Q (armor shred) auto-resets', 'Juke your combo with the clone (W)', 'All-in with E-dash into R (spin knockup)']
+      },
+      early: "It's even early — Wukong's clone (W) can bait your combo onto a decoy, and his Q shreds armour. Bank grit, don't dump your E-stun or combo at a clone, and use his trades to load your W. He out-trades short exchanges early, so wait for your level-3 spike.",
+      mid: "Your window — E-stun him (Facebreaker) when he commits, W with loaded grit for true damage, and out-brawl him. Levels 4-6 are his window too — clone juke into E-R knockup is a burst all-in, so don't get caught low. Read the clone, land E on the real Wukong, and your W true damage out-trades him.",
+      late: "You edge it — Wukong's damage is cooldown-reliant burst, and your grit W true damage + tankiness out-last it. Bank grit, E-stun + W him on his cooldowns, and R him at 6. Bait the clone before every all-in, and don't get caught by the W juke. Your sustained brawl beats his burst.",
+      whys: [
+        "Even — his clone (W) can bait your combo. Bank grit. Don't dump E at a clone.",
+        "He out-trades short exchanges early. Wait for your level-3 spike.",
+        "Your window — E-stun + W (true damage) out-brawl him.",
+        "His window — clone juke into E-R knockup. Don't get caught low.",
+        "Read the clone, land E on the real him. Your W true damage out-trades him.",
+        "Out-brawl his cooldown burst with grit + R.",
+        "You edge it — out-brawl his cooldown burst with grit + R."
+      ]
+    },
+    {
+      a: 'sett', b: 'yasuo',
+      win: ['Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Sett', 'Yasuo'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Even — his W (windwall) blocks ranged; bank grit.' },
+        { when: 'Lvl 2–6', text: 'Your window — E-stun + W (true damage); he can’t windwall a stun.' },
+        { when: '1st item', text: 'Your W true damage out-trades a pre-crit Yasuo.' },
+        { when: '2+ items', text: 'Yasuo takes over — crit item spikes out-DPS you.' }
+      ],
+      wants: {
+        you: ['E-stun him — he can’t windwall a stun', 'Q-close his dashes; W (true damage) brawls', 'Win the early-mid before his crit items'],
+        foe: ['Block your ranged auto with W (Windwall)', 'Dash on minions (E) and shield with his passive', 'Scale into a crit hypercarry at 2 items']
+      },
+      early: "Yasuo's W (Windwall) blocks your ranged off-hand auto, but not your melee punches or W — level 1 is even. Bank grit, and don't waste resources into his windwall. He dashes around with E, but he's a squishy melee who can't out-brawl you once you catch him. Wait for your level-3 spike.",
+      mid: "Your window — E-stun him (Facebreaker); he can't windwall a stun, and his dashes can't escape it. Then W with loaded grit for true damage, and Q-close his mobility. Your W true damage out-trades a pre-crit Yasuo, and at 6 your R grabs him. He needs a knockup for his R (which he lacks solo), so his all-in is limited.",
+      late: "Yasuo takes over at two crit items — IE + crit out-DPS your grit and he kites you. The lane is favoured because you crush his early-mid (E-stun beats his mobility); convert it. Snowball off the E-stun + W all-ins, deny his farm, and end before his crit spike. A farmed Yasuo flips the 1v1.",
+      whys: [
+        "Yasuo's W blocks your ranged auto, not your punches or W. Level 1 is even.",
+        "Don't waste resources into his windwall. Wait for your level-3 spike.",
+        "Your window — E-stun him; he can't windwall a stun.",
+        "Q-close his dashes; W (true damage) brawls. At 6 your R grabs him.",
+        "His R needs a knockup he lacks solo — his all-in is limited.",
+        "Your W true damage out-trades a pre-crit Yasuo.",
+        "Yasuo takes over — crit item spikes out-DPS you. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'yone',
+      win: ['Skill', 'Sett', 'Sett', 'Sett', 'Skill', 'Sett', 'Yone'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Even — he dashes around; bank grit, look for E.' },
+        { when: 'Lvl 2–6', text: 'Your window — E-stun + W (true damage); his dashes can’t escape.' },
+        { when: '1st item', text: 'Your W true damage out-trades a pre-crit Yone.' },
+        { when: '2+ items', text: 'Yone takes over — crit + mobility out-DPS you.' }
+      ],
+      wants: {
+        you: ['E-stun him — his dashes can’t escape a stun', 'Q-close his mobility; W (true damage) brawls', 'Punish him after he commits E (spirit form)'],
+        foe: ['Poke with Q and dash on the third cast', 'Retreat with E (spirit form snaps him back)', 'All-in with R (knockup) and scale to crit']
+      },
+      early: "Yone dashes around to poke and retreat — level 1 is even, so don't whiff your combo on a dashing Yone. Bank grit, and look for your E-stun (Facebreaker). His E (spirit form) lets him commit then snap back, but a stun catches him. Wait for your level-3 spike.",
+      mid: "Your window — E-stun him; his Q dash and E can't escape a stun. Then W with loaded grit for true damage, and Q-close his mobility. Punish him after he commits his E (he's locked into the return path). Your W true damage out-trades a pre-crit Yone, and at 6 your R grabs him.",
+      late: "Yone takes over at two crit items — crit + his mobility out-DPS your grit and he kites you. The lane is even because you out-brawl his early-mid (E-stun beats his mobility) and he scales past you. Snowball off the E-stun + W all-ins, land your stuns, and end before his crit spike. Don't whiff E into his dashes.",
+      whys: [
+        "Yone dashes to poke and retreat. Don't whiff your combo. Level 1 is even.",
+        "Bank grit, look for your E-stun. A stun catches him.",
+        "Your window — E-stun him; his dashes can't escape a stun.",
+        "Punish him after he commits E (locked into the return).",
+        "Q-close his mobility; W (true damage) brawls. At 6 your R grabs him.",
+        "Your W true damage out-trades a pre-crit Yone.",
+        "Yone takes over — crit + mobility out-DPS you. Don't whiff E."
+      ]
+    },
+    {
+      a: 'sett', b: 'yorick',
+      win: ['Yorick', 'Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Yorick'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Yorick’s window — his ghouls + Q out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) before Maiden.' },
+        { when: '1st item', text: 'Your W true damage out-brawls a pre-Maiden Yorick.' },
+        { when: '2+ items', text: 'Yorick takes over — Maiden + ghouls out-DPS you.' }
+      ],
+      wants: {
+        you: ['Bank grit, then E-stun + W before Maiden is online', 'Don’t get W-caged; burst him 1v1', 'Win the early-mid before his ghoul scaling'],
+        foe: ['Wall you in with W (cage) and pile on ghouls', 'Ramp sustained damage with Maiden (R)', 'Out-DPS you late and splitpush with Maiden']
+      },
+      early: "Yorick out-trades you early — his ghouls + Q give him sustained damage, and his E (mist) marks you for ghoul focus. Levels 1-2 are his. Bank grit, dodge the E mark, and look for your E-stun; don't let him free-farm into his power spike with Maiden.",
+      mid: "Your window — Yorick is just a melee juggernaut before Maiden, and your E-stun (Facebreaker) + W (true damage) out-brawl him. His W (Dark Procession) cage traps you, so don't get walled in a ghoul pile. Burst him 1v1 when his cage is down: E-stun, W with loaded grit, and R him. Force the all-in through levels 3-6.",
+      late: "Yorick takes over at two items — Maiden plus a full ghoul pack out-DPS your grit, and he splitpushes with Maiden pressure. The lane is favoured because you crush his early-mid; convert it. Snowball off the E-stun + W all-ins, deny his farm, and end before his 2-item Maiden setup. Don't get caged late.",
+      whys: [
+        "Yorick's ghouls + Q out-trade your early. Dodge the E mark. Levels 1-2 are his.",
+        "Don't let him free-farm to his Maiden spike. Bank grit, look for E.",
+        "Your window — E-stun + W (true damage) before Maiden.",
+        "Don't get W-caged in a ghoul pile. Burst him 1v1 when his cage is down.",
+        "E-stun, W with loaded grit, R him. Force the all-in through 3-6.",
+        "Your W true damage out-brawls a pre-Maiden Yorick.",
+        "Yorick takes over — Maiden + ghouls out-DPS you. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'gragas',
+      win: ['Gragas', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Gragas’s window — his Q poke + W chip your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) out-brawl him.' },
+        { when: 'Lvl 6', text: 'Don’t get cask’d (R) under tower; buy MR.' },
+        { when: 'Late', text: 'Even — your grit W vs his poke; out-brawl when his W is down.' }
+      ],
+      wants: {
+        you: ['Bank grit from his poke, then E-stun + W him', 'Buy MR; bait his W (damage reduction)', 'Don’t get knocked out of position by his R'],
+        foe: ['Poke with Q (cask) and heal/reduce with W', 'Engage or escape with E (body slam stun)', 'Knock you out of position with R (cask)']
+      },
+      early: "Gragas pokes you with Q (cask) and his W reduces damage while healing — levels 1-2 are his poke window. Bank grit, buy MR, take his Q poke to load your W, and don't trade into a raised W (bait it first). His E (body slam) is a dash-stun for engage/escape.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit for true damage, and out-brawl him; bait his W first. Your W true damage cuts through. At 6 watch his R (Explosive Cask) — don't get knocked under his tower or out of position. Trade when his W is down, and your grit out-brawls his poke.",
+      late: "It's even — your grit W true damage versus his poke + sustain. Bank grit from his Q, E-stun + W him when his W is down, and out-brawl him. Don't get cask'd out of position by his R, buy MR, and force the extended fight your grit wins. Gragas is a utility/teamfight pick late; in lane you edge him.",
+      whys: [
+        "Gragas's Q poke + W chip your early. Buy MR. Levels 1-2 are his.",
+        "Take his Q poke to load your W. Don't trade into a raised W.",
+        "Your window — E-stun + W (true damage) out-brawl him.",
+        "Bait his W first; your W true damage cuts through.",
+        "Don't get cask'd (R) under tower. Trade when his W is down.",
+        "Even — your grit W vs his poke; out-brawl when his W is down.",
+        "Even — force the extended fight your grit wins. Buy MR."
+      ]
+    },
+    {
+      a: 'sett', b: 'gangplank',
+      win: ['Gangplank', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Gangplank'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'GP’s window — his Q (Parrrley) + barrels poke your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch a squishy GP.' },
+        { when: '1st item', text: 'A caught GP folds — W (true damage) + R delete him.' },
+        { when: '2+ items', text: 'Gangplank takes over — crit + barrels out-DPS you.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close; E-stun a squishy GP', 'Destroy his barrels (E); W (true damage) deletes him', 'Win before his crit items'],
+        foe: ['Poke with Q (Parrrley) and chain barrels (E)', 'Cleanse your slow with W (Remove Scurvy)', 'Out-scale into a crit + barrel threat']
+      },
+      early: "Gangplank pokes you with Q (Parrrley) and barrels (E) — levels 1-2 are his poke window. Bank grit, destroy his barrels before they chain, and take the chip. He's squishy with no escape, so the moment you Q-close and E-stun him, he's in big trouble.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close his range, E-stun him (Facebreaker), and W with loaded grit; a caught GP folds, and at 6 your R grabs him. His W cleanses your slow, but not your E-stun. Keep destroying his barrels, and force the all-in when you catch him.",
+      late: "Gangplank takes over at two crit items — crit Q + chained barrels out-DPS your grit and his R zones the map. The lane is even because you can punish him hard if you catch him, but he out-scales if you can't. Q-close + E-stun him, destroy his barrels, and end before his crit scaling. Jungle help lets you catch him.",
+      whys: [
+        "GP pokes with Q + barrels. Destroy his barrels. Levels 1-2 are his.",
+        "He's squishy with no escape. Bank grit, take the chip.",
+        "Your window — Q-close + E-stun catch a squishy GP.",
+        "A caught GP folds — W (true damage) + R delete him.",
+        "His W cleanses your slow, but not your E-stun. Destroy his barrels.",
+        "A caught GP folds — W (true damage) + R delete him.",
+        "Gangplank takes over — crit + barrels out-DPS you. Catch him early."
+      ]
+    },
+    {
+      a: 'sett', b: 'quinn',
+      win: ['Quinn', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Quinn’s window — she pokes from range; you can’t catch her yet.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-speed + E-stun catch her; W deletes her.' },
+        { when: '1st item', text: 'Build tanky — her poke can’t kill you; catch and kill her.' },
+        { when: 'Late', text: 'You win the fight if you catch her; she roams for picks.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close her kite; E-stun her', 'Build tanky to ignore her poke; W (true damage) deletes her', 'Punish her roams; catch a squishy Quinn'],
+        foe: ['Poke with autos + Q (Blinding Assault) and kite', 'Vault (E) over you to dodge; roam with R', 'Never get caught by your Q + E-stun']
+      },
+      early: "Quinn pokes you from range and kites with her E (Vault) — levels 1-2 are her poke window, and you can't catch her yet. Build tanky so her poke chips but can't kill you, bank grit, and take the chip. She's short-range and squishy, so the moment you Q-close and E-stun her, she dies.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close her kite, E-stun her (Facebreaker), and W with loaded grit; a squishy Quinn folds, and at 6 your R grabs her out of a vault. Build tanky to ignore her poke, and look for the catch. Her R is a roam tool — punish her wave when she leaves.",
+      late: "You win the fight if you catch Quinn — your tankiness ignores her poke, and Q + E-stun let you close. She roams for picks with R, so the game is about her roam impact, not the 1v1 you win. Build tanky, track her roams, and snowball when you catch her. In lane she can't kill a tank who closes.",
+      whys: [
+        "Quinn pokes from range and kites. You can't catch her yet. Levels 1-2 are hers.",
+        "Build tanky so her poke chips but can't kill you. Bank grit.",
+        "Your window — Q-speed + E-stun catch her; W deletes her.",
+        "A squishy Quinn folds. At 6 your R grabs her out of a vault.",
+        "Build tanky to ignore her poke. Punish her roams.",
+        "Build tanky — her poke can't kill you; catch and kill her.",
+        "You win the fight if you catch her; she roams for picks."
+      ]
+    },
+    {
+      a: 'sett', b: 'kennen',
+      win: ['Kennen', 'Kennen', 'Skill', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Kennen’s window — he pokes with Q from range; build tanky.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun him when he dives in (E Lightning Rush).' },
+        { when: '1st item', text: 'Even — buy MR; catch him with E when he engages.' },
+        { when: 'Late', text: 'Even — build tanky; punish his dive-in with E-stun + W.' }
+      ],
+      wants: {
+        you: ['E-stun him when he dives in with E (Lightning Rush)', 'Build MR + tanky; bank grit through his poke', 'W (true damage) deletes a caught squishy Kennen'],
+        foe: ['Poke you with Q (shuriken) from range', 'Dive in with E (Lightning Rush) for his combo', 'Burst you with R (stun) + E when you’re low']
+      },
+      early: "Kennen pokes you with Q (shuriken) from range — levels 1-2 are his poke window. Unlike a pure kiter, Kennen has to dive IN with his E (Lightning Rush) to land his full combo, which gives you a window to E-stun him when he commits. Build tanky + MR, bank grit, and take the chip.",
+      mid: "Your window opens when he dives — when Kennen E's in for his Q-E-R combo, he's in range of your E-stun (Facebreaker). E-stun him on his engage, W with loaded grit for true damage, and your W deletes his squishy frame. Don't chase him when he kites, but punish every dive.",
+      late: "It's even — Kennen pokes you out if you let him, but his teamfight-stun playstyle means he has to enter your range to engage, where you catch him with E-stun. Build tanky + MR, take the chip, and punish his dive-ins with E-stun + W + R. He scales into an AOE-stun teamfighter; in lane, catch his engage.",
+      whys: [
+        "Kennen pokes with Q from range. Build tanky + MR. Levels 1-2 are his.",
+        "He must dive in with E (Lightning Rush) for his combo — that's your window.",
+        "Your window — E-stun him when he dives in.",
+        "E-stun his engage, W with loaded grit. Your W deletes his squishy frame.",
+        "Don't chase his kite; punish every dive.",
+        "Even — buy MR; catch him with E when he engages.",
+        "Even — build tanky; punish his dive-in with E-stun + W."
       ]
     }
   ];

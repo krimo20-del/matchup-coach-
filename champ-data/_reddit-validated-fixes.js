@@ -130,7 +130,9 @@
       shen: 57.4, swain: 55.2, warwick: 51.2, volibear: 53.2, wukong: 51.9, yasuo: 54.7,
       yone: 53.1, yorick: 49.2, gragas: 47.1, gangplank: 50.1, kennen: 50.6, singed: 53.2,
       chogath: 52.5, tahmkench: 53.4, ksante: 55.6, poppy: 48.0, kayle: 45.2, akali: 54.6,
-      cassiopeia: 50.0, galio: 53.7, gwen: 48.2, jayce: 55.9, kassadin: 55.2, lucian: 54.1
+      cassiopeia: 50.0, galio: 53.7, gwen: 48.2, jayce: 55.9, kassadin: 55.2, lucian: 54.1,
+      camille: 58.3, trundle: 45.2, ryze: 53.3, rumble: 48.7, heimerdinger: 39.1, sejuani: 48.4,
+      zac: 51.7, ziggs: 52.4, maokai: 52.9, sylas: 53.3, graves: 49.3, nautilus: 54.7
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -8539,6 +8541,318 @@
         "Look for the E when his E dash is down. Slam him in your zone.",
         "A caught Lucian folds — a vessel can't escape your tentacles.",
         "You edge it — catch him with E; he can't kill a bruiser in tentacles."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'camille',
+      win: ['Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Camille'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Even — she E-Q trades; set up tentacles, look for E.' },
+        { when: 'Lvl 2–6', text: 'Your window — E her and slam; she can’t hookshot out of a vessel.' },
+        { when: '1st item', text: 'Your tentacle DPS out-sustains her E-Q trades.' },
+        { when: '2+ items', text: 'Camille flips it only if she snowballed — else you dominate.' }
+      ],
+      wants: {
+        you: ['Land E — she can’t reset out of the soul fight', 'Slam her with tentacles when she commits E-Q', 'Out-sustain her true damage off vessel healing'],
+        foe: ['Out-trade with E-Q (hookshot) true damage', 'Reset trades by hookshotting away', 'Isolate you with R in the side lane late']
+      },
+      early: "Camille's E-Q (hookshot into empowered auto) out-trades you in a short window early — level 1 is even. Stand away from terrain so her E can't stun, set up tentacles, and look for your E (Test of Spirit). Her game is hit-and-reset; once you land E on her, she can't hookshot out of the soul fight.",
+      mid: "Your window — E her, W in, and slam her with tentacles. She can't reset out of a vessel with her hookshot, and your sustained DPS + vessel healing out-last her burst-then-wait pattern. Punish her after she commits E-Q, when she's tied to your tentacles. This is a strong matchup once you control the engage.",
+      late: "Camille only flips it if she snowballed a big lead — otherwise you dominate. Her R isolation + true damage are dangerous in the side lane, but if you land E she can't escape your tentacles, and your DPS + healing out-last her trades. Land E, fight in your zone, and crush her; don't stand by walls (her E stun).",
+      whys: [
+        "Camille's E-Q out-trades you short. Stand off terrain. Level 1 is even.",
+        "Set up tentacles, look for E. Her game is hit-and-reset.",
+        "Your window — E her and slam; she can't hookshot out of a vessel.",
+        "Punish her after she commits E-Q, when she's tied to your tentacles.",
+        "Your R wall + vessel heal out-last her burst-then-wait.",
+        "Your tentacle DPS out-sustains her E-Q trades.",
+        "Camille flips it only if she snowballed — else you dominate."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'trundle',
+      win: ['Trundle', 'Trundle', 'Skill', 'Skill', 'Trundle', 'Skill', 'Illaoi'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Trundle’s window — his Q + sustain out-trade your early.' },
+        { when: 'Lvl 6', text: 'His R drains you; his E pillar blocks your engage path.' },
+        { when: '1st item', text: 'He out-sustains you — your tentacle DPS vs his bite.' },
+        { when: 'Late', text: 'Tricky — his sustain + R drain out-last your tentacles.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacles', 'Play around his E (Pillar) that blocks your path', 'Out-DPS his sustain in your zone if you can'],
+        foe: ['Bite (Q) to steal your damage and heal', 'Zone you with E (Pillar) — blocks your tentacle approach', 'Drain your damage + HP with R in a long fight']
+      },
+      early: "Trundle is tricky — his Q (Chomp) bites and steals your damage, his sustain out-paces your early, and his E (Pillar of Ice) can block your approach to your tentacle field or peel you off him. Levels 1-2 are his. Set up tentacles, look for your E, but he out-sustains and his pillar disrupts your zone control.",
+      mid: "His R (Subjugate) drains your damage and HP in a long fight — exactly the extended fight you want, flipped against you. His E pillar zones you off your tentacles. Land E and slam him in your zone, but his sustain out-lasts your tentacle DPS over the fight. Don't get dragged into a drain-fest his R wins.",
+      late: "It's tricky — Trundle's sustain + R drain out-last your tentacle DPS in the extended fight, and his pillar disrupts your zone control. Land E and grind him where you can, but as a tank-buster who out-sustains, he's built to win the long fight you rely on. Buy antiheal, fight short when his R is down, and look for jungle help.",
+      whys: [
+        "Trundle's Q + sustain out-trade your early. Set up tentacles. Levels 1-2 are his.",
+        "His E (Pillar) blocks your approach to your tentacles. Play around it.",
+        "Land E and slam him in your zone — but his sustain out-lasts you.",
+        "Don't get dragged into a drain-fest. His pillar zones you off your tentacles.",
+        "His R drains your damage + HP. His E pillar blocks your engage.",
+        "He out-sustains you — your tentacle DPS vs his bite. Buy antiheal.",
+        "Tricky — his sustain + R drain out-last your tentacles. Look for jungle."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'ryze',
+      win: ['Ryze', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Ryze'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Ryze’s window — his Q-E poke chips you; dodge his W root.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam his squishy frame.' },
+        { when: '1st item', text: 'Your tentacle DPS out-trades a weak-mid Ryze.' },
+        { when: '2+ items', text: 'Ryze takes over — mana-stacked, tanky, out-DPS your tentacles.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacle field', 'Dodge his W (root); buy MR', 'Win the early-mid before his item scaling'],
+        foe: ['Poke with Q-E spread combo from range', 'Lock you with W (root) to kite', 'Out-scale into a tanky, high-DPS mana mage']
+      },
+      early: "Ryze pokes you with Q-E and roots with W — levels 1-2 are his poke window. Set up tentacles, buy MR, dodge his W root (it sets up his combo), and look for your E (Test of Spirit). He's weak early-mid and squishy; once you land E, he can't escape your tentacle slams.",
+      mid: "Your window — land E, W in, and slam him in your zone. A squishy Ryze folds to your tentacle DPS once you catch him, and a vessel can't escape. Dodge his W root, deny his mana/item stacking, and out-sustain his poke off vessel healing. Pressure him before his items come online.",
+      late: "Ryze takes over at two items — mana-stacked and tanky, his high-output magic DPS out-trades your tentacles, and his root + poke control the fight. The lane is favoured because you crush his early-mid; convert it. Snowball off the E pressure, build MR, deny his farm, and end before his item scaling flips it.",
+      whys: [
+        "Ryze's Q-E poke chips you; dodge his W root. Buy MR. Levels 1-2 are his.",
+        "He's weak early-mid and squishy. Set up tentacles, look for E.",
+        "Your window — E him and slam his squishy frame.",
+        "A vessel can't escape — deny his mana/item stacking.",
+        "Your R wall deletes him. Out-sustain his poke off vessel healing.",
+        "Your tentacle DPS out-trades a weak-mid Ryze.",
+        "Ryze takes over — mana-stacked, tanky, out-DPS your tentacles. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'rumble',
+      win: ['Rumble', 'Rumble', 'Skill', 'Skill', 'Rumble', 'Skill', 'Illaoi'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Rumble’s window — his Q (Flamespitter) pokes; he kites your E.' },
+        { when: 'Lvl 6', text: 'His R (Equalizer) zones your tentacle fights.' },
+        { when: '1st item', text: 'He pokes + kites you; land E when he steps up.' },
+        { when: 'Late', text: 'Tricky — his poke + R zone vs your tentacle DPS.' }
+      ],
+      wants: {
+        you: ['Land E when he steps up — a caught Rumble folds', 'Buy MR; out-sustain his Q poke', 'Don’t fight in his R (Equalizer) zone'],
+        foe: ['Poke with Q (Flamespitter) in his Heat window', 'Kite with W (shield + MS) and E (harpoon slow)', 'Zone your tentacles with R (Equalizer)']
+      },
+      early: "Rumble pokes you with Q (Flamespitter) and kites with W (shield + MS) and E (slow) — levels 1-2 are his poke window, and his mobility makes your slow E hard to land. Set up tentacles, buy MR, and look for your E (Test of Spirit) when he steps up. He out-pokes you, so play around your tentacles.",
+      mid: "His R (The Equalizer) is a fire zone that can cover your tentacle field and force you out of fights. Land E when you catch him — a squishy Rumble in your tentacles folds — but he kites your engage with W + E. Don't fight inside his R zone; bait it, then commit E. Out-sustain his poke off vessel healing.",
+      late: "It's tricky — Rumble pokes you and his R zones your tentacle fights, and his mobility dodges your slow E. Land E when his W is down and he steps up; a caught Rumble dies in your nest. But if he kites freely and zones with R, he edges it. Buy MR, look for E windows, and ask jungler for help to land it.",
+      whys: [
+        "Rumble's Q pokes; his W + E kite your slow E. Buy MR. Levels 1-2 are his.",
+        "He out-pokes you. Set up tentacles, look for E when he steps up.",
+        "Land E when he steps up — a caught Rumble folds.",
+        "He kites your engage with W + E. Bait his shield.",
+        "His R (Equalizer) zones your tentacle fights — don't fight in it.",
+        "He pokes + kites you; land E when he steps up.",
+        "Tricky — his poke + R zone vs your tentacle DPS. Ask for jungle help."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'heimerdinger',
+      win: ['Heimerdinger', 'Heimerdinger', 'Heimerdinger', 'Heimerdinger', 'Skill', 'Heimerdinger', 'Heimerdinger'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Heimer’s window — his turrets zone your approach to tentacles.' },
+        { when: 'Lvl 6', text: 'Your only window — E him IF you can reach him past turrets.' },
+        { when: '1st item', text: 'He pokes you out; turrets prevent you from setting up.' },
+        { when: 'Late', text: 'Hard — his turret zone shuts down your tentacle game.' }
+      ],
+      wants: {
+        you: ['Try to E him from max range past his turrets', 'Build MR + tenacity; ask jungler to help land E', 'Survive lane — turrets deny your tentacle approach'],
+        foe: ['Zone your approach with H-28 turrets (Q)', 'Poke with W (rockets) and stun with E (grenade)', 'Wall you off so you never reach him']
+      },
+      early: "This is a hard counter — Heimerdinger's turrets (Q) zone the lane and deny your approach to your tentacle field, his E (grenade) stuns you, and he pokes from range. Levels 1-3 he poke-and-zones you out, and you can't set up tentacles or reach him. Hug minions, try to land E from max range, and accept you'll lose CS.",
+      mid: "Your whole game is reaching Heimer to land E, but his turret wall keeps you out, and his grenade stun interrupts you. Even if you E him, his turrets + W poke you down. Build MR, ask your jungler to gank (a gank lets you land E and delete his squishy frame), and play safe; you can't force the fight he zones.",
+      late: "Hard lane — Heimer's turret zone shuts down your tentacle game entirely; you can't approach, set up, or reach him, and he pokes you out. You needed jungle help to land E early. Without it, this is a losing matchup by design (a zone-control mage vs a zone-control bruiser, and his zone out-ranges yours). Build MR, group, and avoid his turrets.",
+      whys: [
+        "Heimer's turrets zone your approach to your tentacles. Hug minions. Levels 1-3 are his.",
+        "His E (grenade) stuns and his W pokes. Try to E from max range.",
+        "You can't set up tentacles or reach him. Play safe.",
+        "His turret wall keeps you out. Ask jungler to gank.",
+        "Your only window — E him IF you reach him past turrets.",
+        "He pokes you out; turrets prevent you from setting up.",
+        "Hard — his turret zone shuts down your tentacle game. Group."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'sejuani',
+      win: ['Sejuani', 'Skill', 'Skill', 'Skill', 'Sejuani', 'Skill', 'Illaoi'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Sejuani’s window — her Q charge can knock you off your tentacles.' },
+        { when: 'Lvl 6', text: 'Her R + Frost stun lock you down; she out-tanks you.' },
+        { when: '1st item', text: 'She out-tanks your tentacle DPS; land E and grind her.' },
+        { when: 'Late', text: 'Tricky — she out-tanks you; she’s a teamfight engage tank.' }
+      ],
+      wants: {
+        you: ['Land E, then grind her in your tentacles', 'Dodge her Q (charge) — it knocks you out of position', 'Out-DPS her tankiness in your zone if you can'],
+        foe: ['Engage with Q (charge knockup) out of your zone', 'Stack Frost (E) for a stun; out-tank your tentacles', 'Become a teamfight engage tank with R']
+      },
+      early: "Sejuani is tricky — her Q (charge) is a knockup that can displace you out of your tentacle field, and she builds tanky to out-last your DPS. Levels 1-2 are hers. Set up tentacles, dodge her Q, and look for your E; it's a tank fight where her CC + tankiness frustrate your zone control.",
+      mid: "Her R + Frost (E) stun lock you down, and her tankiness out-lasts your tentacle DPS in a grind. Land E and slam her in your zone, but she out-tanks the soul fight and her Q can knock you off your tentacles. Don't get chain-CC'd; fight in your nest and chip her down, but it's slow.",
+      late: "It's tricky — Sejuani out-tanks your tentacle DPS, her CC displaces you, and she's a teamfight engage tank with a global-ish R. Land E and grind her where you can, but she's built to survive your zone and peel. She scales into teamfights, so play for objectives; the 1v1 is uphill. Don't get knocked off your tentacles.",
+      whys: [
+        "Sejuani's Q charge can knock you off your tentacles. Dodge it. Levels 1-2 are hers.",
+        "She builds tanky to out-last your DPS. Set up tentacles, look for E.",
+        "Land E and grind her in your zone — but it's slow.",
+        "Don't get chain-CC'd by her Frost + R. Fight in your nest.",
+        "Her R + Frost stun lock you down; she out-tanks you.",
+        "She out-tanks your tentacle DPS; land E and grind her.",
+        "Tricky — she out-tanks you; she's a teamfight engage tank."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'zac',
+      win: ['Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Skill', 'Illaoi', 'Zac'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even — set up tentacles; he’s a weak-early laner.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam; deny his blobs.' },
+        { when: '1st item', text: 'Your tentacle DPS out-pressures a low-HP Zac.' },
+        { when: '2+ items', text: 'Even-to-his — Zac’s HP stacking out-tanks your tentacles.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacle field', 'Step on his blobs to deny his sustain', 'Win the early-mid before his HP scaling'],
+        foe: ['Poke with Q (stretchy arm) and farm safely', 'Sustain with passive blobs + W', 'Scale into an HP-stacking teamfight tank with R']
+      },
+      early: "Levels 1-2 are even, but you out-scale — Zac is a weak early laner with low kill pressure. Set up tentacles, poke with Q, and look for your E (Test of Spirit). Step on his passive blobs so he can't heal, and pressure him; you out-trade a weak-early Zac with your tentacle DPS.",
+      mid: "Your window — land E, W in, and slam him in your zone. Deny his blobs to cut his sustain, and out-DPS a low-HP Zac. His R at 6 is a teamfight engage, not a 1v1 button. Keep him off farm and snowball your tentacle pressure before his HP stacking comes online.",
+      late: "It's even-to-his — Zac stacks HP into a teamfight tank that out-tanks your tentacle DPS late, and his blob heals out-sustain everything. The lane is even because you crush his early-mid; convert it. Snowball off the E pressure, step on his blobs, deny his farm, and end before his HP scaling out-tanks you.",
+      whys: [
+        "Zac is a weak early laner. Set up tentacles, look for E. Even early.",
+        "Step on his blobs so he can't heal. Pressure him with tentacle DPS.",
+        "Your window — E him and slam; deny his blobs.",
+        "Out-DPS a low-HP Zac. His R is teamfight engage, not a 1v1 button.",
+        "Your R wall out-pressures him. Keep him off farm.",
+        "Your tentacle DPS out-pressures a low-HP Zac.",
+        "Even-to-his — Zac's HP stacking out-tanks your tentacles. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'ziggs',
+      win: ['Ziggs', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Skill', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Ziggs’s window — his Q pokes from max range; you can’t catch him.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him if he mispositions; a caught Ziggs folds.' },
+        { when: '1st item', text: 'Even — he pokes you; land E when his W (satchel) is down.' },
+        { when: 'Late', text: 'Even — buy MR; punish a misposition with E + tentacles.' }
+      ],
+      wants: {
+        you: ['Land E when he mispositions — a caught Ziggs folds', 'Buy MR; hug minions through his Q poke', 'Fight him in your tentacles when you catch him'],
+        foe: ['Poke from max range with Q (bouncing bomb)', 'Escape your engage with W (Satchel Charge)', 'Zone you with E (minefield) and nuke with R']
+      },
+      early: "Ziggs out-ranges everything and pokes you with Q (bouncing bomb) — levels 1-2 are his artillery window, and his W (Satchel Charge) escape + minefield keep you off him. Hug minions, set up tentacles, buy MR, and take the chip. He's squishy, so any E you land deletes him — but landing your slow E on a kiting artillery mage is the challenge.",
+      mid: "Your window opens if he mispositions — when Ziggs steps up or his satchel is down, land E and W in to slam his squishy frame. A vessel can't escape your tentacles. Don't path through his minefield, bait his satchel, and look for the E. Out-sustain his poke off vessel healing.",
+      late: "It's even — Ziggs pokes you out if you let him, but a misposition or a down satchel lets you land E and delete him. Build MR, hug minions to deny free poke, and punish his mistakes with E + tentacles. He scales as a teamfight artillery mage, so the game is about his zone damage; in lane, catch his misposition.",
+      whys: [
+        "Ziggs out-ranges you with Q poke. Hug minions, buy MR. Levels 1-2 are his.",
+        "His W satchel + minefield keep you off him. Take the chip.",
+        "Your window — E him if he mispositions; a caught Ziggs folds.",
+        "A vessel can't escape — bait his satchel, then commit E.",
+        "Don't path through his minefield. Out-sustain his poke.",
+        "Even — land E when his W (satchel) is down.",
+        "Even — buy MR; punish a misposition with E + tentacles."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'maokai',
+      win: ['Maokai', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Maokai’s window — his saplings + W root out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam; out-DPS his sustain.' },
+        { when: '1st item', text: 'Your tentacle DPS out-pressures his sapling sustain.' },
+        { when: 'Late', text: 'You edge it — out-DPS his sustain tank in your zone.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacle field', 'Dodge his W (root) and sapling (E) zone', 'Out-DPS his sustain with tentacles + vessel heal'],
+        foe: ['Poke + sustain with E (saplings) and passive heal', 'Root you with W (Twisted Advance)', 'Out-tank you and lock you down with R (root wave)']
+      },
+      early: "Maokai out-trades you early — his saplings (E) poke and zone, his passive heals, and his W (Twisted Advance) roots you. Levels 1-2 are his. Set up tentacles, dodge the W root and sapling zone, and look for your E (Test of Spirit). It's a tank fight where his sustain gives him the early edge.",
+      mid: "Your window from level 3 — land E, W in, and slam him with tentacle DPS in your zone. His sapling + passive sustain are real, but your sustained tentacle slams + vessel healing out-pressure them. Dodge his W root and R (root wave), fight in your nest, and out-DPS his tankiness.",
+      late: "You edge it — your tentacle DPS in your zone out-pressures his sustain-tank kit over a long fight. His roots can lock you down, so position carefully, but in your tentacle field your damage + vessel healing out-last his saplings. Land E, fight in your nest, and grind him; the extended fight in your zone is yours.",
+      whys: [
+        "Maokai's saplings + W root out-trade your early. Dodge them. Levels 1-2 are his.",
+        "His passive heals and his sustain gives him the edge. Set up tentacles.",
+        "Your window — E him and slam; out-DPS his sustain.",
+        "Your tentacle slams + vessel heal out-pressure his saplings.",
+        "Dodge his W root and R (root wave). Fight in your nest.",
+        "Your tentacle DPS out-pressures his sapling sustain.",
+        "You edge it — out-DPS his sustain tank in your zone."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'sylas',
+      win: ['Sylas', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Sylas'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Sylas’s window — his Q poke + W heal out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam; he can’t dash out of a vessel.' },
+        { when: '1st item', text: 'Your tentacle DPS out-sustains his W heal in your zone.' },
+        { when: '2+ items', text: 'Sylas takes over — AP sustain + mobility out-scale you.' }
+      ],
+      wants: {
+        you: ['Land E — he can’t dash out of the soul fight', 'Buy MR; out-sustain his W heal off vessel healing', 'Don’t feed him your R (he can steal it)'],
+        foe: ['Poke with Q (double whip) and heal with W', 'Dash + chain-stun you with E', 'Steal and turn your R against you']
+      },
+      early: "Sylas pokes you with Q (double whip) and heals off it (W) — levels 1-2 favour his poke-and-sustain. Set up tentacles, buy MR, and look for your E (Test of Spirit). His E is a dash + chain stun, so don't get caught, but once you land E, his dashes can't escape the soul fight.",
+      mid: "Your window — land E, W in, and slam him in your zone. He can't dash out of a vessel, and your sustained DPS + vessel healing out-last his W heal. His R can steal YOUR R (Leap of Faith), so bait it or fight when it's down. Out-sustain him in your tentacle field and crush a caught Sylas.",
+      late: "Sylas takes over at two items — AP sustain + mobility out-scale your tentacles, and his W out-heals you in extended fights. The lane is favoured because you crush his early-mid once you land E; convert it. Snowball off the E pressure, build MR, deny his farm, and end before his items flip it. Don't feed him a stolen R.",
+      whys: [
+        "Sylas pokes with Q + heals with W. Buy MR. Levels 1-2 are his.",
+        "His E is a dash + chain stun — don't get caught. Set up tentacles.",
+        "Your window — E him and slam; he can't dash out of a vessel.",
+        "Your DPS + vessel heal out-last his W heal. His R can steal yours — bait it.",
+        "Out-sustain him in your tentacle field. Crush a caught Sylas.",
+        "Your tentacle DPS out-sustains his W heal in your zone.",
+        "Sylas takes over — AP sustain + mobility out-scale you. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'graves',
+      win: ['Graves', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Illaoi', 'Graves'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Graves’s window — his shotgun Q burst + E dash out-trade you.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him when his E is down; slam his squishy frame.' },
+        { when: '1st item', text: 'Even — a caught Graves folds, but he dashes + smokes away.' },
+        { when: '2+ items', text: 'Graves takes over — his DPS scaling out-trades your tentacles.' }
+      ],
+      wants: {
+        you: ['Land E when his E (dash) is down — a caught Graves folds', 'Don’t fight in his W (smoke) blind', 'Win the early-mid before his DPS scaling'],
+        foe: ['Burst you with shotgun Q + E (dash + armor)', 'Blind + slow you with W (Smoke Screen)', 'Out-trade you late with his marksman DPS']
+      },
+      early: "Graves out-trades you early — his shotgun Q is heavy burst, his E dashes + stacks armour, and his W (Smoke Screen) blinds you. Levels 1-2 are his. Set up tentacles, don't fight in his smoke, and look for your E (Test of Spirit). He's squishy, so a landed E is huge, but his dash makes it hard to catch him.",
+      mid: "Your window — land E when his E dash is on cooldown; a caught Graves folds to your tentacle slams, and a vessel can't escape (even his dash). Bait his E, then commit. Don't fight in his smoke (it blinds your W auto). Your sustained DPS out-trades a one-item Graves in your zone.",
+      late: "Graves takes over at two items — his marksman DPS out-trades your tentacles once itemized, and his dash + smoke help him kite. The lane is even because you can punish him hard if you land E, but he out-scales if you can't catch him. Look for E on his dash cooldown, snowball, and end before his DPS scaling.",
+      whys: [
+        "Graves' shotgun Q + E dash out-trade you. Don't fight in his smoke. Levels 1-2 are his.",
+        "He's squishy — a landed E is huge, but his dash makes it hard. Set up tentacles.",
+        "Your window — E him when his E is down; slam his squishy frame.",
+        "A caught Graves folds — a vessel can't escape even his dash.",
+        "Don't fight in his smoke (it blinds your W auto). Bait his E.",
+        "Even — a caught Graves folds, but he dashes + smokes away.",
+        "Graves takes over — his DPS scaling out-trades your tentacles. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'nautilus',
+      win: ['Nautilus', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Naut’s window — his Q hook + W on-hit out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam; out-DPS a low-damage Naut.' },
+        { when: '1st item', text: 'Your tentacle DPS out-pressures his low damage.' },
+        { when: 'Late', text: 'You win the lane 1v1 — he’s a teamfight CC frontliner.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacle field', 'Dodge his Q (hook); out-DPS his low damage', 'Win the lane 1v1 he can’t out-damage'],
+        foe: ['Hook you in with Q (Dredge Line)', 'Chunk with W (shield + on-hit) + E (AOE)', 'Lock you down with R + passive root']
+      },
+      early: "Nautilus's trade starts with the Q hook — levels 1-2 he can chunk you with W (shield + on-hit) + E if he lands it. Dodge the hook from bush range; eat it and he gets a free combo. Set up tentacles, look for your E (Test of Spirit), and out-DPS his low-damage CC-tank kit once you land it.",
+      mid: "Your window — land E, W in, and slam him in your zone. Without the hook he can't engage, and his W + E don't out-trade your tentacle DPS. At 6 his R is a single-target knockup pick tool, dangerous with a jungler, but in the 1v1 he can't out-damage you. Dodge the hook and crush him in your nest.",
+      late: "You win the lane 1v1 — Nautilus is a CC tank with low damage, and your tentacles out-DPS him in your zone. He becomes a teamfight CC frontliner, so the game is about his engage in fights, not the lane you dominate. Land E, fight in your tentacles, and respect his R + jungler for picks, but never fear the 1v1.",
+      whys: [
+        "Naut's Q hook starts his trade. Dodge it from bush. Levels 1-2 are his.",
+        "Eat the hook and he gets a free W + E. Set up tentacles, look for E.",
+        "Your window — E him and slam; out-DPS a low-damage Naut.",
+        "Without the hook he can't engage. Crush him in your nest.",
+        "His R is a pick tool with a jungler, not a 1v1 button. Dodge the hook.",
+        "Your tentacle DPS out-pressures his low damage.",
+        "You win the lane 1v1 — he's a teamfight CC frontliner."
       ]
     }
   ];

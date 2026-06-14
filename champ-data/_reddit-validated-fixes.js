@@ -148,7 +148,9 @@
       irelia: 56.7, riven: 50.5, sion: 52.6, ornn: 47.9, malphite: 48.4, pantheon: 51.8,
       kled: 53.7, urgot: 49.4, olaf: 52.0, tryndamere: 48.0, vladimir: 49.7, gnar: 51.4,
       shen: 51.6, swain: 47.6, warwick: 52.5, volibear: 50.4, wukong: 52.4, yasuo: 54.8,
-      yone: 52.1, yorick: 57.6, gragas: 51.0, gangplank: 49.8, quinn: 52.4, kennen: 48.8
+      yone: 52.1, yorick: 57.6, gragas: 51.0, gangplank: 49.8, quinn: 52.4, kennen: 48.8,
+      chogath: 57.0, tahmkench: 53.9, ksante: 52.2, poppy: 55.1, kayle: 49.4, akali: 52.9,
+      cassiopeia: 47.5, galio: 54.3, gwen: 48.6, jayce: 53.3, kassadin: 53.3, lucian: 52.7
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -10013,6 +10015,318 @@
         "Don't chase his kite; punish every dive.",
         "Even — buy MR; catch him with E when he engages.",
         "Even — build tanky; punish his dive-in with E-stun + W."
+      ]
+    },
+    {
+      a: 'sett', b: 'chogath',
+      win: ['Sett', 'Sett', 'Sett', 'Sett', 'Skill', 'Sett', "Cho'Gath"],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — W (true damage) + aggression bully a weak Cho.' },
+        { when: 'Lvl 6', text: 'Your window — E-stun + R; respect his R true-damage execute.' },
+        { when: '1st item', text: 'Your W true damage out-trades a low-stack Cho.' },
+        { when: '2+ items', text: 'Cho takes over — stacked HP + true-damage R out-tank you.' }
+      ],
+      wants: {
+        you: ['W (true damage) + aggression bully his weak early', 'Dodge his Q (rupture) + W (silence); E-stun him', 'Deny his stacks; win before his HP scaling'],
+        foe: ['Land Q (knockup) into W (silence) for a trade', 'Farm safely and stack HP with R (Feast)', 'Scale into an unkillable true-damage teamfight tank']
+      },
+      early: "Levels 1-3 are yours — Cho'Gath is a weak-early tank scaler, and your W (Haymaker) true damage + aggression bully him. Bank grit, dodge his Q (Rupture knockup) and W (silence), and W-true-damage him; his HP stacking does less against your true damage. Deny his CS to keep him off stacks.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit for true damage, and R him at 6. Respect his R (Feast): it's a true-damage execute that ignores your tankiness, so don't get caught low. Your W cuts through his HP; keep denying his stacks and out-brawl a low-stack Cho.",
+      late: "Cho takes over at two items if he stacked — stacked HP + true-damage R out-tank even your grit. The lane is favoured because you crush the early-mid; convert it. Snowball off the W + E-stun all-ins, deny his farm, and end before his HP stacking makes him unkillable.",
+      whys: [
+        "Cho is weak early. W (true damage) + aggression bully him. Levels 1-3 are yours.",
+        "Dodge his Q (rupture) and W (silence). Deny his CS.",
+        "Your W true damage cuts through his HP. E-stun him.",
+        "Keep denying stacks. Out-brawl a low-stack Cho.",
+        "Your window — E-stun + R; respect his R true-damage execute.",
+        "Your W true damage out-trades a low-stack Cho.",
+        "Two items in, stacked HP + true damage out-tank you. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'tahmkench',
+      win: ['Sett', 'Sett', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — W (true damage) bursts through his weak early.' },
+        { when: 'Lvl 6', text: 'Your window — E-stun + R; burst his grey health fast.' },
+        { when: '1st item', text: 'Your W true damage cuts through his grey-health sustain.' },
+        { when: 'Late', text: 'You edge it — out-brawl him; he peels for his team.' }
+      ],
+      wants: {
+        you: ['W (true damage) bursts through his grey health', 'E-stun + R; commit hard, don’t chip', 'Pin him — he has no waveclear'],
+        foe: ['Tank your damage with grey health (passive)', 'Reposition out of your stun with W (Devour)', 'Scale into a tanky teamfight peeler / saver']
+      },
+      early: "Levels 1-2 are yours — Tahm Kench has a weak early and no waveclear, and your W (Haymaker) true damage bursts through his grey health (which banks normal damage as a shield, but true damage cuts it). Bank grit, W him, and pin him; deny CS. Don't walk into a W (Devour) for a free grey-health trade.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit, and R him at 6. Commit hard rather than chip: his grey health resets chip damage, but your W true damage + R burst through it. His W can reposition him out of your stun, so don't let him Devour away mid-fight. Burst him fast.",
+      late: "You edge it — your W true damage out-brawls his grey-health sustain, and he becomes a teamfight peeler/saver, not a duelist. In the side-lane 1v1 your burst cuts through his grey health. Pin him, deny CS, and snowball your aggression; he can't out-sustain your true damage.",
+      whys: [
+        "Tahm has no waveclear and a weak early. W (true damage) bursts through. Levels 1-2 are yours.",
+        "Don't walk into a W (Devour) grey-health trade. Pin him, deny CS.",
+        "Your W true damage cuts his grey health. Commit hard, don't chip.",
+        "His grey health resets chip — your W + R burst through it.",
+        "Your window — E-stun + R; burst his grey health fast.",
+        "Your W true damage cuts through his grey-health sustain.",
+        "You edge it — out-brawl him; he peels for his team."
+      ]
+    },
+    {
+      a: 'sett', b: 'ksante',
+      win: ['Sett', 'Sett', 'Sett', 'Skill', 'Skill', 'Sett', "K'Sante"],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — W (true damage) + aggression bully a pre-item K’Sante.' },
+        { when: 'Lvl 6', text: 'His R (All Out) duel form — E-stun + W, don’t get caught low.' },
+        { when: '1st item', text: 'Your W true damage out-trades a pre-item K’Sante.' },
+        { when: '2+ items', text: 'K’Sante takes over — tanky stance + items out-sustain you.' }
+      ],
+      wants: {
+        you: ['W (true damage) bully a weak pre-item K’Sante', 'Bait his W (block) — don’t feed it your W', 'E-stun + R; win before his items'],
+        foe: ['Block your damage with W (damage reduction)', 'Knock you with Q and dash with E (shield)', 'Pop R (All Out) to duel, or stay tanky to scale']
+      },
+      early: "Levels 1-3 are yours — K'Sante is weak before items, and your W (Haymaker) true damage + aggression bully him. His W blocks damage, so don't dump your W into a held block; bait it, then commit. Bank grit, dodge his Q knockback, and out-brawl a pre-item K'Sante.",
+      mid: "His big spike is R (All Out): he sheds tankiness to become a high-damage duelist with dashes, so don't get caught at low HP when it's up. E-stun him (Facebreaker), W with loaded grit, and R him; your true damage cuts his tankier stance. Bait his W block, then commit, and keep him off the items that make him unkillable.",
+      late: "K'Sante takes over at two items — his tank stance + item sustain out-grind your grit, and his R lets him pick the duel. The lane is even because you crush him early; convert it. Snowball off the W + E-stun all-ins, deny his farm, and end before his scaling flips the side-lane 1v1.",
+      whys: [
+        "K'Sante is weak pre-item. W (true damage) bully him. Levels 1-3 are yours.",
+        "His W blocks damage — bait it, don't dump your W into a held block.",
+        "Your W true damage out-trades a pre-item K'Sante. Dodge his Q.",
+        "Keep him off farm. E-stun + R; win before his items.",
+        "His R (All Out) is a burst duel form — don't get caught low.",
+        "Your W true damage out-trades a pre-item K'Sante.",
+        "Two items in, tank stance + items out-sustain you. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'poppy',
+      win: ['Sett', 'Sett', 'Sett', 'Sett', 'Skill', 'Sett', 'Poppy'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — W (true damage) out-damages her low damage.' },
+        { when: 'Lvl 6', text: 'Her R can knock you off; E-stun + W out-brawl her anyway.' },
+        { when: '1st item', text: 'Your W true damage out-trades her tankiness.' },
+        { when: 'Late', text: 'Poppy out-tanks you eventually — she’s a teamfight peeler.' }
+      ],
+      wants: {
+        you: ['W (true damage) out-damages her low damage', 'Stand off walls so her E (stun) can’t pin you', 'E-stun + R; snowball before she builds tanky'],
+        foe: ['Stun you into a wall with E (Heroic Charge)', 'Stop your dash-engages with her W passive', 'Scale to a tanky teamfight peeler']
+      },
+      early: "Levels 1-3 are yours — Poppy deals low damage, and your W (Haymaker) true damage out-damages her. Her E (Heroic Charge) stuns you into walls, so stand off terrain. Her W passive grounds dash-users, but your Q is a move-speed buff, not a dash, so it's less affected. Bank grit and W-true-damage her.",
+      mid: "Your W true damage out-trades her tankiness. E-stun her (Facebreaker), W with loaded grit, and R her; her R (Keeper's Verdict) can knock you away, but you out-brawl her low-damage kit. Stand off walls (her E stun), and keep her off farm; her low kill pressure means you dictate the lane.",
+      late: "Poppy out-tanks you eventually — she builds resistances and becomes a teamfight peeler with a big R disengage. The lane is favoured because you bully the early; convert it. Snowball your W + E-stun all-ins, take plates, and end before her tankiness makes your grit tickle. She's more of a teamfight peeler late.",
+      whys: [
+        "Poppy deals low damage. W (true damage) out-damages her. Levels 1-3 are yours.",
+        "Stand off walls so her E can't stun you. Your Q is a buff, not a dash.",
+        "Your W true damage out-trades her tankiness. E-stun + R.",
+        "Keep her off farm — she has no kill pressure.",
+        "Her R can knock you off; E-stun + W out-brawl her anyway.",
+        "Your W true damage out-trades her tankiness.",
+        "Poppy out-tanks you eventually — she's a teamfight peeler."
+      ]
+    },
+    {
+      a: 'sett', b: 'kayle',
+      win: ['Sett', 'Sett', 'Sett', 'Sett', 'Skill', 'Kayle', 'Kayle'],
+      spikes: [
+        { when: 'Lvl 1–5', text: 'Your window — W (true damage) + aggression bully a weak Kayle.' },
+        { when: 'Lvl 6', text: 'Your window — E-stun + R; deny her CS to delay her spikes.' },
+        { when: 'Lvl 11', text: 'Kayle’s spike — ranged form out-ranges you and kites.' },
+        { when: '2+ items', text: 'Kayle takes over — ranged + untouchable R win the game.' }
+      ],
+      wants: {
+        you: ['W (true damage) + aggression bully her weak early', 'Deny her CS + XP; E-stun + R to kill her', 'Build a lead before her level 11 spike'],
+        foe: ['Survive the brutal early and farm safely', 'Hit level 11 (ranged form) to out-range you', 'Reach level 16 R and become untouchable']
+      },
+      early: "Levels 1-5 are yours — Kayle is the weakest early-game champion, and your W (Haymaker) true damage + aggression + E-stun bully her. Bank grit, W-true-damage her, and trap her under tower; deny her CS and XP relentlessly. You out-brawl her hard while she's melee and weak.",
+      mid: "Free-kill territory — E-stun her (Facebreaker), W with loaded grit, and R her at 6; she has no escape and dies to your combo. Perma-zone her off the wave and deny her farm. You must build a lead so big she's irrelevant before level 11, because her ranged form will out-range you.",
+      late: "Kayle takes over — at level 11 her ranged form out-ranges you and kites, and by 16 her R makes her untouchable. The lane is even despite you crushing the early, because she wins the GAME if she scales. You had to snowball and let your team end early; if she farmed, you lose late. Deny her relentlessly.",
+      whys: [
+        "Kayle is the weakest early champ. W (true damage) + aggression bully her. Levels 1-5 are yours.",
+        "Trap her under tower, deny CS + XP. You out-brawl a melee Kayle hard.",
+        "Your W true damage out-trades her. E-stun + R.",
+        "Perma-zone her off the wave. Build a huge lead before level 11.",
+        "Your window — E-stun + R; deny her CS to delay her spikes.",
+        "Kayle's spike — ranged form out-ranges you and kites.",
+        "Kayle takes over — ranged + untouchable R win the game. Snowball early."
+      ]
+    },
+    {
+      a: 'sett', b: 'akali',
+      win: ['Akali', 'Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Akali'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Akali’s window — her Q poke + shroud chip your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) delete a squishy Akali.' },
+        { when: '1st item', text: 'Build tanky — her burst can’t kill you; E-stun and W her.' },
+        { when: '2+ items', text: 'Akali takes over — her item spikes out-burst you.' }
+      ],
+      wants: {
+        you: ['E-stun her — a caught Akali folds to your W', 'Build tanky to survive her R + shroud all-in', 'Kill her before her assassin item spikes'],
+        foe: ['Poke with Q and hide in W (shroud) to reset', 'All-in with E + R dashes at level 6', 'Scale into a burst assassin with item spikes']
+      },
+      early: "Akali pokes you with Q and resets in W (shroud) — levels 1-2 are her poke window. Build tanky so her poke chips but can't kill you, bank grit, and look for your E-stun (Facebreaker). She's a squishy assassin with no sustain; once you catch her with E, she's in big trouble.",
+      mid: "Your window — E-stun her (a stun beats her dashes and shroud-reset), W with loaded grit for true damage, and a squishy Akali folds. At 6 her R + shroud all-in chunks you, but your tankiness + R survive it. Build tanky, deny her CS, and punish her every time she steps up to poke.",
+      late: "Akali takes over at two items — her assassin item spikes let her burst even a tank from shroud before your grit matters. The lane is favoured because you out-brawl her early-mid (E-stun beats her mobility); convert it. Snowball off the E-stun + W all-ins, deny her farm, and end before her item spikes flip it.",
+      whys: [
+        "Akali pokes with Q + shroud. Build tanky. Levels 1-2 are hers.",
+        "She's a squishy assassin with no sustain. Look for your E-stun.",
+        "Your window — E-stun + W (true damage) delete a squishy Akali.",
+        "A stun beats her dashes and shroud-reset. Deny her CS.",
+        "Her R + shroud all-in chunks you, but your tankiness + R survive it.",
+        "Build tanky — her burst can't kill you; E-stun and W her.",
+        "Akali takes over — her item spikes out-burst you. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'cassiopeia',
+      win: ['Cassiopeia', 'Cassiopeia', 'Skill', 'Skill', 'Skill', 'Cassiopeia', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Cassio’s window — her Q/W poison pokes you; W grounds you.' },
+        { when: 'Lvl 6', text: 'Her grounding (W) stops your Q chase — buy MR.' },
+        { when: '1st item', text: 'She out-pokes you; catch her with E when her W is down.' },
+        { when: '2+ items', text: 'Cassiopeia takes over — Rylai’s / Liandry’s kite and ground you.' }
+      ],
+      wants: {
+        you: ['E-stun her when she steps up — a caught Cassio folds', 'Buy MR; don’t get grounded out of your approach', 'Bank grit through her poison; close the gap'],
+        foe: ['Poke you out with Q/W poison (%-HP) from range', 'Ground you with W (Miasma) to stop your chase', 'Scale into an unkitable DPS mage']
+      },
+      early: "Cassiopeia is tricky — she pokes you with Q/W poison (%-HP magic) from range, and her W (Miasma) grounds you, stopping your Q move-speed chase and keeping you off her. Levels 1-3 are her poke window. Bank grit, buy MR, and don't path through her poison. She out-pokes you, so play for the catch.",
+      mid: "Your window is catching her — if you E-stun Cassiopeia, a squishy mage folds to your W + R. But her grounding (W Miasma) stops your approach, and her poison chips you down. Look for the E-stun when her W is on cooldown, then W with loaded grit. Buy MR and close the gap when you can.",
+      late: "Cassiopeia takes over at two items — Rylai's + Liandry's let her kite and ground you forever, out-DPSing you with poison. The lane is tricky because she out-pokes you and grounds your approach. Buy MR, look for E-stun windows when her W is down, and ask your jungler for help. If she kites freely, she edges it.",
+      whys: [
+        "Cassio's Q/W poison pokes you; her W grounds you. Buy MR. Levels 1-3 are hers.",
+        "Don't path through her poison. She out-pokes you — play for the catch.",
+        "Your window — E-stun her when she steps up; a caught Cassio folds.",
+        "Her grounding (W) stops your Q chase. Look for E when her W is down.",
+        "Her grounding (W) stops your Q chase — buy MR.",
+        "She out-pokes you; catch her with E when her W is down.",
+        "Cassiopeia takes over — Rylai's / Liandry's kite and ground you. Ask for jungle."
+      ]
+    },
+    {
+      a: 'sett', b: 'galio',
+      win: ['Galio', 'Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Galio’s window — his Q (windblast) pokes your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) out-brawl a tanky mage.' },
+        { when: '1st item', text: 'Buy MR; your W true damage cuts his tankiness.' },
+        { when: 'Late', text: 'You win the lane 1v1 — he’s a global teamfighter; deny his roams.' }
+      ],
+      wants: {
+        you: ['Bank grit, then E-stun + W (true damage) him', 'Buy MR; bait his W (damage reduction)', 'Punish the wave when he R-globals away'],
+        foe: ['Poke with Q (windblast) and soak with W', 'Taunt you with a channeled W (Shield of Durand)', 'Roam / impact the map with global R']
+      },
+      early: "Galio pokes you with Q (windblast) and soaks with W — levels 1-2 are his poke window. Bank grit, buy MR, take his Q poke to load your W, and don't dump your damage into a raised W (it taunts). He's a tanky control mage with low kill pressure on you; wait for your level-3 spike.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit for true damage, and out-brawl a tanky mage; bait his W block first. Your W true damage cuts his tankiness. His R (Hero's Entrance) is a global peel/engage — when he ults away to help a teammate, shove and punish his wave.",
+      late: "You win the lane 1v1 — your W true damage + E-stun out-brawl him, and he's a teamfight frontliner with global presence, not a duelist. The game decides in fights where his R matters, but in the side lane you dominate. Buy MR, deny his roam value, and snowball your grit pressure.",
+      whys: [
+        "Galio pokes with Q (windblast). Buy MR. Levels 1-2 are his.",
+        "Take his Q poke to load your W. Don't dump damage into a raised W (taunt).",
+        "Your window — E-stun + W (true damage) out-brawl a tanky mage.",
+        "Bait his W block first. Your W true damage cuts his tankiness.",
+        "His R is a global peel — when he ults away, punish the wave.",
+        "Buy MR; your W true damage cuts his tankiness.",
+        "You win the lane 1v1 — he's a global teamfighter; deny his roams."
+      ]
+    },
+    {
+      a: 'sett', b: 'gwen',
+      win: ['Sett', 'Sett', 'Skill', 'Skill', 'Gwen', 'Gwen', 'Gwen'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — W (true damage) + aggression bully a weak Gwen.' },
+        { when: 'Lvl 6', text: 'Gwen’s window — her W (mist) dodges your E-stun and zones you.' },
+        { when: '1st item', text: 'Gwen’s spike — her Q true damage shreds you in her mist.' },
+        { when: '2+ items', text: 'Gwen takes over — AP + true damage out-DPS you.' }
+      ],
+      wants: {
+        you: ['W (true damage) bully her weak early before mist', 'E-stun + W before her W (mist) is online', 'Win the early before her AP scaling'],
+        foe: ['Hide in W (mist) — dodges your E-stun, untargetable', 'Shred you with Q (true damage) and scale', 'Out-scale into a tank-shredding AP bruiser']
+      },
+      early: "Levels 1-2 are yours — Gwen is weak early and scales into a tank-shredder, so punish her now. Your W (Haymaker) true damage + aggression out-brawl her before her W (mist) is a factor. Bank grit, W her, and deny her CS. Her Q deals true damage, but early she can't out-trade you.",
+      mid: "Gwen's window — her W (Hallowed Mist) makes her untargetable from outside the cloud, dodging your E-stun and zoning you, and her Q true damage shreds you. E-stun + W her BEFORE she has W up; once she's in mist, you can't lock her down. Fight her outside the mist, and don't chase her into the cloud.",
+      late: "Gwen takes over at two items — her AP + true damage out-DPS your grit, and her mist dodges your stun and keeps her safe. The lane is even-ish because you crush her weak early but she out-scales. Snowball your early W + E-stun all-ins, deny her farm, and end before her scaling. If she's farmed, it's her lane.",
+      whys: [
+        "Gwen is weak early and scales hard. W (true damage) bully her. Levels 1-2 are yours.",
+        "Her Q is true damage, but early she can't out-trade you. Deny her CS.",
+        "E-stun + W her before her W (mist) is online.",
+        "Once she's in mist, you can't lock her down. Fight outside it.",
+        "Gwen's window — her W (mist) dodges your E-stun and zones you.",
+        "Gwen's spike — her Q true damage shreds you in her mist.",
+        "Gwen takes over — AP + true damage out-DPS you. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'jayce',
+      win: ['Jayce', 'Jayce', 'Skill', 'Sett', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Jayce’s window — his cannon Q + W poke your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch a squishy Jayce.' },
+        { when: '1st item', text: 'A caught Jayce folds — W (true damage) + R delete him.' },
+        { when: 'Late', text: 'You take over — Jayce falls off; your grit + R win.' }
+      ],
+      wants: {
+        you: ['Survive his poke; Q-close + E-stun a squishy Jayce', 'W (true damage) + R delete a caught Jayce', 'Out-scale his falloff with tankiness'],
+        foe: ['Poke from range with cannon Q + W (Hyper Charge)', 'Burst with the melee E-knockback → Q combo', 'Snowball the early poke before you out-scale']
+      },
+      early: "Jayce pokes you hard early — cannon Q (Shock Blast) through W, plus his melee burst combo — so levels 1-2 are his poke window. Bank grit, hug your minions, and don't step into a gate-empowered Shock Blast. He's squishy with no escape, so look for the gap-close once you survive the poke.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close his range, E-stun him (Facebreaker), and W with loaded grit; a caught Jayce folds, and at 6 your R grabs him. Be patient through his poke, then commit when he steps up or whiffs his cannon Q. His poke can't out-trade your grit once you're on him.",
+      late: "You take over — Jayce is a lane bully who falls off, while your W true damage + tankiness + R only grow. His poke can't out-pace your sustain, and any catch deletes him. Survive his level 1-2 poke, look for Q-close + E-stun windows, and crush him from level 3 on. By your item spikes he can't fight you.",
+      whys: [
+        "Jayce pokes hard — cannon Q + W. Hug minions. Levels 1-2 are his.",
+        "Don't step into a gate-empowered Shock Blast. Look for the gap-close.",
+        "Your window — Q-close + E-stun catch a squishy Jayce.",
+        "A caught Jayce folds — W (true damage) + R delete him.",
+        "Be patient — commit when he whiffs his cannon Q.",
+        "A caught Jayce folds — W (true damage) + R delete him.",
+        "You take over — Jayce falls off; your grit + R win."
+      ]
+    },
+    {
+      a: 'sett', b: 'kassadin',
+      win: ['Sett', 'Sett', 'Sett', 'Sett', 'Sett', 'Sett', 'Kassadin'],
+      spikes: [
+        { when: 'Lvl 1–5', text: 'Your window — W (true damage) + aggression bully a weak Kassadin.' },
+        { when: 'Lvl 6', text: 'Your window — E-stun + R before his Riftwalk escape.' },
+        { when: '1st item', text: 'Your W true damage crushes a pre-spike Kassadin.' },
+        { when: '2+ items', text: 'Kassadin takes over — at 16 + items he out-scales the game.' }
+      ],
+      wants: {
+        you: ['W (true damage) + aggression bully his brutal early', 'Deny CS + XP; E-stun + R before his Riftwalk', 'Build a lead before his level 16 spike'],
+        foe: ['Survive lane with Q (spell shield) and farm', 'Blink away with R (Riftwalk) post-6', 'Out-scale into an unkillable late-game assassin']
+      },
+      early: "Levels 1-5 are yours — Kassadin is one of the weakest early champions, and your W (Haymaker) true damage + aggression + E-stun crush him. His Q is a spell shield (blocks one ability, so don't waste your combo into it), but he can't trade with you. Bank grit, bully him off CS, and deny XP.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit, and R him before level 6 (after which his R Riftwalk gives a blink escape). Perma-zone him off the wave and deny his farm. Every level and item you deny delays the hyper-carry he becomes; dive him with jungle help.",
+      late: "Kassadin takes over at two items and level 16 — his Riftwalk burst out-scales the game and he becomes nearly unkillable. The lane is favoured because you crush his early hard; you must convert it. Snowball off the W + E-stun all-ins, deny his farm relentlessly, and end the game before his spike. If he farmed, you lose late.",
+      whys: [
+        "Kassadin is one of the weakest early champs. W + aggression crush him. Levels 1-5 are yours.",
+        "His Q blocks one ability — don't waste your combo into it. Deny CS + XP.",
+        "Your W true damage crushes a pre-spike Kassadin.",
+        "Perma-zone him off the wave. Dive him with jungle help.",
+        "Your window — E-stun + R before his Riftwalk escape.",
+        "Your W true damage crushes a pre-spike Kassadin.",
+        "Kassadin takes over — at 16 + items he out-scales. Snowball hard."
+      ]
+    },
+    {
+      a: 'sett', b: 'lucian',
+      win: ['Lucian', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Lucian’s window — his Q + passive poke; you can’t catch him yet.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch him; W deletes him.' },
+        { when: '1st item', text: 'A caught Lucian folds — build tanky to ignore his poke.' },
+        { when: 'Late', text: 'You edge it — catch him with E; he kites + scales DPS.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close his kite; E-stun him', 'Build tanky to ignore his poke; W deletes him', 'Catch a squishy Lucian when his E dash is down'],
+        foe: ['Poke with Q (line) + passive double-shot', 'Dash around with E (Relentless Pursuit)', 'Kite you and scale into a DPS marksman']
+      },
+      early: "Lucian pokes you with Q + passive double-shot and dashes with E — levels 1-2 are his poke window, and you can't catch him yet. Build tanky so his poke chips but can't kill you, bank grit, and take the chip. He's squishy, so the moment you Q-close and E-stun him, he's in big trouble.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close his kite, E-stun him (Facebreaker) when his E dash is down, and W with loaded grit; a squishy Lucian folds, and at 6 your R grabs him. Build tanky to ignore his poke, and look for the catch when his dash is on cooldown.",
+      late: "You edge it — Lucian pokes and kites, but a marksman can't kill a tanky Sett, and any catch deletes him. Build tanky, close on his E cooldown with Q + E-stun, and W him. He scales as a DPS marksman, so the game is about teamfights; in lane, catch him and snowball. If he kites freely he chips you; if you catch him, he dies.",
+      whys: [
+        "Lucian pokes with Q + passive. You can't catch him yet. Levels 1-2 are his.",
+        "Build tanky so his poke chips but can't kill you. Bank grit.",
+        "Your window — Q-close + E-stun catch him; W deletes him.",
+        "A squishy Lucian folds. At 6 your R grabs him.",
+        "Build tanky to ignore his poke. Catch him when his E is down.",
+        "A caught Lucian folds — build tanky to ignore his poke.",
+        "You edge it — catch him with E; he kites + scales DPS."
       ]
     }
   ];

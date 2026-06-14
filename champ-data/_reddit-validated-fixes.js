@@ -20,7 +20,7 @@
   function disp(s) { return DISP[s] || (s.charAt(0).toUpperCase() + s.slice(1)); }
 
   // ===== hand-set top-lane pairs (verdict + windows) =====
-  var FIX = [
+  var HANDFIX = [
     { a: 'darius',   b: 'garen',       da: 'FAVOURED', db: 'TRICKY',   win: ['Darius', 'Darius', 'Darius', 'Darius', 'Darius', 'Skill', 'Garen'] },
     { a: 'camille',  b: 'fiora',       da: 'FAVOURED', db: 'TRICKY',   win: ['Fiora', 'Skill', 'Skill', 'Skill', 'Skill', 'Camille', 'Camille'] },
     // (renekton/darius removed — real lolalytics has Darius FAVOURED 53.2%, not Renekton; handled in CONTENT)
@@ -165,27 +165,41 @@
   // lolalytics page, so a later champ's mirror write never clobbers a real number
   // (e.g. aatrox/vs/darius = 51.8 and darius/vs/aatrox = 50.97 are independent
   // samples — each page keeps its own real value instead of forcing 100-x).
-  var REAL = {};
-  Object.keys(WR).forEach(function (champ) {
-    var m = WR[champ];
-    Object.keys(m).forEach(function (en) {
-      var wr = m[en], da = diffFromWr(wr);
-      window.MC_REAL_WR[champ] = window.MC_REAL_WR[champ] || {}; window.MC_REAL_WR[champ][en] = wr; REAL[champ + '|' + en] = 1;
-      window.MC_REAL_WR[en] = window.MC_REAL_WR[en] || {};
-      if (!REAL[en + '|' + champ]) window.MC_REAL_WR[en][champ] = Math.round((100 - wr) * 10) / 10;
-      // Aatrox-specific early-skip auto-window (his "weakest early" pattern). Other
-      // champs (Darius is an early bully) get diff-only here — their windows come
-      // from the bespoke CONTENT entries below, which are early-weighted instead.
-      var win = (champ === 'aatrox' && da === 'FAVOURED')
-        ? ['Skill', 'Skill', disp(champ), disp(champ), disp(champ), disp(champ), SCALER[en] ? disp(en) : 'Skill']
-        : null;
-      // fwd: this verdict is forward-only — each champion's page shows its OWN
-      // lolalytics number/verdict. The reverse page gets ITS verdict from the
-      // opponent's own table (once that champ is processed), not a mirror guess,
-      // since the two pages are independent samples that can straddle a boundary.
-      FIX.push({ a: champ, b: en, da: da, db: mirrorDiff(da), win: win, fwd: true });
-    });
-  });
+  // ingestTables() rebuilds the WR-derived FIX entries from the built-in WR object
+  // PLUS any externally-appended per-champion tables in window.MC_WR_TABLES
+  // (champ-data/content/<champ>.js files push their 68-opponent table there). It is
+  // called fresh on every apply() tick so late-loaded champion files are picked up
+  // by the retry loop. MC_REAL_WR is (re)written here; forward writes are
+  // unconditional so each champ's OWN page number always wins, while the mirror
+  // write is guarded so it never clobbers an opponent's real number.
+  function ingestTables() {
+    var out = [], REAL = {};
+    function ingest(champ, m) {
+      Object.keys(m).forEach(function (en) {
+        var wr = m[en], da = diffFromWr(wr);
+        window.MC_REAL_WR[champ] = window.MC_REAL_WR[champ] || {}; window.MC_REAL_WR[champ][en] = wr; REAL[champ + '|' + en] = 1;
+        window.MC_REAL_WR[en] = window.MC_REAL_WR[en] || {};
+        if (!REAL[en + '|' + champ]) window.MC_REAL_WR[en][champ] = Math.round((100 - wr) * 10) / 10;
+        // Aatrox-specific early-skip auto-window (his "weakest early" pattern). Other
+        // champs (Darius is an early bully) get diff-only here — their windows come
+        // from the bespoke CONTENT entries, which are early-weighted instead.
+        var win = (champ === 'aatrox' && da === 'FAVOURED')
+          ? ['Skill', 'Skill', disp(champ), disp(champ), disp(champ), disp(champ), SCALER[en] ? disp(en) : 'Skill']
+          : null;
+        // fwd: forward-only verdict — each champion's page shows its OWN lolalytics
+        // number/verdict; the reverse page gets ITS verdict from the opponent's own
+        // table (independent samples that can straddle a boundary).
+        out.push({ a: champ, b: en, da: da, db: mirrorDiff(da), win: win, fwd: true });
+      });
+    }
+    Object.keys(WR).forEach(function (c) { ingest(c, WR[c]); });
+    var ext = window.MC_WR_TABLES || {};
+    Object.keys(ext).forEach(function (c) { ingest(c, ext[c]); });
+    return out;
+  }
+  // eager pass so the built-in MC_REAL_WR numbers exist synchronously at load
+  // (independent of CHAMP_FULL timing); apply() re-runs it for external tables.
+  ingestTables();
 
   // ===== per-matchup BREAKDOWN + level-by-level WHY rewrites =====
   // Bespoke, level-specific text for matchups whose call changed (so the writeup
@@ -10855,20 +10869,45 @@
     }
   ];
   window.MC_MATCHUP_EXTRA = window.MC_MATCHUP_EXTRA || {};
+  // strip a wrapping pair of straight double-quotes some generated entries carry
+  // (author occasionally wrapped a paragraph in quotes); safe — only removes when
+  // BOTH first and last non-space chars are '"'.
+  function clean(s) {
+    if (typeof s !== 'string') return s;
+    var t = s.trim();
+    // strip wrapping double-quotes, plain ("...") or backslash-escaped (\"...\") —
+    // a few-shot artifact some generated entries carry, sometimes NESTED ("\"...\"").
+    // Loop until stable; only strips when BOTH ends match, so mid-text quotes are safe.
+    for (var i = 0; i < 4; i++) {
+      var before = t;
+      if (t.length > 3 && t.slice(0, 2) === '\\"' && t.slice(-2) === '\\"') t = t.slice(2, -2).trim();
+      if (t.length > 1 && t.charAt(0) === '"' && t.charAt(t.length - 1) === '"') t = t.slice(1, -1).trim();
+      if (t === before) break;
+    }
+    return t;
+  }
+  function cleanSpikes(a) { return a ? a.map(function (sp) { return { when: sp.when, text: clean(sp.text) }; }) : null; }
+  function cleanWants(w) { return w ? { you: (w.you || []).map(clean), foe: (w.foe || []).map(clean) } : null; }
   function applyContent() {
     var F = window.CHAMP_FULL; if (!F) return;
-    CONTENT.forEach(function (c) {
+    // built-in CONTENT plus any externally-appended per-champion entries.
+    // Dedupe by a|b (last wins) — the DC executes <helmet> scripts twice, so the
+    // per-champion files' .push() lands their entries twice; this keeps apply idempotent.
+    var RAW = CONTENT.concat(window.MC_CONTENT_EXTRA || []);
+    var seen = {}, ALL = [];
+    for (var ri = RAW.length - 1; ri >= 0; ri--) { var rc = RAW[ri], rk = rc.a + '|' + rc.b; if (!seen[rk]) { seen[rk] = 1; ALL.push(rc); } }
+    ALL.forEach(function (c) {
       // per-matchup "What X wants" + power-spike windows (read by renderVals)
       if (c.wants || c.spikes) {
         window.MC_MATCHUP_EXTRA[c.a] = window.MC_MATCHUP_EXTRA[c.a] || {};
-        window.MC_MATCHUP_EXTRA[c.a][c.b] = { wants: c.wants || null, spikes: c.spikes || null };
+        window.MC_MATCHUP_EXTRA[c.a][c.b] = { wants: cleanWants(c.wants), spikes: cleanSpikes(c.spikes) };
       }
       var e = F[c.a] && F[c.a][c.b]; if (!e) return;
-      if (e.breakdown) { if (c.early) e.breakdown.early = c.early; if (c.mid) e.breakdown.mid = c.mid; if (c.late) e.breakdown.late = c.late; }
+      if (e.breakdown) { if (c.early) e.breakdown.early = clean(c.early); if (c.mid) e.breakdown.mid = clean(c.mid); if (c.late) e.breakdown.late = clean(c.late); }
       if (e.phases) e.phases.forEach(function (p) {
         var i = stageIdx(p.label); if (i < 0) return;
         if (c.win && c.win[i]) p.side = c.win[i];   // keep windows locked to the whys
-        if (c.whys && c.whys[i]) p.why = c.whys[i];
+        if (c.whys && c.whys[i]) p.why = clean(c.whys[i]);
       });
       // Mirror the favour-timeline SIDE onto the reverse matchup so b-vs-a shows the
       // same windows (win[] uses absolute display names, so it reads correctly from
@@ -10901,6 +10940,7 @@
   function apply() {
     var F = window.CHAMP_FULL, D = window.CHAMP_DATA;
     if (!F && !D) return;
+    var FIX = HANDFIX.concat(ingestTables());
     FIX.forEach(function (f) {
       [F, D].forEach(function (store) {
         patch(store, f.a, f.b, f.da, f.win);

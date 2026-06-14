@@ -124,7 +124,9 @@
     // slow E. Spikes hard at 6 (R = a wall of tentacles).
     illaoi: {
       darius: 51.3, garen: 47.9, aatrox: 53.5, drmundo: 52.8, fiora: 53.4, teemo: 41.1,
-      renekton: 56.4, sett: 53.9, mordekaiser: 49.3, jax: 56.9, nasus: 57.2, vayne: 52.7
+      renekton: 56.4, sett: 53.9, mordekaiser: 49.3, jax: 56.9, nasus: 57.2, vayne: 52.7,
+      irelia: 55.7, riven: 58.3, sion: 46.3, ornn: 52.0, malphite: 54.0, pantheon: 50.2,
+      kled: 55.9, urgot: 48.2, olaf: 55.2, tryndamere: 48.0, vladimir: 50.3, gnar: 55.6
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -7597,6 +7599,318 @@
         "One E into your tentacles deletes a squishy Vayne.",
         "Catch her with E — a one-item Vayne folds to your tentacles.",
         "Vayne takes over — %-HP true damage shreds you if she scaled. Kill her early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'irelia',
+      win: ['Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Irelia'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even — she’s weak unstacked; set up tentacles, look for E.' },
+        { when: 'Lvl 3–6', text: 'Your window — E her and slam in your tentacles before she stacks.' },
+        { when: '1st item', text: 'Your tentacle DPS out-trades a low-stack Irelia.' },
+        { when: '2+ items', text: 'Irelia takes over — stacked Q resets + true damage kite you.' }
+      ],
+      wants: {
+        you: ['Land E, then slam her in your tentacle field', 'Deny her minion Q-resets and stacks', 'Win the early-mid before her items'],
+        foe: ['Stack passive on minions, then out-DPS you', 'Q-reset around your tentacles to kite', 'Out-scale into a stacked on-hit carry']
+      },
+      early: "Irelia is weak before she stacks her passive, so the early is yours to set up. Level 1-2 is even; place tentacles, poke with Q, and deny her minion Q-resets. Look for your E (Test of Spirit) — a vessel can't kite around your tentacles, and an unstacked Irelia folds to your slams.",
+      mid: "Your window — land E and W in to slam her with tentacles before she's stacked. Her Q resets let her dance, but inside your tentacle field she gets hit from all angles, and your sustained DPS + vessel healing out-trade her. At 6 your R wall makes it brutal. Keep her off CS to delay her item + stack spike.",
+      late: "Irelia takes over at two items — stacked, her Q resets and on-hit true damage let her kite around your tentacles and shred you. The lane is favoured because you crush her early-mid; convert it. Snowball off the E pressure, deny her farm, and end before her stacked carry form flips the duel.",
+      whys: [
+        "Irelia is weak unstacked. Set up tentacles, look for E. Level 1-2 is even.",
+        "Deny her minion Q-resets and stacks. Poke with Q.",
+        "Your window — E her and slam in your tentacles before she stacks.",
+        "A vessel can't kite around your tentacles. Keep her off CS.",
+        "Your R wall makes it brutal — slam her from all angles.",
+        "Your tentacle DPS out-trades a low-stack Irelia.",
+        "Two items in, stacked resets + true damage kite you. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'riven',
+      win: ['Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Riven'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Even — she dashes around; set up tentacles, look for E.' },
+        { when: 'Lvl 2–6', text: 'Your window — E her and slam; she can’t dash out of a vessel.' },
+        { when: '1st item', text: 'Your tentacle DPS out-sustains her combo burst.' },
+        { when: '2+ items', text: 'Riven flips it only if she snowballed — else you dominate.' }
+      ],
+      wants: {
+        you: ['Land E — she can’t dash out of the soul fight', 'Slam her with tentacles + W in your field', 'Out-sustain her burst off vessel healing'],
+        foe: ['Dodge your E with Q dashes + E shield', 'Burst you in a short combo, then disengage', 'Snowball the early before you set up']
+      },
+      early: "Riven dashes around to dodge your E (Test of Spirit) early — level 1 is even, so don't whiff your E on a dashing Riven. Set up tentacles, poke with Q, and wait for a clean E. Once you land it, she's tied to the soul fight and can't dash away from your tentacle slams.",
+      mid: "Your window — E her, W in, and slam her with tentacles in your field. Her combo burst is short, but your sustained tentacle DPS + vessel healing out-last it, and she can't escape a vessel with her dashes. Punish her after she dumps her combo, when she's stuck in your zone. This is a hard counter once you land E.",
+      late: "Riven only flips it if she snowballed a big item lead — otherwise you dominate. Her combo can't out-burst your tentacle DPS + healing, and her mobility doesn't escape a soul vessel. Land E, fight in your tentacles, and crush her; she's one of your best matchups when you control the engage. Don't whiff E into her dashes.",
+      whys: [
+        "Riven dashes to dodge your E. Don't whiff it. Level 1 is even — set up tentacles.",
+        "Wait for a clean E. Once landed, she's tied to the soul fight.",
+        "Your window — E her and slam; she can't dash out of a vessel.",
+        "Punish her after she dumps her combo, when she's stuck in your zone.",
+        "Your R wall + tentacle DPS out-last her short burst.",
+        "Your tentacle DPS out-sustains her combo burst.",
+        "Riven flips it only if she snowballed — else you dominate. Don't whiff E."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'sion',
+      win: ['Sion', 'Sion', 'Skill', 'Skill', 'Sion', 'Skill', 'Illaoi'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Sion’s window — his charged Q knockup interrupts your combo.' },
+        { when: 'Lvl 6', text: 'Sion’s window — his W shield + Q out-tank your tentacles.' },
+        { when: '1st item', text: 'He out-tanks your DPS; land E and fight in tentacles anyway.' },
+        { when: 'Late', text: 'Tricky — he out-tanks you; he’s a teamfight engage tank.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacles', 'Dodge his charged Q (it knocks you out of position)', 'Out-DPS his shield in your tentacle field'],
+        foe: ['Charged Q knockup to interrupt your W/combo', 'Tank your tentacles with W shield + HP', 'Become a teamfight engage tank with R']
+      },
+      early: "Sion is tricky for you — his charged Q is a knockup that interrupts your W dash and knocks you out of position, and his W shield + HP out-tank your tentacle DPS. Levels 1-2 are his. Set up tentacles, dodge his charged Q, and look for your E; you out-trade him only if you fight in your zone and avoid the knockup.",
+      mid: "His W (Soul Furnace) shield soaks your burst, and he just farms to scale into a teamfight tank. Land E and W in to slam him with tentacles, but his shield + HP mean it takes a while. Dodge his Q knockup (it cancels your combo), and don't get knocked away from your tentacle field. It's an uphill tank fight.",
+      late: "It's tricky — Sion out-tanks your tentacle DPS, and he's a teamfight engage tank with a global R, so the lane and the game favour his scaling. Land E and grind him in your zone where you can, but don't expect to solo-kill a tanky Sion. Build to win extended fights in your tentacles and play for objectives; the 1v1 is hard.",
+      whys: [
+        "Sion's charged Q knockup interrupts your W/combo. Dodge it. Levels 1-2 are his.",
+        "His W shield + HP out-tank your tentacle DPS. Set up tentacles, look for E.",
+        "Land E and fight in your tentacles — but his shield makes it slow.",
+        "Don't get knocked away from your tentacle field by his Q.",
+        "His W shield + Q out-tank your tentacles. Grind him in your zone.",
+        "He out-tanks your DPS; land E and fight in tentacles anyway.",
+        "Tricky — he out-tanks you; he's a teamfight engage tank. Play objectives."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'ornn',
+      win: ['Ornn', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Ornn’s window — his brittle (W) + Q poke out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam in your tentacles.' },
+        { when: '1st item', text: 'Even — your tentacle DPS vs his tankiness + sustain.' },
+        { when: 'Late', text: 'Even tank fight — control the field; he out-tanks open ground.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacle field', 'Dodge his Q (pillar) so he can’t brittle-detonate', 'Out-DPS his tankiness in your zone'],
+        foe: ['Brittle you with W, then detonate for bonus + slow', 'Poke with Q and out-sustain your tentacles', 'Scale to an unkillable tank with free upgrades']
+      },
+      early: "Ornn out-trades you early — his brittle (W) makes you take bonus damage he detonates with CC, and his Q pillar pokes. Levels 1-2 are his. Set up tentacles, dodge the Q-pillar so he can't set up the brittle, and look for your E (Test of Spirit). It's a tank-vs-tank lane where his brittle gives him the early edge.",
+      mid: "Your window from level 3 — land E, W in, and slam him with tentacles in your field. His tankiness + free item upgrades make it a slow grind, but your sustained DPS + vessel healing keep pace. Dodge his brittle detonation, fight in your zone, and don't trade into a Q-pillar setup.",
+      late: "It's an even tank fight — your tentacle DPS in your zone versus his tankiness + sustain on open ground. Neither kills the other quickly; control the tentacle field and you edge the extended fight, but his free upgrades out-tank you outside it. Both scale into teamfighters, so the game decides in fights. Land E and grind him in your nest.",
+      whys: [
+        "Ornn's brittle (W) + Q poke out-trade you. Dodge the pillar. Levels 1-2 are his.",
+        "Set up tentacles, look for your E. Don't feed the brittle.",
+        "Your window — E him and slam in your tentacles.",
+        "His tankiness makes it a slow grind — fight in your zone.",
+        "Your R wall + vessel heal keep pace with his tankiness.",
+        "Even — your tentacle DPS vs his tankiness + sustain.",
+        "Even tank fight — control the field; he out-tanks open ground."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'malphite',
+      win: ['Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even — set up tentacles; his armour doesn’t stop your magic.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam; armour doesn’t reduce your kit.' },
+        { when: '1st item', text: 'Your tentacle DPS ignores his armour stacking.' },
+        { when: 'Late', text: 'You out-DPS him in lane; he scales to a teamfight R.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacle field', 'Press your edge — his armour doesn’t reduce your magic damage', 'Win the lane 1v1 he can’t out-tank'],
+        foe: ['Poke with Q (slow) and farm behind the shield', 'Stack armour (less effective vs your magic damage)', 'Scale to a teamfight R (Unstoppable Force)']
+      },
+      early: "Levels 1-2 are even, but this is a good lane — much of your damage (E, tentacle slams) is magic, so Malphite stacking armour does far less against you than against an AD bruiser. Set up tentacles, poke with Q, and look for your E. His Q poke + shield are his only tools; he can't out-tank your magic tentacle DPS.",
+      mid: "Your window — land E, W in, and slam him with tentacles. His armour barely reduces your kit, and he has no kill pressure, so you out-DPS and out-pressure him in your zone. Keep denying his farm; he's a teamfight scaler with no answer to your tentacle field in the 1v1.",
+      late: "You out-DPS him in lane — your magic damage ignores his armour, and your tentacles crush him in your zone. Malphite scales into a teamfight R (Unstoppable Force) threat, so the game decides in fights, but in the side lane you dominate. Snowball your tentacle pressure and deny his farm.",
+      whys: [
+        "Even — your magic damage ignores his armour. Set up tentacles, look for E. Level 1-2.",
+        "His Q poke + shield are his only tools. Poke with Q.",
+        "Your window — E him and slam; armour doesn't reduce your kit.",
+        "He can't out-tank your magic tentacle DPS. Deny his farm.",
+        "Your R wall crushes him — armour barely helps him.",
+        "Your tentacle DPS ignores his armour stacking.",
+        "You out-DPS him in lane; he scales to a teamfight R."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'pantheon',
+      win: ['Pantheon', 'Pantheon', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Pantheon’s window — his Q poke + W stun bully your early.' },
+        { when: 'Lvl 4–6', text: 'Your window — E him and slam; he falls off, you scale.' },
+        { when: '1st item', text: 'Your tentacle DPS out-scales his fading early.' },
+        { when: 'Late', text: 'You take over — Pantheon has no late; your tentacles win.' }
+      ],
+      wants: {
+        you: ['Survive his early poke + stun; set up tentacles', 'Land E, then slam him in your tentacle field', 'Out-scale his falloff with tentacle DPS'],
+        foe: ['Bully your early with Q (spear) + W (stun)', 'Block your tentacle slams with E (Aegis)', 'Roam with R before falling off']
+      },
+      early: "Pantheon bullies your early — his Q spear pokes, his W is a point-click stun, and his E (Aegis) blocks your tentacle slams from one direction. Levels 1-2 are his. Set up tentacles, dodge the W-stun-into-burst, and look for your E; accept some poke and don't over-commit while he's strong.",
+      mid: "Levels 4-6 swing to you — Pantheon is front-loaded and falls off, while your tentacle DPS + sustain grow. Land E, W in, and slam him in your zone; angle your tentacles so his E-block faces the wrong way. At 6 your R wall makes it brutal. Watch his R roam if he can't kill you.",
+      late: "You take over — Pantheon has essentially no late game while your tentacles only get stronger. Survive his level 1-2 poke window, land E from level 4 on, and crush him in your zone. The lane flips decisively once you weather his early peak; by your item spikes he can't fight you.",
+      whys: [
+        "Pantheon's Q + W stun bully your early. Set up tentacles. Levels 1-2 are his.",
+        "His E (Aegis) blocks your slams from one direction. Dodge the W-stun.",
+        "Your window — E him and slam; he falls off, you scale.",
+        "Angle your tentacles so his E-block faces the wrong way.",
+        "Your R wall makes it brutal. Watch his R roam.",
+        "Your tentacle DPS out-scales his fading early.",
+        "You take over — Pantheon has no late; your tentacles win."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'kled',
+      win: ['Kled', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Kled’s window — mounted aggression + grab bully your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him, dismount him, and slam in your tentacles.' },
+        { when: '1st item', text: 'Your tentacle DPS out-scales his fading aggression.' },
+        { when: 'Late', text: 'You take over — Kled falls off; your tentacles dominate.' }
+      ],
+      wants: {
+        you: ['Survive his mounted early; set up tentacles', 'Land E, then slam him — dismounted Kled folds', 'Out-scale his falloff with tentacle DPS'],
+        foe: ['Bully your early while mounted (Skaarl)', 'Grab you with Q out of your tentacles', 'Snowball before you out-scale him']
+      },
+      early: "Mounted Kled bullies your early — his Q (Beartrap) grabs you out of your tentacles and his W stacks courage for burst. Levels 1-2 are his. Set up tentacles, don't feed the grab, and look for your E; accept some poke and survive his peak aggression while his courage is stacked.",
+      mid: "Levels 3-6 swing to you — land E, W in, and slam him in your zone. Trade enough to dismount him; off Skaarl he's weak, and a dismounted Kled in your tentacle field folds to your slams + vessel healing. At 6 your R wall makes it brutal. Don't let him remount for free.",
+      late: "You take over — Kled is a front-loaded early bully who falls off, while your tentacles only get stronger. Survive his mounted early, land E, and crush him in your zone from level 3 on. By your item spikes his aggression can't out-trade your sustained tentacle DPS. The lane flips once you weather his peak.",
+      whys: [
+        "Mounted Kled's Q grab pulls you out of your tentacles. Don't feed it. Levels 1-2 are his.",
+        "Set up tentacles, survive his courage burst. Look for your E.",
+        "Your window — E him, dismount him, and slam in your tentacles.",
+        "A dismounted Kled folds to your slams + vessel healing.",
+        "Your R wall makes it brutal. Don't let him remount free.",
+        "Your tentacle DPS out-scales his fading aggression.",
+        "You take over — Kled falls off; your tentacles dominate."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'urgot',
+      win: ['Urgot', 'Urgot', 'Skill', 'Skill', 'Urgot', 'Skill', 'Illaoi'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Urgot’s window — his W (shotgun) + Q out-trade you.' },
+        { when: 'Lvl 6', text: 'His R executes you off % missing HP — stay healthy.' },
+        { when: '1st item', text: 'He out-trades you; land E and fight in tentacles anyway.' },
+        { when: 'Late', text: 'Tricky — his shotgun shred + execute vs your tentacle DPS.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacles', 'Stay above his R execute threshold', 'Out-sustain his shotgun off vessel healing'],
+        foe: ['Out-trade with W (shotgun knees) + Q poke', 'Flip you with E out of your tentacle field', 'Execute you with R when you drop low']
+      },
+      early: "Urgot out-trades you — his W (shotgun knees) shreds you up close, his Q pokes, and his E flips you OUT of your tentacle field. Levels 1-3 are his. Set up tentacles, don't sit in his W stance, and look for your E; he has the trade advantage early, so play around your tentacles and don't get flipped out.",
+      mid: "His R (Fear Beyond Death) executes you below a % missing-HP threshold and refreshes, so stay healthy — a chunked Illaoi is in execute range. Don't get E-flipped out of your zone into his shotgun. Land E, W in, and slam him in your tentacles where your sustained DPS + vessel healing can out-last his trades.",
+      late: "It's tricky — Urgot's shotgun shred + execute out-trade you, and his E-flip drags you off your tentacles. Stay above his execute line, land E, and grind him in your zone where your tentacle DPS holds. If he flips you out and shreds you, he wins; if you control the tentacle field, you can out-sustain. Look for jungle help.",
+      whys: [
+        "Urgot's W (shotgun) + Q out-trade you. Don't sit in his stance. Levels 1-3 are his.",
+        "His E flips you OUT of your tentacle field. Play around your tentacles.",
+        "Land E and fight in tentacles anyway — out-sustain his trades there.",
+        "Stay healthy — his R executes you off % missing HP.",
+        "Don't get E-flipped into his shotgun. Slam him in your zone.",
+        "He out-trades you; land E and fight in tentacles anyway.",
+        "Tricky — his shotgun + execute vs your tentacle DPS. Look for jungle."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'olaf',
+      win: ['Olaf', 'Skill', 'Illaoi', 'Illaoi', 'Olaf', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Olaf’s window — his axe + reckless DPS out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam in your tentacles.' },
+        { when: 'Lvl 6', text: 'His R goes CC-immune — your E still creates the vessel, slam him.' },
+        { when: 'Late', text: 'You edge it — out-sustain his lifesteal in your tentacle field.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacles', 'Out-sustain his reckless trades off vessel healing', 'Fight in your zone where tentacles out-DPS him'],
+        foe: ['Pick up his axe (Q) to slow and out-trade you', 'Ramp attack speed + lifesteal as he drops low', 'Go CC-immune with R for an all-in']
+      },
+      early: "Olaf out-trades you early — his axe (Q) slows and his ramping attack speed + lifesteal beat your poke. Levels 1-2 are his. Set up tentacles, dodge his axe, and look for your E (Test of Spirit); don't brawl into his reckless DPS before your tentacles and E are set up.",
+      mid: "Your window from level 3 — land E, W in, and slam him in your tentacle field. His R (Ragnarok) makes him CC-immune, but your E still creates the vessel and your tentacles still slam him — the soul fight doesn't need CC. Out-sustain his lifesteal with vessel healing, and fight only in your zone where your DPS out-paces his.",
+      late: "You edge it — in your tentacle field your sustained DPS + vessel healing out-last his reckless lifesteal trades. His R CC-immunity doesn't escape the soul fight. Land E, drag him into your tentacles, and out-sustain him; on open ground his DPS is dangerous, but in your nest you win the attrition.",
+      whys: [
+        "Olaf's axe + reckless DPS out-trade you. Dodge the axe. Levels 1-2 are his.",
+        "Set up tentacles, look for your E. Don't brawl into his ramping DPS.",
+        "Your window — E him and slam in your tentacles.",
+        "His R goes CC-immune — but your E still creates the vessel. Slam him.",
+        "Out-sustain his lifesteal with vessel healing in your zone.",
+        "Your R wall + vessel heal out-last his reckless trades.",
+        "You edge it — out-sustain his lifesteal in your tentacle field."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'tryndamere',
+      win: ['Tryndamere', 'Tryndamere', 'Skill', 'Skill', 'Tryndamere', 'Skill', 'Illaoi'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Trynd’s window — his spin mobility dodges your E; crit DPS shreds you.' },
+        { when: 'Lvl 6', text: 'His R (Undying Rage) survives the soul fight — he can’t die.' },
+        { when: '1st item', text: 'His crit DPS out-trades you; land E to pin him if you can.' },
+        { when: '2+ items', text: 'Tryndamere takes over — crit + R out-duel you.' }
+      ],
+      wants: {
+        you: ['Land E when his E (spin) is down — it dodges your E', 'Fight in your tentacles; out-sustain off the vessel', 'Survive his crit DPS; ask jungler to help land E'],
+        foe: ['Spin (E) to dodge your E and crit you', 'Reduce your damage with W; ramp crit DPS', 'Survive the soul fight with R (can’t die 5s)']
+      },
+      early: "Tryndamere is tricky — his E (Spinning Slash) mobility dodges your slow E (Test of Spirit), and his crit DPS shreds you once his fury ramps. Levels 1-3 are his. Set up tentacles, fight him at low fury, and try to land E when his spin is on cooldown; if you can't catch him, you can't punish him.",
+      mid: "His R (Undying Rage) makes him unable to die for 5 seconds, so even if you E him and slam, he survives the soul fight and crits you back. Land E when his E is down, W in, and slam him in your tentacles, but don't expect a clean kill through his R. Out-sustain off the vessel, but his crit DPS is hard to out-trade.",
+      late: "Tryndamere takes over — his crit DPS out-duels your tentacles, his R survives your burst, and his spin mobility dodges your E. The lane is tricky and his to win if he scaled. Land E when his spin is down to pin him, fight in your tentacles, and ask your jungler for help; without catching his E, you struggle to control him.",
+      whys: [
+        "Trynd's spin (E) dodges your slow E; crit DPS shreds you. Levels 1-3 are his.",
+        "Fight him at low fury. Try to land E when his spin is on cooldown.",
+        "His crit DPS out-trades you; land E to pin him if you can.",
+        "His R survives the soul fight — he can't die for 5s.",
+        "Don't expect a clean kill through his R. Out-sustain off the vessel.",
+        "Land E when his E is down; otherwise you can't punish him.",
+        "Tryndamere takes over — crit + R out-duel you. Ask for jungle help."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'vladimir',
+      win: ['Vladimir', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Vladimir', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Vlad’s window — his Q/E %-HP poke chips you; pool dodges your E.' },
+        { when: 'Lvl 6', text: 'Even — his pool (W) dodges your E + R; buy MR.' },
+        { when: '1st item', text: 'Even — land E when his pool is down; out-sustain his poke.' },
+        { when: '2+ items', text: 'Vladimir takes over — full-AP scaling out-DPS your tentacles.' }
+      ],
+      wants: {
+        you: ['Land E when his pool (W) is down', 'Buy MR; fight in your tentacles', 'Win the early-mid before his AP scaling'],
+        foe: ['Poke with Q/E (%-HP magic) and self-heal', 'Pool (W) your E + R — untargetable', 'Out-scale into a %-HP AP threat']
+      },
+      early: "Vladimir pokes you with Q/E (%-HP magic) and self-heals — levels 1-3 are his poke window, and his Sanguine Pool (W) can dodge your E (Test of Spirit) by going untargetable. Set up tentacles, buy MR, and look to land E when his pool is on cooldown. Don't waste your E into a ready pool.",
+      mid: "It's even — bait his pool out, then land E and W in to slam him in your tentacles. His pool also dodges your R, so time your engage for when W is down. Buy MR, out-sustain his poke off vessel healing, and fight in your zone. Deny his Q stacks to slow his scaling.",
+      late: "Vladimir takes over at two items — full-AP Vlad with Rylai's/Cosmic Drive out-DPS your tentacles and pools away from your E on demand. The lane is even because you can punish his weak early with E, but he out-scales late. Land E on pool cooldowns, build MR, and end before his AP scaling flips it. Don't let him free-scale.",
+      whys: [
+        "Vlad's Q/E %-HP poke chips you; pool dodges your E. Buy MR. Levels 1-3 are his.",
+        "Don't waste E into a ready pool. Set up tentacles, look for the window.",
+        "Your window — land E when his pool is down, then slam him.",
+        "His pool dodges your E + R — time your engage for when W is down.",
+        "Even — bait his pool, then E him. Out-sustain his poke.",
+        "Even — land E on pool cooldowns; out-sustain his poke.",
+        "Vladimir takes over — full-AP scaling out-DPS your tentacles. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'gnar',
+      win: ['Gnar', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Mini Gnar’s window — he pokes and kites your tentacles.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam; a caught Gnar folds.' },
+        { when: 'Mega form', text: 'Mega Gnar’s W stun + R can knock you off — avoid walls.' },
+        { when: 'Late', text: 'You edge it — land E and fight in your tentacle field.' }
+      ],
+      wants: {
+        you: ['Land E (Test of Spirit) — Gnar can’t kite a vessel', 'Fight in your tentacles; avoid Mega Gnar’s wall stun', 'Out-sustain his poke off vessel healing'],
+        foe: ['Poke + kite in Mini form; never enter tentacles', 'Build rage, transform, and W-stun you for burst', 'Use Mega R to knock you off your tentacles']
+      },
+      early: "Mini Gnar pokes and kites your tentacles with his Q boomerang — levels 1-2 are his poke window, and a ranged Gnar tries to never enter your zone. Set up tentacles, take the chip, and look to land E (Test of Spirit); once a vessel exists, his kiting can't escape the soul fight. Watch his rage bar.",
+      mid: "Your window from level 3 — land E and W in to slam him in your field; a caught Gnar (Mini or just-transformed) folds to your tentacles. Don't commit when he's about to go Mega: Mega Gnar's W stuns and his R can knock you off your tentacles into a wall. Time your E to catch him, then out-sustain.",
+      late: "You edge it — land E and fight in your tentacle field where Gnar can't kite, and your sustained DPS + vessel healing out-last him. Respect Mega Gnar's R wall-pin in skirmishes (it removes you from your zone), but in the side lane you control him once you catch his E. Avoid walls and slam him in your nest.",
+      whys: [
+        "Mini Gnar pokes and kites your tentacles. Take the chip. Levels 1-2 are his.",
+        "Look for E — once a vessel exists, his kiting can't escape. Watch his rage.",
+        "Your window — E him and slam; a caught Gnar folds.",
+        "Don't commit when he's about to go Mega. Time your E.",
+        "Mega Gnar's W stun + R can knock you off — avoid walls.",
+        "Your R wall + vessel heal out-last him. Slam him in your nest.",
+        "You edge it — land E and fight in your tentacle field."
       ]
     }
   ];

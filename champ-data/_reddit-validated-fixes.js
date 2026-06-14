@@ -150,7 +150,9 @@
       shen: 51.6, swain: 47.6, warwick: 52.5, volibear: 50.4, wukong: 52.4, yasuo: 54.8,
       yone: 52.1, yorick: 57.6, gragas: 51.0, gangplank: 49.8, quinn: 52.4, kennen: 48.8,
       chogath: 57.0, tahmkench: 53.9, ksante: 52.2, poppy: 55.1, kayle: 49.4, akali: 52.9,
-      cassiopeia: 47.5, galio: 54.3, gwen: 48.6, jayce: 53.3, kassadin: 53.3, lucian: 52.7
+      cassiopeia: 47.5, galio: 54.3, gwen: 48.6, jayce: 53.3, kassadin: 53.3, lucian: 52.7,
+      maokai: 58.2, sylas: 53.0, graves: 52.6, heimerdinger: 48.0, ryze: 59.7, rumble: 53.4,
+      sejuani: 52.9, zac: 57.4, ziggs: 51.8, nautilus: 53.5, singed: 52.7, trundle: 51.4
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -10327,6 +10329,318 @@
         "Build tanky to ignore his poke. Catch him when his E is down.",
         "A caught Lucian folds — build tanky to ignore his poke.",
         "You edge it — catch him with E; he kites + scales DPS."
+      ]
+    },
+    {
+      a: 'sett', b: 'maokai',
+      win: ['Maokai', 'Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Maokai’s window — his saplings + W root out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) cut his sustain.' },
+        { when: '1st item', text: 'Your W true damage out-trades his sapling sustain.' },
+        { when: 'Late', text: 'You win the brawl — your true damage beats his tankiness.' }
+      ],
+      wants: {
+        you: ['Bank grit, then E-stun + W (true damage) him', 'Dodge his W (root) and sapling (E) zone', 'Out-brawl his sustain with true damage'],
+        foe: ['Poke + sustain with E (saplings) and passive heal', 'Root you with W (Twisted Advance)', 'Out-tank you and lock you down with R (root wave)']
+      },
+      early: "Maokai out-trades you early — his saplings (E) poke and zone, his passive heals, and his W (Twisted Advance) roots you. Levels 1-2 are his. Bank grit, dodge the W root and sapling zone, and use his damage to load your W. Your W true damage is your edge against his sustain.",
+      mid: "Your window from level 3 — E-stun him (Facebreaker), W with loaded grit for true damage, and out-brawl him. His sapling + passive sustain can't out-heal your true damage, which cuts through his tankiness. Dodge his W root and R (root wave), and force the all-in your grit + true damage win.",
+      late: "You win the brawl — your W true damage out-trades a sustain tank like Maokai, who can't out-heal it. His roots can lock you down, so position carefully, but in an extended fight your grit + true damage + R beat his sustain. Snowball your level-3 spike and out-brawl him; he's a teamfight peeler, you're the duelist.",
+      whys: [
+        "Maokai's saplings + W root out-trade your early. Dodge them. Levels 1-2 are his.",
+        "Use his damage to load your W. Your W true damage is your edge.",
+        "Your window — E-stun + W (true damage) cut his sustain.",
+        "His sustain can't out-heal your true damage. Force the all-in.",
+        "Dodge his W root and R (root wave). Your grit + true damage win.",
+        "Your W true damage out-trades his sapling sustain.",
+        "You win the brawl — your true damage beats his tankiness."
+      ]
+    },
+    {
+      a: 'sett', b: 'sylas',
+      win: ['Sylas', 'Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Sylas'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Sylas’s window — his Q poke + W heal out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) out-brawl him.' },
+        { when: '1st item', text: 'Your W true damage out-trades his W heal; buy MR.' },
+        { when: '2+ items', text: 'Sylas takes over — AP sustain + mobility out-scale you.' }
+      ],
+      wants: {
+        you: ['Bank grit, then E-stun + W (true damage) him', 'Buy MR; out-brawl his W heal', 'Don’t feed him your R (he can steal it)'],
+        foe: ['Poke with Q (double whip) and heal with W', 'Dash + chain-stun you with E', 'Steal and turn your R against you']
+      },
+      early: "Sylas pokes you with Q (double whip) and heals off it (W) — levels 1-2 favour his poke-and-sustain. Bank grit, buy MR, and use his poke to load your W. His E is a dash + chain stun, so don't get caught, but he has no burst on a tanky Sett. Wait for your level-3 spike.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit for true damage, and out-brawl his W heal; your true damage cuts through his sustain. His R can steal YOUR R (Show Stopper), so bait it or fight when it's down. Buy MR, and force the all-in your grit + true damage win.",
+      late: "Sylas takes over at two items — AP sustain + mobility out-scale your grit, and his W out-heals you in extended fights. The lane is favoured because you out-brawl his early-mid (E-stun + true damage); convert it. Snowball off the E-stun + W all-ins, build MR, and end before his items flip it. Don't feed him a stolen R.",
+      whys: [
+        "Sylas pokes with Q + heals with W. Buy MR. Levels 1-2 are his.",
+        "His E is a dash + chain stun, but no burst on a tanky Sett. Wait for your spike.",
+        "Your window — E-stun + W (true damage) out-brawl him.",
+        "Your true damage cuts through his W heal. His R can steal yours — bait it.",
+        "Buy MR; force the all-in your grit + true damage win.",
+        "Your W true damage out-trades his W heal; buy MR.",
+        "Sylas takes over — AP sustain + mobility out-scale you. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'graves',
+      win: ['Graves', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Graves'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Graves’s window — his shotgun Q burst + E dash out-trade you.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch a squishy Graves.' },
+        { when: '1st item', text: 'A caught Graves folds — W (true damage) + R delete him.' },
+        { when: '2+ items', text: 'Graves takes over — his DPS scaling out-trades your grit.' }
+      ],
+      wants: {
+        you: ['Bank grit from his shotgun, then Q-close + E-stun', 'W (true damage) + R delete a caught Graves', 'Win the early-mid before his DPS scaling'],
+        foe: ['Burst you with shotgun Q + E (dash + armor)', 'Blind + slow you with W (Smoke Screen)', 'Out-trade you late with his marksman DPS']
+      },
+      early: "Graves out-trades you early — his shotgun Q is heavy burst, his E dashes + stacks armour, and his W (Smoke Screen) blinds you. Levels 1-2 are his. Bank grit from his shotgun (use his damage to load your W), don't sit in his smoke, and survive. He's squishy, so look for the gap-close.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close, E-stun him (Facebreaker) when his E dash is down, and W with loaded grit; a caught Graves folds, and at 6 your R grabs him. Bait his E, then commit. Don't dump your combo in his smoke (it blinds your autos), but your W true damage + R delete him.",
+      late: "Graves takes over at two items — his marksman DPS out-trades your grit once itemized. The lane is favoured because you can punish him hard if you catch him; convert it. Q-close + E-stun him, W + R, snowball, and end before his DPS scaling. If he kites with his dash + smoke, he edges late.",
+      whys: [
+        "Graves' shotgun Q + E dash out-trade you. Bank grit from his shotgun. Levels 1-2 are his.",
+        "Don't sit in his smoke. Use his damage to load your W; survive.",
+        "Your window — Q-close + E-stun catch a squishy Graves.",
+        "A caught Graves folds — W (true damage) + R delete him.",
+        "Don't dump your combo in his smoke. Bait his E, then commit.",
+        "A caught Graves folds — W (true damage) + R delete him.",
+        "Graves takes over — his DPS scaling out-trades your grit. Catch him early."
+      ]
+    },
+    {
+      a: 'sett', b: 'heimerdinger',
+      win: ['Heimerdinger', 'Heimerdinger', 'Skill', 'Skill', 'Skill', 'Heimerdinger', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Heimer’s window — his turrets zone your approach + poke you.' },
+        { when: 'Lvl 6', text: 'Your only window — Q-close + E-stun IF you reach him past turrets.' },
+        { when: '1st item', text: 'He pokes you out; turrets keep you off him. Build MR.' },
+        { when: 'Late', text: 'Tricky — his turret zone shuts down your approach.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close past his turrets', 'Dodge his E (grenade stun); build MR + tanky', 'E-stun + W if you reach him — a squishy Heimer folds'],
+        foe: ['Zone your approach with H-28 turrets (Q)', 'Poke with W (rockets) and stun with E (grenade)', 'Wall you off so you never reach him']
+      },
+      early: "Heimerdinger is tricky — his turrets (Q) zone your approach and poke you, and his E (grenade) stuns. Levels 1-3 he poke-and-zones you out, and his turret wall keeps you off him. Bank grit, build MR + tanky, dodge the grenade, and use Q (Knuckle Down) move speed to try to close. Take the chip.",
+      mid: "Your window is reaching him — if you Q-close past his turrets and E-stun him, a squishy Heimer folds to your W + R. But his turrets + grenade stun make closing the gap hard. Build tanky to push through the turret damage, dodge the E, and commit when you reach him. Ask your jungler for help.",
+      late: "It's tricky — Heimer's turret zone shuts down your approach, and he pokes you out from behind it. Build MR + tanky, use Q to close on his grenade cooldown, and a landed E-stun deletes him. You needed jungle help to reach him early; if he kites behind turrets, he edges it. Don't get poked out sieging his zone.",
+      whys: [
+        "Heimer's turrets zone your approach + poke you. Build MR. Levels 1-3 are his.",
+        "His E (grenade) stuns. Use Q to close, dodge the grenade.",
+        "Your only window — Q-close + E-stun IF you reach him.",
+        "Build tanky to push through turret damage. Ask jungler for help.",
+        "A squishy Heimer folds if you reach him — commit when you do.",
+        "He pokes you out; turrets keep you off him. Build MR.",
+        "Tricky — his turret zone shuts down your approach."
+      ]
+    },
+    {
+      a: 'sett', b: 'ryze',
+      win: ['Ryze', 'Sett', 'Sett', 'Sett', 'Sett', 'Sett', 'Ryze'],
+      spikes: [
+        { when: 'Lvl 1', text: 'Ryze’s window — his Q-E poke chips you; dodge his W root.' },
+        { when: 'Lvl 2–6', text: 'Your window — E-stun + W (true damage) crush a weak-mid Ryze.' },
+        { when: '1st item', text: 'Your W true damage out-trades a weak-mid Ryze.' },
+        { when: '2+ items', text: 'Ryze takes over — mana-stacked, tanky, out-DPS your grit.' }
+      ],
+      wants: {
+        you: ['Bank grit, then E-stun + W (true damage) him', 'Dodge his W (root); buy MR', 'Win the early-mid before his item scaling'],
+        foe: ['Poke with Q-E spread combo from range', 'Lock you with W (root) to kite', 'Out-scale into a tanky, high-DPS mana mage']
+      },
+      early: "Ryze pokes you with Q-E and roots with W — level 1 is his poke window. Bank grit, buy MR, dodge his W root (it sets up his combo), and use his poke to load your W. He's weak early-mid and squishy; once you reach him, you out-brawl him hard. Wait for your level-2 spike.",
+      mid: "Your window — E-stun him (Facebreaker); a stun beats his root-and-kite, and his squishy frame folds to your W true damage + R. Bank grit, dodge his W, and deny his mana/item stacking. Force the all-in repeatedly; you crush a weak-mid Ryze (one of your best lanes).",
+      late: "Ryze takes over at two items — mana-stacked and tanky, his high-output magic DPS out-trades your grit, and his root + poke control the fight. The lane is favoured because you dominate his early-mid; convert it. Snowball off the E-stun + W all-ins, build MR, deny his farm, and end before his item scaling flips it.",
+      whys: [
+        "Ryze's Q-E poke chips you; dodge his W root. Buy MR. Level 1 is his.",
+        "He's weak early-mid and squishy. Use his poke to load your W.",
+        "Your window — E-stun + W (true damage) crush a weak-mid Ryze.",
+        "A stun beats his root-and-kite. Deny his mana/item stacking.",
+        "Force the all-in repeatedly — you crush a weak-mid Ryze.",
+        "Your W true damage out-trades a weak-mid Ryze.",
+        "Ryze takes over — mana-stacked, tanky, out-DPS your grit. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'rumble',
+      win: ['Rumble', 'Skill', 'Sett', 'Sett', 'Rumble', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Rumble’s window — his Q (Flamespitter) pokes; he kites you.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch a squishy Rumble.' },
+        { when: 'Lvl 6', text: 'Don’t fight in his R (Equalizer) zone; buy MR.' },
+        { when: 'Late', text: 'You edge it — catch him with Q + E; W (true damage) deletes him.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close his kite; E-stun him', 'Buy MR; W (true damage) deletes a caught Rumble', 'Dodge his R (Equalizer) fire zone'],
+        foe: ['Poke with Q (Flamespitter) in his Heat window', 'Kite with W (shield + MS) and E (harpoon slow)', 'Zone you with R (Equalizer) and overheat burst']
+      },
+      early: "Rumble pokes you with Q (Flamespitter) and kites with W (shield + MS) and E (slow) — levels 1-2 are his poke window. Bank grit, buy MR, and walk through the poke behind minions. He's squishy AP, so the moment you Q-close and E-stun him, your W deletes him. Take the chip and look for the gap-close.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close his kite, E-stun him (Facebreaker), and W with loaded grit; a squishy Rumble folds, and at 6 your R grabs him. Respect his R (The Equalizer) — don't fight inside the fire zone. Bait his W shield, then commit on his cooldowns.",
+      late: "You edge it — your Q-close + E-stun + W true damage delete a kite-and-poke Rumble whenever you reach him. Buy MR, dodge his R zone, and close on his W cooldown. If you catch him, he dies; if he kites freely with R zoning, he stalls. Make him fight on your terms with Q's move speed.",
+      whys: [
+        "Rumble's Q pokes; he kites with W + E. Buy MR. Levels 1-2 are his.",
+        "Walk through the poke behind minions. Look for the gap-close.",
+        "Your window — Q-close + E-stun catch a squishy Rumble.",
+        "A squishy Rumble folds. At 6 your R grabs him.",
+        "Don't fight in his R (Equalizer) zone — dodge it first.",
+        "Bait his W shield, then commit on his cooldowns.",
+        "You edge it — catch him with Q + E; W (true damage) deletes him."
+      ]
+    },
+    {
+      a: 'sett', b: 'sejuani',
+      win: ['Sett', 'Sett', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — W (true damage) out-damages her low damage.' },
+        { when: 'Lvl 6', text: 'Your window — E-stun + R; her R is a teamfight stun, not a 1v1.' },
+        { when: '1st item', text: 'Your W true damage out-trades her tankiness.' },
+        { when: 'Late', text: 'Sejuani out-tanks you eventually — she’s a teamfight engage tank.' }
+      ],
+      wants: {
+        you: ['W (true damage) out-damages her low damage', 'Dodge her Q (charge); E-stun + R', 'Snowball before she builds tanky'],
+        foe: ['Engage with Q (charge knockup)', 'Stack Frost (E) for a stun, farm and scale', 'Become a teamfight engage tank with R']
+      },
+      early: "Levels 1-3 are yours — Sejuani is a weak early laner with low damage, and your W (Haymaker) true damage out-damages her. Dodge her Q (charge knockup), don't let her free-stack Frost (E), bank grit, and W-true-damage her. Bully her off CS while she's weak.",
+      mid: "Your window — E-stun her (Facebreaker), W with loaded grit, and R her; her W cleave + true damage can't beat your brawl, and your W cuts her tankiness. Her R is a long-range engage stun for teamfights, not a 1v1 button, so don't fear it in lane — just don't get chain-CC'd into her jungler.",
+      late: "Sejuani out-tanks you eventually — she scales into a teamfight engage tank with resistances. The lane is favoured because you bully the early; convert it. Snowball your W + E-stun all-ins, take plates, and end before her tankiness matters; the game decides in fights where her engage matters more than the 1v1.",
+      whys: [
+        "Sejuani is a weak early laner with low damage. W (true damage) out-damages her. Levels 1-3 are yours.",
+        "Dodge her Q (charge). Don't let her free-stack Frost (E).",
+        "Your W true damage out-trades her tankiness. E-stun + R.",
+        "Keep her off CS — her cleave + true damage can't beat your brawl.",
+        "Your window — E-stun + R; her R is a teamfight stun, not a 1v1.",
+        "Your W true damage out-trades her tankiness.",
+        "Sejuani out-tanks you eventually — she's a teamfight engage tank."
+      ]
+    },
+    {
+      a: 'sett', b: 'zac',
+      win: ['Sett', 'Sett', 'Sett', 'Sett', 'Skill', 'Sett', 'Zac'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — W (true damage) + aggression bully a weak Zac.' },
+        { when: 'Lvl 6', text: 'Your window — E-stun + R; step on his blobs.' },
+        { when: '1st item', text: 'Your W true damage out-trades a low-HP Zac.' },
+        { when: '2+ items', text: 'Zac takes over — HP stacking out-tanks your grit.' }
+      ],
+      wants: {
+        you: ['W (true damage) + aggression bully his weak early', 'Step on his blobs; E-stun + R', 'Win the early-mid before his HP scaling'],
+        foe: ['Poke with Q (stretchy arm) and farm safely', 'Sustain with passive blobs + W', 'Scale into an HP-stacking teamfight tank with R']
+      },
+      early: "Levels 1-3 are yours — Zac is a weak early laner with low kill pressure, and your W (Haymaker) true damage + aggression bully him. Bank grit, W-true-damage him, step on his passive blobs so he can't heal, and deny CS. You out-brawl a weak-early Zac hard.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit, and R him at 6; your true damage cuts through his HP, and his blob heals can't keep up. Step on his blobs to cut his sustain, deny CS, and snowball. His R at 6 is a teamfight engage, not a 1v1 button.",
+      late: "Zac takes over at two items — HP stacking + blob heals out-tank your grit late. The lane is favoured because you crush his early-mid (W true damage); convert it. Snowball off the W + E-stun all-ins, step on his blobs, deny his farm, and end before his HP scaling out-tanks you.",
+      whys: [
+        "Zac is a weak early laner. W (true damage) + aggression bully him. Levels 1-3 are yours.",
+        "Step on his passive blobs so he can't heal. Deny CS.",
+        "Your W true damage cuts through his HP. E-stun + R.",
+        "Step on his blobs to cut his sustain. Snowball.",
+        "Your window — E-stun + R; his R is teamfight engage, not a 1v1.",
+        "Your W true damage out-trades a low-HP Zac.",
+        "Zac takes over — HP stacking out-tanks your grit. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'ziggs',
+      win: ['Ziggs', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Ziggs’s window — his Q out-ranges and pokes you.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch a squishy Ziggs.' },
+        { when: '1st item', text: 'A caught Ziggs folds — W (true damage) + R delete him.' },
+        { when: 'Late', text: 'Even — build MR; catch him when his W (satchel) is down.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close his minefield + poke', 'Bait his W (satchel); E-stun a squishy Ziggs', 'W (true damage) + R delete a caught Ziggs'],
+        foe: ['Poke from max range with Q (bouncing bomb)', 'Escape your gap-close with W (Satchel Charge)', 'Zone you with E (minefield) and nuke with R']
+      },
+      early: "Ziggs out-ranges everything and pokes you with Q — levels 1-2 are his artillery window, and his W (Satchel Charge) escape + minefield keep you off him. Bank grit, build MR, hug minions, and don't path through his minefield. He's squishy, so look to close once you survive the poke.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close past his minefield, bait or eat his W satchel, E-stun him (Facebreaker), and W with loaded grit; a caught Ziggs folds, and at 6 your R grabs him. Force him to burn satchel, then close on its cooldown. A squishy Ziggs dies once you reach him.",
+      late: "It's even — Ziggs pokes you out if you let him, but a misposition or down satchel lets you Q-close + E-stun and delete him. Build MR, hug minions, and punish his mistakes. He scales as a teamfight artillery mage, so the game is about his zone damage; in lane, catch his misposition with Q + E.",
+      whys: [
+        "Ziggs out-ranges you with Q poke. Build MR, hug minions. Levels 1-2 are his.",
+        "His W satchel + minefield keep you off him. Look for the gap-close.",
+        "Your window — Q-close + E-stun catch a squishy Ziggs.",
+        "A caught Ziggs folds — W (true damage) + R delete him.",
+        "Force him to burn satchel, then close on its cooldown.",
+        "A caught Ziggs folds — W (true damage) + R delete him.",
+        "Even — build MR; catch him when his W (satchel) is down."
+      ]
+    },
+    {
+      a: 'sett', b: 'nautilus',
+      win: ['Nautilus', 'Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Naut’s window — his Q hook + W on-hit out-trade your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) out-brawl a low-damage Naut.' },
+        { when: '1st item', text: 'Your W true damage out-trades his tankiness.' },
+        { when: 'Late', text: 'You win the lane 1v1 — he’s a teamfight CC frontliner.' }
+      ],
+      wants: {
+        you: ['Dodge his Q (hook); E-stun + W (true damage)', 'Out-brawl his low damage with grit + R', 'Win the lane 1v1 he can’t out-damage'],
+        foe: ['Hook you in with Q (Dredge Line)', 'Chunk with W (shield + on-hit) + E (AOE)', 'Lock you down with R + passive root']
+      },
+      early: "Nautilus's trade starts with the Q hook — levels 1-2 he can chunk you with W (shield + on-hit) + E if he lands it. Dodge the hook from bush range; eat it and he gets a free combo. Bank grit, use his damage to load your W, and look for your E-stun. He's a CC tank with low damage.",
+      mid: "Your window — E-stun him (Facebreaker), W with loaded grit for true damage, and R him; your true damage cuts his tankiness, and his low-damage kit can't out-trade your brawl. Without the hook he can't engage. Dodge the hook, out-brawl him, and his W shield + E poke don't beat your grit.",
+      late: "You win the lane 1v1 — Nautilus is a CC tank with low damage, and your W true damage + grit out-brawl him. He becomes a teamfight CC frontliner, so the game is about his engage in fights, not the lane you dominate. Dodge the hook, out-brawl him, and respect his R + jungler for picks, but never fear the 1v1.",
+      whys: [
+        "Naut's Q hook starts his trade. Dodge it from bush. Levels 1-2 are his.",
+        "Eat the hook and he gets a free W + E. Use his damage to load your W.",
+        "Your window — E-stun + W (true damage) out-brawl a low-damage Naut.",
+        "Without the hook he can't engage. Out-brawl him.",
+        "His W shield + E poke don't beat your grit. R him.",
+        "Your W true damage out-trades his tankiness.",
+        "You win the lane 1v1 — he's a teamfight CC frontliner."
+      ]
+    },
+    {
+      a: 'sett', b: 'singed',
+      win: ['Singed', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Singed’s window — he proxies/kites; you can’t catch him yet.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch him when he steps up.' },
+        { when: '1st item', text: 'A caught Singed folds — E-stun + W; don’t chase through poison.' },
+        { when: 'Late', text: 'You edge it — catch him with Q + E; he splitpushes.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close his kite; E-stun him', 'W (true damage) + R when you catch him', 'Don’t chase through poison; match his CS'],
+        foe: ['Proxy the wave and kite you through poison', 'Fling (E) you into bad spots with goo + R', 'Out-macro the lane without committing']
+      },
+      early: "Singed proxies and kites through poison — levels 1-2 are his macro window, and you can't chase a kiting Singed through his poison trail (he flings you under tower). Bank grit, match his CS, and don't tilt-chase. Wait for him to step up to fling or proxy near you, then look for the gap-close.",
+      mid: "Your window — when Singed steps into your range, use Q (Knuckle Down) move speed to close, E-stun him (Facebreaker), and W with loaded grit; a caught Singed folds, and at 6 your R grabs him out of his kite. Don't chase him through poison (that's how you die to goo + fling), but punish him when he comes near.",
+      late: "You edge it — your Q-close + E-stun catch Singed whenever he steps up, and your W + R delete him. He splitpushes with his macro game, so match his side pressure or group. Don't tilt-chase through poison; let him come to you, then catch him. In lane, a landed E-stun ends his hit-and-run.",
+      whys: [
+        "Singed proxies and kites through poison. Match his CS. Levels 1-2 are his.",
+        "Don't tilt-chase through poison. Wait for him to step up.",
+        "Your window — Q-close + E-stun catch him when he steps up.",
+        "A caught Singed folds — E-stun + W; don't chase through poison.",
+        "At 6 your R grabs him out of his kite. Punish him when he comes near.",
+        "A caught Singed folds — E-stun + W; don't chase through poison.",
+        "You edge it — catch him with Q + E; he splitpushes."
+      ]
+    },
+    {
+      a: 'sett', b: 'trundle',
+      win: ['Sett', 'Skill', 'Sett', 'Skill', 'Skill', 'Skill', 'Trundle'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Your window — W (true damage) + aggression before his sustain.' },
+        { when: 'Lvl 6', text: 'His R drains your stats; his E pillar zones your approach.' },
+        { when: '1st item', text: 'Even — bait his Q (Chomp); out-brawl when his sustain is down.' },
+        { when: '2+ items', text: 'Trundle takes over — sustain + R drain out-last your grit.' }
+      ],
+      wants: {
+        you: ['W (true damage) + aggression before his sustain ramps', 'Bait his Q (Chomp) which steals your AD', 'E-stun + W; fight short before his R drain'],
+        foe: ['Bite (Q) to steal your AD and heal', 'Zone you with E (Pillar) and out-sustain trades', 'Drain your resistances + HP with R in a long fight']
+      },
+      early: "Your window is the early — before Trundle's sustain ramps, your W (Haymaker) true damage + aggression out-trade him. Levels 1-2, bank grit and W him. His Q (Chomp) steals your AD and heals him, so bait it before you commit; his E (pillar) can zone your approach. Press your early advantage.",
+      mid: "It evens out — his R (Subjugate) drains your resistances and HP in a long fight, exactly the brawl you want flipped against you, and his E pillar disrupts your approach. E-stun him (Facebreaker), W with loaded grit, but fight short before his R ramps. Bait the Chomp, then commit your combo.",
+      late: "Trundle takes over at two items — his sustain + R drain out-last your grit, and he's a tank-buster who melts your resistances. The lane is even because you bully early but he out-sustains. Bring antiheal, snowball your early aggression, force short E-stun + W all-ins (not drain-fests), and end before his sustain out-lasts you.",
+      whys: [
+        "Your window — W (true damage) + aggression before his sustain. Levels 1-2 are yours.",
+        "His Q (Chomp) steals your AD and heals. Bait it before you commit.",
+        "His E pillar zones your approach. E-stun + W; press the early.",
+        "Fight short before his R drain ramps. Bait the Chomp.",
+        "His R drains your stats; his E pillar zones your approach.",
+        "Even — bait his Q; out-brawl when his sustain is down.",
+        "Trundle takes over — sustain + R drain out-last your grit. Bring antiheal."
       ]
     }
   ];

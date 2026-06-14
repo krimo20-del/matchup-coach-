@@ -132,7 +132,9 @@
       chogath: 52.5, tahmkench: 53.4, ksante: 55.6, poppy: 48.0, kayle: 45.2, akali: 54.6,
       cassiopeia: 50.0, galio: 53.7, gwen: 48.2, jayce: 55.9, kassadin: 55.2, lucian: 54.1,
       camille: 58.3, trundle: 45.2, ryze: 53.3, rumble: 48.7, heimerdinger: 39.1, sejuani: 48.4,
-      zac: 51.7, ziggs: 52.4, maokai: 52.9, sylas: 53.3, graves: 49.3, nautilus: 54.7
+      zac: 51.7, ziggs: 52.4, maokai: 52.9, sylas: 53.3, graves: 49.3, nautilus: 54.7,
+      quinn: 46.7, aurora: 47.3, ambessa: 51.3, akshan: 46.2, karma: 51.5, lillia: 52.0,
+      mel: 63.4, neeko: 58.5
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -8853,6 +8855,214 @@
         "His R is a pick tool with a jungler, not a 1v1 button. Dodge the hook.",
         "Your tentacle DPS out-pressures his low damage.",
         "You win the lane 1v1 — he's a teamfight CC frontliner."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'quinn',
+      win: ['Quinn', 'Quinn', 'Skill', 'Quinn', 'Skill', 'Skill', 'Illaoi'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Quinn’s window — she out-ranges your E and kites your tentacles.' },
+        { when: 'Lvl 6', text: 'She roams (R); your only window is catching her with E.' },
+        { when: '1st item', text: 'She pokes you down; a caught Quinn folds, but she vaults away.' },
+        { when: 'Late', text: 'Tricky — she kites + roams; you rarely land your slow E.' }
+      ],
+      wants: {
+        you: ['Try to land E from max range; hug minions', 'Build MR + tenacity; ask jungler to help land E', 'Punish her roams; survive her poke'],
+        foe: ['Out-range your E and poke you out', 'Vault (E) over you to dodge; kite with autos', 'Roam with R; never enter tentacle range']
+      },
+      early: "Quinn is a tricky ranged counter — she out-ranges your E (Test of Spirit), pokes you with autos + Q, and her E (Vault) hops over you to dodge and reset. Levels 1-2 she poke-and-kites you, never entering your tentacle zone. Hug your minions, try to land E from max range, and accept you'll lose some CS and HP.",
+      mid: "Your tentacles do little against a champion who refuses to enter them, and your slow E rarely catches a mobile Quinn. Even at 6, her R (Behind Enemy Lines) is a roam tool — punish her wave when she leaves. Build MR, ask your jungler to gank (a gank lets you land E and delete her squishy frame), and play safe.",
+      late: "It's tricky — Quinn kites your tentacles and roams for picks, and you struggle to land your slow E on her. A caught Quinn folds, but she vaults away from most attempts. You needed jungle help early; without it, this is a poke-and-kite lane she edges. Build MR + tenacity, track her roams, and group with your team.",
+      whys: [
+        "Quinn out-ranges your E and kites your tentacles. Hug minions. Levels 1-2 are hers.",
+        "Her E (Vault) hops over you to dodge. Try to E from max range.",
+        "Your tentacles do little if she never enters them. Play safe.",
+        "Your slow E rarely catches a mobile Quinn. Ask jungler for help.",
+        "Her R roams for picks — punish the wave when she leaves.",
+        "A caught Quinn folds, but she vaults away. Build MR.",
+        "Tricky — she kites + roams; you rarely land your slow E. Group up."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'aurora',
+      win: ['Aurora', 'Aurora', 'Skill', 'Skill', 'Aurora', 'Skill', 'Illaoi'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Aurora’s window — her Q/E poke + W dodge your E.' },
+        { when: 'Lvl 6', text: 'Her R rift + W invis make her hard to pin in tentacles.' },
+        { when: '1st item', text: 'She pokes + kites; land E when her W (dash) is down.' },
+        { when: 'Late', text: 'Tricky — her mobility dodges your slow E; buy MR.' }
+      ],
+      wants: {
+        you: ['Land E when her W (dash + invis) is down', 'Buy MR; out-sustain her poke off vessel healing', 'Fight her in your tentacles when you catch her'],
+        foe: ['Poke with Q (bolt) + E (80% slow) and self-heal', 'Dodge your E with W (dash + invisibility)', 'Zone and escape with R (untargetable rift)']
+      },
+      early: "Aurora is a tricky mobile AP counter — she pokes you with Q and E (80% slow), self-heals, and her W (dash into invisibility) dodges your E (Test of Spirit). Levels 1-2 are her poke window. Set up tentacles, buy MR, and try to land E when her W is on cooldown; don't waste your long-cooldown E into her dash.",
+      mid: "Your tentacles need her in range, but her mobility + W keep her out, and her R (untargetable rift) gives another escape. Land E only when her W is down — then W in and slam her squishy frame; a caught Aurora folds. Bait her W, out-sustain her poke off vessel healing, and don't chase her into her R.",
+      late: "It's tricky — Aurora's mobility (W dash + R rift) dodges your slow E, and she pokes + self-heals. A caught Aurora dies to your tentacles, but landing E on her is the whole challenge. Build MR, look for E windows on her W cooldown, and ask your jungler for help. If she kites freely, she edges it.",
+      whys: [
+        "Aurora's Q/E poke + W dodge your E. Buy MR. Levels 1-2 are hers.",
+        "Don't waste your long-cooldown E into her W dash.",
+        "Land E only when her W is down — then slam her squishy frame.",
+        "Her mobility + W keep her out of tentacle range. Bait her W.",
+        "Her R rift + W invis make her hard to pin. Don't chase into her R.",
+        "She pokes + kites; land E when her W is down.",
+        "Tricky — her mobility dodges your slow E; buy MR. Ask for jungle."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'ambessa',
+      win: ['Ambessa', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Ambessa’s window — her dash combo bursts your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E her and slam; a vessel can’t escape her dashes.' },
+        { when: '1st item', text: 'Your tentacle DPS out-sustains her dash combo.' },
+        { when: 'Late', text: 'Even — land E to pin her; respect her R suppress.' }
+      ],
+      wants: {
+        you: ['Land E — she can’t dash out of the soul fight', 'Out-sustain her burst off vessel healing', 'Respect her R (suppress) — don’t get caught low'],
+        foe: ['Chain dashes (passive) into the Q → W combo', 'Brace with E (shield + counter-smash)', 'All-in with R (blink behind + suppress + stun)']
+      },
+      early: "Ambessa bursts you with her dash combo (Q → W) early and her passive gives her free dashes to dodge your E — levels 1-2 are her window. Her damage is physical, which your HP handles. Set up tentacles, don't get chunked by her combo, and look for your E (Test of Spirit); once you land it, her dashes can't escape the soul fight.",
+      mid: "Your window — E her, W in, and slam her in your zone. She can't dash out of a vessel, and your sustained tentacle DPS + vessel healing out-last her burst. Her E (Repudiation) braces and counters, so don't dump your slam into it. Respect her R (Public Execution suppress) at 6, but a pinned Ambessa loses the fight.",
+      late: "It's even — Ambessa's mobility dodges your slow E, but if you land it she can't escape and your tentacles out-sustain her burst. Land E (bait her dashes first), fight in your zone, and respect her R suppress when you're low. If she kites your E, she edges it; if you catch her, you win the extended fight in your nest.",
+      whys: [
+        "Ambessa bursts you with her dash combo; her dashes dodge your E. Levels 1-2 are hers.",
+        "Her damage is physical — your HP handles it. Set up tentacles, look for E.",
+        "Your window — E her and slam; a vessel can't escape her dashes.",
+        "Don't dump your slam into her E (Repudiation) brace.",
+        "Respect her R (suppress) at 6 — but a pinned Ambessa loses.",
+        "Your tentacle DPS out-sustains her dash combo.",
+        "Even — land E to pin her; respect her R suppress."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'akshan',
+      win: ['Akshan', 'Akshan', 'Skill', 'Akshan', 'Skill', 'Skill', 'Illaoi'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Akshan’s window — he pokes + swings around your tentacles.' },
+        { when: 'Lvl 6', text: 'He roams (R); your only window is catching him with E.' },
+        { when: '1st item', text: 'He pokes you; a caught Akshan folds, but he swings away.' },
+        { when: 'Late', text: 'Tricky — he kites + roams; you rarely land your slow E.' }
+      ],
+      wants: {
+        you: ['Try to land E when his E (swing) is down; hug minions', 'Build MR; ask jungler to help land E', 'Punish his roams; survive his poke'],
+        foe: ['Poke with Q (Avengerang) + autos', 'Swing around terrain with E (Heroic Swing)', 'Roam and pick with R (Comeuppance)']
+      },
+      early: "Akshan is a tricky ranged counter — he pokes you with Q (Avengerang) and autos, and his E (Heroic Swing) lets him swing off terrain to kite, never entering your tentacle zone. Levels 1-2 he poke-and-kites you. Hug minions, try to land E when his swing is down, and take the chip while you set up tentacles.",
+      mid: "Your tentacles do little against a champion who kites them, and your slow E rarely catches a swinging Akshan. At 6 his R is a roam tool — punish his wave when he leaves. Build MR, ask your jungler to gank (a gank lets you land E and delete his squishy frame), and play safe; you can't force the fight.",
+      late: "It's tricky — Akshan kites your tentacles with his swing and roams for picks, and you struggle to land your slow E. A caught Akshan folds, but he swings away from most attempts. You needed jungle help early; without it, it's a poke-and-kite lane he edges. Build MR, track his roams, and group with your team.",
+      whys: [
+        "Akshan pokes + swings around your tentacles. Hug minions. Levels 1-2 are his.",
+        "His E (Heroic Swing) kites off terrain. Try to E when his swing is down.",
+        "Your tentacles do little if he kites them. Play safe.",
+        "Your slow E rarely catches a swinging Akshan. Ask jungler for help.",
+        "His R roams for picks — punish the wave when he leaves.",
+        "A caught Akshan folds, but he swings away. Build MR.",
+        "Tricky — he kites + roams; you rarely land your slow E. Group up."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'karma',
+      win: ['Karma', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Karma’s window — her Q (Mantra) pokes; W roots to peel.' },
+        { when: 'Lvl 3–6', text: 'Your window — E her if she steps up; a caught Karma folds.' },
+        { when: '1st item', text: 'Even — buy MR; catch her with E when her E shield is down.' },
+        { when: 'Late', text: 'Even — she pokes/peels; land E to delete her squishy frame.' }
+      ],
+      wants: {
+        you: ['Land E when she steps up — a caught Karma folds', 'Buy MR; out-sustain her Q poke', 'Don’t get kited by her W (root) + E (shield)'],
+        foe: ['Poke with Q (Inner Flame) — empowered by R (Mantra)', 'Root you with W (Focused Resolve) tether', 'Self-peel with E (shield + move speed)']
+      },
+      early: "Karma pokes you with Q (Mantra-empowered) and peels with E (shield + MS) and W (root tether) — levels 1-2 are her poke window. Set up tentacles, buy MR, and look to land E (Test of Spirit) if she steps up to last-hit. She's squishy; a caught Karma folds, but her shield + kite make landing E tricky.",
+      mid: "Your window — if you land E on Karma, she folds; she's squishy and a vessel can't escape your tentacle slams. The challenge is catching her — she pokes from range and self-peels. Look for the E when her E shield is down, then W in and slam her. Don't get rooted by her W tether mid-engage; buy MR.",
+      late: "It's even — Karma pokes and peels for her team, but she can't kill a bruiser and a landed E deletes her squishy frame. Build MR, hug minions to deny free poke, and look for E windows when her shield is down. She's a utility mage, so the game is about her teamfight shields/roots; in lane, catch her with E.",
+      whys: [
+        "Karma pokes with Q + peels with E/W. Buy MR. Levels 1-2 are hers.",
+        "She's squishy; a caught Karma folds. Look for E when she steps up.",
+        "Your window — E her if she steps up; she folds.",
+        "A vessel can't escape — don't get rooted by her W mid-engage.",
+        "Even — catch her with E when her E shield is down.",
+        "Even — she pokes/peels; land E to delete her squishy frame.",
+        "Even — buy MR; catch her with E. She can't kill a bruiser."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'lillia',
+      win: ['Lillia', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Illaoi', 'Lillia'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Lillia’s window — she kites your tentacles with Q + E.' },
+        { when: 'Lvl 3–6', text: 'Your window — E her when her E (dash) is down; she folds.' },
+        { when: '1st item', text: 'Even — a caught Lillia dies; but she kites your slow E.' },
+        { when: '2+ items', text: 'Lillia takes over — AP on-hit + mobility kite and shred you.' }
+      ],
+      wants: {
+        you: ['Land E when her E (dash) is down — she can’t kite a vessel', 'Buy MR; out-sustain her poke off vessel healing', 'Win the early-mid before her AP scaling'],
+        foe: ['Kite with Q (swirl) movement + E (dash + slow)', 'Stack passive burn and scale AP on-hit', 'Set up picks with R (sleep)']
+      },
+      early: "Lillia kites your tentacles with her Q (move speed) and E (dash + slow) — levels 1-2 are her poke window, and her mobility makes your slow E hard to land. Set up tentacles, buy MR, and look for your E (Test of Spirit) when her E dash is down. She's squishy; a caught Lillia folds to your slams.",
+      mid: "Your window — land E when her E is on cooldown; a vessel can't kite away from your tentacle slams. Punish her after she commits her dash. Buy MR (her damage is magic), out-sustain her poke off vessel healing, and slam her in your zone. At 6 her R (sleep) sets up ganks, so don't get slept in a bad spot.",
+      late: "Lillia takes over at two items — AP on-hit + her constant mobility let her kite your tentacles and shred you while staying out of E range. The lane is even because you can punish her hard if you land E, but she out-scales if she kites freely. Build MR, look for E on her dash cooldowns, and end before her scaling.",
+      whys: [
+        "Lillia kites your tentacles with Q + E. Buy MR. Levels 1-2 are hers.",
+        "Her mobility makes your slow E hard to land. Look for E when her dash is down.",
+        "Your window — E her when her E is down; she folds.",
+        "A vessel can't kite away. Punish her after she commits her dash.",
+        "Don't get slept by her R in a bad spot. Out-sustain her poke.",
+        "Even — a caught Lillia dies; but she kites your slow E.",
+        "Lillia takes over — AP on-hit + mobility kite and shred you. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'mel',
+      win: ['Mel', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Mel’s window — her Q (Radiant Volley) pokes from range.' },
+        { when: 'Lvl 3–6', text: 'Your window — E her and slam; a squishy Mel deletes.' },
+        { when: '1st item', text: 'Your tentacle DPS deletes a caught Mel.' },
+        { when: 'Late', text: 'You own the lane — she can’t escape a vessel; one of your best.' }
+      ],
+      wants: {
+        you: ['Land E — a squishy Mel can’t escape the vessel', 'Buy MR; dodge her E (Solar Snare root)', 'Hug minions through her Q poke, then catch her'],
+        foe: ['Poke from range with Q (Radiant Volley)', 'Root you with E (Solar Snare) to land poke', 'Self-peel with W (shield + move speed)']
+      },
+      early: "Mel is one of your best lanes — she's a squishy artillery mage with no escape but her W move-speed. She pokes you with Q (Radiant Volley) and roots with E early — levels 1-2 are her poke window. Hug minions, buy MR, set up tentacles, and dodge her E root; the moment you land E (Test of Spirit), she's in huge trouble.",
+      mid: "Your window — land E, W in, and slam her with tentacles; a squishy Mel can't escape a vessel and folds instantly to your DPS + slams. Dodge her E (Solar Snare root) that sets up her poke, then commit. Her W reflects projectiles, but your tentacle slams and W dash aren't blocked. Crush her in your zone.",
+      late: "You own the lane — if you reach Mel she dies, full stop. She's a teamfight poke/execute mage (her R is global), but in the side-lane 1v1 your tentacles delete her squishy frame. Build MR, dodge her E, look for E windows, and snowball your tentacle pressure. One of your best matchups.",
+      whys: [
+        "Mel is squishy with no real escape. Hug minions, buy MR. Levels 1-2 are hers.",
+        "Dodge her E (Solar Snare root). The moment you land E, she's in trouble.",
+        "Your window — E her and slam; a squishy Mel deletes.",
+        "A squishy Mel can't escape a vessel. Her W reflect doesn't block your slams.",
+        "Your R wall + tentacles delete her. Crush her in your zone.",
+        "Your tentacle DPS deletes a caught Mel.",
+        "You own the lane — she can't escape a vessel; one of your best."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'neeko',
+      win: ['Neeko', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Neeko’s window — her Q poke + E root chip your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E her and slam; a squishy Neeko deletes.' },
+        { when: '1st item', text: 'Your tentacle DPS deletes a caught Neeko.' },
+        { when: 'Late', text: 'You own the lane — she’s a teamfight pick mage, not a duelist.' }
+      ],
+      wants: {
+        you: ['Land E — a squishy Neeko can’t escape the vessel', 'Dodge her E (Tangle-Barbs root); buy MR', 'Don’t get fooled by her W (clone) disguise'],
+        foe: ['Poke with Q (Blooming Burst) and root with E', 'Disguise as a minion/ally with W (clone)', 'All-in with R (Pop Blossom AOE stun)']
+      },
+      early: "Neeko pokes you with Q and roots with E to set up damage — levels 1-2 are her poke window. But she's squishy and built for picks, not dueling. Set up tentacles, buy MR, dodge her E root, and look for your E (Test of Spirit). Don't get fooled by her W (clone) disguise; the moment you land E on the real Neeko, she folds.",
+      mid: "Your window — land E, W in, and slam her with tentacles; a squishy Neeko can't escape a vessel and deletes to your DPS. Dodge her E root, watch her R (Pop Blossom) windup at 6 (often from a disguise), and don't facecheck a 'minion' that might be her clone. Crush her in your zone.",
+      late: "You own the lane — Neeko is a teamfight burst/pick mage, not a side-lane duelist, and your tentacles delete her squishy frame. If you reach her she dies. Build MR, dodge her R windup, deny her roams, and snowball your tentacle pressure. The 1v1 is always yours; don't facecheck her clones.",
+      whys: [
+        "Neeko pokes with Q + roots with E. Buy MR. Levels 1-2 are hers.",
+        "Don't get fooled by her W (clone) disguise. Dodge her E root.",
+        "Your window — E her and slam; a squishy Neeko deletes.",
+        "A squishy Neeko can't escape a vessel. Land E on the real her.",
+        "Watch her R (Pop Blossom) windup at 6, often from a disguise.",
+        "Your tentacle DPS deletes a caught Neeko.",
+        "You own the lane — she's a teamfight pick mage, not a duelist."
       ]
     }
   ];

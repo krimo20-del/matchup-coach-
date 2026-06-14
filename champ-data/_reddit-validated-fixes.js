@@ -128,7 +128,9 @@
       irelia: 55.7, riven: 58.3, sion: 46.3, ornn: 52.0, malphite: 54.0, pantheon: 50.2,
       kled: 55.9, urgot: 48.2, olaf: 55.2, tryndamere: 48.0, vladimir: 50.3, gnar: 55.6,
       shen: 57.4, swain: 55.2, warwick: 51.2, volibear: 53.2, wukong: 51.9, yasuo: 54.7,
-      yone: 53.1, yorick: 49.2, gragas: 47.1, gangplank: 50.1, kennen: 50.6, singed: 53.2
+      yone: 53.1, yorick: 49.2, gragas: 47.1, gangplank: 50.1, kennen: 50.6, singed: 53.2,
+      chogath: 52.5, tahmkench: 53.4, ksante: 55.6, poppy: 48.0, kayle: 45.2, akali: 54.6,
+      cassiopeia: 50.0, galio: 53.7, gwen: 48.2, jayce: 55.9, kassadin: 55.2, lucian: 54.1
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -8225,6 +8227,318 @@
         "Your R wall + tentacles punish him if he comes near.",
         "Your tentacles + E punish him near you.",
         "You edge it — zone his proxy path; don't chase through poison."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'chogath',
+      win: ['Skill', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Illaoi', "Cho'Gath"],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even — set up tentacles; he’s a weak-early tank scaler.' },
+        { when: 'Lvl 6', text: 'Your window — E him and slam; respect his R true-damage execute.' },
+        { when: '1st item', text: 'Your tentacle DPS out-trades a low-stack Cho.' },
+        { when: '2+ items', text: 'Cho takes over — stacked HP + true-damage R out-tank you.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacle field', 'Dodge his Q (rupture) + W (silence)', 'Deny his stacks; win before his HP scaling'],
+        foe: ['Land Q (knockup) into W (silence) for a trade', 'Farm safely and stack HP with R (Feast)', 'Scale into an unkillable true-damage teamfight tank']
+      },
+      early: "Levels 1-2 are even — Cho'Gath is a weak-early tank scaler. Set up tentacles, dodge his Q (Rupture knockup) and W (silence), and look for your E (Test of Spirit). It's a tank-vs-tank race; deny his CS to keep him off HP stacks, and you out-trade an unstacked Cho with your tentacle DPS.",
+      mid: "Your window — land E, W in, and slam him with tentacles in your zone. Respect his R (Feast): it's a true-damage execute that ignores your HP, so don't get caught low. Keep denying his stacks; the longer you keep him weak, the longer you delay the unkillable tank he becomes.",
+      late: "Cho takes over at two items if he stacked — stacked HP + true-damage R out-tank your tentacle DPS. The lane is even because you crush his early-mid; convert it. Snowball off the E pressure, deny his farm relentlessly, and end the game before his HP stacking makes him unkillable.",
+      whys: [
+        "Cho is a weak-early scaler. Set up tentacles, look for E. Level 1-2 is even.",
+        "Dodge his Q (rupture) + W (silence). Deny his CS.",
+        "Your window — E him and slam in your zone.",
+        "You out-trade an unstacked Cho. Keep him off HP stacks.",
+        "Respect his R (true-damage execute) when low — it ignores your HP.",
+        "Your tentacle DPS out-trades a low-stack Cho.",
+        "Two items in, stacked HP + true damage out-tank you. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'tahmkench',
+      win: ['Tahm Kench', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'TK’s window — his W (Devour) grey health soaks your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam; he has no waveclear or escape.' },
+        { when: '1st item', text: 'Your tentacle DPS out-pressures his grey-health sustain.' },
+        { when: 'Late', text: 'You edge it — out-DPS his grey health in your zone.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacle field', 'Burst through his grey health with tentacle DPS', 'Pin him — he has no waveclear'],
+        foe: ['Tank your tentacles with grey health (passive)', 'Reposition out of your zone with W (Devour)', 'Scale into a tanky teamfight peeler / saver']
+      },
+      early: "Tahm has a weak early and no waveclear, but his grey health (W passive) soaks your early poke as a healing shield. Levels 1-2 are his sustain window. Set up tentacles, poke with Q, and look for your E (Test of Spirit); pin him and deny CS. Don't walk into a W (Devour) for a free grey-health trade.",
+      mid: "Your window from level 3 — land E, W in, and slam him with tentacle DPS in your zone. His grey health banks your damage, but your sustained tentacle slams + vessel healing burst through it, and he has no escape from a soul vessel (his W repositions but doesn't break the soul link). Keep him pinned and deny CS.",
+      late: "You edge it — your tentacle DPS out-pressures his grey-health sustain in your zone. Tahm becomes a teamfight peeler/saver, but in the side-lane 1v1 your tentacles out-DPS him. Land E, fight in your field, and burst through his grey health. Scale your tentacle pressure and don't let him reposition out of your nest.",
+      whys: [
+        "TK's grey health (W) soaks your early poke. Pin him, deny CS. Levels 1-2 are his.",
+        "Don't walk into a W (Devour) grey-health trade. Set up tentacles.",
+        "Your window — E him and slam; he has no waveclear or escape.",
+        "Your tentacle slams + vessel heal burst through his grey health.",
+        "Your R wall out-pressures his sustain. Keep him pinned.",
+        "Your tentacle DPS out-pressures his grey-health sustain.",
+        "You edge it — out-DPS his grey health in your zone."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'ksante',
+      win: ['Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', "K'Sante"],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Even — set up tentacles; he’s weak before items.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam before his item spikes.' },
+        { when: '1st item', text: 'Your tentacle DPS out-trades a pre-item K’Sante.' },
+        { when: '2+ items', text: 'K’Sante takes over — tanky stance + items out-sustain you.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacle field', 'Bait his W (block) — don’t feed it your slam', 'Win the early-mid before his items'],
+        foe: ['Block your slam with W (damage reduction)', 'Knock you with Q and dash with E (shield)', 'Pop R (All Out) to duel, or stay tanky to scale']
+      },
+      early: "Levels 1-2 are even, but you out-scale fast — K'Sante is weak before items. Set up tentacles, poke with Q, and look for your E (Test of Spirit). His W blocks a slam and his E dashes + shields, but he can't out-trade your tentacle DPS pre-item. Bait his W, then commit.",
+      mid: "Your window — land E, W in, and slam him with tentacles before his item spikes. His W block soaks one slam, so bait it; your sustained DPS + vessel healing out-trade a pre-item K'Sante. Watch his R (All Out) — it makes him a burst duelist, so don't get caught low, but you crush his weak early-mid.",
+      late: "K'Sante takes over at two items — his tank stance + item sustain out-grind your tentacle DPS, and his R lets him pick the duel. The lane is favoured because you crush his early-mid; convert it. Snowball off the E pressure, deny his farm, and end before his scaling flips the side-lane 1v1.",
+      whys: [
+        "K'Sante is weak pre-item. Set up tentacles, look for E. Level 1-2 is even.",
+        "His W blocks a slam; his E dashes + shields. Bait the W.",
+        "Your window — E him and slam before his item spikes.",
+        "Your tentacle DPS + vessel heal out-trade a pre-item K'Sante.",
+        "Watch his R (All Out) — don't get caught low. You crush his early-mid.",
+        "Your tentacle DPS out-trades a pre-item K'Sante.",
+        "Two items in, tank stance + items out-sustain you. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'poppy',
+      win: ['Poppy', 'Poppy', 'Skill', 'Skill', 'Poppy', 'Skill', 'Illaoi'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Poppy’s window — her W passive stops your W dash; she out-trades.' },
+        { when: 'Lvl 6', text: 'Her R can knock you OUT of your tentacle field.' },
+        { when: '1st item', text: 'She out-trades + out-tanks you; land E and grind her.' },
+        { when: 'Late', text: 'Tricky — she peels and out-tanks; she’s a teamfight peeler.' }
+      ],
+      wants: {
+        you: ['Land E, then slam her in your tentacles', 'Stand off walls so her E (stun) can’t pin you', 'Grind her down with tentacle DPS in your zone'],
+        foe: ['Ground your W dash with her passive', 'Stun you into a wall with E (Heroic Charge)', 'Knock you off your tentacles with R']
+      },
+      early: "Poppy is tricky — her W passive grounds dash-users, which can stop your W (Harsh Lesson) dash, and her E (Heroic Charge) stuns you into walls. She builds tanky and out-trades you. Levels 1-2 are hers. Set up tentacles, stand off walls, and look for your E; don't rely on your W dash near her W.",
+      mid: "She out-tanks your tentacle DPS and peels well, so it's a slow grind. Land E, slam her in your zone, but her W stops your dash and her R (Keeper's Verdict) can knock you OUT of your tentacle field. Stand off walls (her E stun), fight in your nest, and grind her down; don't get knocked away from your tentacles.",
+      late: "It's tricky — Poppy out-trades and out-tanks you, her W neutralizes your dash, and her R removes you from your zone. Land E and grind her in your tentacles where you can, but she's built to frustrate bruisers and peel. She's a teamfight peeler, so play for objectives; the 1v1 is uphill. Don't get wall-stunned.",
+      whys: [
+        "Poppy's W passive stops your W dash; her E stuns. Stand off walls. Levels 1-2 are hers.",
+        "She builds tanky and out-trades you. Set up tentacles, look for E.",
+        "Land E and grind her in your zone — but it's slow.",
+        "Don't rely on your W dash near her W (it grounds you).",
+        "Her R can knock you OUT of your tentacle field. Stand off walls.",
+        "She out-trades + out-tanks you; land E and grind her.",
+        "Tricky — she peels and out-tanks; she's a teamfight peeler."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'kayle',
+      win: ['Illaoi', 'Illaoi', 'Skill', 'Skill', 'Skill', 'Kayle', 'Kayle'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E her early; she’s the weakest early-game champ.' },
+        { when: 'Lvl 6', text: 'Even — keep zoning her; deny CS to delay her spikes.' },
+        { when: 'Lvl 11', text: 'Kayle’s spike — ranged form out-ranges your E and kites you.' },
+        { when: '2+ items', text: 'Kayle takes over — ranged + untouchable R win the game.' }
+      ],
+      wants: {
+        you: ['Land E early — she can’t escape a vessel', 'Zone her off CS + XP relentlessly', 'Build a lead before her level 11 spike'],
+        foe: ['Survive the brutal early and farm safely', 'Hit level 11 (ranged form) to out-range your E', 'Reach level 16 R and become untouchable']
+      },
+      early: "Levels 1-3 are yours — Kayle is the single weakest early-game champion, and you can E her and crush her. Set up tentacles, land E (Test of Spirit), and pressure her off CS and XP relentlessly; you out-trade her hard while she's melee and weak. Your whole job is to deny her so she can't scale.",
+      mid: "Keep zoning her — your tentacle pressure dominates a melee Kayle, but you can't end the lane alone (she'll survive under tower). Deny her CS relentlessly; her whole game is scaling. Dive her with jungle help if she's behind. You must build a lead before level 11, because her ranged form will out-range your slow E.",
+      late: "Kayle takes over — at level 11 her ranged form out-ranges your E and kites you, and by 16 her R makes her untouchable. This is a hard lane despite you crushing the early, because she wins the GAME if she scales. You had to snowball and let your team end early; if she farmed to her spikes, you lose late. Deny her relentlessly.",
+      whys: [
+        "Kayle is the weakest early champ. E her and crush her. Levels 1-3 are yours.",
+        "Pressure her off CS + XP — you out-trade a melee Kayle hard.",
+        "You can't end the lane alone — deny her CS relentlessly.",
+        "Dive her with jungle help. Build a lead before level 11.",
+        "Even — keep zoning her; her ranged form at 11 out-ranges your E.",
+        "Kayle's spike — ranged form out-ranges your E and kites you.",
+        "Kayle takes over — ranged + untouchable R win the game. Deny her early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'akali',
+      win: ['Akali', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Akali'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Akali’s window — her Q poke + shroud chip your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E her (skillshot, ignores shroud); slam her.' },
+        { when: '1st item', text: 'Your tentacle DPS out-sustains a squishy Akali.' },
+        { when: '2+ items', text: 'Akali takes over — her item spikes out-burst you.' }
+      ],
+      wants: {
+        you: ['Land E — it’s a skillshot, shroud invis doesn’t block it', 'Out-sustain her poke off vessel healing', 'Kill her before her assassin item spikes'],
+        foe: ['Poke with Q and hide in W (shroud) to reset', 'All-in with E + R dashes at level 6', 'Scale into a burst assassin with item spikes']
+      },
+      early: "Akali pokes you with Q and resets in W (shroud) — levels 1-2 are her poke window. But here's the key: your E (Test of Spirit) is a skillshot, so her shroud's invisibility doesn't stop you from landing it on her position. Set up tentacles, take the chip, and look to E her when she steps up to poke.",
+      mid: "Your window — land E (even into shroud), W in, and slam her with tentacles. She's a squishy assassin with no sustain, and a vessel can't escape your tentacle slams. Your sustained DPS + vessel healing out-trade her. At 6 her R + dashes are a burst all-in, so don't be low, but you out-sustain a healthy fight.",
+      late: "Akali takes over at two items — her assassin item spikes let her burst even a tank from shroud before your tentacles matter. The lane is favoured because you out-sustain her early-mid (and your skillshot E ignores shroud); convert it. Snowball off the E pressure, deny her farm, and end before her item spikes flip the duel.",
+      whys: [
+        "Akali pokes with Q + shroud. Take the chip. Levels 1-2 are hers.",
+        "Your E is a skillshot — her shroud invis doesn't block it. Look for the E.",
+        "Your window — E her (ignores shroud) and slam her.",
+        "She's squishy with no sustain — a vessel can't escape your slams.",
+        "Her R + dashes are a burst all-in at 6 — don't be low.",
+        "Your tentacle DPS out-sustains a squishy Akali.",
+        "Akali takes over — her item spikes out-burst you. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'cassiopeia',
+      win: ['Cassiopeia', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Cassiopeia', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Cassio’s window — her Q/W poison pokes you; W grounds your dash.' },
+        { when: 'Lvl 3–6', text: 'Your window — E her if she steps up; slam her squishy frame.' },
+        { when: '1st item', text: 'Even — buy MR; catch her with E when her W is down.' },
+        { when: '2+ items', text: 'Cassiopeia takes over — Rylai’s / Liandry’s kite and ground you.' }
+      ],
+      wants: {
+        you: ['Land E when she steps up — a caught Cassio folds', 'Buy MR; don’t get grounded out of your W dash', 'Win the early-mid before her DPS scaling'],
+        foe: ['Poke you out with Q/W poison from range', 'Ground you with W (Miasma) to stop your W dash', 'Scale into an unkitable DPS mage']
+      },
+      early: "Cassiopeia pokes you with Q/W poison from range, and her W (Miasma) grounds you — which can stop your W (Harsh Lesson) dash. Levels 1-2 are her poke window. Set up tentacles, buy MR, and look to land E (Test of Spirit) if she steps up to last-hit. Don't rely on your W dash through her Miasma.",
+      mid: "Your window — if you land E on Cassiopeia, she folds; she's squishy and a vessel can't escape your tentacle slams. The hard part is catching her — she pokes from range and grounds your dash. Look for the E when her W (Miasma) is down, then slam her in your zone. Buy MR and out-sustain her poison off vessel healing.",
+      late: "Cassiopeia takes over at two items — Rylai's + Liandry's let her kite and ground you forever, out-DPSing your tentacles if you can't reach her. The lane is even because you can punish her hard if you land E, but she pokes and out-scales if you can't catch her. Build MR, look for E windows, and end before her DPS scaling.",
+      whys: [
+        "Cassio pokes with Q/W poison; her W grounds your dash. Buy MR. Levels 1-2 are hers.",
+        "Don't rely on your W dash through her Miasma. Look for E when she steps up.",
+        "Your window — E her if she steps up; slam her squishy frame.",
+        "A caught Cassio folds — a vessel can't escape your slams.",
+        "Even — catch her with E when her W is down. Out-sustain her poison.",
+        "Even — buy MR; catch her with E when her W is down.",
+        "Cassiopeia takes over — Rylai's / Liandry's kite and ground you. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'galio',
+      win: ['Galio', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Galio’s window — his Q (windblast) pokes your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him and slam; buy MR.' },
+        { when: '1st item', text: 'Your tentacle DPS out-pressures a tanky mage.' },
+        { when: 'Late', text: 'You win the lane 1v1 — he’s a global teamfighter; deny his roams.' }
+      ],
+      wants: {
+        you: ['Land E, then slam him in your tentacle field', 'Buy MR; out-sustain his Q poke', 'Punish the wave when he R-globals away'],
+        foe: ['Poke with Q (windblast) and soak with W', 'Taunt you with a channeled W (Shield of Durand)', 'Roam / impact the map with global R']
+      },
+      early: "Galio pokes you with Q (windblast) and soaks with W — levels 1-2 are his poke window. Set up tentacles, buy MR, and look for your E (Test of Spirit). His W reduces a trade and can taunt, so don't dump your slam into a raised W; he's a tanky control mage with low kill pressure on you. Look for the E.",
+      mid: "Your window — land E, W in, and slam him with tentacles in your zone. His W soaks one trade, but your sustained DPS out-pressures a tanky mage. Buy MR. His R (Hero's Entrance) is a global peel/engage for other lanes — when he ults away, shove and punish his wave.",
+      late: "You win the lane 1v1 — your tentacle DPS out-pressures him, and he's a teamfight frontliner with global presence, not a duelist. The game decides in fights where his R matters, but in the side lane you dominate. Buy MR, land E, deny his roam value, and snowball your tentacle pressure.",
+      whys: [
+        "Galio pokes with Q (windblast). Buy MR. Levels 1-2 are his.",
+        "Don't dump your slam into a raised W (it taunts). Look for your E.",
+        "Your window — E him and slam; out-pressure a tanky mage.",
+        "Your sustained DPS out-pressures him. Buy MR.",
+        "His R is a global peel — when he ults away, punish the wave.",
+        "Your tentacle DPS out-pressures a tanky mage.",
+        "You win the lane 1v1 — he's a global teamfighter; deny his roams."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'gwen',
+      win: ['Illaoi', 'Illaoi', 'Skill', 'Skill', 'Gwen', 'Gwen', 'Gwen'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E her early before her scaling; she’s weak.' },
+        { when: 'Lvl 6', text: 'Gwen’s window — her W (mist) dodges your E and zones your tentacles.' },
+        { when: '1st item', text: 'Gwen’s spike — her Q true damage shreds you in her mist.' },
+        { when: '2+ items', text: 'Gwen takes over — AP + true damage out-DPS your tentacles.' }
+      ],
+      wants: {
+        you: ['Land E early before her W (mist) is online', 'Deny her CS; win before her AP scaling', 'Fight her outside her mist where your tentacles hit'],
+        foe: ['Hide in W (mist) — dodges your E, untargetable', 'Shred you with Q (true damage) and scale', 'Out-scale into a tank-shredding AP bruiser']
+      },
+      early: "Levels 1-3 are yours — Gwen is weak early and scales into a tank-shredder, so punish her now. Set up tentacles, land E (Test of Spirit), and pressure her off CS before her W (mist) is a factor. Her Q deals true damage, but early she can't out-trade your tentacles. Deny her farm hard.",
+      mid: "Gwen's window — her W (Hallowed Mist) makes her untargetable from outside the cloud, dodging your E and zoning your tentacle slams. Once she has mist, you can't lock her down, and her Q true damage shreds you. Land E BEFORE she has W up, fight her outside the mist, and don't chase her into the cloud.",
+      late: "Gwen takes over at two items — her AP + true damage out-DPS your tentacles, and her mist dodges your E and keeps her safe. The lane is tricky because you crush her weak early but she out-scales and her mist neutralizes your engage. Snowball your early E pressure, deny her farm, and end before her scaling. If she's farmed, it's her lane.",
+      whys: [
+        "Gwen is weak early and scales into a tank-shredder. E her now. Levels 1-3 are yours.",
+        "Pressure her off CS before her W (mist) is a factor.",
+        "Her Q is true damage, but early she can't out-trade your tentacles.",
+        "Gwen's window — her W (mist) dodges your E and zones your tentacles.",
+        "Land E BEFORE she has W up. Don't chase her into the mist.",
+        "Gwen's spike — her Q true damage shreds you in her mist.",
+        "Gwen takes over — AP + true damage out-DPS your tentacles. End early."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'jayce',
+      win: ['Jayce', 'Jayce', 'Skill', 'Illaoi', 'Illaoi', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Jayce’s window — his cannon Q + W poke your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him if he steps up; slam his squishy frame.' },
+        { when: '1st item', text: 'Your tentacle DPS deletes a caught Jayce — he’s squishy.' },
+        { when: 'Late', text: 'You take over — Jayce falls off; your tentacles dominate.' }
+      ],
+      wants: {
+        you: ['Land E when he steps up — a caught Jayce folds', 'Survive his early poke; set up tentacles', 'Out-scale his falloff with tentacle DPS'],
+        foe: ['Poke from range with cannon Q + W (Hyper Charge)', 'Burst with the melee E-knockback → Q combo', 'Snowball the early poke before you out-scale']
+      },
+      early: "Jayce pokes you hard early — cannon Q (Shock Blast) through W, plus his melee burst combo — so levels 1-2 are his poke window. Set up tentacles, hug your minions, and don't step into a gate-empowered Shock Blast. Look for your E (Test of Spirit) if he over-extends; he's squishy and a caught Jayce is in big trouble.",
+      mid: "Your window — if you land E on Jayce, he folds; he's squishy and a vessel can't escape your tentacle slams. The hard part is catching him through his poke. Look for the E when he steps up to last-hit or commits his melee combo, then W in and slam him. His poke can't out-trade your tentacle DPS once you're on him.",
+      late: "You take over — Jayce is a lane bully who falls off, while your tentacles only get stronger. His poke can't out-pace your scaling, and any E you land deletes him. Survive his level 1-2 poke window, look for E windows, and crush him from level 3 on. By your item spikes he can't fight you in your zone.",
+      whys: [
+        "Jayce pokes hard — cannon Q + W. Hug minions. Levels 1-2 are his.",
+        "Don't step into a gate-empowered Shock Blast. Look for your E.",
+        "Your window — E him if he steps up; slam his squishy frame.",
+        "A caught Jayce folds — a vessel can't escape your slams.",
+        "Your R wall + tentacles delete him. His poke can't out-trade you on him.",
+        "Your tentacle DPS deletes a caught Jayce — he's squishy.",
+        "You take over — Jayce falls off; your tentacles dominate."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'kassadin',
+      win: ['Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Illaoi', 'Kassadin'],
+      spikes: [
+        { when: 'Lvl 1–3', text: 'Your window — E him early; he’s one of the weakest early champs.' },
+        { when: 'Lvl 6', text: 'Your window — E him before his R (Riftwalk) escape; slam him.' },
+        { when: '1st item', text: 'Your tentacle DPS crushes a pre-spike Kassadin.' },
+        { when: '2+ items', text: 'Kassadin takes over — at 16 + items he out-scales the game.' }
+      ],
+      wants: {
+        you: ['Land E early — he’s weak and can’t escape a vessel pre-6', 'Zone him off CS + XP relentlessly', 'Build a lead before his level 16 spike'],
+        foe: ['Survive lane with Q (spell shield) and farm', 'Blink away with R (Riftwalk) post-6', 'Out-scale into an unkillable late-game assassin']
+      },
+      early: "Levels 1-3 are yours — Kassadin is one of the weakest early champions, and you can E him and crush him. Set up tentacles, land E (Test of Spirit), and pressure him off CS and XP relentlessly. His Q is a spell shield (it blocks one ability), but he can't trade with you; deny his farm so he can't scale.",
+      mid: "Your window — keep E'ing him and crushing him before level 6 (after which his R gives a blink escape). Land E, W in, and slam a pre-spike Kassadin in your zone; deny his stacks of farm. Dive him with jungle help. Every level and item you deny delays the hyper-carry he becomes.",
+      late: "Kassadin takes over at two items and level 16 — his Riftwalk burst out-scales the game and he becomes nearly unkillable. The lane is favoured because you crush his early-mid hard; you must convert it. Snowball off the E pressure, deny his farm relentlessly, and end the game before his spike. If he farmed, you lose late.",
+      whys: [
+        "Kassadin is one of the weakest early champs. E him and crush him. Levels 1-3 are yours.",
+        "His Q blocks one ability, but he can't trade you. Deny his farm.",
+        "Pressure him off CS + XP — you out-trade him hard.",
+        "Keep E'ing him before 6 (his R gives a blink escape after).",
+        "Your window — E him before his Riftwalk escape; slam him.",
+        "Your tentacle DPS crushes a pre-spike Kassadin.",
+        "Kassadin takes over — at 16 + items he out-scales. Snowball hard."
+      ]
+    },
+    {
+      a: 'illaoi', b: 'lucian',
+      win: ['Lucian', 'Skill', 'Illaoi', 'Illaoi', 'Skill', 'Illaoi', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Lucian’s window — his Q + passive poke; hug minions.' },
+        { when: 'Lvl 3–6', text: 'Your window — E him when he steps up; slam his squishy frame.' },
+        { when: '1st item', text: 'A caught Lucian folds — a vessel can’t escape your tentacles.' },
+        { when: 'Late', text: 'You edge it — catch him with E; he can’t kill a bruiser in tentacles.' }
+      ],
+      wants: {
+        you: ['Land E when he steps up — a caught Lucian folds', 'Hug minions through his Q poke', 'Fight him in your tentacles when you catch him'],
+        foe: ['Poke with Q (line) + passive double-shot', 'Dash around with E (Relentless Pursuit)', 'Kite you and scale into a DPS marksman']
+      },
+      early: "Lucian pokes you with Q + passive double-shot — levels 1-2 are his poke window, and he dashes with E to stay safe. Hug your minions to limit the Q, set up tentacles, and take the chip. He's squishy, so look to land E (Test of Spirit) when he steps up to last-hit or commits his combo.",
+      mid: "Your window — if you land E on Lucian, he folds; he's squishy and a vessel can't escape your tentacle slams, even with his E dash. The hard part is catching him through his poke and mobility. Look for the E when his E is down or he steps up, then W in and slam him in your zone.",
+      late: "You edge it — Lucian pokes and kites, but a marksman can't kill a bruiser inside her tentacle field, and any E you land deletes him. Hug minions to deny free poke, look for E windows when his dash is down, and slam him in your nest. If he kites freely he chips you; if you catch him, he dies.",
+      whys: [
+        "Lucian pokes with Q + passive. Hug minions. Levels 1-2 are his.",
+        "He dashes with E to stay safe. Take the chip, look for your E.",
+        "Your window — E him when he steps up; slam his squishy frame.",
+        "A caught Lucian folds — a vessel can't escape your tentacles.",
+        "Look for the E when his E dash is down. Slam him in your zone.",
+        "A caught Lucian folds — a vessel can't escape your tentacles.",
+        "You edge it — catch him with E; he can't kill a bruiser in tentacles."
       ]
     }
   ];

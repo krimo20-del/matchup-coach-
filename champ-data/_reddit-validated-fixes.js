@@ -152,7 +152,9 @@
       chogath: 57.0, tahmkench: 53.9, ksante: 52.2, poppy: 55.1, kayle: 49.4, akali: 52.9,
       cassiopeia: 47.5, galio: 54.3, gwen: 48.6, jayce: 53.3, kassadin: 53.3, lucian: 52.7,
       maokai: 58.2, sylas: 53.0, graves: 52.6, heimerdinger: 48.0, ryze: 59.7, rumble: 53.4,
-      sejuani: 52.9, zac: 57.4, ziggs: 51.8, nautilus: 53.5, singed: 52.7, trundle: 51.4
+      sejuani: 52.9, zac: 57.4, ziggs: 51.8, nautilus: 53.5, singed: 52.7, trundle: 51.4,
+      camille: 46.4, aurora: 53.6, ambessa: 57.2, akshan: 54.3, karma: 52.1, lillia: 50.1,
+      mel: 58.2, neeko: 52.9
     }
   };
   // hard-scalers who reclaim the 2+ item window even in an Aatrox-favoured lane
@@ -10641,6 +10643,214 @@
         "His R drains your stats; his E pillar zones your approach.",
         "Even — bait his Q; out-brawl when his sustain is down.",
         "Trundle takes over — sustain + R drain out-last your grit. Bring antiheal."
+      ]
+    },
+    {
+      a: 'sett', b: 'camille',
+      win: ['Camille', 'Camille', 'Skill', 'Skill', 'Camille', 'Camille', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Camille’s window — her E-Q true damage out-trades your early.' },
+        { when: 'Lvl 3–6', text: 'Camille’s window — her true damage + shield beat your grit.' },
+        { when: '1st item', text: 'She out-trades you; bank grit, E-stun her on the ground.' },
+        { when: '2+ items', text: 'Camille takes over — R isolation + true damage shred you.' }
+      ],
+      wants: {
+        you: ['E-stun her — she can’t hookshot out of a stun', 'Bank grit; her true damage out-trades you otherwise', 'Stand off walls so her E can’t stun you'],
+        foe: ['Out-trade with E-Q (hookshot) true damage + shield', 'Reset trades by hookshotting away', 'Isolate you with R in the side lane late']
+      },
+      early: "Camille is tricky — her E-Q (hookshot into empowered auto) does true damage that out-trades you, and her shield blunts your trade back. Levels 1-2 are hers. Stand away from terrain so her E can't stun you, bank grit, and look for your E-stun (Facebreaker); she can't hookshot out of a stun.",
+      mid: "Camille out-trades you through the mid-game — her true damage shreds your grit shield, and she resets trades by hookshotting away. Your one answer is the E-stun: catch her when she commits E-Q, then W with loaded grit. Don't chase her resets, and don't fight by walls where her E stuns you.",
+      late: "Camille takes over at two items — her R isolation + true damage shred even a tanky Sett in the side lane. The lane is tricky and hers to win. Your best path is landing E-stun when she commits, then bursting her with W + R. Bank grit, stand off walls, and don't get caught alone late; her true damage beats your grit.",
+      whys: [
+        "Camille's E-Q true damage out-trades your early. Stand off walls. Levels 1-2 are hers.",
+        "Her shield blunts your trade back. Bank grit, look for your E-stun.",
+        "Her true damage + shield beat your grit. E-stun her on the ground.",
+        "She resets trades by hookshotting away. Don't chase her resets.",
+        "Catch her when she commits E-Q — she can't hookshot out of a stun.",
+        "She out-trades you; bank grit, E-stun her on the ground.",
+        "Camille takes over — R isolation + true damage shred you."
+      ]
+    },
+    {
+      a: 'sett', b: 'aurora',
+      win: ['Aurora', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Aurora’s window — her Q/E poke + W dodge your approach.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch her; W (true damage).' },
+        { when: '1st item', text: 'A caught Aurora folds — build MR; bait her W dash.' },
+        { when: 'Late', text: 'You edge it — catch her when her W is down; she scales.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close her kite; E-stun her', 'Buy MR; W (true damage) deletes a caught Aurora', 'Catch her when her W (dash) is down'],
+        foe: ['Poke with Q (bolt) + E (80% slow) and self-heal', 'Dodge your E-stun with W (dash + invisibility)', 'Zone and escape with R (untargetable rift)']
+      },
+      early: "Aurora pokes you with Q and E (80% slow), self-heals, and her W (dash into invisibility) dodges your approach — levels 1-2 are her poke window. Bank grit, buy MR, and take the chip. She's a squishy mage; the moment you Q-close and E-stun her (when her W is down), she's in big trouble.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close her kite, E-stun her (Facebreaker) when her W dash is on cooldown, and W with loaded grit; a caught Aurora folds, and at 6 your R grabs her. Bait her W out, then commit. Don't chase her into her R rift; out-brawl her in your window.",
+      late: "You edge it — your Q-close + E-stun + W true damage delete a mobile Aurora whenever her W is down. Build MR, look for E-stun windows on her W cooldown, and W + R her. She scales as an AP threat, so the game is about her teamfight burst; in lane, catch her. If she kites freely, she pokes you.",
+      whys: [
+        "Aurora's Q/E poke + W dodge your approach. Buy MR. Levels 1-2 are hers.",
+        "She's a squishy mage. Take the chip, look for the gap-close.",
+        "Your window — Q-close + E-stun catch her; W (true damage).",
+        "A caught Aurora folds. At 6 your R grabs her.",
+        "Bait her W out, then commit. Don't chase into her R rift.",
+        "A caught Aurora folds — build MR; bait her W dash.",
+        "You edge it — catch her when her W is down; she scales."
+      ]
+    },
+    {
+      a: 'sett', b: 'ambessa',
+      win: ['Ambessa', 'Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Ambessa’s window — her dash combo bursts your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) out-brawl her.' },
+        { when: '1st item', text: 'Your W true damage out-trades her dash combo.' },
+        { when: 'Late', text: 'You edge it — E-stun her dashes; respect her R suppress.' }
+      ],
+      wants: {
+        you: ['Bank grit, then E-stun + W (true damage) her', 'E-stun cancels her dash combo', 'Respect her R (suppress) — don’t get caught low'],
+        foe: ['Chain dashes (passive) into the Q → W combo', 'Brace with E (shield + counter-smash)', 'All-in with R (blink behind + suppress + stun)']
+      },
+      early: "Ambessa bursts you with her dash combo (Q → W) early — levels 1-2 are her window. Her damage is physical, which your grit + tankiness handle. Bank grit from her combo, don't get chunked low, and look for your E-stun (Facebreaker); a stun cancels her dash chains. Wait for your level-3 spike.",
+      mid: "Your window — E-stun her (Facebreaker) when she commits her dash combo (it cancels her mobility), then W with loaded grit for true damage; your true damage out-trades her. Don't dump your W into her E (Repudiation) brace. At 6 your R grabs her. Out-brawl her in your zone.",
+      late: "You edge it — your E-stun cancels her dash mobility, and your W true damage + grit out-brawl her. Respect her R (Public Execution suppress) at low HP — it's a blink-behind all-in. Bank grit, E-stun + W her, and R her when her R is down. Your sustained brawl beats her burst once you lock her down.",
+      whys: [
+        "Ambessa bursts you with her dash combo. Bank grit. Levels 1-2 are hers.",
+        "Her damage is physical — your grit handles it. Look for your E-stun.",
+        "Your window — E-stun + W (true damage) out-brawl her.",
+        "E-stun cancels her dash combo. Don't dump W into her E brace.",
+        "At 6 your R grabs her. Respect her R suppress at low HP.",
+        "Your W true damage out-trades her dash combo.",
+        "You edge it — E-stun her dashes; respect her R suppress."
+      ]
+    },
+    {
+      a: 'sett', b: 'akshan',
+      win: ['Akshan', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Akshan’s window — he pokes + swings around your approach.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch a squishy Akshan.' },
+        { when: '1st item', text: 'A caught Akshan folds — build tanky to ignore his poke.' },
+        { when: 'Late', text: 'You edge it — catch him with Q + E; he kites + roams.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close his swing kite; E-stun him', 'Build tanky to ignore his poke; W deletes him', 'Punish his roams; catch a squishy Akshan'],
+        foe: ['Poke with Q (Avengerang) + autos', 'Swing around terrain with E (Heroic Swing)', 'Roam and pick with R (Comeuppance)']
+      },
+      early: "Akshan pokes you with Q (Avengerang) and autos, and swings off terrain with E — levels 1-2 are his poke window, and a swinging Akshan is hard to catch. Build tanky so his poke chips but can't kill you, bank grit, and take the chip. He's squishy; the moment you Q-close and E-stun him, he dies.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close his swing kite, E-stun him (Facebreaker) when his swing is down, and W with loaded grit; a squishy Akshan folds, and at 6 your R grabs him. Build tanky to ignore his poke, and punish his roams (his R is a roam tool) by taking the wave.",
+      late: "You edge it — your tankiness ignores his poke, and Q + E-stun catch him when his swing is down. He roams for picks with R, so the game is about his roam impact, not the 1v1 you win. Build tanky, track his roams, and W + R him when you catch him. In lane he can't kill a tank who closes.",
+      whys: [
+        "Akshan pokes + swings around your approach. Build tanky. Levels 1-2 are his.",
+        "A swinging Akshan is hard to catch. Take the chip, look for the gap-close.",
+        "Your window — Q-close + E-stun catch a squishy Akshan.",
+        "A squishy Akshan folds. At 6 your R grabs him.",
+        "Build tanky to ignore his poke. Punish his roams.",
+        "A caught Akshan folds — build tanky to ignore his poke.",
+        "You edge it — catch him with Q + E; he kites + roams."
+      ]
+    },
+    {
+      a: 'sett', b: 'karma',
+      win: ['Karma', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Karma’s window — her Q (Mantra) pokes; W roots to peel.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch a squishy Karma.' },
+        { when: '1st item', text: 'A caught Karma folds — W (true damage) + R delete her.' },
+        { when: 'Late', text: 'You edge it — she pokes/peels; catch her with E.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close; E-stun a squishy Karma', 'Buy MR; W (true damage) deletes her', 'Don’t get kited by her W (root) + E (shield)'],
+        foe: ['Poke with Q (Inner Flame) — empowered by R (Mantra)', 'Root you with W (Focused Resolve) tether', 'Self-peel with E (shield + move speed)']
+      },
+      early: "Karma pokes you with Q (Mantra-empowered) and peels with E (shield + MS) and W (root tether) — levels 1-2 are her poke window. Bank grit, buy MR, and look for your E-stun (Facebreaker). She's squishy; a caught Karma folds, but her shield + kite make landing E tricky. Take the chip.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close her kite, E-stun her, and W with loaded grit; a squishy Karma folds, and at 6 your R grabs her. Don't get rooted by her full W tether mid-engage; close fast or break line of sight. Once you're on her with no shield, she dies.",
+      late: "You edge it — Karma pokes and peels for her team, but she can't kill a tanky Sett, and a landed E-stun deletes her. Build MR, hug minions to deny free poke, and W + R her when you catch her. She's a utility mage, so the game is about her teamfight shields/roots; in lane, catch her with Q + E.",
+      whys: [
+        "Karma pokes with Q + peels with E/W. Buy MR. Levels 1-2 are hers.",
+        "She's squishy; a caught Karma folds. Take the chip, look for E.",
+        "Your window — Q-close + E-stun catch a squishy Karma.",
+        "A caught Karma folds — W (true damage) + R delete her.",
+        "Don't get rooted by her W tether mid-engage. Close fast.",
+        "A caught Karma folds — W (true damage) + R delete her.",
+        "You edge it — she pokes/peels; catch her with E."
+      ]
+    },
+    {
+      a: 'sett', b: 'lillia',
+      win: ['Lillia', 'Skill', 'Sett', 'Sett', 'Skill', 'Sett', 'Lillia'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Lillia’s window — she kites you with Q + E.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch her; W deletes her.' },
+        { when: '1st item', text: 'A caught Lillia folds — buy MR; she kites your approach.' },
+        { when: '2+ items', text: 'Lillia takes over — AP on-hit + mobility kite and shred you.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close her kite; E-stun her', 'Buy MR; W (true damage) deletes a caught Lillia', 'Win before her AP scaling'],
+        foe: ['Kite with Q (swirl) movement + E (dash + slow)', 'Stack passive burn and scale AP on-hit', 'Set up picks with R (sleep)']
+      },
+      early: "Lillia kites you with her Q (move speed) and E (dash + slow) — levels 1-2 are her poke window, and her mobility makes catching her hard. Bank grit, buy MR, and use Q (Knuckle Down) move speed to close. She's squishy; the moment you E-stun her, your W deletes her. Take the chip.",
+      mid: "Your window — use Q to close her kite, E-stun her (Facebreaker) when her E dash is down, and W with loaded grit; a squishy Lillia folds, and at 6 your R grabs her. Punish her after she commits her dash. At 6 watch her R (sleep) — don't get slept in a bad spot. Buy MR.",
+      late: "Lillia takes over at two items — AP on-hit + her constant mobility kite and shred you while staying out of reach. The lane is even because you can punish her hard if you catch her, but she out-scales if she kites freely. Build MR, look for E-stun on her dash cooldowns, and end before her scaling. Don't get slept.",
+      whys: [
+        "Lillia kites you with Q + E. Buy MR. Levels 1-2 are hers.",
+        "Her mobility makes catching her hard. Use Q to close.",
+        "Your window — Q-close + E-stun catch her; W deletes her.",
+        "A squishy Lillia folds. Punish her after she commits her dash.",
+        "Don't get slept by her R. At 6 your R grabs her.",
+        "A caught Lillia folds — buy MR; she kites your approach.",
+        "Lillia takes over — AP on-hit + mobility kite and shred you. End early."
+      ]
+    },
+    {
+      a: 'sett', b: 'mel',
+      win: ['Mel', 'Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Mel’s window — her Q (Radiant Volley) pokes from range.' },
+        { when: 'Lvl 3–6', text: 'Your window — Q-close + E-stun catch her; W deletes her.' },
+        { when: '1st item', text: 'A caught Mel folds — build tanky; dodge her E (root).' },
+        { when: 'Late', text: 'You win the lane — she’s a squishy poke mage with no escape.' }
+      ],
+      wants: {
+        you: ['Use Q (move speed) to close her poke; E-stun her', 'Build tanky; W (true damage) deletes a caught Mel', 'Dodge her E (Solar Snare root)'],
+        foe: ['Poke from range with Q (Radiant Volley)', 'Root you with E (Solar Snare) to land poke', 'Self-peel with W (shield + move speed)']
+      },
+      early: "Mel is one of your best lanes — she's a squishy artillery mage with no escape but her W move-speed. She pokes you with Q (Radiant Volley) and roots with E — levels 1-2 are her poke window. Build tanky so her poke chips but can't kill you, bank grit, and dodge her E root. Look for the gap-close.",
+      mid: "Your window — use Q (Knuckle Down) move speed to close her poke, E-stun her (Facebreaker), and W with loaded grit; a squishy Mel deletes instantly, and at 6 your R grabs her. Her W reflects projectiles, but your melee combo + W aren't blocked. Dodge her E root, then commit; she can't escape your catch.",
+      late: "You win the lane — if you reach Mel she dies, full stop. She's a teamfight poke/execute mage (her R is global), but in the side-lane 1v1 your Q-close + E-stun + W delete her squishy frame. Build tanky, dodge her E, and snowball your catch potential. One of your best matchups.",
+      whys: [
+        "Mel is a squishy artillery mage with no escape. Build tanky. Levels 1-2 are hers.",
+        "Dodge her E root. Look for the gap-close.",
+        "Your window — Q-close + E-stun catch her; W deletes her.",
+        "A squishy Mel deletes instantly. Her W reflect doesn't block your melee.",
+        "Dodge her E root, then commit. At 6 your R grabs her.",
+        "A caught Mel folds — build tanky; dodge her E (root).",
+        "You win the lane — she's a squishy poke mage with no escape."
+      ]
+    },
+    {
+      a: 'sett', b: 'neeko',
+      win: ['Neeko', 'Skill', 'Sett', 'Sett', 'Sett', 'Sett', 'Skill'],
+      spikes: [
+        { when: 'Lvl 1–2', text: 'Neeko’s window — her Q poke + E root chip your early.' },
+        { when: 'Lvl 3–6', text: 'Your window — E-stun + W (true damage) delete a squishy Neeko.' },
+        { when: '1st item', text: 'A caught Neeko folds — build tanky; dodge her E (root).' },
+        { when: 'Late', text: 'You win the lane — she’s a teamfight pick mage, not a duelist.' }
+      ],
+      wants: {
+        you: ['E-stun + W delete a squishy Neeko', 'Build tanky; dodge her E (root) and R (stun)', 'Don’t get fooled by her W (clone) disguise'],
+        foe: ['Poke with Q (Blooming Burst) and root with E', 'Disguise as a minion/ally with W (clone)', 'All-in with R (Pop Blossom AOE stun)']
+      },
+      early: "Neeko pokes you with Q and roots with E to set up damage — levels 1-2 are her poke window. But she's squishy and built for picks, not dueling. Build tanky so her poke chips but can't kill you, bank grit, and dodge her E root. Don't get fooled by her W (clone) disguise; look for your E-stun on the real Neeko.",
+      mid: "Your window — E-stun her (Facebreaker), W with loaded grit for true damage, and a squishy Neeko deletes; at 6 your R grabs her. Watch her R (Pop Blossom) windup (often from a disguise), and dodge her E root. Don't facecheck a 'minion' that might be her clone. Crush her once you catch her.",
+      late: "You win the lane — Neeko is a teamfight burst/pick mage, not a side-lane duelist, and your E-stun + W delete her squishy frame. If you reach her she dies. Build tanky, dodge her R windup, deny her roams, and snowball your catch. The 1v1 is always yours; don't facecheck her clones.",
+      whys: [
+        "Neeko pokes with Q + roots with E. Build tanky. Levels 1-2 are hers.",
+        "Don't get fooled by her W (clone) disguise. Dodge her E root.",
+        "Your window — E-stun + W (true damage) delete a squishy Neeko.",
+        "A squishy Neeko deletes. At 6 your R grabs her.",
+        "Watch her R (Pop Blossom) windup, often from a disguise.",
+        "A caught Neeko folds — build tanky; dodge her E (root).",
+        "You win the lane — she's a teamfight pick mage, not a duelist."
       ]
     }
   ];

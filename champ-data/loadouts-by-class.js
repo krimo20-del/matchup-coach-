@@ -53,6 +53,15 @@
       core: ['Hextech Rocketbelt', 'Shadowflame', 'Rabadon’s Deathcap'],
       options: [{ label: 'AD Assassin', items: ['Youmuu’s Ghostblade', 'Profane Hydra'] }, { label: 'vs Squishy', items: ['Void Staff', 'Zhonya’s Hourglass'] }]
     },
+    skirmisher_onhit: {
+      label: 'On-Hit Skirmisher', summHigh: ['Flash', 'Teleport'], summLow: ['Flash', 'Ignite'],
+      keystone: 'Lethal Tempo', primaryTree: 'Precision', primary: ['Triumph', 'Legend: Alacrity', 'Last Stand'],
+      secondaryTree: 'Domination', secondary: ['Sudden Impact', 'Treasure Hunter'],
+      shards: ['Attack Speed', 'Adaptive Force', 'Health'],
+      start: ["Doran's Blade", 'Health Potion'], boots: 'Berserker’s Greaves',
+      core: ['Kraken Slayer', 'Blade of the Ruined King', 'Wit’s End'],
+      options: [{ label: 'vs Tanks', items: ['Blade of the Ruined King', 'Terminus'] }, { label: 'vs Heavy AP', items: ['Wit’s End', 'Maw of Malmortius'] }]
+    },
     marksman: {
       label: 'Marksman / ADC', summHigh: ['Flash', 'Heal'], summLow: ['Flash', 'Barrier'],
       keystone: 'Press the Attack', primaryTree: 'Precision', primary: ['Presence of Mind', 'Legend: Alacrity', 'Cut Down'],
@@ -107,7 +116,8 @@
     } else if (role === 'mid') {
       key = has(MID_ASSASSINS, champ) ? 'assassin' : 'mage';
     } else { // top
-      key = classOf === 'Tank' ? 'tank' : classOf === 'Diver' ? 'diver' : classOf === 'Mage' ? 'mage' : 'juggernaut';
+      key = has(['Master Yi'], champ) ? 'skirmisher_onhit'
+          : classOf === 'Tank' ? 'tank' : classOf === 'Diver' ? 'diver' : classOf === 'Mage' ? 'mage' : 'juggernaut';
     }
     var base = A[key];
     var preset = JSON.parse(JSON.stringify(base));

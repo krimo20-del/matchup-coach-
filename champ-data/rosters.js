@@ -6,7 +6,7 @@ window.ROSTERS = {
     { g: "Tanks", c: ["Cho'Gath","K'Sante","Malphite","Maokai","Nautilus","Ornn","Poppy","Shen","Sion","Tahm Kench","Zac"] },
     { g: "Mages, Marksmen & Specialists", c: ["Akali","Aurora","Gangplank","Gnar","Heimerdinger","Jayce","Kayle","Kennen","Quinn","Rumble","Singed","Swain","Teemo","Vladimir"] },
     { g: "Newest Arrivals", c: ["Ambessa","Zaahen"] },
-    { g: "Off-Meta & Flex Picks", c: ["Akshan","Cassiopeia","Galio","Graves","Karma","Kassadin","Lillia","Lucian","Mel","Neeko","Ryze","Sejuani","Sylas","Ziggs"] }
+    { g: "Off-Meta & Flex Picks", c: ["Akshan","Cassiopeia","Galio","Graves","Karma","Kassadin","Lillia","Lucian","Master Yi","Mel","Neeko","Ryze","Sejuani","Sylas","Ziggs"] }
   ],
   jungle: [
     { g: "Assassins & Divers", c: ["Bel'Veth","Diana","Ekko","Elise","Evelynn","Graves","Kayn","Kha'Zix","Kindred","Lee Sin","Naafiri","Nidalee","Nocturne","Rengar","Shaco","Talon","Viego","Wukong"] },

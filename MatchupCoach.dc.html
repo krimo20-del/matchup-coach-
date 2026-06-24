@@ -999,8 +999,7 @@
       <div style="margin-bottom:12px;"><span style="display:inline-block; padding:5px 13px; border-radius:8px; background:rgba(255,93,108,0.14); border:1px solid rgba(255,93,108,0.45); font-family:'Chakra Petch',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:0.8px; color:#ff8b96;">PICK THE ENEMY JUNGLER ↓</span></div>
       <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:9px; background:rgba(232,184,75,0.08); border:1px solid rgba(232,184,75,0.3); margin-bottom:14px;">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f0cd72" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4M12 16h.01"></path></svg>
-        <span style="font-size:11.5px; font-weight:700; color:#f0cd72;">Patch 26.11 — nobody leashes anymore:</span>
-        <span style="font-size:11.5px; color:#cdc4ad;">camps spawn 0:55 · scuttle 2:55 · junglers solo-start on the side OPPOSITE the lane they want to gank.</span>
+        <span style="font-size:11.5px; color:#cdc4ad;">Patch 26.11 — junglers solo-start on the side <span style="font-weight:700; color:#f0cd72;">OPPOSITE</span> the lane they want to gank.</span>
       </div>
 
       <!-- jungler picker (home: 2 free + the rest behind a free account) -->
@@ -2239,8 +2238,7 @@
       <div style="margin-bottom:12px;"><span style="display:inline-block; padding:5px 13px; border-radius:8px; background:rgba(255,93,108,0.14); border:1px solid rgba(255,93,108,0.45); font-family:'Chakra Petch',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:0.8px; color:#ff8b96;">PICK THE ENEMY JUNGLER ↓</span></div>
       <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:9px; background:rgba(232,184,75,0.08); border:1px solid rgba(232,184,75,0.3); margin-bottom:14px;">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f0cd72" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4M12 16h.01"></path></svg>
-        <span style="font-size:11.5px; font-weight:700; color:#f0cd72;">Patch 26.11 — nobody leashes anymore:</span>
-        <span style="font-size:11.5px; color:#cdc4ad;">camps spawn 0:55 · scuttle 2:55 · junglers solo-start on the side OPPOSITE the lane they want to gank.</span>
+        <span style="font-size:11.5px; color:#cdc4ad;">Patch 26.11 — junglers solo-start on the side <span style="font-weight:700; color:#f0cd72;">OPPOSITE</span> the lane they want to gank.</span>
       </div>
 
       <!-- jungler picker -->
@@ -3529,6 +3527,10 @@ class Component extends DCLogic {
     try { history.replaceState({ mc: { view: 'home', homeStep: 'role', role: '', myChamp: '', enemyChamp: '', matchup: 'mid', authMode: 'login', plan: 'all' } }, ''); } catch (e) {}
     this._onPop = (e) => { if (e.state && e.state.mc) { this.setState(e.state.mc); window.scrollTo(0, 0); } };
     window.addEventListener('popstate', this._onPop);
+    // Bootstrap Google Sign-In from the hardcoded public client ID.
+    // Paste your client ID from console.cloud.google.com → Credentials here:
+    var _gcid = window.MC_GOOGLE_CLIENT_ID || '';
+    if (_gcid) { (function(self, gid){ self.setState({ googleClientId: gid }); var s = document.createElement('script'); s.src = 'https://accounts.google.com/gsi/client'; s.async = true; document.head.appendChild(s); self._gsi = setInterval(function(){ var el = document.getElementById('mc-gsi'); var g = window.google && window.google.accounts && window.google.accounts.id; if (!el || el.childElementCount > 0 || !g) return; if (!self._gsiInit) { g.initialize({ client_id: gid, callback: function(r){ self._googleCred(r && r.credential); } }); self._gsiInit = true; } g.renderButton(el, { theme: 'outline', size: 'large', text: 'continue_with', shape: 'pill', width: 300 }); }, 250); })(this, _gcid); }
     if (window.MC_API) window.MC_API.available().then(ok => {
       if (!ok) return;
       // Server is authoritative: live founder ladder, weekly rotation index,
@@ -3550,8 +3552,9 @@ class Component extends DCLogic {
             history.replaceState({}, '', location.pathname);
           }
         } catch (e) {}
-        if (!c.googleClientId) return;
-        this.setState({ googleClientId: c.googleClientId });
+        var gid = c.googleClientId || window.MC_GOOGLE_CLIENT_ID;
+        if (!gid) return;
+        this.setState({ googleClientId: gid });
         var s = document.createElement('script');
         s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
         document.head.appendChild(s);
@@ -3870,10 +3873,11 @@ class Component extends DCLogic {
   // Scroll to top reliably: hit window + document + body, now and after the
   // (heavy) re-render lands, so a matchup never opens scrolled into the middle.
   _top() {
-    var go = function(){ try { window.scrollTo(0, 0); document.documentElement.scrollTop = 0; document.body.scrollTop = 0; } catch (e) {} };
+    try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch(e) {}
+    var go = function(){ try { window.scrollTo({top:0,left:0,behavior:'instant'}); document.documentElement.scrollTop = 0; document.body.scrollTop = 0; } catch (e) { try { window.scrollTo(0,0); } catch(e2){} } };
     go();
     requestAnimationFrame(go);
-    setTimeout(go, 60); setTimeout(go, 180); setTimeout(go, 420); setTimeout(go, 700);
+    setTimeout(go, 30); setTimeout(go, 100); setTimeout(go, 250); setTimeout(go, 500);
   }
   // Browser-history integration: every major view change pushes a snapshot so
   // the Back button walks the app instead of leaving the site. On a matchup we

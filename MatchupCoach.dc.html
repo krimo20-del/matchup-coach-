@@ -856,14 +856,35 @@
       </div>
 
       <div style="margin:34px auto 0; max-width:740px; display:flex; align-items:center; gap:8px; background:#10141f; border:1px solid rgba(255,255,255,0.09); border-radius:16px; padding:8px; flex-wrap:wrap; box-shadow:0 24px 56px -30px rgba(0,0,0,0.95);">
-        <input value="{{ heroYou }}" onChange="{{ setHeroYou }}" onKeyDown="{{ heroKey }}" list="mc-champs" placeholder="Enter your champion" style="flex:1 1 190px; min-width:150px; padding:13px 15px; border-radius:11px; border:1px solid rgba(255,255,255,0.07); background:#0b0e16; color:#ece7e1; font-size:14px; font-family:'Manrope',sans-serif; outline:none;">
+        <div style="position:relative; flex:1 1 190px; min-width:150px;">
+          <input value="{{ heroYou }}" onChange="{{ setHeroYou }}" onKeyDown="{{ heroKey }}" onFocus="{{ heroYouFocus }}" onBlur="{{ heroYouBlur }}" placeholder="Your champion" style="width:100%; box-sizing:border-box; padding:13px 15px; border-radius:11px; border:1px solid rgba(255,255,255,0.07); background:#0b0e16; color:#ece7e1; font-size:14px; font-family:'Manrope',sans-serif; outline:none;">
+          <sc-if value="{{ showYouSuggs }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:200; border-radius:12px; border:1px solid rgba(255,255,255,0.1); background:#13151f; box-shadow:0 20px 48px -12px rgba(0,0,0,0.9); overflow:hidden; max-height:240px; overflow-y:auto;">
+              <sc-for list="{{ youSuggs }}" as="s" hint-placeholder-count="5">
+                <button onClick="{{ s.pick }}" style="width:100%; display:flex; align-items:center; gap:10px; padding:9px 12px; border:none; background:transparent; cursor:pointer; text-align:left; font-family:'Manrope',sans-serif;" style-hover="background:rgba(255,255,255,0.06);">
+                  <span data-champ-icon="{{ s.name }}" style="flex:0 0 auto; width:30px; height:30px; border-radius:8px; background:#1c2030; border:1px solid rgba(255,255,255,0.1);"></span>
+                  <span style="font-size:13px; font-weight:700; color:#ece7e1;">{{ s.name }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
         <span style="flex:0 0 auto; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:13px; color:#f0cd72; padding:0 4px;">VS</span>
-        <input value="{{ heroFoe }}" onChange="{{ setHeroFoe }}" onKeyDown="{{ heroKey }}" list="mc-champs" placeholder="Enter enemy champion" style="flex:1 1 190px; min-width:150px; padding:13px 15px; border-radius:11px; border:1px solid rgba(255,255,255,0.07); background:#0b0e16; color:#ece7e1; font-size:14px; font-family:'Manrope',sans-serif; outline:none;">
+        <div style="position:relative; flex:1 1 190px; min-width:150px;">
+          <input value="{{ heroFoe }}" onChange="{{ setHeroFoe }}" onKeyDown="{{ heroKey }}" onFocus="{{ heroFoeFocus }}" onBlur="{{ heroFoeBlur }}" placeholder="Enemy champion" style="width:100%; box-sizing:border-box; padding:13px 15px; border-radius:11px; border:1px solid rgba(255,255,255,0.07); background:#0b0e16; color:#ece7e1; font-size:14px; font-family:'Manrope',sans-serif; outline:none;">
+          <sc-if value="{{ showFoeSuggs }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:200; border-radius:12px; border:1px solid rgba(255,255,255,0.1); background:#13151f; box-shadow:0 20px 48px -12px rgba(0,0,0,0.9); overflow:hidden; max-height:240px; overflow-y:auto;">
+              <sc-for list="{{ foeSuggs }}" as="s" hint-placeholder-count="5">
+                <button onClick="{{ s.pick }}" style="width:100%; display:flex; align-items:center; gap:10px; padding:9px 12px; border:none; background:transparent; cursor:pointer; text-align:left; font-family:'Manrope',sans-serif;" style-hover="background:rgba(255,255,255,0.06);">
+                  <span data-champ-icon="{{ s.name }}" style="flex:0 0 auto; width:30px; height:30px; border-radius:8px; background:#1c2030; border:1px solid rgba(255,255,255,0.1);"></span>
+                  <span style="font-size:13px; font-weight:700; color:#ece7e1;">{{ s.name }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
         <button onClick="{{ heroGo }}" style="flex:0 0 auto; padding:13px 20px; border-radius:11px; border:none; background:linear-gradient(180deg,#46c6f5,#2a9fd6); color:#06121a; font-weight:700; font-size:14px; cursor:pointer; font-family:'Manrope',sans-serif; white-space:nowrap;" style-hover="background:linear-gradient(180deg,#5fd2ff,#34a8e0);">Analyze Matchup</button>
       </div>
-      <datalist id="mc-champs">
-        <sc-for list="{{ champPool }}" as="cn" hint-placeholder-count="20"><option value="{{ cn }}"></option></sc-for>
-      </datalist>
       <sc-if value="{{ hasHeroErr }}" hint-placeholder-val="{{ false }}">
         <div style="margin:10px auto 0; max-width:740px; font-size:12.5px; font-weight:700; color:#ff8b96;">{{ heroErr }}</div>
       </sc-if>
@@ -3489,7 +3510,7 @@ class Component extends DCLogic {
     pendingPlan: '', plan: 'all', planRole: 'top', planChamp: 'Aatrox', coStyle: 'embedded',
     founders: null, serverWeek: null, pendingMU: null, googleClientId: null,
     stripeEnabled: false, payOk: false, payErr: '', stripeBusy: false,
-    heroYou: '', heroFoe: '', heroErr: '',
+    heroYou: '', heroFoe: '', heroErr: '', heroYouOpen: false, heroFoeOpen: false,
     jgSeenAt: null, jgSeenSide: '', jgClock: 0,
     homeJgYou: '', homeJgFoe: '', homeTrackJg: '',
     cdNum: '', cdExp: '', cdCvc: '', cdName: '', cdErr: '', coBusy: false, coDone: false
@@ -6988,11 +7009,19 @@ class Component extends DCLogic {
       })(this),
       // Hero matchup box — wired inputs with autocomplete; Enter analyzes.
       heroYou: this.state.heroYou, heroFoe: this.state.heroFoe, heroErr: this.state.heroErr, hasHeroErr: !!this.state.heroErr,
-      setHeroYou: (e) => this.setState({ heroYou: e.target.value, heroErr: '' }),
-      setHeroFoe: (e) => this.setState({ heroFoe: e.target.value, heroErr: '' }),
+      setHeroYou: (e) => { var v = e.target.value; this.setState({ heroYou: v, heroErr: '', heroYouOpen: true }); },
+      setHeroFoe: (e) => { var v = e.target.value; this.setState({ heroFoe: v, heroErr: '', heroFoeOpen: true }); },
+      heroYouFocus: () => this.setState({ heroYouOpen: true }),
+      heroYouBlur: () => setTimeout(() => this.setState({ heroYouOpen: false }), 150),
+      heroFoeFocus: () => this.setState({ heroFoeOpen: true }),
+      heroFoeBlur: () => setTimeout(() => this.setState({ heroFoeOpen: false }), 150),
       heroKey: (e) => { if (e.key === 'Enter') { e.preventDefault && e.preventDefault(); this.heroAnalyze(); } },
       heroGo: () => this.heroAnalyze(),
       champPool: this._allChamps(),
+      showYouSuggs: !!(this.state.heroYouOpen && this.state.heroYou && this.state.heroYou.length >= 1),
+      showFoeSuggs: !!(this.state.heroFoeOpen && this.state.heroFoe && this.state.heroFoe.length >= 1),
+      youSuggs: (() => { var q = (this.state.heroYou||'').toLowerCase(); var pool = this._allChamps(); return pool.filter(n => n.toLowerCase().startsWith(q)).concat(pool.filter(n => !n.toLowerCase().startsWith(q) && n.toLowerCase().includes(q))).slice(0,8).map(n => ({ name: n, pick: () => this.setState({ heroYou: n, heroYouOpen: false }) })); })(),
+      foeSuggs: (() => { var q = (this.state.heroFoe||'').toLowerCase(); var pool = this._allChamps(); return pool.filter(n => n.toLowerCase().startsWith(q)).concat(pool.filter(n => !n.toLowerCase().startsWith(q) && n.toLowerCase().includes(q))).slice(0,8).map(n => ({ name: n, pick: () => this.setState({ heroFoe: n, heroFoeOpen: false }) })); })(),
       // Head-to-head win rate. If a REAL win rate (from lolalytics, in
       // window.MC_REAL_WR[you][foe]) exists for this pair, show that; otherwise
       // fall back to a deterministic estimate derived from the verdict.

@@ -30,8 +30,9 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 // ours. Subscriptions need Price IDs from your Stripe dashboard; the founder
 // one-time charge is a flat $24.99 Lifetime Member.
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
-const STRIPE_PRICE_ROLE = process.env.STRIPE_PRICE_ROLE || ''; // Lane Pass $2.99/mo price id
-const STRIPE_PRICE_ALL = process.env.STRIPE_PRICE_ALL || '';   // Everything $4.99/mo price id
+const STRIPE_PRICE_ROLE = process.env.STRIPE_PRICE_ROLE || ''; // Lane Pass $1.99/mo price id
+const STRIPE_PRICE_ALL = process.env.STRIPE_PRICE_ALL || '';   // Everything $3.99/mo price id
+const STRIPE_PRICE_ALLYR = process.env.STRIPE_PRICE_ALLYR || ''; // Everything Annual $19.99/yr price id
 const PUBLIC_URL = (process.env.PUBLIC_URL || 'https://matchupcoach.gg').replace(/\/+$/, '');
 const STRIPE_ON = !!STRIPE_SECRET_KEY;
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -345,14 +346,14 @@ async function handleApi(req, res, pathname, ip) {
     if (PAYMENTS_MODE === 'off') return sendJson(res, 503, { error: 'Paid plans are not open yet - follow the launch for the go-live date.' });
     const b = await readBody(req);
     const plan = String(b.plan || '');
-    if (!['role', 'roleyr', 'all', 'founder'].includes(plan)) return sendJson(res, 400, { error: 'Unknown plan.' });
+    if (!['role', 'all', 'allyr', 'founder'].includes(plan)) return sendJson(res, 400, { error: 'Unknown plan.' });
     let charged = '';
     const planObj = { type: plan };
-    if (plan === 'role' || plan === 'roleyr') {
+    if (plan === 'role') {
       planObj.role = ['top', 'jungle', 'mid', 'bot', 'support'].includes(b.role) ? b.role : 'top';
-      charged = plan === 'roleyr' ? '$19.99/yr' : '$2.99/mo';
-    } else if (plan === 'all') {
-      charged = '$4.99/mo';
+      charged = '$1.99/mo';
+    } else if (plan === 'all' || plan === 'allyr') {
+      charged = plan === 'allyr' ? '$19.99/yr' : '$3.99/mo';
     } else {
       if (u.plan && u.plan.type === 'founder') {
         return sendJson(res, 200, { user: publicUser(u), charged: 'already a Lifetime Member - not charged', founders: founderState() });
@@ -376,7 +377,7 @@ async function handleApi(req, res, pathname, ip) {
     if (!STRIPE_ON) return sendJson(res, 503, { error: 'Payments are not switched on yet.' });
     const b = await readBody(req);
     const plan = String(b.plan || '');
-    if (!['role', 'all', 'founder'].includes(plan)) return sendJson(res, 400, { error: 'Unknown plan.' });
+    if (!['role', 'all', 'allyr', 'founder'].includes(plan)) return sendJson(res, 400, { error: 'Unknown plan.' });
     const role = ['top', 'jungle', 'mid', 'bot', 'support'].includes(b.role) ? b.role : 'top';
 
     const params = {
@@ -397,7 +398,7 @@ async function handleApi(req, res, pathname, ip) {
       params['line_items[0][price_data][unit_amount]'] = Math.round(fs2.price * 100);
       params['line_items[0][price_data][product_data][name]'] = 'MatchupCoach — Lifetime Member';
     } else {
-      const priceId = plan === 'all' ? STRIPE_PRICE_ALL : STRIPE_PRICE_ROLE;
+      const priceId = plan === 'allyr' ? STRIPE_PRICE_ALLYR : plan === 'all' ? STRIPE_PRICE_ALL : STRIPE_PRICE_ROLE;
       if (!priceId) return sendJson(res, 503, { error: 'This plan is not configured yet.' });
       params.mode = 'subscription';
       params['line_items[0][price]'] = priceId;

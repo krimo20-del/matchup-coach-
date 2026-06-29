@@ -46,7 +46,7 @@
 <script>window.MC_GOOGLE_CLIENT_ID = "993471719983-g8fkkrqom5ap0f7pdf7tkg63v86d77l4.apps.googleusercontent.com";
 // Release version — bump this ONE line each batched deploy (beta 1.1, beta 1.2…).
 // Logged to console so you can confirm which build is actually live after publishing.
-window.MC_VERSION = "beta 1.4";
+window.MC_VERSION = "beta 1.5";
 try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-weight:700;font-size:13px"); } catch (e) {}</script>
 <style>
   * { box-sizing: border-box; }
@@ -928,7 +928,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
         <div>
           <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; letter-spacing:1px; color:#46c6f5;">FREE BETA</span>
           <p style="margin:4px 0 0; font-size:13.5px; line-height:1.6; color:#aab0c2;">Everything is <strong style="color:#f0cd72;">completely free</strong> during the beta — sign in with Google and get full access to every champion, every matchup, and the jungle tracker. No card required, no limits.</p>
-          <p style="margin:8px 0 0; font-size:12px; color:#666e87; line-height:1.5;">After the beta: free daily picks, a single-role <strong style="color:#8a90a2;">Lane Pass at $2.99/mo</strong> (or $19.99/yr), or <strong style="color:#8a90a2;">Everything for $4.99/mo</strong>. It's all free while the beta is on.</p>
+          <p style="margin:8px 0 0; font-size:12px; color:#666e87; line-height:1.5;">After the beta: a single-role <strong style="color:#8a90a2;">Lane Pass at $1.99/mo</strong>, or <strong style="color:#8a90a2;">Everything for $3.99/mo</strong> (or just $19.99/yr). It's all free — full access — while the beta is on.</p>
         </div>
       </div>
     </div>
@@ -1372,7 +1372,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
           </div>
         </div>
         <div style="border-top:1px solid rgba(255,255,255,0.05); padding-top:14px; display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
-          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">beta 1.4</span></span>
+          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">beta 1.5</span></span>
           <span style="font-size:11px; color:#4c5263; max-width:680px; line-height:1.5;">MatchupCoach is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</span>
         </div>
       </div>
@@ -6859,9 +6859,9 @@ class Component extends DCLogic {
         var RL = { top: 'Top', jungle: 'Jungle', mid: 'Mid', bot: 'Bot', support: 'Support' };
         var RS = { top: 'TOP', jungle: 'JG', mid: 'MID', bot: 'BOT', support: 'SUP' };
         var oneTime = st.plan === 'founder' || st.plan === 'champ';
-        var isYr = st.plan === 'roleyr';
-        var price = st.plan === 'all' ? '$4.99' : st.plan === 'role' ? '$2.99' : st.plan === 'roleyr' ? '$19.99' : st.plan === 'founder' ? '$24.99' : '$0.99';
-        var planName = st.plan === 'all' ? 'MatchupCoach \u2014 Everything' : st.plan === 'role' ? 'MatchupCoach \u2014 Lane Pass (' + (RL[st.planRole] || 'Top') + ')' : st.plan === 'roleyr' ? 'MatchupCoach \u2014 Lane Pass Annual (' + (RL[st.planRole] || 'Top') + ')' : st.plan === 'founder' ? 'MatchupCoach \u2014 Lifetime Member' : 'MatchupCoach \u2014 ' + ((st.planChamp || 'Aatrox').trim() || 'Aatrox') + ' (one champion)';
+        var isYr = st.plan === 'allyr';
+        var price = st.plan === 'all' ? '$3.99' : st.plan === 'role' ? '$1.99' : st.plan === 'allyr' ? '$19.99' : st.plan === 'founder' ? '$24.99' : '$0.99';
+        var planName = st.plan === 'all' ? 'MatchupCoach \u2014 Everything' : st.plan === 'role' ? 'MatchupCoach \u2014 Lane Pass (' + (RL[st.planRole] || 'Top') + ')' : st.plan === 'allyr' ? 'MatchupCoach \u2014 Everything (Annual)' : st.plan === 'founder' ? 'MatchupCoach \u2014 Lifetime Member' : 'MatchupCoach \u2014 ' + ((st.planChamp || 'Aatrox').trim() || 'Aatrox') + ' (one champion)';
         var renew = new Date(Date.now() + 30 * 864e5).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
         var renewYr = new Date(Date.now() + 365 * 864e5).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
         var digits = (st.cdNum || '').replace(/\s/g, '');
@@ -6871,7 +6871,7 @@ class Component extends DCLogic {
           user: U, noUser: !U,
           userName: U ? U.name : '',
           userInitial: U ? (U.name || '?').charAt(0).toUpperCase() : '',
-          userBadge: U && U.plan ? (U.plan.type === 'founder' ? (U.plan.founderNum ? 'FOUNDER #' + U.plan.founderNum : 'FOUNDER \u2605') : U.plan.type === 'all' ? 'PRO \u00b7 FULL DB' : U.plan.type === 'champ' ? 'PRO \u00b7 ' + ((U.plan.champ || 'CHAMP').toUpperCase()) : 'PRO \u00b7 ' + (RS[U.plan.role] || 'ROLE')) : 'FREE',
+          userBadge: U && U.plan ? (U.plan.type === 'founder' ? (U.plan.founderNum ? 'FOUNDER #' + U.plan.founderNum : 'FOUNDER \u2605') : (U.plan.type === 'all' || U.plan.type === 'allyr') ? 'PRO \u00b7 FULL DB' : U.plan.type === 'champ' ? 'PRO \u00b7 ' + ((U.plan.champ || 'CHAMP').toUpperCase()) : 'PRO \u00b7 ' + (RS[U.plan.role] || 'ROLE')) : 'FREE',
           userBadgeColor: U && U.plan ? '#f0cd72' : '#8a90a2',
           userBadgeBg: U && U.plan ? 'rgba(232,184,75,0.13)' : 'rgba(255,255,255,0.06)',
           userBadgeBd: U && U.plan ? 'rgba(232,184,75,0.4)' : 'rgba(255,255,255,0.12)',
@@ -6917,9 +6917,9 @@ class Component extends DCLogic {
             onClick: () => self.setState({ coStyle: k })
           })),
           planCards: [
-            { key: 'role', name: 'Lane Pass', price: '$2.99', per: '/mo', desc: 'One role \u2014 every current and future champion in it.' },
-            { key: 'roleyr', name: 'Lane Pass \u00b7 Annual', price: '$19.99', per: '/yr', desc: 'One role, billed yearly \u2014 just $1.67/mo, save 44%.' },
-            { key: 'all', name: 'Everything', price: '$4.99', per: '/mo', desc: 'Every champion, matchup, and role \u2014 best value.', badge: true },
+            { key: 'role', name: 'Lane Pass', price: '$1.99', per: '/mo', desc: 'One role \u2014 every current and future champion in it.' },
+            { key: 'all', name: 'Everything', price: '$3.99', per: '/mo', desc: 'Every champion, matchup, and role.', badge: true },
+            { key: 'allyr', name: 'Everything \u00b7 Annual', price: '$19.99', per: '/yr', desc: 'Whole catalog, billed yearly \u2014 just $1.67/mo, best value.' },
             { key: 'founder', name: 'Lifetime Member', price: '$24.99', per: ' once', desc: 'Pay once \u2014 full access for the lifetime of the service.' }
           ].map(c => ({
             name: c.name, price: c.price, per: c.per, desc: c.desc, showBadge: !!c.badge,
@@ -6929,7 +6929,7 @@ class Component extends DCLogic {
             dotBd: st.plan === c.key ? '#e8b84b' : 'rgba(255,255,255,0.3)',
             onClick: () => self.setState({ plan: c.key, cdErr: '' })
           })),
-          showRolePick: st.plan === 'role' || st.plan === 'roleyr',
+          showRolePick: st.plan === 'role',
           showChampPick: st.plan === 'champ',
           planChamp: st.planChamp, setPlanChamp: (e) => self.setState({ planChamp: e.target.value }),
           coVerb: oneTime ? 'Buy' : 'Subscribe to',
@@ -7217,23 +7217,24 @@ class Component extends DCLogic {
             }) };
         });
       })(this),
-      paywallTitle: this.state.stripeEnabled ? 'Simple pricing — start free' : 'Free daily picks — paid plans coming soon',
+      paywallTitle: this.state.stripeEnabled ? 'Simple pricing — start free' : 'Free for everyone during beta — paid plans coming soon',
       paywallSub: this.state.stripeEnabled
-        ? 'A free champion in every role daily, your lane for $2.99/mo (or $19.99/yr), or everything for $4.99. Checkout is handled securely by Stripe.'
-        : 'Free gets you one champion per role every day. Lane Pass ($2.99/mo or $19.99/yr) unlocks a full role; Everything ($4.99) unlocks the whole catalog. Paid plans open soon.',
+        ? 'Your lane for $1.99/mo, everything for $3.99/mo (or $19.99/yr), or Lifetime for $24.99. Checkout is handled securely by Stripe.'
+        : 'The whole app is free during the beta — just sign in with Google or create an account for full access. After beta: Lane Pass $1.99/mo, Everything $3.99/mo (or $19.99/yr), Lifetime $24.99. Paid plans coming soon.',
       tiers: [
         // Launch mode: a free account unlocks the ENTIRE catalog; paid tiers
         // are visible (price anchoring) but disabled until payments open.
-        { key: 'free', name: 'Free', price: 'Free', period: 'forever', featured: false,
-          cta: this.state.user ? 'Play today\u2019s free champions' : 'Create free account',
-          badgeText: '', perks: ['1 free champion per role, every day', 'Rotates daily \u2014 5 free matchups to study', 'Full matchup detail on the day\u2019s picks', 'Account required'],
-          note: 'A fresh champion in every role unlocks free each day.', noteColor: '#7fe3b8' },
-        { key: 'role', name: 'Lane Pass', price: '$2.99', period: '/mo', cta: this.state.stripeEnabled ? 'Get Lane Pass' : 'Coming soon', comingSoon: !this.state.stripeEnabled,
-          perks: ['One role only', 'Top OR Jungle OR Mid OR ADC OR Support', 'All current and future champions in that role'],
-          note: 'Or go yearly: $19.99/yr — just $1.67/mo, save 44%.', noteColor: '#7cc8e8' },
-        { key: 'all', name: 'Everything', price: '$4.99', period: '/mo', cta: this.state.stripeEnabled ? 'Get Everything' : 'Coming soon', comingSoon: !this.state.stripeEnabled, featured: true,
+        { key: 'free', name: 'Free Beta', price: 'Free', period: 'during beta', featured: false,
+          cta: this.state.user ? 'Open the full app' : 'Sign in for full access',
+          badgeText: '\u2705 FULL ACCESS', badgeBg: 'linear-gradient(180deg,#7fe3b8,#3ddc97)', badgeColor: '#06281a',
+          perks: ['Every champion, matchup & role', 'Live enemy jungle tracker', 'Sign in with Google or create an account', 'Free for the entire beta \u2014 no card'],
+          note: 'Beta is free for everyone \u2014 the paid plans below arrive after launch.', noteColor: '#7fe3b8' },
+        { key: 'role', name: 'Lane Pass', price: '$1.99', period: '/mo', cta: this.state.stripeEnabled ? 'Get Lane Pass' : 'Coming soon', comingSoon: !this.state.stripeEnabled,
+          perks: ['One role only', 'Top OR Jungle OR Mid OR ADC OR Support', 'All current and future champions in that role'] },
+        { key: 'all', name: 'Everything', price: '$3.99', period: '/mo', cta: this.state.stripeEnabled ? 'Get Everything' : 'Coming soon', comingSoon: !this.state.stripeEnabled, featured: true,
           badgeText: '\u2b50 BEST VALUE', badgeBg: 'linear-gradient(180deg,#f3cf6e,#e8b84b)', badgeColor: '#1a1303',
-          perks: ['Every champion', 'Every matchup', 'Every role', 'Search', 'Counterpick database', 'Enemy jungle tracker', 'Future updates'] },
+          perks: ['Every champion', 'Every matchup', 'Every role', 'Search', 'Counterpick database', 'Enemy jungle tracker', 'Future updates'],
+          note: 'Or go yearly: $19.99/yr — just $1.67/mo, best value.', noteColor: '#7fe3b8' },
         { key: 'founder', name: 'Lifetime Member', price: '$24.99', period: 'one-time', cta: this.state.stripeEnabled ? 'Become a Lifetime Member' : 'Coming soon', comingSoon: !this.state.stripeEnabled, founder: true,
           badgeText: '\ud83d\udd25 PAY ONCE', badgeBg: 'linear-gradient(180deg,#ff8a5c,#ff5d6c)', badgeColor: '#1c0608',
           perks: ['Everything, forever', 'One payment \u2014 no subscription', 'All future champions & features', 'Lifetime member badge'],

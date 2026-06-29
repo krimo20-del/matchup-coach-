@@ -43,7 +43,11 @@
 <!-- Google Sign-In client ID (public/safe to ship). Hardcoded so the
      "Continue with Google" button renders even when the page is served
      statically / the /api/config call isn't reachable on this origin. -->
-<script>window.MC_GOOGLE_CLIENT_ID = "993471719983-g8fkkrqom5ap0f7pdf7tkg63v86d77l4.apps.googleusercontent.com";</script>
+<script>window.MC_GOOGLE_CLIENT_ID = "993471719983-g8fkkrqom5ap0f7pdf7tkg63v86d77l4.apps.googleusercontent.com";
+// Release version — bump this ONE line each batched deploy (beta 1.1, beta 1.2…).
+// Logged to console so you can confirm which build is actually live after publishing.
+window.MC_VERSION = "beta 1.0";
+try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-weight:700;font-size:13px"); } catch (e) {}</script>
 <style>
   * { box-sizing: border-box; }
   body { margin: 0; background: #0b0907; }
@@ -108,6 +112,7 @@
 <script src="./champ-data/champ-gender.js"></script>
 <script src="./champ-data/rosters.js"></script>
 <script src="./champ-data/jungle-intel.js"></script>
+<script src="./champ-data/jungle-intel-lanes.js"></script>
 <script src="./champ-data/jungle-intel-2.js"></script>
 <script src="./champ-data/jg/leesin.js"></script>
 <script src="./champ-data/jg/kindred.js"></script>
@@ -787,7 +792,7 @@
 <script src="./champ-data/content/teemo.js"></script>
 <script src="./champ-data/_reddit-validated-fixes.js"></script>
 </helmet>
-<div style="min-height:100vh; font-family:'Manrope',system-ui,sans-serif; color:#ece7e1; background:radial-gradient(1200px 640px at 50% -10%, rgba(232,184,75,0.13), transparent 60%), radial-gradient(900px 520px at 88% 2%, rgba(240,115,74,0.08), transparent 55%), radial-gradient(820px 520px at 8% 1%, rgba(70,198,245,0.05), transparent 55%), #0b0908; padding-bottom:64px;">
+<div style="min-height:{{ mainMinH }}; font-family:'Manrope',system-ui,sans-serif; color:#ece7e1; background:radial-gradient(1200px 640px at 50% -10%, rgba(232,184,75,0.13), transparent 60%), radial-gradient(900px 520px at 88% 2%, rgba(240,115,74,0.08), transparent 55%), radial-gradient(820px 520px at 8% 1%, rgba(70,198,245,0.05), transparent 55%), #0b0908; padding-bottom:64px;">
 
   <!-- ===== PAYMENT RESULT BANNER ===== -->
   <sc-if value="{{ payOk }}" hint-placeholder-val="{{ false }}">
@@ -1076,7 +1081,7 @@
                 </div>
               </div>
               <div style="border-left:1px solid rgba(255,255,255,0.1); padding-left:22px;">
-                <div style="font-family:'Chakra Petch',sans-serif; font-size:9.5px; letter-spacing:0.8px; color:#f0cd72; font-weight:700; margin-bottom:3px;">SHOWS TOP</div>
+                <div style="font-family:'Chakra Petch',sans-serif; font-size:9.5px; letter-spacing:0.8px; color:#f0cd72; font-weight:700; margin-bottom:3px;">{{ jgSel.showsLabel }}</div>
                 <div style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:22px; color:#fff; line-height:1;">{{ jgSel.critFrom }}<span style="color:#7d8499;">–</span>{{ jgSel.critTo }}</div>
               </div>
             </div>
@@ -1099,8 +1104,8 @@
                   <span style="position:absolute; top:7px; left:8px; font-family:'Chakra Petch',sans-serif; font-size:8px; letter-spacing:0.5px; color:#9fb8c8; font-weight:700;">TOP</span>
                   <span style="position:absolute; bottom:6px; right:8px; font-family:'Chakra Petch',sans-serif; font-size:8px; letter-spacing:0.5px; color:#c88f9a; font-weight:700;">BOT</span>
                   <!-- your lane marker -->
-                  <span style="position:absolute; left:13%; top:13%; width:11px; height:11px; border-radius:50%; border:2px solid #f0cd72; transform:translate(-50%,-50%);"></span>
-                  <span style="position:absolute; left:13%; top:30%; font-family:'Chakra Petch',sans-serif; font-size:7.5px; color:#f0cd72; font-weight:700; transform:translateX(-40%);">YOU</span>
+                  <span style="position:absolute; left:{{ jgSel.youLeft }}; top:{{ jgSel.youTop }}; width:11px; height:11px; border-radius:50%; border:2px solid #f0cd72; transform:translate(-50%,-50%);"></span>
+                  <span style="position:absolute; left:{{ jgSel.youLeft }}; top:{{ jgSel.youTop }}; font-family:'Chakra Petch',sans-serif; font-size:7.5px; color:#f0cd72; font-weight:700; transform:translate(-50%, 9px);">YOU</span>
                   <!-- jungler start dot -->
                   <span style="position:absolute; left:{{ jgSel.startLeft }}; top:{{ jgSel.startTop }}; width:13px; height:13px; border-radius:50%; background:{{ jgSel.tone }}; box-shadow:0 0 0 4px {{ jgSel.tone }}33; transform:translate(-50%,-50%); animation:mc-pulse 2s ease-in-out infinite;"></span>
                 </div>
@@ -1365,7 +1370,7 @@
           </div>
         </div>
         <div style="border-top:1px solid rgba(255,255,255,0.05); padding-top:14px; display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
-          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved.</span>
+          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">beta 1.0</span></span>
           <span style="font-size:11px; color:#4c5263; max-width:680px; line-height:1.5;">MatchupCoach is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</span>
         </div>
       </div>
@@ -2299,7 +2304,7 @@
                 </div>
               </div>
               <div style="border-left:1px solid rgba(255,255,255,0.1); padding-left:22px;">
-                <div style="font-family:'Chakra Petch',sans-serif; font-size:9.5px; letter-spacing:0.8px; color:#f0cd72; font-weight:700; margin-bottom:3px;">SHOWS TOP</div>
+                <div style="font-family:'Chakra Petch',sans-serif; font-size:9.5px; letter-spacing:0.8px; color:#f0cd72; font-weight:700; margin-bottom:3px;">{{ jgSel.showsLabel }}</div>
                 <div style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:22px; color:#fff; line-height:1;">{{ jgSel.critFrom }}<span style="color:#7d8499;">–</span>{{ jgSel.critTo }}</div>
               </div>
             </div>
@@ -2322,8 +2327,8 @@
                   <span style="position:absolute; top:7px; left:8px; font-family:'Chakra Petch',sans-serif; font-size:8px; letter-spacing:0.5px; color:#9fb8c8; font-weight:700;">TOP</span>
                   <span style="position:absolute; bottom:6px; right:8px; font-family:'Chakra Petch',sans-serif; font-size:8px; letter-spacing:0.5px; color:#c88f9a; font-weight:700;">BOT</span>
                   <!-- your lane marker -->
-                  <span style="position:absolute; left:13%; top:13%; width:11px; height:11px; border-radius:50%; border:2px solid #f0cd72; transform:translate(-50%,-50%);"></span>
-                  <span style="position:absolute; left:13%; top:30%; font-family:'Chakra Petch',sans-serif; font-size:7.5px; color:#f0cd72; font-weight:700; transform:translateX(-40%);">YOU</span>
+                  <span style="position:absolute; left:{{ jgSel.youLeft }}; top:{{ jgSel.youTop }}; width:11px; height:11px; border-radius:50%; border:2px solid #f0cd72; transform:translate(-50%,-50%);"></span>
+                  <span style="position:absolute; left:{{ jgSel.youLeft }}; top:{{ jgSel.youTop }}; font-family:'Chakra Petch',sans-serif; font-size:7.5px; color:#f0cd72; font-weight:700; transform:translate(-50%, 9px);">YOU</span>
                   <!-- jungler start dot -->
                   <span style="position:absolute; left:{{ jgSel.startLeft }}; top:{{ jgSel.startTop }}; width:13px; height:13px; border-radius:50%; background:{{ jgSel.tone }}; box-shadow:0 0 0 4px {{ jgSel.tone }}33; transform:translate(-50%,-50%); animation:mc-pulse 2s ease-in-out infinite;"></span>
                 </div>
@@ -6572,7 +6577,18 @@ class Component extends DCLogic {
     const JI = window.JUNGLE_INTEL || {};
     const JGRP = window.JUNGLE_GROUPS || [];
     const selJgKey = this.state.enemyJg;
-    const selJg = (selJgKey && JI[selJgKey]) ? JI[selJgKey] : null;
+    // Lane POV: top reads the base intel; mid and bot read the per-lane override
+    // file (jungle-intel-lanes.js) merged onto the base. ADC + support both = bot.
+    const JL = window.JUNGLE_INTEL_LANE || {};
+    const laneKey = this.state.role === 'mid' ? 'mid'
+      : (this.state.role === 'bot' || this.state.role === 'support') ? 'bot' : 'top';
+    const laneOv = (laneKey !== 'top' && JL[laneKey]) ? (JL[laneKey][selJgKey] || null) : null;
+    const selJg = (selJgKey && JI[selJgKey]) ? Object.assign({}, JI[selJgKey], laneOv || {}) : null;
+    // Display strings that depend on which lane we're showing.
+    const LANE_SHOWS = { top: 'SHOWS TOP', mid: 'SHOWS MID', bot: 'SHOWS BOT' };
+    const LANE_FARSIDE = { top: 'BOT-SIDE', mid: 'OPPOSITE SIDE', bot: 'TOP-SIDE' };
+    // Mini-map "YOU" marker: top-left / center / bottom-right by lane.
+    const LANE_YOU = { top: { top: '13%', left: '13%' }, mid: { top: '50%', left: '50%' }, bot: { top: '87%', left: '87%' } };
     const RISK_COLORS = ['#3ddc97', '#3ddc97', '#7fcf5a', '#e8b84b', '#ff8b3d', '#ff5d6c'];
     const RISK_LABELS = ['', 'VERY LOW', 'LOW', 'MEDIUM', 'HIGH', 'EXTREME'];
     const mkJgGroups = (selKey, onPick, dotOf) => JGRP.map(grp => ({
@@ -6611,8 +6627,10 @@ class Component extends DCLogic {
       clearStyle: selJg.clearStyle, clearSpeed: selJg.clearSpeed,
       startLabel: selJg.startLabel, startNote: selJg.startNote,
       startTop: selJg.startTop, startLeft: selJg.startLeft,
-      startTag: selJg.start === 'near' ? 'STARTS NEAR YOU' : 'STARTS FAR · BOT-SIDE',
+      startTag: selJg.start === 'near' ? 'STARTS NEAR YOU' : ('STARTS FAR · ' + (LANE_FARSIDE[laneKey] || 'BOT-SIDE')),
       startTagColor: selJg.start === 'near' ? '#ff5d6c' : '#3ddc97',
+      showsLabel: LANE_SHOWS[laneKey] || 'SHOWS TOP',
+      youTop: (LANE_YOU[laneKey] || LANE_YOU.top).top, youLeft: (LANE_YOU[laneKey] || LANE_YOU.top).left,
       critFrom: selJg.critFrom, critTo: selJg.critTo, critNote: selJg.critNote,
       diveNote: selJg.diveNote,
       diveLabel: DIVE_LABELS[selJg.dive] || '', diveColor: DIVE_COLORS[selJg.dive - 1] || '#c7ccdb',
@@ -6844,6 +6862,9 @@ class Component extends DCLogic {
           signOut: () => self.signOut(),
           isAuth: st.view === 'auth',
           isCheckout: st.view === 'checkout',
+          // Auth/checkout are full-height sibling views AFTER the main wrapper;
+          // collapse the wrapper's min-height so they don't render a viewport down.
+          mainMinH: (st.view === 'auth' || st.view === 'checkout') ? '0px' : '100vh',
           isAuLogin: m === 'login', isAuSignup: m === 'signup', isAuForgot: m === 'forgot',
           auShowGoogle: m !== 'forgot' && !!st.googleClientId, auShowPass: m !== 'forgot',
           authTitle: m === 'login' ? 'Welcome back' : m === 'signup' ? 'Create your account' : 'Reset your password',

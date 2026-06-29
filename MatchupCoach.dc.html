@@ -3597,6 +3597,20 @@ class Component extends DCLogic {
   jgSpot(side) { this.setState({ jgSeenSide: side, jgSeenAt: Date.now(), jgClock: 0 }); }
   jgReset() { this.setState({ jgSeenSide: '', jgSeenAt: null, jgClock: 0 }); }
   componentWillUnmount() { clearInterval(this._t); clearInterval(this._gsi); window.removeEventListener('popstate', this._onPop); }
+  // Universal scroll-to-top: whenever the NAVIGATION identity changes (a new
+  // matchup, lane, champion, jungler, screen, or home step) jump to the top —
+  // so every view always loads from the top, no matter which picker/tab/picture
+  // triggered it. In-page toggles (level, wave, team mode, cooldown timers,
+  // search text, the enemy-jungle cheat-sheet selector) are intentionally NOT
+  // in this list, so they don't yank the page up mid-interaction.
+  componentDidUpdate() {
+    // This framework doesn't pass prevState to componentDidUpdate, so we track
+    // the navigation key on the instance and scroll to top whenever it changes.
+    var s = this.state;
+    var key = [s.view, s.role, s.homeStep, s.myChamp, s.enemyChamp, s.matchup, s.authMode].join('|');
+    if (this._navKey == null) { this._navKey = key; return; }
+    if (key !== this._navKey) { this._navKey = key; this._top(); }
+  }
 
   // ---- accounts / checkout ----
   _accts() { try { return JSON.parse(localStorage.getItem('mc_accounts') || '{}'); } catch (e) { return {}; } }

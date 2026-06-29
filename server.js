@@ -345,12 +345,12 @@ async function handleApi(req, res, pathname, ip) {
     if (PAYMENTS_MODE === 'off') return sendJson(res, 503, { error: 'Paid plans are not open yet - follow the launch for the go-live date.' });
     const b = await readBody(req);
     const plan = String(b.plan || '');
-    if (!['role', 'all', 'founder'].includes(plan)) return sendJson(res, 400, { error: 'Unknown plan.' });
+    if (!['role', 'roleyr', 'all', 'founder'].includes(plan)) return sendJson(res, 400, { error: 'Unknown plan.' });
     let charged = '';
     const planObj = { type: plan };
-    if (plan === 'role') {
+    if (plan === 'role' || plan === 'roleyr') {
       planObj.role = ['top', 'jungle', 'mid', 'bot', 'support'].includes(b.role) ? b.role : 'top';
-      charged = '$2.99/mo';
+      charged = plan === 'roleyr' ? '$19.99/yr' : '$2.99/mo';
     } else if (plan === 'all') {
       charged = '$4.99/mo';
     } else {

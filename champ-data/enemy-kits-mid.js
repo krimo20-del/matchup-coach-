@@ -171,7 +171,14 @@ window.ENEMY_KITS = Object.assign(window.ENEMY_KITS || {}, {
     Q: { n: "Razor Shuriken", d: "Shurikens from him AND every shadow \u2014 the double-shuriken angles are the real poke; stand where the lines cross minions." },
     W: { n: "Living Shadow", d: "Shadow he can swap to \u2014 energy refund on landed spells; his poke pattern needs it, so punish the 18 seconds after." },
     E: { n: "Shadow Slash", d: "AoE slash from him and shadows that SLOWS \u2014 the setup that makes his Qs land; don\u2019t hug his shadow." },
-    R: { n: "Death Mark", d: "Untargetable dash + delayed EXECUTE pop \u2014 spend your defensive answer (Zhonya\u2019s, shield, exhaust) AFTER the mark, not before." } }
+    R: { n: "Death Mark", d: "Untargetable dash + delayed EXECUTE pop \u2014 spend your defensive answer (Zhonya\u2019s, shield, exhaust) AFTER the mark, not before." } },
+  // ===== LOCKE (patch 26.13) =====
+  locke: { cls: "AP Assassin \u00b7 Execute Totem",
+    P: { n: "Silver Stake", d: "On-hit magic damage scaling with YOUR missing health \u2014 his even trades become executes as you drop; don\u2019t trade below ~40% HP." },
+    Q: { n: "Ritual Nails", d: "Recastable nail volleys that slow and stack marks (max 3) \u2014 his autos and E consume them for bonus damage and refunds. Sidestep the recasts: no marks, no burst." },
+    W: { n: "Soul Ignition", d: "Attack/move-speed steroid that burns his own HP as true damage, then heals the stored grey health on recast \u2014 disengage the window and his self-drain goes unrefunded." },
+    E: { n: "Ashen Pursuit", d: "Blink + empowered dash-through attack; resets fully on takedowns. It is his ONLY mobility \u2014 the ten seconds after he spends it are your trade window." },
+    R: { n: "Purgatory", d: "Execute totem \u2014 marked champions below the threshold (~11%+, grows with each sealed soul) die outright. Back out above the threshold or leave the zone; never fight at sliver HP inside it." } }
 });
 
 // Signature dodge letters for the new mid enemies (fallback DODGE tag in the ability tracker).
@@ -179,5 +186,5 @@ window.ENEMY_DODGE = Object.assign(window.ENEMY_DODGE || {}, {
   anivia: 'Q', aurelionsol: 'E', azir: 'Q', hwei: 'E', lissandra: 'W', malzahar: 'Q', orianna: 'R', syndra: 'E',
   taliyah: 'W', viktor: 'W', xerath: 'E', ahri: 'E', annie: 'R', brand: 'Q', lux: 'Q', twistedfate: 'W',
   veigar: 'E', vex: 'Q', zoe: 'E', diana: 'Q', ekko: 'W', fizz: 'E', katarina: 'R', leblanc: 'E',
-  naafiri: 'W', qiyana: 'R', talon: 'W', zed: 'R'
+  naafiri: 'W', qiyana: 'R', talon: 'W', zed: 'R', locke: 'Q'
 });

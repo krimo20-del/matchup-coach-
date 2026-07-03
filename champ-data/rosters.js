@@ -17,7 +17,7 @@ window.ROSTERS = {
   mid: [
     { g: "Control & Battlemages", c: ["Anivia","Aurelion Sol","Azir","Cassiopeia","Hwei","Lissandra","Malzahar","Orianna","Ryze","Swain","Syndra","Taliyah","Viktor","Vladimir","Xerath","Ziggs"] },
     { g: "Burst & Utility Mages", c: ["Ahri","Annie","Aurora","Brand","Karma","Lux","Mel","Neeko","Twisted Fate","Veigar","Vex","Zoe"] },
-    { g: "Assassins", c: ["Akali","Akshan","Diana","Ekko","Fizz","Kassadin","Katarina","LeBlanc","Naafiri","Qiyana","Sylas","Talon","Zed"] },
+    { g: "Assassins", c: ["Akali","Akshan","Diana","Ekko","Fizz","Kassadin","Katarina","LeBlanc","Locke","Naafiri","Qiyana","Sylas","Talon","Zed"] },
     { g: "Fighters & Skirmishers", c: ["Galio","Irelia","Pantheon","Yasuo","Yone"] }
   ],
   bot: [

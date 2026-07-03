@@ -15,7 +15,8 @@ window.GEN_ENGINE_MID = (function () {
     twistedfate:'Twisted Fate', veigar:'Veigar', vex:'Vex', zoe:'Zoe',
     akali:'Akali', akshan:'Akshan', diana:'Diana', ekko:'Ekko', fizz:'Fizz', kassadin:'Kassadin', katarina:'Katarina',
     leblanc:'LeBlanc', naafiri:'Naafiri', qiyana:'Qiyana', sylas:'Sylas', talon:'Talon', zed:'Zed',
-    galio:'Galio', irelia:'Irelia', pantheon:'Pantheon', yasuo:'Yasuo', yone:'Yone'
+    galio:'Galio', irelia:'Irelia', pantheon:'Pantheon', yasuo:'Yasuo', yone:'Yone',
+    locke:'Locke'
   };
 
   // grp: control|burst|assassin|fighter. melee/gap/dmg/allIn/sustain/scale/proj as in the top engine.
@@ -65,7 +66,8 @@ window.GEN_ENGINE_MID = (function () {
     irelia:      { grp:'fighter', melee:1, gap:2, dmg:'mixed', allIn:'early', sustain:1, scale:1 },
     pantheon:    { grp:'fighter', melee:1, gap:1, dmg:'AD', allIn:'early', sustain:0, scale:0 },
     yasuo:       { grp:'fighter', melee:1, gap:2, dmg:'AD', allIn:'flat',  sustain:0, scale:2, proj:1 },
-    yone:        { grp:'fighter', melee:1, gap:2, dmg:'mixed', allIn:'spike6', sustain:0, scale:2 }
+    yone:        { grp:'fighter', melee:1, gap:2, dmg:'mixed', allIn:'spike6', sustain:0, scale:2 },
+    locke:       { grp:'assassin', melee:1, gap:2, dmg:'AP', allIn:'spike6', sustain:1, scale:1 }
   };
 
   // Per-enemy matchup-defining ability (champion-agnostic, mid context).
@@ -115,7 +117,8 @@ window.GEN_ENGINE_MID = (function () {
     irelia:      { slot:'E', name:'Flawless Duet (Stun)', cd:'18s', note:'Her stun setup — dodge it and the dive falls apart.', winT:'STUN DOWN' },
     pantheon:    { slot:'W', name:'Shield Vault (Stun)', cd:'14s', note:'Point-and-click stun — respect the all-in any time it is up.', winT:'VAULT DOWN' },
     yasuo:       { slot:'W', name:'Wind Wall', cd:'26s', note:'Blocks every projectile for its duration — hold your poke until it is spent.', winT:'WIND WALL DOWN' },
-    yone:        { slot:'E', name:'Soul Unbound', cd:'22s', note:'His burst window — survive it and punish the body he snaps back to.', winT:'SOUL UNBOUND DOWN' }
+    yone:        { slot:'E', name:'Soul Unbound', cd:'22s', note:'His burst window — survive it and punish the body he snaps back to.', winT:'SOUL UNBOUND DOWN' },
+    locke:       { slot:'Q', name:'Ritual Nails (Marks)', cd:'10s', note:'The nail marks are his whole engine — without 2-3 stacks on you his blink-in barely dents; sidestep the recasts and punish the ten seconds of nothing.', winT:'NAILS DOWN' }
   };
 
   function fill(tpl, ctx) {

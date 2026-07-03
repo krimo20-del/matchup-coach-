@@ -23,7 +23,8 @@
     'Maokai': 7, 'Rammus': 7, 'Taliyah': 7, 'Gragas': 7, 'Olaf': 6.5,
     'Talon': 6.5, 'Naafiri': 6.5, 'Shaco': 6.5, 'Vi': 6.5, 'Jarvan IV': 6.5,
     'Warwick': 6.5, 'Ivern': 6.5, 'Morgana': 6.5, 'Xin Zhao': 6, 'Nidalee': 6,
-    "Rek'Sai": 6, 'Nunu & Willump': 6, 'Lee Sin': 5.5, 'Elise': 5
+    "Rek'Sai": 6, 'Nunu & Willump': 6, 'Lee Sin': 5.5, 'Elise': 5,
+    'Locke': 6.5
   };
 
   // verdict score from an already-fixed stage label (stages 0-2 & 4 formats)

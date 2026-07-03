@@ -78,7 +78,9 @@ window.GEN_ENGINE = (function () {
     cassiopeia:  { grp:'ranged', melee:0, gap:0, dmg:'AP', allIn:'flat',  sustain:1, scale:2, ground:1 },
     akshan:      { grp:'ranged', melee:0, gap:2, dmg:'AD', allIn:'early', sustain:0, scale:1 },
     graves:      { grp:'ranged', melee:0, gap:1, dmg:'AD', allIn:'early', sustain:0, scale:1 },
-    sylas:       { grp:'ranged', melee:1, gap:2, dmg:'AP', allIn:'spike6', sustain:1, scale:1 }
+    sylas:       { grp:'ranged', melee:1, gap:2, dmg:'AP', allIn:'spike6', sustain:1, scale:1 },
+    masteryi:    { grp:'diver', melee:1, gap:1, dmg:'AD', allIn:'late', sustain:1, scale:2 },
+    locke:       { grp:'diver', melee:1, gap:2, dmg:'AP', allIn:'spike6', sustain:1, scale:1 }
   };
 
   // Per-enemy key ability to track (champion-agnostic).
@@ -152,7 +154,9 @@ window.GEN_ENGINE = (function () {
     cassiopeia:  { slot:'W', name:'Miasma', cd:'12s', note:'Grounds you — dashes and leaps are disabled inside it.', winT:'MIASMA DOWN' },
     akshan:      { slot:'E', name:'Heroic Swing', cd:'14s', note:'His swing engage/escape — fight only while it is down.', winT:'SWING DOWN' },
     graves:      { slot:'E', name:'Quickdraw', cd:'13s', note:'Dash + armor stacks — burst him after the charges are spent.', winT:'QUICKDRAW DOWN' },
-    sylas:       { slot:'E', name:'Abscond / Abduct', cd:'14s', note:'Dash into chain-stun — punish him hard while it is down.', winT:'CHAIN DOWN' }
+    sylas:       { slot:'E', name:'Abscond / Abduct', cd:'14s', note:'Dash into chain-stun — punish him hard while it is down.', winT:'CHAIN DOWN' },
+    masteryi:    { slot:'Q', name:'Alpha Strike', cd:'14s', note:'Untargetable blink that dodges your key spell — bait it before committing your burst.', winT:'ALPHA DOWN' },
+    locke:       { slot:'Q', name:'Ritual Nails (Marks)', cd:'10s', note:'The nail marks are his whole engine — without 2-3 stacks on you his blink-in barely dents; sidestep the recasts and punish the ten seconds of nothing.', winT:'NAILS DOWN' }
   };
 
   function fill(tpl, ctx) {

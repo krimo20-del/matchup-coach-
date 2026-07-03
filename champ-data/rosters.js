@@ -5,15 +5,16 @@ window.ROSTERS = {
     { g: "Divers & Skirmishers", c: ["Camille","Fiora","Gragas","Gwen","Irelia","Jax","Kled","Olaf","Pantheon","Renekton","Riven","Tryndamere","Vayne","Warwick","Wukong","Yasuo","Yone"] },
     { g: "Tanks", c: ["Cho'Gath","K'Sante","Malphite","Maokai","Nautilus","Ornn","Poppy","Shen","Sion","Tahm Kench","Zac"] },
     { g: "Mages, Marksmen & Specialists", c: ["Akali","Aurora","Gangplank","Gnar","Heimerdinger","Jayce","Kayle","Kennen","Quinn","Rumble","Singed","Swain","Teemo","Vladimir"] },
-    { g: "Newest Arrivals", c: ["Ambessa","Zaahen"] },
+    { g: "Newest Arrivals", c: ["Ambessa","Locke","Zaahen"] },
     { g: "Off-Meta & Flex Picks", c: ["Akshan","Cassiopeia","Galio","Graves","Karma","Kassadin","Lillia","Lucian","Master Yi","Mel","Neeko","Ryze","Sejuani","Sylas","Ziggs"] }
   ],
   jungle: [
-    { g: "Assassins & Divers", c: ["Bel'Veth","Diana","Ekko","Elise","Evelynn","Graves","Kayn","Kha'Zix","Kindred","Lee Sin","Naafiri","Nidalee","Nocturne","Rengar","Shaco","Talon","Viego","Wukong"] },
+    { g: "Assassins & Divers", c: ["Bel'Veth","Diana","Ekko","Elise","Evelynn","Graves","Kayn","Kha'Zix","Kindred","Lee Sin","Locke","Naafiri","Nidalee","Nocturne","Rengar","Shaco","Talon","Viego","Wukong"] },
     { g: "Skirmishers & Fighters", c: ["Briar","Jax","Master Yi","Olaf","Qiyana","Shyvana","Trundle","Udyr","Vi","Xin Zhao"] },
     { g: "Tanks & Vanguards", c: ["Amumu","Hecarim","Jarvan IV","Maokai","Nunu & Willump","Rammus","Rek'Sai","Sejuani","Skarner","Volibear","Warwick","Zac"] },
     { g: "Mages & Specialists", c: ["Brand","Fiddlesticks","Gragas","Ivern","Karthus","Lillia","Morgana","Taliyah","Zyra"] }
   ],
+  // NOTE: Locke (patch 26.13) appears in top (Newest Arrivals), mid (Assassins), and jungle (Assassins & Divers).
   mid: [
     { g: "Control & Battlemages", c: ["Anivia","Aurelion Sol","Azir","Cassiopeia","Hwei","Lissandra","Malzahar","Orianna","Ryze","Swain","Syndra","Taliyah","Viktor","Vladimir","Xerath","Ziggs"] },
     { g: "Burst & Utility Mages", c: ["Ahri","Annie","Aurora","Brand","Karma","Lux","Mel","Neeko","Twisted Fate","Veigar","Vex","Zoe"] },

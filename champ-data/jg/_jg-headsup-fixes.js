@@ -61,7 +61,8 @@
     "Morgana": [3, 3.5, 4],
     "Evelynn": [2.5, 3, 3.5],
     "Fiddlesticks": [2.5, 3, 3.5],
-    "Ivern": [2, 2.5, 3]
+    "Ivern": [2, 2.5, 3],
+    "Locke": [5, 5.5, 5.5]
   };
 
   // ---- level-6 ult-on duel scores (index 3 of score model) --------------------
@@ -74,7 +75,8 @@
     "Wukong": 7.5, "Rengar": 7, "Naafiri": 7, "Hecarim": 7, "Qiyana": 7, "Talon": 7,
     "Rammus": 7, "Sejuani": 7, "Karthus": 7, "Amumu": 7, "Shaco": 6.5, "Gragas": 6.5,
     "Brand": 6.5, "Kayn": 6.5, "Zyra": 6.5, "Maokai": 6.5, "Zac": 6.5, "Morgana": 6.5,
-    "Nidalee": 6, "Elise": 6, "Taliyah": 6, "Nunu & Willump": 6, "Ivern": 6
+    "Nidalee": 6, "Elise": 6, "Taliyah": 6, "Nunu & Willump": 6, "Ivern": 6,
+    "Locke": 6.5
   };
 
   // ---- pairwise modifiers (applied symmetrically by score()) ------------------
@@ -391,7 +393,13 @@
         "Brushmaker poke from your own brush is your only legal trade",
         "Triggerseed's root protects your escape; you never want the 1v1"],
       threat: "he won't fight you — but a Triggerseed root into his laner's follow-up will",
-      tool: "Steal the camps he's marked at half-clear and there is nothing he can do about it" }
+      tool: "Steal the camps he's marked at half-clear and there is nothing he can do about it" },
+    "Locke": { plan: [
+        "Q nail volleys clear camps at range while banking marks for the first scuttle fight",
+        "the blink-auto mark consume chunks hard, but spending E in a duel spends the escape too",
+        "W's grey-health refund makes his short trades cheaper than they look — full clears cost him real HP"],
+      threat: "a stacked nail string into the blink-through consume deletes half a health bar",
+      tool: "fight him at full marks-zero and punish the ten seconds after his blink — E is his only exit" }
   };
 
   // ---- text builders ------------------------------------------------------------
@@ -476,7 +484,8 @@
     "Evelynn": { ult: "Demon Shade", plan: "Demon Shade camouflage means you choose every post-6 fight — and they cannot", threat: "from six on she is invisible — every face-check is a charm into Last Caress", tool: "buy sweepers, hug control wards, and never path alone through her quadrant" },
     "Fiddlesticks": { ult: "Crowstorm", plan: "a fog-channeled Crowstorm flank deletes whole contests — your game starts now", threat: "a Crowstorm from unwarded fog erases half your HP before you can turn", tool: "deep wards beat him completely — the channel needs unseen seconds to land" },
     "Ivern": { ult: "Daisy!", plan: "Daisy! adds a knock-up frontline to your poke-and-root game", threat: "Daisy's knock-ups plus triggered roots make diving him expensive", tool: "kill Daisy fast or ignore her — Ivern himself still cannot fight you" },
-    "Wukong": { ult: "Cyclone", plan: "double-cast Cyclone knock-ups chain into extended fights nobody out-trades", threat: "two Cyclone knock-ups mean half the fight is spent airborne", tool: "hold your answer until the clone reveals — then dodge the second spin, not the first" }
+    "Wukong": { ult: "Cyclone", plan: "double-cast Cyclone knock-ups chain into extended fights nobody out-trades", threat: "two Cyclone knock-ups mean half the fight is spent airborne", tool: "hold your answer until the clone reveals — then dodge the second spin, not the first" },
+    "Locke": { ult: "Purgatory", plan: "the Purgatory totem turns any low-HP skirmish into a chain of executes and blink resets", threat: "Purgatory executes anyone who fights below the floor inside his totem — 'almost dead' becomes dead", tool: "leave the totem zone above the threshold and kill him while E is down — his execute can't chase" }
   };
 
   // short names for red labels ("Respect Yi's R")

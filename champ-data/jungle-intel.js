@@ -385,6 +385,34 @@ window.JUNGLE_INTEL = {
     spike: 'Level 3 — Bandage Toss (Q)', spikeNote: 'The skillshot stun is the entire gank — dodge it and he\u2019s harmless.',
     wardTime: '2:45', wardLoc: 'Top river bush', wardNote: 'Vision lets you body-block the Q with minions before it\u2019s thrown.',
     plan: ['Body-block his Q with the minion wave — it\u2019s a skillshot.', 'Ward by 2:45 to see the bandage angle.', 'Dodge the Q and the entire gank fails.']
+  },
+
+  locke: {
+    name: 'Locke',
+    tone: '#9b8cff',
+    group: 'Power Farm & Scale',
+    role: 'Execute Assassin',
+    tags: 'Farm to 6 · Purgatory Totem',
+    clearStyle: 'Ranged Q clears while banking mark stacks; weak early duels, so he farms toward his level-6 totem. His ganks are execute setups — chipped lanes are his lanes.',
+    start: 'far',
+    startLabel: 'Weak-side full clear',
+    startTop: '73%',
+    startLeft: '72%',
+    startNote: 'Loses most early jungle 1v1s (43.9% WR at emerald+) — he avoids scuttle fights and farms for 6.',
+    clearSpeed: 'Steady but self-damaging — W burns his own HP, so he clears healthy only when uncontested.',
+    critFrom: '6:00',
+    critTo: '8:30',
+    critNote: 'Purgatory changes everything: a gank on a chipped lane becomes an execute chain — his E resets on takedowns.',
+    dive: 2,
+    diveNote: 'Pre-6 dives are weak. Post-6 he dives ANY low-HP lane — the totem executes below ~11% and every kill resets his blink.',
+    waveState: 'Early: play normally, he is farming. Post-6: never sit chipped under tower when he is nearby — that is exactly the dive he farms.',
+    laneTell: 'Enemy laner starts poking harder than usual once you are low — they are stacking the lane for a Purgatory dive.',
+    spike: 'Level 6 — Purgatory (execute totem)',
+    spikeNote: 'Before 6 he is a weak duelist. After 6 + Lich Bane the blink-consume one-shots chipped squishies inside his floor.',
+    wardTime: 'Relax early; ward hard from 5:30 onward',
+    wardLoc: 'River entrances on your chipped lanes',
+    wardNote: 'His danger clock starts at 6 and follows low HP bars — vision the side that is losing trades.',
+    plan: ['Fight him early — his duel is honest at best and his escape is one blink.', 'After 6, back off lanes at low HP before he arrives, not after.', 'Never keep fighting at sliver HP inside Purgatory — leave the zone or die to the floor.']
   }
 
 };
@@ -394,5 +422,5 @@ window.JUNGLE_GROUPS = [
   { g: 'Gank & Dive', keys: ['leesin','elise','jarvaniv','vi','xinzhao','warwick','wukong','reksai'] },
   { g: 'Cheese & Invade', keys: ['shaco','rengar','graves','nidalee','briar'] },
   { g: 'Engage & CC', keys: ['sejuani','maokai','viego','hecarim','amumu'] },
-  { g: 'Power Farm & Scale', keys: ['khazix','kayn','masteryi','diana','nocturne','evelynn','karthus'] }
+  { g: 'Power Farm & Scale', keys: ['khazix','kayn','masteryi','diana','nocturne','evelynn','karthus','locke'] }
 ];

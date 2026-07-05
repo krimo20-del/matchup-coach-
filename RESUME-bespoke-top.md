@@ -1,11 +1,18 @@
-# RESUME — bespoke Reddit-validated top-lane content (continue after usage limit resets)
+# RESUME — bespoke Reddit-validated top-lane content
 
-Hit the account **usage limit (resets 5am America/Toronto)** mid-Yasuo. Agent workflows
-fail until reset. Pick up here.
+## ✅ ALL 18 IN-POOL DONE & PUSHED (champions #57–#74, live on matchupcoach.gg)
+Aatrox, Darius, Dr. Mundo, Garen, Illaoi, Sett, Urgot, Volibear, Yorick (9 juggernauts),
+Tryndamere, Vayne, Warwick, Wukong, Yasuo, Yone (6 divers), Zac, Vladimir, Ziggs.
+→ **18 of 18** in-pool missing champs done. Every top champ now has bespoke content EXCEPT
+the 3 pool-extension champs below. Verified: content win[] == store, 0 mismatch (8092+ cells).
 
-## DONE & PUSHED (champions #57–#69, live on matchupcoach.gg)
+## ONLY REMAINING: 3 pool-extension champs (Locke, Zaahen, Master Yi)
+NOT in the 68-opponent pool and have NO reverse content, so no cross-locks exist. Need the
+opponent pool extended + fresh win[] for every matchup (or skip — they're new/niche).
+
+## (historical note) DONE & PUSHED (champions #57–#69)
 Aatrox, Darius, Dr. Mundo, Garen, Illaoi, Sett, Urgot, Volibear, Yorick (all 9 juggernauts),
-Tryndamere, Vayne, Warwick, Wukong.  → **13 of 18** in-pool missing champs done.
+Tryndamere, Vayne, Warwick, Wukong.  → 13 of 18 (rest completed after the usage-limit reset).
 Each: `champ-data/content/<champ>.js` + a `<script>` line in the DC `<helmet>` (before
 `_reddit-validated-fixes.js`, alphabetical) + one commit "`<Champ>: 68 bespoke top-lane matchups (champion #NN)`".
 

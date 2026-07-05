@@ -30,6 +30,22 @@ for (const m of job.matchups) {
   entries.push({ a: champ, b: m.opp, win: e.win, spikes: e.spikes, wants: e.wants, early: e.early, mid: e.mid, late: e.late, whys: e.whys });
 }
 
+// Precise chart<->content risk report: cells where the agent's authored win[]
+// diverged from the store (= the forced/final win). Those whys were written for
+// the agent's colour and may now contradict the store colour — inspect them.
+const store2 = (function () { try { return JSON.parse(fs.readFileSync(path.join(__dirname, '_label-corrections.json'), 'utf8'))[champ]; } catch (e) { return null; } })();
+if (store2) {
+  const risk = [];
+  for (const m of job.matchups) {
+    const f = path.join(outDir, m.opp + '.json'); if (!fs.existsSync(f)) continue;
+    let ae; try { ae = JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { continue; }
+    const sw = store2[m.opp]; if (!sw || !Array.isArray(ae.win)) continue;
+    for (let i = 0; i < 7; i++) if (ae.win[i] !== sw[i]) risk.push(m.opp + '#' + i + ' store=' + sw[i] + ' agent=' + ae.win[i]);
+  }
+  if (risk.length) console.log('RISK (agent win != store, whys need a look): ' + JSON.stringify(risk));
+  else console.log('RISK: none — every authored win[] matched the store timeline.');
+}
+
 console.log(JSON.stringify({ champ, matchups: job.matchups.length, authored: entries.length, problems: problems.slice(0, 30), problemCount: problems.length }));
 if (problems.length) { console.log('NOT WRITING — fix problems first.'); process.exit(1); }
 

@@ -52,3 +52,9 @@ reconciled to match each cell's colour. Verified per champ: content win[] == sto
 EXCEPTION: **Wukong** — store key is mis-cased "Wukong" so `_label-text-fixes.js` is a no-op on its
 page; its win[] is sourced from CROSS-LOCKS (opponent reverse content via `_bespoke_crosslock.js`)
 instead, keeping mirror-consistency with opponent pages.
+
+## ✅ 100% COMPLETE (2026-07)
+All 71 top champs have bespoke content (72 files, #1-#77). The 3 pool-extension champs are done:
+Zaahen #75 + Master Yi #76 (were in the store) and Locke #77 (chart-locked to its generated timeline
+via _bespoke_prep_locke.js + _locke_chart.json). Verified: 21 new champs = 0 chart<->content
+mismatch. Nothing left in top lane.

@@ -7,7 +7,9 @@
 const fs = require('fs'), path = require('path');
 const champ = process.argv[2], champDisp = process.argv[3], scratch = process.argv[4];
 const wr = JSON.parse(fs.readFileSync(path.join(__dirname, '_wr_' + champ + '.json'), 'utf8'));
-const store = JSON.parse(fs.readFileSync(path.join(__dirname, '_label-corrections.json'), 'utf8'))[champ];
+const STORE = JSON.parse(fs.readFileSync(path.join(__dirname, '_label-corrections.json'), 'utf8'));
+// most champ keys are the lowercase slug, but a few legacy ones are display-cased (e.g. "Wukong")
+const store = STORE[champ] || STORE[champDisp] || STORE[champ.charAt(0).toUpperCase() + champ.slice(1)];
 if (!store) throw new Error('no store timeline for ' + champ);
 const P = JSON.parse(fs.readFileSync(path.join(__dirname, '_bespoke_pool.json'), 'utf8'));
 const disp = P.disp;

@@ -33,7 +33,7 @@ for (const m of job.matchups) {
 // Precise chart<->content risk report: cells where the agent's authored win[]
 // diverged from the store (= the forced/final win). Those whys were written for
 // the agent's colour and may now contradict the store colour — inspect them.
-const store2 = (function () { try { return JSON.parse(fs.readFileSync(path.join(__dirname, '_label-corrections.json'), 'utf8'))[champ]; } catch (e) { return null; } })();
+const store2 = (function () { try { const S = JSON.parse(fs.readFileSync(path.join(__dirname, '_label-corrections.json'), 'utf8')); return S[champ] || S[champ.charAt(0).toUpperCase() + champ.slice(1)]; } catch (e) { return null; } })();
 if (store2) {
   const risk = [];
   for (const m of job.matchups) {

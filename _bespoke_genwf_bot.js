@@ -8,6 +8,7 @@ const dir = path.join(scratch, 'bespoke-bot', champ);
 const job = JSON.parse(fs.readFileSync(path.join(dir, 'job.json'), 'utf8'));
 const groups = JSON.parse(fs.readFileSync(path.join(dir, 'groups.json'), 'utf8'));
 const champDisp = job.champDisp;
+const champDispEsc = champDisp.replace(/'/g, "\\'"); // safe inside single-quoted meta strings (Kai'Sa, Kog'Maw)
 const kit = job.kit;
 const kitLine = kit.cls ? `${champDisp} kit: P ${kit.P}, Q ${kit.Q}, W ${kit.W}, E ${kit.E}, R ${kit.R} (class: ${kit.cls}).` : `Use your accurate knowledge of ${champDisp}'s kit.`;
 const JOB = path.join(dir, 'job.json').replace(/\\/g, '/');
@@ -15,7 +16,7 @@ const OUT = path.join(dir, 'out').replace(/\\/g, '/');
 
 const script = `export const meta = {
   name: 'bespoke-bot-${champ}',
-  description: 'Author bespoke Reddit-informed BOT-lane (ADC) matchup content for ${champDisp} (${job.matchups.length} matchups, chart-locked)',
+  description: 'Author bespoke Reddit-informed BOT-lane (ADC) matchup content for ${champDispEsc} (${job.matchups.length} matchups, chart-locked)',
   phases: [{ title: 'Author', detail: '${groups.length} agents, win[] locked to the verified bot-lane favour timeline' }],
 }
 const JOB = ${JSON.stringify(JOB)}

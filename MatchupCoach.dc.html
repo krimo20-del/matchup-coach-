@@ -50,7 +50,9 @@ window.MC_VERSION = "beta 2.0";
 try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-weight:700;font-size:13px"); } catch (e) {}</script>
 <style>
   * { box-sizing: border-box; }
-  body { margin: 0; background: #0b0907; }
+  /* color on body is the safety net: any element that forgets an explicit color
+     renders light-on-dark instead of invisible browser-default black. */
+  body { margin: 0; background: #0b0907; color: #e7eaf2; }
   image-slot { display: block; }
   @keyframes mc-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(232,184,75,0.45), 0 12px 30px -8px rgba(232,184,75,0.55); } 50% { box-shadow: 0 0 0 6px rgba(232,184,75,0), 0 12px 34px -6px rgba(232,184,75,0.7); } }
   @keyframes mc-blip { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
@@ -4210,23 +4212,50 @@ class Component extends DCLogic {
   // (heavy) re-render lands, so a matchup never opens scrolled into the middle.
   _top() {
     try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch(e) {}
-    // Enforce top until the heavy re-render fully lands (~2s), but hand control
-    // back the instant the user scrolls/keys on purpose.
-    var cancelled = false;
-    var cancel = function(){ cancelled = true; };
-    try { ['wheel','touchstart','keydown'].forEach(function(ev){ window.addEventListener(ev, cancel, { passive: true, once: true }); }); } catch(e) {}
-    var go = function(){ if (cancelled) return; try {
-      window.scrollTo({top:0,left:0,behavior:'instant'});
-      document.documentElement.scrollTop = 0; document.body.scrollTop = 0;
-      // The app can scroll inside wrappers (#dc-root / .sc-host on desktop),
-      // not the window — reset EVERY scrolled container or the matchup opens
-      // wherever the champion picker was scrolled to.
-      var root = document.getElementById('dc-root'); if (root) root.scrollTop = 0;
-      var els = document.querySelectorAll('div'); for (var i = 0; i < els.length; i++) { if (els[i].scrollTop > 0) els[i].scrollTop = 0; }
-    } catch (e) { try { window.scrollTo(0,0); } catch(e2){} } };
-    go();
-    requestAnimationFrame(go);
-    [30, 100, 250, 500, 900, 1400, 2000].forEach(function(ms){ setTimeout(go, ms); });
+    // HARD-pin the page to the top on every animation frame for 1.2s after a view
+    // opens. No cancellation listeners: the old "cancel when the user scrolls"
+    // escape hatch was being tripped by trailing mouse-wheel momentum from
+    // scrolling the champion picker — the leftover wheel deltas landed right
+    // after the click, cancelled the reset, and dragged the fresh matchup
+    // halfway down. Pinning every frame absorbs that momentum completely; 1.2s
+    // is past any wheel/touch inertia and past the heavy re-render.
+    var until = Date.now() + 1600, self = this;
+    if (this._topRaf) { try { cancelAnimationFrame(this._topRaf); } catch (e) {} this._topRaf = null; }
+    if (this._topIv) { try { clearInterval(this._topIv); } catch (e) {} this._topIv = null; }
+    var pin = function(){
+      try {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0; document.body.scrollTop = 0;
+        // The app can scroll inside wrappers (#dc-root / .sc-host), not the
+        // window — reset EVERY scrolled container, whatever it is.
+        var els = document.querySelectorAll('div');
+        for (var i = 0; i < els.length; i++) { if (els[i].scrollTop > 0) els[i].scrollTop = 0; }
+      } catch (e) { try { window.scrollTo(0,0); } catch(e2){} }
+    };
+    // rAF for per-frame smoothness PLUS a 50ms interval as the guarantee — rAF
+    // throttles/pauses when the tab isn't focused, and the pin must hold anyway.
+    var loop = function(){
+      if (Date.now() >= until) { self._topRaf = null; return; }
+      pin();
+      self._topRaf = requestAnimationFrame(loop);
+    };
+    pin();
+    loop();
+    this._topIv = setInterval(function(){
+      if (Date.now() >= until) { clearInterval(self._topIv); self._topIv = null; return; }
+      pin();
+    }, 50);
+    // The deterministic layer: timers throttle in unfocused tabs, but scroll
+    // EVENTS fire synchronously with the scroll itself. A capture-phase listener
+    // on document sees every container's scroll and reverts it instantly, so
+    // trailing wheel momentum can never leave the fresh view scrolled down.
+    if (this._topOnScroll) { try { document.removeEventListener('scroll', this._topOnScroll, true); } catch (e) {} }
+    var onScroll = function(){ if (Date.now() < until) pin(); };
+    this._topOnScroll = onScroll;
+    try {
+      document.addEventListener('scroll', onScroll, { capture: true, passive: true });
+      setTimeout(function(){ try { document.removeEventListener('scroll', onScroll, true); } catch (e) {} if (self._topOnScroll === onScroll) self._topOnScroll = null; }, 1700);
+    } catch (e) {}
   }
   // Browser-history integration: every major view change pushes a snapshot so
   // the Back button walks the app instead of leaving the site. On a matchup we
@@ -4309,7 +4338,7 @@ class Component extends DCLogic {
   closePaywall() { this.setState({ showPaywall: false }); }
   setRole(r) { this.setState({ role: r, homeStep: 'you', search: '' }); }
   pickYou(c) { this.setState({ myChamp: c, homeStep: 'enemy', search: '' }); }
-  pickEnemy(c) { var freePick = this.state.myChamp && this.state.role && this.state.myChamp === this.dailyFreeChamp(this.state.role); if (!freePick && this._gated({ kind: 'pick', enemy: c })) return; this.setState({ enemyChamp: c, view: 'demo', matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); this._top(); this._nav(); }
+  pickEnemy(c) { var freePick = this.state.myChamp && this.state.role && this.state.myChamp === this.dailyFreeChamp(this.state.role); if (!freePick && this._gated({ kind: 'pick', enemy: c })) return; this.setState({ enemyChamp: c, view: 'demo', matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); this._top(); this._nav(); this.loadComments(this.state.myChamp, c, this.state.role); this.refreshLiveWr(this.state.myChamp, c, this.state.role); }
   backStep() { this.setState(s => ({ homeStep: s.homeStep === 'enemy' ? 'you' : 'role', search: '' })); }
   setSearch(e) { this.setState({ search: e.target.value }); }
   setLevel(l) { this.setState({ level: l }); }

@@ -46,8 +46,24 @@
 <script>window.MC_GOOGLE_CLIENT_ID = "993471719983-g8fkkrqom5ap0f7pdf7tkg63v86d77l4.apps.googleusercontent.com";
 // Release version — bump this ONE line each batched deploy (beta 1.1, beta 1.2…).
 // Logged to console so you can confirm which build is actually live after publishing.
-window.MC_VERSION = "beta 2.1";
-try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-weight:700;font-size:13px"); } catch (e) {}</script>
+window.MC_VERSION = "beta 2.2";
+try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-weight:700;font-size:13px"); } catch (e) {}
+// SELF-HEALING CACHE: fetch a tiny always-fresh build stamp; if the page a
+// browser cached is older than what's deployed, reload ONCE (guarded against
+// loops). From this version on, every future deploy reaches users automatically
+// with no hard refresh — /build.txt is served no-store, the HTML revalidates.
+(function(){
+  try {
+    fetch('/build.txt', { cache: 'no-store' }).then(function(r){ return r.ok ? r.text() : null; }).then(function(v){
+      if (!v) return; v = v.trim();
+      if (!v || v === window.MC_VERSION) return;
+      var flag = 'mc_reloaded_' + v;
+      if (sessionStorage.getItem(flag)) return; // already reloaded for this build — don't loop
+      sessionStorage.setItem(flag, '1');
+      location.reload();
+    }).catch(function(){});
+  } catch (e) {}
+})();</script>
 <style>
   * { box-sizing: border-box; }
   /* color on body is the safety net: any element that forgets an explicit color
@@ -1560,7 +1576,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
           </div>
         </div>
         <div style="border-top:1px solid rgba(255,255,255,0.05); padding-top:14px; display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
-          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">beta 2.1</span></span>
+          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">beta 2.2</span></span>
           <span style="font-size:11px; color:#4c5263; max-width:680px; line-height:1.5;">MatchupCoach is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</span>
         </div>
       </div>
@@ -2151,158 +2167,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
       </div>
     </section>
 
-    <!-- SKILL MAX + BUILDS -->
-    <section style="margin-top:16px; display:grid; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); gap:16px;">
-
-      <!-- Skill max order -->
-      <div style="border-radius:18px; border:1px solid rgba(255,255,255,0.07); background:linear-gradient(180deg,#12141d,#0d0f16); padding:20px;">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
-          <div style="display:flex; align-items:center; gap:9px;">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9b8cff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6-6.3 4.6L8 13.9 2 9.4h7.6z"></path></svg>
-            <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:17px;">Skill Max Order</span>
-          </div>
-          <span style="padding:4px 10px; border-radius:7px; background:rgba(70,198,245,0.13); border:1px solid rgba(70,198,245,0.3); color:#7cc8e8; font-size:11px; font-weight:700; font-family:'Chakra Petch',sans-serif;">{{ patch }}</span>
-        </div>
-
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:15px;">
-          <span style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:rgba(70,198,245,0.14); border:1px solid rgba(70,198,245,0.4); color:#46c6f5;">Q</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5a6072" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          <span style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:rgba(155,140,255,0.14); border:1px solid rgba(155,140,255,0.4); color:#9b8cff;">W</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5a6072" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          <span style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:rgba(232,184,75,0.14); border:1px solid rgba(232,184,75,0.4); color:#e8b84b;">E</span>
-          <span style="margin-left:6px; font-family:'Manrope',sans-serif; font-size:12px; font-weight:600; color:#8a90a2;">put 1 early point in E</span>
-        </div>
-
-        <!-- level grid -->
-        <div style="display:grid; grid-template-columns:repeat(9,1fr); gap:5px; margin-bottom:14px;">
-          <sc-for list="{{ skillOrder }}" as="s" hint-placeholder-count="18">
-            <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
-              <span style="font-size:9px; font-weight:700; color:#5a6072; font-family:'Chakra Petch',sans-serif;">{{ s.lvl }}</span>
-              <span aria-hidden="true" aria-label="ab:{{ champA.name }}|{{ s.a }}" style="width:100%; aspect-ratio:1; border-radius:6px; display:flex; align-items:center; justify-content:center; background:{{ s.bg }}; border:1px solid {{ s.color }}55;"></span>
-              <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; color:{{ s.color }};">{{ s.a }}</span>
-            </div>
-          </sc-for>
-        </div>
-
-        <div style="display:flex; flex-direction:column; gap:8px;">
-          <sc-for list="{{ skillLegend }}" as="l" hint-placeholder-count="4">
-            <div style="display:flex; align-items:flex-start; gap:10px;">
-              <span aria-hidden="true" aria-label="ab:{{ champA.name }}|{{ l.k }}" style="flex:0 0 auto; width:30px; height:30px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:{{ l.color }}; border:1px solid {{ l.color }}55;">{{ l.k }}</span>
-              <div style="min-width:0;">
-                <div style="display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;">
-                  <span style="font-size:13px; font-weight:700; color:#dfe2ec;">{{ l.label }}</span>
-                  <sc-if value="{{ l.abName }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Chakra Petch',sans-serif; font-size:11px; font-weight:700; color:{{ l.color }};">{{ l.abName }}</span></sc-if>
-                  <span style="font-size:12px; color:#8a90a2;">{{ l.note }}</span>
-                </div>
-                <sc-if value="{{ l.detail }}" hint-placeholder-val="{{ false }}">
-                  <div style="margin-top:3px; font-size:12px; line-height:1.5; color:#9aa0b3; text-wrap:pretty;">{{ l.detail }}</div>
-                </sc-if>
-              </div>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-
-      <!-- ===== UNIFIED RUNES / SUMMONERS / BUILD (picture-forward, same on every page) ===== -->
-      <sc-if value="{{ loadout }}" hint-placeholder-val="{{ true }}">
-      <div style="border-radius:18px; border:1px solid rgba(255,255,255,0.07); background:linear-gradient(180deg,#12141d,#0d0f16); padding:20px;">
-        <div style="display:flex; align-items:center; gap:9px; margin-bottom:4px; flex-wrap:wrap;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e8b84b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9M14 17H5M17 3l3 4-3 4M7 13l-3 4 3 4"></path></svg>
-          <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:18px; color:#f4efe8;">Runes, Summoners &amp; Build</span>
-          <span style="font-size:12px; color:#8a90a2;">{{ loadout.archetype }}</span>
-        </div>
-
-        <!-- SUMMONERS: just elo + the two icons, no prose -->
-        <div style="display:flex; gap:12px; flex-wrap:wrap; margin:14px 0 20px;">
-          <div style="display:flex; align-items:center; gap:11px; padding:10px 15px; border-radius:13px; background:#0c0e15; border:1px solid rgba(232,184,75,0.3);">
-            <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:0.6px; color:#f0cd72; font-weight:700; white-space:nowrap;">EMERALD+</span>
-            <sc-for list="{{ loadout.summHigh }}" as="s" hint-placeholder-count="2">
-              <span aria-hidden="true" aria-label="lo:summ:{{ s.name }}" title="{{ s.name }}" style="flex:0 0 auto; width:46px; height:46px; border-radius:11px; background:#15161e; border:1px solid rgba(255,255,255,0.14);"></span>
-            </sc-for>
-          </div>
-          <div style="display:flex; align-items:center; gap:11px; padding:10px 15px; border-radius:13px; background:#0c0e15; border:1px solid rgba(255,255,255,0.1);">
-            <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:0.6px; color:#9aa0b3; font-weight:700; white-space:nowrap;">EMERALD &amp; BELOW</span>
-            <sc-for list="{{ loadout.summLow }}" as="s" hint-placeholder-count="2">
-              <span aria-hidden="true" aria-label="lo:summ:{{ s.name }}" title="{{ s.name }}" style="flex:0 0 auto; width:46px; height:46px; border-radius:11px; background:#15161e; border:1px solid rgba(255,255,255,0.14);"></span>
-            </sc-for>
-          </div>
-        </div>
-
-        <!-- RUNES (big symbol first, tiny clamped label after) -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); gap:14px; margin-bottom:20px;">
-          <div style="border-radius:14px; background:linear-gradient(180deg,rgba(232,184,75,0.07),#11131c); border:1px solid rgba(232,184,75,0.22); padding:15px 16px;">
-            <div style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.9px; color:#f0cd72; font-weight:700; margin-bottom:13px;">{{ loadout.primaryTree }} · PRIMARY</div>
-            <div style="display:flex; gap:11px; flex-wrap:wrap; align-items:flex-start;">
-              <span style="display:flex; flex-direction:column; align-items:center; gap:6px; width:66px;">
-                <span aria-hidden="true" aria-label="lo:rune:{{ loadout.keystone.name }}" style="flex:0 0 auto; width:64px; height:64px; border-radius:14px; background:#15161e; border:1.5px solid rgba(232,184,75,0.55);"></span>
-                <span style="font-size:8.5px; line-height:1.15; color:#e7e2d8; font-weight:600; text-align:center; max-height:20px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">{{ loadout.keystone.name }}</span>
-              </span>
-              <sc-for list="{{ loadout.primary }}" as="r" hint-placeholder-count="3">
-                <span style="display:flex; flex-direction:column; align-items:center; gap:6px; width:56px;">
-                  <span aria-hidden="true" aria-label="lo:rune:{{ r.name }}" style="flex:0 0 auto; width:52px; height:52px; border-radius:12px; background:#15161e; border:1px solid rgba(255,255,255,0.12);"></span>
-                  <span style="font-size:8px; line-height:1.15; color:#9aa0b3; text-align:center; max-height:19px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">{{ r.name }}</span>
-                </span>
-              </sc-for>
-            </div>
-          </div>
-          <div style="border-radius:14px; background:linear-gradient(180deg,rgba(127,227,184,0.06),#11131c); border:1px solid rgba(127,227,184,0.2); padding:15px 16px;">
-            <div style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.9px; color:#7fe3b8; font-weight:700; margin-bottom:13px;">{{ loadout.secondaryTree }} · SECONDARY</div>
-            <div style="display:flex; gap:11px; flex-wrap:wrap; align-items:flex-start;">
-              <sc-for list="{{ loadout.secondary }}" as="r" hint-placeholder-count="2">
-                <span style="display:flex; flex-direction:column; align-items:center; gap:6px; width:56px;">
-                  <span aria-hidden="true" aria-label="lo:rune:{{ r.name }}" style="flex:0 0 auto; width:52px; height:52px; border-radius:12px; background:#15161e; border:1px solid rgba(255,255,255,0.12);"></span>
-                  <span style="font-size:8px; line-height:1.15; color:#9aa0b3; text-align:center; max-height:19px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">{{ r.name }}</span>
-                </span>
-              </sc-for>
-            </div>
-            <div style="margin-top:13px; display:flex; gap:7px; flex-wrap:wrap;">
-              <sc-for list="{{ loadout.shards }}" as="sh" hint-placeholder-count="3">
-                <span style="display:inline-flex; align-items:center; gap:5px; padding:4px 9px; border-radius:7px; background:#11131c; border:1px solid rgba(155,140,255,0.3); font-size:9.5px; color:#bcb1ff; font-weight:600; white-space:nowrap;"><span style="flex:0 0 auto; width:6px; height:6px; border-radius:50%; background:#9b8cff;"></span>{{ sh.name }}</span>
-              </sc-for>
-            </div>
-          </div>
-        </div>
-
-        <!-- BUILD PATH — big item pictures, tiny clamped labels -->
-        <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
-          <div>
-            <div style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.6px; color:#7d8499; font-weight:700; margin-bottom:9px;">START</div>
-            <div style="display:flex; gap:8px;">
-              <sc-for list="{{ loadout.start }}" as="it" hint-placeholder-count="2">
-                <span style="display:flex; flex-direction:column; align-items:center; gap:4px; width:58px;"><span aria-hidden="true" aria-label="lo:item:{{ it.name }}" style="flex:0 0 auto; width:54px; height:54px; border-radius:12px; background:#15161e; border:1px solid rgba(255,255,255,0.12);"></span><span style="font-size:8px; line-height:1.15; color:#9aa0b3; text-align:center; max-height:19px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">{{ it.name }}</span></span>
-              </sc-for>
-            </div>
-          </div>
-          <div>
-            <div style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.6px; color:#7d8499; font-weight:700; margin-bottom:9px;">BOOTS</div>
-            <span style="display:flex; flex-direction:column; align-items:center; gap:4px; width:58px;"><span aria-hidden="true" aria-label="lo:item:{{ loadout.boots.name }}" style="flex:0 0 auto; width:54px; height:54px; border-radius:12px; background:#15161e; border:1px solid rgba(255,255,255,0.12);"></span><span style="font-size:8px; line-height:1.15; color:#9aa0b3; text-align:center; max-height:19px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">{{ loadout.boots.name }}</span></span>
-          </div>
-          <div style="flex:1 1 auto;">
-            <div style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.6px; color:#7cc8e8; font-weight:700; margin-bottom:9px;">CORE — RUSH IN ORDER</div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <sc-for list="{{ loadout.core }}" as="it" hint-placeholder-count="3">
-                <span style="display:flex; flex-direction:column; align-items:center; gap:4px; width:66px;"><span aria-hidden="true" aria-label="lo:item:{{ it.name }}" style="flex:0 0 auto; width:62px; height:62px; border-radius:13px; background:#15161e; border:1.5px solid rgba(70,198,245,0.4);"></span><span style="font-size:8px; line-height:1.15; color:#cfd4e0; text-align:center; font-weight:600; max-height:19px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">{{ it.name }}</span></span>
-              </sc-for>
-            </div>
-          </div>
-        </div>
-
-        <div style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.6px; color:#7d8499; font-weight:700; margin-bottom:10px;">SITUATIONAL — PICK BY ENEMY COMP</div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr)); gap:12px;">
-          <sc-for list="{{ loadout.options }}" as="o" hint-placeholder-count="2">
-            <div style="border-radius:12px; background:#11131c; border:1px solid rgba(255,255,255,0.06); padding:12px 13px;">
-              <div style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11.5px; color:#e8b84b; margin-bottom:10px;">{{ o.label }}</div>
-              <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <sc-for list="{{ o.items }}" as="it" hint-placeholder-count="2">
-                  <span style="display:flex; flex-direction:column; align-items:center; gap:4px; width:56px;"><span aria-hidden="true" aria-label="lo:item:{{ it.name }}" style="flex:0 0 auto; width:52px; height:52px; border-radius:12px; background:#15161e; border:1px solid rgba(255,255,255,0.12);"></span><span style="font-size:8px; line-height:1.15; color:#9aa0b3; text-align:center; max-height:19px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">{{ it.name }}</span></span>
-                </sc-for>
-              </div>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-      </sc-if>
-    </section>
+    <!-- (runes / items / build section removed — we coach the matchup, not builds) -->
 
     <!-- ===== COOLDOWN CHEAT SHEET (below Skill Max Order) ===== -->
     <section style="margin-top:30px;">
@@ -2927,133 +2792,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
       </sc-if>
     </section>
 
-    <!-- RUNES, SUMMONERS & BUILD (jungle) -->
-    <section style="margin-top:18px;">
-      <div style="border-radius:18px; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg,#12141d,#0d0f16); padding:22px 24px;">
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#e8b84b" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9M14 17H5M17 3l3 4-3 4M7 13l-3 4 3 4"></path></svg>
-          <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:21px; color:#f4efe8;">Runes, Summoners &amp; Build</span>
-          <span style="font-size:13px; color:#8a90a2;">— {{ patch }} · this matchup</span>
-        </div>
-        <div style="border-radius:13px; background:rgba(70,198,245,0.07); border:1px solid rgba(70,198,245,0.3); padding:15px 17px; margin-bottom:14px; display:flex; gap:13px; align-items:flex-start;">
-          <span style="flex:0 0 auto; width:34px; height:34px; border-radius:9px; background:rgba(70,198,245,0.14); border:1px solid rgba(70,198,245,0.34); display:flex; align-items:center; justify-content:center;">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7cc8e8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
-          </span>
-          <div>
-            <div style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:0.9px; color:#7cc8e8; font-weight:700; margin-bottom:6px;">{{ jv.sumNote.title }}</div>
-            <p data-icontext="summs" style="margin:0 0 7px; font-size:13.5px; line-height:1.6; color:#d7dbe6; text-wrap:pretty;">{{ jv.sumNote.body }}</p>
-            <p style="margin:0; font-size:13px; line-height:1.55; color:#aab0c2; text-wrap:pretty;">{{ jv.sumNote.extra }}</p>
-          </div>
-        </div>
-
-        <sc-if value="{{ jv.loadout }}" hint-placeholder-val="{{ true }}">
-        <div>
-          <!-- BUILD PATH: 4 explicit stages (same system as the lane pages) -->
-          <div style="display:flex; align-items:center; gap:9px; margin-bottom:11px; flex-wrap:wrap;">
-            <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:0.9px; color:#f0cd72; font-weight:700;">BUILD PATH</span>
-            <span style="font-size:11.5px; color:#8a90a2;">vs {{ jv.champB.name }} · {{ jv.loadout.diff }}</span>
-            <span style="margin-left:auto; font-size:11.5px; color:#7cc8e8; font-weight:600;">{{ jv.loadout.wr }}</span>
-          </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:11px; margin-bottom:11px;">
-            <div style="position:relative; border-radius:13px; background:#11131c; border:1px solid rgba(255,255,255,0.09); border-top:2.5px solid #7d8499; padding:14px 15px;">
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:9px;">
-                <span style="flex:0 0 auto; width:22px; height:22px; border-radius:7px; background:rgba(125,132,153,0.18); color:#aab0c2; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; display:flex; align-items:center; justify-content:center;">1</span>
-                <span style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.7px; color:#9aa1b3; font-weight:700;">JUNGLE START</span>
-              </div>
-              <div data-icontext="items" style="font-size:14px; font-weight:700; color:#eef0f6; line-height:1.4;">{{ jv.loadout.start }}</div>
-            </div>
-            <div style="position:relative; border-radius:13px; background:linear-gradient(180deg,rgba(70,198,245,0.08),#11131c); border:1px solid rgba(70,198,245,0.22); border-top:2.5px solid #46c6f5; padding:14px 15px;">
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:9px;">
-                <span style="flex:0 0 auto; width:22px; height:22px; border-radius:7px; background:rgba(70,198,245,0.18); color:#7cc8e8; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; display:flex; align-items:center; justify-content:center;">2</span>
-                <span style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.7px; color:#7cc8e8; font-weight:700;">FIRST BACK · GOAL</span>
-              </div>
-              <div data-icontext="items" style="font-size:14px; font-weight:700; color:#eef0f6; line-height:1.4;">{{ jv.loadout.firstBack }}</div>
-            </div>
-            <div style="position:relative; border-radius:13px; background:linear-gradient(180deg,rgba(232,184,75,0.09),#11131c); border:1px solid rgba(232,184,75,0.26); border-top:2.5px solid #e8b84b; padding:14px 15px;">
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:9px;">
-                <span style="flex:0 0 auto; width:22px; height:22px; border-radius:7px; background:rgba(232,184,75,0.2); color:#f0cd72; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; display:flex; align-items:center; justify-content:center;">3</span>
-                <span style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.7px; color:#f0cd72; font-weight:700;">FIRST ITEM · THIS MATCHUP</span>
-              </div>
-              <div data-icontext="items" style="font-size:14px; font-weight:700; color:#f7efdc; line-height:1.4;">{{ jv.loadout.firstItem }}</div>
-            </div>
-            <div style="position:relative; border-radius:13px; background:linear-gradient(180deg,rgba(240,136,61,0.09),#11131c); border:1px solid rgba(240,136,61,0.26); border-top:2.5px solid #f0883d; padding:14px 15px;">
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:9px;">
-                <span style="flex:0 0 auto; width:22px; height:22px; border-radius:7px; background:rgba(240,136,61,0.2); color:#f5a667; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; display:flex; align-items:center; justify-content:center;">4</span>
-                <span style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.7px; color:#f5a667; font-weight:700;">SECOND ITEM</span>
-              </div>
-              <div data-icontext="items" style="font-size:14px; font-weight:700; color:#f7ecdf; line-height:1.4;">{{ jv.loadout.secondItem }}</div>
-            </div>
-          </div>
-          <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px;">
-            <div style="flex:0 0 auto; display:inline-flex; align-items:center; gap:8px; padding:9px 13px; border-radius:11px; background:#11131c; border:1px solid rgba(255,255,255,0.08);">
-              <span style="font-family:'Chakra Petch',sans-serif; font-size:9.5px; letter-spacing:0.7px; color:#7d8499; font-weight:700;">BOOTS</span>
-              <span data-icontext="items" style="font-size:13px; color:#e7d6a8; font-weight:700;">{{ jv.loadout.boots }}</span>
-            </div>
-            <div style="flex:1 1 240px; min-width:240px; display:flex; align-items:flex-start; gap:9px; padding:10px 13px; border-radius:11px; background:rgba(61,220,151,0.06); border:1px solid rgba(61,220,151,0.22);">
-              <span style="flex:0 0 auto; font-family:'Chakra Petch',sans-serif; font-size:9.5px; letter-spacing:0.7px; color:#7fe3b8; font-weight:700; padding-top:2px;">THEN</span>
-              <span style="font-size:12.5px; line-height:1.5; color:#cfd4e0; text-wrap:pretty;">{{ jv.loadout.spike }}</span>
-            </div>
-          </div>
-
-          <!-- FULL RUNE PAGE (same system as the lane pages) -->
-          <div style="display:flex; align-items:center; gap:9px; margin-bottom:11px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9b8cff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6-6.3 4.6L8 13.9 2 9.4h7.6z"></path></svg>
-            <span style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:0.9px; color:#bcb1ff; font-weight:700;">FULL RUNE PAGE</span>
-          </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px;">
-            <div style="border-radius:13px; background:#11131c; border:1px solid rgba(232,184,75,0.22); padding:15px 16px;">
-              <div data-icontext="runes" style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.9px; color:#f0cd72; font-weight:700; margin-bottom:12px;">{{ jv.loadout.runes.primaryTree }} · PRIMARY</div>
-              <div style="display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:11px; background:linear-gradient(135deg,rgba(232,184,75,0.16),rgba(232,184,75,0.04)); border:1px solid rgba(232,184,75,0.4); margin-bottom:11px;">
-                <span style="flex:0 0 auto; width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #f5d27a, #d8901c); box-shadow:0 0 0 2px rgba(232,184,75,0.35);"></span>
-                <div>
-                  <div style="font-family:'Chakra Petch',sans-serif; font-size:8.5px; letter-spacing:0.8px; color:#bca366; font-weight:700;">KEYSTONE</div>
-                  <div data-icontext="runes" style="font-size:15px; font-weight:800; color:#f7e6bd; line-height:1.2;">{{ jv.loadout.runes.keystone }}</div>
-                </div>
-              </div>
-              <sc-for list="{{ jv.loadout.runes.primary }}" as="r" hint-placeholder-count="3">
-                <div style="display:flex; align-items:center; gap:11px; padding:7px 4px;">
-                  <span style="flex:0 0 auto; width:13px; height:13px; transform:rotate(45deg); background:rgba(232,184,75,0.7); border-radius:3px;"></span>
-                  <span data-icontext="runes" style="font-size:13.5px; color:#e7e2d8; font-weight:600;">{{ r }}</span>
-                </div>
-              </sc-for>
-            </div>
-            <div style="display:flex; flex-direction:column; gap:12px;">
-              <div style="border-radius:13px; background:#11131c; border:1px solid rgba(61,220,151,0.22); padding:15px 16px;">
-                <div data-icontext="runes" style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.9px; color:#7fe3b8; font-weight:700; margin-bottom:11px;">{{ jv.loadout.runes.tree }} · SECONDARY</div>
-                <sc-for list="{{ jv.loadout.runes.secondary }}" as="r" hint-placeholder-count="2">
-                  <div style="display:flex; align-items:center; gap:11px; padding:7px 4px;">
-                    <span style="flex:0 0 auto; width:13px; height:13px; transform:rotate(45deg); background:rgba(61,220,151,0.7); border-radius:3px;"></span>
-                    <span data-icontext="runes" style="font-size:13.5px; color:#e7e2d8; font-weight:600;">{{ r }}</span>
-                  </div>
-                </sc-for>
-              </div>
-              <div style="border-radius:13px; background:#11131c; border:1px solid rgba(255,255,255,0.08); padding:14px 16px;">
-                <div style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.9px; color:#9aa1b3; font-weight:700; margin-bottom:10px;">STAT SHARDS</div>
-                <div style="display:flex; flex-wrap:wrap; gap:8px;">
-                  <sc-for list="{{ jv.loadout.runes.shards }}" as="sh" hint-placeholder-count="3">
-                    <span style="display:inline-flex; align-items:center; gap:7px; padding:6px 11px; border-radius:20px; background:rgba(155,140,255,0.1); border:1px solid rgba(155,140,255,0.28); font-size:12.5px; color:#d7d3ee; font-weight:600;">
-                      <span style="width:8px; height:8px; border-radius:50%; background:#9b8cff;"></span>{{ sh }}
-                    </span>
-                  </sc-for>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        </sc-if>
-
-        <!-- Reddit / jungle consensus note (bottom of box — same position as lane pages) -->
-        <div style="margin-top:13px; border-radius:13px; background:rgba(255,93,108,0.06); border:1px solid rgba(255,93,108,0.22); padding:13px 16px; display:flex; gap:11px; align-items:flex-start;">
-          <span style="flex:0 0 auto; width:30px; height:30px; border-radius:8px; background:rgba(255,93,108,0.14); border:1px solid rgba(255,93,108,0.3); display:flex; align-items:center; justify-content:center;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff8b96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-          </span>
-          <div>
-            <div style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.8px; color:#ff8b96; font-weight:700; margin-bottom:5px;">FROM THE SUBREDDIT · JUNGLE CONSENSUS</div>
-            <p style="margin:0; font-size:13px; line-height:1.6; color:#dcd2d4; text-wrap:pretty;">{{ jv.reddit }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- (runes / items / build section removed — we coach the matchup, not builds) -->
 
 
     <!-- MATCHUP BREAKDOWN -->
@@ -3072,6 +2811,41 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
         </sc-for>
       </div>
     </section>
+
+    <!-- ===== WHERE TO START · HOW TO CLEAR · HOW TO PATH ===== -->
+    <sc-if value="{{ jv.startClear }}" hint-placeholder-val="{{ false }}">
+    <section style="margin-top:30px;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:5px; flex-wrap:wrap;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#3ddc97" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"></path><path d="M9 3v15M15 6v15"></path></svg>
+        <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:21px;">Where to Start, Clear &amp; Path</span>
+      </div>
+      <div style="font-size:13px; color:#8a90a2; margin-bottom:16px;">Your opening this matchup — where you start, how you clear, where {{ jv.startClear.foeName }} most likely starts, and how to path around them.</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px;">
+        <div style="border-radius:16px; border:1px solid rgba(61,220,151,0.28); border-top:2.5px solid #3ddc97; background:linear-gradient(180deg,rgba(61,220,151,0.06),#0d0f16); padding:17px 18px;">
+          <div style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:0.7px; color:#7fe3b8; font-weight:700; margin-bottom:9px;">YOUR START — {{ jv.startClear.youName }}</div>
+          <div style="font-size:13.5px; font-weight:700; color:#eafff5; line-height:1.5;">{{ jv.startClear.youStart }}</div>
+          <div style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.7px; color:#6fae90; font-weight:700; margin:12px 0 4px;">HOW YOU CLEAR</div>
+          <p style="margin:0; font-size:12.5px; line-height:1.55; color:#d7dbe6; text-wrap:pretty;">{{ jv.startClear.youClear }}</p>
+        </div>
+        <div style="border-radius:16px; border:1px solid rgba(255,93,108,0.28); border-top:2.5px solid #ff5d6c; background:linear-gradient(180deg,rgba(255,93,108,0.06),#0d0f16); padding:17px 18px;">
+          <div style="font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:0.7px; color:#ff8b96; font-weight:700; margin-bottom:9px;">THEY LIKELY START — {{ jv.startClear.foeName }}</div>
+          <div style="font-size:13.5px; font-weight:700; color:#ffe9ec; line-height:1.5;">{{ jv.startClear.foeStart }}</div>
+          <p style="margin:8px 0 0; font-size:12px; line-height:1.5; color:#cdd3e2; text-wrap:pretty;">{{ jv.startClear.foeStartNote }}</p>
+          <div style="font-family:'Chakra Petch',sans-serif; font-size:10px; letter-spacing:0.7px; color:#c07f86; font-weight:700; margin:12px 0 4px;">FIRST-GANK WINDOW · {{ jv.startClear.foeGankWindow }}</div>
+          <p style="margin:0; font-size:12.5px; line-height:1.55; color:#d7dbe6; text-wrap:pretty;">{{ jv.startClear.foeClear }}</p>
+        </div>
+      </div>
+      <div style="margin-top:14px; display:flex; gap:11px; align-items:flex-start; padding:15px 17px; border-radius:14px; background:rgba(155,140,255,0.07); border:1px solid rgba(155,140,255,0.28);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#b3a6ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto; margin-top:1px;"><path d="M3 12h4l3 8 4-16 3 8h4"></path></svg>
+        <div>
+          <div style="font-family:'Chakra Petch',sans-serif; font-size:10.5px; letter-spacing:0.7px; color:#b3a6ff; font-weight:700; margin-bottom:4px;">HOW TO PATH THIS MATCHUP</div>
+          <p style="margin:0 0 9px; font-size:13.5px; line-height:1.6; color:#e7eaf2; text-wrap:pretty;">{{ jv.startClear.path }}</p>
+          <div style="font-family:'Chakra Petch',sans-serif; font-size:10.5px; letter-spacing:0.7px; color:#8a90a2; font-weight:700; margin-bottom:3px;">WHAT TO LOOK FOR</div>
+          <p style="margin:0; font-size:12.5px; line-height:1.55; color:#c0c5d2; text-wrap:pretty;">{{ jv.startClear.watch }}</p>
+        </div>
+      </div>
+    </section>
+    </sc-if>
 
     <!-- LEVEL & PATHING ADVANTAGE CHART -->
     <section style="margin-top:30px;">
@@ -7232,6 +7006,39 @@ class Component extends DCLogic {
         })(),
         // CLEARS & INVADE CONTROL — symmetric read of both junglers' clear +
         // invade profiles → a levels 1-3 verdict: PRESS theirs, WATCH yours, or MIRROR.
+        // WHERE TO START · HOW TO CLEAR · HOW TO PATH — built from both junglers'
+        // researched JUNGLE_INTEL profiles, so it's specific to THIS matchup.
+        startClear: (function(){
+          var f = intelRaw, m = myRaw;
+          if (!f) return null;
+          var sideOf = function(j){ return j && j.start === 'near' ? 'bot / river side (aggressive start)' : 'top / weak side (safe full clear)'; };
+          var fEarly = (f.gank || 3) >= 4 || (f.invadeTend || 2) >= 4;   // foe is an early-tempo threat
+          var fFarm = (f.gank || 3) <= 2 && (f.invadeTend || 2) <= 2;    // foe is a power-farmer
+          var mySide = m ? sideOf(m) : 'the buff on your open side';
+          var foeSideKnown = !!f.startLabel;
+          // pathing recommendation from the two profiles
+          var path;
+          if (fEarly) {
+            path = 'Start the buff on the side away from ' + foe + ', clear toward mid so you can body-block or counter their first gank, and DON’T greed a slow full clear — ' + foe + ' wants tempo, so match pace and hold your flanks warded from ~2:45.';
+          } else if (fFarm) {
+            path = foe + ' power-farms and won’t contest you early — start whichever buff routes you to scuttle fastest, do a healthy full clear, and use the free tempo to gank a lane or set vision on their jungle before their scaling comes online.';
+          } else {
+            path = 'Standard clear: start your open-side buff, path toward the scuttle you can win, and take the first river fight only with a leash or HP lead. Ward the side you’re pushing so ' + foe + ' can’t collapse on you blind.';
+          }
+          return {
+            youName: you, foeName: foe,
+            youStart: m ? (m.startLabel || 'Standard leash start') : 'Standard leash start',
+            youSide: mySide,
+            youClear: m ? (m.clearSpeed || m.clearStyle || 'Standard three-camp clear into a scuttle contest.') : 'Standard three-camp clear into a scuttle contest.',
+            foeStart: foeSideKnown ? f.startLabel : 'Standard leash start',
+            foeSide: sideOf(f),
+            foeStartNote: f.startNote || (foe + ' takes a normal leash and paths to the nearest scuttle.'),
+            foeClear: f.clearSpeed || f.clearStyle || 'Standard three-camp clear.',
+            foeGankWindow: (f.critFrom || '~3:00') + '–' + (f.critTo || '3:30'),
+            watch: f.laneTell || (f.spikeNote || ('Watch for ' + foe + '’s first gank around ' + (f.critFrom || '3:00') + ' — track where they showed on the map and assume the opposite side is next.')),
+            path: path
+          };
+        })(),
         invadeCall: (function(){
           var f = intelRaw, m = myRaw;
           if (!f) return null;

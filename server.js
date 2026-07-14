@@ -51,6 +51,7 @@ const users = loadJson('users.json', {});
 const sessions = loadJson('sessions.json', {});
 const founders = loadJson('founders.json', { claimed: 0 });
 const fulfilled = loadJson('fulfilled.json', {}); // stripe session id -> true (idempotent fulfillment)
+const commentsDb = loadJson('comments.json', {}); // matchup thread key -> [{id, uk, name, text, ts}]
 
 // ---------- crypto ----------
 const newToken = () => crypto.randomBytes(32).toString('hex');
@@ -338,6 +339,57 @@ async function handleApi(req, res, pathname, ip) {
     const h = req.headers.authorization || '';
     if (h.startsWith('Bearer ')) { delete sessions[h.slice(7)]; saveJson('sessions.json', sessions); }
     return sendJson(res, 200, { ok: true });
+  }
+
+  // ---------- matchup comments (per-matchup discussion thread) ----------
+  // Thread key is the UNORDERED champ pair + lane, so "A vs B" and "B vs A"
+  // share one discussion. Reading is public; posting/deleting needs a session.
+  if (pathname === '/api/comments' && (req.method === 'GET' || req.method === 'POST')) {
+    const q = (function () { try { return new URL(req.url, 'http://x').searchParams; } catch (e) { return new URLSearchParams(); } })();
+    const body = req.method === 'POST' ? await readBody(req) : {};
+    const pick = (k) => String((req.method === 'POST' ? body[k] : q.get(k)) || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+    const a = pick('a'), b = pick('b');
+    let lane = pick('lane') || 'top';
+    if (!['top', 'mid', 'bot', 'support', 'jungle'].includes(lane)) lane = 'top';
+    if (!a || !b || a.length > 24 || b.length > 24) return sendJson(res, 400, { error: 'Bad matchup.' });
+    const key = lane + ':' + [a, b].sort().join('|');
+    const thread = commentsDb[key] || [];
+
+    if (req.method === 'GET') {
+      const me = authUser(req);
+      const mineKey = me ? me.key : null;
+      const list = thread.slice(-200).map((c) => ({ id: c.id, name: c.name, text: c.text, ts: c.ts, mine: !!(mineKey && c.uk === mineKey) }));
+      return sendJson(res, 200, { comments: list, count: thread.length });
+    }
+
+    // POST — add a comment
+    const me = authUser(req);
+    if (!me) return sendJson(res, 401, { error: 'Sign in to post a note.' });
+    if (throttled(ip)) return sendJson(res, 429, { error: 'Slow down a moment and try again.' });
+    let text = String(body.text || '').replace(/\s+$/g, '').replace(/^\s+/g, '');
+    if (!text) return sendJson(res, 400, { error: 'Write something first.' });
+    if (text.length > 1000) text = text.slice(0, 1000);
+    if (thread.length >= 1000) thread.shift(); // hard cap per thread
+    const c = { id: crypto.randomBytes(9).toString('hex'), uk: me.key, name: me.name, text, ts: Date.now() };
+    thread.push(c);
+    commentsDb[key] = thread;
+    saveJson('comments.json', commentsDb);
+    return sendJson(res, 200, { comment: { id: c.id, name: c.name, text: c.text, ts: c.ts, mine: true } });
+  }
+
+  if (route === 'POST /api/comments/delete') {
+    const me = authUser(req);
+    if (!me) return sendJson(res, 401, { error: 'Sign in first.' });
+    const body = await readBody(req);
+    const id = String(body.id || '');
+    let removed = false;
+    for (const k of Object.keys(commentsDb)) {
+      const arr = commentsDb[k];
+      const i = arr.findIndex((c) => c.id === id && c.uk === me.key);
+      if (i >= 0) { arr.splice(i, 1); removed = true; break; }
+    }
+    if (removed) saveJson('comments.json', commentsDb);
+    return sendJson(res, 200, { ok: removed });
   }
 
   if (route === 'POST /api/checkout') {

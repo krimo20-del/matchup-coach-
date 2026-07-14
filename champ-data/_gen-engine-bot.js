@@ -63,7 +63,7 @@ window.GEN_ENGINE_BOT = (function () {
     twitch:      { slot:'Q', name:'Ambush (Stealth)', cd:'13s', note:'The stealth approach starts every Twitch fight — sweep the flanks and track the disappearance.', winT:'STEALTH SPOTTED' },
     vayne:       { slot:'E', name:'Condemn', cd:'18s', note:'Wall-stuns you — never fight her with terrain at your back.', winT:'CONDEMN DOWN' },
     zeri:        { slot:'E', name:'Spark Surge', cd:'20s', note:'The wall-dash escape — she is catchable only while it is down.', winT:'SURGE DOWN' },
-    corki:       { slot:'W', name:'Special Delivery (Package)', cd:'—', note:'The package run flips river fights — track the delivery timer like an objective.', winT:'NO PACKAGE' },
+    corki:       { slot:'W', name:'Valkyrie', cd:'20s', note:'His only escape — once the dash is spent he is a slow turret with no exits.', winT:'VALKYRIE DOWN' },
     ezreal:      { slot:'E', name:'Arcane Shift', cd:'19s', note:'The blink makes him untouchable — punish the nineteen seconds after he burns it.', winT:'SHIFT DOWN' },
     kalista:     { slot:'R', name:'Fate\u2019s Call', cd:'120s', note:'The support-toss engage — respect every brush her Oathsworn could be sitting in.', winT:'CALL DOWN' },
     lucian:      { slot:'E', name:'Relentless Pursuit', cd:'14s', note:'His dash — lock him down while it is on cooldown.', winT:'DASH DOWN' },

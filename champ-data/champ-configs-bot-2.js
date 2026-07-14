@@ -133,29 +133,29 @@ window.CHAMP_CONFIGS_BOT = Object.assign(window.CHAMP_CONFIGS_BOT || {}, {
   },
   Corki: {
     dataKey: 'corki_bot', sub: 'Marksman \u00b7 Mixed Poke \u00b7 Daring Bombardier', label: '#d8b88f', tint: 'rgba(200,170,110,0.5)',
-    classLabel: 'Marksman', winStyle: 'Poke / Package', ultVerdict: 'MISSILE BARRAGE',
-    lateSwing: 'Late Corki sieges with mail service \u2014 missile the setup, package the engage.', spikeLine: 'Trinity online \u2014 the missile war is yours.',
-    spikeItem: 'Sheen spike \u2014 siege with the count.', lvl6Spike: 'Package timer live \u2014 the delivery flips river fights.',
-    fbVerb: 'out-poke him in two currencies', fbAction: 'missile the contacts and strafe the windows', fbDo: 'Count to the big missile \u2014 it\u2019s your fourth ability', dosTail: 'The package is an objective \u2014 wasting the delivery on a dead lane is a dragon given away.',
+    classLabel: 'Marksman', winStyle: 'Poke / Siege', ultVerdict: 'MISSILE BARRAGE',
+    lateSwing: 'Late Corki sieges with the missile count \u2014 missile the setup, Valkyrie the angles.', spikeLine: 'Trinity online \u2014 the missile war is yours.',
+    spikeItem: 'Sheen spike \u2014 siege with the count.', lvl6Spike: 'Missile Barrage live \u2014 the Big One count flips river fights.',
+    fbVerb: 'out-poke him in two currencies', fbAction: 'missile the contacts and strafe the windows', fbDo: 'Count to the big missile \u2014 it\u2019s your fourth ability', dosTail: 'The Big One is an objective tool \u2014 wasting the count on a dead lane is a dragon given away.',
     buildStart: ['Doran\u2019s Blade + Health Potion', 'Sheen'],
     buildCore: ['Berserker\u2019s / Sorcerer\u2019s', 'Trinity Force / ER', 'Mixed-damage path'],
     skillSeq: ['Q', 'E', 'W', 'Q', 'Q', 'R', 'Q', 'E', 'Q', 'E', 'R', 'E', 'E', 'W', 'W', 'R', 'W', 'W'],
     skillLegend: [
       { k: 'Q', color: '#46c6f5', label: 'Phosphorus Bomb', note: 'Max 1st \u00b7 AoE + reveal' },
-      { k: 'W', color: '#9b8cff', label: 'Valkyrie / Package', note: 'The strafe + the delivery' },
+      { k: 'W', color: '#9b8cff', label: 'Valkyrie', note: 'Reposition strafe · the escape' },
       { k: 'E', color: '#e8b84b', label: 'Gatling Gun', note: 'Max 2nd \u00b7 resist shred' },
       { k: 'R', color: '#ff5d6c', label: 'Missile Barrage', note: 'Levels 6 / 11 / 16' }
     ],
     combos: [
       { name: 'Missile Cadence', keys: ['R', 'R'], tone: '#ff5d6c', tier: 'Poke', when: 'On cooldown: every third missile is the BIG one \u2014 count aloud.' },
       { name: 'Splash Trade', keys: ['Q', 'E', 'AA'], tone: '#46c6f5', tier: 'Trade', when: 'Duo contact: bomb the pair, gatling the angle, walk before the answer.' },
-      { name: 'Special Delivery', keys: ['W'], tone: '#9b8cff', tier: 'Engage', when: 'Package ready + river fight: the burn trail flips formations.' },
+      { name: 'Valkyrie Angle', keys: ['W'], tone: '#9b8cff', tier: 'Engage', when: 'River fight forming: strafe to the siege angle before the poke war starts.' },
       { name: 'Strafe Out', keys: ['W'], tone: '#e8b84b', tier: 'Defensive', when: 'Their engage lands: Valkyrie the wall \u2014 the W is the third summoner.' }
     ],
     isFlank: false,
-    teamWinCon: 'You win fights in two currencies \u2014 missile the setup war, package the engage, and gatling whatever the burn trail herds.',
-    teamLookFor: [{ label: 'Big missile counted', tone: '#ff5d6c' }, { label: 'Package on an objective timer', tone: '#9b8cff' }, { label: 'Gatling angles open', tone: '#e8b84b' }, { label: 'Mixed damage confusing them', tone: '#46c6f5' }],
-    teamPositioning: ['Missile the siege \u2014 the count never sleeps.', 'Package fights, not lanes.', 'Gatling at angles, not faces.', 'Their armor page lies \u2014 keep it that way.']
+    teamWinCon: 'You win fights in two currencies \u2014 missile the setup war, spike the trades with Sheen, and gatling whatever the frontline herds.',
+    teamLookFor: [{ label: 'Big missile counted', tone: '#ff5d6c' }, { label: 'Big One banked for the fight', tone: '#9b8cff' }, { label: 'Gatling angles open', tone: '#e8b84b' }, { label: 'Mixed damage confusing them', tone: '#46c6f5' }],
+    teamPositioning: ['Missile the siege \u2014 the count never sleeps.', 'Valkyrie angles, not coin-flips.', 'Gatling at angles, not faces.', 'Their armor page lies \u2014 keep it that way.']
   },
   Ezreal: {
     dataKey: 'ezreal_bot', sub: 'Marksman \u00b7 Poke & Blink \u00b7 Prodigal Explorer', label: '#f0d8a8', tint: 'rgba(230,200,140,0.5)',

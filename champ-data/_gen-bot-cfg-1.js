@@ -207,7 +207,7 @@ window.GEN_BOT_CFGS_1 = [
       tldr:"An even lane your range tilts — poke the poker from further and trap the trick he needs proximity for.",
       breakdown:"Utility marksmen match your lane but not your reach: Q the angles, headshot off trap roots, and respect {K} as the one equalizer.",
       dos:["Win the range war on raw numbers","Trap his engage and escape paths","Dodge {K} before stepping to poke"],
-      donts:["Eat his utility trick at even HP","Push past river without trap cover","Greed plates through his poke"],
+      donts:["Face-tank his utility spell at even HP","Push past river without trap cover","Greed plates through his poke"],
       win:"Out-range the toolbox and trap the trick."
     },
     apc:{

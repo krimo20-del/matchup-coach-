@@ -9,6 +9,16 @@
 [build]
   publish = "."
 
+# ALWAYS-FRESH CACHING: the app is one big HTML file + hundreds of champ-data
+# scripts with no version query. Without explicit headers, browsers heuristically
+# cache them for days — users kept seeing old builds after deploys ("the fix
+# didn't work"). max-age=0 + must-revalidate forces a cheap ETag check on every
+# load, so each deploy reaches everyone immediately (304s when nothing changed).
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 # Proxy the API to the Render backend (200 = rewrite/proxy, not a redirect).
 [[redirects]]
   from = "/api/*"

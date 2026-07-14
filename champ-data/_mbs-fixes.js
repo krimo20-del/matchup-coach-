@@ -66,7 +66,7 @@
     lux: "snare-shield poke combos", zoe: "bubble-sleep pick bursts", ekko: "rewind dive resets",
     lissandra: "short-range root bursts", veigar: "cage-stack inevitability", sylas: "chain-heal ult theft",
     zed: "shadow-shuriken executes", caitlyn: "650-range trap sieging", nilah: "whirling-blade sustain dives",
-    corki: "package poke rotations", draven: "spinning-axe snowballing", senna: "soul-scaling root poke",
+    corki: "missile-barrage poke sieging", draven: "spinning-axe snowballing", senna: "soul-scaling root poke",
     ezreal: "arcane-shift poke safety", kaisa: "plasma-stack burst evolutions", zeri: "wall-zap kite spirals",
     karthus: "isolated-Q wave mowing", kalista: "hop-spear rend executions", kogmaw: "%-HP shred barrages",
     lucian: "double-tap burst trades", missfortune: "strut-poke bullet rains", samira: "chain-combo style cashes",

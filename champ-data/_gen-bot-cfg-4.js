@@ -9,9 +9,9 @@ window.GEN_BOT_CFGS_4 = [
     "Trade short and strafe out — your kit wants skirmishes measured in seconds.",
     "Full kit: Q-E trades shred resists and the W keeps every exchange optional.",
     "R-spam the poke war — every third missile is a BIG one; count them like a fourth ability.",
-    "The Package timer begins — the delivery flips river fights; track it like an objective spawn.",
+    "The Big One count begins — the barrage spike flips river fights; time it like an objective spawn.",
     "First item spike: the missile chip war is officially yours — siege with the count.",
-    "Late Corki is a poke siege with a delivery service: missile the setup, package the engage, strafe the answer."
+    "Late Corki is a poke siege with mixed damage: missile the setup, Big One the engage, strafe the answer."
   ],
   diffBase:{ hyper:'EVEN', utility:'EVEN', apc:'EVEN' },
   diffEx:{ caitlyn:'TRICKY', draven:'TRICKY', lucian:'TRICKY', samira:'EVEN', tristana:'EVEN', kalista:'EVEN', missfortune:'EVEN',
@@ -19,56 +19,56 @@ window.GEN_BOT_CFGS_4 = [
     heimerdinger:'TRICKY', seraphine:'EVEN', ziggs:'TRICKY', karthus:'EVEN', veigar:'EVEN', swain:'EVEN', ezreal:'EVEN', sivir:'EVEN', varus:'EVEN', xayah:'EVEN' },
   vs:{
     hyper:{
-      tldr:"His curve wants a quiet lane — your missiles bill it per wave and the package audits the all-in.",
+      tldr:"His curve wants a quiet lane — your missiles bill it per wave and the two-item spike audits the all-in.",
       breakdown:"Chip with R on every contact, splash Q the duo, and strafe the engage windows. The mixed damage means his armor page lies to him all game.",
-      dos:["Missile-chip every wave contact","Splash the duo with Q bombs","Package the river fight he forces"],
+      dos:["Missile-chip every wave contact","Splash the duo with Q bombs","Big One the river fight he forces"],
       donts:["Race auto DPS at his spikes","Strafe for tempo instead of exits","Hold the big missile for perfect moments"],
-      win:"Bill the lane in missiles and audit the scaling with the package."
+      win:"Bill the lane in missiles and audit the scaling with the two-item spike."
     },
     utility:{
       tldr:"A utility mirror with mixed damage cheating — trade tool-for-tool and let the resist confusion pay the margins.",
       breakdown:"Match his poke with R-counts, dodge {K}, and gatling the extended exchanges — his armor answers half your kit and the other half collects.",
       dos:["Win the poke count war with R","Gatling the extended trade windows","Dodge {K} before stepping to missile"],
-      donts:["Eat his tool at even HP","Waste W on poke spacing","Trade autos inside his range trick"],
+      donts:["Face-tank his signature spell at even HP","Waste W on poke spacing","Trade autos inside his range trick"],
       win:"Out-poke the toolbox with mixed math it can't itemize against."
     },
     apc:{
-      tldr:"A poke war against real cooldowns — your missiles cycle faster than his rotation and the package ends sieges.",
-      breakdown:"Trade missile-for-spell and win on cadence: his rotation has gaps, your R barely does. The package breaks the siege stalemate his zone built.",
-      dos:["Out-cadence his rotation with R","Package the siege stalemate","Q-splash the casting positions"],
-      donts:["Eat full rotations for one missile","Walk the painted floor for chip","Dive the nest packageless"],
+      tldr:"A poke war against real cooldowns — your missiles cycle faster than his rotation and the Big One ends sieges.",
+      breakdown:"Trade missile-for-spell and win on cadence: his rotation has gaps, your R barely does. The Big One breaks the siege stalemate his zone built.",
+      dos:["Out-cadence his rotation with R","Big One the siege stalemate","Q-splash the casting positions"],
+      donts:["Eat full rotations for one missile","Walk the painted floor for chip","Dive the nest without Valkyrie"],
       win:"Out-cycle the cooldown class and deliver the tiebreaker by air."
     }
   },
   mirror:{
-    tldr:"Missile mirror — big-missile counts and package timers; whoever delivers first flips the lane.",
-    breakdown:"Track both big-missile counters, trade on his small ones, and hold your package for his delivery — the counter-strafe wins.",
-    dos:["Trade into his small-missile windows","Counter-package his delivery","Win the count war aloud"],
-    donts:["Eat the big one at even HP","Package first without setup","Strafe-duel at parity"],
-    win:"Better counting, later package — the cleaner pilot wins.",
-    winS:"His package is gone — the river is yours; force it."
+    tldr:"Missile mirror — big-missile counts and Valkyrie timers; whoever lands the Big One first flips the lane.",
+    breakdown:"Track both big-missile counters, trade on his small ones, and hold your Valkyrie for his engage — the counter-strafe wins.",
+    dos:["Trade into his small-missile windows","Counter-Valkyrie his engage","Win the count war aloud"],
+    donts:["Eat the big one at even HP","Ult first without setup","Strafe-duel at parity"],
+    win:"Better counting, later Valkyrie — the cleaner pilot wins.",
+    winS:"His escape is spent — missile the window and gatling the rest."
   },
   winS:"His escape is spent — missile the window and gatling the rest.",
   tradeGood:"Q-splash the contact, R the retreat, strafe back — a three-part chip his armor page mispriced.",
   tradeBad:"Spending W on spacing and meeting the engage on foot — the strafe is your Flash with a burn trail; budget it.",
-  waveBest:"a missile-thinned slow push that crashes on package timers — the delivery is the play; the wave is the alibi.",
-  waveWorst:"a shoved wave with the package wasted — a poke pilot with no cargo and no exits.",
+  waveBest:"a missile-thinned slow push that crashes on your Big One windows — the barrage is the play; the wave is the alibi.",
+  waveWorst:"a shoved wave with Valkyrie burned — a poke pilot with no dash and no exits.",
   early:"Chip in mixed denominations — the lane can't itemize against you; bank the confusion.",
-  mid:"Package economy runs the rivers: missile the setups, deliver the engages, and strafe the answers.",
-  late:"You are the siege: R the choke from fog, package the stalled fight, and gatling whatever the burn trail herds.",
+  mid:"Missile economy runs the rivers: missile the setups, Big One the engages, and strafe the answers.",
+  late:"You are the siege: R the choke from fog, Big One the stalled fight, and gatling whatever the burn trail herds.",
   safetyTool:"W Valkyrie",
-  spikesLine:"First item arms the missile war; the package flips rivers; two items make the chip a siege.",
-  carryLine:"Carry through cadence — the missiles never stop billing; your job is the count and the delivery timing.",
+  spikesLine:"First item arms the missile war; the Big One flips rivers; two items make the chip a siege.",
+  carryLine:"Carry through cadence — the missiles never stop billing; your job is the count and the Big One timing.",
   behindShort:"farm with Q splash and stay relevant through missile poke.",
   loadingRule:"Count to the big missile — it's your fourth ability.",
-  dontDetail:"The package is an objective — wasting the delivery on a dead lane is a dragon given away.",
-  aheadTpl:"Ahead, raise the postage: missile {E} off every wave, package the fights he avoids, and siege the towers bare.",
-  behindTpl:"Behind, the mail still runs: chip from range, strafe their dives, and deliver one package that resets the river.",
+  dontDetail:"The Big One is a resource — wasting it on a dead lane is a dragon given away.",
+  aheadTpl:"Ahead, raise the postage: missile {E} off every wave, Big One the fights he avoids, and siege the towers bare.",
+  behindTpl:"Behind, the mail still runs: chip from range, strafe their dives, and land one Big One that resets the river.",
   spikeName:"first item",
   runeReport:"Fleet Footwork or First Strike, Presence of Mind, Legend: Bloodline, Coup de Grace; secondary Sorcery — Manaflow + Gathering Storm.",
   summReport:"Flash + Heal standard — the W is the third summoner; spend it like one.",
   itemReport:"Start Doran's Blade + pot. Trinity or ER first, Berserker's, then mixed-damage paths — the kit splits their armory.",
-  jungleLine:"Package WITH your jungler's gank and the river fight starts 2v0 — ping the delivery windows like drake timers.",
+  jungleLine:"Ult WITH your jungler's gank and the river fight starts 2v0 — ping your Big One windows like drake timers.",
   redditLine:"count the missiles, time the mail, and strafe with a plan — Corki wins by billing in two currencies.",
   load:{
     sub:"r/CorkiMains",
@@ -85,8 +85,8 @@ window.GEN_BOT_CFGS_4 = [
     runes:{ keystone:"Fleet Footwork", primaryTree:"Precision", primary:["Presence of Mind","Legend: Bloodline","Coup de Grace"], tree:"Sorcery", secondary:["Manaflow Band","Gathering Storm"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
-    heimerdinger:{ tldr:"The nest out-zones your strafe range — Q-splash the turrets from max distance and save the package for the apartment complex itself." },
-    caitlyn:{ tldr:"She out-ranges the missile war — chip off cooldown from fog angles and package the trap geometry she hides behind." }
+    heimerdinger:{ tldr:"The nest out-zones your strafe range — Q-splash the turrets from max distance and save the Big One for the apartment complex itself." },
+    caitlyn:{ tldr:"She out-ranges the missile war — chip off cooldown from fog angles and Big One the trap geometry she hides behind." }
   }
 },
 

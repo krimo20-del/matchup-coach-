@@ -115,7 +115,7 @@
     azir: "soldier-poke shuffle control", katarina: "dagger-reset roulettes", leblanc: "chain-clone burst escapes",
     mel: "reflect-barrier poke", qiyana: "element-brush ambush bursts", taliyah: "worked-ground boulder bursts",
     talon: "wall-hop bleed bursts", vex: "gloom-fear anti-dash zones", karma: "mantra poke-and-speed denial",
-    caitlyn: "650-range trap sieging", nilah: "whirling-blade sustain dives", corki: "package poke rotations",
+    caitlyn: "650-range trap sieging", nilah: "whirling-blade sustain dives", corki: "missile-barrage poke sieging",
     draven: "spinning-axe snowballing", senna: "soul-scaling root poke", ezreal: "arcane-shift poke safety",
     kaisa: "plasma-stack burst evolutions", zeri: "wall-zap kite spirals", karthus: "isolated-Q wave mowing",
     kalista: "hop-spear rend executions", kogmaw: "%-HP shred barrages", missfortune: "strut-poke bullet rains",

@@ -112,7 +112,7 @@ window.GEN_VARIANTS = (function () {
     { find: "\u2019s favourite window \u2014 refusing it removes half his win condition.",
       vars: [
         "\u2019s rehearsed moment — don\u2019t audition for it.",
-        "\u2019s best page in the playbook; starve it and the book gets thin.",
+        "\u2019s bread-and-butter play \u2014 deny it and they run out of answers.",
         "\u2019s whole plan in one window — decline politely and watch it retire."
       ] },
     { find: " gets one kill, respect {K} and reset to farming. Two kills: play for the team, not for solo redemption \u2014 ",

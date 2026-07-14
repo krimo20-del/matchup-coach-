@@ -67,7 +67,7 @@ window.WKM_LINES = {
   aurelionsol: ['His Q melts you the longer it channels — break the channel line by walking THROUGH him, not away.', 'Past 2 items his stacked burst executes; the scaling is the threat, end the game before it.'],
   azir: ['Soldiers poke you from outside your range — trade ONLY when soldiers expire, not when he’s "far".', 'His R wall shoves you INTO his team; never fight with your back open near 6.'],
   cassiopeia: ['Her W GROUNDS you — your dash dies in the zone, and so do you. Walk, don’t dash, out.', 'Twin Fang spam on poisoned targets melts; never stand in Miasma trading "even".'],
-  corki: ['The package turns mid lane into his kill zone every few minutes — track the delivery timer.', 'His poke is mixed damage; armor alone doesn’t answer it — short trades or none.'],
+  corki: ['His Big One missile spam turns sieges into his kill zone — respect the barrage count before you commit.', 'His poke is mixed damage; armor alone doesn’t answer it — short trades or none.'],
   ekko: ['Three hits = passive burst + movespeed; the third proc is where every trade flips.', 'His R rewinds the fight you "won" — chase the hologram timer, not the HP bar.'],
   fizz: ['His E makes him untargetable through your combo — bait the playful hop BEFORE you commit anything.', 'Shark from fog at 6 one-shots; never walk a straight line at half HP.'],
   galio: ['His taunt charges while you’re already in the W zone — leaving late is the same as not leaving.', 'His R follows roams across the map — shoving him in does not mean your side lanes are safe.'],

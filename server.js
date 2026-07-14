@@ -52,6 +52,21 @@ const sessions = loadJson('sessions.json', {});
 const founders = loadJson('founders.json', { claimed: 0 });
 const fulfilled = loadJson('fulfilled.json', {}); // stripe session id -> true (idempotent fulfillment)
 const commentsDb = loadJson('comments.json', {}); // matchup thread key -> [{id, uk, name, text, ts}]
+const liveWr = loadJson('live-wr.json', {}); // '<lane>:<a>:<b>' -> { wr, games, ts }  (wr null = negative cache)
+
+// ---------- live win rate (lolalytics, weekly per matchup) ----------
+// Refresh cadence: a matchup's WR is re-fetched at most once every 7 days; a
+// failed fetch is negatively cached for 12h so we don't hammer a missing pair.
+const WR_TTL_OK = 7 * 864e5;
+const WR_TTL_FAIL = 12 * 3600e3;
+// our champ slug (stripped display name) -> lolalytics URL slug, only where they differ
+const LOLA_SLUG = { nunuwillump: 'nunu', renataglasc: 'renata' };
+const LOLA_LANE = { top: 'top', mid: 'middle', bot: 'bottom', support: 'support', jungle: 'jungle' };
+// Custom / non-Riot champions that lolalytics doesn't have real matchup data for —
+// keep their bundled authored win rates rather than scrape a wrong page.
+const NOT_ON_LOLA = { locke: 1, zaahen: 1 };
+const wrInflight = new Map(); // key -> Promise (dedupe concurrent fetches)
+let wrLastFetch = 0;          // simple outbound spacing
 
 // ---------- crypto ----------
 const newToken = () => crypto.randomBytes(32).toString('hex');
@@ -113,6 +128,50 @@ function fetchJson(url) {
       r.on('end', () => { try { resolve({ status: r.statusCode, json: JSON.parse(raw) }); } catch (e) { reject(e); } });
     }).on('error', reject);
   });
+}
+
+// Fetch text (HTML) with a browser-like UA, timeout, redirect follow, and a hard
+// byte cap so we never buffer a whole ad-heavy page — the matchup sentence sits
+// near the top of the document. Used by the live win-rate refresh.
+function fetchText(url, cap, depth) {
+  cap = cap || 500000; depth = depth || 0;
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml',
+        'Accept-Language': 'en-US,en;q=0.9'
+      }, timeout: 9000
+    }, (r) => {
+      if (r.statusCode >= 300 && r.statusCode < 400 && r.headers.location && depth < 3) {
+        r.resume();
+        const next = r.headers.location.startsWith('http') ? r.headers.location : new URL(r.headers.location, url).toString();
+        return fetchText(next, cap, depth + 1).then(resolve, reject);
+      }
+      if (r.statusCode !== 200) { r.resume(); return reject(new Error('status ' + r.statusCode)); }
+      let raw = '';
+      r.on('data', (c) => { raw += c; if (raw.length > cap) { raw = raw.slice(0, cap); r.destroy(); } });
+      r.on('end', () => resolve(raw));
+      r.on('close', () => resolve(raw));
+    });
+    req.on('timeout', () => req.destroy(new Error('timeout')));
+    req.on('error', reject);
+  });
+}
+
+// Parse "<A> wins against <B> NN.NN% of the time" out of a lolalytics vs-page.
+// The names sit inside <a> tags, so span up to ~90 chars to the percentage.
+function wrParse(html) {
+  const m = html.match(/wins against[\s\S]{0,90}?(\d{2}(?:\.\d{1,2})?)%\s+of the time/i);
+  if (!m) return null;
+  const wr = parseFloat(m[1]);
+  return (wr >= 25 && wr <= 75) ? wr : null; // sanity-bound; anything wilder is a parse error
+}
+// Fetch champion A's win rate vs B in a lane from lolalytics (current patch, Emerald+).
+function wrFetch(a, b, lane) {
+  const la = LOLA_SLUG[a] || a, lb = LOLA_SLUG[b] || b, ll = LOLA_LANE[lane] || 'top';
+  const url = 'https://lolalytics.com/lol/' + la + '/vs/' + lb + '/build/?lane=' + ll + '&tier=emerald_plus';
+  return fetchText(url, 400000).then(wrParse);
 }
 
 // Flatten a nested object into Stripe's form-encoded a[b][c]=v shape.
@@ -390,6 +449,52 @@ async function handleApi(req, res, pathname, ip) {
     }
     if (removed) saveJson('comments.json', commentsDb);
     return sendJson(res, 200, { ok: removed });
+  }
+
+  // ---------- live win rate: GET /api/wr?a&b&lane ----------
+  // Returns A-vs-B win rate, refreshed from lolalytics at most once per 7 days per
+  // matchup (lazy: only pairs people actually view get fetched). wr:null => the
+  // frontend keeps its bundled number. Data © LoLalytics; shown with attribution.
+  if (pathname === '/api/wr' && req.method === 'GET') {
+    const q = (function () { try { return new URL(req.url, 'http://x').searchParams; } catch (e) { return new URLSearchParams(); } })();
+    const sl = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const a = sl(q.get('a')), b = sl(q.get('b'));
+    let lane = String(q.get('lane') || 'top').toLowerCase();
+    if (!LOLA_LANE[lane]) lane = 'top';
+    if (!a || !b || a.length > 24 || b.length > 24 || a === b) return sendJson(res, 400, { error: 'Bad matchup.' });
+    // custom champs aren't on lolalytics — keep their bundled numbers
+    if (NOT_ON_LOLA[a] || NOT_ON_LOLA[b]) return sendJson(res, 200, { wr: null, source: null });
+    const key = lane + ':' + a + ':' + b, rkey = lane + ':' + b + ':' + a;
+    const now = Date.now();
+    const hit = liveWr[key];
+    const fresh = hit && (now - hit.ts) < (hit.wr == null ? WR_TTL_FAIL : WR_TTL_OK);
+    if (fresh) return sendJson(res, 200, { wr: hit.wr, ts: hit.ts, age: now - hit.ts, source: hit.wr == null ? null : 'lolalytics' });
+
+    let p = wrInflight.get(key);
+    if (!p) {
+      p = (async () => {
+        const wait = Math.max(0, 1200 - (Date.now() - wrLastFetch)); // ~1 outbound fetch / 1.2s
+        if (wait) await new Promise((r) => setTimeout(r, wait));
+        wrLastFetch = Date.now();
+        try {
+          const wr = await wrFetch(a, b, lane);
+          const ts = Date.now();
+          if (wr == null) { liveWr[key] = { wr: null, ts }; saveJson('live-wr.json', liveWr); return { wr: null, source: null, ts }; }
+          liveWr[key] = { wr, ts };
+          liveWr[rkey] = { wr: Math.round((100 - wr) * 100) / 100, ts };
+          saveJson('live-wr.json', liveWr);
+          return { wr, ts, age: 0, source: 'lolalytics' };
+        } catch (e) {
+          if (!liveWr[key]) { liveWr[key] = { wr: null, ts: Date.now() }; saveJson('live-wr.json', liveWr); }
+          // serve a stale positive value if we have one, else null (frontend falls back)
+          return (hit && hit.wr != null) ? { wr: hit.wr, ts: hit.ts, source: 'lolalytics', stale: true } : { wr: null, source: null };
+        }
+      })();
+      wrInflight.set(key, p);
+      p.finally(() => wrInflight.delete(key));
+    }
+    const v = await p.catch(() => ({ wr: null }));
+    return sendJson(res, 200, v);
   }
 
   if (route === 'POST /api/checkout') {

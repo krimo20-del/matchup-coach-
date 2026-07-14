@@ -3765,7 +3765,8 @@ class Component extends DCLogic {
     jgSeenAt: null, jgSeenSide: '', jgClock: 0,
     homeJgYou: '', homeJgFoe: '', homeTrackJg: '',
     cdNum: '', cdExp: '', cdCvc: '', cdName: '', cdErr: '', coBusy: false, coDone: false,
-    cmts: [], cmtText: '', cmtErr: '', cmtBusy: false, cmtLoaded: false, cmtKey: ''
+    cmts: [], cmtText: '', cmtErr: '', cmtBusy: false, cmtLoaded: false, cmtKey: '',
+    wrTick: 0
   };
 
   componentDidMount() {
@@ -3779,7 +3780,7 @@ class Component extends DCLogic {
     this._openFromUrl();
     // Back/forward buttons walk the app's own views instead of leaving the site.
     try { history.replaceState({ mc: { view: 'home', homeStep: 'role', role: '', myChamp: '', enemyChamp: '', matchup: 'mid', authMode: 'login', plan: 'all' } }, ''); } catch (e) {}
-    this._onPop = (e) => { if (e.state && e.state.mc) { this.setState(e.state.mc); this._top(); if (e.state.mc.view === 'demo' && e.state.mc.myChamp && e.state.mc.enemyChamp) this.loadComments(e.state.mc.myChamp, e.state.mc.enemyChamp, e.state.mc.role); } };
+    this._onPop = (e) => { if (e.state && e.state.mc) { this.setState(e.state.mc); this._top(); if (e.state.mc.view === 'demo' && e.state.mc.myChamp && e.state.mc.enemyChamp) { this.loadComments(e.state.mc.myChamp, e.state.mc.enemyChamp, e.state.mc.role); this.refreshLiveWr(e.state.mc.myChamp, e.state.mc.enemyChamp, e.state.mc.role); } } };
     window.addEventListener('popstate', this._onPop);
     // Bootstrap Google Sign-In from the hardcoded public client ID.
     // Paste your client ID from console.cloud.google.com → Credentials here:
@@ -4136,8 +4137,8 @@ class Component extends DCLogic {
     else this.openGen(mu.role, mu.you, mu.enemy);
     return true;
   }
-  openGen(role, you, enemy, free) { if (!free && this._gated({ kind: 'gen', role: role, you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: role, myChamp: you, enemyChamp: enemy, matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, search: '', cds: { Q: 0, W: 0, E: 0, R: 0 } }); this._top(); this._nav(); this.loadComments(you, enemy, role); }
-  openJg(you, enemy, free) { if (!free && this._gated({ kind: 'jg', you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: 'jungle', myChamp: you, enemyChamp: enemy, matchup: 'gen', search: '' }); this._top(); this._nav(); this.loadComments(you, enemy, 'jungle'); }
+  openGen(role, you, enemy, free) { if (!free && this._gated({ kind: 'gen', role: role, you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: role, myChamp: you, enemyChamp: enemy, matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, search: '', cds: { Q: 0, W: 0, E: 0, R: 0 } }); this._top(); this._nav(); this.loadComments(you, enemy, role); this.refreshLiveWr(you, enemy, role); }
+  openJg(you, enemy, free) { if (!free && this._gated({ kind: 'jg', you: you, enemy: enemy })) return; this.setState({ view: 'demo', role: 'jungle', myChamp: you, enemyChamp: enemy, matchup: 'gen', search: '' }); this._top(); this._nav(); this.loadComments(you, enemy, 'jungle'); this.refreshLiveWr(you, enemy, 'jungle'); }
   // ---------- matchup comments ----------
   _cmtParams(you, enemy, role) {
     var sl = function (n) { return String(n || '').toLowerCase().replace(/[^a-z0-9]/g, ''); };
@@ -4183,6 +4184,27 @@ class Component extends DCLogic {
     var h = Math.floor(m / 60); if (h < 24) return h + 'h ago';
     var d = Math.floor(h / 24); if (d < 30) return d + 'd ago';
     try { return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch (e) { return ''; }
+  }
+  // ---------- live win rate (lolalytics, weekly-cached server-side) ----------
+  // On matchup open, ask the backend for this pair's current WR. If it answers with
+  // a number, override window.MC_REAL_WR (the map the WR display reads) and re-render.
+  // On any miss the bundled number stands. Writes the BARE-slug keys the render uses,
+  // so it also upgrades non-top matchups from an estimate to the real lolalytics WR.
+  refreshLiveWr(you, enemy, role) {
+    if (!window.MC_API) return;
+    var sl = function (n) { return String(n || '').toLowerCase().replace(/[^a-z0-9]/g, ''); };
+    var a = sl(you), b = sl(enemy), lane = role || 'top';
+    window.MC_API.get('/wr?a=' + a + '&b=' + b + '&lane=' + lane).then((r) => {
+      if (!r || typeof r.wr !== 'number') return;
+      if (sl(this.state.myChamp) !== a || sl(this.state.enemyChamp) !== b) return; // moved on
+      // Write to a SEPARATE live map — the favour-timeline fix loop re-runs
+      // ingestTables() on an interval and would clobber MC_REAL_WR back to the
+      // bundled number. The WR display reads MC_LIVE_WR first, so this sticks.
+      window.MC_LIVE_WR = window.MC_LIVE_WR || {};
+      window.MC_LIVE_WR[a] = window.MC_LIVE_WR[a] || {}; window.MC_LIVE_WR[a][b] = r.wr;
+      window.MC_LIVE_WR[b] = window.MC_LIVE_WR[b] || {}; window.MC_LIVE_WR[b][a] = Math.round((100 - r.wr) * 10) / 10;
+      this.setState({ wrTick: (this.state.wrTick || 0) + 1 });
+    }).catch(() => {});
   }
   // Scroll to top reliably: hit window + document + body, now and after the
   // (heavy) re-render lands, so a matchup never opens scrolled into the middle.
@@ -7435,8 +7457,12 @@ class Component extends DCLogic {
       ...(function(self){
         var you = (MU.champA && MU.champA.name) || '', foe = (MU.champB && MU.champB.name) || '';
         var sl = function(n){ return String(n || '').toLowerCase().replace(/[^a-z0-9]/g, ''); };
-        var WR = window.MC_REAL_WR || {};
-        var real = (WR[sl(you)] && typeof WR[sl(you)][sl(foe)] === 'number') ? WR[sl(you)][sl(foe)] : null;
+        var WR = window.MC_REAL_WR || {}, LWR = window.MC_LIVE_WR || {};
+        // Prefer a live lolalytics number (weekly-refreshed) when we have one for
+        // this pair; otherwise fall back to the bundled MC_REAL_WR table.
+        var live = (LWR[sl(you)] && typeof LWR[sl(you)][sl(foe)] === 'number') ? LWR[sl(you)][sl(foe)] : null;
+        var real = live != null ? live : ((WR[sl(you)] && typeof WR[sl(you)][sl(foe)] === 'number') ? WR[sl(you)][sl(foe)] : null);
+        var isLive = live != null;
         var base, isReal = false;
         if (real != null) { base = real; isReal = true; }
         else {
@@ -7456,7 +7482,7 @@ class Component extends DCLogic {
         var GG = window.MC_REAL_GAMES || {};
         var games = (isReal && GG[sl(you)] && typeof GG[sl(you)][sl(foe)] === 'number') ? GG[sl(you)][sl(foe)] : null;
         var limited = games != null && games < 100;
-        return { wrA: wrA + '%', wrB: wrB + '%', wrLabel: isReal ? 'WIN RATE · LOLALYTICS' : 'EST. WIN RATE', wrATone: base >= 50.5 ? '#3ddc97' : base <= 49.5 ? '#ff5d6c' : '#e8b84b', wrBTone: base >= 50.5 ? '#ff5d6c' : base <= 49.5 ? '#3ddc97' : '#e8b84b', wrAPct: Math.round(base),
+        return { wrA: wrA + '%', wrB: wrB + '%', wrLabel: isLive ? 'WIN RATE · LOLALYTICS LIVE' : (isReal ? 'WIN RATE · LOLALYTICS' : 'EST. WIN RATE'), wrATone: base >= 50.5 ? '#3ddc97' : base <= 49.5 ? '#ff5d6c' : '#e8b84b', wrBTone: base >= 50.5 ? '#ff5d6c' : base <= 49.5 ? '#3ddc97' : '#e8b84b', wrAPct: Math.round(base),
           wrSample: limited ? ('⚠ limited sample · ' + games + ' games') : '', wrSampleDisp: limited ? 'block' : 'none' };
       })(this),
       ticker: (function(){

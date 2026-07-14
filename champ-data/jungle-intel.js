@@ -412,7 +412,13 @@ window.JUNGLE_INTEL = {
     wardTime: 'Relax early; ward hard from 5:30 onward',
     wardLoc: 'River entrances on your chipped lanes',
     wardNote: 'His danger clock starts at 6 and follows low HP bars — vision the side that is losing trades.',
-    plan: ['Fight him early — his duel is honest at best and his escape is one blink.', 'After 6, back off lanes at low HP before he arrives, not after.', 'Never keep fighting at sliver HP inside Purgatory — leave the zone or die to the floor.']
+    plan: ['Fight him early — his duel is honest at best and his escape is one blink.', 'After 6, back off lanes at low HP before he arrives, not after.', 'Never keep fighting at sliver HP inside Purgatory — leave the zone or die to the floor.'],
+    gank: 2,
+    invadeTend: 1,
+    invadeVuln: 4,
+    invadeNote: 'He loses almost every early 1v1 and his W self-damage leaves him chipped mid-clear — walk into his second buff with prio and he either gives it or dies. Just leave before 6: inside Purgatory a losing invade flips into an execute chain.',
+    syncOrder: 'you',
+    sync: 'You set up, he finishes. Land your CC and he banks marks with Q, then post-6 drops Purgatory ON the locked target — the floor holds them in the execute zone. Never both engage at once: your CC starts it, his totem ends it.'
   }
 
 };

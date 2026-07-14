@@ -73,6 +73,9 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
      Touch nothing on desktop; make it usable + tap-friendly on phones. */
   html { -webkit-text-size-adjust: 100%; }
   html, body { max-width: 100%; overflow-x: hidden; overflow-anchor: none; }
+  /* the app can scroll inside wrappers, not just the window — kill scroll
+     anchoring on those containers too so progressive render never drags them */
+  #dc-root, .sc-host { overflow-anchor: none; }
   img, svg, video, canvas { max-width: 100%; }
 
   /* NOTE: the template's inline styles are re-serialized by React with a
@@ -4308,8 +4311,12 @@ class Component extends DCLogic {
         // pretend signed-in gate already cleared for deep links is handled by openGen
         var R = window.ROSTERS || {}, lanes = ['top','mid','bot','support'], role = null;
         for (var i = 0; i < lanes.length; i++) { var p = (R[lanes[i]]||[]).reduce(function(x,g){return x.concat(g.c);},[]); if (p.indexOf(a)>=0 && p.indexOf(b)>=0) { role = lanes[i]; break; } }
-        if (!role && window.JG_DB && window.JG_DB[a]) { self.openJg(a, b); return; }
-        self.openGen(role || 'top', a, b);
+        if (!role && window.JG_DB && window.JG_DB[a]) { self.openJg(a, b); }
+        else self.openGen(role || 'top', a, b);
+        // Cold deep-link loads hydrate for several seconds and some browsers
+        // restore scroll on reload — run extra pin passes to cover the tail.
+        setTimeout(function(){ self._top(); }, 2000);
+        setTimeout(function(){ self._top(); }, 4200);
       }
     }, 120);
   }

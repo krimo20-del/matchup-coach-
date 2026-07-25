@@ -30,9 +30,20 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 // ours. Subscriptions need Price IDs from your Stripe dashboard; the founder
 // one-time charge is a flat $24.99 Lifetime Member.
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
-const STRIPE_PRICE_ROLE = process.env.STRIPE_PRICE_ROLE || ''; // Lane Pass $1.99/mo price id
-const STRIPE_PRICE_ALL = process.env.STRIPE_PRICE_ALL || '';   // Everything $3.99/mo price id
-const STRIPE_PRICE_ALLYR = process.env.STRIPE_PRICE_ALLYR || ''; // Everything Annual $19.99/yr price id
+// ---- Early Access / Founding Member pricing ----
+// While EARLY_ACCESS is on (default), the single membership costs $1.99/mo and
+// every subscriber is a FOUNDING MEMBER: the price + founding flag are written
+// onto their account at purchase time and never recomputed, so later price
+// changes can never touch them. When EARLY_ACCESS is turned off (set env
+// EARLY_ACCESS=0), new subscribers pay $3.99/mo (standard membership); existing
+// Founding Members keep $1.99 for life (Stripe subscriptions stay on the price
+// they subscribed to — new prices only ever apply to NEW checkout sessions).
+const EARLY_ACCESS = process.env.EARLY_ACCESS !== '0';
+const PRICE_FOUNDING = 1.99;   // Early Access — Founding Member, locked for life
+const PRICE_STANDARD = 3.99;   // after Early Access — standard membership
+const STRIPE_PRICE_FOUNDING = process.env.STRIPE_PRICE_FOUNDING || ''; // $1.99/mo recurring price id
+const STRIPE_PRICE_STANDARD = process.env.STRIPE_PRICE_STANDARD || ''; // $3.99/mo recurring price id
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || ''; // whsec_… (Developers → Webhooks)
 const PUBLIC_URL = (process.env.PUBLIC_URL || 'https://matchupcoach.gg').replace(/\/+$/, '');
 const STRIPE_ON = !!STRIPE_SECRET_KEY;
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -80,12 +91,52 @@ function safeEq(a, b) {
 }
 
 // ---------- helpers ----------
-// Flat Lifetime Member pricing — a one-time $24.99 that never sells out (matches
-// the frontend's "Lifetime Member $24.99" tier). `claimed` is still tracked for
-// analytics / the member number, but no longer gates price or availability.
+// Membership state shown to the frontend: whether Early Access is live, what a
+// new subscriber pays today, the post-EA price, and how many Founding Members
+// have joined (founders.json 'claimed' doubles as the member counter).
+function memberState() {
+  return {
+    earlyAccess: EARLY_ACCESS,
+    price: EARLY_ACCESS ? PRICE_FOUNDING : PRICE_STANDARD,
+    priceLabel: EARLY_ACCESS ? '$1.99' : '$3.99',
+    regularPrice: PRICE_STANDARD,
+    regularLabel: '$3.99',
+    members: founders.claimed | 0
+  };
+}
+// Stamp a paid Stripe Checkout session onto the buyer's account. Idempotent
+// (fulfilled.json), safe to call from BOTH /api/stripe/confirm and the webhook.
+// The founding flag + price come from the SESSION metadata (what was actually
+// sold), never today's config — a later price change can't rewrite history.
+// An existing membership is never downgraded: founding/memberNum are preserved.
+function fulfillStripeSession(sid, sess) {
+  if (fulfilled[sid]) return false;
+  const key = sess.client_reference_id;
+  const u = users[key];
+  if (!u) return false;
+  const founding = !!(sess.metadata && sess.metadata.founding === '1');
+  const paidPrice = parseFloat((sess.metadata && sess.metadata.price) || '') || (founding ? 1.99 : 3.99);
+  const prev = u.plan && u.plan.type === 'member' ? u.plan : null;
+  const planObj = {
+    type: 'member',
+    price: prev && prev.founding ? prev.price : paidPrice,
+    founding: prev ? (prev.founding || founding) : founding,
+    since: prev ? prev.since : Date.now(),
+    subId: (typeof sess.subscription === 'string' && sess.subscription) || (prev && prev.subId) || ''
+  };
+  if (planObj.founding) {
+    if (prev && prev.memberNum) planObj.memberNum = prev.memberNum;
+    else { founders.claimed = (founders.claimed | 0) + 1; saveJson('founders.json', founders); planObj.memberNum = founders.claimed; }
+  }
+  fulfilled[sid] = true; saveJson('fulfilled.json', fulfilled);
+  u.plan = planObj; saveJson('users.json', users);
+  return true;
+}
+
+// Legacy alias — old frontends called /api/founders for lifetime-tier state.
 function founderState() {
   const c = founders.claimed | 0;
-  return { claimed: c, soldOut: false, price: 24.99, priceLabel: '$24.99', bracket: 'lifetime', remaining: null, nextPrice: null };
+  return Object.assign({ claimed: c, soldOut: false, price: 24.99, priceLabel: '$24.99', bracket: 'lifetime', remaining: null, nextPrice: null }, memberState());
 }
 const publicUser = (u) => ({ name: u.name, plan: u.plan || null, google: !!u.google });
 function newSession(key) {
@@ -118,6 +169,26 @@ function readBody(req) {
     req.on('end', () => { if (over) return resolve({}); try { resolve(JSON.parse(raw || '{}')); } catch (e) { resolve({}); } });
     req.on('error', () => resolve({}));
   });
+}
+// Raw body (unparsed) — Stripe webhook signatures are computed over the exact bytes.
+function readRawBody(req, cap) {
+  cap = cap || 262144;
+  return new Promise((resolve) => {
+    let raw = '';
+    req.on('data', (c) => { raw += c; if (raw.length > cap) { raw = ''; req.destroy(); } });
+    req.on('end', () => resolve(raw));
+    req.on('error', () => resolve(''));
+  });
+}
+// Verify a Stripe-Signature header (t=…,v1=…) against the raw payload.
+function stripeSigOk(header, payload) {
+  try {
+    const parts = String(header || '').split(',').reduce((o, p) => { const i = p.indexOf('='); if (i > 0) o[p.slice(0, i).trim()] = p.slice(i + 1).trim(); return o; }, {});
+    if (!parts.t || !parts.v1) return false;
+    if (Math.abs(Date.now() / 1000 - parseInt(parts.t, 10)) > 600) return false; // 10-min replay window
+    const expected = crypto.createHmac('sha256', STRIPE_WEBHOOK_SECRET).update(parts.t + '.' + payload).digest('hex');
+    return safeEq(expected, parts.v1);
+  } catch (e) { return false; }
 }
 
 function fetchJson(url) {
@@ -327,7 +398,7 @@ async function handleApi(req, res, pathname, ip) {
   const route = req.method + ' ' + pathname;
 
   if (route === 'GET /api/health') return sendJson(res, 200, { ok: true, ts: Date.now() });
-  if (route === 'GET /api/config') return sendJson(res, 200, { googleClientId: GOOGLE_CLIENT_ID || null, stripeEnabled: STRIPE_ON });
+  if (route === 'GET /api/config') return sendJson(res, 200, Object.assign({ googleClientId: GOOGLE_CLIENT_ID || null, stripeEnabled: STRIPE_ON }, memberState()));
   if (route === 'GET /api/founders') return sendJson(res, 200, founderState());
   if (route === 'GET /api/weekchamp') {
     // Tuesday-anchored UTC week index; the client maps index -> champion pool.
@@ -498,68 +569,55 @@ async function handleApi(req, res, pathname, ip) {
   }
 
   if (route === 'POST /api/checkout') {
+    // Demo-mode membership checkout (PAYMENTS_MODE=demo): one plan. During Early
+    // Access the subscriber becomes a FOUNDING MEMBER — price + founding flag are
+    // stamped onto the account here and never recomputed, so future price changes
+    // only ever apply to people who subscribe after them.
     const u = authUser(req);
     if (!u) return sendJson(res, 401, { error: 'Sign in to check out.' });
-    if (PAYMENTS_MODE === 'off') return sendJson(res, 503, { error: 'Paid plans are not open yet - follow the launch for the go-live date.' });
-    const b = await readBody(req);
-    const plan = String(b.plan || '');
-    if (!['role', 'all', 'allyr', 'founder'].includes(plan)) return sendJson(res, 400, { error: 'Unknown plan.' });
-    let charged = '';
-    const planObj = { type: plan };
-    if (plan === 'role') {
-      planObj.role = ['top', 'jungle', 'mid', 'bot', 'support'].includes(b.role) ? b.role : 'top';
-      charged = '$1.99/mo';
-    } else if (plan === 'all' || plan === 'allyr') {
-      charged = plan === 'allyr' ? '$19.99/yr' : '$3.99/mo';
-    } else {
-      if (u.plan && u.plan.type === 'founder') {
-        return sendJson(res, 200, { user: publicUser(u), charged: 'already a Lifetime Member - not charged', founders: founderState() });
-      }
-      const fs2 = founderState();
-      if (fs2.soldOut) return sendJson(res, 410, { error: 'Lifetime Member is unavailable right now.' });
+    // Once real Stripe payments are on, the simulated checkout is CLOSED — it
+    // must never mint memberships alongside real billing.
+    if (STRIPE_ON) return sendJson(res, 403, { error: 'Checkout is handled by Stripe - use the payment page.' });
+    if (PAYMENTS_MODE === 'off') return sendJson(res, 503, { error: 'Payments are temporarily unavailable - try again shortly.' });
+    if (u.plan && (u.plan.type === 'member' || u.plan.type === 'founder')) {
+      return sendJson(res, 200, { user: publicUser(u), charged: 'already a member - not charged', founders: founderState() });
+    }
+    const planObj = { type: 'member', price: EARLY_ACCESS ? PRICE_FOUNDING : PRICE_STANDARD, founding: EARLY_ACCESS, since: Date.now() };
+    if (EARLY_ACCESS) {
       founders.claimed = (founders.claimed | 0) + 1;
       saveJson('founders.json', founders);
-      planObj.founderNum = founders.claimed;
-      charged = fs2.priceLabel + ' one-time';
+      planObj.memberNum = founders.claimed;
     }
     users[u.key].plan = planObj;
     saveJson('users.json', users);
+    const charged = (EARLY_ACCESS ? '$1.99' : '$3.99') + '/mo' + (EARLY_ACCESS ? ' - Founding Member price, locked for life' : '');
     return sendJson(res, 200, { user: publicUser(users[u.key]), charged, founders: founderState() });
   }
 
   // ----- Real Stripe Checkout (hosted): create a session, redirect, confirm -----
+  // One membership subscription. The price ID picked HERE (founding vs standard)
+  // is what Stripe bills forever for this subscriber — turning Early Access off
+  // or raising prices later only changes what NEW sessions use. That is the
+  // price-lock guarantee: Founding Members' subscriptions live on the $1.99
+  // price object permanently.
   if (route === 'POST /api/stripe/checkout') {
     const u = authUser(req);
     if (!u) return sendJson(res, 401, { error: 'Sign in to check out.' });
     if (!STRIPE_ON) return sendJson(res, 503, { error: 'Payments are not switched on yet.' });
-    const b = await readBody(req);
-    const plan = String(b.plan || '');
-    if (!['role', 'all', 'allyr', 'founder'].includes(plan)) return sendJson(res, 400, { error: 'Unknown plan.' });
-    const role = ['top', 'jungle', 'mid', 'bot', 'support'].includes(b.role) ? b.role : 'top';
-
+    if (u.plan && (u.plan.type === 'member' || u.plan.type === 'founder')) return sendJson(res, 400, { error: 'You already have full access.' });
+    const priceId = EARLY_ACCESS ? STRIPE_PRICE_FOUNDING : STRIPE_PRICE_STANDARD;
+    if (!priceId) return sendJson(res, 503, { error: 'Membership is not configured yet.' });
     const params = {
       success_url: PUBLIC_URL + '/?mc_checkout=success&session_id={CHECKOUT_SESSION_ID}',
       cancel_url: PUBLIC_URL + '/?mc_checkout=cancel',
       client_reference_id: u.key,
-      'metadata[plan]': plan,
-      'metadata[role]': role,
-      'line_items[0][quantity]': 1
+      'metadata[plan]': 'member',
+      'metadata[founding]': EARLY_ACCESS ? '1' : '0',
+      'metadata[price]': String(EARLY_ACCESS ? PRICE_FOUNDING : PRICE_STANDARD),
+      mode: 'subscription',
+      'line_items[0][quantity]': 1,
+      'line_items[0][price]': priceId
     };
-    if (plan === 'founder') {
-      if (u.plan && u.plan.type === 'founder') return sendJson(res, 400, { error: 'You already own Lifetime Member.' });
-      const fs2 = founderState();
-      if (fs2.soldOut) return sendJson(res, 410, { error: 'Lifetime Member is unavailable.' });
-      params.mode = 'payment';
-      // Flat $24.99 Lifetime Member one-time charge.
-      params['line_items[0][price_data][currency]'] = 'usd';
-      params['line_items[0][price_data][unit_amount]'] = Math.round(fs2.price * 100);
-      params['line_items[0][price_data][product_data][name]'] = 'MatchupCoach — Lifetime Member';
-    } else {
-      const priceId = plan === 'allyr' ? STRIPE_PRICE_ALLYR : plan === 'all' ? STRIPE_PRICE_ALL : STRIPE_PRICE_ROLE;
-      if (!priceId) return sendJson(res, 503, { error: 'This plan is not configured yet.' });
-      params.mode = 'subscription';
-      params['line_items[0][price]'] = priceId;
-    }
     try {
       const r = await stripeApi('POST', '/v1/checkout/sessions', params);
       if (r.status >= 400 || !r.json.url) return sendJson(res, 502, { error: (r.json.error && r.json.error.message) || 'Stripe could not start checkout.' });
@@ -581,20 +639,39 @@ async function handleApi(req, res, pathname, ip) {
       sess = r.json;
     } catch (e) { return sendJson(res, 502, { error: 'Could not verify with Stripe.' }); }
     if (!sess || sess.client_reference_id !== u.key) return sendJson(res, 403, { error: 'This checkout is not yours.' });
-    if (sess.payment_status !== 'paid' && sess.status !== 'complete') return sendJson(res, 402, { error: 'Payment not completed.' });
-    const plan = (sess.metadata && sess.metadata.plan) || '';
-    const role = (sess.metadata && sess.metadata.role) || 'top';
-    const planObj = { type: plan };
-    if (plan === 'role') planObj.role = role;
-    if (plan === 'founder') {
-      if (!(u.plan && u.plan.type === 'founder')) {
-        const fs2 = founderState();
-        if (!fs2.soldOut) { founders.claimed = (founders.claimed | 0) + 1; saveJson('founders.json', founders); planObj.founderNum = founders.claimed; }
-      } else { planObj.founderNum = u.plan.founderNum; }
-    }
-    fulfilled[sid] = true; saveJson('fulfilled.json', fulfilled);
-    users[u.key].plan = planObj; saveJson('users.json', users);
+    if (sess.payment_status !== 'paid') return sendJson(res, 402, { error: 'Payment not completed.' });
+    fulfillStripeSession(sid, sess);
     return sendJson(res, 200, { user: publicUser(users[u.key]), founders: founderState() });
+  }
+
+  // ----- Stripe webhook: the safety net + lifecycle feed -----
+  // Fulfills paid checkouts even if the buyer never returns to the site
+  // (closed tab, different browser), and revokes access when a subscription is
+  // cancelled/expires. Configure in Stripe: Developers → Webhooks → endpoint
+  // https://matchupcoach.gg/api/stripe/webhook with events
+  // checkout.session.completed + customer.subscription.deleted, then set
+  // STRIPE_WEBHOOK_SECRET (whsec_…) in the environment.
+  if (route === 'POST /api/stripe/webhook') {
+    if (!STRIPE_WEBHOOK_SECRET) return sendJson(res, 503, { error: 'Webhook not configured.' });
+    const raw = await readRawBody(req);
+    if (!raw || !stripeSigOk(req.headers['stripe-signature'], raw)) return sendJson(res, 400, { error: 'Bad signature.' });
+    let event; try { event = JSON.parse(raw); } catch (e) { return sendJson(res, 400, { error: 'Bad payload.' }); }
+    const obj = event.data && event.data.object;
+    if (event.type === 'checkout.session.completed' && obj && obj.payment_status === 'paid') {
+      fulfillStripeSession(obj.id, obj);
+    } else if (event.type === 'customer.subscription.deleted' && obj && obj.id) {
+      // Membership ended (cancelled or payment failed out) — remove access.
+      // The founding history is intentionally kept on record: if they resubscribe
+      // during Early Access they get founding again; after EA they pay standard.
+      for (const k of Object.keys(users)) {
+        const pl = users[k].plan;
+        if (pl && pl.type === 'member' && pl.subId === obj.id) {
+          users[k].pastPlan = pl; users[k].plan = null; saveJson('users.json', users);
+          break;
+        }
+      }
+    }
+    return sendJson(res, 200, { received: true });
   }
 
   return sendJson(res, 404, { error: 'No such endpoint.' });

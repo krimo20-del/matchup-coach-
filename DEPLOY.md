@@ -41,14 +41,46 @@ dependencies). Host it on Render, point the GoDaddy domain at it, done.
 3. Back in Render, click **Verify** on both domains. HTTPS certificates are
    issued automatically. DNS can take from minutes up to ~an hour.
 
-## 4. After it's live
+## 4. Stripe — real Early Access payments
 
-- `https://matchupcoach.gg` — the site, accounts, founder counter: all live.
-- **Payments are still simulated** (`PAYMENTS_MODE=demo` in render.yaml /
-  the service's environment). Before promoting the site publicly, either:
-  - set `PAYMENTS_MODE=off` (paid checkout politely says "not open yet" —
-    free Champion-of-the-Week still works fully), or
-  - wire Stripe for real charges (needs your Stripe account + keys).
+The server sells ONE subscription: **Founding Member $1.99/mo** while
+`EARLY_ACCESS` is on (default), **$3.99/mo standard** after you set
+`EARLY_ACCESS=0`. Founding Members keep their $1.99 Stripe price forever —
+new prices only apply to new checkout sessions.
+
+1. Create the account at https://dashboard.stripe.com and **activate live
+   payments** (business details + bank account for payouts).
+2. **Product Catalog → Add product**: name `MatchupCoach Membership`.
+   Add TWO recurring monthly prices to it:
+   - `$1.99 / month`  → copy its price id (`price_…`) — the FOUNDING price
+   - `$3.99 / month`  → copy its price id — the STANDARD price
+3. **Developers → API keys** → copy the **Secret key** (`sk_live_…`).
+   (Use `sk_test_…` + test-mode price ids first if you want a dry run.)
+4. In Render → your service → **Environment**, set:
+
+       STRIPE_SECRET_KEY      = sk_live_…
+       STRIPE_PRICE_FOUNDING  = price_…   (the $1.99 one)
+       STRIPE_PRICE_STANDARD  = price_…   (the $3.99 one)
+       PUBLIC_URL             = https://matchupcoach.gg
+       EARLY_ACCESS           = 1         (later: 0 to end Early Access)
+
+   Save → Render redeploys. `/api/config` now returns `stripeEnabled:true`
+   and the site's checkout hands off to Stripe's hosted page.
+5. Test with Stripe test mode or a real $1.99 charge (you can refund it from
+   the dashboard). Success returns to `/?mc_checkout=success&session_id=…`,
+   which the app confirms server-side before unlocking the account.
+6. In Stripe **Settings → Billing → Customer portal**, enable the portal so
+   subscribers can cancel/update cards themselves (cancel-anytime promise).
+
+**Ending Early Access later:** set `EARLY_ACCESS=0` and redeploy. New
+subscribers pay $3.99; every existing Founding Member's subscription stays on
+the $1.99 price object in Stripe automatically.
+
+## 5. After it's live
+
+- `https://matchupcoach.gg` — the site, accounts, member counter: all live.
+- Without Stripe keys, payments run as `PAYMENTS_MODE=demo` (simulated
+  checkout — fine for testing, NOT for launch; set the keys before promoting).
 - Champion data updates: edit files, `git commit` + `git push` — Render
   auto-deploys every push. User data is on the disk and survives deploys.
 

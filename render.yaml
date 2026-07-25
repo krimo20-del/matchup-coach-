@@ -18,19 +18,21 @@ services:
       - key: DATA_DIR
         value: /data
       - key: PAYMENTS_MODE
-        value: "off"  # paid checkout disabled until Stripe is wired; flip to "demo" for testing
+        value: "demo"  # simulated checkout until Stripe keys are set (access is PAID-gated now — 'off' would lock everyone out)
+      - key: EARLY_ACCESS
+        value: "1"     # 1 = Founding Member $1.99/mo locked for life; set 0 later to end Early Access ($3.99/mo for new members)
       - key: GOOGLE_CLIENT_ID
         # Public OAuth web-client id (Google Cloud project "MatchupCoach") —
         # safe to commit; the client SECRET is never used or stored anywhere.
         value: "993471719983-g8fkkrqom5ap0f7pdf7tkg63v86d77l4.apps.googleusercontent.com"
       # --- Stripe (real payments). Add these in the Render dashboard, NOT here
       #     (the secret key must never be committed to git). When STRIPE_SECRET_KEY
-      #     is set, the paid tiers switch from "Coming soon" to live Stripe Checkout.
+      #     is set, checkout hands off to Stripe's hosted page for real charges.
       - key: STRIPE_SECRET_KEY
         sync: false            # set in Render dashboard: sk_live_… (or sk_test_… to trial)
-      - key: STRIPE_PRICE_ALL
-        sync: false            # Stripe Price ID for All Access $9.99/mo (price_…)
-      - key: STRIPE_PRICE_ROLE
-        sync: false            # Stripe Price ID for Lane Pass $4.99/mo (price_…)
+      - key: STRIPE_PRICE_FOUNDING
+        sync: false            # Stripe Price ID for Founding Member $1.99/mo (price_…)
+      - key: STRIPE_PRICE_STANDARD
+        sync: false            # Stripe Price ID for standard $3.99/mo after Early Access (price_…)
       - key: PUBLIC_URL
         value: "https://matchupcoach.gg"

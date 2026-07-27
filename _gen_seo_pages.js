@@ -7,10 +7,16 @@ const fs = require('fs');
 const path = require('path');
 
 const ORIGIN = 'https://matchupcoach.gg';
-const TODAY = '2026-07-14';
+const TODAY = new Date().toISOString().slice(0, 10); // build date — never freeze this
 const slug = n => n.toLowerCase().replace(/[^a-z]/g, '');
 const urlslug = n => n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// content-file slug -> roster display name (handles 'renata' -> "Renata Glasc")
+function dispOf(D, bFile) {
+  if (D.dispBy[bFile]) return D.dispBy[bFile];
+  const k = Object.keys(D.dispBy).find(k => k.startsWith(bFile) || bFile.startsWith(k));
+  return k ? D.dispBy[k] : bFile;
+}
 
 global.window = {};
 new Function('window', fs.readFileSync('champ-data/rosters.js', 'utf8'))(global.window);
@@ -138,7 +144,7 @@ for (const L of LANES) {
     if (!C) continue;
     for (const bFile of Object.keys(C.entries)) {
       const e = C.entries[bFile];
-      const bName = D.dispBy[bFile] || D.dispBy[Object.keys(D.dispBy).find(k => k.startsWith(bFile) || bFile.startsWith(k))] || bFile;
+      const bName = dispOf(D, bFile);
       const b = slug(bName);
       const uA = urlslug(aName), uB = urlslug(bName);
       const rel = `${L.key}/${uA}-vs-${uB}/index.html`;
@@ -151,10 +157,20 @@ for (const L of LANES) {
       const nB = win ? win.filter(x => x === bName).length : 0;
 
       let verdict;
+      const wrKnown = typeof wr === 'number';
+      const wrLeansA = wrKnown && wr >= 50.5, wrLeansB = wrKnown && wr <= 49.5;
       if (win) {
-        if (nA > nB) verdict = `${aName} is favoured — ${aName} owns ${nA} of the 7 game windows${nB ? ` to ${bName}'s ${nB}` : ''}.`;
-        else if (nB > nA) verdict = `${bName} is favoured — ${bName} owns ${nB} of the 7 game windows${nA ? ` to ${aName}'s ${nA}` : ''}. Play it patient and win your windows.`;
-        else verdict = `A genuine skill matchup — the favour swings window to window (${nA} apiece of the 7 stages).`;
+        if (nA > nB) {
+          verdict = wrLeansB
+            ? `Closer than it looks — ${aName} owns ${nA} of the 7 game windows${nB ? ` to ${bName}'s ${nB}` : ''}, but the win rate still favours ${bName}: you have to convert those windows or the game slips away.`
+            : `${aName} is favoured — ${aName} owns ${nA} of the 7 game windows${nB ? ` to ${bName}'s ${nB}` : ''}.`;
+        } else if (nB > nA) {
+          verdict = wrLeansA
+            ? `Winnable despite the lane — ${bName} owns ${nB} of the 7 game windows${nA ? ` to ${aName}'s ${nA}` : ''}, yet the win rate favours ${aName}: survive their windows and the game is yours.`
+            : `${bName} is favoured — ${bName} owns ${nB} of the 7 game windows${nA ? ` to ${aName}'s ${nA}` : ''}. Play it patient and win your windows.`;
+        } else {
+          verdict = `A genuine skill matchup — the favour swings window to window (${nA} apiece of the 7 stages).`;
+        }
       } else verdict = 'Stage-by-stage skill matchup.';
       const wrLine = (typeof wr === 'number') ? `${aName} wins ${wr}% of games vs ${bName} in ${L.label.toLowerCase()}${games ? ` (${Number(games).toLocaleString('en-US')} Emerald+ games analysed)` : ''}.` : '';
 
@@ -208,7 +224,7 @@ ${tl}
 <div class="gate">
   <div class="gate-h">Read the rest of this matchup</div>
   <p class="gate-p">The full ${esc(aName)} vs ${esc(bName)} report continues with the <b>mid-game plan</b>, the <b>late-game and teamfight plan</b>, every <b>power spike</b> to play around, and the <b>win conditions</b> for both sides — plus cooldown tracking and the live enemy-jungle tracker inside the app.</p>
-  <a class="cta" href="/matchup/${uA}-vs-${uB}">Become a Founding Member — $1.99/month →</a>
+  <a class="cta" href="/matchup/${L.key}/${uA}-vs-${uB}/open">Become a Founding Member — $1.99/month →</a>
   <p class="gate-note">🔒 Secure checkout · 💰 7-day money-back guarantee · ✋ Cancel anytime<br>Early Access price — $3.99/month for new members after launch.</p>
 </div>
 <h2>Related guides</h2>
@@ -229,17 +245,23 @@ ${crossLane}`;
 // clear are public; scuttle/dragon rules, invade boundaries, macro and the
 // win condition are members-only.
 const JGW = {};
-try {
-  for (const f of fs.readdirSync('champ-data/jg').filter(f => f.endsWith('.js') && !f.startsWith('_'))) {
-    new Function('window', fs.readFileSync('champ-data/jg/' + f, 'utf8'))(JGW);
-  }
-} catch (e) {}
+for (const f of fs.readdirSync('champ-data/jg').filter(f => f.endsWith('.js') && !f.startsWith('_'))) {
+  // Deliberately NOT wrapped in a swallow-everything try/catch: a data error
+  // here silently dropped 2,550 URLs from the sitemap while still exiting 0.
+  new Function('window', fs.readFileSync('champ-data/jg/' + f, 'utf8'))(JGW);
+}
 const JG_DB = JGW.JG_DB || {};
 const jgNames = Object.keys(JG_DB);
 // Mirrors the app's own advantage classifier so the guide agrees with the app.
-function jgTone(adv, youName) {
+function jgTone(adv, youName, foeName) {
   const a = (adv || '').toLowerCase();
-  if (a.indexOf(String(youName).toLowerCase()) >= 0 || /dominant|domination|favou?red|peak|spike|apex|predator|stabilized|playmaker|absolute/.test(a)) return 'a';
+  const you = String(youName).toLowerCase(), foe = String(foeName || '').toLowerCase();
+  // Check the OPPONENT first: a label like "Bel'Veth Favored" names them, not
+  // you, and must read as pressure — otherwise the generic /favou?red/ test
+  // below claims their window as yours.
+  if (foe && a.indexOf(foe) >= 0) return 'b';
+  if (a.indexOf(you) >= 0) return 'a';
+  if (/dominant|domination|favou?red|peak|spike|apex|predator|stabilized|playmaker|absolute/.test(a)) return 'a';
   if (/defensive|posture|caution|risk|danger|avoid|surviv|weak|vulnerab|passive|concede|respect/.test(a)) return 'b';
   return 's';
 }
@@ -247,11 +269,12 @@ let jgPages = 0;
 for (const you of jgNames) {
   const opps = Object.keys(JG_DB[you] || {});
   for (const foe of opps) {
+    if (foe === you) continue; // mirror: 'Lee Sin is favoured vs Lee Sin' is nonsense
     const rep = JG_DB[you][foe];
     if (!rep || !rep.stages || !rep.stages.length) continue;
     const uA = urlslug(you), uB = urlslug(foe);
     const canonical = `${ORIGIN}/matchup/jungle/${uA}-vs-${uB}/`;
-    const tones = rep.stages.map(s => jgTone(s.adv, you));
+    const tones = rep.stages.map(s => jgTone(s.adv, you, foe));
     const greens = tones.filter(t => t === 'a').length, reds = tones.filter(t => t === 'b').length;
     const diff = reds >= 3 ? 'HARD' : greens >= 5 ? 'FAVOURED' : 'SKILL';
     const verdict = diff === 'FAVOURED'
@@ -283,7 +306,7 @@ ${rep.start ? `<h2>First clear &amp; their start</h2><p>${esc(rep.start)}</p>` :
 <div class="gate">
   <div class="gate-h">Read the rest of this matchup</div>
   <p class="gate-p">The full ${esc(you)} vs ${esc(foe)} report continues with <b>scuttle &amp; dragon rules</b>, <b>invade windows and safety boundaries</b>, the <b>top-side objective fight</b>, <b>macro rotations</b> and the <b>win condition</b> — plus the live enemy-jungle tracker that shows their start, clear and gank timers in game.</p>
-  <a class="cta" href="/matchup/${uA}-vs-${uB}">Become a Founding Member — $1.99/month →</a>
+  <a class="cta" href="/matchup/jungle/${uA}-vs-${uB}/open">Become a Founding Member — $1.99/month →</a>
   <p class="gate-note">🔒 Secure checkout · 💰 7-day money-back guarantee · ✋ Cancel anytime<br>Early Access price — $3.99/month for new members after launch.</p>
 </div>
 <h2>Related guides</h2>
@@ -296,7 +319,7 @@ ${rep.start ? `<h2>First clear &amp; their start</h2><p>${esc(rep.start)}</p>` :
   // jungle champion hub
   const uA = urlslug(you);
   const canonical = `${ORIGIN}/matchup/jungle/${uA}/`;
-  const links = opps.slice().sort().map(f => `<a href="/matchup/jungle/${uA}-vs-${urlslug(f)}/">${esc(you)} vs ${esc(f)}</a>`).join('');
+  const links = opps.filter(f => f !== you).sort().map(f => `<a href="/matchup/jungle/${uA}-vs-${urlslug(f)}/">${esc(you)} vs ${esc(f)}</a>`).join('');
   const title = `${you} Jungle Matchups — All ${opps.length} Guides | MatchupCoach.gg`;
   const desc = `Every ${you} jungle matchup guide: the level-by-level race, first clear, pathing, invade windows and objective control vs all ${opps.length} junglers.`;
   outWrite(`jungle/${uA}/index.html`, shell(title, desc, canonical, { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical }, `
@@ -329,7 +352,7 @@ for (const L of LANES) {
     if (!C) continue;
     const uA = urlslug(aName);
     const canonical = `${ORIGIN}/matchup/${L.key}/${uA}/`;
-    const opps = Object.keys(C.entries).map(bF => D.dispBy[bF] || bF).sort();
+    const opps = Object.keys(C.entries).map(bF => dispOf(D, bF)).sort();
     const links = opps.map(bN => `<a href="/matchup/${L.key}/${uA}-vs-${urlslug(bN)}/">${esc(aName)} vs ${esc(bN)}</a>`).join('');
     const title = `${aName} ${L.short} Matchups — All ${opps.length} Lane Guides | MatchupCoach.gg`;
     const desc = `Every ${aName} ${L.label.toLowerCase()} matchup guide: who wins, favour timeline, power spikes and game plans vs all ${opps.length} opponents.`;

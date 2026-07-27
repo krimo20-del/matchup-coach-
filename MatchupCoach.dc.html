@@ -46,7 +46,7 @@
 <script>window.MC_GOOGLE_CLIENT_ID = "993471719983-g8fkkrqom5ap0f7pdf7tkg63v86d77l4.apps.googleusercontent.com";
 // Release version — bump this ONE line each batched deploy (v2.5, v2.6…).
 // Logged to console so you can confirm which build is actually live after publishing.
-window.MC_VERSION = "v2.6";
+window.MC_VERSION = "v2.7";
 try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-weight:700;font-size:13px"); } catch (e) {}
 // SELF-HEALING CACHE: fetch a tiny always-fresh build stamp; if the page a
 // browser cached is older than what's deployed, reload ONCE (guarded against
@@ -983,6 +983,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
 <script src="./champ-data/content/sup/zilean.js"></script>
 <script src="./champ-data/content/sup/zyra.js"></script>
 <script src="./champ-data/_reddit-validated-fixes.js"></script>
+<script src="./champ-data/_slug-aliases.js"></script>
 </helmet>
 <div style="min-height:{{ mainMinH }}; font-family:'Manrope',system-ui,sans-serif; color:#ece7e1; background:radial-gradient(1200px 640px at 50% -10%, rgba(232,184,75,0.13), transparent 60%), radial-gradient(900px 520px at 88% 2%, rgba(240,115,74,0.08), transparent 55%), radial-gradient(820px 520px at 8% 1%, rgba(70,198,245,0.05), transparent 55%), #0b0908; padding-bottom:64px;">
 
@@ -1599,7 +1600,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
           </div>
         </div>
         <div style="border-top:1px solid rgba(255,255,255,0.05); padding-top:14px; display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
-          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">v2.6 · Early Access</span></span>
+          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">v2.7 · Early Access</span></span>
           <span style="font-size:11px; color:#4c5263; max-width:680px; line-height:1.5;">MatchupCoach is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</span>
         </div>
       </div>
@@ -1812,7 +1813,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
           <span style="font-size:13px; color:#8a90a2;">— how the whole lane plays out</span>
           <sc-if value="{{ volatility.counter }}" hint-placeholder-val="{{ true }}">
             <span style="margin-left:auto; display:inline-flex; align-items:center; gap:7px; padding:7px 12px; border-radius:9px; background:rgba(255,93,108,0.1); border:1px solid rgba(255,93,108,0.32);">
-              <span style="font-family:'Chakra Petch',sans-serif; font-size:9px; letter-spacing:0.6px; color:#ff8b96; font-weight:700;">BUY VS HIM</span>
+              <span style="font-family:'Chakra Petch',sans-serif; font-size:9px; letter-spacing:0.6px; color:#ff8b96; font-weight:700;">{{ volatility.counterLabel }}</span>
               <span style="font-size:12px; color:#ff9b6b; font-weight:700;">{{ volatility.counter }}</span>
             </span>
           </sc-if>
@@ -7728,15 +7729,17 @@ class Component extends DCLogic {
         var snowLbl = snow >= 8 ? 'gets out of control fast if fed' : snow >= 6 ? 'turns a lead into real lane pressure' : 'limited solo carry \u2014 deny resources';
         var esub = ((MU.champB && MU.champB.sub) || '').toLowerCase();
         var asub = ((MU.champA && MU.champA.sub) || '').toLowerCase();
-        var counter = /drain|sustain|heal|lifesteal|vamp|regen/.test(esub) ? "Executioner\u2019s Calling \u2014 anti-heal, cuts his sustain hard"
-          : /marksman|crit|attack|on-hit|auto/.test(esub) ? 'Bramble Vest \u2014 armor + anti-heal vs his autos'
-          : /assassin|burst|mage|ap/.test(esub) ? 'Early MR (Mercs / Null-Magic) \u2014 blunt his burst' : '';
+        // Pronouns follow the enemy champion (Renata/Lux/\u2026 are not "him").
+        var _eP = (window.MC_PRON ? window.MC_PRON((MU.champB && MU.champB.name) || '') : { p: 'his', o: 'him' });
+        var counter = /drain|sustain|heal|lifesteal|vamp|regen/.test(esub) ? "Executioner\u2019s Calling \u2014 anti-heal, cuts " + _eP.p + " sustain hard"
+          : /marksman|crit|attack|on-hit|auto/.test(esub) ? 'Bramble Vest \u2014 armor + anti-heal vs ' + _eP.p + ' autos'
+          : /assassin|burst|mage|ap/.test(esub) ? 'Early MR (Mercs / Null-Magic) \u2014 blunt ' + _eP.p + ' burst' : '';
         // ADCs / marksmen don't itemize Bramble Vest or early anti-heal as a lane
         // counter \u2014 that's a tank/bruiser build. Suppress the "buy vs him" item
         // chip entirely when the player is a marksman (covers ADC-vs-ADC).
         if (/marksman|crit/.test(asub)) counter = '';
         var rush = (MU.buildStart && MU.buildStart[1]) ? MU.buildStart[1] : (MU.buildCore && MU.buildCore[1] ? MU.buildCore[1] : '');
-        return { pct: v, label: lbl, color: col, classLabel: MU.classLabel || (MU.champA && MU.champA.sub ? MU.champA.sub.split(' \u00b7 ')[0] : 'Fighter'), winStyle: MU.winStyle || 'Win-Con', keyThreat: (MU.watchText ? MU.watchText.split(' \u2014 ')[0].split(' \u00b7 ')[0] : (MU.champB ? MU.champB.name + ' threat' : 'Key threat')), snow: snow, snowCol: snowCol, snowLbl: snowLbl, snowName: (MU.champB ? MU.champB.name : 'Enemy'), counter: counter, rush: rush };
+        return { pct: v, label: lbl, color: col, classLabel: MU.classLabel || (MU.champA && MU.champA.sub ? MU.champA.sub.split(' \u00b7 ')[0] : 'Fighter'), winStyle: MU.winStyle || 'Win-Con', keyThreat: (MU.watchText ? MU.watchText.split(' \u2014 ')[0].split(' \u00b7 ')[0] : (MU.champB ? MU.champB.name + ' threat' : 'Key threat')), snow: snow, snowCol: snowCol, snowLbl: snowLbl, snowName: (MU.champB ? MU.champB.name : 'Enemy'), counter: counter, counterLabel: 'BUY VS ' + (_eP.o || 'him').toUpperCase(), rush: rush };
       })(),
       dos: (MU.dos || []).map((x) => { var o = typeof x === 'string' ? { t: x, d: '' } : x; return { t: this.txtN(o.t, 2), d: o.d ? this.txtN(o.d, 2) : '' }; }),
       donts: (MU.donts || []).map((x) => { var o = typeof x === 'string' ? { t: x, d: '' } : x; return { t: this.txtN(o.t, 2), d: o.d ? this.txtN(o.d, 2) : '' }; }),

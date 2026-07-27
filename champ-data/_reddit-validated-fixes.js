@@ -16,7 +16,7 @@
   'use strict';
   var TONE = { FAVOURED: '#3ddc97', HARD: '#ff5d6c', EVEN: '#e8b84b', TRICKY: '#ff8b3d', MIRROR: '#e8b84b' };
   var STAGES = ['level 1', 'level 2', 'level 3', 'levels 4-5', 'level 6', 'first item', '2+ items'];
-  var DISP = { chogath: "Cho'Gath", drmundo: 'Dr. Mundo', ksante: "K'Sante", tahmkench: 'Tahm Kench' };
+  var DISP = { chogath: "Cho'Gath", drmundo: 'Dr. Mundo', ksante: "K'Sante", tahmkench: 'Tahm Kench', masteryi: 'Master Yi', missfortune: 'Miss Fortune', twistedfate: 'Twisted Fate', aurelionsol: 'Aurelion Sol', jarvaniv: 'Jarvan IV', leesin: 'Lee Sin', xinzhao: 'Xin Zhao', reksai: "Rek'Sai", khazix: "Kha'Zix", velkoz: "Vel'Koz", kaisa: "Kai'Sa", kogmaw: "Kog'Maw", belveth: "Bel'Veth", nunu: 'Nunu & Willump', renata: 'Renata Glasc', leblanc: 'LeBlanc' };
   function disp(s) { return DISP[s] || (s.charAt(0).toUpperCase() + s.slice(1)); }
 
   // ===== hand-set top-lane pairs (verdict + windows) =====
@@ -10901,6 +10901,31 @@
       if (c.wants || c.spikes) {
         window.MC_MATCHUP_EXTRA[c.a] = window.MC_MATCHUP_EXTRA[c.a] || {};
         window.MC_MATCHUP_EXTRA[c.a][c.b] = { wants: cleanWants(c.wants), spikes: cleanSpikes(c.spikes) };
+      }
+      // Bespoke content may describe a matchup the generated .full.js files never
+      // had — champions added to the roster after those files were built (the 2026
+      // additions). Previously we bailed here, so those matchups rendered with no
+      // favour timeline and no stage whys at all. Synthesize the entry instead:
+      // the bespoke record already carries everything a report needs.
+      if (F[c.a] && !F[c.a][c.b] && c.win && c.win.length === 7 && c.whys) {
+        var aDisp = disp(c.a), bDisp = disp(c.b);
+        var mine = 0, theirs = 0;
+        for (var wi = 0; wi < 7; wi++) { if (c.win[wi] === aDisp) mine++; else if (c.win[wi] === bDisp) theirs++; }
+        var diff = mine > theirs + 1 ? 'FAVOURED' : theirs > mine + 1 ? 'HARD' : mine > theirs ? 'TRICKY' : theirs > mine ? 'TRICKY' : 'EVEN';
+        var tone = diff === 'FAVOURED' ? '#3ddc97' : diff === 'HARD' ? '#ff5d6c' : diff === 'TRICKY' ? '#ff8b3d' : '#e8b84b';
+        F[c.a][c.b] = {
+          tldr: clean(c.early || ''),
+          winCon: clean((c.wants && c.wants.you && c.wants.you[0]) || ''),
+          enemyWin: clean((c.wants && c.wants.foe && c.wants.foe[0]) || ''),
+          diff: diff, tone: tone,
+          diffRating: (theirs > mine ? (5.5 + Math.min(3, theirs - mine)) : (5.5 - Math.min(3, mine - theirs))).toFixed(1) + '/10',
+          carryRating: (5 + Math.min(4, mine)).toFixed(0) + '/10',
+          phases: ['Level 1', 'Level 2', 'Level 3', 'Levels 4-5', 'Level 6', 'First item', '2+ items'].map(function (lb, i) {
+            var owner = c.win[i];
+            return { label: lb, side: owner, rating: (owner === aDisp ? '7/10' : owner === bDisp ? '4/10' : '5/10'), why: clean(c.whys[i] || '') };
+          }),
+          breakdown: { early: clean(c.early || ''), mid: clean(c.mid || ''), late: clean(c.late || '') }
+        };
       }
       var e = F[c.a] && F[c.a][c.b]; if (!e) return;
       if (e.breakdown) { if (c.early) e.breakdown.early = clean(c.early); if (c.mid) e.breakdown.mid = clean(c.mid); if (c.late) e.breakdown.late = clean(c.late); }

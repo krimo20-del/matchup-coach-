@@ -222,6 +222,105 @@ ${crossLane}`;
   }
 }
 
+// ---------- JUNGLE guides ----------
+// Jungle isn't a lane matchup — it's jungler vs jungler, stored in JG_DB
+// (keyed by display name) rather than the per-lane content files. Same
+// preview-and-convert shape: verdict + the stage-by-stage race + the first
+// clear are public; scuttle/dragon rules, invade boundaries, macro and the
+// win condition are members-only.
+const JGW = {};
+try {
+  for (const f of fs.readdirSync('champ-data/jg').filter(f => f.endsWith('.js') && !f.startsWith('_'))) {
+    new Function('window', fs.readFileSync('champ-data/jg/' + f, 'utf8'))(JGW);
+  }
+} catch (e) {}
+const JG_DB = JGW.JG_DB || {};
+const jgNames = Object.keys(JG_DB);
+// Mirrors the app's own advantage classifier so the guide agrees with the app.
+function jgTone(adv, youName) {
+  const a = (adv || '').toLowerCase();
+  if (a.indexOf(String(youName).toLowerCase()) >= 0 || /dominant|domination|favou?red|peak|spike|apex|predator|stabilized|playmaker|absolute/.test(a)) return 'a';
+  if (/defensive|posture|caution|risk|danger|avoid|surviv|weak|vulnerab|passive|concede|respect/.test(a)) return 'b';
+  return 's';
+}
+let jgPages = 0;
+for (const you of jgNames) {
+  const opps = Object.keys(JG_DB[you] || {});
+  for (const foe of opps) {
+    const rep = JG_DB[you][foe];
+    if (!rep || !rep.stages || !rep.stages.length) continue;
+    const uA = urlslug(you), uB = urlslug(foe);
+    const canonical = `${ORIGIN}/matchup/jungle/${uA}-vs-${uB}/`;
+    const tones = rep.stages.map(s => jgTone(s.adv, you));
+    const greens = tones.filter(t => t === 'a').length, reds = tones.filter(t => t === 'b').length;
+    const diff = reds >= 3 ? 'HARD' : greens >= 5 ? 'FAVOURED' : 'SKILL';
+    const verdict = diff === 'FAVOURED'
+      ? `${you} is favoured — ${you} controls ${greens} of the 7 windows in the jungle race.`
+      : diff === 'HARD'
+      ? `${foe} is favoured — ${foe} pressures ${reds} of the 7 windows. Survive the early race and scale.`
+      : `A genuine skill matchup — the jungle race swings window to window between ${you} and ${foe}.`;
+    const title = `${you} vs ${foe} Jungle Matchup Guide | MatchupCoach.gg`;
+    const desc = `How to play ${you} vs ${foe} in the jungle: first clear, pathing, the level-by-level race, invade windows and objective control.`;
+    const rows = rep.stages.map((s, i) => `<tr><td>${esc(s.stage)}</td><td class="own-${tones[i]}">${esc(s.adv)}</td><td>${esc(s.why || '')}</td></tr>`).join('');
+    const faq = [{ '@type': 'Question', name: `Who wins ${you} vs ${foe} in the jungle?`, acceptedAnswer: { '@type': 'Answer', text: verdict } }];
+    if (rep.start) faq.push({ '@type': 'Question', name: `How should ${you} clear and path against ${foe}?`, acceptedAnswer: { '@type': 'Answer', text: rep.start } });
+    const jsonld = { '@context': 'https://schema.org', '@graph': [
+      { '@type': 'Article', headline: `${you} vs ${foe} — Jungle Matchup Guide`, description: desc, datePublished: TODAY, dateModified: TODAY, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
+      { '@type': 'FAQPage', mainEntity: faq },
+      { '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Matchups', item: ORIGIN + '/matchup/' },
+        { '@type': 'ListItem', position: 2, name: 'Jungle', item: `${ORIGIN}/matchup/jungle/` },
+        { '@type': 'ListItem', position: 3, name: `${you} vs ${foe}`, item: canonical } ] }
+    ] };
+    const body = `
+<nav class="crumbs"><a href="/matchup/">Matchups</a> › <a href="/matchup/jungle/">Jungle</a> › ${esc(you)} vs ${esc(foe)}</nav>
+<h1>${esc(you)} vs ${esc(foe)} — Jungle Matchup Guide</h1>
+<p class="sub">How to win the jungle race as ${esc(you)} against ${esc(foe)} · Updated ${TODAY}</p>
+<div class="verdict"><b>Verdict:</b> ${esc(verdict)}</div>
+<h2>The jungle race — who owns each window</h2>
+<table><tr><th>Stage</th><th>Read</th><th>Why</th></tr>${rows}</table>
+${rep.start ? `<h2>First clear &amp; their start</h2><p>${esc(rep.start)}</p>` : ''}
+<div class="gate">
+  <div class="gate-h">Read the rest of this matchup</div>
+  <p class="gate-p">The full ${esc(you)} vs ${esc(foe)} report continues with <b>scuttle &amp; dragon rules</b>, <b>invade windows and safety boundaries</b>, the <b>top-side objective fight</b>, <b>macro rotations</b> and the <b>win condition</b> — plus the live enemy-jungle tracker that shows their start, clear and gank timers in game.</p>
+  <a class="cta" href="/matchup/${uA}-vs-${uB}">Become a Founding Member — $1.99/month →</a>
+  <p class="gate-note">🔒 Secure checkout · 💰 7-day money-back guarantee · ✋ Cancel anytime<br>Early Access price — $3.99/month for new members after launch.</p>
+</div>
+<h2>Related guides</h2>
+<p><a href="/matchup/jungle/${uB}-vs-${uA}/">Playing the other side? ${esc(foe)} vs ${esc(you)} guide →</a><br>
+<a href="/matchup/jungle/${uA}/">All ${esc(you)} jungle matchups →</a></p>`;
+    outWrite(`jungle/${uA}-vs-${uB}/index.html`, shell(title, desc, canonical, jsonld, body));
+    sitemap.push(canonical);
+    jgPages++;
+  }
+  // jungle champion hub
+  const uA = urlslug(you);
+  const canonical = `${ORIGIN}/matchup/jungle/${uA}/`;
+  const links = opps.slice().sort().map(f => `<a href="/matchup/jungle/${uA}-vs-${urlslug(f)}/">${esc(you)} vs ${esc(f)}</a>`).join('');
+  const title = `${you} Jungle Matchups — All ${opps.length} Guides | MatchupCoach.gg`;
+  const desc = `Every ${you} jungle matchup guide: the level-by-level race, first clear, pathing, invade windows and objective control vs all ${opps.length} junglers.`;
+  outWrite(`jungle/${uA}/index.html`, shell(title, desc, canonical, { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical }, `
+<nav class="crumbs"><a href="/matchup/">Matchups</a> › <a href="/matchup/jungle/">Jungle</a> › ${esc(you)}</nav>
+<h1>${esc(you)} — Jungle Matchup Guides</h1>
+<p class="sub">${opps.length} researched jungle-vs-jungle guides for ${esc(you)}.</p>
+<div class="linkgrid">${links}</div>`));
+  sitemap.push(canonical);
+}
+// jungle lane hub
+{
+  const canonical = `${ORIGIN}/matchup/jungle/`;
+  const title = 'Jungle Matchup Guides — Every Jungler | MatchupCoach.gg';
+  const desc = `Jungler-vs-jungler matchup guides for all ${jgNames.length} junglers — the level-by-level race, first clears, pathing, invade windows and objective control.`;
+  const links = jgNames.slice().sort().map(n => `<a href="/matchup/jungle/${urlslug(n)}/">${esc(n)}</a>`).join('');
+  outWrite('jungle/index.html', shell(title, desc, canonical, { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical }, `
+<nav class="crumbs"><a href="/matchup/">Matchups</a> › Jungle</nav>
+<h1>Jungle Matchup Guides</h1>
+<p class="sub">Your lane is the whole map — and your opponent is their jungler. Pick your jungler.</p>
+<div class="linkgrid">${links}</div>`));
+  sitemap.push(canonical);
+}
+console.log('jungle guide pages:', jgPages, '(+ ' + jgNames.length + ' champion hubs)');
+
 // ---------- champ hubs ----------
 for (const L of LANES) {
   const D = DATA[L.key];
@@ -264,7 +363,9 @@ for (const L of LANES) {
   const canonical = `${ORIGIN}/matchup/`;
   const title = 'LoL Matchup Guides — Every Champion, Every Lane | MatchupCoach.gg';
   const desc = 'Researched League of Legends matchup guides for every champion in top, mid, bot and support — who wins, favour timelines, power spikes, and how to play each phase.';
-  const counts = LANES.map(L => `<a href="/matchup/${L.key}/">${L.label} — ${DATA[L.key].names.length} champions</a>`).join('<br>');
+  const counts = LANES.map(L => `<a href="/matchup/${L.key}/">${L.label} — ${DATA[L.key].names.length} champions</a>`)
+    .concat(jgNames.length ? [`<a href="/matchup/jungle/">Jungle — ${jgNames.length} junglers</a>`] : [])
+    .join('<br>');
   const body = `
 <h1>League of Legends Matchup Guides</h1>
 <p class="sub">Every champion, every lane — researched stage-by-stage.</p>

@@ -349,6 +349,12 @@ function sendStatic(res, rel) {
   let full = path.normalize(path.join(ROOT, rel));
   // Extensionless pretty URLs: /privacy -> privacy.html
   if (withinRoot(full) && !path.extname(full) && fs.existsSync(full + '.html')) full += '.html';
+  // Directory index: /matchup/top/darius-vs-garen/ -> .../index.html. Netlify does
+  // this for free; without it the SPA fallback below would shadow the static
+  // guide pages when running this server locally.
+  if (withinRoot(full) && !path.extname(full)) {
+    try { if (fs.statSync(full).isDirectory() && fs.existsSync(path.join(full, 'index.html'))) full = path.join(full, 'index.html'); } catch (e) {}
+  }
   // SPA fallback: deep links like /matchup/aatrox-vs-darius serve the app
   // (the page uses <base href="/"> so relative assets still resolve).
   let mu = null;

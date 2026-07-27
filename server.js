@@ -122,7 +122,8 @@ function fulfillStripeSession(sid, sess) {
     price: prev && prev.founding ? prev.price : paidPrice,
     founding: prev ? (prev.founding || founding) : founding,
     since: prev ? prev.since : Date.now(),
-    subId: (typeof sess.subscription === 'string' && sess.subscription) || (prev && prev.subId) || ''
+    subId: (typeof sess.subscription === 'string' && sess.subscription) || (prev && prev.subId) || '',
+    custId: (typeof sess.customer === 'string' && sess.customer) || (prev && prev.custId) || ''
   };
   if (planObj.founding) {
     if (prev && prev.memberNum) planObj.memberNum = prev.memberNum;
@@ -657,6 +658,26 @@ async function handleApi(req, res, pathname, ip) {
   // https://matchupcoach.gg/api/stripe/webhook with events
   // checkout.session.completed + customer.subscription.deleted, then set
   // STRIPE_WEBHOOK_SECRET (whsec_…) in the environment.
+  // ----- Cancel anytime: open Stripe's billing portal for this member -----
+  // The site promises 'cancel anytime from your account' at every subscribe
+  // point; without this there was no way to act on it except emailing support.
+  if (route === 'POST /api/billing/portal') {
+    const u = authUser(req);
+    if (!u) return sendJson(res, 401, { error: 'Sign in first.' });
+    const plan = u.plan;
+    if (!plan || plan.type !== 'member') return sendJson(res, 400, { error: 'No active membership to manage.' });
+    if (!STRIPE_ON) return sendJson(res, 503, { error: 'Billing management opens once payments are live. Email support@matchupcoach.gg to cancel.' });
+    if (!plan.custId) return sendJson(res, 409, { error: 'We could not find your billing profile - email support@matchupcoach.gg and we will cancel it for you.' });
+    try {
+      const r = await stripeApi('POST', '/v1/billing_portal/sessions', {
+        customer: plan.custId,
+        return_url: PUBLIC_URL + '/'
+      });
+      if (r.status >= 400 || !r.json.url) return sendJson(res, 502, { error: (r.json.error && r.json.error.message) || 'Could not open the billing portal.' });
+      return sendJson(res, 200, { url: r.json.url });
+    } catch (e) { return sendJson(res, 502, { error: 'Could not reach Stripe.' }); }
+  }
+
   if (route === 'POST /api/stripe/webhook') {
     if (!STRIPE_WEBHOOK_SECRET) return sendJson(res, 503, { error: 'Webhook not configured.' });
     const raw = await readRawBody(req);

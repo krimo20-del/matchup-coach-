@@ -1,7 +1,20 @@
 # Deploying MatchupCoach to matchupcoach.gg
 
-The whole site is one Node service (`server.js` — static app + API, zero npm
-dependencies). Host it on Render, point the GoDaddy domain at it, done.
+**Current topology (what is actually live):**
+
+- **Netlify serves the site** at `matchupcoach.gg` — the app
+  (`MatchupCoach.dc.html`), all champion data, and the ~12,000 static matchup
+  guide pages, which Netlify BUILDS on every deploy by running
+  `node _gen_seo_pages.js` (see `netlify.toml`). The guides are gitignored, so
+  they are always regenerated from the current champion data.
+- **Render runs the API** (`server.js` — accounts, membership, Stripe, comments).
+  `netlify.toml` proxies `/api/*` to the Render service, so the browser only
+  ever talks to `matchupcoach.gg` and there is no CORS to configure.
+
+So: front end + SEO pages = Netlify (deploys on `git push`); accounts, payments
+and the persistent disk = Render. Sections 2–3 below cover the Render service
+and DNS; Stripe (section 4) is configured in the **Render** environment because
+that is where the API runs.
 
 ## 1. Push the code to GitHub (one time)
 
@@ -69,8 +82,17 @@ new prices only apply to new checkout sessions.
 5. Test with Stripe test mode or a real $1.99 charge (you can refund it from
    the dashboard). Success returns to `/?mc_checkout=success&session_id=…`,
    which the app confirms server-side before unlocking the account.
-6. In Stripe **Settings → Billing → Customer portal**, enable the portal so
-   subscribers can cancel/update cards themselves (cancel-anytime promise).
+6. In Stripe **Settings → Billing → Customer portal**, click **Activate**. This
+   is REQUIRED, not optional: the site promises "cancel anytime" at every
+   subscribe point, and the app's "Manage membership" button calls
+   /api/billing/portal which opens exactly this portal. Until it is activated
+   that button returns a friendly "email support to cancel" message.
+7. Also add a webhook (**Developers → Webhooks → Add endpoint**):
+   URL `https://matchupcoach.gg/api/stripe/webhook`, events
+   `checkout.session.completed` and `customer.subscription.deleted`. Copy the
+   signing secret into `STRIPE_WEBHOOK_SECRET`. Without it, someone who pays and
+   closes the tab before returning is charged with no access, and cancellations
+   never revoke access.
 
 **Ending Early Access later:** set `EARLY_ACCESS=0` and redeploy. New
 subscribers pay $3.99; every existing Founding Member's subscription stays on

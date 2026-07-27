@@ -4100,9 +4100,22 @@ class Component extends DCLogic {
         title = 'Matchup — ' + s.myChamp + ' vs ' + s.enemyChamp + ' | MatchupCoach.gg';
       }
       document.title = title;
-      // Keep the canonical link in sync so each matchup deep-link is indexed as
-      // its own page (not a duplicate of the root canonical).
-      try { var cl = document.querySelector('link[rel="canonical"]'); if (cl) cl.setAttribute('href', location.origin + path); } catch (e2) {}
+      // Canonical points at the STATIC guide page for this matchup when one
+      // exists (/matchup/<lane>/<a>-vs-<b>/). Those pages are what the sitemap
+      // lists and what Google should rank; without this the app URL and the
+      // static page would compete as duplicates of each other. Jungle has no
+      // static guides, so it keeps its own app URL.
+      try {
+        var cl = document.querySelector('link[rel="canonical"]');
+        if (cl) {
+          var canon = location.origin + path;
+          if (s.view === 'demo' && s.myChamp && s.enemyChamp && s.role && s.role !== 'jungle') {
+            var cs = function(n){ return (n || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''); };
+            canon = location.origin + '/matchup/' + s.role + '/' + cs(s.myChamp) + '-vs-' + cs(s.enemyChamp) + '/';
+          }
+          cl.setAttribute('href', canon);
+        }
+      } catch (e2) {}
       history.pushState({ mc: { view: s.view, homeStep: s.homeStep, role: s.role, myChamp: s.myChamp, enemyChamp: s.enemyChamp, matchup: s.matchup, authMode: s.authMode, plan: s.plan } }, '', path);
       return;
     } catch (e) {}

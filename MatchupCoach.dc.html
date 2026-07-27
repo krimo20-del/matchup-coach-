@@ -46,7 +46,7 @@
 <script>window.MC_GOOGLE_CLIENT_ID = "993471719983-g8fkkrqom5ap0f7pdf7tkg63v86d77l4.apps.googleusercontent.com";
 // Release version — bump this ONE line each batched deploy (v2.5, v2.6…).
 // Logged to console so you can confirm which build is actually live after publishing.
-window.MC_VERSION = "v2.8";
+window.MC_VERSION = "v2.9";
 try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-weight:700;font-size:13px"); } catch (e) {}
 // SELF-HEALING CACHE: fetch a tiny always-fresh build stamp; if the page a
 // browser cached is older than what's deployed, reload ONCE (guarded against
@@ -1600,7 +1600,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
           </div>
         </div>
         <div style="border-top:1px solid rgba(255,255,255,0.05); padding-top:14px; display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
-          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">v2.8 · Early Access</span></span>
+          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">v2.9 · Early Access</span></span>
           <span style="font-size:11px; color:#4c5263; max-width:680px; line-height:1.5;">MatchupCoach is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</span>
         </div>
       </div>
@@ -3644,9 +3644,9 @@ class Component extends DCLogic {
       }).catch(() => {});
       if (window.MC_API.token()) {
         window.MC_API.get('/me')
-          .then(r => { this._setSession(r.user, true); this.setState({ user: r.user, payOk: true }); })
-          .catch(e => { if (e.status === 401) { window.MC_API.clearToken(); try { localStorage.removeItem('mc_session'); sessionStorage.removeItem('mc_session'); } catch (x) {} this.setState({ user: null }); } });
-      }
+          .then(r => { this._setSession(r.user, true); this._authSettled = true; this.setState({ user: r.user, payOk: true }); })
+          .catch(e => { if (e.status === 401) { window.MC_API.clearToken(); try { localStorage.removeItem('mc_session'); sessionStorage.removeItem('mc_session'); } catch (x) {} this.setState({ user: null }); } this._authSettled = true; });
+      } else { this._authSettled = true; }
     });
     const ready = () => window.CHAMP_DATA && ['aatrox','darius','drmundo','garen','illaoi','mordekaiser','nasus','sett','trundle','urgot','volibear','yorick','camille','fiora','gragas','gwen','irelia','jax','kled','olaf','pantheon','renekton','riven','tryndamere','vayne','warwick','wukong','yasuo','yone','chogath','ksante','malphite','maokai','nautilus','ornn','poppy','shen','sion','tahmkench','zac','akali','aurora','gangplank','gnar','heimerdinger','jayce','kayle','kennen','quinn','rumble','singed','swain','teemo','vladimir','ambessa','zaahen','galio','ziggs','sylas','sejuani','ryze','neeko','mel','lucian','lillia','kassadin','karma','graves','cassiopeia','akshan'].every(k => window.CHAMP_DATA[k]);
     if (!ready()) {
@@ -4131,6 +4131,11 @@ class Component extends DCLogic {
     var go = setInterval(function(){
       tries++;
       if (!(window.ROSTERS && self._allChamps().length)) { if (tries > 40) clearInterval(go); return; }
+      // Wait for the session check to settle before opening. Otherwise a signed-in
+      // MEMBER following a shared link is judged signed-out (state.user is still
+      // null while /api/me is in flight) and gets bounced to the signup screen.
+      // Cap the wait so a dead/slow API can't hang the deep link forever.
+      if (!self._authSettled && tries <= 40) return;
       clearInterval(go);
       var a = self._resolveChamp(deslug(m[1])), b = self._resolveChamp(deslug(m[2]));
       if (a && b) {

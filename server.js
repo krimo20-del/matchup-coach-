@@ -130,6 +130,18 @@ function fulfillStripeSession(sid, sess) {
   const key = sess.client_reference_id;
   const u = users[key];
   if (!u) return false;
+  // Ordering guard: Stripe retries webhook deliveries for days. If a STALE
+  // paid session (created before the currently-stored plan was purchased)
+  // arrives late, fulfilling it would overwrite the newer plan and cancel the
+  // newer subscription. Mark it handled and cancel ITS sub instead — the buyer
+  // already replaced it with a newer purchase.
+  const createdMs = (sess.created | 0) * 1000;
+  if (u.plan && u.plan.since && createdMs && createdMs < u.plan.since) {
+    fulfilled[sid] = true; saveJson('fulfilled.json', fulfilled);
+    const staleSub = stripeId(sess.subscription);
+    if (staleSub && staleSub !== u.plan.subId && STRIPE_ON) cancelStripeSub(u, staleSub);
+    return false;
+  }
   const md = sess.metadata || {};
   const planKey = PLANS[md.plan] ? md.plan : 'all';
   const spec = PLANS[planKey];
@@ -146,28 +158,68 @@ function fulfillStripeSession(sid, sess) {
     custId: stripeId(sess.customer) || (prev && prev.custId) || ''
   };
   if (spec.type === 'role') planObj.role = ROLES[md.role] ? md.role : 'top';
-  if (!(prev && prev.memberNum)) { founders.claimed = (founders.claimed | 0) + 1; saveJson('founders.json', founders); }
-  planObj.memberNum = (prev && prev.memberNum) || founders.claimed;
+  // One person, one member number — a lapsed subscriber who comes back keeps
+  // their number (pastPlan) and is not double-counted in the public counter.
+  const keptNum = (prev && prev.memberNum) || (u.pastPlan && u.pastPlan.memberNum);
+  if (!keptNum) { founders.claimed = (founders.claimed | 0) + 1; saveJson('founders.json', founders); }
+  planObj.memberNum = keptNum || founders.claimed;
   // Upgrade path: buying a new plan replaces the old one. The OLD Stripe
   // subscription would keep billing forever, so cancel it immediately. The
   // webhook's subscription.deleted for the old sub can't revoke the new plan —
   // the revoke loop matches on subId, which now points at the new sub.
   const oldSub = prev && prev.subId;
-  if (oldSub && planObj.subId && oldSub !== planObj.subId && STRIPE_ON) {
-    stripeApi('DELETE', '/v1/subscriptions/' + encodeURIComponent(oldSub))
-      .catch(() => {}); // best-effort; portal cancellation remains the fallback
-  }
   fulfilled[sid] = true; saveJson('fulfilled.json', fulfilled);
   u.plan = planObj; saveJson('users.json', users);
+  if (oldSub && planObj.subId && oldSub !== planObj.subId && STRIPE_ON) cancelStripeSub(u, oldSub);
   return true;
 }
+// Cancel a replaced subscription and VERIFY it worked. stripeApi resolves on
+// HTTP errors too, so a .catch alone silently missed failures — which breaks
+// the customer-facing promise that an upgrade never double-bills. On failure
+// the sub id is parked on the user (orphanSubs) and retried before every
+// billing-portal open, so there is always a self-serve path to recovery.
+function cancelStripeSub(u, subId) {
+  return stripeApi('DELETE', '/v1/subscriptions/' + encodeURIComponent(subId))
+    .then((r) => {
+      const gone = r.status < 400 || (r.json && r.json.error && r.json.error.code === 'resource_missing');
+      if (!gone) throw new Error('cancel failed: ' + r.status);
+      if (u.orphanSubs) { u.orphanSubs = u.orphanSubs.filter((s) => s !== subId); if (!u.orphanSubs.length) delete u.orphanSubs; saveJson('users.json', users); }
+      return true;
+    })
+    .catch(() => {
+      u.orphanSubs = (u.orphanSubs || []).concat(u.orphanSubs && u.orphanSubs.indexOf(subId) !== -1 ? [] : [subId]);
+      saveJson('users.json', users);
+      return false;
+    });
+}
 
-// Legacy alias — old frontends called /api/founders for lifetime-tier state.
+// Legacy alias — old frontends called /api/founders for member-counter state.
+// (The dead $24.99 lifetime literals it used to carry were always overwritten
+// by memberState() and advertised a plan that no longer exists — removed.)
 function founderState() {
-  const c = founders.claimed | 0;
-  return Object.assign({ claimed: c, soldOut: false, price: 24.99, priceLabel: '$24.99', bracket: 'lifetime', remaining: null, nextPrice: null }, memberState());
+  return Object.assign({ claimed: founders.claimed | 0, soldOut: false, remaining: null, nextPrice: null }, memberState());
 }
 const publicUser = (u) => ({ name: u.name, plan: u.plan || null, google: !!u.google });
+// Repurchase guard, shared by the Stripe and demo checkouts: block any
+// same-or-smaller purchase, allow only genuine upgrades (role→all/year,
+// all→year, lane→lane on a DIFFERENT lane). Legacy plans are all strictly
+// better than anything on sale today — founder is a paid-for LIFETIME,
+// member is $1.99/mo for everything, champ has its own scope — so every
+// purchase is blocked for them: replacing those plans (which fulfillment
+// does unconditionally) would be a paid downgrade sold as an upgrade.
+function repurchaseBlock(plan, planKey, role) {
+  if (!plan) return '';
+  const t = plan.type;
+  if (t === 'founder' || t === 'member' || t === 'champ') {
+    return 'Your account already has a legacy plan that includes more than this - buying it would replace the better plan you own. Email support@matchupcoach.gg if you want to change plans.';
+  }
+  const hasAll = t === 'all' || t === 'allyr';
+  if (planKey === 'lane' && hasAll) return 'You already have every lane.';
+  if (planKey === 'lane' && t === 'role' && plan.role === role) return 'You already have the ' + role + ' Lane Pass.';
+  if (planKey === 'all' && hasAll) return 'You already have every lane.';
+  if (planKey === 'year' && t === 'allyr') return 'You are already on the annual plan.';
+  return '';
+}
 function newSession(key) {
   const tok = newToken();
   sessions[tok] = { user: key, exp: Date.now() + 30 * 864e5 };
@@ -389,8 +441,12 @@ function sendStatic(res, rel) {
   let mu = null;
   if (withinRoot(full) && !path.extname(full) && !fs.existsSync(full) && /^matchup\//.test(rel)) {
     full = path.join(ROOT, 'MatchupCoach.dc.html');
-    // accept both the SEO path /matchup/leagueoflegends/lol/a-vs-b and the legacy /matchup/a-vs-b
-    const mm = /^matchup\/(?:leagueoflegends\/lol\/)?(.+?)-vs-(.+?)\/?$/.exec(rel);
+    // accept the SEO path /matchup/leagueoflegends/lol/a-vs-b, the legacy
+    // /matchup/a-vs-b, AND the lane-aware app deep link
+    // /matchup/<lane>/a-vs-b/open — without the lane/open handling the greedy
+    // groups swallowed the path segments and produced titles like
+    // "Top/darius vs Garen/open".
+    const mm = /^matchup\/(?:leagueoflegends\/lol\/|(?:top|mid|bot|support|jungle)\/)?(.+?)-vs-(.+?)(?:\/open)?\/?$/.exec(rel);
     if (mm) mu = { you: prettyChamp(mm[1]), foe: prettyChamp(mm[2]), aSlug: mm[1], bSlug: mm[2] };
   }
   if (!withinRoot(full) || !fs.existsSync(full) || !fs.statSync(full).isFile()) {
@@ -615,10 +671,15 @@ async function handleApi(req, res, pathname, ip) {
     const db = await readBody(req);
     const planKey = PLANS[db.plan] ? db.plan : 'all';
     const spec = PLANS[planKey];
+    const demoRole = ROLES[db.role] ? db.role : 'top';
+    // Same guard as the real Stripe checkout — the demo must mirror it.
+    const demoGuardErr = repurchaseBlock(u.plan, planKey, planKey === 'lane' ? demoRole : '');
+    if (demoGuardErr) return sendJson(res, 400, { error: demoGuardErr });
     const planObj = { type: spec.type, price: spec.price, since: Date.now() };
-    if (spec.type === 'role') planObj.role = ROLES[db.role] ? db.role : 'top';
-    if (!(u.plan && u.plan.memberNum)) { founders.claimed = (founders.claimed | 0) + 1; saveJson('founders.json', founders); }
-    planObj.memberNum = (u.plan && u.plan.memberNum) || founders.claimed;
+    if (spec.type === 'role') planObj.role = demoRole;
+    const demoKeptNum = (u.plan && u.plan.memberNum) || (u.pastPlan && u.pastPlan.memberNum);
+    if (!demoKeptNum) { founders.claimed = (founders.claimed | 0) + 1; saveJson('founders.json', founders); }
+    planObj.memberNum = demoKeptNum || founders.claimed;
     users[u.key].plan = planObj;
     saveJson('users.json', users);
     const charged = spec.label + spec.per + (spec.type === 'role' ? ' - ' + planObj.role + ' lane' : ' - all lanes');
@@ -640,16 +701,8 @@ async function handleApi(req, res, pathname, ip) {
     const spec = PLANS[planKey];
     const role = planKey === 'lane' ? (ROLES[cb.role] ? cb.role : '') : '';
     if (planKey === 'lane' && !role) return sendJson(res, 400, { error: 'Pick a lane for the Lane Pass.' });
-    // Repurchase guard: block same-or-smaller purchases, allow real upgrades
-    // (role→all/year, all→year, lane→lane on a DIFFERENT lane).
-    if (u.plan) {
-      const t = u.plan.type;
-      const hasAll = t === 'all' || t === 'allyr' || t === 'member' || t === 'founder';
-      if (planKey === 'lane' && hasAll) return sendJson(res, 400, { error: 'You already have every lane.' });
-      if (planKey === 'lane' && t === 'role' && u.plan.role === role) return sendJson(res, 400, { error: 'You already have the ' + role + ' Lane Pass.' });
-      if (planKey === 'all' && hasAll) return sendJson(res, 400, { error: 'You already have every lane.' });
-      if (planKey === 'year' && t === 'allyr') return sendJson(res, 400, { error: 'You are already on the annual plan.' });
-    }
+    const guardErr = repurchaseBlock(u.plan, planKey, role);
+    if (guardErr) return sendJson(res, 400, { error: guardErr });
     const priceId = STRIPE_PLAN_PRICE()[planKey];
     if (!priceId) return sendJson(res, 503, { error: 'This plan is not configured yet.' });
     const params = {
@@ -664,8 +717,20 @@ async function handleApi(req, res, pathname, ip) {
       'line_items[0][price]': priceId
     };
     if (!STRIPE_MANAGED) params['managed_payments[enabled]'] = 'false';
+    // Reuse the buyer's existing Stripe customer so an upgrade's new
+    // subscription lands on the SAME customer as the old one — that keeps the
+    // billing portal able to show (and cancel) everything they're paying for.
+    // Without this, every session minted a fresh customer and a failed
+    // auto-cancel left an orphaned sub the portal could never reach.
+    const existingCust = u.plan && typeof u.plan.custId === 'string' && /^cus_/.test(u.plan.custId) ? u.plan.custId : '';
+    if (existingCust) params.customer = existingCust;
     try {
-      const r = await stripeApi('POST', '/v1/checkout/sessions', params);
+      let r = await stripeApi('POST', '/v1/checkout/sessions', params);
+      if (r.status >= 400 && existingCust) {
+        // Stale/deleted customer id must not block a purchase — retry fresh.
+        delete params.customer;
+        r = await stripeApi('POST', '/v1/checkout/sessions', params);
+      }
       if (r.status >= 400 || !r.json.url) return sendJson(res, 502, { error: (r.json.error && r.json.error.message) || 'Stripe could not start checkout.' });
       return sendJson(res, 200, { url: r.json.url });
     } catch (e) { return sendJson(res, 502, { error: 'Could not reach Stripe.' }); }
@@ -708,6 +773,9 @@ async function handleApi(req, res, pathname, ip) {
     if (!plan || !(plan.type === 'member' || plan.type === 'role' || plan.type === 'all' || plan.type === 'allyr')) return sendJson(res, 400, { error: 'No active membership to manage.' });
     if (!STRIPE_ON) return sendJson(res, 503, { error: 'Billing management opens once payments are live. Email support@matchupcoach.gg to cancel.' });
     if (!plan.custId) return sendJson(res, 409, { error: 'We could not find your billing profile - email support@matchupcoach.gg and we will cancel it for you.' });
+    // Sweep any replaced-but-not-yet-cancelled subscriptions (a failed
+    // auto-cancel during an upgrade) before showing billing state.
+    if (u.orphanSubs && u.orphanSubs.length) await Promise.all(u.orphanSubs.slice().map((s) => cancelStripeSub(u, s)));
     try {
       const r = await stripeApi('POST', '/v1/billing_portal/sessions', {
         customer: plan.custId,

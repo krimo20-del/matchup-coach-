@@ -46,7 +46,7 @@
 <script>window.MC_GOOGLE_CLIENT_ID = "993471719983-g8fkkrqom5ap0f7pdf7tkg63v86d77l4.apps.googleusercontent.com";
 // Release version — bump this ONE line each batched deploy (v2.5, v2.6…).
 // Logged to console so you can confirm which build is actually live after publishing.
-window.MC_VERSION = "v3.7";
+window.MC_VERSION = "v3.8";
 try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-weight:700;font-size:13px"); } catch (e) {}
 // SELF-HEALING CACHE: fetch a tiny always-fresh build stamp; if the page a
 // browser cached is older than what's deployed, reload ONCE (guarded against
@@ -1224,10 +1224,15 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
                       <span style="font-size:10px; color:#7d8499;">tap → pick opponent</span>
                     </span>
                   </button>
+                  <button onClick="{{ fc.openSample }}" style="display:flex; align-items:center; justify-content:space-between; gap:7px; padding:7px 10px; border-radius:10px; border:1px dashed rgba(61,220,151,0.45); background:rgba(61,220,151,0.06); cursor:pointer; font-family:'Manrope',sans-serif; min-width:0;" style-hover="background:rgba(61,220,151,0.14); border-color:rgba(61,220,151,0.8);">
+                    <span style="min-width:0; font-size:11px; font-weight:700; color:#7fe3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ fc.sampleLabel }}</span>
+                    <span style="flex:0 0 auto; font-family:'Chakra Petch',sans-serif; font-size:8px; font-weight:700; letter-spacing:0.5px; color:#3ddc97;">NO SIGNUP</span>
+                  </button>
                 </sc-for>
               </div>
             </sc-for>
           </div>
+          <div style="margin-top:10px; text-align:center; font-size:11.5px; color:#7d8499;">Tap a <span style="color:#7fe3b8; font-weight:700;">sample</span> to read a full matchup guide free, no signup — see exactly how deep every guide goes.</div>
         </div>
         </sc-if>
 
@@ -1617,7 +1622,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
           </div>
         </div>
         <div style="border-top:1px solid rgba(255,255,255,0.05); padding-top:14px; display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
-          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">v3.7</span></span>
+          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">v3.8</span></span>
           <span style="font-size:11px; color:#4c5263; max-width:680px; line-height:1.5;">MatchupCoach is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</span>
         </div>
       </div>
@@ -7607,15 +7612,37 @@ class Component extends DCLogic {
       freeToday: (function(self){
         var ACC = { top: '#f0883d', jungle: '#3ddc97', mid: '#46c6f5', bot: '#ff8bd0', support: '#9b8cff' };
         var LBL = { top: 'TOP', jungle: 'JG', mid: 'MID', bot: 'ADC', support: 'SUP' };
+        var day = self._dayIndex();
         return self.freeTodayList().map(function(x){
           return { role: x.role, label: LBL[x.role] || x.role.toUpperCase(), accent: ACC[x.role] || '#7fe3b8',
             champs: x.champs.map(function(ch){
-              return { champ: ch, onClick: function(){
-                // Free champions require a (free) account — clicking sends
-                // signed-out visitors to signup first.
-                if (!self.state.user) { self.openAuth('signup', 'Create a free account to study today’s free champions — one per role, refreshed every 24 hours.'); return; }
-                if (x.role === 'jungle') { self.openJg(ch, (window.JG_DB && window.JG_DB[ch]) ? Object.keys(window.JG_DB[ch])[0] : "Kha'Zix", true); } else { self.setState({ role: x.role, myChamp: ch, homeStep: 'enemy', search: '', view: 'home' }); self._top(); }
-              } };
+              // SAMPLE opponent for this free champ — deterministic daily pick
+              // from the same role, so every visitor sees the same pairing and
+              // it rotates with the champion. Opens WITHOUT an account ("see
+              // how in-depth it is"); everything else needs the free account.
+              var opp = '';
+              if (x.role === 'jungle') {
+                var jk = (window.JG_DB && window.JG_DB[ch]) ? Object.keys(window.JG_DB[ch]).sort() : [];
+                opp = jk.length ? jk[day % jk.length] : "Kha'Zix";
+              } else {
+                var R = window.ROSTERS || {};
+                var pool = (R[x.role] || []).reduce(function(a, g){ return a.concat(g.c); }, []).sort();
+                if (pool.length > 1) {
+                  var oi = (day + 7) % pool.length;
+                  if (pool[oi] === ch) oi = (oi + 1) % pool.length;
+                  opp = pool[oi];
+                }
+              }
+              return { champ: ch, opp: opp, sampleLabel: 'Sample: vs ' + opp + ' →',
+                openSample: function(){
+                  if (x.role === 'jungle') self.openJg(ch, opp, true);
+                  else self.openGen(x.role, ch, opp, true);
+                },
+                onClick: function(){
+                  // The full rotation (any opponent) needs a free account.
+                  if (!self.state.user) { self.openAuth('signup', 'Create a free account to study today’s free champions — one per role, refreshed every 24 hours.'); return; }
+                  if (x.role === 'jungle') { self.openJg(ch, opp || "Kha'Zix", true); } else { self.setState({ role: x.role, myChamp: ch, homeStep: 'enemy', search: '', view: 'home' }); self._top(); }
+                } };
             }) };
         });
       })(this),

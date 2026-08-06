@@ -60,10 +60,33 @@
 # Without this every shared/sitemap matchup URL 404'd on Netlify — only the
 # Node server had the SPA fallback. Static files under /matchup/ still win
 # (Netlify only applies a non-forced redirect when no file matches).
+# App routes stay SPA: /open deep links (lane-aware and legacy lane-less) and
+# old /matchup/leagueoflegends/lol/ links load the app, which opens the matchup.
 [[redirects]]
-  from = "/matchup/*"
+  from = "/matchup/:lane/:slug/open"
   to = "/MatchupCoach.dc.html"
   status = 200
+[[redirects]]
+  from = "/matchup/:slug/open"
+  to = "/MatchupCoach.dc.html"
+  status = 200
+[[redirects]]
+  from = "/matchup/leagueoflegends/lol/*"
+  to = "/MatchupCoach.dc.html"
+  status = 200
+# Legacy lane-less shared links (/matchup/a-vs-b) still load the app…
+[[redirects]]
+  from = "/matchup/:slug"
+  to = "/MatchupCoach.dc.html"
+  status = 200
+# …but any other unknown matchup URL is a REAL 404 now. Without this, every
+# nonexistent guide URL soft-200'd into the 756KB app shell — crawl waste and
+# soft-404s in Search Console. Physical guide pages always win over these
+# non-forced rules, so all 12k real pages are unaffected.
+[[redirects]]
+  from = "/matchup/*"
+  to = "/404.html"
+  status = 404
 
 # Don't serve backend-only / internal files even though they live in the repo
 # root (publish = "." ships everything). These MUST be force = true: without it

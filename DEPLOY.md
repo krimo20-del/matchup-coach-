@@ -54,16 +54,37 @@ that is where the API runs.
 3. Back in Render, click **Verify** on both domains. HTTPS certificates are
    issued automatically. DNS can take from minutes up to ~an hour.
 
-## 4. Stripe — real Early Access payments
+## 4. Stripe — LIVE configuration
 
-The server sells ONE subscription: **Founding Member $1.99/mo** while
-`EARLY_ACCESS` is on (default), **$3.99/mo standard** after you set
-`EARLY_ACCESS=0`. Founding Members keep their $1.99 Stripe price forever —
-new prices only apply to new checkout sessions.
+Payments run on the **live account** `acct_1TwwUSKkkqlXWkI3`. Three prices are
+sold: **Lane $1.99/mo**, **All $3.99/mo**, **Annual $24.99/yr**.
 
-### 4a. Test-mode dry run (the sandbox is already built)
+Set these in Render → **Environment**:
 
-The **Matchupcoach.gg sandbox** (`acct_1TwwUeKhe9XAP2K5`) is fully configured:
+       STRIPE_SECRET_KEY      = sk_live_…   (live secret key, Developers → API keys)
+       STRIPE_WEBHOOK_SECRET  = whsec_…    (signing secret of webhook we_1U1VRhKkkqlXWkI37m92oOmA)
+       STRIPE_PRICE_FOUNDING  = price_1U1VNZKkkqlXWkI3JQ4kAiRS   (Lane $1.99 — legacy env name, reads as LANE)
+       STRIPE_PRICE_STANDARD  = price_1U1VNaKkkqlXWkI3Js7b4sRE   (All $3.99)
+       STRIPE_PRICE_ALLYR     = price_1U1VNZKkkqlXWkI3UVtiw6uZ   (Annual $24.99)
+       PUBLIC_URL             = https://matchupcoach.gg
+       DATA_DIR               = /data
+
+- The webhook is `we_1U1VRhKkkqlXWkI37m92oOmA` →
+  `https://matchupcoach.gg/api/stripe/webhook`, listening to two events:
+  `checkout.session.completed` + `customer.subscription.deleted`.
+- **`DATA_DIR=/data` is REQUIRED** — it points the server at the persistent
+  disk. Without it, accounts and memberships are written to the ephemeral
+  filesystem and are wiped on every deploy/restart.
+- `numInstances` must stay 1 — file-backed in-memory state.
+
+Without `STRIPE_WEBHOOK_SECRET` set, someone who pays and closes the tab before
+returning is charged with no access, and cancellations never revoke access.
+
+### 4a. Sandbox (historical reference only — superseded by the live config above)
+
+The **Matchupcoach.gg sandbox** (`acct_1TwwUeKhe9XAP2K5`) was used for the
+test-mode dry run. It is a SEPARATE account — none of its ids exist in live
+mode:
 
 | Thing | Value |
 |---|---|
@@ -73,45 +94,13 @@ The **Matchupcoach.gg sandbox** (`acct_1TwwUeKhe9XAP2K5`) is fully configured:
 | Webhook | `we_1U1Sy0Khe9XAP2K569FXzCDN` → `https://matchupcoach.gg/api/stripe/webhook` (2 events) |
 | Portal config | `bpc_1U1SzzKhe9XAP2K5I4V74Ujv` — cancel at period end, plan switching OFF |
 
-Plan switching is deliberately OFF so a Founding Member can never move
-themselves onto the $3.99 price and lose the lock.
-
-To dry-run, set these in Render → **Environment** (the two secrets are yours to
-copy — the key from **Developers → API keys**, the `whsec_…` from the webhook's
-**Signing secret → reveal**):
-
-       STRIPE_SECRET_KEY      = sk_test_…   (sandbox secret key)
-       STRIPE_PRICE_FOUNDING  = price_1U1SrXKhe9XAP2K5vEzYo8SA
-       STRIPE_PRICE_STANDARD  = price_1U1SrXKhe9XAP2K5GkltlMSO
-       STRIPE_WEBHOOK_SECRET  = whsec_…
-       PUBLIC_URL             = https://matchupcoach.gg
-       EARLY_ACCESS           = 1
-
-Save → Render redeploys → `/api/config` returns `stripeEnabled:true`. Subscribe
-with test card `4242 4242 4242 4242`, any future expiry, any CVC. Success
-returns to `/?mc_checkout=success&session_id=…`, which the app confirms
-server-side before unlocking. Then check the webhook's **Event deliveries** tab
+Plan switching is deliberately OFF so a member can never move themselves onto
+another price and lose their lock. To dry-run again, swap the env vars to the
+sandbox `sk_test_…` key, sandbox price ids, and sandbox `whsec_…`, then
+subscribe with test card `4242 4242 4242 4242`, any future expiry, any CVC.
+Success returns to `/?mc_checkout=success&session_id=…`, which the app confirms
+server-side before unlocking; check the webhook's **Event deliveries** tab
 shows a 200, and that "Manage membership" opens the portal.
-
-### 4b. Going live
-
-The sandbox is a SEPARATE account — none of the ids above exist in live mode.
-
-1. **Switch to live account** → activate payments (business details + bank
-   account for payouts). This part is yours; it needs your real identity docs.
-2. Recreate the same product + two USD monthly prices ($1.99, $3.99) in live
-   mode, and the same webhook endpoint + events.
-3. Swap the Render vars to the live `sk_live_…`, the live `price_…` ids and the
-   live `whsec_…`. Everything else stays the same.
-4. Charge yourself $1.99 once as a smoke test, then refund it from the
-   dashboard.
-
-Without `STRIPE_WEBHOOK_SECRET` set, someone who pays and closes the tab before
-returning is charged with no access, and cancellations never revoke access.
-
-**Ending Early Access later:** set `EARLY_ACCESS=0` and redeploy. New
-subscribers pay $3.99; every existing Founding Member's subscription stays on
-the $1.99 price object in Stripe automatically.
 
 ## 5. After it's live
 

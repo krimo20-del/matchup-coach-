@@ -24,6 +24,9 @@ const PAYMENTS_MODE = process.env.PAYMENTS_MODE || 'demo';
 // id whose authorized origins include https://matchupcoach.gg. Unset = the
 // frontend hides the Google button entirely (no shared demo account).
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+// Moderation: comma-separated user keys (lowercase) allowed to delete ANY
+// matchup note, e.g. ADMIN_USERS=kristopher. Authors can always delete their own.
+const ADMIN_USERS = (process.env.ADMIN_USERS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
 
 // Stripe (hosted Checkout). Set STRIPE_SECRET_KEY (sk_live_… or sk_test_…) to
 // turn on real payments; the customer enters their card on Stripe's page, not
@@ -76,6 +79,17 @@ const founders = loadJson('founders.json', { claimed: 0 });
 const fulfilled = loadJson('fulfilled.json', {}); // stripe session id -> true (idempotent fulfillment)
 const commentsDb = loadJson('comments.json', {}); // matchup thread key -> [{id, uk, name, text, ts}]
 const liveWr = loadJson('live-wr.json', {}); // '<lane>:<a>:<b>' -> { wr, games, ts }  (wr null = negative cache)
+
+// Startup sweep: expired sessions otherwise accumulate in sessions.json forever
+// (they were only pruned lazily, when their own token was next presented).
+{
+  let swept = false;
+  const nowStart = Date.now();
+  for (const t of Object.keys(sessions)) {
+    if (!sessions[t] || sessions[t].exp < nowStart) { delete sessions[t]; swept = true; }
+  }
+  if (swept) saveJson('sessions.json', sessions);
+}
 
 // ---------- live win rate (lolalytics, weekly per matchup) ----------
 // Refresh cadence: a matchup's WR is re-fetched at most once every 7 days; a
@@ -135,8 +149,13 @@ function fulfillStripeSession(sid, sess) {
   // arrives late, fulfilling it would overwrite the newer plan and cancel the
   // newer subscription. Mark it handled and cancel ITS sub instead — the buyer
   // already replaced it with a newer purchase.
+  // Compare like-for-like: the stored plan carries the CREATION time of the
+  // session that fulfilled it (sessCreated). Comparing against plan.since (a
+  // local fulfillment wall-clock) discarded any second purchase whose session
+  // was created before the first purchase was fulfilled — a buyer with two
+  // checkout tabs paid for an upgrade that was silently voided and cancelled.
   const createdMs = (sess.created | 0) * 1000;
-  if (u.plan && u.plan.since && createdMs && createdMs < u.plan.since) {
+  if (u.plan && createdMs && createdMs < (u.plan.sessCreated || u.plan.since)) {
     fulfilled[sid] = true; saveJson('fulfilled.json', fulfilled);
     const staleSub = stripeId(sess.subscription);
     if (staleSub && staleSub !== u.plan.subId && STRIPE_ON) cancelStripeSub(u, staleSub);
@@ -150,6 +169,9 @@ function fulfillStripeSession(sid, sess) {
     type: spec.type,
     price: parseFloat(md.price || '') || spec.price,
     since: Date.now(),
+    // The fulfilled session's own Stripe creation time — what the ordering
+    // guard above compares against (same clock as sess.created).
+    sessCreated: createdMs,
     // Stripe sends these as bare ids, but returns objects when expanded. Accept
     // both: subId is what customer.subscription.deleted matches on to revoke
     // access, and custId is what opens the billing portal — losing either
@@ -244,20 +266,27 @@ function sendJson(res, code, obj) {
 }
 function readBody(req) {
   return new Promise((resolve) => {
-    let raw = '';
-    let over = false;
-    req.on('data', (c) => { raw += c; if (raw.length > 10240) { over = true; req.destroy(); } });
-    req.on('end', () => { if (over) return resolve({}); try { resolve(JSON.parse(raw || '{}')); } catch (e) { resolve({}); } });
+    // Collect Buffers and decode ONCE — `raw += chunk` decoded each chunk
+    // independently, corrupting multi-byte UTF-8 split across TCP chunks.
+    const chunks = [];
+    let n = 0, over = false;
+    req.on('data', (c) => { chunks.push(c); n += c.length; if (n > 10240) { over = true; chunks.length = 0; req.destroy(); } });
+    req.on('end', () => { if (over) return resolve({}); try { resolve(JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}')); } catch (e) { resolve({}); } });
     req.on('error', () => resolve({}));
   });
 }
-// Raw body (unparsed) — Stripe webhook signatures are computed over the exact bytes.
+// Raw body (unparsed) — Stripe webhook signatures are computed over the exact
+// bytes, so chunks are concatenated as Buffers and decoded once. Per-chunk
+// string coercion turned a multi-byte character straddling a chunk boundary
+// into two U+FFFD halves, failing signature verification on any payload with
+// non-ASCII (e.g. a cardholder name like "José"). Cap is byte length.
 function readRawBody(req, cap) {
   cap = cap || 262144;
   return new Promise((resolve) => {
-    let raw = '';
-    req.on('data', (c) => { raw += c; if (raw.length > cap) { raw = ''; req.destroy(); } });
-    req.on('end', () => resolve(raw));
+    const chunks = [];
+    let n = 0;
+    req.on('data', (c) => { chunks.push(c); n += c.length; if (n > cap) { chunks.length = 0; req.destroy(); } });
+    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
     req.on('error', () => resolve(''));
   });
 }
@@ -382,6 +411,31 @@ function throttled(ip) {
   return arr.length > 30;
 }
 
+// Separate, looser limiter for GET /api/wr — it's hit once per matchup view by
+// anonymous visitors, so the auth throttle above is too tight for it. Fixed
+// window: 60 requests per IP per minute.
+const wrHits = new Map();
+function wrThrottled(ip) {
+  const now = Date.now();
+  const h = wrHits.get(ip);
+  if (!h || now - h.ts > 60000) {
+    if (wrHits.size > 5000) wrHits.clear(); // memory backstop
+    wrHits.set(ip, { count: 1, ts: now });
+    return false;
+  }
+  h.count++;
+  return h.count > 60;
+}
+
+// Cap the live-WR cache so live-wr.json can't grow without bound: past 50k
+// entries, evict the ~1000 oldest by fetch timestamp. Call before saving.
+function liveWrTrim() {
+  const keys = Object.keys(liveWr);
+  if (keys.length <= 50000) return;
+  keys.sort((x, y) => ((liveWr[x] && liveWr[x].ts) || 0) - ((liveWr[y] && liveWr[y].ts) || 0));
+  for (let i = 0; i < 1000 && i < keys.length; i++) delete liveWr[keys[i]];
+}
+
 // ---------- static ----------
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
@@ -446,8 +500,8 @@ function sendStatic(res, rel) {
     // /matchup/<lane>/a-vs-b/open — without the lane/open handling the greedy
     // groups swallowed the path segments and produced titles like
     // "Top/darius vs Garen/open".
-    const mm = /^matchup\/(?:leagueoflegends\/lol\/|(?:top|mid|bot|support|jungle)\/)?(.+?)-vs-(.+?)(?:\/open)?\/?$/.exec(rel);
-    if (mm) mu = { you: prettyChamp(mm[1]), foe: prettyChamp(mm[2]), aSlug: mm[1], bSlug: mm[2] };
+    const mm = /^matchup\/(?:leagueoflegends\/lol\/|(top|mid|bot|support|jungle)\/)?(.+?)-vs-(.+?)(?:\/open)?\/?$/.exec(rel);
+    if (mm) mu = { you: prettyChamp(mm[2]), foe: prettyChamp(mm[3]), aSlug: mm[2], bSlug: mm[3], lane: mm[1] || '' };
   }
   if (!withinRoot(full) || !fs.existsSync(full) || !fs.statSync(full).isFile()) {
     const notFound = path.join(ROOT, '404.html');
@@ -462,11 +516,16 @@ function sendStatic(res, rel) {
   // scrapers and search engines see a tailored card without running the app's JS.
   if (mu) {
     let html = fs.readFileSync(full, 'utf8');
-    // canonical is always the SEO path, so a legacy /matchup/a-vs-b hit declares the new URL
-    const url = PUBLIC_URL + '/matchup/leagueoflegends/lol/' + mu.aSlug + '-vs-' + mu.bSlug;
+    // Lane-aware hits canonicalise to the lane-aware static guide (the URL the
+    // sitemap actually lists); only the legacy lane-less shapes fall back to
+    // the old SEO path. Dropping the lane collapsed two lanes' guides onto one
+    // dead canonical (/matchup/leagueoflegends/lol/... is in no sitemap).
+    const url = mu.lane
+      ? PUBLIC_URL + '/matchup/' + mu.lane + '/' + mu.aSlug + '-vs-' + mu.bSlug + '/'
+      : PUBLIC_URL + '/matchup/leagueoflegends/lol/' + mu.aSlug + '-vs-' + mu.bSlug;
     const pair = mu.you + ' vs ' + mu.foe;
     const ogTitle = htmlEsc(pair + ' — MatchupCoach.gg');
-    const desc = htmlEsc('How to play ' + pair + ': power spikes, cooldown timers, wave plan, and build path for the matchup.');
+    const desc = htmlEsc('How to play ' + pair + ': power spikes, cooldown timers, wave plan, and win conditions for the matchup.');
     html = html
       .replace(/<title>[\s\S]*?<\/title>/, '<title>Matchup — ' + htmlEsc(pair) + ' | MatchupCoach.gg</title>')
       .replace(/(<meta name="description" content=")[^"]*(">)/, '$1' + desc + '$2')
@@ -503,9 +562,15 @@ async function handleApi(req, res, pathname, ip) {
     const b = await readBody(req);
     const name = String(b.name || '').trim();
     const pass = String(b.pass || '');
+    // Honeypot: "website" is a hidden field no human ever fills. A bot that
+    // does gets a silent fake success — no account, no error to learn from.
+    const trap = String(b.website || '');
+    if (trap) return sendJson(res, 200, { token: '', user: null });
     if (name.length < 3) return sendJson(res, 400, { error: 'Username needs at least 3 characters.' });
+    if (name.length > 24) return sendJson(res, 400, { error: 'Username must be 24 characters or fewer.' });
     if (!/^[A-Za-z0-9 ._-]+$/.test(name)) return sendJson(res, 400, { error: 'Letters, numbers, spaces, dots and dashes only.' });
     if (pass.length < 6) return sendJson(res, 400, { error: 'Password needs at least 6 characters.' });
+    if (pass.length > 128) return sendJson(res, 400, { error: 'Password must be 128 characters or fewer.' });
     const key = name.toLowerCase();
     if (users[key]) return sendJson(res, 409, { error: 'That username is taken - sign in instead.' });
     const salt = newSalt();
@@ -526,6 +591,7 @@ async function handleApi(req, res, pathname, ip) {
   }
 
   if (route === 'POST /api/google') {
+    if (throttled(ip)) return sendJson(res, 429, { error: 'Too many attempts - wait a minute and try again.' });
     // Real Google Sign-In: the frontend sends the Google ID token (JWT); we
     // verify it with Google and key the account on the stable Google user id,
     // so every person gets their OWN account.
@@ -590,10 +656,28 @@ async function handleApi(req, res, pathname, ip) {
     let text = String(body.text || '').replace(/\s+$/g, '').replace(/^\s+/g, '');
     if (!text) return sendJson(res, 400, { error: 'Write something first.' });
     if (text.length > 1000) text = text.slice(0, 1000);
+    // Anti-spam: links are the classic comment-spam vector — none allowed.
+    if (/(https?:\/\/|www\.|\.(com|gg|net|org|io|xyz)\b)/i.test(text)) return sendJson(res, 400, { error: "Links aren't allowed in matchup notes." });
+    // Per-account pacing on top of the per-IP throttle above: at least 20s
+    // between notes, at most 30 notes per UTC day.
+    const nowMs = Date.now();
+    if (me.cmtLast && nowMs - me.cmtLast < 20000) return sendJson(res, 429, { error: 'Give it a few seconds between notes.' });
+    const utcDay = new Date(nowMs).toISOString().slice(0, 10);
+    if (me.cmtDay === utcDay && (me.cmtCount | 0) >= 30) return sendJson(res, 429, { error: "That's the daily note limit — back tomorrow." });
+    // Duplicate rejection: identical to one of this account's last 5 notes.
+    const textHash = crypto.createHash('sha1').update(text).digest('hex');
+    if (Array.isArray(me.cmtHashes) && me.cmtHashes.includes(textHash)) return sendJson(res, 400, { error: 'You already posted that.' });
     if (thread.length >= 1000) thread.shift(); // hard cap per thread
     const c = { id: crypto.randomBytes(9).toString('hex'), uk: me.key, name: me.name, text, ts: Date.now() };
     thread.push(c);
     commentsDb[key] = thread;
+    // Persist the poster's anti-spam counters ONLY when a note actually posts —
+    // rejections above never touch users.json.
+    me.cmtLast = nowMs;
+    if (me.cmtDay === utcDay) me.cmtCount = (me.cmtCount | 0) + 1;
+    else { me.cmtDay = utcDay; me.cmtCount = 1; }
+    me.cmtHashes = (Array.isArray(me.cmtHashes) ? me.cmtHashes : []).concat(textHash).slice(-5);
+    saveJson('users.json', users);
     saveJson('comments.json', commentsDb);
     return sendJson(res, 200, { comment: { id: c.id, name: c.name, text: c.text, ts: c.ts, mine: true } });
   }
@@ -603,10 +687,12 @@ async function handleApi(req, res, pathname, ip) {
     if (!me) return sendJson(res, 401, { error: 'Sign in first.' });
     const body = await readBody(req);
     const id = String(body.id || '');
+    // Moderators (ADMIN_USERS env) may delete ANY note; authors only their own.
+    const isAdmin = ADMIN_USERS.includes(me.key);
     let removed = false;
     for (const k of Object.keys(commentsDb)) {
       const arr = commentsDb[k];
-      const i = arr.findIndex((c) => c.id === id && c.uk === me.key);
+      const i = arr.findIndex((c) => c.id === id && (isAdmin || c.uk === me.key));
       if (i >= 0) { arr.splice(i, 1); removed = true; break; }
     }
     if (removed) saveJson('comments.json', commentsDb);
@@ -618,6 +704,7 @@ async function handleApi(req, res, pathname, ip) {
   // matchup (lazy: only pairs people actually view get fetched). wr:null => the
   // frontend keeps its bundled number. Data © LoLalytics; shown with attribution.
   if (pathname === '/api/wr' && req.method === 'GET') {
+    if (wrThrottled(ip)) return sendJson(res, 429, { error: 'Slow down.' });
     const q = (function () { try { return new URL(req.url, 'http://x').searchParams; } catch (e) { return new URLSearchParams(); } })();
     const sl = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
     const a = sl(q.get('a')), b = sl(q.get('b'));
@@ -641,13 +728,14 @@ async function handleApi(req, res, pathname, ip) {
         try {
           const wr = await wrFetch(a, b, lane);
           const ts = Date.now();
-          if (wr == null) { liveWr[key] = { wr: null, ts }; saveJson('live-wr.json', liveWr); return { wr: null, source: null, ts }; }
+          if (wr == null) { liveWr[key] = { wr: null, ts }; liveWrTrim(); saveJson('live-wr.json', liveWr); return { wr: null, source: null, ts }; }
           liveWr[key] = { wr, ts };
           liveWr[rkey] = { wr: Math.round((100 - wr) * 100) / 100, ts };
+          liveWrTrim();
           saveJson('live-wr.json', liveWr);
           return { wr, ts, age: 0, source: 'lolalytics' };
         } catch (e) {
-          if (!liveWr[key]) { liveWr[key] = { wr: null, ts: Date.now() }; saveJson('live-wr.json', liveWr); }
+          if (!liveWr[key]) { liveWr[key] = { wr: null, ts: Date.now() }; liveWrTrim(); saveJson('live-wr.json', liveWr); }
           // serve a stale positive value if we have one, else null (frontend falls back)
           return (hit && hit.wr != null) ? { wr: hit.wr, ts: hit.ts, source: 'lolalytics', stale: true } : { wr: null, source: null };
         }
@@ -726,8 +814,13 @@ async function handleApi(req, res, pathname, ip) {
     if (existingCust) params.customer = existingCust;
     try {
       let r = await stripeApi('POST', '/v1/checkout/sessions', params);
-      if (r.status >= 400 && existingCust) {
-        // Stale/deleted customer id must not block a purchase — retry fresh.
+      // Stale/deleted customer id must not block a purchase — retry fresh.
+      // ONLY for that cause (resource_missing): retrying every 4xx/5xx without
+      // `customer` minted a duplicate Stripe customer on a transient 429/500,
+      // permanently splitting the buyer's billing identity.
+      const custGone = r.status >= 400 && r.json && r.json.error &&
+        (r.json.error.code === 'resource_missing' || /No such customer/i.test(r.json.error.message || ''));
+      if (custGone && existingCust) {
         delete params.customer;
         r = await stripeApi('POST', '/v1/checkout/sessions', params);
       }
@@ -769,13 +862,15 @@ async function handleApi(req, res, pathname, ip) {
     const u = authUser(req);
     if (!u) return sendJson(res, 401, { error: 'Sign in first.' });
     const plan = u.plan;
+    // Sweep any replaced-but-not-yet-cancelled subscriptions (a failed
+    // auto-cancel during an upgrade) BEFORE any early return — an orphan must
+    // stay retryable even after the plan itself is revoked (cancelled/lapsed),
+    // otherwise the customer keeps being billed with no self-serve recovery.
+    if (STRIPE_ON && u.orphanSubs && u.orphanSubs.length) await Promise.all(u.orphanSubs.slice().map((s) => cancelStripeSub(u, s)));
     // Any paid subscription plan can be managed (role/all/allyr + legacy member).
     if (!plan || !(plan.type === 'member' || plan.type === 'role' || plan.type === 'all' || plan.type === 'allyr')) return sendJson(res, 400, { error: 'No active membership to manage.' });
     if (!STRIPE_ON) return sendJson(res, 503, { error: 'Billing management opens once payments are live. Email support@matchupcoach.gg to cancel.' });
     if (!plan.custId) return sendJson(res, 409, { error: 'We could not find your billing profile - email support@matchupcoach.gg and we will cancel it for you.' });
-    // Sweep any replaced-but-not-yet-cancelled subscriptions (a failed
-    // auto-cancel during an upgrade) before showing billing state.
-    if (u.orphanSubs && u.orphanSubs.length) await Promise.all(u.orphanSubs.slice().map((s) => cancelStripeSub(u, s)));
     try {
       const r = await stripeApi('POST', '/v1/billing_portal/sessions', {
         customer: plan.custId,

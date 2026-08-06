@@ -109,8 +109,12 @@ function shell(title, desc, canonical, jsonld, body) {
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${canonical}">
-<meta property="og:image" content="${ORIGIN}/og-image.svg">
+<meta property="og:image" content="${ORIGIN}/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MatchupCoach.gg — Challenger-level League of Legends matchup coaching">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://matchupcoach.gg/og-image.png">
 <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
 <style>${CSS}</style>
 </head>

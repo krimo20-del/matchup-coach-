@@ -23,6 +23,10 @@
   for = "/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+    # Clickjacking + MIME-sniffing protection for the static pages (the API
+    # already sets both from server.js; Netlify sends neither by default).
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
 
 # The self-healing build stamp must never be cached — it's how a stale page
 # learns a new build shipped and reloads itself.
@@ -38,11 +42,18 @@
   status = 200
   force = true
 
-# Serve the app at the root URL (skip the index.html meta-refresh hop).
+# Serve the app at the root URL. force = true is REQUIRED: the physical
+# index.html otherwise wins and its meta-refresh hop DROPS the query string —
+# which silently killed the Stripe success return (?mc_checkout=success&
+# session_id=…) in production, leaving buyers dependent on webhook latency
+# for their access. With the rewrite forced, the app loads at / with the
+# query intact and the confirm path runs. (The app's <head> carries its own
+# canonical + JSON-LD, so shadowing index.html loses nothing.)
 [[redirects]]
   from = "/"
   to = "/MatchupCoach.dc.html"
   status = 200
+  force = true
 
 # Matchup deep links (/matchup/a-vs-b and /matchup/leagueoflegends/lol/a-vs-b)
 # load the app, which reads the path and opens that matchup (_openFromUrl).
@@ -102,6 +113,12 @@
 # underscore — none of them should be publicly readable.
 [[redirects]]
   from = "/_*"
+  to = "/404.html"
+  status = 404
+  force = true
+# Internal working notes (content-pipeline resume files) — not for the public.
+[[redirects]]
+  from = "/RESUME-*"
   to = "/404.html"
   status = 404
   force = true

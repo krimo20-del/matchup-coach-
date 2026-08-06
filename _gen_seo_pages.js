@@ -118,7 +118,7 @@ function shell(title, desc, canonical, jsonld, body) {
 <div class="wrap">
 <header class="site"><a class="logo" href="/">Matchup<b>Coach</b>.gg</a></header>
 ${body}
-<footer>MatchupCoach.gg — Challenger-level matchup coaching for every champion, every lane. <a href="/matchup/">All matchup guides</a> · <a href="/">Open the interactive coach</a><br>Updated ${TODAY}. MatchupCoach.gg isn't endorsed by Riot Games.</footer>
+<footer>MatchupCoach.gg — Challenger-level matchup coaching for every champion, every lane. <a href="/matchup/">All matchup guides</a> · <a href="/">Open the interactive coach</a><br>Updated ${TODAY} — refreshed every major League patch. MatchupCoach.gg isn't endorsed by Riot Games.</footer>
 </div>
 </body>
 </html>`;

@@ -46,7 +46,7 @@
 <script>window.MC_GOOGLE_CLIENT_ID = "993471719983-g8fkkrqom5ap0f7pdf7tkg63v86d77l4.apps.googleusercontent.com";
 // Release version — bump this ONE line each batched deploy (v2.5, v2.6…).
 // Logged to console so you can confirm which build is actually live after publishing.
-window.MC_VERSION = "v3.3";
+window.MC_VERSION = "v3.4";
 try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-weight:700;font-size:13px"); } catch (e) {}
 // SELF-HEALING CACHE: fetch a tiny always-fresh build stamp; if the page a
 // browser cached is older than what's deployed, reload ONCE (guarded against
@@ -1158,6 +1158,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
     </div>
     </sc-if>
 
+
     <!-- ===== JUNGLERS HAVE A MATCHUP TOO ===== -->
     <div style="max-width:960px; margin:0 auto 18px; padding:0 28px;">
       <div style="display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border-radius:14px; background:rgba(61,220,151,0.07); border:1px solid rgba(61,220,151,0.28);">
@@ -1202,28 +1203,33 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
         </div>
         <div style="text-align:center; margin-top:16px; font-size:12.5px; color:#7d8499;">All five roles live — every champion, every lane matchup.</div>
 
-        <!-- ===== FREE SAMPLE MATCHUPS (1 iconic per role · no signup) ===== -->
+        <!-- ===== FREE TODAY — 3 champions per role (free account · 24h rotation) ===== -->
+        <sc-if value="{{ showFreeToday }}" hint-placeholder-val="{{ true }}">
         <div style="margin-top:34px;">
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
-            <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:16px; color:#f4efe8; letter-spacing:0.3px;">Free sample matchups</span>
-            <span style="font-family:'Chakra Petch',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.6px; color:#3ddc97; padding:3px 8px; border-radius:6px; background:rgba(61,220,151,0.12); border:1px solid rgba(61,220,151,0.32); white-space:nowrap;">NO SIGNUP NEEDED</span>
+            <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:16px; color:#f4efe8; letter-spacing:0.3px;">🎁 Free champions today</span>
+            <span style="font-family:'Chakra Petch',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.6px; color:#3ddc97; padding:3px 8px; border-radius:6px; background:rgba(61,220,151,0.12); border:1px solid rgba(61,220,151,0.32); white-space:nowrap;">FREE WITH ANY ACCOUNT</span>
             <span style="flex:1; height:1px; background:rgba(255,255,255,0.07);"></span>
-            <span style="font-size:11.5px; color:#7d8499; white-space:nowrap;">one iconic lane per role — tap to open</span>
+            <span style="font-size:11.5px; color:#7d8499; white-space:nowrap;">every matchup for these champions — a new one per role every 24h</span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:9px;">
-            <sc-for list="{{ showcase }}" as="c" hint-placeholder-count="5">
-              <button onClick="{{ c.onClick }}" style="position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 8px 14px; min-width:0; border-radius:14px; border:1px solid rgba(255,255,255,0.08); border-top:2.5px solid {{ c.a }}; background:linear-gradient(180deg,#13151f,#0c0e15); cursor:pointer; transition:transform 0.16s, border-color 0.16s; font-family:'Manrope',sans-serif; text-align:center;" style-hover="transform:translateY(-3px); border-color:rgba(232,184,75,0.5);">
-                <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:9px; letter-spacing:0.6px; color:#f0cd72;">{{ c.role }}</span>
-                <span style="display:flex; align-items:center; justify-content:center; max-width:100%;">
-                  <span data-champ-icon="{{ c.left }}" style="flex:0 0 auto; width:38px; height:38px; border-radius:9px; background:{{ c.a }}; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:rgba(8,10,14,0.85);">{{ c.aInit }}</span>
-                  <span style="position:relative; z-index:2; margin:0 -5px; flex:0 0 auto; width:18px; height:18px; border-radius:50%; background:#0c0e15; border:1px solid rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:7px; color:#f0cd72;">VS</span>
-                  <span data-champ-icon="{{ c.right }}" style="flex:0 0 auto; width:38px; height:38px; border-radius:9px; background:{{ c.b }}; border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:rgba(8,10,14,0.85);">{{ c.bInit }}</span>
-                </span>
-                <span style="width:100%; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; line-height:1.25; color:#eef0f6; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;">{{ c.champs }}</span>
-              </button>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:9px;">
+            <sc-for list="{{ freeToday }}" as="fr" hint-placeholder-count="5">
+              <div style="display:flex; flex-direction:column; gap:8px; padding:12px 10px; border-radius:14px; border:1px solid rgba(255,255,255,0.08); border-top:2.5px solid {{ fr.accent }}; background:linear-gradient(180deg,#13151f,#0c0e15);">
+                <span style="text-align:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:10px; letter-spacing:0.8px; color:{{ fr.accent }};">{{ fr.label }}</span>
+                <sc-for list="{{ fr.champs }}" as="fc" hint-placeholder-count="3">
+                  <button onClick="{{ fc.onClick }}" style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.04); cursor:pointer; font-family:'Manrope',sans-serif; text-align:left; min-width:0;" style-hover="border-color:#3ddc97; background:rgba(61,220,151,0.08);">
+                    <span data-champ-icon="{{ fc.champ }}" style="flex:0 0 auto; width:30px; height:30px; border-radius:8px; background:#1c2030; border:1px solid rgba(255,255,255,0.14);"></span>
+                    <span style="min-width:0; display:flex; flex-direction:column;">
+                      <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:#eef0f6; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ fc.champ }}</span>
+                      <span style="font-size:10px; color:#7d8499;">tap → pick opponent</span>
+                    </span>
+                  </button>
+                </sc-for>
+              </div>
             </sc-for>
           </div>
         </div>
+        </sc-if>
 
 
         <!-- ===== ENEMY JUNGLE TRACKER (same boxes as the lane page) ===== -->
@@ -1611,7 +1617,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
           </div>
         </div>
         <div style="border-top:1px solid rgba(255,255,255,0.05); padding-top:14px; display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
-          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">v3.3</span></span>
+          <span style="font-size:11px; color:#5f6578;">© 2026 MatchupCoach.gg · Operated from Ontario, Canada · All rights reserved. · <span style="color:#4c5263;">v3.4</span></span>
           <span style="font-size:11px; color:#4c5263; max-width:680px; line-height:1.5;">MatchupCoach is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</span>
         </div>
       </div>
@@ -3844,19 +3850,31 @@ class Component extends DCLogic {
   // Free-tier rotation index \u2014 one whole-day step (UTC), so the free champions
   // (one per role) and the featured samples refresh once per day.
   _dayIndex() { return Math.floor(Date.now() / 864e5); }
-  // Today's free champion for a given role (rotates daily).
-  dailyFreeChamp(role) {
+  // Today's free champion(s) for a given role — FREE_PER_ROLE per day, rotating
+  // every 24h (UTC). Deterministic — every visitor sees the same champion(s),
+  // no server involved. Kris's ruling 2026-08-06: ONE per role (was briefly 3);
+  // to change the count, edit FREE_PER_ROLE — the rest of the plumbing is
+  // array-based and adapts.
+  dailyFreeChamps(role) {
+    var FREE_PER_ROLE = 1;
     var R = window.ROSTERS || {};
     var pool = (R[role] || []).reduce(function(a, g){ return a.concat(g.c); }, []);
-    if (!pool.length) return 'Aatrox';
+    if (!pool.length) return ['Aatrox'];
     pool = pool.slice().sort();
+    var n = pool.length;
     var d = this._dayIndex() + (role.charCodeAt(0) * 7); // offset so roles don't all land on the same index
-    return pool[((d % pool.length) + pool.length) % pool.length];
+    var base = ((d % n) + n) % n;
+    var out = [];
+    for (var i = 0; i < FREE_PER_ROLE && i < n; i++) out.push(pool[(base + Math.floor((i * n) / FREE_PER_ROLE) + (i ? 1 : 0)) % n]);
+    // de-dupe tiny pools where the offsets can collide
+    return out.filter(function(c, i2){ return out.indexOf(c) === i2; });
   }
-  // The five free champions available today (one per role).
+  // Back-compat: the first of today's trio (claimFree/weekChamp use it).
+  dailyFreeChamp(role) { return this.dailyFreeChamps(role)[0]; }
+  // The free champions available today, three per role.
   freeTodayList() {
     var self = this;
-    return ['top', 'jungle', 'mid', 'bot', 'support'].map(function(role){ return { role: role, champ: self.dailyFreeChamp(role) }; });
+    return ['top', 'jungle', 'mid', 'bot', 'support'].map(function(role){ return { role: role, champs: self.dailyFreeChamps(role) }; });
   }
   weekChamp() { return this.dailyFreeChamp('top'); }
   claimFree() {
@@ -3981,8 +3999,13 @@ class Component extends DCLogic {
     var u = this.state.user;
     var laneRole = this._pendingRole(pending);
     if (u && u.plan && this._planCovers(u.plan, laneRole)) return false;
+    // Free tier: any signed-in account gets a free champion PER ROLE each day
+    // (24h UTC rotation). Playing AS today's free champ opens all of that
+    // champion's matchups in that lane — enemy switching included.
+    var youChamp = pending && (pending.you || (pending.kind === 'pick' ? this.state.myChamp : ''));
+    if (u && youChamp && this.dailyFreeChamps(laneRole).indexOf(youChamp) !== -1) return false;
     this.setState({ pendingMU: pending });
-    if (!u) this.openAuth('signup', 'Create your account, then pick a plan — from $1.99/month.');
+    if (!u) this.openAuth('signup', 'Create a free account — a free champion in every role, every day, plans from $1.99/month.');
     else { this.setState({ showPaywall: true, paywallRole: laneRole }); this._nav(); }
     return true;
   }
@@ -4249,7 +4272,9 @@ class Component extends DCLogic {
   closePaywall() { this.setState({ showPaywall: false }); }
   setRole(r) { this.setState({ role: r, homeStep: 'you', search: '' }); }
   pickYou(c) { this.setState({ myChamp: c, homeStep: 'enemy', search: '' }); }
-  pickEnemy(c) { var freePick = this.state.myChamp && this.state.role && this.state.myChamp === this.dailyFreeChamp(this.state.role); if (!freePick && this._gated({ kind: 'pick', enemy: c })) return; this.setState({ enemyChamp: c, view: 'demo', matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); this._top(); this._nav(); this.loadComments(this.state.myChamp, c, this.state.role); this.refreshLiveWr(this.state.myChamp, c, this.state.role); }
+  // The free-champion path lives inside _gated now (and requires an account —
+  // the old freePick bypass let signed-out visitors straight through).
+  pickEnemy(c) { if (this._gated({ kind: 'pick', enemy: c })) return; this.setState({ enemyChamp: c, view: 'demo', matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); this._top(); this._nav(); this.loadComments(this.state.myChamp, c, this.state.role); this.refreshLiveWr(this.state.myChamp, c, this.state.role); }
   backStep() { this.setState(s => ({ homeStep: s.homeStep === 'enemy' ? 'you' : 'role', search: '' })); }
   setSearch(e) { this.setState({ search: e.target.value }); }
   setLevel(l) { this.setState({ level: l }); }
@@ -7400,14 +7425,10 @@ class Component extends DCLogic {
           left: FIX[l] || l, right: FIX[r] || r,
           aInit: init(l), bInit: init(r) };
       });
-        // One iconic matchup per role (TOP / JG / MID / BOT / SUP), rotated daily
-        // within each role so it stays fresh but always shows all five lanes.
-        var d = Math.floor(Date.now() / 864e5), out = [];
-        ['TOP', 'JG', 'MID', 'BOT', 'SUP'].forEach(function(rl){
-          var pool = SHOWPOOL.filter(function(c){ return c.role === rl; });
-          if (pool.length) out.push(pool[((d % pool.length) + pool.length) % pool.length]);
-        });
-        return out;
+        // RETIRED 2026-08-06 (Kris): the no-signup sample tiles are gone — the
+        // free tier (one free champion per role daily, account required) is the
+        // acquisition path now. SHOWPOOL kept for reference; nothing renders it.
+        return [];
       })(),
       heroStats: (function(self){
         var R = window.ROSTERS || {}, total = 0;
@@ -7532,18 +7553,22 @@ class Component extends DCLogic {
           })
         };
       })(this),
-      // Home: today's free champions, one per role (rotates daily).
+      // Home: today's free champions — THREE per role, 24h rotation. Hidden for
+      // plan holders (they already have more than the free tier).
+      showFreeToday: !(this.state.user && this.state.user.plan),
       freeToday: (function(self){
         var ACC = { top: '#f0883d', jungle: '#3ddc97', mid: '#46c6f5', bot: '#ff8bd0', support: '#9b8cff' };
         var LBL = { top: 'TOP', jungle: 'JG', mid: 'MID', bot: 'ADC', support: 'SUP' };
         return self.freeTodayList().map(function(x){
-          return { role: x.role, label: LBL[x.role] || x.role.toUpperCase(), champ: x.champ, accent: ACC[x.role] || '#7fe3b8',
-            onClick: function(){
-              // Free champions require a (free) account — clicking sends signed-out
-              // visitors to signup; the sample matchups stay open without login.
-              if (!self.state.user) { self.openAuth('signup', 'Create a free account to study today’s free champions — ' + x.champ + ' plus one more per role, refreshed daily.'); return; }
-              if (x.role === 'jungle') { self.openJg(x.champ, (window.JG_DB && window.JG_DB[x.champ]) ? Object.keys(window.JG_DB[x.champ])[0] : "Kha'Zix", true); } else { self.setState({ role: x.role, myChamp: x.champ, homeStep: 'enemy', search: '', view: 'home' }); self._top(); }
-            } };
+          return { role: x.role, label: LBL[x.role] || x.role.toUpperCase(), accent: ACC[x.role] || '#7fe3b8',
+            champs: x.champs.map(function(ch){
+              return { champ: ch, onClick: function(){
+                // Free champions require a (free) account — clicking sends
+                // signed-out visitors to signup first.
+                if (!self.state.user) { self.openAuth('signup', 'Create a free account to study today’s free champions — one per role, refreshed every 24 hours.'); return; }
+                if (x.role === 'jungle') { self.openJg(ch, (window.JG_DB && window.JG_DB[ch]) ? Object.keys(window.JG_DB[ch])[0] : "Kha'Zix", true); } else { self.setState({ role: x.role, myChamp: ch, homeStep: 'enemy', search: '', view: 'home' }); self._top(); }
+              } };
+            }) };
         });
       })(this),
       // Home: ENEMY-JG TRACKER for laners — pick the enemy jungler, get their
@@ -7616,7 +7641,7 @@ class Component extends DCLogic {
         });
       })(this),
       paywallTitle: 'Pick your membership',
-      paywallSub: 'Lane Pass $1.99/mo (one lane) · All Lanes $3.99/mo · or $24.99/yr annual. Cancel anytime.',
+      paywallSub: 'Lane Pass $1.99/mo (one lane) · All Lanes $3.99/mo · or $24.99/yr annual. Cancel anytime. Not ready? Your account still gets a free champion in every role, rotating every 24 hours.',
       tiers: (function(self){
         var RLL = { top: 'Top', jungle: 'Jungle', mid: 'Mid', bot: 'Bot', support: 'Support' };
         var wantRole = self.state.paywallRole || self.state.role || 'top';

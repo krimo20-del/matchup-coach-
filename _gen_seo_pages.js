@@ -224,8 +224,8 @@ ${tl}
 <div class="gate">
   <div class="gate-h">Read the rest of this matchup</div>
   <p class="gate-p">The full ${esc(aName)} vs ${esc(bName)} report continues with the <b>mid-game plan</b>, the <b>late-game and teamfight plan</b>, every <b>power spike</b> to play around, and the <b>win conditions</b> for both sides — plus cooldown tracking and the live enemy-jungle tracker inside the app.</p>
-  <a class="cta" href="/matchup/${L.key}/${uA}-vs-${uB}/open">Become a Founding Member — $1.99/month →</a>
-  <p class="gate-note">🔒 Secure checkout · 💰 7-day money-back guarantee · ✋ Cancel anytime<br>Early Access price — $3.99/month for new members after launch.</p>
+  <a class="cta" href="/matchup/${L.key}/${uA}-vs-${uB}/open">Read the full guide — plans from $1.99/month →</a>
+  <p class="gate-note">🔒 Secure checkout · 💰 7-day money-back guarantee · ✋ Cancel anytime<br>Lane Pass $1.99/mo · All Lanes $3.99/mo · Annual $24.99/yr.</p>
 </div>
 <h2>Related guides</h2>
 <p><a href="/matchup/${L.key}/${uB}-vs-${uA}/">Playing the other side? ${esc(bName)} vs ${esc(aName)} guide →</a><br>
@@ -306,8 +306,8 @@ ${rep.start ? `<h2>First clear &amp; their start</h2><p>${esc(rep.start)}</p>` :
 <div class="gate">
   <div class="gate-h">Read the rest of this matchup</div>
   <p class="gate-p">The full ${esc(you)} vs ${esc(foe)} report continues with <b>scuttle &amp; dragon rules</b>, <b>invade windows and safety boundaries</b>, the <b>top-side objective fight</b>, <b>macro rotations</b> and the <b>win condition</b> — plus the live enemy-jungle tracker that shows their start, clear and gank timers in game.</p>
-  <a class="cta" href="/matchup/jungle/${uA}-vs-${uB}/open">Become a Founding Member — $1.99/month →</a>
-  <p class="gate-note">🔒 Secure checkout · 💰 7-day money-back guarantee · ✋ Cancel anytime<br>Early Access price — $3.99/month for new members after launch.</p>
+  <a class="cta" href="/matchup/jungle/${uA}-vs-${uB}/open">Read the full guide — plans from $1.99/month →</a>
+  <p class="gate-note">🔒 Secure checkout · 💰 7-day money-back guarantee · ✋ Cancel anytime<br>Lane Pass $1.99/mo · All Lanes $3.99/mo · Annual $24.99/yr.</p>
 </div>
 <h2>Related guides</h2>
 <p><a href="/matchup/jungle/${uB}-vs-${uA}/">Playing the other side? ${esc(foe)} vs ${esc(you)} guide →</a><br>

@@ -30,19 +30,23 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 // ours. Subscriptions need Price IDs from your Stripe dashboard; the founder
 // one-time charge is a flat $24.99 Lifetime Member.
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
-// ---- Early Access / Founding Member pricing ----
-// While EARLY_ACCESS is on (default), the single membership costs $1.99/mo and
-// every subscriber is a FOUNDING MEMBER: the price + founding flag are written
-// onto their account at purchase time and never recomputed, so later price
-// changes can never touch them. When EARLY_ACCESS is turned off (set env
-// EARLY_ACCESS=0), new subscribers pay $3.99/mo (standard membership); existing
-// Founding Members keep $1.99 for life (Stripe subscriptions stay on the price
-// they subscribed to — new prices only ever apply to NEW checkout sessions).
-const EARLY_ACCESS = process.env.EARLY_ACCESS !== '0';
-const PRICE_FOUNDING = 1.99;   // Early Access — Founding Member, locked for life
-const PRICE_STANDARD = 3.99;   // after Early Access — standard membership
-const STRIPE_PRICE_FOUNDING = process.env.STRIPE_PRICE_FOUNDING || ''; // $1.99/mo recurring price id
-const STRIPE_PRICE_STANDARD = process.env.STRIPE_PRICE_STANDARD || ''; // $3.99/mo recurring price id
+// ---- Pricing: three plans, no Early Access (2026-08-06 rework) ----
+// lane  $1.99/mo  — ONE lane (top|mid|bot|support|jungle), stored on plan.role
+// all   $3.99/mo  — every lane
+// year  $24.99/yr — every lane, billed annually ($2.08/mo effective)
+// The env names STRIPE_PRICE_FOUNDING/STANDARD are kept as fallbacks so the
+// Render env set during Early Access keeps working: FOUNDING was the $1.99
+// price (now the lane price) and STANDARD the $3.99 (now all-lanes monthly).
+const PLANS = {
+  lane: { price: 1.99, label: '$1.99', per: '/mo', type: 'role' },
+  all: { price: 3.99, label: '$3.99', per: '/mo', type: 'all' },
+  year: { price: 24.99, label: '$24.99', per: '/yr', type: 'allyr' }
+};
+const ROLES = { top: 1, mid: 1, bot: 1, support: 1, jungle: 1 };
+const STRIPE_PRICE_LANE = process.env.STRIPE_PRICE_LANE || process.env.STRIPE_PRICE_FOUNDING || '';
+const STRIPE_PRICE_ALL = process.env.STRIPE_PRICE_ALL || process.env.STRIPE_PRICE_STANDARD || '';
+const STRIPE_PRICE_ALLYR = process.env.STRIPE_PRICE_ALLYR || '';
+const STRIPE_PLAN_PRICE = () => ({ lane: STRIPE_PRICE_LANE, all: STRIPE_PRICE_ALL, year: STRIPE_PRICE_ALLYR });
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || ''; // whsec_… (Developers → Webhooks)
 // Stripe "Managed Payments" (Stripe acting as merchant of record) is ON by
 // default on new accounts. It remits worldwide sales tax for you, but stacks to
@@ -99,16 +103,17 @@ function safeEq(a, b) {
 }
 
 // ---------- helpers ----------
-// Membership state shown to the frontend: whether Early Access is live, what a
-// new subscriber pays today, the post-EA price, and how many Founding Members
-// have joined (founders.json 'claimed' doubles as the member counter).
+// Membership state shown to the frontend. earlyAccess is pinned false and the
+// legacy price fields describe the all-lanes monthly plan so cached pre-rework
+// frontends render something sensible; new frontends read `plans`.
 function memberState() {
   return {
-    earlyAccess: EARLY_ACCESS,
-    price: EARLY_ACCESS ? PRICE_FOUNDING : PRICE_STANDARD,
-    priceLabel: EARLY_ACCESS ? '$1.99' : '$3.99',
-    regularPrice: PRICE_STANDARD,
-    regularLabel: '$3.99',
+    earlyAccess: false,
+    plans: { lane: PLANS.lane.price, all: PLANS.all.price, year: PLANS.year.price },
+    price: PLANS.all.price,
+    priceLabel: PLANS.all.label,
+    regularPrice: PLANS.all.price,
+    regularLabel: PLANS.all.label,
     members: founders.claimed | 0
   };
 }
@@ -116,32 +121,41 @@ function memberState() {
 const stripeId = (v) => (typeof v === 'string' && v) || (v && typeof v === 'object' && typeof v.id === 'string' && v.id) || '';
 // Stamp a paid Stripe Checkout session onto the buyer's account. Idempotent
 // (fulfilled.json), safe to call from BOTH /api/stripe/confirm and the webhook.
-// The founding flag + price come from the SESSION metadata (what was actually
-// sold), never today's config — a later price change can't rewrite history.
-// An existing membership is never downgraded: founding/memberNum are preserved.
+// The plan + price come from the SESSION metadata (what was actually sold),
+// never today's config — a later price change can't rewrite history. A new
+// purchase REPLACES the old plan (that's how a lane subscriber upgrades to
+// all-lanes: buy the bigger plan, then cancel the old sub in the portal).
 function fulfillStripeSession(sid, sess) {
   if (fulfilled[sid]) return false;
   const key = sess.client_reference_id;
   const u = users[key];
   if (!u) return false;
-  const founding = !!(sess.metadata && sess.metadata.founding === '1');
-  const paidPrice = parseFloat((sess.metadata && sess.metadata.price) || '') || (founding ? 1.99 : 3.99);
-  const prev = u.plan && u.plan.type === 'member' ? u.plan : null;
+  const md = sess.metadata || {};
+  const planKey = PLANS[md.plan] ? md.plan : 'all';
+  const spec = PLANS[planKey];
+  const prev = u.plan || null;
   const planObj = {
-    type: 'member',
-    price: prev && prev.founding ? prev.price : paidPrice,
-    founding: prev ? (prev.founding || founding) : founding,
-    since: prev ? prev.since : Date.now(),
+    type: spec.type,
+    price: parseFloat(md.price || '') || spec.price,
+    since: Date.now(),
     // Stripe sends these as bare ids, but returns objects when expanded. Accept
     // both: subId is what customer.subscription.deleted matches on to revoke
     // access, and custId is what opens the billing portal — losing either
     // silently breaks cancellation.
-    subId: stripeId(sess.subscription) || (prev && prev.subId) || '',
+    subId: stripeId(sess.subscription) || '',
     custId: stripeId(sess.customer) || (prev && prev.custId) || ''
   };
-  if (planObj.founding) {
-    if (prev && prev.memberNum) planObj.memberNum = prev.memberNum;
-    else { founders.claimed = (founders.claimed | 0) + 1; saveJson('founders.json', founders); planObj.memberNum = founders.claimed; }
+  if (spec.type === 'role') planObj.role = ROLES[md.role] ? md.role : 'top';
+  if (!(prev && prev.memberNum)) { founders.claimed = (founders.claimed | 0) + 1; saveJson('founders.json', founders); }
+  planObj.memberNum = (prev && prev.memberNum) || founders.claimed;
+  // Upgrade path: buying a new plan replaces the old one. The OLD Stripe
+  // subscription would keep billing forever, so cancel it immediately. The
+  // webhook's subscription.deleted for the old sub can't revoke the new plan —
+  // the revoke loop matches on subId, which now points at the new sub.
+  const oldSub = prev && prev.subId;
+  if (oldSub && planObj.subId && oldSub !== planObj.subId && STRIPE_ON) {
+    stripeApi('DELETE', '/v1/subscriptions/' + encodeURIComponent(oldSub))
+      .catch(() => {}); // best-effort; portal cancellation remains the fallback
   }
   fulfilled[sid] = true; saveJson('fulfilled.json', fulfilled);
   u.plan = planObj; saveJson('users.json', users);
@@ -590,51 +604,61 @@ async function handleApi(req, res, pathname, ip) {
   }
 
   if (route === 'POST /api/checkout') {
-    // Demo-mode membership checkout (PAYMENTS_MODE=demo): one plan. During Early
-    // Access the subscriber becomes a FOUNDING MEMBER — price + founding flag are
-    // stamped onto the account here and never recomputed, so future price changes
-    // only ever apply to people who subscribe after them.
+    // Demo-mode checkout (PAYMENTS_MODE=demo): mirrors the three real plans so
+    // the UI can be exercised without Stripe keys.
     const u = authUser(req);
     if (!u) return sendJson(res, 401, { error: 'Sign in to check out.' });
     // Once real Stripe payments are on, the simulated checkout is CLOSED — it
     // must never mint memberships alongside real billing.
     if (STRIPE_ON) return sendJson(res, 403, { error: 'Checkout is handled by Stripe - use the payment page.' });
     if (PAYMENTS_MODE === 'off') return sendJson(res, 503, { error: 'Payments are temporarily unavailable - try again shortly.' });
-    if (u.plan && (u.plan.type === 'member' || u.plan.type === 'founder')) {
-      return sendJson(res, 200, { user: publicUser(u), charged: 'already a member - not charged', founders: founderState() });
-    }
-    const planObj = { type: 'member', price: EARLY_ACCESS ? PRICE_FOUNDING : PRICE_STANDARD, founding: EARLY_ACCESS, since: Date.now() };
-    if (EARLY_ACCESS) {
-      founders.claimed = (founders.claimed | 0) + 1;
-      saveJson('founders.json', founders);
-      planObj.memberNum = founders.claimed;
-    }
+    const db = await readBody(req);
+    const planKey = PLANS[db.plan] ? db.plan : 'all';
+    const spec = PLANS[planKey];
+    const planObj = { type: spec.type, price: spec.price, since: Date.now() };
+    if (spec.type === 'role') planObj.role = ROLES[db.role] ? db.role : 'top';
+    if (!(u.plan && u.plan.memberNum)) { founders.claimed = (founders.claimed | 0) + 1; saveJson('founders.json', founders); }
+    planObj.memberNum = (u.plan && u.plan.memberNum) || founders.claimed;
     users[u.key].plan = planObj;
     saveJson('users.json', users);
-    const charged = (EARLY_ACCESS ? '$1.99' : '$3.99') + '/mo' + (EARLY_ACCESS ? ' - Founding Member price, locked for life' : '');
+    const charged = spec.label + spec.per + (spec.type === 'role' ? ' - ' + planObj.role + ' lane' : ' - all lanes');
     return sendJson(res, 200, { user: publicUser(users[u.key]), charged, founders: founderState() });
   }
 
   // ----- Real Stripe Checkout (hosted): create a session, redirect, confirm -----
-  // One membership subscription. The price ID picked HERE (founding vs standard)
-  // is what Stripe bills forever for this subscriber — turning Early Access off
-  // or raising prices later only changes what NEW sessions use. That is the
-  // price-lock guarantee: Founding Members' subscriptions live on the $1.99
-  // price object permanently.
+  // Three plans. The price ID picked HERE is what Stripe bills this subscriber
+  // until they cancel — later catalogue changes only affect NEW sessions.
+  // Buying while already subscribed is allowed ON PURPOSE: it's the upgrade
+  // path (lane → all/annual). fulfillStripeSession replaces the plan and
+  // cancels the old Stripe subscription so nobody is double-billed.
   if (route === 'POST /api/stripe/checkout') {
     const u = authUser(req);
     if (!u) return sendJson(res, 401, { error: 'Sign in to check out.' });
     if (!STRIPE_ON) return sendJson(res, 503, { error: 'Payments are not switched on yet.' });
-    if (u.plan && (u.plan.type === 'member' || u.plan.type === 'founder')) return sendJson(res, 400, { error: 'You already have full access.' });
-    const priceId = EARLY_ACCESS ? STRIPE_PRICE_FOUNDING : STRIPE_PRICE_STANDARD;
-    if (!priceId) return sendJson(res, 503, { error: 'Membership is not configured yet.' });
+    const cb = await readBody(req);
+    const planKey = PLANS[cb.plan] ? cb.plan : 'all';
+    const spec = PLANS[planKey];
+    const role = planKey === 'lane' ? (ROLES[cb.role] ? cb.role : '') : '';
+    if (planKey === 'lane' && !role) return sendJson(res, 400, { error: 'Pick a lane for the Lane Pass.' });
+    // Repurchase guard: block same-or-smaller purchases, allow real upgrades
+    // (role→all/year, all→year, lane→lane on a DIFFERENT lane).
+    if (u.plan) {
+      const t = u.plan.type;
+      const hasAll = t === 'all' || t === 'allyr' || t === 'member' || t === 'founder';
+      if (planKey === 'lane' && hasAll) return sendJson(res, 400, { error: 'You already have every lane.' });
+      if (planKey === 'lane' && t === 'role' && u.plan.role === role) return sendJson(res, 400, { error: 'You already have the ' + role + ' Lane Pass.' });
+      if (planKey === 'all' && hasAll) return sendJson(res, 400, { error: 'You already have every lane.' });
+      if (planKey === 'year' && t === 'allyr') return sendJson(res, 400, { error: 'You are already on the annual plan.' });
+    }
+    const priceId = STRIPE_PLAN_PRICE()[planKey];
+    if (!priceId) return sendJson(res, 503, { error: 'This plan is not configured yet.' });
     const params = {
       success_url: PUBLIC_URL + '/?mc_checkout=success&session_id={CHECKOUT_SESSION_ID}',
       cancel_url: PUBLIC_URL + '/?mc_checkout=cancel',
       client_reference_id: u.key,
-      'metadata[plan]': 'member',
-      'metadata[founding]': EARLY_ACCESS ? '1' : '0',
-      'metadata[price]': String(EARLY_ACCESS ? PRICE_FOUNDING : PRICE_STANDARD),
+      'metadata[plan]': planKey,
+      'metadata[role]': role,
+      'metadata[price]': String(spec.price),
       mode: 'subscription',
       'line_items[0][quantity]': 1,
       'line_items[0][price]': priceId
@@ -680,7 +704,8 @@ async function handleApi(req, res, pathname, ip) {
     const u = authUser(req);
     if (!u) return sendJson(res, 401, { error: 'Sign in first.' });
     const plan = u.plan;
-    if (!plan || plan.type !== 'member') return sendJson(res, 400, { error: 'No active membership to manage.' });
+    // Any paid subscription plan can be managed (role/all/allyr + legacy member).
+    if (!plan || !(plan.type === 'member' || plan.type === 'role' || plan.type === 'all' || plan.type === 'allyr')) return sendJson(res, 400, { error: 'No active membership to manage.' });
     if (!STRIPE_ON) return sendJson(res, 503, { error: 'Billing management opens once payments are live. Email support@matchupcoach.gg to cancel.' });
     if (!plan.custId) return sendJson(res, 409, { error: 'We could not find your billing profile - email support@matchupcoach.gg and we will cancel it for you.' });
     try {
@@ -702,12 +727,12 @@ async function handleApi(req, res, pathname, ip) {
     if (event.type === 'checkout.session.completed' && obj && obj.payment_status === 'paid') {
       fulfillStripeSession(obj.id, obj);
     } else if (event.type === 'customer.subscription.deleted' && obj && obj.id) {
-      // Membership ended (cancelled or payment failed out) — remove access.
-      // The founding history is intentionally kept on record: if they resubscribe
-      // during Early Access they get founding again; after EA they pay standard.
+      // Subscription ended (cancelled or payment failed out) — remove access.
+      // Matching on subId means an upgrade's auto-cancel of the OLD sub can
+      // never revoke the NEW plan (its subId already points at the new sub).
       for (const k of Object.keys(users)) {
         const pl = users[k].plan;
-        if (pl && pl.type === 'member' && pl.subId === obj.id) {
+        if (pl && pl.subId === obj.id && (pl.type === 'member' || pl.type === 'role' || pl.type === 'all' || pl.type === 'allyr')) {
           users[k].pastPlan = pl; users[k].plan = null; saveJson('users.json', users);
           break;
         }

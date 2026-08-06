@@ -86,6 +86,7 @@ ul{padding-left:22px}li{margin:7px 0}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:640px){.cols{grid-template-columns:1fr}}
 .card{border-radius:14px;background:#11131c;border:1px solid rgba(255,255,255,0.08);padding:15px 17px}
 .card h3{margin:0 0 8px;font-family:'Chakra Petch',sans-serif;font-size:14px;color:#dfe2ec}
+h3.qa-q{font-family:'Chakra Petch',sans-serif;font-size:15px;margin:18px 0 6px;color:#dfe2ec}
 footer{margin-top:44px;font-size:12.5px;color:#8a90a2;border-top:1px solid rgba(255,255,255,0.07);padding-top:16px}
 .linkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;font-size:14px}
 .gate{margin:26px 0;padding:22px 24px;border-radius:16px;border:1px solid rgba(240,205,114,0.4);background:linear-gradient(180deg,rgba(240,205,114,0.07),#11131c);text-align:center}
@@ -178,19 +179,39 @@ for (const L of LANES) {
       } else verdict = 'Stage-by-stage skill matchup.';
       const wrLine = (typeof wr === 'number') ? `${aName} wins ${wr}% of games vs ${bName} in ${L.label.toLowerCase()}${games ? ` (${Number(games).toLocaleString('en-US')} Emerald+ games analysed)` : ''}.` : '';
 
-      const title = `${aName} vs ${bName} ${L.short} Matchup Guide | MatchupCoach.gg`;
-      const desc = `How to play ${aName} vs ${bName} in ${L.label.toLowerCase()}. ${typeof wr === 'number' ? `${aName} wins ${wr}% of games. ` : ''}Stage-by-stage favour, power spikes, and early, mid and late game plans.`;
+      const title = `${aName} vs ${bName} ${L.short} Matchup: Who Wins & How to Play | MatchupCoach.gg`;
+      const desc = `Who wins ${aName} vs ${bName} in ${L.label.toLowerCase()}? ${typeof wr === 'number' ? `${aName} wins ${wr}% of games${games ? ` across ${Number(games).toLocaleString('en-US')} Emerald+ games` : ''}. ` : ''}How to beat ${bName} as ${aName}: stage-by-stage favour, power spikes and the full lane plan.`;
+
+      // The questions people actually type (who wins / skill matchup / counter),
+      // answered from the FREE data only — these mirror the visible "Common
+      // questions" section below, so the FAQ schema always matches the page.
+      const skillAns = win
+        ? (nA === nB
+          ? `Yes — ${aName} vs ${bName} is a genuine skill matchup: the favour swings window to window (${nA} apiece of the 7 stages).`
+          : `Not exactly — ${nA > nB ? aName : bName} owns more of the game (${Math.max(nA, nB)} of the 7 windows), so one side is working uphill${wrKnown ? ` (${aName} wins ${wr}% of games)` : ''}.`)
+        : '';
+      const counterAns = wrKnown
+        ? (wr >= 52
+          ? `Statistically yes — ${aName} counters ${bName} in ${L.label.toLowerCase()}, winning ${wr}% of games${games ? ` over ${Number(games).toLocaleString('en-US')} Emerald+ games` : ''}.`
+          : wr >= 50.5
+          ? `${aName} has a slight statistical edge (${wr}% win rate), but it plays closer to a skill matchup than a hard counter.`
+          : wr > 49.5
+          ? `No hard counter either way — the ${aName} vs ${bName} win rate is ${wr}%, an even lane decided by execution.`
+          : `No — the numbers lean ${bName} (${aName} wins only ${wr}% of games), so play it as the disadvantaged side and win through the windows above.`)
+        : '';
 
       // FAQ JSON-LD from the bespoke data
       const faq = [];
       faq.push({ '@type': 'Question', name: `Who wins ${aName} vs ${bName} in ${L.label.toLowerCase()}?`, acceptedAnswer: { '@type': 'Answer', text: `${verdict} ${wrLine}`.trim() } });
+      if (skillAns) faq.push({ '@type': 'Question', name: `Is ${aName} vs ${bName} a skill matchup?`, acceptedAnswer: { '@type': 'Answer', text: skillAns } });
+      if (counterAns) faq.push({ '@type': 'Question', name: `Does ${aName} counter ${bName}?`, acceptedAnswer: { '@type': 'Answer', text: counterAns } });
       if (e.early) faq.push({ '@type': 'Question', name: `How should ${aName} play the early game vs ${bName}?`, acceptedAnswer: { '@type': 'Answer', text: e.early } });
       // NOTE: mid/late are members-only on this page, so they are deliberately
       // NOT in the FAQ schema — structured data must match visible content.
       const jsonld = {
         '@context': 'https://schema.org',
         '@graph': [
-          { '@type': 'Article', headline: `${aName} vs ${bName} — ${L.label} Matchup Guide`, description: desc, datePublished: TODAY, dateModified: TODAY, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
+          { '@type': 'Article', headline: `${aName} vs ${bName} — ${L.label} Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: TODAY, dateModified: TODAY, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
           { '@type': 'FAQPage', mainEntity: faq },
           { '@type': 'BreadcrumbList', itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Matchups', item: ORIGIN + '/matchup/' },
@@ -214,6 +235,20 @@ for (const L of LANES) {
       const others = (pairLanes[C.fileSlug + '|' + bFile] || []).filter(k => k !== L.key);
       const crossLane = others.length ? `<p class="sub">Also played in: ` + others.map(k => `<a href="/matchup/${k}/${uA}-vs-${uB}/">${LANES.find(x => x.key === k).label}</a>`).join(' · ') + `</p>` : '';
 
+      // Visible Q&A mirroring the FAQ schema (minus the early-game answer,
+      // which is the section above) — targets "who wins / skill matchup /
+      // counter" searches and the People-Also-Ask box.
+      const qa = [[`Who wins ${aName} vs ${bName}?`, `${verdict}${wrLine ? ' ' + wrLine : ''}`]];
+      if (skillAns) qa.push([`Is ${aName} vs ${bName} a skill matchup?`, skillAns]);
+      if (counterAns) qa.push([`Does ${aName} counter ${bName}?`, counterAns]);
+      const qaHtml = `<h2>Common questions</h2>` + qa.map(([q, ans]) => `<h3 class="qa-q">${esc(q)}</h3><p>${esc(ans)}</p>`).join('');
+
+      // Internal-link cluster: this champion's most-played other matchups in
+      // the same lane (by analysed-games volume when known).
+      const moreOpps = Object.keys(C.entries).filter(f => f !== bFile)
+        .sort((x, y) => (Number(C.games[y]) || 0) - (Number(C.games[x]) || 0)).slice(0, 6)
+        .map(f => { const n = dispOf(D, f); return `<a href="/matchup/${L.key}/${uA}-vs-${urlslug(n)}/">vs ${esc(n)}</a>`; }).join(' · ');
+
       // PREVIEW + CONVERT. MatchupCoach is a paid product, so the public page
       // shows what earns the ranking and proves the depth — the verdict, the
       // stage-by-stage favour table, and the full early-game plan — then hands
@@ -231,9 +266,11 @@ ${tl}
   <a class="cta" href="/matchup/${L.key}/${uA}-vs-${uB}/open">Read the full guide — plans from $1.99/month →</a>
   <p class="gate-note">🔒 Secure checkout · 💰 7-day money-back guarantee on your first payment · ✋ Cancel anytime<br>Lane Pass $1.99/mo · All Lanes $3.99/mo · Annual $24.99/yr.</p>
 </div>
+${qaHtml}
 <h2>Related guides</h2>
 <p><a href="/matchup/${L.key}/${uB}-vs-${uA}/">Playing the other side? ${esc(bName)} vs ${esc(aName)} guide →</a><br>
 <a href="/matchup/${L.key}/${uA}/">All ${esc(aName)} ${L.label.toLowerCase()} matchups →</a></p>
+${moreOpps ? `<p class="sub">More ${esc(aName)} ${L.short.toLowerCase()} matchups: ${moreOpps}</p>` : ''}
 ${crossLane}`;
 
       outWrite(rel, shell(title, desc, canonical, jsonld, body));
@@ -286,13 +323,20 @@ for (const you of jgNames) {
       : diff === 'HARD'
       ? `${foe} is favoured — ${foe} pressures ${reds} of the 7 windows. Survive the early race and scale.`
       : `A genuine skill matchup — the jungle race swings window to window between ${you} and ${foe}.`;
-    const title = `${you} vs ${foe} Jungle Matchup Guide | MatchupCoach.gg`;
-    const desc = `How to play ${you} vs ${foe} in the jungle: first clear, pathing, the level-by-level race, invade windows and objective control.`;
+    const title = `${you} vs ${foe} Jungle Matchup: Who Wins & How to Play | MatchupCoach.gg`;
+    const desc = `Who wins ${you} vs ${foe} in the jungle? ${diff === 'FAVOURED' ? `${you} controls ${greens} of 7 windows. ` : diff === 'HARD' ? `${foe} pressures ${reds} of 7 windows. ` : 'A window-to-window skill matchup. '}How to beat ${foe} as ${you}: first clear, pathing, the level-by-level race, invade windows and objective control.`;
     const rows = rep.stages.map((s, i) => `<tr><td>${esc(s.stage)}</td><td class="own-${tones[i]}">${esc(s.adv)}</td><td>${esc(s.why || '')}</td></tr>`).join('');
+    const jgSkill = diff === 'SKILL'
+      ? `Yes — ${you} vs ${foe} is a genuine skill matchup: the jungle race swings window to window (${greens} windows for ${you}, ${reds} pressured by ${foe}).`
+      : `Not exactly — ${diff === 'FAVOURED' ? `${you} controls ${greens} of the 7 windows` : `${foe} pressures ${reds} of the 7 windows`}, so one jungler is working uphill and has to play the map to compensate.`;
     const faq = [{ '@type': 'Question', name: `Who wins ${you} vs ${foe} in the jungle?`, acceptedAnswer: { '@type': 'Answer', text: verdict } }];
+    faq.push({ '@type': 'Question', name: `Is ${you} vs ${foe} a skill matchup?`, acceptedAnswer: { '@type': 'Answer', text: jgSkill } });
     if (rep.start) faq.push({ '@type': 'Question', name: `How should ${you} clear and path against ${foe}?`, acceptedAnswer: { '@type': 'Answer', text: rep.start } });
+    const jgQa = `<h2>Common questions</h2><h3 class="qa-q">Who wins ${esc(you)} vs ${esc(foe)}?</h3><p>${esc(verdict)}</p><h3 class="qa-q">Is ${esc(you)} vs ${esc(foe)} a skill matchup?</h3><p>${esc(jgSkill)}</p>`;
+    const jgMore = opps.filter(f => f !== foe && f !== you).sort().slice(0, 6)
+      .map(f => `<a href="/matchup/jungle/${uA}-vs-${urlslug(f)}/">vs ${esc(f)}</a>`).join(' · ');
     const jsonld = { '@context': 'https://schema.org', '@graph': [
-      { '@type': 'Article', headline: `${you} vs ${foe} — Jungle Matchup Guide`, description: desc, datePublished: TODAY, dateModified: TODAY, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
+      { '@type': 'Article', headline: `${you} vs ${foe} — Jungle Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: TODAY, dateModified: TODAY, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
       { '@type': 'FAQPage', mainEntity: faq },
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Matchups', item: ORIGIN + '/matchup/' },
@@ -313,9 +357,11 @@ ${rep.start ? `<h2>First clear &amp; their start</h2><p>${esc(rep.start)}</p>` :
   <a class="cta" href="/matchup/jungle/${uA}-vs-${uB}/open">Read the full guide — plans from $1.99/month →</a>
   <p class="gate-note">🔒 Secure checkout · 💰 7-day money-back guarantee on your first payment · ✋ Cancel anytime<br>Lane Pass $1.99/mo · All Lanes $3.99/mo · Annual $24.99/yr.</p>
 </div>
+${jgQa}
 <h2>Related guides</h2>
 <p><a href="/matchup/jungle/${uB}-vs-${uA}/">Playing the other side? ${esc(foe)} vs ${esc(you)} guide →</a><br>
-<a href="/matchup/jungle/${uA}/">All ${esc(you)} jungle matchups →</a></p>`;
+<a href="/matchup/jungle/${uA}/">All ${esc(you)} jungle matchups →</a></p>
+${jgMore ? `<p class="sub">More ${esc(you)} jungle matchups: ${jgMore}</p>` : ''}`;
     outWrite(`jungle/${uA}-vs-${uB}/index.html`, shell(title, desc, canonical, jsonld, body));
     sitemap.push(canonical);
     jgPages++;

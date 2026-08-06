@@ -44,6 +44,14 @@ const PRICE_STANDARD = 3.99;   // after Early Access — standard membership
 const STRIPE_PRICE_FOUNDING = process.env.STRIPE_PRICE_FOUNDING || ''; // $1.99/mo recurring price id
 const STRIPE_PRICE_STANDARD = process.env.STRIPE_PRICE_STANDARD || ''; // $3.99/mo recurring price id
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || ''; // whsec_… (Developers → Webhooks)
+// Stripe "Managed Payments" (Stripe acting as merchant of record) is ON by
+// default on new accounts. It remits worldwide sales tax for you, but stacks to
+// ~6.4% + $0.30 — on a $1.99 subscription that is ~21.5% vs ~17.2% on standard
+// pricing — and it REFUSES to create a session unless every product carries a
+// tax_code, which is how we found it (checkout 400'd on the first live test).
+// Default OFF. Set STRIPE_MANAGED_PAYMENTS=1 to opt in, and give the product a
+// tax code first (Product catalogue → the product → Tax code) or checkout breaks.
+const STRIPE_MANAGED = process.env.STRIPE_MANAGED_PAYMENTS === '1';
 const PUBLIC_URL = (process.env.PUBLIC_URL || 'https://matchupcoach.gg').replace(/\/+$/, '');
 const STRIPE_ON = !!STRIPE_SECRET_KEY;
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -631,6 +639,7 @@ async function handleApi(req, res, pathname, ip) {
       'line_items[0][quantity]': 1,
       'line_items[0][price]': priceId
     };
+    if (!STRIPE_MANAGED) params['managed_payments[enabled]'] = 'false';
     try {
       const r = await stripeApi('POST', '/v1/checkout/sessions', params);
       if (r.status >= 400 || !r.json.url) return sendJson(res, 502, { error: (r.json.error && r.json.error.message) || 'Stripe could not start checkout.' });

@@ -104,6 +104,8 @@ function memberState() {
     members: founders.claimed | 0
   };
 }
+// A Stripe reference field is either the id string or the expanded object.
+const stripeId = (v) => (typeof v === 'string' && v) || (v && typeof v === 'object' && typeof v.id === 'string' && v.id) || '';
 // Stamp a paid Stripe Checkout session onto the buyer's account. Idempotent
 // (fulfilled.json), safe to call from BOTH /api/stripe/confirm and the webhook.
 // The founding flag + price come from the SESSION metadata (what was actually
@@ -122,8 +124,12 @@ function fulfillStripeSession(sid, sess) {
     price: prev && prev.founding ? prev.price : paidPrice,
     founding: prev ? (prev.founding || founding) : founding,
     since: prev ? prev.since : Date.now(),
-    subId: (typeof sess.subscription === 'string' && sess.subscription) || (prev && prev.subId) || '',
-    custId: (typeof sess.customer === 'string' && sess.customer) || (prev && prev.custId) || ''
+    // Stripe sends these as bare ids, but returns objects when expanded. Accept
+    // both: subId is what customer.subscription.deleted matches on to revoke
+    // access, and custId is what opens the billing portal — losing either
+    // silently breaks cancellation.
+    subId: stripeId(sess.subscription) || (prev && prev.subId) || '',
+    custId: stripeId(sess.customer) || (prev && prev.custId) || ''
   };
   if (planObj.founding) {
     if (prev && prev.memberNum) planObj.memberNum = prev.memberNum;

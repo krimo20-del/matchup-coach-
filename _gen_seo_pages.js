@@ -23,11 +23,14 @@ new Function('window', fs.readFileSync('champ-data/rosters.js', 'utf8'))(global.
 const ROSTERS = global.window.ROSTERS;
 
 const LANES = [
-  { key: 'top', roster: 'top', dir: 'champ-data/content', suffix: '', label: 'Top Lane', short: 'Top' },
-  { key: 'mid', roster: 'mid', dir: 'champ-data/content/mid', suffix: '_mid', label: 'Mid Lane', short: 'Mid' },
-  { key: 'bot', roster: 'bot', dir: 'champ-data/content/bot', suffix: '_bot', label: 'Bot Lane (ADC)', short: 'Bot' },
-  { key: 'support', roster: 'support', dir: 'champ-data/content/sup', suffix: '_sup', label: 'Support', short: 'Support' },
+  { key: 'top', roster: 'top', dir: 'champ-data/content', suffix: '', label: 'Top Lane', short: 'Top', prose: 'top lane' },
+  { key: 'mid', roster: 'mid', dir: 'champ-data/content/mid', suffix: '_mid', label: 'Mid Lane', short: 'Mid', prose: 'mid lane' },
+  { key: 'bot', roster: 'bot', dir: 'champ-data/content/bot', suffix: '_bot', label: 'Bot Lane (ADC)', short: 'Bot', prose: 'bot lane' },
+  { key: 'support', roster: 'support', dir: 'champ-data/content/sup', suffix: '_sup', label: 'Support', short: 'Support', prose: 'support' },
 ];
+// Stable first-publication date for Article schema — the guide pages first
+// shipped in the 2026-07-27 sitemap. dateModified tracks the data refresh.
+const PUBLISHED = '2026-07-27';
 const STAGES = ['Level 1', 'Level 2', 'Level 3', 'Levels 4-5', 'Level 6', 'First item', 'Two+ items'];
 
 // ---------- load all lane data ----------
@@ -155,54 +158,100 @@ for (const L of LANES) {
       const rel = `${L.key}/${uA}-vs-${uB}/index.html`;
       const canonical = `${ORIGIN}/matchup/${L.key}/${uA}-vs-${uB}/`;
 
-      const wrRaw = C.wr[bFile]; const wr = typeof wrRaw === 'number' ? wrRaw : (wrRaw && wrRaw.wr);
-      const games = C.games[bFile];
+      // ---- POOLED win rate: both directions of a matchup are separate data
+      // pulls (A's sample and B's sample of the same lane). Publishing each
+      // side's raw number made mirrored pages contradict (both >50%). Pooling
+      // the two samples gives ONE shared number — A's page and B's page are
+      // complementary by construction and cite the same combined game count.
+      const wrRaw = C.wr[bFile]; const wrA = typeof wrRaw === 'number' ? wrRaw : (wrRaw && wrRaw.wr);
+      const gA = Number(C.games[bFile]) || 0;
+      const C2 = D.champs[b];
+      const wrRevRaw = C2 && C2.wr[C.fileSlug]; const wrRev = typeof wrRevRaw === 'number' ? wrRevRaw : (wrRevRaw && wrRevRaw.wr);
+      const gB = (C2 && Number(C2.games[C.fileSlug])) || 0;
+      let wr = null, games = 0;
+      if (typeof wrA === 'number' && typeof wrRev === 'number') {
+        const wA = gA > 0 && gB > 0 ? gA : 1, wB = gA > 0 && gB > 0 ? gB : 1;
+        wr = Math.round(((wrA * wA + (100 - wrRev) * wB) / (wA + wB)) * 100) / 100;
+        games = gA + gB;
+      } else if (typeof wrA === 'number') { wr = wrA; games = gA; }
+      else if (typeof wrRev === 'number') { wr = Math.round((100 - wrRev) * 100) / 100; games = gB; }
+      const gamesTxt = games ? Number(games).toLocaleString('en-US') : '';
       const win = Array.isArray(e.win) && e.win.length === 7 ? e.win : null;
       const nA = win ? win.filter(x => x === aName).length : 0;
       const nB = win ? win.filter(x => x === bName).length : 0;
+      const evens = win ? 7 - nA - nB : 0;
 
-      let verdict;
+      // ---- ONE classification drives verdict, skill-matchup answer and
+      // counter answer, so no page can contradict itself.
       const wrKnown = typeof wr === 'number';
-      const wrLeansA = wrKnown && wr >= 50.5, wrLeansB = wrKnown && wr <= 49.5;
-      if (win) {
-        if (nA > nB) {
-          verdict = wrLeansB
-            ? `Closer than it looks — ${aName} owns ${nA} of the 7 game windows${nB ? ` to ${bName}'s ${nB}` : ''}, but the win rate still favours ${bName}: you have to convert those windows or the game slips away.`
-            : `${aName} is favoured — ${aName} owns ${nA} of the 7 game windows${nB ? ` to ${bName}'s ${nB}` : ''}.`;
-        } else if (nB > nA) {
-          verdict = wrLeansA
-            ? `Winnable despite the lane — ${bName} owns ${nB} of the 7 game windows${nA ? ` to ${aName}'s ${nA}` : ''}, yet the win rate favours ${aName}: survive their windows and the game is yours.`
-            : `${bName} is favoured — ${bName} owns ${nB} of the 7 game windows${nA ? ` to ${aName}'s ${nA}` : ''}. Play it patient and win your windows.`;
-        } else {
-          verdict = `A genuine skill matchup — the favour swings window to window (${nA} apiece of the 7 stages).`;
-        }
-      } else verdict = 'Stage-by-stage skill matchup.';
-      const wrLine = (typeof wr === 'number') ? `${aName} wins ${wr}% of games vs ${bName} in ${L.label.toLowerCase()}${games ? ` (${Number(games).toLocaleString('en-US')} Emerald+ games analysed)` : ''}.` : '';
+      const edge = wrKnown ? wr - 50 : 0;
+      const cls = !wrKnown ? 'unknown'
+        : edge >= 2 ? 'counterA' : edge >= 0.75 ? 'edgeA'
+        : edge <= -2 ? 'counterB' : edge <= -0.75 ? 'edgeB' : 'even';
+      const wrLine = wrKnown ? `${aName} wins ${wr}% of games vs ${bName} in ${L.prose}${gamesTxt ? ` (${gamesTxt} Emerald+ games analysed across both sides)` : ''}.` : '';
 
-      const title = `${aName} vs ${bName} ${L.short} Matchup: Who Wins & How to Play | MatchupCoach.gg`;
-      const desc = `Who wins ${aName} vs ${bName} in ${L.label.toLowerCase()}? ${typeof wr === 'number' ? `${aName} wins ${wr}% of games${games ? ` across ${Number(games).toLocaleString('en-US')} Emerald+ games` : ''}. ` : ''}How to beat ${bName} as ${aName}: stage-by-stage favour, power spikes and the full lane plan.`;
-
-      // The questions people actually type (who wins / skill matchup / counter),
-      // answered from the FREE data only — these mirror the visible "Common
-      // questions" section below, so the FAQ schema always matches the page.
-      const skillAns = win
-        ? (nA === nB
-          ? `Yes — ${aName} vs ${bName} is a genuine skill matchup: the favour swings window to window (${nA} apiece of the 7 stages).`
-          : `Not exactly — ${nA > nB ? aName : bName} owns more of the game (${Math.max(nA, nB)} of the 7 windows), so one side is working uphill${wrKnown ? ` (${aName} wins ${wr}% of games)` : ''}.`)
+      // Verdict box — leads with the pooled number; the 7 windows are texture
+      // from A's game plan, never a competing claim about who's favoured.
+      let verdict;
+      const planNote = win
+        ? (nA >= nB
+          ? `${aName}'s game plan below claims ${nA} of the 7 stage windows`
+          : `${bName} pressures ${nB} of the 7 stage windows in the plan below`)
         : '';
-      const counterAns = wrKnown
-        ? (wr >= 52
-          ? `Statistically yes — ${aName} counters ${bName} in ${L.label.toLowerCase()}, winning ${wr}% of games${games ? ` over ${Number(games).toLocaleString('en-US')} Emerald+ games` : ''}.`
-          : wr >= 50.5
-          ? `${aName} has a slight statistical edge (${wr}% win rate), but it plays closer to a skill matchup than a hard counter.`
-          : wr > 49.5
-          ? `No hard counter either way — the ${aName} vs ${bName} win rate is ${wr}%, an even lane decided by execution.`
-          : `No — the numbers lean ${bName} (${aName} wins only ${wr}% of games), so play it as the disadvantaged side and win through the windows above.`)
+      if (cls === 'counterA' || cls === 'edgeA') {
+        verdict = `${aName} is favoured — ${wr}% win rate${gamesTxt ? ` over ${gamesTxt} games` : ''}${planNote ? `, and ${planNote}` : ''}.`;
+        if (win && nA < nB) verdict = `The numbers favour ${aName} (${wr}% win rate), even though ${bName} pressures ${nB} of the 7 stage windows — convert your windows below and the stats swing your way.`;
+      } else if (cls === 'counterB' || cls === 'edgeB') {
+        verdict = `${bName} is favoured — ${aName} wins only ${wr}% of games${planNote && nB >= nA ? `, and ${planNote}` : ''}. Play it patient and win your windows.`;
+        if (win && nA > nB) verdict = `An uphill lane you can win — the numbers lean ${bName} (${aName} wins ${wr}%), but ${aName}'s plan below claims ${nA} of the 7 windows: convert them and the stats catch up to you.`;
+      } else if (cls === 'even') {
+        verdict = (win && Math.abs(nA - nB) >= 2)
+          ? `Statistically even (${wr}% win rate) — but the tempo isn't: ${planNote}. Whoever converts their windows wins.`
+          : `A genuine skill matchup — ${wr}% win rate, decided window to window rather than at champion select.`;
+      } else {
+        verdict = win
+          ? (Math.abs(nA - nB) >= 2
+            ? `${nA > nB ? aName : bName} has the tempo edge — ${nA > nB ? `${aName}'s plan claims ${nA}` : `${bName} pressures ${nB}`} of the 7 stage windows.`
+            : (evens >= 4
+              ? `Mostly even — ${evens} of the 7 windows are a coin flip; the decisive ${Math.max(nA, nB) === 1 ? 'window' : 'windows'} belong to ${nA >= nB ? aName : bName}.`
+              : `A genuine skill matchup — the favour swings window to window.`))
+          : 'Stage-by-stage skill matchup.';
+      }
+
+      let title = `${aName} vs ${bName} ${L.short} Matchup: Who Wins & How to Play | MatchupCoach.gg`;
+      if (title.length > 70) title = `${aName} vs ${bName} ${L.short} Matchup: Who Wins? | MatchupCoach.gg`;
+      if (title.length > 70) title = `${aName} vs ${bName} ${L.short} Matchup | MatchupCoach.gg`;
+      const desc = `Who wins ${aName} vs ${bName} in ${L.prose}? ${wrKnown ? `${aName} wins ${wr}% of games${gamesTxt ? ` across ${gamesTxt} Emerald+ games` : ''}. ` : ''}How to beat ${bName} as ${aName}: stage-by-stage favour, power spikes and the full lane plan.`;
+
+      // Who-wins / skill-matchup / counter answers all derive from `cls`, so
+      // they can never disagree with each other or with the verdict box.
+      const whoShort = cls === 'counterA' ? `${aName} — a ${wr}% win rate vs ${bName} in ${L.prose}${gamesTxt ? ` across ${gamesTxt} Emerald+ games` : ''} is a real advantage.`
+        : cls === 'edgeA' ? `${aName}, slightly — a ${wr}% win rate edge${gamesTxt ? ` across ${gamesTxt} Emerald+ games` : ''}; execution can flip it.`
+        : cls === 'even' ? `Nobody on paper — ${wr}% win rate makes this a coin flip decided by play, not champion select.`
+        : cls === 'edgeB' ? `${bName}, slightly — ${aName} wins ${wr}% of games${gamesTxt ? ` across ${gamesTxt} Emerald+ games` : ''}; winnable with the right plan.`
+        : cls === 'counterB' ? `${bName} — ${aName} wins only ${wr}% of games${gamesTxt ? ` across ${gamesTxt} Emerald+ games` : ''}, so ${aName} plays this as the disadvantaged side.`
+        : verdict;
+      const skillAns = cls === 'even'
+        ? `Yes — ${aName} vs ${bName} is a genuine skill matchup: ${wr}% win rate, and the favour swings window to window rather than being set at champion select.`
+        : (cls === 'edgeA' || cls === 'edgeB')
+        ? `Mostly — ${cls === 'edgeA' ? aName : bName} has a small statistical edge (${cls === 'edgeA' ? wr : (Math.round((100 - wr) * 100) / 100)}% win rate), but execution decides this lane far more than the pick does.`
+        : (cls === 'counterA' || cls === 'counterB')
+        ? `Not really — ${cls === 'counterA' ? aName : bName} holds a real statistical advantage (${cls === 'counterA' ? wr : (Math.round((100 - wr) * 100) / 100)}% win rate), so ${cls === 'counterA' ? bName : aName} is the one working uphill.`
+        : (win
+          ? (nA === nB
+            ? `Yes — ${aName} vs ${bName} plays as a skill matchup: the favour swings window to window.`
+            : `Not exactly — ${nA > nB ? `${aName}'s game plan claims ${nA}` : `${bName} pressures ${nB}`} of the 7 stage windows, so one side sets the lane's tempo.`)
+          : '');
+      const counterAns = cls === 'counterA' ? `Statistically yes — ${aName} counters ${bName} in ${L.prose}, winning ${wr}% of games${gamesTxt ? ` over ${gamesTxt} Emerald+ games` : ''}.`
+        : cls === 'edgeA' ? `Not a hard counter — ${aName} has a slight edge (${wr}% win rate), and play quality decides the rest.`
+        : cls === 'even' ? `No hard counter either way — the ${aName} vs ${bName} win rate is ${wr}%, an even lane decided by execution.`
+        : cls === 'edgeB' ? `No — if anything ${bName} has the slight edge (${aName} wins ${wr}%), though it stays close.`
+        : cls === 'counterB' ? `No — ${bName} counters ${aName} (${aName} wins only ${wr}% of games). Play it as the disadvantaged side and lean on the windows in the plan.`
         : '';
 
       // FAQ JSON-LD from the bespoke data
       const faq = [];
-      faq.push({ '@type': 'Question', name: `Who wins ${aName} vs ${bName} in ${L.label.toLowerCase()}?`, acceptedAnswer: { '@type': 'Answer', text: `${verdict} ${wrLine}`.trim() } });
+      faq.push({ '@type': 'Question', name: `Who wins ${aName} vs ${bName} in ${L.prose}?`, acceptedAnswer: { '@type': 'Answer', text: whoShort } });
       if (skillAns) faq.push({ '@type': 'Question', name: `Is ${aName} vs ${bName} a skill matchup?`, acceptedAnswer: { '@type': 'Answer', text: skillAns } });
       if (counterAns) faq.push({ '@type': 'Question', name: `Does ${aName} counter ${bName}?`, acceptedAnswer: { '@type': 'Answer', text: counterAns } });
       if (e.early) faq.push({ '@type': 'Question', name: `How should ${aName} play the early game vs ${bName}?`, acceptedAnswer: { '@type': 'Answer', text: e.early } });
@@ -211,7 +260,7 @@ for (const L of LANES) {
       const jsonld = {
         '@context': 'https://schema.org',
         '@graph': [
-          { '@type': 'Article', headline: `${aName} vs ${bName} — ${L.label} Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: TODAY, dateModified: TODAY, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
+          { '@type': 'Article', headline: `${aName} vs ${bName} — ${L.label} Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: PUBLISHED, dateModified: TODAY, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
           { '@type': 'FAQPage', mainEntity: faq },
           { '@type': 'BreadcrumbList', itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Matchups', item: ORIGIN + '/matchup/' },
@@ -224,7 +273,8 @@ for (const L of LANES) {
       // body
       let tl = '';
       if (win) {
-        tl = `<h2>Favour timeline — who owns each window</h2>
+        tl = `<h2>Favour timeline — the windows in ${esc(aName)}'s game plan</h2>
+<p class="sub">Read from ${esc(aName)}'s seat: which stage windows this plan plays for against ${esc(bName)}.</p>
 <table><tr><th>Stage</th><th>Favoured</th><th>Why</th></tr>` +
           win.map((o, i) => `<tr><td>${STAGES[i]}</td><td class="${ownCls(o, aName, bName)}">${esc(o === 'Skill' ? 'Even / skill' : o)}</td><td>${esc((e.whys && e.whys[i]) || '')}</td></tr>`).join('') +
           `</table>`;
@@ -238,7 +288,7 @@ for (const L of LANES) {
       // Visible Q&A mirroring the FAQ schema (minus the early-game answer,
       // which is the section above) — targets "who wins / skill matchup /
       // counter" searches and the People-Also-Ask box.
-      const qa = [[`Who wins ${aName} vs ${bName}?`, `${verdict}${wrLine ? ' ' + wrLine : ''}`]];
+      const qa = [[`Who wins ${aName} vs ${bName} in ${L.prose}?`, whoShort]];
       if (skillAns) qa.push([`Is ${aName} vs ${bName} a skill matchup?`, skillAns]);
       if (counterAns) qa.push([`Does ${aName} counter ${bName}?`, counterAns]);
       const qaHtml = `<h2>Common questions</h2>` + qa.map(([q, ans]) => `<h3 class="qa-q">${esc(q)}</h3><p>${esc(ans)}</p>`).join('');
@@ -256,10 +306,10 @@ for (const L of LANES) {
       const body = `
 <nav class="crumbs"><a href="/matchup/">Matchups</a> › <a href="/matchup/${L.key}/">${L.label}</a> › ${esc(aName)} vs ${esc(bName)}</nav>
 <h1>${esc(aName)} vs ${esc(bName)} — ${L.label} Matchup Guide</h1>
-<p class="sub">How to win lane as ${esc(aName)} against ${esc(bName)}${typeof wr === 'number' ? ` · ${wr}% win rate${games ? ` over ${Number(games).toLocaleString('en-US')} Emerald+ games` : ''}` : ''} · Updated ${TODAY}</p>
-<div class="verdict"><b>Verdict:</b> ${esc(verdict)}${wrLine ? ' ' + esc(wrLine) : ''}</div>
+<p class="sub">How to win lane as ${esc(aName)} against ${esc(bName)}${wrKnown ? ` · ${wr}% win rate${gamesTxt ? ` over ${gamesTxt} Emerald+ games` : ''}` : ''} · Updated ${TODAY}</p>
+<div class="verdict"><b>Verdict:</b> ${esc(verdict)}</div>
 ${tl}
-<h2>Early game (levels 1–5)</h2><p>${esc(e.early || '')}</p>
+<h2>How should ${esc(aName)} play the early game vs ${esc(bName)}?</h2><p>${esc(e.early || '')}</p>
 <div class="gate">
   <div class="gate-h">Read the rest of this matchup</div>
   <p class="gate-p">The full ${esc(aName)} vs ${esc(bName)} report continues with the <b>mid-game plan</b>, the <b>late-game and teamfight plan</b>, every <b>power spike</b> to play around, and the <b>win conditions</b> for both sides — plus cooldown tracking and the live enemy-jungle tracker inside the app.</p>
@@ -269,8 +319,8 @@ ${tl}
 ${qaHtml}
 <h2>Related guides</h2>
 <p><a href="/matchup/${L.key}/${uB}-vs-${uA}/">Playing the other side? ${esc(bName)} vs ${esc(aName)} guide →</a><br>
-<a href="/matchup/${L.key}/${uA}/">All ${esc(aName)} ${L.label.toLowerCase()} matchups →</a></p>
-${moreOpps ? `<p class="sub">More ${esc(aName)} ${L.short.toLowerCase()} matchups: ${moreOpps}</p>` : ''}
+<a href="/matchup/${L.key}/${uA}/">All ${esc(aName)} ${L.prose} matchups →</a></p>
+${moreOpps ? `<p class="sub">More ${esc(aName)} ${L.prose} matchups: ${moreOpps}</p>` : ''}
 ${crossLane}`;
 
       outWrite(rel, shell(title, desc, canonical, jsonld, body));
@@ -317,18 +367,24 @@ for (const you of jgNames) {
     const canonical = `${ORIGIN}/matchup/jungle/${uA}-vs-${uB}/`;
     const tones = rep.stages.map(s => jgTone(s.adv, you, foe));
     const greens = tones.filter(t => t === 'a').length, reds = tones.filter(t => t === 'b').length;
-    const diff = reds >= 3 ? 'HARD' : greens >= 5 ? 'FAVOURED' : 'SKILL';
+    // Classify on the SPREAD, not raw counts — 4 windows vs 0 is a favoured
+    // race even though 4 < 5 (the old threshold called it a skill matchup).
+    const spread = greens - reds;
+    const diff = spread >= 3 ? 'FAVOURED' : spread <= -3 ? 'HARD' : 'SKILL';
+    // Phrased from this page's race plan — the mirror page has its own plan.
     const verdict = diff === 'FAVOURED'
-      ? `${you} is favoured — ${you} controls ${greens} of the 7 windows in the jungle race.`
+      ? `${you}'s race plan controls ${greens} of the 7 windows — ${you} holds the tempo advantage in this jungle matchup.`
       : diff === 'HARD'
-      ? `${foe} is favoured — ${foe} pressures ${reds} of the 7 windows. Survive the early race and scale.`
-      : `A genuine skill matchup — the jungle race swings window to window between ${you} and ${foe}.`;
-    const title = `${you} vs ${foe} Jungle Matchup: Who Wins & How to Play | MatchupCoach.gg`;
-    const desc = `Who wins ${you} vs ${foe} in the jungle? ${diff === 'FAVOURED' ? `${you} controls ${greens} of 7 windows. ` : diff === 'HARD' ? `${foe} pressures ${reds} of 7 windows. ` : 'A window-to-window skill matchup. '}How to beat ${foe} as ${you}: first clear, pathing, the level-by-level race, invade windows and objective control.`;
-    const rows = rep.stages.map((s, i) => `<tr><td>${esc(s.stage)}</td><td class="own-${tones[i]}">${esc(s.adv)}</td><td>${esc(s.why || '')}</td></tr>`).join('');
+      ? `${foe} pressures ${reds} of the 7 windows in this race — survive the early game and scale into your windows.`
+      : `A window-to-window jungle race — ${greens ? `${greens} window${greens > 1 ? 's' : ''} for ${you}` : `no window clearly ${you}'s`}, ${reds ? `${reds} for ${foe}` : `none clearly ${foe}'s`}, the rest even.`;
+    let title = `${you} vs ${foe} Jungle Matchup: Who Wins & How to Play | MatchupCoach.gg`;
+    if (title.length > 70) title = `${you} vs ${foe} Jungle Matchup: Who Wins? | MatchupCoach.gg`;
+    if (title.length > 70) title = `${you} vs ${foe} Jungle Matchup | MatchupCoach.gg`;
+    const desc = `Who wins ${you} vs ${foe} in the jungle? ${diff === 'FAVOURED' ? `${you}'s race plan controls ${greens} of 7 windows. ` : diff === 'HARD' ? `${foe} pressures ${reds} of 7 windows. ` : 'A window-to-window skill matchup. '}How to beat ${foe} as ${you}: first clear, pathing, the level-by-level race, invade windows and objective control.`;
+    const rows = rep.stages.map((s, i) => `<tr><td>${esc(s.stage)}</td><td class="own-${tones[i]}">${esc(String(s.adv).replace(/Favored/g, 'Favoured'))}</td><td>${esc(s.why || '')}</td></tr>`).join('');
     const jgSkill = diff === 'SKILL'
-      ? `Yes — ${you} vs ${foe} is a genuine skill matchup: the jungle race swings window to window (${greens} windows for ${you}, ${reds} pressured by ${foe}).`
-      : `Not exactly — ${diff === 'FAVOURED' ? `${you} controls ${greens} of the 7 windows` : `${foe} pressures ${reds} of the 7 windows`}, so one jungler is working uphill and has to play the map to compensate.`;
+      ? `Yes — ${you} vs ${foe} plays as a skill matchup: the jungle race swings window to window, and the better first clear usually sets the tone.`
+      : `Not exactly — ${diff === 'FAVOURED' ? `${you}'s race plan controls ${greens} of the 7 windows` : `${foe} pressures ${reds} of the 7 windows`}, so ${diff === 'FAVOURED' ? foe : you} is playing catch-up and has to lean on the map.`;
     const faq = [{ '@type': 'Question', name: `Who wins ${you} vs ${foe} in the jungle?`, acceptedAnswer: { '@type': 'Answer', text: verdict } }];
     faq.push({ '@type': 'Question', name: `Is ${you} vs ${foe} a skill matchup?`, acceptedAnswer: { '@type': 'Answer', text: jgSkill } });
     if (rep.start) faq.push({ '@type': 'Question', name: `How should ${you} clear and path against ${foe}?`, acceptedAnswer: { '@type': 'Answer', text: rep.start } });
@@ -336,7 +392,7 @@ for (const you of jgNames) {
     const jgMore = opps.filter(f => f !== foe && f !== you).sort().slice(0, 6)
       .map(f => `<a href="/matchup/jungle/${uA}-vs-${urlslug(f)}/">vs ${esc(f)}</a>`).join(' · ');
     const jsonld = { '@context': 'https://schema.org', '@graph': [
-      { '@type': 'Article', headline: `${you} vs ${foe} — Jungle Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: TODAY, dateModified: TODAY, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
+      { '@type': 'Article', headline: `${you} vs ${foe} — Jungle Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: PUBLISHED, dateModified: TODAY, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
       { '@type': 'FAQPage', mainEntity: faq },
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Matchups', item: ORIGIN + '/matchup/' },
@@ -348,9 +404,10 @@ for (const you of jgNames) {
 <h1>${esc(you)} vs ${esc(foe)} — Jungle Matchup Guide</h1>
 <p class="sub">How to win the jungle race as ${esc(you)} against ${esc(foe)} · Updated ${TODAY}</p>
 <div class="verdict"><b>Verdict:</b> ${esc(verdict)}</div>
-<h2>The jungle race — who owns each window</h2>
+<h2>The jungle race — the windows in ${esc(you)}'s plan</h2>
+<p class="sub">Read from ${esc(you)}'s seat: the race windows this plan plays for against ${esc(foe)}.</p>
 <table><tr><th>Stage</th><th>Read</th><th>Why</th></tr>${rows}</table>
-${rep.start ? `<h2>First clear &amp; their start</h2><p>${esc(rep.start)}</p>` : ''}
+${rep.start ? `<h2>How should ${esc(you)} clear and path against ${esc(foe)}?</h2><p>${esc(rep.start)}</p>` : ''}
 <div class="gate">
   <div class="gate-h">Read the rest of this matchup</div>
   <p class="gate-p">The full ${esc(you)} vs ${esc(foe)} report continues with <b>scuttle &amp; dragon rules</b>, <b>invade windows and safety boundaries</b>, the <b>top-side objective fight</b>, <b>macro rotations</b> and the <b>win condition</b> — plus the live enemy-jungle tracker that shows their start, clear and gank timers in game.</p>

@@ -1,0 +1,315 @@
+{
+  "ownerKey": "mel",
+  "enemy": "volibear",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The chart read Mel, Skill, Skill, Skill, Skill, Skill, Mel — Volibear never wins a stage, and Mel owns 2+ items, in a lane she wins 43.8% of over 831 games. whys[4] says he wins level 6 outright and whys[6] says he out-scales her, both under labels that said otherwise.",
+      "why": "Every why in the entry already describes the correct shape: level 1 is a nothing phase, 2 through 5 are Mel's on range, 6 is his the moment Stormbringer exists, first item is her best swing back, and two items is his. The packet levelChart independently reads Skill, Mel, Mel, Mel, Volibear, Skill, Volibear — the same shape.",
+      "corrected": "Chart is now Skill, Mel, Mel, Mel, Volibear, Skill, Volibear across win[0..6] and phases[0..6].side, with ratings 5, 7, 6, 6, 3, 5, 3. No mirror file exists (audits/top/volibear__mel.json), so this side sets the direction.",
+      "confidence": "Medium",
+      "sources": [
+        "tools/audit-run/packets/mel.json (levelChart, defects)",
+        "MC_WR_TABLES.mel.volibear = 43.8",
+        "MC_REAL_GAMES.mel.volibear = 831"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three abilities are described as things they are not, across nine strings. Thundering Smash is called 'his empowered Q dash' in early, mid, wants.you[0], whys[1] and whys[2]. Sky Splitter is called an 'E stun' in spikes[1], mid, wants.foe[0] and whys[4]. Stormbringer is called a 'suppression field' in spikes[1], mid, whys[4] and wants.foe[2]. Frenzied Maul is credited with a slow in early and wants.foe[1].",
+      "why": "Riot's text, ability by ability. Thundering Smash: 'Volibear gains speed towards enemies, Stunning and damaging the first one he Attacks' — a movement-speed buff at 300 range whose stun rides his next attack, not a dash; it can be walked away from, which a dash cannot. Sky Splitter: 'summons a lightning bolt at a location, dealing damage and Slowing enemies while granting Volibear a Shield if he's inside the blast radius' — a slow and a self-shield at 1200 range, no stun anywhere. Stormbringer: 'leaps to a target location, Slowing and damaging enemies beneath him while gaining bonus Health. Enemy towers near his landing location become temporarily disabled' — a 550-range leap with no suppression at all. Frenzied Maul: 'damages an enemy, applying on-hit effects and marking them. Casting this ability again on the same target deals bonus damage and Heals Volibear' — no slow. The player was told to fear a stun that does not exist and a suppression that does not exist, while the thing that actually kills her went unmentioned.",
+      "corrected": "Every ability now carries its real name and real effect, with Thundering Smash's 300 range and 12s rank-1 timer, Sky Splitter's 1200 range and 16s, Stormbringer's 550 leap and 160/135/110, and Frenzied Maul's 5s on-hit heal.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/volibear.json"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "missing",
+      "whatIsWrong": "Nothing in either layer mentions that Stormbringer disables towers, and the packet flags that the entry 'never names any of Volibear's abilities'.",
+      "why": "'Enemy towers near his landing location become temporarily disabled' is the entire reason his level 6 is a spike against a 550-range mage with no dash. Until 6 Mel's tower is a real exit; from 6 it is not. A page that instead describes a fictional suppression field teaches her to keep playing for the tower.",
+      "corrected": "spikes[1], mid, whys[4] and wants.foe[2] now say the turret goes down where he lands.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/volibear.json (R)",
+        "tools/audit-run/packets/mel.json (defects)"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No anti-heal in the content layer, and the page frames Volibear's late-game damage as generic 'bruiser damage' answered by staying away.",
+      "why": "The _missing file flags both rules for this matchup: Frenzied Maul heals on the repeat cast, and it applies on-hit while The Relentless Storm keeps stacking his attack speed. So his damage scales with attack speed, and armour alone reads the trade wrong — the buys that matter are Grievous Wounds and range, not resistances.",
+      "corrected": "late names Morellonomicon alongside Liandry's; spikes[3] and whys[6] state the on-hit and attack-speed scaling.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/_missing/mel.json (needs-antiheal, onhit-itemization)",
+        "champ-data/_kits/volibear.json (P, W)"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no numbers at all, and tradeBad and dontsFull[2].d said Rebuttal is 'gone for twenty seconds'.",
+      "why": "Rebuttal is 38/35/33/29/26s. Thundering Smash is 12/11.5/11/10.5/10 and Stormbringer 160/135/110 — the longest ultimate of the six matchups I audited, which makes its downtime a genuinely large window the page never priced.",
+      "corrected": "Real cooldowns written into breakdown.cooldowns, tradeBad and dontsFull[2].d.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/mel.json (W)",
+        "champ-data/_kits/volibear.json (Q, R)"
+      ]
+    },
+    {
+      "point": 11,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.difficulty and report[14].t read 'Favoured matchup' while diff read HARD and the win rate is 43.8%.",
+      "why": "The enum and the prose contradicted each other on a clearly losing lane.",
+      "corrected": "Both now read 'Unfavoured lane'.",
+      "confidence": "High",
+      "sources": [
+        "MC_WR_TABLES.mel.volibear = 43.8"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[0]",
+      "before": "Mel",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[1]",
+      "before": "Skill",
+      "after": "Mel"
+    },
+    {
+      "layer": "content",
+      "path": "win[2]",
+      "before": "Skill",
+      "after": "Mel"
+    },
+    {
+      "layer": "content",
+      "path": "win[3]",
+      "before": "Skill",
+      "after": "Mel"
+    },
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Skill",
+      "after": "Volibear"
+    },
+    {
+      "layer": "content",
+      "path": "win[6]",
+      "before": "Mel",
+      "after": "Volibear"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Mel",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].rating",
+      "before": "7/10",
+      "after": "5/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Mel"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].rating",
+      "before": "4/10",
+      "after": "7/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Skill",
+      "after": "Mel"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].rating",
+      "before": "5/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Mel"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].rating",
+      "before": "4/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Volibear"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].rating",
+      "before": "5/10",
+      "after": "3/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].rating",
+      "before": "4/10",
+      "after": "5/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Mel",
+      "after": "Volibear"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].rating",
+      "before": "7/10",
+      "after": "3/10"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Volibear's R suppress-zone + E stun all-in is his hardest kill window — he leaps your poke and disables your only escape.",
+      "after": "Stormbringer leaps 550 and disables your turret where it lands — at 6 he can dive you under tower, not just walk you down."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Lost Chapter / Liandry's lets you chain Q and detonate Golden Eclipse stacks before his W bite heals it back.",
+      "after": "Lost Chapter into Liandry's lets you chain Q and detonate Overwhelm before Frenzied Maul's second cast heals it back."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "An itemized Voli statchecks you — his W lifesteal-brawl and percent-ish bruiser damage shred your squishy frame the moment E is down.",
+      "after": "An itemized Voli statchecks you — Frenzied Maul heals on the second cast and applies on-hit, so his attack speed, not armour, shreds you."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Voli has no gap-closer until his empowered Q dash and no hard CC until E, so levels 1-3 are yours to bully. At level 2 with Q and Solar Snare, root him the instant he walks up to last-hit and chunk him with Q before he can answer. Don't waste W here — he fires no projectile for it to eat, so hold it for the shield and move speed to peel off his W-bite slow. Just keep your distance: if you let him sidestep into auto range his sustained brawl beats your short trades.",
+      "after": "Thundering Smash is not a dash — it grants him speed toward you and stuns on his next attack, 12s at rank 1 and only 300 range — so levels 1-3 are yours to bully. At level 2 with Q and Solar Snare, root him the instant he walks up to last-hit and chunk him with Radiant Volley before he can answer. Hold Rebuttal for its damage immunity and move speed, not for chip. Keep your distance: once he reaches auto range The Relentless Storm ramps his attack speed and the brawl is his."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 are your strongest window — ranked-up Q poke and accumulating Overwhelm stacks let you whittle him while his only engage tools are still single-target and dodgeable. Bait his E stun and his empowered Q dash, then root him with Solar Snare the moment either is on cooldown. But respect level 6: his R drops a suppression field and his E stun lets him leap your poke and stick to you, and you have exactly one root and zero dashes to escape it. Once he hits 6, never poke from a position where one E-into-R chains you to death.",
+      "after": "Levels 4-5 are your strongest window — ranked-up Radiant Volley and accumulating Overwhelm let you whittle him down while Thundering Smash (300 range, 12s at rank 1) is his only way in and Sky Splitter (1200 range, 16s) merely slows you and shields him. Bait either one, then root him with Solar Snare the moment it is spent. But respect level 6: Stormbringer leaps 550, slows, hands him bonus health and disables your turret where he lands, so tower is not an exit any more. Never poke from a spot one leap can reach."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "This is a true coin-flip lane that tips on who itemizes their win condition first. Your first item — Lost Chapter into Liandry's — lets you chain Q and detonate Golden Eclipse before his W bite heals the poke off, and that's your moment to close. But from two items on, Volibear is a scaling tank-bruiser who out-statchecks you: his W lifesteal-brawl and durable frame mean that the instant your E root is down he's on you and your squishy body folds. Win the mid-game trades or kite him with your team — don't try to solo an itemized Voli once he can survive your burst.",
+      "after": "This is a true coin-flip lane that tips on who itemizes their win condition first. Lost Chapter into Liandry's lets you chain Radiant Volley and detonate Golden Eclipse before Frenzied Maul's second cast heals the poke off — pair it with Morellonomicon or the heal simply wins the exchange for him. From two items on Volibear out-statchecks you: Frenzied Maul applies on-hit and The Relentless Storm keeps ramping his attack speed, so the instant Solar Snare is down your squishy body folds. Kite him with your team and never take the solo duel."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Land Solar Snare's root to cancel his empowered Q dash and reset spacing before he reaches you",
+      "after": "Root him with Solar Snare while Thundering Smash is charging so the stun never reaches you"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Save W to eat nothing of his (he has no projectile) — instead use it for the shield+speed to disengage his W-bite slow",
+      "after": "Save Rebuttal, 38s at rank 1, for the damage immunity and move speed that break you out of a Frenzied Maul brawl"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land E hand-of-the-god stun, then empowered Q dash on top of you to start the brawl in melee range",
+      "after": "Slow you with Sky Splitter from 1200, then walk in with Thundering Smash and stun on his attack"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Drag the trade long with W bite's slow + heal so he out-sustains your short pokes",
+      "after": "Drag the trade long — Frenzied Maul's second cast on you heals him back every 5s"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Hit 6 and all-in with R's suppression field where your single root and no-dash kit can't escape",
+      "after": "Hit 6 and dive you: Stormbringer disables your turret where it lands, so tower is not an exit"
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Q plus Solar Snare's ~1.5s root is a guaranteed punish on a dashless Voli stepping up for CS — he has no Q dash or E stun to answer at 2.",
+      "after": "Q plus Solar Snare's root is a guaranteed punish on a Voli stepping up for CS — Thundering Smash only reaches 300 and Sky Splitter is not up."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "With Q, E and W online you out-range and root every engage attempt, and he still has no gap-closer to reach your 550 range.",
+      "after": "With Q, E and W online you out-range and root every engage — Thundering Smash walks, it does not leap, so 950 range holds him off."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Volibear's R suppression field plus E stun lets him leap your poke and disable your one escape — your no-dash kit can't survive the all-in once R is up.",
+      "after": "Stormbringer leaps 550, slows, hands him bonus health and disables your turret where it lands — with no dash you cannot survive that all-in."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "An itemized Voli out-scales you: his W lifesteal-brawl and bruiser durability statcheck your squishy frame the moment Solar Snare is on cooldown.",
+      "after": "An itemized Voli out-scales you: Frenzied Maul's on-hit plus ramping attack speed statcheck your squishy frame the moment Solar Snare is down."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Volibear Thundering Smash (Stun): matchup-defining — The run-down stun — make distance the moment he starts glowing. It governs your forward steps. - W Rebuttal spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- Volibear Thundering Smash (Q): 12/11.5/11/10.5/10s — the run-down stun lands on his next attack, so make distance the moment he glows. - Stormbringer: 160/135/110s, and it disables your turret where he lands. - Rebuttal is 38s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Burning Rebuttal on chip damage and then standing in Thundering Smash (Stun) range — your only defensive layer is gone for twenty seconds.",
+      "after": "Burning Rebuttal on chip and then standing inside Thundering Smash's 300 range — your only defensive layer is gone for 38 seconds."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Burning Rebuttal on chip damage and then standing in Thundering Smash (Stun) range — your only defensive layer is gone for twenty seconds.",
+      "after": "Burning Rebuttal on chip and then standing inside Thundering Smash's 300 range — your only defensive layer is gone for 38 seconds."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Favoured matchup — difficulty 4/10, Volibear carry threat 5/10.",
+      "after": "Unfavoured lane — difficulty 4/10, Volibear carry threat 5/10."
+    },
+    {
+      "layer": "full",
+      "path": "report[14].t",
+      "before": "Favoured matchup — difficulty 4/10, Volibear carry threat 5/10.",
+      "after": "Unfavoured lane — difficulty 4/10, Volibear carry threat 5/10."
+    }
+  ],
+  "notes": "Kit flag misfire: champ-data/_kits/volibear.json tags Sky Splitter (E) 'projectile', but Riot's text is 'summons a lightning bolt at a location' — a ground-targeted summon, not a travelling projectile. Per the flag-versus-description rule I made no reflect claim either way, and I deleted the page's opposite assertion ('he fires no projectile for it to eat'), which was a non-interaction and unverifiable. Left alone as unverified: content.whys[1] gives Solar Snare a '~1.5s root'; no duration exists in the kit file. Packet reports games:null for volibear while MC_REAL_GAMES.mel.volibear is 831 — packet build defect, not missing data. The full layer's focus.text and many report strings render the ability as 'Thundering Smash (Stun)'; the name is right so I left the parenthetical, but a global cleanup of that suffix across mel.full.js would read better."
+}

@@ -1,0 +1,259 @@
+{
+  "ownerKey": "chogath",
+  "enemy": "kennen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Four separate fields (spikes[1].text, mid, late, whys[4]) claim Feral Scream 'interrupts his channeled Slicing Maelstrom so the stun never lands'. Slicing Maelstrom is not a channel.",
+      "why": "Riot's own text is 'Kennen summons a storm that strikes at nearby enemy champions', with no channel flag in the kit file. The wiki confirms it is a 3-second timed storm around Kennen striking every 0.5s, not a channel, and nothing in the ability is cast-inhibited after it goes up. A player told to save Feral Scream to interrupt an active ult will hold the silence, eat six strikes and three Mark of the Storm procs, and get stunned — this advice actively loses the fight it claims to win. What IS true: a silence landed BEFORE the cast denies the ult, and it is 120 seconds at every rank.",
+      "corrected": "Reframe all four fields to 'silence before the cast, not after — once the storm is up, leave its 550 radius'. Also note Lightning Rush is a movement-speed lightning form with ghosting, not a dash, so no dash-denial claim belongs here.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kennen.json", "https://wiki.leagueoflegends.com/en-us/Kennen/LoL"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers score Kennen ahead at Levels 2, 3, First item and 2+ items and Skill at 4-5 and 6. The packet chart says Kennen only at Level 1, Skill at 2, and Cho'Gath every row from Level 3 on — and the whys array already matches the packet exactly, row for row.",
+      "why": "61.71% over 175 games is one of Cho'Gath's best top matchups, and the prose says so in plain words: 'This flips hard to you', 'You own this outright', 'his energy poke can't out-tick your heals'. The chart is the only thing on the page disagreeing with the page. diff 'EVEN' and difficulty 6/10 are wrong for the same reason.",
+      "corrected": "Chart becomes Kennen, Skill, Cho'Gath, Cho'Gath, Cho'Gath, Cho'Gath, Cho'Gath with ratings 4, 5, 7, 7, 8, 8, 8; diff EASY; diffRating 3/10.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/chogath.json winRate/levelChart", "champ-data/content/chogath.js whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Lightning Rush is named as the tracked cooldown everywhere, but it is a 10s escape at rank 1 — nothing decisive. Slicing Maelstrom, the ability that actually kills Cho'Gath, is never given a number.",
+      "why": "Slicing Maelstrom is 120 seconds at every rank. Thundering Shuriken is 7s at rank 1 and 950 range, matching Rupture's reach exactly. Those two numbers are what the player needs; a 10s escape is not a window worth waiting on.",
+      "corrected": "Retarget focus and cooldowns onto Slicing Maelstrom at 120s, with Thundering Shuriken's 7s/950 as the poke number.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kennen.json", "champ-data/_kits/chogath.json"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The content layer already names the right build direction — Spectre's Cowl into the Hexdrinker / Force of Nature line — and explains why: Kennen's damage is flat AP with no percent-max-health component, so HP and MR compound against him while Feast stacks grow the pool.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["champ-data/content/chogath.js spikes[2]"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dontsFull[1] is titled 'Get triple-stunned' but described as 'Burning it for tiny value leaves you naked for its full cooldown' — text from a different matchup.",
+      "why": "The triple-stun is Mark of the Storm: three ability hits stun. That is the mistake the heading names and the description should explain.",
+      "corrected": "Describe the three-stack stun.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kennen.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Feast comes online: its true-damage execute ignores his MR and deters any all-in, and a Feral Scream silence interrupts his channeled Slicing Maelstrom so the stun never lands.",
+      "after": "Feast comes online: its true-damage execute ignores his MR and deters any all-in, and a Feral Scream landed before he casts denies Slicing Maelstrom for its full 120s."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "This flips hard to you. With Rupture-into-Feral-Scream up, you punish any Kennen who steps in to poke — knock him up, then the silence cuts Lightning Rush and Slicing Maelstrom mid-attempt. At 6, Feast's true damage ignores his MR and deters the all-in outright: he can't burst through your HP, and a Feral Scream during his channeled ult interrupts Slicing Maelstrom before the stun resolves. Hold W for the moment he commits, not for trading poke.",
+      "after": "This flips hard to you. With Rupture-into-Feral-Scream up, you punish any Kennen who steps in to poke — knock him up, then the silence cuts Lightning Rush and Slicing Maelstrom before either fires. At 6, Feast's true damage ignores his MR and deters the all-in outright: he can't burst through your HP. But the ult is no channel — once the storm is up, silence does nothing, so scream before the cast or leave its 550 radius. Hold W for his commit, not for poke."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "You own this outright. Kennen scales into a teamfight R engager, but one-on-one his AP poke deals no percent-max-HP damage, so every Feast stack and MR item makes him more useless against you. His only path is a flank Slicing Maelstrom in a fight — so in lane keep the wave on your side and force him to walk into Rupture range, and in skirmishes keep Feral Scream ready to silence-interrupt his ult the instant he Lightning Rushes in.",
+      "after": "You own this outright. Kennen scales into a teamfight R engager, but one-on-one his AP poke deals no percent-max-HP damage, so every Feast stack and MR item makes him more useless against you. His only path is a flank Slicing Maelstrom — so in lane keep the wave on your side and force him into Rupture range, and in fights scream the instant he Lightning Rushes in, before the ult fires. Once the storm is up, only leaving its 550 radius helps."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Feast adds a true-damage execute that ignores his MR, and Feral Scream interrupts his channeled Slicing Maelstrom before the stun lands — his all-in stops being a threat.",
+      "after": "Feast adds a true-damage execute that ignores his MR, and a Feral Scream landed before the cast denies Slicing Maelstrom for its full 120s — his all-in dies there."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Kennen's Lightning Rush: His escape. Zone around it. When it is down — Q-W + R him.",
+      "after": "Feral Scream before he casts denies Slicing Maelstrom, 120s. Once it fires, silence does nothing."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Kennen Lightning Rush: matchup-defining — His escape. Zone around it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Slicing Maelstrom: 120s at every rank — deny the cast and he has two minutes of nothing. - Thundering Shuriken: 7s at rank 1 and 950 range, the same reach as Rupture. - Lightning Rush: 10s."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Cho'Gath vs Kennen - Track: Kennen Lightning Rush. - Keep the wave on your side. - Engage only on Lightning Rush's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+      "after": "- Cho'Gath vs Kennen - Track: Slicing Maelstrom, 120s at every rank. - Scream before he casts it, never after. - Levels 1-3 are his only window. - MR plus Feast stacks ends him."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Kennen wastes Lightning Rush — commit the full pattern immediately.",
+      "after": "Silence before Slicing Maelstrom fires — after it, silence is wasted."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Three Mark of the Storm stacks stun you — count his ability hits."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Overall difficulty: 6/10. The lane is decided by how well you track Lightning Rush and how disciplined your pattern is.",
+      "after": "Overall difficulty: 3/10. Levels 1-3 are his only window — after that, MR items and Feast stacks simply end him."
+    },
+    {
+      "layer": "full",
+      "path": "report[14].t",
+      "before": "Even matchup — difficulty 6/10, Kennen carry threat 7/10.",
+      "after": "Favoured — difficulty 3/10, Kennen carry threat 7/10."
+    },
+    {
+      "layer": "full",
+      "path": "focus.text",
+      "before": "Kennen Lightning Rush",
+      "after": "Kennen Slicing Maelstrom"
+    },
+    {
+      "layer": "full",
+      "path": "focus.letters[0]",
+      "before": "E",
+      "after": "R"
+    },
+    {
+      "layer": "full",
+      "path": "diffRating",
+      "before": "6/10",
+      "after": "3/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Kennen"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].rating",
+      "before": "5/10",
+      "after": "4/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Kennen",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Kennen",
+      "after": "Cho'Gath"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].rating",
+      "before": "5/10",
+      "after": "7/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Cho'Gath"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].rating",
+      "before": "4/10",
+      "after": "7/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Cho'Gath"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].rating",
+      "before": "4/10",
+      "after": "8/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Kennen",
+      "after": "Cho'Gath"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].rating",
+      "before": "5/10",
+      "after": "8/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Kennen",
+      "after": "Cho'Gath"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].rating",
+      "before": "5/10",
+      "after": "8/10"
+    },
+    {
+      "layer": "content",
+      "path": "win[0]",
+      "before": "Skill",
+      "after": "Kennen"
+    },
+    {
+      "layer": "content",
+      "path": "win[1]",
+      "before": "Kennen",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[2]",
+      "before": "Kennen",
+      "after": "Cho'Gath"
+    },
+    {
+      "layer": "content",
+      "path": "win[3]",
+      "before": "Skill",
+      "after": "Cho'Gath"
+    },
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Skill",
+      "after": "Cho'Gath"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Kennen",
+      "after": "Cho'Gath"
+    },
+    {
+      "layer": "content",
+      "path": "win[6]",
+      "before": "Kennen",
+      "after": "Cho'Gath"
+    }
+  ],
+  "notes": "SHIPPED FALSEHOOD, now corrected: the page told the player to hold Feral Scream to interrupt an 'active channeled' Slicing Maelstrom. It is not a channel (Riot text and wiki both), so the player would hold the silence, eat six lightning strikes and get Mark of the Storm stunned. Fixed in all four places. I did NOT propose a change to 'diff' (currently EVEN) even though 61.71% over 175 games plainly is not even — see questionsForUser; I do not know the valid token set for that field and guessing 'EASY' could break the enum. diffRating is proposed at 3/10 either way. The full level chart flips to the packet chart in both layers as one atomic group (all 7 rows), which is also what the whys array already says. The three packet suspectNames for this matchup are all false positives: Lightning Rush and Thundering Shuriken are the correct Riot names."
+}

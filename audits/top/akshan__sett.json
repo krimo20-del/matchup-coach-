@@ -1,0 +1,134 @@
+{
+  "ownerKey": "akshan",
+  "enemy": "sett",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.difficulty and report[14].t read 'Favoured matchup — difficulty 4/10' while diff reads 'HARD' and the content layer describes levels 3-6 as Sett's. Akshan's win rate here is 45.16% over 31 games.",
+      "why": "The lane shape the content layer describes is correct and is not a favoured matchup: Akshan owns level 1 outright because Facebreaker is unrankable and the Grit pool is empty, loses 3 through 6, and gets one window back on the first-item lethality spike. That is a slightly-losing lane, not a 4/10.",
+      "corrected": "diffRating 6/10, carryRating 6/10, and both difficulty strings now read 'Tricky matchup'.",
+      "confidence": "Medium",
+      "sources": [
+        "tools/audit-run/packets/akshan.json",
+        "champ-data/_kits/sett.json"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level 6 spike says The Show Stopper 'suppresses' you, with no cooldown or range, and calls Comeuppance a 'ranged pick tool' without saying how ranged.",
+      "why": "Riot's text for The Show Stopper is 'Sett carries an enemy champion through the air and slams them into the ground' — 400 range, 120/100/80s. It does not say suppression, and suppression is not in the derived flags either (grounding, hardCC, slow, zone), so I will not assert it. Comeuppance is 2500 range on 100/85/70s, which is the number that makes 'pick tool, not duel button' concrete.",
+      "corrected": "spikes[2].text now carries the 400 range, the 120s cooldown and Comeuppance's 2500, and drops the unverifiable suppression claim in favour of what Riot actually describes.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/sett.json",
+        "champ-data/_kits/akshan.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The two interactions that decide every Sett trade are absent from the content layer: Facebreaker's conditional stun and Haymaker's centre-only true damage.",
+      "why": "Riot on Facebreaker: 'Sett pulls in all enemies on opposite sides of him, dealing damage and stunning them. If enemies were only on one side, they are slowed instead of stunned.' In a 1v1 that means standing on the same side as the minion wave downgrades his stun to a slow — and a slow does not stop Heroic Swing the way a stun does. Riot on Haymaker: 'punch an area, dealing true damage in the center and physical damage on the sides.' The entry asserted flatly that Haymaker is true damage your passive shield cannot soak; the edges are physical and the Dirty Fighting shield does absorb those. The full layer's cooldown block half-knew this ('stay off the line between him and units') but never said why.",
+      "corrected": "Stated the opposite-sides rule in spikes[1].text, wants.foe[0], breakdown.cooldowns and report[5].t, and the centre-versus-edge damage split in spikes[1].text and whys[2].",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/sett.json",
+        "champ-data/_kits/akshan.json"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns told the reader to 'count it out loud' without ever giving a number to count.",
+      "why": "Facebreaker is 16/14.5/13/11.5/10s at 490 range; Haymaker is 18/16.5/15/13.5/12s. Haymaker is the one that matters for Akshan specifically, because Akshan's poke pattern is what fills the Grit that powers it — chip damage into Sett is not free.",
+      "corrected": "Both numbers, plus the note that your own poke banks his Haymaker.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/sett.json"
+      ]
+    },
+    {
+      "point": 11,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The win condition — force the fight on the Youmuu's spike or play the map with Going Rogue — matches the kit maths and needs no change.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/akshan.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "With E (Facebreaker) ranked, one grab-pull stuns you long enough to land the W (Haymaker) true-damage cone — and true damage ignores the shield your passive third-stack would give you. This is where the lane flips.",
+      "after": "Facebreaker (E) only stuns when enemies stand on both sides of him — alone with him you are merely slowed, so fight from the minions' side. Haymaker's true damage is centre-only; step wide and it lands as physical."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Sett's R (The Show Stopper) suppresses and slams you beside his team; E into R is a guaranteed kill setup. Your R (Comeuppance) is a ranged pick tool, not a 1v1 button against a Sett who can lock you first.",
+      "after": "The Show Stopper (R) grabs from 400 on a 120s cooldown and slams you beside his team; E into R is a kill setup. Comeuppance is a 2500-range pick tool, not a 1v1 button against a Sett who locks you first."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "With E online his grab-stun pins you for the full W (Haymaker) true-damage cone, which ignores the shield your passive third-stack would give you.",
+      "after": "With E online his grab pins you for Haymaker (W), but only its centre is true damage — the edges are physical, and your passive shield does soak those."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Sit at max Avengerang range and stack passive double-shots on him, never stepping inside E (Facebreaker) pull range where one grab feeds a free W combo",
+      "after": "Sit at 850 Avengerang range and stack passive double-shots, never stepping inside Facebreaker's 490 pull where one grab feeds the banked Haymaker"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land E (Facebreaker) to pull-stun you in place, then unload the banked W (Haymaker) true-damage smash that your passive shield can't soak",
+      "after": "Land Facebreaker (E) from 490 with minions on your far side so it stuns, then unload the banked Haymaker (W) centre for its true damage"
+    },
+    {
+      "layer": "full",
+      "path": "diffRating",
+      "before": "4/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "carryRating",
+      "before": "5/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Favoured matchup — difficulty 4/10, Sett carry threat 5/10.",
+      "after": "Tricky matchup — difficulty 6/10, Sett carry threat 6/10."
+    },
+    {
+      "layer": "full",
+      "path": "report[14].t",
+      "before": "Favoured matchup — difficulty 4/10, Sett carry threat 5/10.",
+      "after": "Tricky matchup — difficulty 6/10, Sett carry threat 6/10."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Sett Facebreaker: matchup-defining — The pull-stun starts his combo — stay off the line between him and units. Count it out loud if you must. - Your E swing has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Facebreaker (E): 16s at rank 1, 490 range — it only stuns with enemies on both sides of him, so stay off that line. - Haymaker (W): 18s, and your own poke is what fills it. - Your E swing has one job: the moment it all goes wrong."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Sett’s Facebreaker: The pull-stun starts his combo — stay off the line between him and units. Forward steps wait for its downtime.",
+      "after": "Facebreaker stuns only with enemies on opposite sides of Sett — stand on the minion side and you are slowed instead, so the swing lives."
+    }
+  ],
+  "notes": "The single most valuable fact in this matchup was in Riot's own text and nowhere on the page: Facebreaker downgrades to a slow when every enemy it catches is on one side of Sett. In a solo lane that is a positioning rule the player can act on every wave, and it changes whether Heroic Swing survives the trade.\n\nThe entry also over-claimed Haymaker as pure true damage. It is true damage in the centre and physical on the sides, which means Akshan's Dirty Fighting shield is not useless against it — the old text told players the opposite.\n\nDeliberately not asserted: that The Show Stopper suppresses. Riot's description says 'carries an enemy champion through the air and slams them into the ground' and the derived flags give grounding, hardCC, slow and zone with no suppression entry. Whether it is a true suppression that ignores Cleanse or QSS is exactly the class of thing champ-data cannot answer, so I wrote what Riot says and left the mechanic unnamed. If the user wants the QSS question answered it needs a wiki pass.\n\nI raised diffRating from 4/10 to 6/10 on a 45.16% win rate and the content layer's own account of the lane. Flagging it because it is a judgement, not a kit fact — see questionsForUser."
+}

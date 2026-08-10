@@ -1,0 +1,105 @@
+{
+  "ownerKey": "aatrox",
+  "enemy": "yone",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "content win[0] reads Skill while whys[0] says 'Level 1 favours you'. win[1] and win[2] read Yone while whys[1] says 'Still yours at 2' and whys[2] says level 3 unlocks the rotation to punish his cooldowns. win[3] and win[4] read Skill while whys[3] and whys[4] give both stages to Aatrox. win[5] reads Yone while whys[5] says first-item trades are one-sided for Aatrox. Six of seven stages disagree with the reason printed beside them.",
+      "why": "The packet chart reads Aatrox for six stages and Yone only at Two+ items, and Aatrox is at 52.02% over 5867 games — the largest sample in this slice. Spirit Cleave shields by the number of champions it catches, so in a solo lane it is always the weakest version of his defence.",
+      "corrected": "Levels 1 through First item all read Aatrox; Two+ items stays Yone.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/yone.json",
+        "packets/aatrox.json levelChart"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The spike table now carries Mortal Steel at 4s, Spirit Cleave at 14s, Soul Unbound at 22s and the 120s Fate Sealed, applied since my first read of this file. The spike ordering itself was already right — level 3-5 punish window, level 6 ult trade, first item, then his crit scaling.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/yone.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The remaining wrong-name references are in wants.you[0] and wants.foe[2], which still say 'his Q3 (the dash-knockup)' and 'Q double-tap' rather than Mortal Steel, and the full-layer tldr still lists 'Yone E return, third Q swing (the knock-up), R, and item spikes' — a template string that describes AATROX's third swing inside a list of Yone's threats.",
+      "why": "Riot's text: Mortal Steel — 'On hit, grants a stack of Gathering Storm for a few seconds. At 2 stacks, Mortal Steel dashes Yone forward with a gust of wind knocking enemies Airborne.' The knockup is gated on landing a first hit and holding the stack, so the punish window is the moment after his first Mortal Steel connects, not a flat cooldown. Soul Unbound leaves his body at a fixed point and forces his spirit back to it, which the mid text now states correctly.",
+      "corrected": "Mortal Steel named with its two-stack condition in wants.you[0]; Fate Sealed named in wants.foe[2]; the full tldr rewritten around Soul Unbound and Spirit Cleave.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/yone.json (Q, W, E)",
+        "champ-data/_kits/_missing/aatrox.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[0]",
+      "before": "Skill",
+      "after": "Aatrox"
+    },
+    {
+      "layer": "content",
+      "path": "win[1]",
+      "before": "Yone",
+      "after": "Aatrox"
+    },
+    {
+      "layer": "content",
+      "path": "win[2]",
+      "before": "Yone",
+      "after": "Aatrox"
+    },
+    {
+      "layer": "content",
+      "path": "win[3]",
+      "before": "Skill",
+      "after": "Aatrox"
+    },
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Skill",
+      "after": "Aatrox"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Yone",
+      "after": "Aatrox"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Track his Q3 (the dash-knockup) cooldown and fight only when it's down",
+      "after": "Fight in the gap before Mortal Steel banks its second stack knockup"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Poke with Q double-tap and all-in with R when you're low on drain",
+      "after": "Poke you down with Mortal Steel, then Fate Sealed you when low"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Eclipse plus your drain makes brawls one-sided — bait his Q3 knockup, then all-in while it's down.",
+      "after": "Eclipse plus your drain makes brawls one-sided — fight before Mortal Steel banks its second stack."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Yone changes the lane by forcing Aatrox to respect Yone E return, third Q swing (the knock-up), R, and item spikes. Aatrox wins by controlling spacing with his first two Q swings, holding E until the enemy punish tool is committed, and managing the wave so the enemy must walk into the outer edge of his Q. Yone wants to enter inside Aatrox clean Q hits on the outer edge (where it hurts most), force melee trades, and punish Aatrox after Q/E are down.",
+      "after": "Yone changes the lane by forcing Aatrox to respect Soul Unbound (E, 22s), which leaves his body behind and snaps his spirit back to it, and Spirit Cleave (14s), which shields him by the number of champions it catches. Aatrox wins by standing on that body instead of chasing the spirit, spacing with his first two Darkin Blade swings, and fighting him alone in the side lane, where Spirit Cleave shields for the least it ever will."
+    }
+  ],
+  "notes": "RE-BASED mid-run. tools/apply-proposals.js ran while I was working and applied a pass to champ-data/content/aatrox.js: spikes[0], spikes[1], early, mid, wants.you[1] and full.focus.text now already name Mortal Steel, Spirit Cleave, Soul Unbound and Fate Sealed with cooldowns, and mid already carries the body-snapback correction. I re-read the file and cut every edit that would have re-stated an applied fix; what remains is the level chart, two wants entries, one spike and the full tldr. The full layer still sets carryRating 10/10 and diffRating 7.5/10 while the chart and all seven whys hand Aatrox the lane until two items — inconsistent, but left alone since I could not establish which is intended."
+}

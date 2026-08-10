@@ -1,0 +1,181 @@
+{
+ "ownerKey": "akali",
+ "enemy": "pantheon",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The Akali packet gives 49.68% over 777 games; the mirror entry pantheon__akali.json records that its packet says 53.54% while MC_WR_TABLES.pantheon on disk carries 50.32 for akali. Three different numbers for one matchup.",
+   "why": "MC_WR_TABLES is off-limits and I will not guess which row is the Emerald+ headline, so no chart, side, rating or diffRating was touched on this side either. The stage pattern itself (Pantheon at 1 and 6, Akali from 3 and from first item) is consistent across both layers and the mirror.",
+   "corrected": "No chart edits; see questionsForUser.",
+   "confidence": "Low",
+   "sources": [
+    "scratchpad/packets/akali.json",
+    "audits/top/pantheon__akali.json"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.spikes read 'Shield Vault online, level 6, first item' with no numbers and gave Akali 'levels 2-3'. Grand Starfall is named nowhere.",
+   "why": "Twilight Shroud is not learnable before level 3. Grand Starfall is 180/165/150s at 5500 range - the longest cooldown in the matchup, and it means his level 6 is a threat to the rest of the map rather than to you in lane, which changes what you do about it.",
+   "corrected": "breakdown.spikes and phases[4].why rebuilt on level 3 and the 180s global.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/pantheon.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Aegis Assault carries no cooldown anywhere, and the full layer repeatedly says to 'Shroud-dodge' Shield Vault.",
+   "why": "Shield Vault is a targeted dash - the content layer says correctly that it ignores invisibility - so telling the player to shroud-dodge it in the full layer is the opposite advice on the same page. And Aegis Assault is 22/21/20/19/18s of front-facing invulnerability: it is the longest basic cooldown either champion has, it eats a committed Akali combo whole, and the _missing file flags this matchup untargetable-dodges-burst on exactly that ability. Neither number appeared.",
+   "corrected": "tldr, report[0].t, winCon, report[1].t, enemyWin, breakdown.cooldowns, dosFull[0].d, report[5].t, dontsFull[1], report[11].t, phases[1].why and content whys[1], spikes[0].text and wants.foe[1] now carry the 13s Shield Vault and the 22s Aegis Assault, and the shroud-dodge instruction is gone.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/pantheon.json",
+    "champ-data/_kits/_missing/akali.json"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "No cooldown numbers appeared anywhere in either layer, and the content layer only calls Shield Vault 'a long cooldown early'.",
+   "why": "13/12/11/10/9s is the number the whole plan hangs on: the lane is 'commit while his W is down', and 13 seconds is short enough that the player needs to know it is a bait window and not a rest.",
+   "corrected": "breakdown.cooldowns, dosFull[0].d, dosFull[2].d, winCon, report[1].t, report[9].t and phases[1].why now state it.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/pantheon.json"
+   ]
+  },
+  {
+   "point": 12,
+   "status": "needs-correction",
+   "whatIsWrong": "dontsFull[1] is titled 'Sit low for his W execute' with a body about burning a cooldown.",
+   "why": "Shield Vault is a dash-stun; nothing in Riot's text makes it an execute, and the body belonged to another slot entirely.",
+   "corrected": "dontsFull[1].t and .d now describe bursting into Aegis Assault, which is the mistake that actually costs you the trade.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/pantheon.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Survive his early — shroud his all-in, scale. Akali wins the Shield Vault cooldown windows.",
+   "after": "Survive his early — shroud, then scale. Shield Vault is 13s; Aegis Assault is 22s."
+  },
+  {
+   "layer": "full",
+   "path": "report[0].t",
+   "before": "Survive his early — shroud his all-in, scale.",
+   "after": "Survive his early — bait Shield Vault's 13s."
+  },
+  {
+   "layer": "full",
+   "path": "winCon",
+   "before": "Shroud his early and out-scale him. Track Shield Vault before every commit and keep the wave on your side.",
+   "after": "Shroud his early game and out-scale him. Shield Vault is 13s at rank 1 — that gap is the whole lane."
+  },
+  {
+   "layer": "full",
+   "path": "report[1].t",
+   "before": "Shroud his early and out-scale him. Track Shield Vault before every commit.",
+   "after": "Shroud his early and out-scale him. Shield Vault is 13s at rank one."
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Pantheon wins by landing Shield Vault, denying your pattern, and out-trading your engage windows.",
+   "after": "Pantheon wins by point-click Shield Vault into a held Comet Spear before you have Shroud."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Pantheon Shield Vault: matchup-defining — His all-in start. Shroud-dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+   "after": "- Pantheon Shield Vault: matchup-defining — 13/12/11/10/9s and point-and-click, so Shroud does not dodge it. - Aegis Assault: 22/21/20/19/18s, invulnerable from the front. - Grand Starfall: 180/165/150s."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His all-in start. Shroud-dodge it. Only engage once it is down or baited.",
+   "after": "13s at rank 1 and point-and-click — Shroud will not dodge it. Bait it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Pantheon wastes Shield Vault (Stun) — commit the full pattern immediately.",
+   "after": "Pantheon spends Shield Vault — commit the full pattern immediately."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Pantheon's Shield Vault (Stun): His all-in start. Shroud-dodge it. When it is down — E-Q + R him.",
+   "after": "Aegis Assault is 22s of front-facing invulnerability — hit him from behind, or just wait it out."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.spikes",
+   "before": "Pantheon: Shield Vault online, level 6, first item. Akali: levels 2-3 (full pattern), Lich Bane first-item spike, and the 2-item window.",
+   "after": "Pantheon: Shield Vault at level 2 (13s), level 6 (Grand Starfall, 180s), first item. Akali: level 3 (Shroud), Lich Bane, two items."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Shroud rewrites any trade he starts. Only take the trade when Pantheon's Shield Vault is down.",
+   "after": "Shroud does not stop a point-click Shield Vault. Trade only when its 13s is actually down."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Both R casts turn survived all-ins into executes. Reassess every all-in at 6 — Pantheon's ultimate changes the math too.",
+   "after": "Grand Starfall is 180s and lands anywhere on the map — his 6 threatens other lanes more than yours. Plan for it."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Shield Vault's cooldown, on your level-6 spike, and on your Lich Bane timing. Bait the answer, then sign.",
+   "after": "Commit on Shield Vault's 13s, on your level-6 spike, and on your Lich Bane timing. Bait the answer, then sign."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].t",
+   "before": "Sit low for his W execute",
+   "after": "Burst into Aegis Assault"
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+   "after": "22s of frontal invulnerability eats a committed combo whole."
+  },
+  {
+   "layer": "full",
+   "path": "report[11].t",
+   "before": "Trade into his W stun. Sit low for his W execute. Fight his early even. Don't spend your ultimate on chip — it is the kill window.",
+   "after": "Trade into his W stun. Burst into Aegis Assault. Fight his early even. Don't spend your ultimate on chip — it is the kill window."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "His E (Aegis Assault) blocks your frontal empowered autos and his W stun chains into Comet Spear before you can answer.",
+   "after": "His E (Aegis Assault) is 22s of frontal invulnerability, and his W stun chains into Comet Spear before you answer."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Hold E (Aegis Assault) to block your frontal empowered autos and win every short early trade",
+   "after": "Hold E (Aegis Assault), 22s of frontal invulnerability, to eat your empowered autos and short trades"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Pantheon's window — his W (Shield Vault) point-click stun plus a held empowered-Q spear out-trades your Q-only level 1, and his E (Aegis Assault) blocks your frontal autos when he holds it.",
+   "after": "Pantheon's window — his W (Shield Vault) point-click stun plus a held empowered-Q spear out-trades your Q-only level 1, and his E (Aegis Assault) is 22s of frontal invulnerability."
+  }
+ ],
+ "notes": "The full layer told the player to 'Shroud-dodge' Shield Vault in four places while the content layer correctly says the point-click stun ignores invisibility — the two halves of the same page gave opposite instructions on the one thing that decides the lane. Also carried over from the mirror and still true here: Akali's Assassin's Mark (auto reset, bonus range on exiting the ring) is never described in this matchup, and every string that could carry it is at its length ceiling."
+}

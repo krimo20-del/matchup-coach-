@@ -1,0 +1,109 @@
+{
+  "ownerKey": "akshan",
+  "enemy": "shen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "diff TRICKY at 7/10 matches the 43.24% win rate and the content layer's account: a narrow level 3-5 window for Akshan, then Shen taking over from 6 on global pressure and tank items. Nothing to correct in the shape of the lane.",
+      "corrected": "Left the ratings and the chart alone; added the cooldown numbers that make the 3-5 window actually schedulable.",
+      "confidence": "High",
+      "sources": [
+        "tools/audit-run/packets/akshan.json",
+        "champ-data/_kits/shen.json"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Every spike in this matchup is described relative to a cooldown ('whenever his W is on cooldown', 'his E taunt sets up the gank') and not one of them says how long that cooldown is.",
+      "why": "Spirit's Refuge is 16/14.5/13/11.5/10s, Shadow Dash is 18/16/14/12/10s at 600 range, Stand United is 200/180/160s. At rank 1 the W block is down for most of a minute-long trade cycle, which is why the 3-5 window is real rather than theoretical — and Stand United's 200s is why 'shove and take a plate when he leaves' is a repeatable plan rather than a one-off.",
+      "corrected": "spikes[0].text and wants.foe[1] now carry the real numbers; breakdown.cooldowns carries all three.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/shen.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The entry gets the big Spirit's Refuge interaction right but misses Ki Barrier entirely, and never says that Twilight Assault slows you when you run.",
+      "why": "Riot on Ki Barrier: 'After casting a spell, Shen gets a shield. Affecting other champions reduces the cooldown of this effect.' Against a poke champion that is the whole reason chip damage under-delivers into Shen — he refunds a slice of every trade for free. Riot on Twilight Assault: 'all collided enemies are slowed while running away from Shen', so the disengage after eating Shadow Dash is slowed on top of the taunt. The entry's existing claim that Spirit's Refuge blocks attacks but not Avengerang is correct and supported: 'Attacks that would hit Shen or his allies near his spirit blade are blocked.' The packet flagged 'His Spirit's Refuge' in whys[1] as a suspect name — that is a FALSE POSITIVE, the name is exactly right and the detector tripped on the preceding word.",
+      "corrected": "Ki Barrier's shield-per-cast is now in early and report[5].t; the Twilight Assault run-away slow is in wants.foe[1] and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/shen.json",
+        "champ-data/_kits/akshan.json"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns named Shadow Dash as matchup-defining with no number, and dosFull[2].d is generic filler ('Shen spends Shadow Dash early — the closest thing this matchup has to a guarantee').",
+      "why": "The punishable cooldown in this lane is Spirit's Refuge, not Shadow Dash: W is what makes your auto trades worthless, and at 16s it is down far more often than it is up. Shadow Dash is 18s and is the gank-enabler rather than the trade-decider.",
+      "corrected": "Rewrote breakdown.cooldowns around W 16s / E 18s / R 200s and replaced the dosFull[2] filler with the actual instruction: bait W, then auto.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/shen.json"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing anywhere states that Heroic Swing ends on champion collision, which is precisely what a 600-range Shadow Dash into your arc does.",
+      "why": "Riot: Akshan 'gets knocked off when colliding with champions or terrain'. Shen does not need the taunt to land to end the swing — a body in the arc is enough.",
+      "corrected": "Added to report[5].t.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/akshan.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "With E (Heroic Swing) up plus Q chip you own this window: poke him down whenever his W (Spirit's Refuge) is on cooldown, since W only eats autos and your double-shot, not your ability damage.",
+      "after": "With Heroic Swing up plus Q chip you own this window: Spirit's Refuge is 16s at rank 1, so it is down more than it is up, and it only eats autos and your double-shot — never Avengerang."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Land E (Shadow Dash) taunt to lock you out of Heroic Swing and turn a jungle gank lethal",
+      "after": "Land Shadow Dash (E), 600 range on 18s, to taunt you off Heroic Swing, then Q-slow the retreat"
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Shen is immobile and short-range, so on paper he's your kind of food — but his W (Spirit's Refuge) is the catch: while it's up it blocks your autos and your double-shot passive, so an auto-trade you start into his W is just wasted. Note it does NOT block your Q (Avengerang) or your E shots — those are abilities — so keep chipping with Q boomerang even when W is active. At level 1 you both want to scale, so last-hit and poke with Q. The single worst thing that can happen here is eating an E (Shadow Dash) taunt that locks you out of Heroic Swing and hands the jungler a free kill.",
+      "after": "Shen is immobile and short-range, so on paper he's your kind of food — but Spirit's Refuge (W) is the catch: while it's up it blocks your autos and your double-shot passive, so an auto-trade started into it is wasted. It does NOT block Avengerang — that's an ability — so keep chipping with Q while W is active, and know that Ki Barrier shields him after every cast, which is why chip damage under-delivers here. At 16s the W is beatable; the worst thing that happens is a 600-range Shadow Dash taunt off your swing into a waiting jungler."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "His Spirit's Refuge (W) eats your autos and double-shot, so an even level-2 trade isn't reliably yours until you have E to swing around it.",
+      "after": "Spirit's Refuge (W) eats your autos and double-shot and Ki Barrier shields every cast, so level 2 isn't reliably yours until E can swing around it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Shen Shadow Dash (Taunt): matchup-defining — His taunt engage — punish hard while it is on cooldown. Step up only on its downtime. - Budget E swing for emergencies and the R for opportunities — never swap them.",
+      "after": "- Spirit's Refuge (W): 16s at rank 1 and the real gate — it blocks attacks, never Avengerang. - Shadow Dash (E): 18s, 600 range, and Q slows you as you run. - Stand United: 200s; every time he leaves, take a plate."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Shen’s Shadow Dash (Taunt): His taunt engage — punish hard while it is on cooldown. Forward steps wait for its downtime.",
+      "after": "Spirit's Refuge blocks attacks, not Avengerang, and Ki Barrier shields each cast. Shadow Dash into your arc ends the swing on contact."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Shen spends Shadow Dash (Taunt) early — the closest thing this matchup has to a guarantee.",
+      "after": "Bait Spirit's Refuge with one Q, then spend your autos in the 16 seconds before it returns."
+    }
+  ],
+  "notes": "The packet flagged 'His Spirit's Refuge' in whys[1] as a probable wrong ability name. It is a FALSE POSITIVE — Spirit's Refuge is exactly right and the near-miss detector matched on the preceding word. Worth tuning, because the same pattern ('His <Ability>') will keep tripping it across the whole site.\n\nThe entry was already unusually good on the one interaction that matters most here — that Spirit's Refuge blocks attacks but not Avengerang — so most of my work was putting numbers on advice that was already correct in shape. The genuinely missing piece was Ki Barrier: Shen shields himself after every spell cast, which is the mechanical reason a poke champion's chip does less to him than the damage numbers suggest, and it appeared nowhere in either layer.\n\nUnverified and therefore not written: whether Spirit's Refuge blocks Akshan's Heroic Swing shots. Riot calls them 'firing at the nearest enemy while swinging' without specifying whether those count as attacks or ability hits, and akshan.json needsResearch is empty. The entry's existing spikes[0].text asserts W does not block 'your E shots' — I left that assertion alone rather than repeating or removing it, but it needs a wiki check, since it is the difference between Heroic Swing being a trade tool into W or a wasted cooldown."
+}

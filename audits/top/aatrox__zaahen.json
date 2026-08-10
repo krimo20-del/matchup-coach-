@@ -1,0 +1,88 @@
+{
+  "ownerKey": "aatrox",
+  "enemy": "zaahen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "content win[] reads Skill, Zaahen, Zaahen, Skill, Skill, Zaahen, Zaahen and every one of the seven whys agrees with it stage for stage — neutral level 1, his levels 2-3, even 4-5, even at 6, his first item and late. The packet chart is identical. This is the only chart in my slice that already matches its own reasoning, so nothing was touched.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packets/aatrox.json levelChart",
+        "champ-data/content/aatrox.js whys"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[4] says 'World Ender's stat swing and revive cancel whatever lead he built'. World Ender grants no revive. Aatrox has not had a revive on his ultimate for many patches — the champion in this matchup who revives is ZAAHEN, through Cultivation of War.",
+      "why": "Riot's text: World Ender — 'Aatrox unleashes his demonic form, fearing nearby enemy minions and gaining attack damage, increased healing, and Move Speed. If he gets a takedown, this effect is extended.' No revive. Cultivation of War — 'When filled with Determination, Zaahen gains increased Attack Damage and can revive.' Telling an Aatrox player they have a revive window at 6 will get them killed taking a fight they cannot survive, and it hides the fact that their OPPONENT is the one who comes back. The Teemo mirror flagged the identical false claim in that matchup's file, so this error is systemic.",
+      "corrected": "whys[4] now says World Ender grants no revive and points the revive at Zaahen's passive.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aatrox.json (R)",
+        "champ-data/_kits/zaahen.json (P)",
+        "audits/top/teemo__aatrox.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Dreaded Return is described only as a 'W pull' that 're-engages'. Riot's text has it stab in a direction and then pull enemies toward him — and the kit flags it as a knockup, so it is displacement, not just a gap-close. Nothing anywhere states that The Darkin Glaive is recastable, which is where his knockup comes from.",
+      "why": "Riot's text: The Darkin Glaive — 'Zaahen slashes twice on his next attack, dealing bonus damage and healing himself. Zaahen can recast this ability to have his next attack deal bonus damage and knock up his target.' So his knockup is not a separate button you can track; it is the second half of an ability he has already spent, meaning the tell is the recast, not the cast. Dreaded Return is 14/13.5/13/12.5/12 and Aureate Rush 10/9.5/9/8.5/8, which is why the entry's advice to trade in the ten seconds after his dash is right.",
+      "corrected": "The Darkin Glaive's recast knockup stated in wants.foe[0]; Dreaded Return's pull already carries its 14s cooldown in spikes[2].",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zaahen.json (Q, W, E)"
+      ]
+    },
+    {
+      "point": 14,
+      "status": "needs-correction",
+      "whatIsWrong": "The entire FULL layer for this matchup is an unfilled placeholder. tldr reads 'Zaahen is marked as pending because the matchup needs confirmed kit, cooldown, and live-lane data'; enemyWin reads 'Pending kit confirmation'; focus.text reads 'Pending kit data'; diffRating and carryRating are empty strings; and all seven phases[].side read 'Pending' at a flat 5/10.",
+      "why": "The kit data is no longer pending — champ-data/_kits/zaahen.json carries all five abilities with per-rank cooldowns, and the content layer for this matchup has already been written to a good standard off it. The full layer is simply stale relative to the data that now exists, and a player opening the loading screen sees a page that says the site does not know the matchup while the site plainly does.",
+      "corrected": "tldr and focus.text rewritten from the kit. diffRating, carryRating, enemyWin and phases[].side left alone — empty strings and the 'Pending' enum cannot be filled inside the length band, so they are raised for the user.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zaahen.json",
+        "champ-data/content/aatrox.js"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "At 6 it's even: World Ender's stat swing and revive cancel whatever lead he built, so a full-ult all-in is a genuine coinflip.",
+      "after": "At 6 it's even: World Ender's stat swing cancels whatever lead he built — but it grants no revive; his passive is the one that does."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Punish your whiffed Qs",
+      "after": "Recast Glaive: knockup"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Out-heal you with Q and R",
+      "after": "Out-heal you: Glaive and R"
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Zaahen is marked as pending because the matchup needs confirmed kit, cooldown, and live-lane data before a reliable scouting report can be written. Do not fake matchup certainty in a paid database. Use the safe default Aatrox rules below until verified.",
+      "after": "Zaahen changes the lane by forcing Aatrox to respect Aureate Rush (E, 10s), which sidesteps his sweet spots, and The Darkin Glaive, an auto-reset that heals and recasts into a knockup. Aatrox holds Q for sure hits and trades in the 10s after that dash."
+    },
+    {
+      "layer": "full",
+      "path": "focus.text",
+      "before": "Pending kit data",
+      "after": "Aureate Rush, 10s"
+    }
+  ],
+  "notes": "TWO ITEMS FOR THE USER. (1) CHAMP_FULL.aatrox.zaahen is still a placeholder record: enemyWin reads 'Pending kit confirmation', diffRating and carryRating are EMPTY STRINGS, and all seven phases[].side read 'Pending' at 5/10. I rewrote tldr and focus.text, but the rest cannot be filled without either breaking the +/-10% length band (empty string to any value is an infinite increase) or writing to enemyWin, which is not on my writable list. The content layer for this matchup is fully written, so the full layer is simply stale — it needs a manual pass or an applier exemption for placeholder records. (2) The 'World Ender grants a revive' error corrected here in whys[4] is the same false claim the Teemo mirror found in champ-data/content/teemo.js. It is worth grepping the whole repo for 'revive' near 'World Ender' — every instance tells an Aatrox player to take a fight they lose. packet suspectNames flagged 'If World Ender' and \"World Ender's\" — both FALSE POSITIVES."
+}

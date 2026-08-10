@@ -1,0 +1,103 @@
+{
+  "ownerKey": "jayce",
+  "enemy": "galio",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Reused from the mirror at audits/top/galio__jayce.json rather than re-derived. Both layers and the packet agree: Jayce owns levels 2-3 with the gate online, the middle stages are skill windows, and Jayce holds both item stages against a 6/10 carry threat. No change needed.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "audits/top/galio__jayce.json",
+        "packets/jayce.json levelChart"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why for level 6 is champion-wide boilerplate ('six abilities against his four') and never names Hero's Entrance.",
+      "why": "Hero's Entrance is 180/160/140s with 4000-5500 range and lands on an ALLY's position, not on you. That makes Galio's level 6 a map-wide spike rather than a lane one — the correct instruction is about warding and not over-shoving, which the generic line never conveys.",
+      "corrected": "phases[4].why rewritten around the 180s cooldown and the ally-targeted landing.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/galio.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Shield of Durand is not mentioned anywhere on the page — not in breakdown.cooldowns, not in the Key Ability Interactions entry, not in the dos or donts. Every field treats Justice Punch as Galio's only relevant ability.",
+      "why": "Riot's W text: Galio charges a defensive stance, moving slowly, and on release he TAUNTS and damages nearby enemies. A taunt is the thing that turns a survivable Justice Punch into a death for a champion with no defensive stats, and it is the reason 'swap to hammer and trade back' is wrong here. It is also visually telegraphed by the slow charge, which makes it actionable.",
+      "corrected": "Stated in breakdown.cooldowns, the Key Ability Interactions entry and dontsFull[1], with its 18s rank-1 cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/galio.json (W description)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Justice Punch is described only as 'His dash + knockup engage'. The page never states that Galio steps BACK before charging, or that the charge stops on the first enemy champion it encounters.",
+      "why": "Riot's E text gives both. The backstep is a free half-second of warning — the single most usable tell in the matchup — and _missing-interactions.json flags this pair for dash-denied because the knockup interrupts To the Skies!.",
+      "corrected": "Both stated in breakdown.cooldowns, report[5] and dosFull[0], with the 11s rank-1 cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/galio.json (E description)",
+        "champ-data/_kits/_missing-interactions.json"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[2] and dontsFull[1] carry descriptions copied from unrelated template lines, and dosFull[0].d repeats the breakdown fragment 'His dash + knockup engage. Punish him when it's down.' without saying how to recognise it.",
+      "why": "Mismatched title/description pairs give no usable instruction.",
+      "corrected": "All three rewritten with real mechanics and numbers.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/jayce.full.js"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Galio Justice Punch: matchup-defining — His dash + knockup engage. Punish him when it's down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Justice Punch (E), 11s at rank 1: he steps BACK before he charges — that backstep is the tell, and it knocks up the first champion it reaches. - Shield of Durand (W), 18s: the charge-up TAUNTS you on release."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Galio's Justice Punch: His dash + knockup engage. Punish him when it's down. When it is down — Gate-Q poke + hammer knock.",
+      "after": "Justice Punch telegraphs with a backstep and hits the first champion in its path. Shield of Durand taunts on release."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His dash + knockup engage. Punish him when it's down. Only engage once it is down or baited.",
+      "after": "Watch for the backstep — that is the wind-up, and it is 11s at rank 1 if he misses."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Galio wastes Justice Punch — commit the full pattern immediately.",
+      "after": "Justice Punch is 11s at rank 1 — poke him for the whole window."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Shield of Durand taunts on release — never stand in it to trade back."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Form-swapping IS the ult — six abilities against his four. Reassess every all-in at 6 — Galio's ultimate changes the math too.",
+      "after": "Hero's Entrance is 180s at rank 1 and lands on an ally anywhere on the map — his 6 is a map spike, not a lane one at all."
+    }
+  ],
+  "notes": "_missing-interactions.json also flags an autoreset-burst-tell for Colossal Smash (P) — 'the wind-up is your cue to step back, not the ability cast'. Riot's passive text confirms the periodic empowered attack with bonus magic damage in an area, but says nothing about an attack reset, and the derived autoReset flag is the kind of tooltip-parse misfire the brief warns about. I wrote the Justice Punch backstep tell instead, which is stated plainly in Riot's own E text and is the more reliable read anyway. The Shield of Durand taunt was the single largest gap here: an ability that hard-CCs Jayce for its whole duration appeared nowhere on a page whose entire plan is 'swap to hammer when he closes'."
+}

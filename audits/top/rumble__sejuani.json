@@ -1,0 +1,115 @@
+{
+  "ownerKey": "rumble",
+  "enemy": "sejuani",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Emerald+ 50.74% over 408 games. The full layer calls the matchup FAVOURED at 4/10 difficulty, which is a little generous against a coin-flip win rate, but the content layer's 'EVEN, win through teamfight' framing is the one the player reads and it is right.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["packets/rumble.json"]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Rumble takes levels 2-3, it evens from 4-5 as she buys HP, and she owns two items. Correct as written. She has exactly one gap-close (Arctic Assault, 18s at rank 1) and no dash otherwise, which is why the early window is real.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sejuani.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Two of the four spikes are built on a fabricated mechanic: 'her percent-HP W'. Winter's Wrath has no percent-health component.",
+      "why": "Riot's Winter's Wrath description in full: 'Sejuani swings her mace twice, dealing damage, slowing enemies and applying Frost stacks.' No max-health scaling, and the kit file carries no percentHealth flag on it. Her two-item spike is raw stat weight plus Frost Armor's free armour and magic resist, not percent-health damage. Telling a Rumble he cannot win a grind because of percent-HP damage that does not exist sends him to the wrong item build.",
+      "corrected": "spikes[2].text and spikes[3].text rewritten around the real source of her scaling.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sejuani.json (W description and flags)"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Fury of the North grants Sejuani immunity to slows while Frost Armor holds. The matchup's stated win condition is 'double Electro-Harpoon to pin her' — and against a Sejuani who has been out of combat, that pin simply does not apply.",
+      "why": "Riot's passive description: after being out of combat Sejuani gains Frost Armor, which grants Armor and Magic Resist 'and immunity to slows', persisting for a short time after she takes damage. Every first engage of a wave starts with Frost Armor up. The correct sequencing is therefore: land a hit to break it, then Electro-Harpoon — throwing the harpoons first wastes both charges on a slow-immune target. Naming Arctic Assault (Q, 18s) as her gap-close also matters: the text twice calls Winter's Wrath her gap-close, which is wrong.",
+      "corrected": "Stated in wants.you[1], wants.foe[0], spikes[0].text, dosFull[0].d and the Key Ability Interactions report line.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sejuani.json (P and Q descriptions)", "champ-data/_kits/rumble.json (E slow)"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The matchup repeatedly says to 'trade around her E cooldown' and 'engage once Permafrost is down'. Permafrost is on a 1.5 second cooldown — it is never down.",
+      "why": "Permafrost is gated on Frost stacks, not on its own cooldown: Riot's text is that it 'freezes and stuns an enemy champion that has maximum Frost stacks'. Stacks come from Winter's Wrath (9/8/7/6/5s) and Glacial Prison. So the ability to track is Winter's Wrath, and the way to be safe from the stun is to not eat W swings, not to count down a stun cooldown that refreshes in a second and a half.",
+      "corrected": "breakdown.cooldowns and dosFull[0].d rewritten to track Winter's Wrath at 9s and Arctic Assault at 18s instead.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sejuani.json (E, W, P descriptions)"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Once you have Q and E online, ride to Danger Zone heat and force a trade — Sejuani has to walk through Flamespitter with no dash to escape the double Electro-Harpoon slow.",
+      "after": "Ride to Danger Zone and force the trade, but break Frost Armor with your first hit — while it holds she is immune to slows and walks straight out of the Electro-Harpoon pin."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Luden's or Shadowflame closes your kill threat on a squishy-HP Sejuani, but if she has Sunfire or Heartsteel her percent-HP W and raw tank stats start making trades genuinely neutral again.",
+      "after": "Luden's or Shadowflame closes your kill threat on a squishy-HP Sejuani, but Sunfire or Heartsteel plus Frost Armor's free armour and magic resist make her first trade of each wave neutral again."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "A fully itemized Sejuani with Frozen Heart and Thornmail soaks your sustained Flamespitter and her W percent-HP damage turns every prolonged trade into her favor — respect the 2-item wall.",
+      "after": "A fully itemized Sejuani with Frozen Heart and Thornmail soaks your sustained Flamespitter, and stacked Frost into a Permafrost stun turns every prolonged trade into her favor — respect that wall."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Land both Electro-Harpoon charges to keep her stuck inside Flamespitter range and deny her W gap-close",
+      "after": "Hit her once to break Frost Armor first — it grants slow immunity, so Electro-Harpoon only pins her in combat"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Stack W Permafrost stacks by walking through your Flamespitter and surviving the trade with raw tank HP",
+      "after": "Open on you with Frost Armor up so your Electro-Harpoon slow is ignored, then stack Frost with Winter's Wrath"
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Her percent-HP W starts to normalize the trade math as she scales HP — fights become genuinely Skill-dependent on who lands their CC first, her E stun or your double Harpoon pin.",
+      "after": "Winter's Wrath is not percent-HP — her scaling is raw HP and resists. The fight turns on who lands CC first: Permafrost once Frost is stacked, or your double Harpoon pin."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Full tank Sejuani with Frozen Heart and Thornmail simply outlasts your Flamespitter channel; her W percent-HP converts every prolonged trade into her win condition — shift focus to Equalizer teamfight impact.",
+      "after": "Full tank Sejuani with Frozen Heart and Thornmail simply outlasts Flamespitter's burn; it is her raw stat weight, not any percent-HP damage, that wins the grind — shift to Equalizer teamfight impact."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Her stun after Frost stacks. Don't get stacked + stunned. Only engage once it is down or baited.",
+      "after": "1.5s cooldown — deny the Frost stacks from Winter's Wrath instead, you cannot wait it out."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Sejuani's Permafrost: Her stun after Frost stacks. Don't get stacked + stunned. When it is down — Overheat flame + E slow.",
+      "after": "Frost Armor makes her immune to slows — Electro-Harpoon does nothing until you break it with a hit. Permafrost is 1.5s: deny the stacks."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Sejuani Permafrost: matchup-defining — Her stun after Frost stacks. Don't get stacked + stunned. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Permafrost: 1.5s, so you never wait it out — you deny the Frost stacks off Winter's Wrath (9s at rank 1). - Arctic Assault: 18s, her only gap-close, and it knocks up. - Glacial Prison: 120s. - Your R: kill windows only."
+    }
+  ],
+  "notes": "breakdown.mid and the content 'mid' paragraph both still say to trade around Permafrost's cooldown, which is a 1.5s ability — the corrected framing is in breakdown.cooldowns and dosFull, but a future pass should rewrite those two prose blocks too (I left them alone rather than force a whole-paragraph rewrite inside the length band). The 'percent-HP W' claim appears in five places in this matchup and is a pure fabrication; I fixed the four that fit the band. Standing note for Rumble: the kit file's knockup and terrain flags on Scrap Shield (W) are parsing misfires — Riot's description is a shield plus a movement-speed burst only."
+}

@@ -1,0 +1,255 @@
+{
+ "ownerKey": "kassadin",
+ "enemy": "swain",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "47.37% Emerald+. Swain out-ranges Kassadin with Death's Hand on a 7s cooldown at rank 1 and converts one Nevermove root into a full combo; Kassadin has no disengage until 6. The 5.5/10 difficulty with HARD lane framing matches a lane you lose but a game you can still win.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/swain.json",
+    "champ-data/_kits/kassadin.json",
+    "champ-data/content/kassadin.js MC_WR_TABLES"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "The whys array is shifted one stage from index 3: whys[3] sits in Levels 4-5 but describes Riftwalk arriving at 6, whys[4] sits in Level 6 but describes the Catalyst/Rod of Ages stall, whys[5] sits in First item but describes 2+ items. Levels 4-5 therefore had no caption of its own. Separately win[2] said Swain while its caption ends 'it's even at best until 6', and win[6] said Swain while its caption describes assassinating him.",
+   "why": "Stage order is Level 1, Level 2, Level 3, Levels 4-5, Level 6, First item, Two+ items. A caption reading 'even at best' is Skill; a caption describing you killing him before his ult ramps is a Kassadin win.",
+   "corrected": "Captions realigned so whys[3] covers Levels 4-5, whys[4] Level 6, whys[5] First item and whys[6] Two+ items. Sides: Level 3 to Skill and Two+ items to Kassadin. Levels 4-5 stays Swain, Level 6 stays Skill, First item stays Swain — Swain's Soul Fragment sustain genuinely holds through the first item, so no shift was invented there.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/content/kassadin.js",
+    "champ-data/kassadin.full.js"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Four fields (late, whys[6], spikes[1], wants.you[2]) state that 'Null Sphere interrupts his Demonic Ascension channel' and build a win condition on it. Riot's Demonic Ascension text describes a transformation, not a channel: 'Swain transforms into a demon and drains health from nearby enemy champions, minions, and neutral monsters... This form is indefinite as long as Swain drains enemy champions.' A form that persists indefinitely is not something an interrupt cancels, and swain.json carries no channel flag on R — unlike Quinn's Behind Enemy Lines, Shen's Stand United and Poppy's Keeper's Verdict, which all do carry it in the same kit library.",
+   "why": "This is the load-bearing claim of the matchup's late game, so if it is wrong the whole plan is wrong. I removed it rather than leave it shipped; removing a possibly-true fact is recoverable, shipping a false one is not.",
+   "corrected": "The interrupt claim is gone from all four fields, replaced with what the kits do support: buy Grievous Wounds against the drain, and burst him before it ramps.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/_kits/swain.json",
+    "champ-data/_kits/kassadin.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Nevermove's actual timing is never stated, and Ravenous Flock is never mentioned at all.",
+   "why": "Riot's Nevermove text: 'Swain launches a wave of demonic power forward. It then returns to Swain and roots enemies it hits.' The root is on the RETURN leg, not the outbound — which means the wave passing through you is not the moment to panic, and you have the whole return travel to step off its path. The page said only 'blink the instant his E root projectile is in the air', which points at the wrong leg. Riot's Ravenous Flock text: 'Swain's ravens collect Soul Fragments that heal him and permanently increase his maximum health', and Vision of Empire grants him a fragment for every champion it hits — so eating his poke literally makes him permanently bigger.",
+   "corrected": "The return-leg root is now in mid, whys[4], spikes[1], winCon, breakdown.cooldowns, report[5] and loading. Ravenous Flock and the Soul Fragment loop are in early, whys[3], whys[5], late, wants.foe[2] and enemyWin, with Morellonomicon named in wants.you[2] and breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/swain.json",
+    "champ-data/_kits/_missing-interactions.json (needs-antiheal and resistances-invalidated rows for kassadin vs swain)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[2].d offered a 'fifteen-second invitation'; the tracked ability throughout the full layer is Demonic Ascension, which is a 120s ultimate rather than a lane clock.",
+   "why": "Nevermove is 12/11.5/11/10.5/10s at 850 range and it is the input to every threat Swain has — that is the cooldown a laner actually counts. Death's Hand is 7s at rank 1, Vision of Empire 22s, Demonic Ascension 120s.",
+   "corrected": "Nevermove's 12s becomes the tracked clock in tradeGood, dosFull[1], dosFull[2], breakdown.cooldowns, report[5], report[9] and loading; Demonic Ascension is kept but labelled with its real 120s.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/swain.json"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.late claims 'Q-silence the counterplay'.",
+   "why": "Null Sphere has no silence — Riot's text is 'dealing damage and interrupting channels'.",
+   "corrected": "Replaced with the interrupt.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/kassadin.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "win[2]",
+   "before": "Swain",
+   "after": "Skill"
+  },
+  {
+   "layer": "content",
+   "path": "win[6]",
+   "before": "Swain",
+   "after": "Kassadin"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Swain",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Swain",
+   "after": "Kassadin"
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "Riftwalk lets you blink out of his Nevermove root, the input to his entire combo, lifting you off the back foot at 6.",
+   "after": "Still holding the line: Nether Blade funds the farm, but Soul Fragments heal him, so no trade you start ever finishes."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "Catalyst/Rod of Ages stalls his poke while your sustain comes fully online — you stop being free pressure for him.",
+   "after": "Riftwalk blinks you clear of Nevermove — and it roots on the return leg, so you get two chances to leave its path."
+  },
+  {
+   "layer": "content",
+   "path": "whys[5]",
+   "before": "At 2+ items Riftwalk burst plus Void Stone's 15% magic reduction let you assassinate him before his R drain ramps.",
+   "after": "Catalyst/Rod of Ages stalls his poke and your sustain arrives, but Ravenous Flock still out-heals everything you chip."
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "Null Sphere interrupts his Demonic Ascension channel, so you can cancel the drain that wins his extended fights.",
+   "after": "At 2+ items Riftwalk burst plus Void Stone's 15% reduction kill him before Demonic Ascension's drain can ramp."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Swain owns the early levels and you have to accept it. His Q (Death's Hand) out-ranges and out-damages anything you can do with Null Sphere, and a landed E (Nevermove) root sets up a free Q+W combo, so every time you step up to last-hit you risk eating the full burst with no way to disengage. Use Null Sphere's shield only to soak a hit if you're forced into it, and otherwise farm at max range. Do not flash or burn anything chasing a kill here — pre-6 you have no all-in and no escape.",
+   "after": "Swain owns the early levels and you have to accept it. Death's Hand (Q) out-ranges and out-damages anything you can do with Null Sphere, and a landed Nevermove (E) root sets up the free follow-up, so every step up to last-hit risks the full burst with no way to disengage. Worse, Vision of Empire (W) hands him a Soul Fragment whenever it clips you and Ravenous Flock turns those into healing and permanent max health — so eating poke literally makes him bigger. Farm at max range and burn nothing chasing a kill."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 4-5 are still a hold-the-line window: Nether Blade's mana refund (quintupled off champions) lets you keep farming through his Q poke, but you can't win a straight trade into his sustain. Level 6 is the flip — Riftwalk finally lets you blink the moment his Nevermove root is in the air, and that root is the input to every threat he has. Dodge the E and his W and R can't land their value; the lane stops being free for him.",
+   "after": "Levels 4-5 are still a hold-the-line window: Nether Blade's mana refund (quintupled off champions) lets you keep farming through his Q poke, but you can't win a straight trade into his sustain. Level 6 is the flip — Riftwalk finally answers Nevermove, and the detail that matters is that Nevermove roots on its return leg, not on the way out. Step off the line it will travel back along and his W and R never land their value."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "This is the game you stalled for. By 2+ items with Riftwalk stacking, you blink onto Swain faster than his R can ramp its drain healing, and Void Stone's 15% magic reduction blunts whatever AoE he does land. Critically, Null Sphere interrupts his Demonic Ascension channel — if he ults to all-in you, a well-timed Q cancels the drain outright. Don't let him open with E; instead Riftwalk in on your terms, Q to interrupt or shield, and burst him before the sustain does work.",
+   "after": "This is the game you stalled for. By 2+ items with Riftwalk stacking, you blink onto Swain faster than his R can ramp its drain healing, and Void Stone's 15% magic reduction blunts whatever AoE he does land. Buy the Grievous Wounds though: Ravenous Flock's Soul Fragments heal him and permanently raise his max health, and every Vision of Empire that clips you hands him another. Don't let him open with Nevermove — Riftwalk in on your terms, Q for the shield, and burst him before the sustain does its work."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Riftwalk online: blink the instant his E root projectile is in the air, and remember Null Sphere interrupts his R drain channel if he ults to all-in you.",
+   "after": "Riftwalk online: Nevermove roots on the way back to Swain, not on the way out, so blink sideways off its return path and his whole combo loses its opener."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Reach 2+ items where Riftwalk burst, Void Stone's 15% magic reduction, and a Null Sphere that interrupts his R drain let you flip the all-in",
+   "after": "Reach 2+ items and add Morellonomicon — Riftwalk burst plus Grievous Wounds beats the Soul Fragment healing that wins his long fights"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Drag the fight long with R drain so his sustained healing outlasts your single Riftwalk burst window",
+   "after": "Drag the fight long on R drain and stacked Soul Fragments so his healing outlasts your burst window"
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "If his damage is magic, your Q eats it — if it's physical, this is a real lane. Either way: level 6 changes everything.",
+   "after": "Swain is all magic, so Void Stone and the Q shield both bite — but Soul Fragments out-heal chip. Level 6 flips it."
+  },
+  {
+   "layer": "full",
+   "path": "report[0].t",
+   "before": "If his damage is magic, your Q eats it — if it's physical, this is a real lane. Either way: level 6 changes everything.",
+   "after": "Swain is all magic, so Void Stone and the Q shield both bite — but Soul Fragments out-heal chip. Level 6 flips it."
+  },
+  {
+   "layer": "full",
+   "path": "winCon",
+   "before": "Absorb the poke phase and blink-execute from 6 onward. Shorthand: Demonic Ascension down, wave right, go.",
+   "after": "Absorb the poke phase and blink-execute from 6 onward. Shorthand: Nevermove roots on the return, so sidestep late."
+  },
+  {
+   "layer": "full",
+   "path": "report[1].t",
+   "before": "Absorb the poke phase and blink-execute from 6 onward. Shorthand: Demonic Ascension down, wave right, go.",
+   "after": "Absorb the poke phase and blink-execute from 6 onward. Shorthand: Nevermove roots on the return, so sidestep late."
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Swain wins by landing Demonic Ascension, denying your pattern, and owning the spacing war until your tempo starves.",
+   "after": "Swain wins by rooting you with Nevermove, feeding Soul Fragments off every poke, and out-healing your burst window."
+  },
+  {
+   "layer": "full",
+   "path": "tradeGood",
+   "before": "Riftwalk onto him the instant Demonic Ascension goes down, Q-E-W in one breath, and walk out as the shield absorbs his counter — repeat every six seconds.",
+   "after": "Riftwalk onto him the instant Nevermove is down — 12s at rank 1 — Q-W-E in one breath, then blink out before Ravenous Flock heals the trade back."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Riftwalk onto him the instant Demonic Ascension goes down, Q-E-W in one breath, and walk out as the shield absorbs his counter — repeat every six seconds.",
+   "after": "Riftwalk onto him the instant Nevermove is down — 12s at rank 1 — Q-W-E in one breath, then blink out before Ravenous Flock heals the trade back."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].t",
+   "before": "Blink onto him the moment Demonic Ascension is down post-6",
+   "after": "Blink onto him the moment Nevermove is spent, 12s at rank 1"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His drain mode — disengage and reset the fight when it starts. Commit on its cooldown, never into it.",
+   "after": "His drain form, 120s — disengage and reset when it starts, and never open a long fight into it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Swain burns Demonic Ascension on nothing — take the fifteen-second invitation.",
+   "after": "Swain whiffs Nevermove on nothing — that is a clean twelve seconds of lane."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. Count it out loud if you must. - Your Q shield has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+   "after": "- Swain Nevermove: matchup-defining — 850 range, 12s at rank 1, and it roots on the return leg rather than the outbound. Sidestep the way back, not the way out. - Death's Hand is 7s. - Demonic Ascension is 120s and out-heals chip, so buy Grievous Wounds."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.late",
+   "before": "Stacked Riftwalk Kassadin is the endgame boss: blink onto carries, Q-silence the counterplay, and leave before the fight even registers you.",
+   "after": "Stacked Riftwalk Kassadin is the endgame boss: blink onto carries, Null Sphere to cut their channel, and leave before the fight registers you."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Swain’s Demonic Ascension: His drain mode — disengage and reset the fight when it starts. It’s down or you don’t go.",
+   "after": "Track Swain's Nevermove: 850 range, 12s, and it roots on the return leg — sidestep the way back, not the way out."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Demonic Ascension’s cooldown, on your Rod of Ages spike, and with your jungler’s setup. Make him flinch first.",
+   "after": "Commit on Nevermove's 12 seconds, on your Rod of Ages spike, and with your jungler's setup. Make him flinch first."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Kassadin vs Swain - Track: Swain Demonic Ascension. - No trades before 6 — not one. - Demonic Ascension down is the green light. - Hold the ult for names, not waves.",
+   "after": "- Kassadin vs Swain - Track: Nevermove, 12s, roots on the return. - No trades before 6 — not one. - Buy Grievous Wounds for the drain. - Hold the ult for names, not waves."
+  }
+ ],
+ "notes": "Judgement call flagged for the user: the page asserted in four places that Null Sphere interrupts Demonic Ascension. Riot's description of that ultimate is a transformation that 'is indefinite as long as Swain drains enemy champions', and swain.json carries no channel flag on R while Quinn's, Shen's and Poppy's ultimates all do in the same library. I removed the claim rather than leave a load-bearing interaction on a live page that the source data does not support — but I did not have a way to prove it in-client, so this one is worth a second pair of eyes. The genuine Null Sphere interrupt in my slice is Shen's Stand United, which is flagged as a channel. Also worth knowing: _missing-interactions.json contains 'Swain can cancel your Null Sphere (Q) with Nevermove (E)' for the mid-lane copy, built on the same bad channel flag on Null Sphere; not written."
+}

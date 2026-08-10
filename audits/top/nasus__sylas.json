@@ -1,0 +1,148 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "sylas",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Both layers call Sylas's E a stun: the full layer's dosFull[0] said 'His dash + stun (recast pull)' and the content layer says 'E chain-dash stun' in spikes[0], whys[1] and early.",
+   "why": "Abscond / Abduct is a dash whose recast throws chains and pulls Sylas to the enemy hit — Riot's description contains no stun, and the derived kit flags for that slot are projectile + dash only, with no hardCC (compare Swain's Nevermove and Urgot's Disdain, both of which do carry hardCC). Telling a Nasus he is about to be stunned changes whether he holds Wither or Flash, so the error is not cosmetic.",
+   "corrected": "It is a dash out with a recast chain-pull in, not a stun. Both halves share one cooldown: 13/12/11/10/9s.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/_kits/sylas.json — E Abscond / Abduct description and flags",
+    "champ-data/_kits/swain.json and urgot.json — hardCC flag present on genuine CC slots"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The content layer repeatedly calls Chain Lash a 'Q drain' (spikes[0], whys[1], whys[3], early, mid).",
+   "why": "Chain Lash damages and slows and then detonates after a delay. It does not heal him. Kingslayer is the heal. Attributing the sustain to the wrong spell sends the player to bait the wrong cooldown.",
+   "corrected": "Chain Lash is the slow-and-detonate poke (10/9/8/7/6s); Kingslayer is the healing lunge (12/10.5/9/7.5/6s).",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sylas.json — Q Chain Lash and W Kingslayer descriptions"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "The full layer never mentions Hijack. Its matchup-defining cooldown, its dos, its donts and its level-6 phase all point at Abscond / Abduct instead.",
+   "why": "Hijack copies Fury of the Sands. A Nasus who opens the all-in with his ultimate hands Sylas the same bonus health, resists, damage aura and reduced Q cooldown he just used. That single fact decides the level-6 fight and it was only in the content layer.",
+   "corrected": "Level 6 phase and the cooldown section now lead with Hijack at 80/55/30s: never open with R.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sylas.json — R Hijack",
+    "champ-data/_kits/nasus.json — R Fury of the Sands"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The full layer gave Sylas stages 1-5; the content chart gives him only stages 2 and 4 with the rest Skill.",
+   "why": "Nasus wins 49.93% over 1390 games — the largest sample in this slice and a genuinely even lane. Five straight enemy-favoured stages does not describe an even matchup.",
+   "corrected": "phases[0], [2] and [4] moved to Skill to match the content chart; stages 2 and 4 left with Sylas.",
+   "confidence": "High",
+   "sources": [
+    "MC_WR_TABLES.nasus.sylas = 49.93",
+    "MC_REAL_GAMES.nasus.sylas = 1390",
+    "champ-data/content/nasus.js win[]"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "No anti-heal called anywhere despite Kingslayer being his sustain through every extended trade.",
+   "why": "Kingslayer heals him against champions on a cooldown that falls to 6s. Nasus wins by grinding; Sylas wins by out-healing the grind.",
+   "corrected": "Grievous Wounds now named in dontsFull[1] and whys[3].",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/_missing-interactions.json — nasus vs sylas, rule needs-antiheal",
+    "champ-data/_kits/sylas.json — W heal flag"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Sylas",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Q start, last-hit only. Sylas wins every level-1 exchange — concede the bush, concede the trades, take the stacks.",
+   "after": "Q start, last-hit only. Nobody wins level 1 here — Sylas has one spell up, so deny his last-hits and bank stacks."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Sylas",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "E lets you stack safely from range when Sylas zones you. Spirit Fire the wave under tower; every stack denied is his only real win condition.",
+   "after": "Wither is online. Abscond is a 13s dash at rank 1 and the chain-pull recast shares it — once he spends it to close, he has no exit from your Q range."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Sylas",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Sylas, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "Hijack steals Fury of the Sands — if you ult first he gets a copy of it. Bait it or hold R; his ult is only 80s at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Sylas Abscond / Abduct: matchup-defining — His dash + stun (recast pull). Bait it, then commit. Track it before every engage.",
+   "after": "- Sylas Hijack: 80/55/30s — it copies your Fury of the Sands, so never open with R. - Sylas Abscond: 13/12/11/10/9s — his only exit."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His dash + stun (recast pull). Bait it, then commit. Only engage once it is down or baited.",
+   "after": "His dash out and his chain-pull back in share one 13s cooldown — bait it, then commit."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Sylas wastes Abscond / Abduct — commit the full pattern immediately.",
+   "after": "Withered, he cannot reposition between Chain Lash detonations."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+   "after": "Kingslayer heals him off you — Grievous Wounds before any extended trade."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Sylas spikes first — his E chain-dash stun plus Q drain lets him poke your stacking and bully you off Siphoning Strike farm.",
+   "after": "Sylas spikes first — Abscond's chain-pull plus Kingslayer's heal lets him poke your stacking and bully you off Siphoning Strike farm."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "Sylas spikes with E's chain-dash stun and Q drain, bullying you off stacks before you have Wither to answer.",
+   "after": "Sylas spikes with Abscond's chain-pull and Kingslayer's heal, bullying you off stacks before you have Wither."
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "He out-pokes a stack-hungry Nasus through 4-5 — his Q drain plus W sustain beats your lifesteal while you're farming not trading.",
+   "after": "He out-pokes you through 4-5 — Chain Lash plus Kingslayer's heal beats your lifesteal unless you already hold Grievous Wounds."
+  }
+ ],
+ "notes": "Kept the Abscond stun correction at Medium confidence: it rests on Riot's ability text plus the absence of a hardCC flag in the derived kit, not on a wiki read. If you want it at High, one League Wiki check on Abduct settles it. Left diff=TRICKY / 7/10 alone (same report[] problem described in the swain file)."
+}

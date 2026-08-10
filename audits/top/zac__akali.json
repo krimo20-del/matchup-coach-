@@ -1,0 +1,328 @@
+{
+  "ownerKey": "zac",
+  "enemy": "akali",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet win rate 54.81% over 270 games matches MC_WR_TABLES.zac.akali = 54.81. No elo-tier language in either layer.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json",
+        "champ-data/content/zac.js MC_WR_TABLES"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "content.win gives Akali 6 of 7 stages while Zac wins the matchup 54.81%. The full layer disagrees with it as well: full.phases[].side is [Akali, Skill, Zac, Zac, Akali, Zac, Zac].",
+      "why": "Here the full layer is the accurate one and the content layer is the broken one — the reverse of the Aatrox entry in this same file. Akali genuinely owns levels 1-3 on Five Point Strike poke and a zero-cost Twilight Shroud, and she genuinely retakes level 6. She does not own the item stages: a tank Zac with Cell Division behind him is exactly the profile an assassin cannot convert on, which is where the 54.81% comes from. Giving her the first-item and two-item rows contradicts both the win rate and the sibling layer.",
+      "corrected": "content.win should read [Akali, Akali, Skill, Zac, Akali, Zac, Zac], and full.phases[2].side should move from Zac to Skill to match. Not proposed as edits — these are 3-to-6 character categorical tokens and every flip breaks the plus/minus 10% length band.",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json winRate and levelChart",
+        "champ-data/zac.full.js phases",
+        "champ-data/_kits/akali.json"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "content.whys[5] and content.whys[6] both assert Akali stays ahead through the item phase ('her Q burst outpaces your defenses again', 'keep her ahead through the item phase'), which is the part of the chart the win rate contradicts.",
+      "why": "These two strings are the prose that justifies the two chart rows identified in point 2 as wrong. They cannot be corrected in isolation without leaving the why saying one thing and win[5]/win[6] saying another, and win[5]/win[6] cannot be edited under the length band.",
+      "corrected": "Fix win[5] and win[6] to Zac first, then rewrite these two whys to match. Deliberately left untouched this pass to avoid creating a row-versus-reason contradiction I cannot complete.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/content/zac.js whys and win"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Packet defect confirmed: the content layer never names a single Akali ability. It says 'Q', 'shroud', 'W', 'double R', 'her first AP item'. Assassin's Mark, Five Point Strike, Twilight Shroud, Shuriken Flip and Perfect Execution appear nowhere. content.mid even writes 'if she burns W or shroud' as if those were two different abilities — W is the shroud.",
+      "why": "Naming them is not cosmetic here because the real numbers change the advice. Five Point Strike is a flat 1.5s cooldown at every rank costing 110 energy at rank 1 falling to 70 at rank 5 — her poke is rationed by energy, not by cooldown, which is exactly what the existing wants.you[2] line gropes at. Twilight Shroud costs zero energy on a 20/19/18/17/16s cooldown, so she never has to ration it. Those two facts together are the whole early lane.",
+      "corrected": "Named all five abilities across early, mid, late, whys, spikes and wants, and attached the real cooldown, cost and range numbers.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/akali.json Q cd 1.5 cost 110/100/90/80/70, W cd 20/19/18/17/16 cost 0"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Shuriken Flip is never mentioned in either layer, in any form.",
+      "why": "It is the ability that decides whether Akali can reach Zac at all. Riot's text: 'Flip backward and fire a shuriken forward... The first enemy or smoke cloud hit is marked. Re-cast to dash to the marked target.' Two consequences the guide never states. First, the mark lands on the FIRST enemy hit, so standing behind the minion wave means a minion gets marked and her gap-close goes to the minion instead of to Zac — a free positional counter for a champion with no dash to spare. Second, the ability opens with a backward flip, which is a dodge tool against a telegraphed Elastic Slingshot, so a Zac player who reads her E as purely an engage will keep throwing E into it.",
+      "corrected": "Added the behind-the-minions rule to wants.you[1], the backflip dodge to wants.foe[2], and Shuriken Flip's 16s rank-1 cooldown and 825 range to breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/akali.json E description, cd 16/14.5/13/11.5/10, range 825"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing says how to find Akali once she is inside Twilight Shroud, even though 'E-knock her off shroud' is the headline win condition in tldr, winCon and report[1].",
+      "why": "Riot's text: 'While inside the shroud, Akali becomes invisible and unable to be selected by enemy spells and attacks. Attacking or using abilities will briefly reveal her.' The reveal-on-action clause is the answer to the guide's own win condition and it is written down nowhere. Zac has no reveal in his kit, so the only thing that makes the shroud punishable is her having to act inside it.",
+      "corrected": "Put the reveal-on-action fact into dosFull[2].d, whose title is literally 'E-knock her off shroud', and into report[5].t.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/akali.json W description",
+        "champ-data/_kits/zac.json (no revealsStealth)"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "full.breakdown.cooldowns spends two of its three bullets on unnamed placeholders — 'Your committal tool: never spend it on chip' and 'Your ultimate: the win condition'.",
+      "why": "The three numbers that actually govern this lane are Twilight Shroud at 20s and zero energy, Shuriken Flip at 16s and 825 range, and Zac's own Elastic Slingshot at 21s at rank 1 — Zac's is the longest of the three, which is why spending it on a blind read is so expensive. None of them was written down.",
+      "corrected": "Replaced the placeholder bullets with those three real cooldowns.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/akali.json W and E",
+        "champ-data/_kits/zac.json E"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "Perfect Execution is treated as a single level-6 event; its cooldown is never given.",
+      "why": "120/90/60 is an unusually steep curve. At rank 1 a dodged or wasted R buys Zac two full minutes; by rank 3 it is 60 seconds and effectively always available. The level-6 phase row and the level-6 spike both talk about her dive threat without telling the player that the size of the punish window collapses as she ranks it.",
+      "corrected": "Put the 120s-at-rank-1 versus 60s-at-rank-3 contrast into full.phases[4].why.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/akali.json R cooldown 120/90/60"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Three of the six Do/Don't cards have descriptions that do not match their titles. dosFull[1] 'Build MR' is described with the E-engage trade line. dosFull[2] 'E-knock her off shroud' is described with 'Akali wastes Twilight Shroud — commit the full pattern immediately'. dontsFull[1] 'Get Q-poked down' is described with 'Burning it for tiny value leaves you naked for its full cooldown', which is about spending a cooldown, not about being poked. dontsFull[2] 'Chase her into shroud' is described with the blob-stomping line.",
+      "why": "Same pasted-description bug found in the Nasus slice. A player reading the cards gets four headings answered by the wrong body text, including the two headings that carry the matchup's actual win condition.",
+      "corrected": "Rewrote all four descriptions to answer their own titles, using real numbers where they exist.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js dosFull and dontsFull"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Akali is referred to as male in at least six strings: tradeBad and dontsFull[2].d ('Letting him stomp your blobs'), phases[1].why ('a trade he paid for'), dontsFull[0].d ('half his win condition'), breakdown.wave and report[4].t ('shoved to his tower'), breakdown.feeding and report[12].t ('If he snowballs').",
+      "why": "Straight template bleed from a male-enemy matchup. It reads as machine-generated, which is the exact impression this dataset exists to avoid.",
+      "corrected": "Fixed in every string this proposal touches. Note that the same 'Letting him stomp your blobs' template appears in the Aatrox entry too, so this is a file-wide template string rather than an Akali-specific typo.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeBad, dontsFull[2].d, breakdown.trading and report[3].t all claim stomping Zac's blobs costs 'your passive revive margin'.",
+      "why": "Cell Division's shed chunks and its death bloblets are separate. The chunks Zac drops when an ability lands are sustain and can be destroyed; the four bloblets exist only after fatal damage and are what set the revive. Stomping chunks mid-trade costs sustain and nothing else. The genuinely useful number — Cell Division's flat 5 minute cooldown — is nowhere in the matchup, and against an assassin it is the single most important thing Zac owns.",
+      "corrected": "Rewrote the bad-trade line to separate the two halves and state the 5 minute cooldown; added the revive to content.late as the reason the item stages flip.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zac.json P description"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Akali pokes you down with Q and refuses trades in melee where your Unstable Matter would matter, so accept the chip and focus on last-hitting; her shroud makes ganks and your engage read tricky, so don't waste E blind.",
+      "after": "Akali pokes with Five Point Strike and refuses melee where Unstable Matter would matter, so accept the chip and last-hit; Twilight Shroud costs her zero energy and is up every 20s at rank 1, so never spend E on a blind read."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Around levels 4-5 you get a real spike — if she burns W or shroud to reposition, your E-Q catches her before energy refunds, and your growing HP shrugs her Q poke. From 6 on her double-dash R restores her dive-and-reset threat and tips the lane back to her.",
+      "after": "Around levels 4-5 you get a real spike — if she burns Twilight Shroud to reposition that is 20s at rank 1 with nothing to show for it, and your growing HP shrugs off Five Point Strike. From 6 Perfect Execution restores her dive-and-reset threat and tips the lane back."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Items favor her burst on paper, but your tank build eats a full combo you couldn't at level 1; the game becomes about using R to peel her off your carries rather than solo-killing her.",
+      "after": "Items favour her burst on paper, but your tank build plus Cell Division's revive eat a full combo; the game becomes using R to peel her off your carries rather than solo-killing her."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Akali's Q poke and shroud let her chip you safely at level 1.",
+      "after": "Five Point Strike is a flat 1.5s cooldown — only energy limits it."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At 2 her sustained poke keeps her ahead of your melee-range W.",
+      "after": "At 2 her poke stays ahead of Unstable Matter's 350-range burst."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 shroud gives her total control of the trade tempo.",
+      "after": "Twilight Shroud at 3 costs no energy and owns trade tempo."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Her level-6 double R restores the dive threat and retakes the lane.",
+      "after": "Perfect Execution at 6 restores the dive-and-reset threat on you."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Akali's Q poke and shroud let her whittle you down safely; your window is the moment she uses W to reposition — punish with a fast E.",
+      "after": "Five Point Strike whittles you down safely; your window is the moment Twilight Shroud drops — 20s at rank 1, so punish it with a fast E."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Her double R lets her dive and reset, jumping over your slow blobs; save E to disengage rather than to chase.",
+      "after": "Perfect Execution gives her a leap in and a second dash out; save E to disengage rather than to chase her."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Once she completes her first AP item her Q burst spikes hard, so back off unless you have jungle help.",
+      "after": "Once she completes her first AP item Five Point Strike spikes hard, so back off unless you have jungle help."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Catch her mid-W or right as shroud drops with a snap E",
+      "after": "Snap E her the moment Twilight Shroud drops or expires"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Spike her when she commits Q so your minions and W punish",
+      "after": "Stand behind minions — Shuriken Flip marks the first thing hit"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Use Second Wind/tankiness to outlast her energy-capped poke",
+      "after": "Outlast her energy — Five Point Strike costs 110 at rank 1"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Poke with Q and vanish in shroud before you can E",
+      "after": "Poke with Five Point Strike, vanish in the shroud"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Use W and double R to dodge your Elastic Slingshot",
+      "after": "Dodge Elastic Slingshot with Shuriken Flip's backflip"
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Charge E from a bush as Akali's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush as Twilight Shroud drops, grab her with Q then hit a minion — the knock-together needs two targets."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Charge E from a bush as Akali's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "MR first — Mercury's Treads then Spirit Visage. Twilight Shroud costs her zero energy, so she never has to ration it."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Akali wastes Twilight Shroud — commit the full pattern immediately.",
+      "after": "Her own attacks and abilities briefly reveal her inside the smoke."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Akali's favourite window — refuse it and half his win condition is gone.",
+      "after": "That is Akali's favourite window — refuse it and half her win condition is gone."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Five Point Strike is a 1.5s cooldown — only her energy limits it."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "She is untargetable inside it — you hand her a free reset and get nothing back for the E."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Every blob you collect is a trade he paid for. Only take the trade when Akali's Twilight Shroud is down.",
+      "after": "Every blob you collect is a trade she paid for. Only take it when Twilight Shroud is down — 20s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Akali's ultimate changes the math too.",
+      "after": "Perfect Execution is 120s at rank 1 but only 60s at rank 3 — the punish window for dodging it shrinks as she ranks it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Akali Twilight Shroud: matchup-defining — Untargetable inside. E-knock before it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Akali Twilight Shroud: matchup-defining — 20s at rank 1 and zero energy. Untargetable inside. - Akali Shuriken Flip: 16s at rank 1, 825 range — her gap-close onto you. - Your Elastic Slingshot: 21s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Charge E from a bush as Akali's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Akali wastes Twilight Shroud — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush as Twilight Shroud drops, grab her with Q then hit a minion — the knock-together needs two targets. Great trade: Akali wastes Twilight Shroud — commit the full pattern immediately. Bad trade: Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Charge E from a bush as Akali's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Akali wastes Twilight Shroud — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush as Twilight Shroud drops, grab her with Q then hit a minion — the knock-together needs two targets. Great trade: Akali wastes Twilight Shroud — commit the full pattern immediately. Bad trade: Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: held near your side so Akali overextends into your pattern. Worst wave: shoved to his tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot.",
+      "after": "Best wave: held near your side so Akali overextends into your pattern. Worst wave: shoved to her tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: held near your side so Akali overextends into your pattern. Worst wave: shoved to his tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot.",
+      "after": "Best wave: held near your side so Akali overextends into your pattern. Worst wave: shoved to her tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Akali gets a kill, stop forcing and respect Twilight Shroud. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Akali gets a kill, stop forcing and respect Twilight Shroud. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "report[12].t",
+      "before": "If Akali gets a kill, stop forcing and respect Twilight Shroud. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Akali gets a kill, stop forcing and respect Twilight Shroud. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Akali's Twilight Shroud: Untargetable inside. E-knock before it. When it is down — E-Q + R her.",
+      "after": "Track Twilight Shroud: untargetable inside, but her own attacks reveal her. When it is down — E-Q + R her."
+    }
+  ],
+  "notes": "The level-chart problem in this matchup is the mirror image of the one in zac__aatrox: there the content layer was right and the full layer was template junk, here the full layer is right and the content layer is the broken one. Whatever fixes charts should not assume one layer is systematically more trustworthy. Across the whole zac file the two layers agree on the chart in only 3 of 71 matchups, so this is a file-wide reconciliation job, not a per-matchup one. Deliberately not asserted: whether Zac's Unstable Matter or the Elastic Slingshot knockup still damages Akali while she is inside Twilight Shroud. Riot's text only establishes that she cannot be SELECTED by spells and attacks, which settles single-target targeting but not area damage, and akali.json needsResearch is empty. This is the single most valuable open question in the matchup — the whole 'E-knock her off shroud' win condition depends on it — and it needs a League Wiki pass rather than a guess. Also left alone: content.whys[5] and whys[6], which justify the two chart rows I believe are wrong; correcting the prose before the rows would leave the reason contradicting the verdict."
+}

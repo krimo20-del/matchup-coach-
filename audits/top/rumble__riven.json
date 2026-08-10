@@ -1,0 +1,97 @@
+{
+  "ownerKey": "rumble",
+  "enemy": "riven",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Emerald+ 48.26% over 719 games — matches the 'she wins the 1v1, you win the map' framing already written.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packets/rumble.json"]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Riven owns levels 2 through 6 in lane and the text says so. She is a side-lane duellist with three dashes on a 13s Broken Wings; Rumble's edge is teamfights and the 1750-range Equalizer, which the late-game text already carries.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/riven.json", "champ-data/_kits/rumble.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level 2 spike was built on a false premise (Ki Burst interrupting Flamespitter), and no spike carried a cooldown number.",
+      "why": "Ki Burst is 11/10/9/8/7s. The real level-2 spike is that she gains a point-blank stun that holds Rumble inside her Broken Wings chain — not that she cancels his damage.",
+      "corrected": "spikes[0].text now states the 11s cooldown and the correct consequence.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/riven.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The matchup repeatedly claims Ki Burst 'interrupts your Flamespitter channel mid-cast'. Flamespitter is not a channel and is not interruptible. It also claims Blade of the Exile 'extends her melee reach past Flamespitter's burn edge'.",
+      "why": "Riot's description of Flamespitter: Rumble torches opponents in front of him 'dealing magic damage in a cone for 3 seconds'. The kit file carries a distinct 'channel' flag elsewhere in the schema and Flamespitter does not have it — the burn runs its full 3 seconds through a stun. Telling a player their damage is cancelled makes them refuse trades they actually win. Separately, Flamespitter's range is 600 and Blade of the Exile's is 200; her empowered reach does not exceed the cone. Her real ranged threat is Wind Slash, the one-shot ranged attack the ult grants.",
+      "corrected": "Corrected in spikes[0].text, whys[1], whys[4], wants.foe[0] and the Key Ability Interactions report line. Added: Valor is a 10s damage-blocking dash that absorbs a Flamespitter tick, and Blade of the Exile is 120s at rank 1.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/rumble.json (Q description, range 600)", "champ-data/_kits/riven.json (R range 200, Wind Slash)"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns named Ki Burst but gave no numbers, and the 'Fight her R burst raw' don't had a description about wasting your own ability rather than about her ultimate.",
+      "why": "Ki Burst 11s to 7s, Valor 10s to 6s, Blade of the Exile 120/90/60s. Those numbers are what turn 'respect it' into 'you have 120 seconds'.",
+      "corrected": "breakdown.cooldowns and dontsFull[1].d rewritten with real numbers.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/riven.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Riven's W stun comes online — she can interrupt your Flamespitter channel mid-cast and burst you before Heat converts into damage.",
+      "after": "Ki Burst comes online at 11s — it cannot interrupt Flamespitter, which burns for 3s regardless, but it pins you inside her Broken Wings chain."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Her W stun arrives and can interrupt your Flamespitter channel mid-cast — Riven owns the first real all-in threat and you must keep Scrap Shield ready rather than burning it on poke.",
+      "after": "Ki Burst arrives on an 11s cooldown. It does not interrupt Flamespitter — the cone burns its full 3s through the stun — but it pins you for her Q chain, so bank Scrap Shield for that, not for poke."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Equalizer gives you zoning threat she must respect, but Blade of the Exile extends her melee reach past Flamespitter's burn edge — force the R placement before she engages rather than after.",
+      "after": "Equalizer gives you zoning threat she must respect, and Blade of the Exile still leaves her inside Flamespitter's 600 cone — the real ult threat is Wind Slash chunking you as you walk up to place the wall."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "W-stun you inside Flamespitter's channel so the overheat damage never fully connects and your Heat resets",
+      "after": "Ki Burst you at Flamespitter's edge, then Q-chain out of the 600 cone so most of its 3-second burn ticks on air"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Blade of the Exile is 120s at rank 1 — bait it, then take the trade."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Riven's Ki Burst (Stun): Her engage CC. E-slow it. When it is down — Flame + E-R her.",
+      "after": "Ki Burst never interrupts Flamespitter — the 3s burn runs through the stun. Punish on its 11s."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Riven Ki Burst: matchup-defining — Her engage CC. E-slow it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Ki Burst: 11s at rank 1, 7s at rank 5 — her engage CC, E-slow it. - Valor: a 10s dash that blocks damage, so it eats a Flamespitter tick. - Blade of the Exile: 120s — bait it before you commit R."
+    }
+  ],
+  "notes": "The 'interrupts your Flamespitter channel' error appears in four places in this matchup and is the kind of claim that makes a player refuse a trade they win — worth checking whether the same phrasing leaked into other Rumble matchups outside this slice. Also: _missing-interactions.json emits a 'both sides carry displacement (Scrap Shield (W) vs Broken Wings (Q))' rule for this pair. That is a parsing misfire — Riot's Scrap Shield description is a shield plus a movement-speed burst, with no knockup and no terrain. Only Riven displaces here (her third Broken Wings cast knocks back), so I did not write the mutual-displacement line."
+}

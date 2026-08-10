@@ -1,0 +1,278 @@
+{
+  "ownerKey": "zac",
+  "enemy": "chogath",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet win rate 50.00% over 102 games matches MC_WR_TABLES.zac.chogath = 50. No elo-tier language in either layer.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json",
+        "champ-data/content/zac.js MC_WR_TABLES"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "content.win is [Skill, Skill, Skill, Skill, Cho'Gath, Skill, Cho'Gath] which is a genuinely good fit for a 50.00% matchup — the packet raised no chart defect here. full.phases[].side however reads [Skill, Zac, Zac, Skill, Skill, Zac, Zac], handing Zac four of seven stages in a dead-even lane.",
+      "why": "This is the one matchup in my slice where the content chart is well calibrated, and the full layer still contradicts it. That is useful evidence about which layer is at fault file-wide: full.phases[].side is [Skill, Zac, Zac, Skill, Skill, Zac, Zac] in this matchup, and it is the identical sequence in zac__aatrox, zac__ambessa and zac__aurora. It is a default template, not a judgement, and it happens to be applied to matchups Zac wins 50%, 51%, 52% and 53% of the time.",
+      "corrected": "full.phases[].side should be copied from content.win: [Skill, Skill, Skill, Skill, Cho'Gath, Skill, Cho'Gath]. Not proposed as an edit — the tokens are 3 to 8 characters and break the length band.",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json levelChart",
+        "champ-data/zac.full.js phases across four matchups in this slice"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.spikes[0].text calls it 'Feral Scream (E)'. Feral Scream is Cho'Gath's W. His E is Vorpal Spikes, which the same matchup names correctly in content.early and content.whys[3].",
+      "why": "A wrong slot letter is worse than no slot letter: a player scanning for the silence will watch the wrong key. The matchup gets every other name right, which makes this one stand out as a transcription slip rather than a systemic gap.",
+      "corrected": "Corrected to Feral Scream (W) and attached its real numbers.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/chogath.json W 'Feral Scream', E 'Vorpal Spikes'",
+        "packets/zac.json enemyAbilities"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.spikes[1].text says 'your P blob revive doesn't help if the sheep-portion body gets Feasted' and content.late says the same via 'even through your P revive if the main body gets eaten'. 'Sheep-portion body' is not a thing in either champion's kit.",
+      "why": "'Sheep' is template bleed — it is Lulu's Whimsy, not anything Cho'Gath does. Riot's text for Feast is 'Devours an enemy unit, dealing a high amount of true damage. If the target is killed, Cho'Gath grows, gaining maximum Health.' There is no polymorph, no separate body, and nothing in the description that interacts with a revive. The underlying claim — that Feast defeats Cell Division — may or may not be true, but it cannot be established from the kit files and chogath.json needsResearch is empty, so asserting it either way would be a guess about the single most consequential mechanic in the matchup.",
+      "corrected": "Removed the garbled claim from both strings and replaced it with what is verified: Feast is true damage, 80s at rank 1, and only 175 range. Did not substitute a denial — see notes.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/chogath.json R description",
+        "champ-data/_kits/zac.json P description"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Feral Scream's silence is mentioned three times as a generic 'silence' and never once connected to what it silences.",
+      "why": "Zac's escape, his engage and his ultimate are all abilities. A silence does not merely interrupt a combo, it removes Elastic Slingshot from the fight entirely — and Elastic Slingshot is a 21s cooldown at rank 1 against a silence that is 11s at rank 1. Feral Scream is also only 300 range, so it is avoidable by spacing, which is the counterplay nobody stated. dontsFull[1] is literally titled 'Get silenced mid-combo' and its body text is about spending a cooldown for tiny value.",
+      "corrected": "Connected the silence to Elastic Slingshot specifically in dosFull[1].d, dontsFull[1].d, spikes[0].text, wants.you[2] and breakdown.cooldowns, with the 11s cooldown and 300 range.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/chogath.json W cd 11/10.5/10/9.5/9, range 300, silence flag",
+        "champ-data/_kits/zac.json E cd 21/18/15/12/9"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer names Rupture as the matchup-defining cooldown and builds nine strings around tracking it — 'Engage only on Rupture's cooldown', 'Dive with your jungler when Rupture is down', 'Only take the trade when Cho'Gath's Rupture is down', 'Commit on Rupture's cooldown'. content.early repeats it: 'trade only when his Q is down'. Rupture is a flat 6 second cooldown at every rank.",
+      "why": "A 6 second cooldown is never meaningfully down. Building the entire commit-timing framework on waiting it out gives the player a window that does not exist, and it displaces the two cooldowns that ARE worth tracking: Feral Scream at 11/10.5/10/9.5/9s, which is what actually turns Zac's kit off, and Feast at 80/70/60s. The guide's own dosFull[0].d already has the right instinct — 'Telegraphed. Dodge it.' — and then contradicts itself in the next sentence with 'Only engage once it is down'.",
+      "corrected": "Reframed the cooldown breakdown around Feral Scream and Feast, and rewrote the strings that told the player to wait out a 6 second ability so they say to dodge the telegraph instead.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/chogath.json Q cooldown '6', W cd 11/10.5/10/9.5/9, R cd 80/70/60"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.whys[0] says 'your Q range trades with his zoning Rupture', implying parity of reach.",
+      "why": "Rupture is 950 range and Stretching Strikes is 800. He out-ranges Zac's only ranged tool by 150 units, which is why the farm-and-poke stalemate is one Zac loses if he plays it as a poke war. The row's verdict of Skill is right; the reason given is not.",
+      "corrected": "Gave both numbers and pointed the row at dodging the telegraph rather than at range parity.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/chogath.json Q range 950",
+        "champ-data/_kits/zac.json Q range 800"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "_missing-interactions.json flags resistances-invalidated for this pairing — 'Cho'Gath bypasses stacking resistances (Feast (R)) — raw armour or MR is the wrong answer here' — and report[8].t recommends Spirit Visage, Thornmail and Plated Steelcaps with no mention of it.",
+      "why": "Feast is true damage. Every resistance item in the recommended build does literally nothing against the ability the matchup says decides the game, and the only stat that helps is raw maximum health. content.wants.you[1] already says 'Keep HP above Feast (R) execute range', so half the insight is present in the content layer and entirely absent from the build advice it should be driving.",
+      "corrected": "Added the true-damage consequence to report[8].t, content.late, whys[4] and phases[4].why.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/_missing-interactions.json zac/chogath resistances-invalidated",
+        "champ-data/_kits/chogath.json R trueDamage flag"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Four Do/Don't descriptions do not answer their titles. dosFull[1] 'Dodge his Q + W' carries the E-engage trade line. dosFull[2] 'E-knock him up' carries 'Cho'Gath wastes Rupture (Knockup) — commit the full pattern immediately'. dontsFull[1] 'Get silenced mid-combo' carries 'Burning it for tiny value leaves you naked for its full cooldown'. dontsFull[2] 'Let him free-stack R' carries the blob-stomping line.",
+      "why": "Same pasted-description bug as the rest of the slice. dontsFull[2] is the costliest: 'Let him free-stack R' is the only place the guide could explain that Feast grows Cho'Gath's maximum health on every kill, and it explains blob pickups instead.",
+      "corrected": "Rewrote all four to answer their own headings, and used dontsFull[2].d for the permanent max-health growth.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js dosFull and dontsFull",
+        "champ-data/_kits/chogath.json R description"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeBad, dontsFull[2].d, breakdown.trading and report[3].t all claim stomped blobs cost 'your passive revive margin'.",
+      "why": "Cell Division's shed chunks are sustain and destructible; the four bloblets appear only on fatal damage and set the revive. Stomping chunks costs sustain only. Getting this right matters more here than anywhere else in the slice, because this matchup separately makes an unverified claim about Feast defeating the revive — the file should at least be internally precise about which half of Cell Division it means.",
+      "corrected": "Separated the two halves and stated the 5 minute cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zac.json P description"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Levels 1-2 are a farm-and-poke stalemate: your Q outranges his auto but his Rupture (Q) zones you off cs, so trade only when his Q is down and don't feed him easy Vorpal Spikes procs.",
+      "after": "Levels 1-2 are a farm-and-poke stalemate: Rupture reaches 950 to your Q's 800, and it is a flat 6s at every rank — you never wait it out, you dodge the telegraph and step in behind it."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Through mid you're roughly even to slightly favoured on skill — your W sustain and E all-in beat his cooldown-gated poke — but at 6 his Feast (R) flips a lost trade into a kill, so the level-6 window is his.",
+      "after": "Through mid you're roughly even to slightly favoured on skill — your W sustain and E all-in beat his poke — but at 6 Feast is 80s at rank 1 and only 175 range, so he must be on top of you: that window is his."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "By items it comes down to Feast: a low-HP Zac dies to the true-damage execute even through your P revive if the main body gets eaten, so play the frontline peel game with R and let your team burst him rather than solo-dueling.",
+      "after": "By items it comes down to Feast: it is TRUE damage, so armour and MR do nothing and only raw health above the number saves you. Play the frontline peel game with R and let your team burst him rather than solo-dueling."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Even skill matchup early — your Q range trades with his zoning Rupture, neither snowballs.",
+      "after": "Rupture reaches 950 to your Q's 800, but it is telegraphed — dodge it and neither snowballs."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Still a wash at 2: both are farming, cooldowns dictate any trade.",
+      "after": "Still a wash at 2 — Rupture is a flat 6s, so it is never truly down."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Cho'Gath spikes at 6 because Feast (R) is a true-damage execute that can kill a low Zac outright.",
+      "after": "Cho'Gath spikes at 6: Feast is true damage at 175 range, so no amount of armour or MR blunts it."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Cho'Gath pulls ahead with items as Feast stacks make him a durable execute threat your kit can't out-tank.",
+      "after": "Cho'Gath pulls ahead as every Feast kill grows his maximum health — he out-tanks you and still hits true."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Once your Q is leveled you can trade back with Stretching Strikes and W, but respect Cho's Rupture (Q) knock-up plus Feral Scream (E) silence combo that shreds a chunk when you dash in.",
+      "after": "Once your Q is leveled you can trade back with Stretching Strikes and W, but respect Rupture (Q) knock-up into Feral Scream (W) — the silence is 300 range and it cuts your E dead."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Cho spikes hard at 6: Feast (R) is true-damage execute that can eat you outright if you dropped low, and your P blob revive doesn't help if the sheep-portion body gets Feasted, so keep your HP buffer above the execute threshold.",
+      "after": "Cho spikes hard at 6: Feast (R) is true damage on an 80s cooldown at rank 1, and at 175 range he has to walk right into you to land it. Armour and MR do nothing against it — keep your raw HP buffer above the number."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Sidestep his silence to keep your kit online",
+      "after": "Dodge Feral Scream — 300 range, and it cuts E"
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Charge E from a bush as Cho'Gath's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush once Feral Scream is spent, grab him with Q then hit a minion — the knock-together needs two."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Letting him stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Telegraphed. Dodge it. Only engage once it is down or baited.",
+      "after": "Telegraphed, and a flat 6s — you dodge it, you never wait it out."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Charge E from a bush as Cho'Gath's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Rupture is a flat 6s at every rank, 950 range. Feral Scream silences inside 300 and shuts your Elastic Slingshot off."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Cho'Gath wastes Rupture (Knockup) — commit the full pattern immediately.",
+      "after": "Grab him with Q, then hit a minion — the knock-together needs two targets."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Cho'Gath's favourite window — refuse it and half his win condition is gone.",
+      "after": "Rupture pops you airborne, and that is what sets up the Feral Scream silence."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Feral Scream is 11s at rank 1 and it turns off Elastic Slingshot."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Every unit Feast kills grows his maximum health permanently, so deny him the free stacks."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Every blob you collect is a trade he paid for. Only take the trade when Cho'Gath's Rupture is down.",
+      "after": "Every blob you collect is a trade he paid for. Rupture is a flat 6s, so dodge it — don't wait it out."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Cho'Gath's ultimate changes the math too.",
+      "after": "Feast at 6 is 80s at rank 1 and only 175 range — he must walk into you, and it is true damage so resistances do nothing."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Cho'Gath Rupture: matchup-defining — Telegraphed. Dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Cho'Gath Feral Scream: matchup-defining — 11s at rank 1, 300 range, and the silence turns off your E. - Cho'Gath Feast: 80s at rank 1, 175 range, true damage. - Your Elastic Slingshot: 21s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Charge E from a bush as Cho'Gath's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Cho'Gath wastes Rupture (Knockup) — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Feral Scream is spent, grab him with Q then hit a minion — the knock-together needs two. Great trade: Cho'Gath wastes Rupture and Feral Scream — commit the full pattern immediately. Bad trade: Letting him stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Charge E from a bush as Cho'Gath's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Cho'Gath wastes Rupture (Knockup) — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Feral Scream is spent, grab him with Q then hit a minion — the knock-together needs two. Great trade: Cho'Gath wastes Rupture and Feral Scream — commit the full pattern immediately. Bad trade: Letting him stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Cho'Gath's Rupture (Knockup): Telegraphed. Dodge it. When it is down — E-Q + R him.",
+      "after": "Track Feral Scream, not Rupture — Rupture is a flat 6s. With the silence down, E-Q + R him."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Shield + pot. Core: Heartsteel  (HP feeds everything), then Spirit Visage / Thornmail; boots Plated Steelcaps.",
+      "after": "Start Doran's Shield + pot. Core: Heartsteel, then Spirit Visage; boots Steelcaps. Feast is true damage — raw HP beats resistances."
+    }
+  ],
+  "notes": "FALSE POSITIVE in the packet: suspectNames flags 'Let's Bounce' in spikes[3].text at distance 1 from 'let's bounce!'. The text on disk actually reads 'use R Let's Bounce! to peel', exclamation mark included, so the name is already correct and the detector appears to be stripping trailing punctuation from one side of the comparison only. No name change made. Deliberately NOT resolved: whether Feast defeats Cell Division's revive. Both content.spikes[1].text and content.late currently assert it does, via the garbled 'sheep-portion body' and 'main body' phrasings, and 'sheep' is unmistakably template bleed from a Lulu matchup rather than anything in Cho'Gath's kit. I removed the claim because it is stated in corrupted language and cannot be supported from the kit files, but I did not replace it with a denial — writing 'Feast does not deny your revive' would be exactly the kind of unverified negative the brief forbids, and it would be far more dangerous than the original if it happens to be false. This is the single highest-value wiki lookup remaining in my slice: if Feast does bypass the revive, it changes how a Zac player values his health buffer at 6 in a way nothing else in the matchup does. Two other things worth flagging upward. First, full.phases[].side is the byte-identical sequence [Skill, Zac, Zac, Skill, Skill, Zac, Zac] in four of my six matchups (aatrox, ambessa, aurora, chogath) — it is a default, not an assessment, and no chart reconciliation pass should treat it as evidence. Second, this matchup is the clearest example of the site tracking the wrong cooldown: nine full-layer strings tell the player to commit 'when Rupture is down', and Rupture is 6 seconds flat. A generator rule that refuses to nominate any ability under roughly 10 seconds as the matchup-defining cooldown would have caught it automatically."
+}

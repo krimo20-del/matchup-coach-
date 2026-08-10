@@ -1,0 +1,83 @@
+{
+ "ownerKey": "cassiopeia",
+ "enemy": "poppy",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The two layers disagree on six of seven stages. content.win reads Cassiopeia / Cassiopeia / Cassiopeia / Skill / Cassiopeia / Skill / Cassiopeia; CHAMP_FULL.phases reads Poppy / Skill / Skill / Poppy / Cassiopeia / Skill / Poppy. content.win also contradicts its own whys, which say Poppy wins level 1, walks you down at 4-5 and reclaims the lane on tank items.",
+   "why": "The full chart and the whys agree with each other and with a 46.94% Emerald+ rate over 49 games. This is the one losing lane in the slice and the content chart hands Cassiopeia five stages of it.",
+   "corrected": "content.win should be set to Poppy / Skill / Skill / Poppy / Cassiopeia / Skill / Poppy. Not proposed as edits: single-word side values cannot change inside the +/-10% length band. Flagged for a manual pass.",
+   "confidence": "High",
+   "sources": [
+    "packets/cassiopeia.json",
+    "champ-data/content/cassiopeia.js",
+    "champ-data/cassiopeia.full.js"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "No cooldowns anywhere, and the level 3 spike says Miasma \"cancels her E Heroic Charge\" without saying how long that buys you.",
+   "why": "Heroic Charge is 14/13/12/11/10 — grounding it once is a 14-second window at rank 1 in which Poppy has no way to reach you, which is the entire reason the level 3 spike exists.",
+   "corrected": "14s written into spikes[1].text.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/poppy.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Iron Ambassador is described as \"point-and-click\" hammer poke in spikes[0].text, whys[0] and early. It is a thrown buckler that bounces off the target and shields her when she picks it up. And Keeper's Verdict is a channel that Petrifying Gaze cancels outright — the single best fact in this matchup and it appears nowhere.",
+   "why": "Riot: \"Poppy throws her buckler that bounces off the target. Poppy can pick it up to gain a temporary shield\" — a dodgeable projectile with a shield attached, not point-and-click. And \"Poppy channels a hammer strike\"; the kit file flags R channel, \"interruptible — any CC cancels it\". Petrifying Gaze is the hard CC that ends it.",
+   "corrected": "Iron Ambassador restated as a thrown, retrievable, shielding buckler; the Keeper's Verdict cancel written into spikes[3].text and wants.you[2].",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/poppy.json",
+    "champ-data/_kits/cassiopeia.json",
+    "champ-data/_kits/_missing-interactions.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Poppy's Iron Ambassador hammer is point-and-click poke and her W Steadfast Presence already taxes you, so she out-trades your lone Q Noxious Blast before any poison stacks.",
+   "after": "Iron Ambassador is a thrown buckler she picks back up for a shield, and Steadfast Presence (W) adds resists, so she out-trades your lone Noxious Blast before any poison stacks."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "W Miasma comes online: its ground cancels her E Heroic Charge mid-dash, the only tool that stops her pinning you to a wall for the stun.",
+   "after": "W Miasma comes online: grounding cancels Heroic Charge (E) mid-dash and leaves her one gap-close down 14s before she can try the wall stun."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Poppy's MR plus tank HP gut your Twin Fang DPS, while her E to a wall and R knockback still catch and peel you off her team.",
+   "after": "Poppy's MR and HP gut your Twin Fang DPS, but Keeper's Verdict is a channel your Petrifying Gaze cancels if she faces you."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Reach 6 and hold R Petrifying Gaze to stun her commit instead of dying to the walk-down",
+   "after": "Reach 6 and hold Petrifying Gaze to cancel her Keeper's Verdict channel or stun her E commit"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Stack MR and HP so your poison and Twin Fang barely scratch her while she trades back with Iron Ambassador",
+   "after": "Stack MR and HP so your poison barely scratches her while Iron Ambassador pickups keep re-shielding her chip"
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Her Iron Ambassador hammer poke and W resists beat your lone Level-1 Q before any poison can stack.",
+   "after": "Her Iron Ambassador buckler and W resists beat your lone Level-1 Q before any poison can stack."
+  }
+ ],
+ "notes": "content.win and CHAMP_FULL.phases disagree on six of seven stages here and neither the mirror file nor a length-band edit can fix single-word side values — this needs a manual chart pass, and content.win is the wrong one. _missing-interactions.json flags Keeper's Verdict as untargetable-dodges-burst; Riot's text says only that she channels, so I wrote the channel-cancel and left the untargetable claim out."
+}

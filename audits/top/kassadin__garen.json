@@ -1,0 +1,188 @@
+{
+  "ownerKey": "kassadin",
+  "enemy": "garen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "48.72% over 39 games - the largest sample in this champion's table - matches a chart where Garen owns every lane stage and Kassadin takes 2+ items. HARD at 8/10 is consistent with a sub-50% result. No change.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packets/kassadin.json (48.72%, 39 games)",
+        "champ-data/kassadin.full.js"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "content.mid says 'the silence is on a long cooldown early, so once it's down there's a window'. Decisive Strike is 8 seconds flat at every rank and costs nothing.",
+      "why": "An 8-second free silence is not a window you can plan a trade around - it is back before your Null Sphere is. That single number changes the whole gameplan from 'bait the Q' to 'never be inside 300 range'.",
+      "corrected": "Rewrote content.mid, breakdown.cooldowns, report[9].t and loading around the real 8s / 22s / 120s numbers.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/garen.json (Q 8s, cost 0)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two decisive interactions were missing entirely. (1) Decisive Strike breaks free of ALL slows affecting him, so Force Pulse cannot kite him - he simply cleanses it and keeps walking. (2) The full layer tracked Courage as the matchup-definer and never mentioned that the Q silence locks Riftwalk, which is the only reason this lane is dangerous at all. Also, dosFull[1] and tradeGood both promise 'the shield absorbs his counter' - Null Sphere shields magic, and Garen is physical and true damage only.",
+      "why": "Riot: 'Garen gains a burst of Move Speed, breaking free of all slows affecting him. His next attack ... deals bonus damage and silencing them'; 'Demacian Justice ... attempt to execute an enemy champion' with a trueDamage flag; Null Sphere 'absorbs magic damage'.",
+      "corrected": "Wrote both into report[5].t, breakdown.cooldowns, tradeBad, loading, content.spikes[0].text and content.wants.foe[0]; removed the shield promise from the trade lines.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/garen.json",
+        "champ-data/_kits/kassadin.json"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "'Add anti-heal early into his sustain' and 'Mercs or Sorcs' boots.",
+      "why": "Garen deals no magic damage at all, so Plated Steelcaps is the boot; and his sustain is Perseverance, which only ticks when he has NOT recently been struck - so a single point of chip denies it, which is cheaper than an item.",
+      "corrected": "report[8].t and dosFull[1] rewritten around chip damage and armour.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/garen.json (P)",
+        "champ-data/_kits/_missing-interactions.json (resistances-invalidated)"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Every window in the full layer was 'when Courage is down' with no duration.",
+      "why": "Courage is 22/19.5/17/14.5/12s and it is the only cooldown long enough to plan around - his Q at 8s and E at 9s are effectively always available.",
+      "corrected": "breakdown.cooldowns and dosFull[0].d.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/garen.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Garen Courage: matchup-defining — Damage reduction on cast — your burst only lands full once it is down. Read it like a second minimap. - Guard your Q shield like a fifth summoner spell. - Ultimate goes to kill windows only.",
+      "after": "- Decisive Strike is only 8s at every rank and free, and the silence locks Riftwalk - there is no long window to bait. - Courage is 22s at rank 1 and cuts your burst. - Demacian Justice: 120/100/80s of true damage."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Garen’s Courage: Damage reduction on cast — your burst only lands full once it is down. The whole green-light system is its cooldown.",
+      "after": "Decisive Strike silences you out of Riftwalk and breaks every slow you land on him. Demacian Justice is true damage, so no MR helps."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Damage reduction on cast — your burst only lands full once it is down. Its cooldown is the green light — wait for it.",
+      "after": "Damage reduction the moment he casts it - your burst only lands full once it is down, and that is 22 seconds at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].t",
+      "before": "Q-shield right before his trade lands",
+      "after": "Chip him so Perseverance never ticks"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Riftwalk onto him the instant Courage goes down, Q-E-W in one breath, and walk out as the shield absorbs his counter — repeat every six seconds.",
+      "after": "Perseverance only regenerates while he has not recently been struck, so one Null Sphere thrown on the way past costs him the whole heal."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Riftwalk onto him the instant Courage goes down, Q-E-W in one breath, and walk out as the shield absorbs his counter — repeat every six seconds.",
+      "after": "Riftwalk onto him the instant Courage is spent, Q-E-W in one breath, and leave on the 5-second Riftwalk before the 8-second silence returns."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Any trade before level 6 — you have no mobility, no real damage, and every juggernaut pattern in the game beats your face in a straight exchange.",
+      "after": "Any trade inside 300 range - Decisive Strike silences Riftwalk away, and the same cast breaks whatever Force Pulse slow you landed."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Any trade before level 6 — you have no mobility, no real damage, and every juggernaut pattern in the game beats your face in a straight exchange.",
+      "after": "Any trade inside 300 range - Decisive Strike silences Riftwalk away, and the same cast breaks whatever Force Pulse slow you landed."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Riftwalk onto him the instant Courage goes down, Q-E-W in one breath, and walk out as the shield absorbs his counter — repeat every six seconds. Bad trade: Any trade before level 6 — you have no mobility, no real damage, and every juggernaut pattern in the game beats your face in a straight exchange.",
+      "after": "Good trade: Riftwalk onto him the instant Courage is spent, Q-E-W in one breath, and leave on the 5-second Riftwalk before the 8-second silence returns. Bad trade: Any trade inside 300 range - Decisive Strike silences Riftwalk away, and it breaks your Force Pulse slow on the same cast."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Riftwalk onto him the instant Courage goes down, Q-E-W in one breath, and walk out as the shield absorbs his counter — repeat every six seconds. Great trade: Garen wastes Courage — commit immediately. Bad trade: Any trade before level 6 — you have no mobility, no real damage, and every juggernaut pattern in the game beats your face in a straight exchange.",
+      "after": "Good trade: Riftwalk onto him the instant Courage is spent, Q-E-W in one breath, and leave on the 5-second Riftwalk before the 8-second silence returns. Great trade: Garen spends Courage on the wave - you have 22 seconds. Bad trade: Any trade inside 300 range - Decisive Strike silences Riftwalk away, and it breaks your Force Pulse slow on the same cast."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Shield or Ring by lane. Tear early, Rod of Ages into Mercs or Sorcs, then Seraph's Embrace and Zhonya's. Add anti-heal early into his sustain.",
+      "after": "Start Doran's Shield. Tear early, Rod of Ages into Plated Steelcaps, then Seraph's and Zhonya's - he deals no magic damage, so MR buys nothing."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Courage’s cooldown, on your Rod of Ages spike, and with your jungler’s setup. Bait the answer, then sign.",
+      "after": "Commit on the 22 seconds of Courage, on your Rod of Ages spike, and with your jungler's setup. Never inside 300."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Kassadin vs Garen - Track: Garen Courage. - No trades before 6 — not one. - Fights start when Courage ends. - The R is for endings, not openings.",
+      "after": "- Kassadin vs Garen - Track: Decisive Strike, 8s and free. - No trades before 6 - not one. - The silence locks Riftwalk and breaks your slow."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit and still underpowered — E only charges when spells fly, so passive lanes starve your waveclear too.",
+      "after": "Full kit and still underpowered - his Q silence locks all three of your casts, and Garen barely casts to charge your E."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Garen's window: Q silences you so you can't cast Null Sphere or E during it, the empowered AA + move speed sticks him to you, then Judgment shreds while you have no blink — just last-hit at Q range.",
+      "after": "Garen's window: Decisive Strike is free and back every 8 seconds, and its silence locks Null Sphere, Force Pulse and Riftwalk alike, then Judgment shreds while you have no blink - just last-hit at Q range."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 are still his — once Nether Blade is up its quintupled mana refund on champion hits lets me sustain a CS lead under tower, but I still lose the all-in to his Q-silence-into-Judgment burst with no escape. Level 6 is my first breath: Riftwalk means his Q engage no longer traps me, I blink straight out of the Judgment AoE or out of his R execute range entirely. I'm not winning trades yet, just no longer free kills. Bait his Q — the silence is on a long cooldown early, so once it's down there's a window — but don't greed; his W damage reduction cuts my burst and Perseverance heals back any chip I land if he steps out of vision.",
+      "after": "Levels 4-5 are still his - once Nether Blade is up its mana refund on champion hits lets me sustain a CS lead under tower, but I still lose the all-in to his Q-silence-into-Judgment burst with no escape. Level 6 is my first breath: Riftwalk means his Q engage no longer traps me, I blink straight out of the Judgment AoE or out of his R execute range entirely. I'm not winning trades yet, just no longer free kills. Do not plan on baiting the silence - Decisive Strike is 8 seconds flat at every rank and costs him nothing, so the window never really opens. Courage at 22 seconds is the cooldown worth counting, and Perseverance heals back any chip I land if he steps out of vision."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Nether Blade's champion-hit mana refund sustains your CS, but a pre-6 Kassadin still loses the all-in to Q-silence-into-Judgment with no blink out.",
+      "after": "Nether Blade's champion-hit mana refund sustains your CS, but a pre-6 Kassadin loses every all-in to an 8-second silence he cannot wait out."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Hit Riftwalk at 6 so his Q engage no longer traps you — blink out of Judgment and out of R-execute range",
+      "after": "Hit Riftwalk at 6 so his Q engage no longer traps you - but cast it before the silence lands, never after"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land Q silence to lock you out of Null Sphere/E, then stick with the empowered AA and move speed",
+      "after": "Land the Q silence to lock Null Sphere, Force Pulse and Riftwalk, and break your slow on the same cast"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Win the short levels 1-3 trades with Q-AA into Judgment, then disengage and heal on Perseverance regen",
+      "after": "Win the short levels 1-3 trades with Q-AA into Judgment, then walk out of range so Perseverance regen starts"
+    }
+  ],
+  "notes": "The biggest correction here is a cooldown, not a name: content.mid told you to bait the silence because it is 'on a long cooldown early'. Decisive Strike is 8 seconds flat at every rank and free to cast - there is no window, and a player waiting for one will keep dying inside 300 range. Two interactions were missing from the entire file: Decisive Strike breaks all slows affecting him (so Force Pulse cannot kite Garen at all), and the silence locks Riftwalk. The full layer also promised 'the shield absorbs his counter' in three places - Null Sphere shields magic and Garen deals none. LEFT ALONE: focus.text still reads 'Garen Courage' with letters [W]; the Q silence is the real matchup-definer but 'Garen Courage' is 13 characters and no Q-based label fits the +/-10% band while also matching the W letter badge - raised as a question."
+}

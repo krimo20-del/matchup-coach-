@@ -1,0 +1,127 @@
+{
+  "ownerKey": "tahmkench",
+  "enemy": "kennen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The entry repeatedly sells a \"3-stack Tongue Lash stun into Devour\" combo (content spikes[0].text, whys[2], early; full tradeGood, dosFull[2], breakdown.trading). That sequence cannot exist.",
+      "why": "Riot's own text in champ-data/_kits/tahmkench.json: An Acquired Taste — \"At three stacks, he can use Devour on an enemy champion.\" Tongue Lash — \"If the champion already has 3 stacks of An Acquired Taste, they are stunned and the stacks are consumed.\" The stun spends the exact resource Devour requires, so Q-stun and R are mutually exclusive on one stack set. A player following this line stuns, then finds R greyed out mid-all-in.",
+      "corrected": "At 3 stacks you choose: Tongue Lash stuns and burns the stacks, or Devour spends them to remove him. The stacking order that actually works is auto/W to two stacks, Tongue Lash for the third (Q does NOT stun at 2 stacks, it only applies the third), then Devour.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tahmkench.json (Data Dragon 16.15.1) — An Acquired Taste and Tongue Lash descriptions"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "content `mid` ends with \"Post-6 your global Abyssal Voyage pressure changes the game: roam or fake roam...\". Tahm Kench has no Abyssal Voyage.",
+      "why": "champ-data/_kits/tahmkench.json lists W = Abyssal Dive (a 1000-1200 range dive with a knockup, 21/20/19/18/17s) and R = Devour. Abyssal Voyage was the pre-rework ultimate and no longer exists. The advice tells the player to build a lane plan around an ability that is not in the game.",
+      "corrected": "Post-6 the gap-closer is Abyssal Dive (W), 1000 range at rank 1 on 21s — it is the only tool that puts Kennen back inside Tongue Lash range.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tahmkench.json — ability slots W/R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content `mid` says \"use Devour on yourself if you have an ally nearby\".",
+      "why": "Devour targets a champion other than the caster — \"Tahm Kench devours a champion for a few seconds, dealing magic damage if they are an enemy, or shielding them if they are an ally.\" There is no self-cast. The instruction is unexecutable.",
+      "corrected": "Against Slicing Maelstrom the answer is distance, not a self-cast: R is 550 range, so leave the storm rather than trade inside it.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tahmkench.json — Devour; champ-data/_kits/kennen.json — Slicing Maelstrom range 550"]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "content `early` tells you to \"play the wave at Tongue Lash max range\" as if that is a safe zone.",
+      "why": "Tongue Lash is 900 range; Thundering Shuriken is 950. Kennen out-ranges your only poke by 50 units, so sitting at your own max range is sitting inside his. The correct pattern is step-in-and-out, not camping a range band.",
+      "corrected": "Thundering Shuriken reaches 950 and Tongue Lash only 900 — step in for the Q, step back out; you never get a free poke band.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tahmkench.json (Tongue Lash range 900); champ-data/_kits/kennen.json (Thundering Shuriken range 950)"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "The cooldown block names Lightning Rush but gives no numbers, and never mentions that Slicing Maelstrom is a flat cooldown at every rank with no resource cost.",
+      "why": "Lightning Rush is 10/9/8/7/6s and costs 80 energy; Slicing Maelstrom is 120s at all three ranks and costs 0. Kennen ranking R does not shorten it, so the punish window after his level-6 all-in is a full two minutes regardless of level — that is the single most exploitable number in the matchup and it was absent.",
+      "corrected": "Lightning Rush 10s at rank 1 down to 6s at rank 5, 80 energy. Slicing Maelstrom flat 120s at all ranks, no energy cost — after he burns R the next two minutes are yours.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kennen.json — Lightning Rush 10/9/8/7/6, Slicing Maelstrom 120 / cost 0"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Kennen's Electrical Surge is on-hit but deals magic damage and his whole kit is AP, so the existing \"build MR / Mercury's Treads / Spirit Visage\" line is the right call. _missing-interactions.json flags on-hit itemization here; MR already answers it, so no edit.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kennen.json — Electrical Surge flags onHit; champ-data/_kits/_missing-interactions.json"]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "53.41% over 264 games with a chart of Tahm Kench 4 / Kennen 1 / Skill 2 is internally consistent. diffRating 6/10 and diff EVEN are defensible for a modestly favoured lane. No edit.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet tahmkench.json — winRate 53.41, games 264, levelChart"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Once you hit 3 An Acquired Taste stacks, your Tongue Lash stuns Kennen in place — one confirmed stun into Devour deletes him from the trade entirely.",
+      "after": "At 3 An Acquired Taste stacks you pick one: Tongue Lash stuns Kennen but consumes the stacks, or Devour spends them and removes him instead."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Three stacks of An Acquired Taste means a stun into Devour — Kennen has no answer for being physically removed from the fight while the bonus damage ticks inside your belly.",
+      "after": "Three stacks arm Devour, and the Tongue Lash stun consumes those same stacks — you get one, never both. Take Devour: Lightning Rush cannot dash out of your belly."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Kennen is ranged and energy-based, so he never runs dry poking you — but his poke does not kill you at level 1 because Thick Skin passively banks it into grey health the moment you step out of combat. Play the wave at Tongue Lash max range, landing Q on Kennen whenever he steps up to last-hit to stack An Acquired Taste without walking into his auto harassment. At level 2 he gains Lightning Rush, which he will use to dodge your Tongue Lash, so watch the cast animation and fire slightly ahead of where he is dashing. The moment you hit 3 stacks without burning them, step up: a confirmed stun into Devour is a full trade win even if he burns his passive mark stun on you during — you swallow him for the bonus damage window and he eats it all.",
+      "after": "Kennen is ranged and energy-based, so he never runs dry poking you — but his poke does not kill you at level 1 because Thick Skin passively banks it into grey health the moment you step out of combat. Thundering Shuriken reaches 950 and Tongue Lash only 900, so your own max range still sits inside his: step in for the Q on his last-hit, step straight back out. At level 2 he gains Lightning Rush, which he will use to dodge your Tongue Lash, so watch the cast animation and fire slightly ahead of where he is dashing. Once you hold 3 stacks, do not spend them on the Q stun — the stun consumes all three and Devour needs all three, so pick the tool that ends the trade, not the one that only starts it."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 are Kennen's strongest kite window — he has Q poke, auto harassment, and Lightning Rush but you have no ultimate to close distance if he respects your stun threat and farms from range. Idle these levels at half XP range, Tongue Lash-fishing when he steps up, and let Thick Skin do its work: bank grey health by taking poke on the tank stats, then activate E to shield up before he all-ins. At level 6 respect Slicing Maelstrom — if you see him close the gap with Lightning Rush and activate R, use Devour on yourself if you have an ally nearby or just disengage; you are not dying to his burst if you are outside his AOE cone when it ramps. Post-6 your global Abyssal Voyage pressure changes the game: roam or fake roam to force him off the wave, because he cannot push as fast as he pokes.",
+      "after": "Levels 4-5 are Kennen's strongest kite window — he has Q poke, auto harassment, and Lightning Rush, and Abyssal Dive on a 21s cooldown is your only way to close if he respects the stun threat and farms from range. Idle these levels at half XP range, Tongue Lash-fishing when he steps up, and let Thick Skin do its work: bank grey health by taking poke on the tank stats, then activate E to shield up before he all-ins. At level 6 respect Slicing Maelstrom — it is a flat 120s at every rank and costs him no energy, so if he Lightning Rushes in and pops R, walk out of the 550-range storm instead of trading inside it. Once R is gone you own the next two full minutes: Abyssal Dive him onto the wave and he has no second dash to leave with."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Punish Kennen's Lightning Rush dash with a pre-charged 3-stack Tongue Lash stun the moment he lands to force Devour",
+      "after": "Punish Kennen's Lightning Rush with Abyssal Dive the instant it ends — his next one is 10s away at rank 1"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Q-stun at 3 stacks is your kill switch. Only take the trade when Kennen's Lightning Rush is down.",
+      "after": "3 stacks arm Devour; the Q stun spends them instead. Trade when Lightning Rush's 10s is down."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Kennen Lightning Rush: matchup-defining — His escape. Q-stun before it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Kennen Lightning Rush: 10s rank 1, 6s rank 5, 80 energy — his only escape, Q-stun before it. - Slicing Maelstrom: flat 120s every rank, free. - Your Abyssal Dive: 21s — never spend it on chip."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Lick Kennen to 3 stacks in short exchanges, Q-stun when his answer is down, and Devour the all-in under your wave.",
+      "after": "Lick Kennen to 3 stacks in short exchanges, then spend them on Devour, not the Q stun — the stun eats the same stacks."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].t",
+      "before": "Q-stun on 3 stacks",
+      "after": "Devour on 3 stacks"
+    }
+  ],
+  "notes": "The 'Q-stun into Devour' error is not local to Kennen — it is boilerplate repeated across Tahm Kench's whole top-lane set (tradeGood, breakdown.trading, report[3].t and dosFull all carry it). Tongue Lash at 3 stacks stuns AND consumes the stacks; Devour requires 3 stacks. They are mutually exclusive. Worth a global sweep beyond this slice. Same for 'Abyssal Voyage', which is the pre-rework ultimate and appears in several matchups' prose. I did not edit report[] entries that duplicate tradeGood/breakdown.trading verbatim — if report is not regenerated from those fields, those duplicates still carry the wrong combo."
+}

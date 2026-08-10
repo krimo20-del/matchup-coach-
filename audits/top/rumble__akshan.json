@@ -1,0 +1,124 @@
+{
+  "ownerKey": "rumble",
+  "enemy": "akshan",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Emerald+ headline 51.44% over 589 games; nothing in the text cites a conflicting number.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packets/rumble.json"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The two layers disagree about who owns levels 2 and 3. The content level chart (and the packet levelChart) both read Skill / Akshan / Akshan / Rumble / Rumble / Rumble / Rumble, but CHAMP_FULL.phases reads Skill / Rumble / Rumble / Skill / Skill / Rumble / Rumble. Levels 2-3 are flatly inverted.",
+      "why": "The content whys argue the Akshan side of levels 2-3 correctly and from the kit: Heroic Swing unlocks at 2, lets him close, proc Dirty Fighting and leave before Rumble banks heat. Rumble's own phase text at those levels is generic template that does not argue for a Rumble edge. The chart is right and the full layer is stale.",
+      "corrected": "full phases[1].side and phases[2].side flipped to Akshan so both layers state the same lane shape.",
+      "confidence": "High",
+      "sources": ["packets/rumble.json", "champ-data/_kits/akshan.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 spike only mentions The Equalizer and never mentions that Akshan also gets Comeuppance at 6, which is the single thing that changes how Rumble stands in lane from that level on.",
+      "why": "Comeuppance is 100/85/70s, scales on the target's missing health, and stops on the first champion, minion or structure hit — so it is defeated by a body or by breaking line of sight. That is actionable and completely absent. Rumble's own spikes (Danger Zone chaining 4-5, Liandry's first item, Equalizer at 130s rank 1) are placed correctly.",
+      "corrected": "Level-6 spike now names Comeuppance and the minion-block / line-of-sight answer.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akshan.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two errors of substance. (a) The text repeatedly claims The Equalizer blocks Heroic Swing — 'he cannot grapple through a burning rocket wall', 'he cannot grapple out of the burning wall'. The Equalizer is a damaging, slowing line of flame, not terrain; it does not stop a dash. (b) The one interaction that actually decides the lane is never stated: Heroic Swing fires a grappling hook into terrain, so it does not exist in open lane, and Riot's text says he 'gets knocked off when colliding with champions or terrain' — Rumble's own body interrupts the swing.",
+      "why": "Riot's Equalizer description is 'a group of rockets, creating a wall of flames that damages and slows enemies' — the kit file's derived 'terrain' flag misfires on the word wall and must be overruled by the description. Heroic Swing's description is explicit about both the terrain requirement and champion-collision knock-off. Teaching a player to place a 130-second ultimate as a dash-block will lose games.",
+      "corrected": "Equalizer reframed as damage-in-his-arc rather than a barrier; Heroic Swing's terrain requirement and champion-collision knock-off added to the cooldown breakdown, the Do, the mid paragraph and the Key Ability Interactions row.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/rumble.json", "champ-data/_kits/akshan.json"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Heroic Swing is named as the matchup-defining cooldown in six places and its cooldown number appears nowhere.",
+      "why": "It is 18/16.5/15/13.5/12. At rank 1 that is an 18-second window, which is what makes the level 2-3 bait-and-commit pattern work at all.",
+      "corrected": "Real numbers added to the cooldown breakdown and to wants.foe[0].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akshan.json"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.foe[2] describes Akshan farming a lead 'through passive camouflage repositioning', which garbles Going Rogue. The passive half of Going Rogue is Scoundrel marking and ally revival; the camouflage is the active, and it decays quickly unless he is moving toward a Scoundrel.",
+      "why": "Nothing actionable survives the garble, and the slot is better spent on the Comeuppance blocking rule the reader can actually use.",
+      "corrected": "Replaced with Akshan's real want: an unobstructed Comeuppance line.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akshan.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Rumble",
+      "after": "Akshan"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Rumble",
+      "after": "Akshan"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "From level 4 onward this lane flips. Your Danger Zone is sustainable now and Akshan has no answer to sustained Flamespitter damage if he has to stand inside it. The pattern is simple: bait his Heroic Swing into a wall or empty air by faking a commit, and the moment it is on cooldown run the full Q-into-double-E slow with Scrap Shield to eat his counter-trade. At level 6 you stop playing for the 1v1 kill and start threatening The Equalizer across his escape path — he cannot grapple through a burning rocket wall.",
+      "after": "From level 4 onward this lane flips. Your Danger Zone is sustainable now and Akshan has no answer to sustained Flamespitter damage if he has to stand inside it. Heroic Swing needs a wall to hook, so fight him in the open middle of the lane where it simply does not exist; bait it, then run Q into double Electro Harpoon while it sits on its 18-second rank-1 cooldown. If he does swing, walking into his arc knocks him off it — your body is the interrupt. The Equalizer is damage, not terrain: aim where he lands."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Two items in your Equalizer decides teamfights regardless of who won lane — place it across his Heroic Swing escape arc and he cannot grapple out of the burning wall.",
+      "after": "Two items in your Equalizer decides teamfights regardless of who won lane — it burns, it does not block, so lay it where his swing has to land rather than across it."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "The Equalizer is your biggest swing tool — drop it across Akshan's Heroic Swing path to punish him mid-swing when he has no dodge.",
+      "after": "Comeuppance also lands at 6 — it stops on the first body, so keep a minion in the line. Your Equalizer burns the spot his swing must end on."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Use Heroic Swing to dodge incoming Flamespitter channels and reset to safe poke range each time you commit heat",
+      "after": "Hook a wall with Heroic Swing to leave the Flamespitter cone and reset poke range — 18 seconds at rank 1, his only out"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Build a cs lead early through passive camouflage repositioning so he is ahead when both spike items land",
+      "after": "Fire Comeuppance down a clean line at a chunked Rumble — it scales on missing health and stops on the first body"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His dash + camera swing escape. Engage when it's down. Only engage once it is down or baited.",
+      "after": "It grapples terrain only — fight in open lane where he has no wall, or block the arc."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Akshan Heroic Swing: matchup-defining — His dash + camera swing escape. Engage when it's down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Heroic Swing: 18s at rank 1, 12s maxed, and it needs a wall — in open lane he has none, and champion collision knocks him off it. - Comeuppance: 100s, stops on the first body. - The Equalizer: 130s, kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Akshan's Heroic Swing: His dash + camera swing escape. Engage when it's down. When it is down — Overheat flame + E slow.",
+      "after": "Heroic Swing hooks terrain and breaks on champion collision — stand in the arc and he drops out of it, mid-lane he cannot cast it."
+    }
+  ],
+  "notes": "Rumble's kit file carries derived flags 'terrain' and 'knockup' on Scrap Shield (W) and 'terrain' on The Equalizer (R). All three contradict Riot's own descriptions — Scrap Shield is a shield plus a movement-speed burst with no displacement and no wall, and The Equalizer is a damaging slow zone. I trusted the descriptions. The Equalizer misfire is the direct cause of the 'he cannot grapple through the wall' error corrected here, so it is worth checking whether other Rumble matchups inherited it. Separately, full phases[3] and phases[4] still read Skill where the level chart says Rumble; I could not fix those because 'Skill' to 'Rumble' is a 20% length change and the applier's band would reject it. Worth a manual pass. suspectNames flagged 'Use The Equalizer' and 'Use Heroic Swing' — both false positives, those are the real names."
+}

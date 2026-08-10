@@ -1,0 +1,211 @@
+{
+  "ownerKey": "malphite",
+  "enemy": "teemo",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart gives Teemo five of seven stages (win = Teemo, Teemo, Teemo, Skill, Teemo, Skill, Teemo) in a lane Malphite wins 52.97% over 2475 games, and it contradicts the entry's own text: whys[4] calls Level 6 'your spike', whys[5] says 'force every all-in now', whys[6] says 'You still win the duel outright'. All three sit under a stage the chart awards to Teemo.",
+      "why": "The mirror reached the same conclusion from the other side: audits/top/teemo__malphite.json records Teemo at 48.33% and says its own chart needs redrawing for the same reason. Levels 1-3 are genuinely Teemo's — Blinding Dart on a flat 7s blanks the autos Malphite's whole trade runs on. From Level 6 the lane is Malphite's.",
+      "corrected": "Teemo owns Levels 1-3. Level 6 onward is Malphite's: no dash means Unstoppable Force always connects, and Ground Slam's attack-speed cut is a hard answer to an attack-speed damage profile.",
+      "confidence": "High",
+      "sources": [
+        "packets/malphite.json (52.97, 2475)",
+        "audits/top/teemo__malphite.json (mirror, 48.33)",
+        "champ-data/_kits/teemo.json",
+        "champ-data/_kits/malphite.json"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2] and wants.you[2] make the first-item spike 'stack armor (Iceborn/Sunfire)' to 'blank his on-hit DPS'. The full layer of the same matchup lists 'Build armor vs his AP' as a critical DON'T.",
+      "why": "Toxic Shot is magic damage. Armour reduces none of it, so as a defensive purchase against Teemo it does nothing — and the two layers currently tell the player opposite things. Armour is still worth buying, but for the reason neither layer gives: Ground Slam's damage is calculated from Malphite's Armor, so every armour item is an offensive item here. What actually blanks his on-hit engine is Ground Slam's attack-speed reduction on a flat 7s, because his damage is attack-speed driven.",
+      "corrected": "Ground Slam's attack-speed cut is the answer to Toxic Shot, not armour. Armour is offensive (it scales Ground Slam); MR is the defensive buy against an all-magic kit.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/teemo.json (E Toxic Shot, on-hit poison)",
+        "champ-data/_kits/malphite.json (E: magic damage based on his Armor, reduces Attack Speed, cd 7)",
+        "audits/top/teemo__malphite.json (mirror, same finding)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet-flagged: the entry names none of Teemo's abilities — everything is 'his blind (Q)', 'E poison', 'shrooms', 'passive move speed'. Separately, early tells the player that stepping out of auto range between trades refreshes Granite Shield and 'soaks most of his poke'.",
+      "why": "That last line is the load-bearing error. Granite Shield only recharges after Malphite has gone a few seconds without being hit, and Toxic Shot poisons on impact and then ticks every second for four seconds afterwards. One auto suppresses the shield for the whole poison duration, so walking out of range does not bring it back — the poison clock has to expire first. The advice as written tells the player he has a reset he does not have. The mirror entry is built around the same interaction from Teemo's side.",
+      "corrected": "Toxic Shot ticks for four seconds after the hit, and Granite Shield needs a few seconds unhit to recharge — so a single auto keeps your shield off through the whole DoT. Names: Guerrilla Warfare (P), Blinding Dart (Q, flat 7s, 680), Move Quick (W, 14s), Toxic Shot (E), Noxious Trap (R).",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/teemo.json (E Toxic Shot: 'damage on impact and each second after for 4 seconds')",
+        "champ-data/_kits/malphite.json (P Granite Shield recharge condition)",
+        "audits/top/teemo__malphite.json (mirror)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing states what Blinding Dart does and does not stop. spikes[1] says Unstoppable Force 'lands point-blank with no dodge', which is right, but never says why it survives the blind.",
+      "why": "Blinding Dart blanks basic attacks. That is devastating against Thunderclap, which is an auto-attack reset whose aftershocks ride on the next few attacks — one dart erases the whole window rather than a single hit. It does nothing to Unstoppable Force, Seismic Shard or Ground Slam. Saying so converts a vague 'bait the blind' into a rule: never open with autos, always open with R.",
+      "corrected": "Blinding Dart stops basic attacks only, so it eats Thunderclap's whole aftershock window but never touches Unstoppable Force, Seismic Shard or Ground Slam. Flat 7s at every rank, 680 range.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/teemo.json (Q Blinding Dart, cd 7, range 680)",
+        "champ-data/_kits/malphite.json (W Thunderclap, autoReset, onHit)"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "late warns about facechecking brush but never mentions Guerrilla Warfare, and Noxious Trap is only ever 'shrooms'.",
+      "why": "Guerrilla Warfare is why the brush is dangerous: standing still makes him invisible indefinitely, and inside brush he keeps the invisibility while moving. That is a different threat from a ward-able champion sitting in a bush. Noxious Trap slows and poisons over time — it is the zoning tool that stops Malphite ever walking a fight down.",
+      "corrected": "Guerrilla Warfare makes him invisible while still, and lets him stay invisible while moving inside brush. Noxious Trap slows and poisons — it is a zoning tool, not a displacement.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/teemo.json (P Guerrilla Warfare; R Noxious Trap)"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Teemo's blind (Q) shuts off your Thunderclap autos and his move-speed kite owns the level 1-2 window — eat the poke and farm at max Q range.",
+      "after": "Blinding Dart is a flat 7s from 680 and it eats Thunderclap's whole aftershock window, while Move Quick kites you — farm and take the Toxic Shot chip."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Unstoppable Force lands point-blank with no dodge — R + Thunderclap autos run down an escape-less Teemo, your single biggest swing in the lane.",
+      "after": "Unstoppable Force lands through the blind — Blinding Dart stops autos, not abilities — and Teemo has no dash, so R into Thunderclap runs him down."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "First armor item (Iceborn / Sunfire) plus Ground Slam's attack-speed slow blanks his on-hit DPS — this is your power peak, force the all-in here.",
+      "after": "Ground Slam's flat 7s attack-speed cut is what blanks his on-hit poison. The armour you buy makes Ground Slam hit harder; MR is what defends you."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Teemo's shrooms zone every choke and his splitpush punishes your low mobility — group through cleared brush and let your team handle the rat.",
+      "after": "Noxious Trap slows and poisons every choke, and his splitpush punishes your low mobility — group through swept brush and let your team handle him."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Bait the blind (Q) on a Thunderclap auto, then close with R so he has no escape",
+      "after": "Bait Blinding Dart onto a Thunderclap auto, then close with R — blind never stops it"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Reach Level 6 and flank with Unstoppable Force the instant his blind is on cooldown",
+      "after": "Reach 6 and flank with Unstoppable Force inside Blinding Dart's flat 7s window"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Stack armor (Iceborn/Sunfire) and chunk him with Ground Slam + Seismic Shard slow to lock the kite",
+      "after": "Cut his attack speed with Ground Slam every 7s — that, not armour, is what stops Toxic Shot"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Blind your autos every trade and kite back with passive move speed so your short range never connects",
+      "after": "Blind your autos every trade and kite with Move Quick so Thunderclap’s 400 range never connects"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Poke you down with E poison and stack shrooms on the brush and your engage path",
+      "after": "Chip you with Toxic Shot poison and seed Noxious Traps across your engage path"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Survive past lane and out-range you forever with splitpush and shroom vision",
+      "after": "Out-range you after lane with splitpush and Noxious Trap vision on every choke"
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Teemo owns the opening. His blind (Q) cancels the empowered autos of your Thunderclap and his passive move speed means you can't walk him down, so don't waste mana throwing a Seismic Shard at max range hoping to chase — just last-hit and accept the E-poison chip. Your Granite Shield passive is the saving grace: step out of his auto range between trades and the shield refreshes, soaking most of his poke. Don't flame your jungler; this is a survive-to-6 lane, not a level-2 cheese.",
+      "after": "Teemo owns the opening. Blinding Dart (Q) is a flat 7s from 680 and it blanks basic attacks, which means it eats Thunderclap's entire aftershock window rather than one hit, while Move Quick (W) means you cannot walk him down. The trap to avoid: Granite Shield does NOT reset just because you stepped back. Toxic Shot (E) ticks every second for four seconds after the hit, and the shield only recharges once you have gone a few seconds unhit — so one auto keeps it off you for the whole poison. Last-hit, take the chip, reach 6."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "This is where it flips. The instant you hit 6, Unstoppable Force gives you something Teemo cannot answer — he has no dash, no flash-tier escape, so a well-timed R from brush or fog locks him for a full Thunderclap + Ground Slam combo. Bait the blind first: trade a Seismic Shard so he burns Q, then R in on the cooldown. With your first armor item, Ground Slam's attack-speed slow guts his on-hit damage and your Granite Shield outlasts his poke. Hold R for when his Q is down.",
+      "after": "This is where it flips. At 6, Unstoppable Force gives you something Teemo cannot answer: he has no dash, and Blinding Dart stops basic attacks only, so your R connects through it from fog or brush and locks him for Thunderclap and Ground Slam. Open with R, never with autos — the blind is a flat 7s and it is worth more to him than any single hit. Ground Slam's attack-speed cut, also a flat 7s, is the item-independent answer to his on-hit poison. Hold R for the seconds after Blinding Dart is spent."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "You win every straight 1v1 he's foolish enough to take — he can't out-burst your armor and he can't escape your R. But Teemo stops fighting you and becomes a map problem: shrooms wall off every choke and objective pit, and his splitpush exploits your zero waveclear pressure and low mobility. Use your R as a flank/engage on his carries in fights rather than chasing the rat, and never facecheck unswept brush near Baron or Dragon — one shroom chunk before a fight is how he claws value back.",
+      "after": "You win every straight 1v1 he takes — no dash means no escape from R, and Ground Slam's attack-speed cut guts an attack-speed damage profile. But Teemo stops fighting you and becomes a map problem: Noxious Trap slows and poisons every choke and pit, and Guerrilla Warfare makes him invisible standing still, and invisible while moving inside brush. Use R as a flank on his carries rather than chasing him, and never facecheck unswept brush near Baron or Dragon."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Teemo blinds your Thunderclap autos and kites with move speed — at level 1 you have no trade pattern and just eat poke.",
+      "after": "Blinding Dart blanks the autos Thunderclap runs on and Move Quick kites you — at level 1 you have no trade pattern."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "He out-ranges and out-poisons you with E while you have only a slow Seismic Shard — let Granite Shield soak it and farm.",
+      "after": "Toxic Shot ticks for 4s after each hit, so Granite Shield never recharges — stepping back does not reset it here."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "By level 3 it evens out: he still pokes but your shield and W sustain stop the bleed, and he can't kill you yet.",
+      "after": "By level 3 it steadies: he still pokes, but Ground Slam's attack-speed cut starts taxing the poison engine."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "W/E come online — Ground Slam's attack-speed slow and Thunderclap's armor let you farm through his poison and stabilize.",
+      "after": "Thunderclap's armour and Ground Slam's flat-7s attack-speed cut come online and you farm through Toxic Shot."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Unstoppable Force is your spike — no dash means Teemo has no escape, so R + Thunderclap runs him down on his blind timer.",
+      "after": "Unstoppable Force is your spike — he has no dash, and blind stops autos not abilities, so your R always connects."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "Your first armor item plus Ground Slam blanks his on-hit DPS while your engage stays lethal — force every all-in now.",
+      "after": "Ground Slam blanks his on-hit damage while the armour you buy only grows it — force every all-in from here."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "You still win the duel outright, but his shrooms zone chokes and his splitpush punishes your low mobility — group and flank, don't chase.",
+      "after": "You still win the duel outright, but Noxious Trap zones the chokes and Guerrilla Warfare hides him — group and flank, don't chase."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q Teemo on his last-hits (speed steal in, slow out), E his attack speed if he answers, and reset behind the passive shield.",
+      "after": "Toxic Shot and Noxious Trap are magic, so MR is the defensive buy; Guerrilla Warfare hides him in unswept brush."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Teemo wastes Blinding Dart — commit the full pattern immediately.",
+      "after": "Blinding Dart stops autos, never abilities — Unstoppable Force lands."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Trading with your passive shield down — that shield IS your trade margin; without it you are paying full price.",
+      "after": "Toxic Shot is magic damage, so armour never reduces it — all it buys you here is a bigger Ground Slam."
+    }
+  ],
+  "notes": "MIRROR: reused audits/top/teemo__malphite.json — the Granite-Shield-versus-poison interaction, Ground Slam as the hard counter to an attack-speed damage profile, and the armour/magic itemisation error. Stated from Malphite's side, same direction (Malphite favoured from 6 onward), no contradiction introduced. LOAD-BEARING FIX: early told the player that stepping out of auto range refreshes Granite Shield and soaks his poke. It does not — Toxic Shot ticks for four seconds after the hit and the shield needs a few unhit seconds, so one auto suppresses it for the whole DoT. Second fix: the two layers disagreed on armour, content saying stack it and full listing it as a critical don't. Toxic Shot is magic; armour is an offensive buy here because Ground Slam scales off it, and the real answer to his on-hit engine is Ground Slam's attack-speed cut. NOT EDITED, NEEDS A HAND: the level chart gives Teemo five of seven stages in a 52.97% lane and contradicts whys[4], whys[5] and whys[6] on the same page — win[4] and win[6] should read Malphite, with phases[4]/phases[6] following. Enum values, so outside the length band. TOOLING FLAG (agrees with the mirror): _missing-interactions.json's 'knockup-enabler — Noxious Trap (R) vs Unstoppable Force (R)' is a false positive. Noxious Trap slows and poisons; it displaces nothing, and Teemo's kit file carries an unearned knockup flag. The suspectNames rows for this matchup ('Ground Slam's', 'Your Granite Shield') are also false positives — both are correct Malphite ability names."
+}

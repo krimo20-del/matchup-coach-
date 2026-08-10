@@ -1,0 +1,202 @@
+{
+  "ownerKey": "nasus",
+  "enemy": "akali",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "54.38% over 1004 games matches MC_WR_TABLES.nasus.akali. No elo-tier language anywhere.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packets/nasus.json"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: 'level chart contradicts data: Nasus wins 54.38% but the chart gives Akali 6/7 stages vs 1'. Separately, content.win[5] is 'Akali' while full.phases[5].side is 'Skill' — the two layers disagree about the same stage.",
+      "why": "54.38% across 1004 games is a clearly Nasus-favoured lane, and the guide's own report[2] already says 'the chart flips at 6 and never flips back' — which the current chart contradicts. Level 6 is where Fury of the Sands arrives and is the first fight Nasus is allowed to take; first item is the Sheen spike that phases[5].why itself calls the end of the bully phase.",
+      "corrected": "Set Level 6 and First item to Skill in both layers, giving 4 Akali / 2 Skill / 1 Nasus. This matches the win rate, makes report[2]'s 'flips at 6' true, and resolves the win[5] vs phases[5].side contradiction.",
+      "confidence": "High",
+      "sources": ["packets/nasus.json levelChart + winRate", "champ-data/nasus.full.js phases[5]", "champ-data/_kits/nasus.json R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.mid says 'She is energy-gated, so after she dumps E plus a shroud (W) she has nothing'. Twilight Shroud costs 0 energy and Shuriken Flip costs 30. Neither is what empties her bar.",
+      "why": "Riot's own costs: Twilight Shroud 0, Shuriken Flip 30, Five Point Strike 110/100/90/80/70. The entire early energy gate is Five Point Strike — at rank 1 it is 110 of a 200 bar, so she gets two casts and is dry. Telling a Nasus to wait for her to 'dump E plus a shroud' points him at the two cheap abilities and misses the only expensive one.",
+      "corrected": "Rewrote content.mid to name Five Point Strike and its 110 rank-1 cost as the actual energy gate, and to state that Twilight Shroud is free so she never pays for it.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akali.json Q cost 110/100/90/80/70, W cost 0, E cost 30"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three places assert that Twilight Shroud removes or 'drops' an existing Wither: content.mid 'it drops you as her Wither target', wants.foe[1] 'to drop your Wither target', spikes[3] 'blanks your Wither target'.",
+      "why": "Riot's text says only that she is 'unable to be selected by enemy spells and attacks' inside the shroud. That prevents Nasus from CASTING Wither on her; whether it strips an already-applied Wither is a cleanse question and is not answerable from the kit file (needsResearch.cleansable is null). The practical rule is the same either way and is unambiguously supported: land Wither before the smoke drops, because once she is inside it you cannot cast it at all.",
+      "corrected": "Reworded all three to the targeting statement rather than the cleanse claim.",
+      "confidence": "Medium",
+      "sources": ["champ-data/_kits/akali.json W", "champ-data/_kits/nasus.json needsResearch"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing anywhere connects Wither to Assassin's Mark.",
+      "why": "Assassin's Mark creates a ring around the champion she damaged and only empowers her next attack when she EXITS that ring. Wither decelerates her Move Speed, so it directly stalls the exit that arms the empowered auto. This is the one place Nasus's W does something other than kite — it delays her passive proc.",
+      "corrected": "Added to wants.you[0].",
+      "confidence": "Medium",
+      "sources": ["champ-data/_kits/akali.json P", "champ-data/_kits/nasus.json W"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "No cooldown numbers for Akali appear anywhere, and no 'wait for X before you Y' line exists (sequencingCues = 1).",
+      "why": "Shuriken Flip is 16/14.5/13/11.5/10s and the dash recast requires the first cast to have marked something. If E1 misses, she has no gap-closer for 16s at rank 1 — that is the single largest walk-up window Nasus gets before item one.",
+      "corrected": "Added the 16s rank-1 figure and the dodge-denies-the-dash rule to whys[2] and breakdown.cooldowns; added Five Point Strike's two-casts-and-dry rule to phases[2].why.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akali.json E cooldown 16/14.5/13/11.5/10 and recast condition"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "content.early says 'you have no Wither until 3'; full.phases[1].why says 'Wither online' at Level 2. Same cross-layer contradiction as the Aatrox entry.",
+      "why": "Wither is a basic ability available from level 2 if taken there. The content layer's claim is wrong as written and contradicts its sibling layer.",
+      "corrected": "Removed the level assertion from content.early and replaced it with Shuriken Flip's 825 range, which is the fact that actually governs the walk-up.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json W", "champ-data/nasus.full.js phases[1]"]
+    },
+    {
+      "point": 11,
+      "status": "needs-correction",
+      "whatIsWrong": "content.late and spikes[3] say a two-item Akali 'reclaims the very end' and out-duels Nasus, while content.win[6] is 'Nasus', whys[6] says 'Now you win', and breakdown.late says 'Late game you are unstoppable'. The same file argues both sides.",
+      "why": "A fully stacked Nasus is not out-duelled by Akali in a sidelane — that is most of why this matchup sits at 54.38%. What is true is that she stops taking that duel and flanks instead. Reframing it that way keeps the warning (she is still a threat) without contradicting the chart or the win rate.",
+      "corrected": "Rewrote content.late and spikes[3] so the late-game threat is Akali refusing the 1v1 and killing the carries, not Akali winning the 1v1.",
+      "confidence": "High",
+      "sources": ["packets/nasus.json winRate", "champ-data/nasus.full.js breakdown.late"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[2] titled 'Build MR' is described as 'Akali wastes Twilight Shroud — commit the full pattern immediately'; dontsFull[1] titled 'Fight her 6 with no MR' is described as 'Burning your answer for tiny value leaves you naked for its full cooldown'. Both descriptions belong to other slots.",
+      "why": "The same paste defect that appears in the Aatrox entry. A player reading either card gets advice unrelated to the heading above it.",
+      "corrected": "Rewrote both to match their titles, using the MR items the guide already recommends in report[8] and Perfect Execution's execute behaviour.",
+      "confidence": "High",
+      "sources": ["champ-data/nasus.full.js report[8]", "champ-data/_kits/akali.json R"]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Nothing in the kit data indicates a recent change to either champion that would move this pairing, and the file header states content was authored on 26.11 against live patch 26.15. No patch-sensitivity claim is made in the text, so there is nothing to correct.",
+      "corrected": "",
+      "confidence": "Low",
+      "sources": ["champ-data/nasus.full.js header"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Akali",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Akali",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Akali",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Nasus"
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Akali owns these levels and you have to accept it. She has shuriken (E) poke and auto harass while you have no Wither until 3 and no ult until 6, so just soak Q last-hits at max range and eat the chip — your Soul Eater lifesteal will heal most of it back off the wave. Do not walk up to throw a Q into her E range; she dashes in, procs her passive, and resets the trade. At level 3 you finally get Wither: if she commits an E-in, slow her move and attack speed to a crawl and land a sweet-spot Siphoning Strike to remind her you bite back.",
+      "after": "Akali owns these levels and you have to accept it. She has Shuriken Flip poke and auto harass while your ult is still levels away, so just soak Q last-hits at max range and eat the chip — your Soul Eater lifesteal will heal most of it back off the wave. Do not walk up to throw a Q inside her 825 Shuriken Flip range; she marks you, dashes in, procs Assassin's Mark and resets the trade. Once Wither is up, punish that E-in: slow her move and attack speed to a crawl and land a sweet-spot Siphoning Strike."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Still her window, but it tightens. She is energy-gated, so after she dumps E plus a shroud (W) she has nothing — that is your moment to Wither and Q. The danger is her shroud: it drops you as her Wither target and eats your Spirit Fire and Q, so do not blow Wither until she has actually committed. At 6 your Fury of the Sands plus Wither lets you survive or win a single all-in, but she can R out, so hold ult to punish a greedy dive rather than initiating into her escapes.",
+      "after": "Still her window, but it tightens. Five Point Strike costs 110 energy at rank 1 — two casts and she is dry, and that empty bar is your moment to Wither and Q. Twilight Shroud is free, so she never pays for it: while she sits in the smoke you cannot target her with Wither at all, so land it before she drops it, not after. At 6 your Fury of the Sands plus Wither lets you survive or win a single all-in, but she can R out, so hold ult to punish a greedy dive rather than initiating into her escapes."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "This is where you flip the whole lane — mostly. With first item and a fat Q stack count, a Wither-locked Siphoning Strike under Fury of the Sands deletes a squishy Akali, and your lifesteal eats her burst in a sustained fight. But be honest: a fully-built two-item Akali is a hard scaler who reclaims the very end. Her shroud blanks your single Wither target and her R double-dash plus execute can chunk your HP bar faster than you can land one Q, so end the game on your splitpush and Wither pick threat before she comes fully online — do not let it become a 1v1 into a six-item assassin.",
+      "after": "This is where you flip the whole lane — mostly. With first item and a fat Q stack count, a Wither-locked Siphoning Strike under Fury of the Sands deletes a squishy Akali, and your lifesteal eats her burst in a sustained fight. But be honest: past two items she stops taking that fight at all. She vanishes into Twilight Shroud where Wither cannot reach her, waits until you commit to a sidelane, and spends her R double-dash on your carries instead — so end the game on your splitpush and pick threat before she gets to choose the fight."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Wither (W) is finally up, but she out-trades you with shroud (W) and E poke and can simply dash out of your slow's range.",
+      "after": "Wither is up, but dodge Shuriken Flip first — with nothing marked she has no dash in, and it is down 16s at rank 1."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Levels 4-5 stay hers: she pokes with E and resets with shroud while you hoard Q stacks and play not to die.",
+      "after": "Levels 4-5 stay hers: Shuriken Flip poke and free Twilight Shroud resets while you hoard stacks and survive."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "Even with your first-item empowered Q she can shroud off your Wither target and E-dash away, edging the trades while energy allows.",
+      "after": "Even with first-item Q she can vanish into Twilight Shroud where Wither cannot be cast, then E-dash out while her energy allows."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Past two items full-AP Akali reclaims it — her shroud (W) blanks your Wither target and her R double-dash plus execute bursts you before your single-target ult lands.",
+      "after": "Past two items Akali stops duelling you — Twilight Shroud denies Wither outright, so she flanks and spends Perfect Execution on your carries instead of contesting your sidelane."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Survive levels 1-5 farming Q safely, then land Wither (W) the instant she dashes in with E to win the trade",
+      "after": "Wither as she commits — she must exit her Assassin's Mark ring to arm the empowered auto, and the slow stalls it"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Use Twilight Shroud (W) to drop your Wither target and dodge your Spirit Fire and Q during trades",
+      "after": "Sit in Twilight Shroud (W) where Wither cannot be cast on her, dodging your Spirit Fire and Q mid-trade"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E lets you stack safely from range when Akali zones you. Spirit Fire the wave under tower; every stack denied is her only real win condition.",
+      "after": "Spirit Fire the wave from range when Akali zones you. Five Point Strike costs 110 energy at rank 1 — after two casts she is dry, so step up."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Akali Twilight Shroud: matchup-defining — Untargetable inside it. Wither when down. Track it before every engage.",
+      "after": "- Akali Twilight Shroud: matchup-defining — you cannot cast Wither on her inside it, so land it before the smoke drops."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Akali wastes Twilight Shroud — commit the full pattern immediately.",
+      "after": "Spirit Visage and Mercury's Treads before her level-6 all-in window."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Perfect Execution is a threshold kill — with no MR you stay inside its range."
+    }
+  ],
+  "notes": "The suspectName flag on wants.foe[1] ('Use Twilight Shroud') is a false positive — Twilight Shroud is Akali's real W. Left the name alone and only fixed the mechanic described around it. Deliberately not asserted: whether Twilight Shroud strips an already-applied Wither, or only prevents it being cast. needsResearch.cleansable is null for both champions and Riot's text only covers targeting, so I wrote the targeting rule (which holds either way) and left the cleanse question open — it is worth a League Wiki pass, because if the shroud does NOT strip Wither then Withering her a moment before she vanishes is a much stronger play than this guide currently suggests. Also unverified: whether Perfect Execution's second cast can be used to leave Wither's 700 range faster than the slow allows. No WKM_LINES problems seen for this pairing."
+}

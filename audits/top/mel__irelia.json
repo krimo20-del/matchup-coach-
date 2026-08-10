@@ -1,0 +1,146 @@
+{
+  "ownerKey": "mel",
+  "enemy": "irelia",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Four separate strings (`spikes[2].text`, `mid`, `late` context, `whys[4]`, `wants.foe[1]`) say Defiant Dance (W) blocks Mel's burst and heals Irelia through Radiant Volley.",
+      "why": "Riot's text for Defiant Dance: 'She takes reduced PHYSICAL damage during the charge.' It reduces physical damage only and it does not heal at all. Mel is a pure magic-damage champion — Radiant Volley, Solar Snare and Golden Eclipse all pass through Defiant Dance at full value. The heal in Irelia's kit belongs to Bladesurge (Q), not W. This is the most consequential error in the entry: it tells a Mel player her level-6 all-in cannot work when in fact W is the one Irelia button that does nothing to her.",
+      "corrected": "Defiant Dance mitigates physical damage and heals nothing, so it is dead weight against Mel — the moment Irelia charges W she has stopped moving and stopped threatening you. Her sustain is Bladesurge's heal, which is what Grievous Wounds answers.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/irelia.json",
+        "champ-data/_kits/mel.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Vanguard's Edge (R) is described only as part of a 'Sheen/Trinity' power spike; its wall is never mentioned.",
+      "why": "Vanguard's Edge fires blades that then form a wall which damages and slows anything crossing it. Mel has no dash anywhere in her kit, so the wall is not chip damage to her — it is a hard boundary between her and safety, placed behind her at 125/105/85s. This is the interaction that decides whether Flash is held for damage or for the wall.",
+      "corrected": "Hold Flash for the Vanguard's Edge wall, not for the burst — with no dash, the wall is what actually kills you.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/irelia.json",
+        "champ-data/_kits/_missing-interactions.json"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "full `breakdown.cooldowns` names Flawless Duet as matchup-defining but gives no number, and never mentions the Bladesurge reset that is the actual gap-close engine.",
+      "why": "Flawless Duet is 16/14.5/13/11.5/10s — a genuinely long window at rank 1. Bladesurge is 10/9/8/7/6s but its cooldown REFRESHES whenever the target is Marked or dies, which is why a big wave lets Irelia chain to Mel for free. Both numbers are already on disk in the kit file and neither is used.",
+      "corrected": "Flawless Duet 16s at rank 1 is the countable window; Bladesurge resets on a Marked target or a kill, so wave size, not its cooldown, sets how far she can reach.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/irelia.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "full `phases[0].side` gives level 1 to Irelia while its own `why` on the same row reads 'Q volleys win every level-1 range war'.",
+      "why": "The side and the reason contradict each other inside one row. The content layer gives level 1 to Mel, which the kit supports: Bladesurge is 600 range and needs a unit to dash to, while Radiant Volley is 950 and Solar Snare 1000. Level 1 Irelia cannot reach a Mel who respects 600.",
+      "corrected": "Level 1 is Mel's; the rest of the chart stays with Irelia.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/irelia.json",
+        "champ-data/_kits/mel.json"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Neither layer's content text asks for Grievous Wounds despite the entry repeatedly saying Irelia heals through the poke.",
+      "why": "Bladesurge heals Irelia on every cast and its cooldown refreshes off Marked targets, so in a big wave she can heal repeatedly during a single trade. Anti-heal timing is what decides whether Mel's chip sticks.",
+      "corrected": "Name Grievous Wounds against the Bladesurge heal.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/irelia.json",
+        "champ-data/_kits/_missing-interactions.json"
+      ]
+    },
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "33.33% over 9 games is carried consistently and matches the HARD 8/10 grade in the full layer and the Irelia-heavy content chart. No elo-tier language present.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "champ-data/content/mel.js"
+      ]
+    }
+  ],
+  "notes": "The full layer calls Irelia 'he/him' in tldr, enemyWin, wave, feeding and elsewhere while the content layer correctly uses she/her — same champion-agnostic template seen on other Mel entries, better fixed at the generator than string by string. The single phases[0].side edit is a short enum label ('Irelia' -> 'Mel') and cannot satisfy the +/-10% band; it is recorded in the audit above so the finding survives if the applier rejects it.",
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "She buys a Sheen/first item and your Golden Eclipse (R) can't out-burst her W damage-block plus heal once she's on top of you.",
+      "after": "Defiant Dance (W) cuts physical damage only and heals nothing — your magic burst goes through it, so 6 is a real window."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Her W blocks your Golden Eclipse burst and heals through it once she's on you, so your level-6 spike can't out-trade hers.",
+      "after": "Defiant Dance reduces physical damage and does not heal, so your magic burst ignores it — her W is dead weight against you."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Land E stun after the Q gap-close so she can W-block your Golden Eclipse and full-combo you",
+      "after": "Land E stun after the Q gap-close, then Bladesurge-heal off the wave and full-combo you"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-6 she takes over. Once Irelia can Q-dash minion-to-you and chain into her E stun, your kiting dies — she's inside your range, her W blocks your burst and heals through your Q, and her passive armor shred melts you. Save Solar Snare (E) purely as a peel/escape tool the moment she dashes, not as poke; whiff it and you're dead. Hold Rebuttal (W) to soak her Q-dash damage or interrupt her combo. Don't try to all-in at 6 — your Golden Eclipse (R) won't out-trade her W block-and-heal when she's on top of you. Look to give up CS, ping for ganks, and never get hooked under her stun range.",
+      "after": "Levels 3-6 she takes over. Once Irelia can Q-dash minion-to-you and chain into her E stun, your kiting dies — she is inside your range and her passive armour shred melts you. Defiant Dance is the one button that does nothing here: it cuts physical damage only and heals nothing, so keep firing magic into the charge. Her sustain is Bladesurge, which refreshes off any Marked target — in a big wave she chains it. Save Solar Snare purely as peel the moment she dashes, not as poke; whiff it and you're dead. Hold Rebuttal to soak the dash. Give up CS, ping for ganks, and never sit inside stun range."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "It stays rough. Once Irelia itemizes a Sheen/Trinity her Q-resets let her flicker through the whole wave onto you, and a fed Irelia simply runs you down before your Overwhelm stacks detonate. Your infinitely-scaling passive matters in teamfights, not the 1v1 — never sidelane against her alone. Group, stay behind frontline, and use Golden Eclipse (R) from max range to detonate stacks on the team while your team peels her off you. Win through your team, not the duel; you lose the straight fight all game.",
+      "after": "It stays rough. Once Irelia itemizes a Sheen/Trinity her Q-resets let her flicker through the whole wave onto you, and a fed Irelia simply runs you down before your Overwhelm stacks detonate. Vanguard's Edge is the part to fear: the blades leave a wall, and with no dash in your kit that wall is the thing that actually kills you — hold Flash for it, not for the damage. Your scaling passive matters in teamfights, not the 1v1. Group, stay behind frontline, and detonate Golden Eclipse from max range while your team peels."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Keep her under 4 Q-reset targets — freeze near your tower so she can't dash-chain through a big wave",
+      "after": "Buy Grievous Wounds — Bladesurge heals on cast and refreshes off Marked targets, so a big wave is free sustain"
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "His dash goes through your reflect — snare the landing spot and save W for the burst, not the engage.",
+      "after": "Her dash ignores your reflect, but Defiant Dance does nothing to magic — snare the landing, then burn her down."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Irelia Flawless Duet (Stun): matchup-defining — Her stun setup — dodge it and the dive falls apart. Step up only on its downtime. - Budget W Rebuttal for emergencies and the R for opportunities — never swap them.",
+      "after": "- Irelia Flawless Duet (Stun): 16s at rank 1, 10s at rank 5 — step up only on its downtime. - Bladesurge refreshes off any Marked target, so the wave size sets her reach, not its cooldown. - W is dead weight versus magic."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q volleys win every level-1 range war — fan them across his last-hit positions and stack Overwhelm early.",
+      "after": "Bladesurge is 600 and needs a target; your Q is 950 and your snare 1000. Respect 600 and level 1 is free."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Golden Eclipse online — anyone you've stacked is now walking around with a countdown. Chip, stack, execute.",
+      "after": "Golden Eclipse online, and Defiant Dance cannot mitigate it — stack her up and the execute math holds at 6."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Irelia",
+      "after": "Mel"
+    }
+  ]
+}

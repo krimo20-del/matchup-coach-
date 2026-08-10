@@ -1,0 +1,292 @@
+{
+ "ownerKey": "mel",
+ "enemy": "warwick",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Packet win rate is 60.0 over only 10 games. The stored EVEN / 5.5-10 framing is the honest read for a sample that small; no change proposed.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packet mel.json entry warwick"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The two layers disagree on the level chart. content.win is [Mel,Mel,Mel,Mel,Mel,Mel,Skill] but full.phases sides are [Mel,Skill,Skill,Skill,Skill,Skill,Skill].",
+   "why": "Pre-6 is genuinely Mel-sided (his only gap-close is a 365-range Jaws of the Beast lunge). From 6 on, Infinite Duress plus Flash is a real kill path, so Skill is right there. The correct shared chart is Mel/Mel/Mel/Mel/Skill/Skill/Skill.",
+   "corrected": "Set content.win[1..3] and full.phases[1..3].side to Mel; set content.win[4] and win[5] to Skill. NOT proposed as an edit because a side value swap (Mel<->Skill) cannot satisfy the +/-10% length band; flagged for the user to apply by hand.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/_kits/warwick.json",
+    "champ-data/_kits/mel.json"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[2].text claims the first-item spike comes from reflecting Warwick's projectiles with Rebuttal.",
+   "why": "Warwick's kit contains no projectile. Eternal Hunger, Jaws of the Beast, Blood Hunt, Primal Howl and Infinite Duress are all non-projectile, so Rebuttal's reflect has literally nothing to send back. The real first-item lever is anti-heal.",
+   "corrected": "Rewrote the spike around Morellonomicon versus Eternal Hunger's sub-25% triple healing.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/warwick.json (no projectile flag on any slot)",
+    "champ-data/_kits/mel.json (W Rebuttal reflects projectiles)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "The matchup never names a single Warwick ability in the content layer and never states the decisive interaction: Solar Snare's root denies both of Warwick's movement abilities.",
+   "why": "Jaws of the Beast (Q) and Infinite Duress (R) are both dash-class movement abilities. A rooted champion cannot cast a dash, so a landed Solar Snare removes Warwick's entire approach and his entire engage for its duration. This is the single most useful fact in the matchup and it was absent.",
+   "corrected": "Named all five abilities across both layers and made the root-denies-lunge-and-leap interaction the spine of the early game text.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/warwick.json (dash flag on Q and R)",
+    "champ-data/_kits/_missing-interactions.json (mel/warwick)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "whys[6] says 'his passive heals hardest as you're low'.",
+   "why": "Eternal Hunger keys off WARWICK's health, not Mel's: it heals below 50% and the healing triples below 25%. The text inverts the mechanic, which teaches the player to chip him into his strongest sustain window and then wonder why he does not die.",
+   "corrected": "Rewrote to state Eternal Hunger triples when Warwick drops under 25%.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/warwick.json (P Eternal Hunger)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Blood Hunt is never mentioned, and the 50% health trigger is never stated.",
+   "why": "Blood Hunt senses enemies below 50% health and grants Warwick move speed toward them, tripled under 25%. That threshold is the whole positioning rule for a 550-range immobile mage: above 50% he cannot catch her, below it he can. It also means a chipped Mel is visible to him across the map.",
+   "corrected": "Stated the 50%/25% thresholds in whys[2], wants.foe[0], phases[3].why and the late-game text.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/warwick.json (W Blood Hunt)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Primal Howl is never mentioned.",
+   "why": "Primal Howl grants damage reduction for 2.5 seconds before the fear fires. Golden Eclipse is a single damage instance, so detonating it into an active Primal Howl throws away the whole stack payoff. Its cooldown is 15/14/13/12/11.",
+   "corrected": "Added the 2.5s damage-reduction warning to whys[4] and the real cooldown to breakdown.cooldowns.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/_kits/warwick.json (E Primal Howl)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "tradeBad, dontsFull[2].d and breakdown.trading all say Rebuttal is 'gone for twenty seconds'. breakdown.cooldowns lists no real numbers at all.",
+   "why": "Rebuttal is 38/35/33/29/26 seconds. At the rank you actually have in lane it is 38 seconds, nearly double what the text claims, which makes a bad trade sound recoverable when it is not. Infinite Duress is 110/90/70 and Primal Howl 15/14/13/12/11.",
+   "corrected": "Replaced 'twenty seconds' with the real 38s figure and put the true numbers into breakdown.cooldowns, dosFull and loading.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/mel.json (W Rebuttal)",
+    "champ-data/_kits/warwick.json (R, E)"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "needs-correction",
+   "whatIsWrong": "Itemization says 'add anti-heal early' without naming an item, and phases[5] implies Blackfire Torch handles his sustain.",
+   "why": "Blackfire Torch is a burn and damage-amp item; it applies no Grievous Wounds. Against a champion with healing on P, Q and R, the anti-heal has to be an actual Grievous Wounds source (Morellonomicon on an AP mage).",
+   "corrected": "Named Morellonomicon in phases[5].why and the itemization line instead of implying the Torch covers it.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/warwick.json (heal flag on P, Q, R)"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "missing",
+   "whatIsWrong": "Infinite Duress's leap distance is treated as fixed.",
+   "why": "The leap scales with Warwick's bonus move speed, so an active Blood Hunt turns a short engage into a screen-crossing one. A Mel player who has only ever seen the base range will stand at a distance she believes is safe.",
+   "corrected": "Stated the Blood-Hunt-scaled leap in spikes[3].text, wants.foe[1] and dosFull[0].d.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/warwick.json (R Infinite Duress description)"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Q poke plus E's Solar Snare root lands a free punish on Warwick as he steps up for a creep — he has no dash to close the gap.",
+   "after": "Q poke plus Solar Snare's root lands a free punish on Warwick as he steps up for a creep — rooted, Jaws of the Beast cannot lunge."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "With your first AP item and mana you chain Q pokes and W his projectiles back — his Q heal can't out-sustain the bleed, this is your peak.",
+   "after": "With your first AP item and mana you chain Q pokes freely — buy Morellonomicon here, because Eternal Hunger triples its healing under 25%."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Warwick's only kill path is R Flash onto you — the suppress locks you in place and his passive heals hardest as he drops you low. Hold Flash for it.",
+   "after": "Warwick's kill path is Infinite Duress off Flash — the leap distance scales with his Blood Hunt move speed, so the range you think is safe isn't. Hold Flash."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Warwick has no dash and only W move-speed to reach you, so the early game is yours to dictate from 550 range. At level 2 grab Q + E: when he steps up to last-hit, land Solar Snare's root and free-poke him with Q while he's stuck, stacking Overwhelm. Don't waste E as a panic button — it's your anti-engage tool, so hold it if he's hovering W to walk you down. His passive heals hardest when HE is low, not when you are, so keep him topped off on poke damage you take back, not the reverse.",
+   "after": "Jaws of the Beast lunges only 365 units, so the early game is yours to dictate from 550 range. At level 2 grab Q + E: when he steps up to last-hit, land Solar Snare's root — rooted he cannot lunge at all — and free-poke him with Q while he's stuck, stacking Overwhelm. Don't waste E as a panic button; it's your anti-engage tool, so hold it if he's hovering Blood Hunt to walk you down. Eternal Hunger heals him under 50% health and triples that healing under 25%, so never leave him parked in that window."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "This is your takeover. As Q ranks up you out-poke his Q-heal sustain — he can't drain what he can't reach. At 6, Golden Eclipse turns your accumulated Overwhelm stacks into burst from range; bait his W-walkup, root with E, then detonate R to chunk or execute. His one real threat is R suppress: it locks you in place and his low-HP passive heals him through your damage, so respect it off Flash and keep W ready to wall his engage. With first item you're at your most dominant — chain Q pokes freely.",
+   "after": "This is your takeover. As Q ranks up you out-poke Jaws of the Beast's healing — he can't drain what he can't reach. At 6, Golden Eclipse turns your accumulated Overwhelm stacks into burst from range; bait his walk-up, root with Solar Snare, then detonate to chunk or execute. His one real threat is Infinite Duress, 110 seconds at rank 1 — a whiffed one leaves him answerless for nearly two minutes. Buy Morellonomicon by your second item; his sustain is the matchup."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "You owned the lane, but late is where a fed-free Warwick claws back. Once he's itemized with a R Flash setup, a single suppress can delete your squishy frame before you cast — you have zero dashes and only E to peel. Never facecheck or sidelane alone where he can engage from fog; stay with your team, use W to wall his all-in and E to break his chase. Your infinitely-scaling passive keeps you relevant, but you win by closing the game on the lead you built, not by 1v1ing a drain tank with R up.",
+   "after": "You owned the lane, but late is where a farmed Warwick claws back. Infinite Duress is 70s at rank 3 and its leap scales with his Blood Hunt speed, so a single suppress can delete your squishy frame before you cast — you have zero dashes and only E to peel. Blood Hunt also senses anyone under 50% health, so never sidelane chipped: that is exactly how he picks his target. Stay with your team, hold W for the real all-in, and close the game on the lead you built rather than duelling a drain tank with R up."
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "You both have weak level 1s, but your 550-range auto pokes a dashless Warwick for free while he can only walk into it — no Q heal value when he's full.",
+   "after": "You both have weak level 1s, but your 550-range auto pokes Warwick for free — Jaws of the Beast lunges only 365 units, so he has to walk the gap."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "Q + E online: Solar Snare roots him as he steps up for CS and you free-poke the rooted target, building Overwhelm he can't answer.",
+   "after": "Q + E online: Solar Snare roots him as he steps up for CS — a rooted Warwick cannot lunge Jaws of the Beast, so every Overwhelm stack is free."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "With Q, E and W up you poke, root and wall his engage — a dashless Warwick has no way to close 550 range to start his drain.",
+   "after": "With Q, E and W up you poke, root and wall his engage — Blood Hunt's chase speed only switches on once you drop under 50% health."
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "Your Q ranks up and Overwhelm stacks pile from repeated trades; his Q heal can't out-sustain the poke he's eating every time he walks.",
+   "after": "Your Q ranks up and Overwhelm piles from repeated trades; Jaws of the Beast heals on an 8s cooldown he rarely gets close enough to spend."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "Golden Eclipse detonates your stacks from range for burst/execute — you chunk him before his W move-speed or R suppress can reach you.",
+   "after": "Golden Eclipse detonates your stacks from range for burst or execute — but Primal Howl's 2.5s damage reduction eats it, so wait out his E."
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "Once itemized, R Flash suppress can lock and delete your squishy frame, and his passive heals hardest as you're low — play safe and close on your lead.",
+   "after": "Once itemized, Infinite Duress off Flash can lock and delete you, and Eternal Hunger triples its healing when HE falls under 25% — close on your lead."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Land E's Solar Snare root the moment Warwick walks up, then Q-poke the rooted target for free Overwhelm stacks",
+   "after": "Land Solar Snare the moment Warwick walks up — the root kills his lunge — then Q-poke him for free Overwhelm stacks"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Walk you down with W's move-speed burst when your E root and W are on cooldown",
+   "after": "Switch on Blood Hunt's chase speed the moment you drop under 50% health"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Land R suppress (usually off Flash) to lock you in place and unload his full drain combo",
+   "after": "Land Infinite Duress off Flash — its leap distance scales with his Blood Hunt move speed"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Drag the lane to a sustained fight where his Q heal and low-HP passive out-heal your poke",
+   "after": "Drag it long so Jaws of the Beast and a sub-25% Eternal Hunger out-heal your poke"
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "His dash goes through your reflect — snare the landing spot and save W for the burst, not the engage.",
+   "after": "Snare him before he commits — rooted, he can neither lunge nor leap — and save W for the burst, not the engage."
+  },
+  {
+   "layer": "full",
+   "path": "tradeBad",
+   "before": "Burning Rebuttal on chip damage and then standing in Infinite Duress range — your only defensive layer is gone for twenty seconds.",
+   "after": "Burning Rebuttal on chip and then standing in Infinite Duress range — Rebuttal is 38 seconds at rank 1, so you are naked for a very long time."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Burning Rebuttal on chip damage and then standing in Infinite Duress range — your only defensive layer is gone for twenty seconds.",
+   "after": "Burning Rebuttal on chip and then standing in Infinite Duress range — Rebuttal is 38 seconds at rank 1, so you are naked for a very long time."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Snare through the wave onto his farming spot, fan two full Q volleys while he's locked, and step back with W ready before his answer comes off cooldown. Bad trade: Burning Rebuttal on chip damage and then standing in Infinite Duress range — your only defensive layer is gone for twenty seconds.",
+   "after": "Good trade: Solar Snare through the wave onto his farming spot, fan two full Q volleys while he's rooted and cannot lunge, and step back with W ready before his answer comes off cooldown. Bad trade: burning Rebuttal on chip and then standing in Infinite Duress range — Rebuttal is 38 seconds at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Warwick Infinite Duress: matchup-defining — Lock-on suppress — track it before every step-up. Read it like a second minimap. - Guard your W Rebuttal like a fifth summoner spell. - Ultimate goes to kill windows only.",
+   "after": "- Warwick Infinite Duress: 110/90/70s — track it before every step-up; a whiff buys you nearly two minutes. - Primal Howl is 15s at rank 1 and eats 2.5s of your burst. - Your Rebuttal is 38s at rank 1 — guard it."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Stack Overwhelm with every hit — once he's marked deep, your execute math starts working. Track Infinite Duress before stepping up.",
+   "after": "Stack Overwhelm with every hit — once he's marked deep, the execute math works. Blood Hunt lights you up the moment you dip under 50%."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "Blackfire Torch spike — your volleys burn through sustain and your snare-volley rotation chunks half bars.",
+   "after": "Blackfire Torch spike, but Morellonomicon is the real answer — Eternal Hunger triples its healing under 25% health."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Lock-on suppress — track it before every step-up. Until it’s spent, every commit is a coin flip.",
+   "after": "110s at rank 1, and the leap scales with Blood Hunt speed. Until it's spent, every commit is a coin flip."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Warwick whiffs Infinite Duress and the lane briefly belongs to you.",
+   "after": "A whiffed Infinite Duress is 110 seconds of lane that belongs to you."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Mel vs Warwick - Track: Warwick Infinite Duress. - Hold the reflect for his real spell. - No commits into Infinite Duress. - The ultimate closes arguments; it doesn’t open them.",
+   "after": "- Mel vs Warwick - Track: Infinite Duress, 110s at rank 1. - Root him and the lunge dies with it. - Stay above 50% health or Blood Hunt sees you. - Buy Morellonomicon."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Warwick’s Infinite Duress: Lock-on suppress — track it before every step-up. The whole green-light system is its cooldown.",
+   "after": "Solar Snare's root denies Jaws of the Beast and Infinite Duress — both are dashes, and a rooted Warwick casts neither. It is 110s at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "Start Doran's Ring + 2 pots. First: Blackfire Torch into Sorcerer's Shoes; then Shadowflame and Rabadon's. Zhonya's into dive comps. Add anti-heal early into his sustain.",
+   "after": "Start Doran's Ring + 2 pots. First: Blackfire Torch into Sorcerer's Shoes; Morellonomicon second against his healing, then Rabadon's. Zhonya's into dive comps."
+  }
+ ],
+ "notes": "LEVEL CHART MISMATCH (needs a human): content.win for mel/warwick is [Mel,Mel,Mel,Mel,Mel,Mel,Skill] while full.phases sides are [Mel,Skill,Skill,Skill,Skill,Skill,Skill]. The two layers show different charts for the same matchup. Correct shared chart is [Mel,Mel,Mel,Mel,Skill,Skill,Skill]. I did not propose it as an edit because swapping a side value between 'Mel' (3 chars) and 'Skill' (5 chars) cannot pass the +/-10% length band. KIT FLAG NOTE: mel.json flags W Rebuttal with 'terrain: creates terrain, blocks paths and dashes'. Riot's own description for Rebuttal says only that it is a barrier that reflects projectiles, prevents damage and grants move speed — nothing about terrain. The existing copy leans on 'wall his engage' in several places; I left that wording where it already existed rather than amplify it, but whether Rebuttal physically blocks a path is unverified and should not be built on further. REFLECT IS DEAD HERE: Warwick has no projectile on any slot, so Rebuttal's reflect contributes nothing in this matchup — the old spikes[2] text was selling a mechanic that does not exist. SUSPECTNAMES ARE FALSE POSITIVES: the packet flags \"E's Solar Snare\" and \"Solar Snare's\" as probable wrong names; Solar Snare is Mel's real E, and both hits are just possessive forms."
+}

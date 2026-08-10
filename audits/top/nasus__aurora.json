@@ -1,0 +1,306 @@
+{
+  "ownerKey": "nasus",
+  "enemy": "aurora",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer is built around 'Twofold Hunt (Blink)', which is not an Aurora ability. It appears 23 times, including focus.text, loading, breakdown.cooldowns and every report section. This is the second fabricated tracked-ability in my slice after Ambessa's 'Repeating Dashes'.",
+      "why": "Aurora's real abilities are Spirit Abjuration (P), Twofold Hex (Q), Across the Veil (W), The Weirding (E) and Between Worlds (R). 'Twofold Hunt' is a mashup of Twofold Hex's name with the blink concept that belongs to Across the Veil. The surrounding text is decisive about which was meant: every occurrence describes it as 'Her escape' and the '(Blink)' suffix, which is Across the Veil.",
+      "corrected": "Renamed all occurrences to 'Across the Veil (W)'. I kept the '(W)' suffix deliberately — 'Across the Veil' alone is five characters shorter than the fabricated name and would fail the applier's length band on the short strings such as focus.text and dosFull[0].t. With the slot suffix every occurrence lands inside the band.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aurora.json",
+        "packets/nasus.json enemyAbilities"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns listed 'Twofold Hunt (Blink)' and 'Across the Veil' as two separate abilities, describing both as her escape.",
+      "why": "They are the same ability. Renaming the fabricated entry alone would have produced a string that lists Across the Veil twice, so this one needed rewriting rather than renaming.",
+      "corrected": "Replaced the duplicate with The Weirding and its real 15s rank-1 cooldown, so the block now names her two genuinely distinct disengages with their real numbers.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aurora.json W and E"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "No cooldown numbers for Aurora appear anywhere, and the content layer treats her disengage as a single tool ('her E blink').",
+      "why": "She has two independent escapes on very different timers: The Weirding at 15/14/13/12/11s, whose damage-and-slow poke also hops her backwards as a side effect, and Across the Veil at 22/21/20/19/18s, which is a leap into invisibility. Against a champion with no dash and a 700-range Wither, the only thing that matters is whether BOTH are spent. Telling a Nasus to 'bait her E blink' as if there were one disengage is why players walk up into the second one.",
+      "corrected": "Rewrote content.mid, spikes[1], wants.you[1] and wants.foe[1] around counting both cooldowns, with the 15s and 22s rank-1 figures.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aurora.json E cooldown 15/14/13/12/11, W cooldown 22/21/20/19/18"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Between Worlds is described only as 'ult realm' and 'level-6 ult realm', with no mechanical content.",
+      "why": "Riot's text: it 'creates an area that slows enemies within it and allows Aurora to teleport from one side of the area to the other'. That is an asymmetric zone — it slows Nasus while she crosses it freely. For the slowest champion in the matchup with no mobility, walking into that area is the single worst decision available at level 6, and nothing in the guide says so.",
+      "corrected": "Added the never-walk-through-it rule to content.mid and whys[4], and to wants.foe[2].",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aurora.json R"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No Grievous Wounds source despite _missing-interactions.json flagging needs-antiheal for this pairing.",
+      "why": "Spirit Abjuration heals her from spirits exorcised by her own spells and attacks, which means she sustains passively off the same poke she is using to win the lane. This is a 46.31% matchup — Nasus's worst in this slice — and the late-game plan is an extended grinding duel, exactly the fight shape where her passive sustain compounds.",
+      "corrected": "Added to content.late, naming Spirit Abjuration.",
+      "confidence": "Medium",
+      "sources": [
+        "champ-data/_kits/_missing-interactions.json nasus/aurora needs-antiheal",
+        "champ-data/_kits/aurora.json P"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[2] titled 'Build MR' was described as 'Aurora wastes Twofold Hunt (Blink) — commit the full pattern immediately'; dontsFull[1] titled 'Chase her blink' carried the same 'Burning your answer for tiny value...' string found on all four previous matchups.",
+      "why": "Five of five matchups audited so far carry the dontsFull[1].d paste defect. It is systematic across the Nasus file rather than a per-matchup slip, and is worth fixing at the generator level rather than one entry at a time.",
+      "corrected": "Rewrote both to match their titles.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/nasus.full.js",
+        "champ-data/_kits/aurora.json W"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "46.31% over 434 games is the weakest matchup in this slice, and the chart [Skill, Aurora x5, Nasus] correctly gives her almost the whole lane. No chart contradiction was flagged and none is present. The 7/10 difficulty is if anything generous to Nasus, but I have no basis to propose a specific different number.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": [
+        "packets/nasus.json levelChart + winRate"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Aurora hard-shoves nothing into you at level 1, so the first two levels are a farm race — soak Q stacks and let Soul Eater lifesteal eat her Q poke. The trap is her E blink: the instant you walk up to Wither her, she blinks back and chips you with Q on the way out. Don't chase a Q onto her — you'll only eat W exile and more poke. Last-hit at max range and accept that you concede the early window; you have no answer to a kiting AP who never stands in melee.",
+      "after": "Aurora shoves nothing into you at level 1, so the first two levels are a farm race — soak Q stacks and let Soul Eater lifesteal eat her Twofold Hex poke. The trap is The Weirding: the instant you walk up to Wither her, the blast slows you and hops her backwards out of range. Don't chase — you'll only eat Across the Veil and more poke. Last-hit at max range and accept that you concede the early window; you have no answer to a kiting AP who never stands in melee."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-6 stay hers. She pokes with Q, holds E to dodge anything you throw, and at 6 her ult realm plus W exile lets her zone you off the wave and burst your fat-but-squishy-early HP bar. Wither is your only mid-game tool — if she ever blinks toward you or whiffs the E, lock her down and Q immediately, because a slowed Aurora can't kite. Otherwise just stack: Spirit Fire (E) clears the wave and chips her, but don't expect to kill her until you have items. Take her ganks seriously since you can't disengage a root + realm.",
+      "after": "Levels 4-6 stay hers. She pokes with Twofold Hex, holds The Weirding to dodge anything you throw, and at 6 Between Worlds plus Across the Veil lets her zone you off the wave and burst your fat-but-squishy-early HP bar. She has two disengages, so count both — The Weirding is 15s and Across the Veil 22s at rank 1, and only once both are spent can you Wither and Q. Never walk through Between Worlds: it slows you inside it while she teleports across freely. Otherwise just stack with Spirit Fire."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "This is where you reclaim it. By 2+ items your Q stacks plus a Sheen/Iceborn proc one-shot her squishy frame, and Wither's full slow finally cancels the blink-and-kite that owned you all lane — one good W and she can't outrun your empowered Q or Fury of the Sands. Force the all-in the moment you have your first big item plus a few hundred stacks. Don't let her play for picks with her team — sidelane where her E blink can only escape, not reset, and grind her down with lifesteal.",
+      "after": "This is where you reclaim it. By 2+ items your Q stacks plus a Sheen/Iceborn proc one-shot her squishy frame, and Wither's full slow finally cancels the kiting that owned you all lane — one good Wither and she can't outrun your empowered Q or Fury of the Sands. Bring Grievous Wounds, because Spirit Abjuration heals her off every spell she lands. Sidelane her, where Across the Veil can only escape and never reset, and grind her down with lifesteal."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Her E blink and Q poke let her chip you with zero risk while you have no ult and no way to close — she edges level 2.",
+      "after": "The Weirding and Twofold Hex chip you at zero risk while you have no ult and no way to close — she edges level 2."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "At 3 you get Wither but she simply blinks out of cast range and keeps poking with Q and W exile.",
+      "after": "Wither is up, but Across the Veil leaves its 700 range instantly and she keeps poking freely."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Levels 4-5 are pure kiting — she shoves, pokes, and holds E to dodge any Wither, hoarding her lead while you hoard stacks.",
+      "after": "Levels 4-5 are pure kiting — she shoves, pokes, and holds The Weirding to dodge Wither, hoarding her lead while you stack."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Her level-6 ult realm and W exile zone you off CS and burst your thin early HP before Fury of the Sands matters.",
+      "after": "Between Worlds slows you inside it while she teleports across it — she zones your CS before Fury of the Sands matters."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Her E blink is the problem window — she blinks away from your Wither and Q the moment you step up, chipping you with Q poke and W exile while you can't reach her.",
+      "after": "Two disengages is the problem — The Weirding hops her back on 15s and Across the Veil blinks her out on 22s, so you have to bait both before a Wither can ever land."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Bait her E blink, then Wither her on landing so she can't reset spacing before you Q",
+      "after": "Bait The Weirding, then Wither her before Across the Veil comes back up at 22s"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Hold E blink to instantly disengage every time you close the gap or threaten a Wither",
+      "after": "Hold The Weirding and Across the Veil to disengage every time you threaten a Wither"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Use level-6 ult realm to zone you off CS and burst you before your stacks come online",
+      "after": "Use Between Worlds to slow you out of CS range and burst you before your stacks land"
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "She pokes and blinks — build MR, farm, and out-scale. Nasus wins by trading around Aurora's Twofold Hunt (Blink) and cashing the pattern: build MR, farm, and out-scale.",
+      "after": "She pokes and blinks — build MR, farm, and out-scale. Nasus wins by trading around Aurora's Across the Veil (W) and cashing the pattern: build MR, farm, and out-scale."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Build MR, farm, and out-scale. Track Twofold Hunt (Blink) before every commit and keep the wave on your side.",
+      "after": "Build MR, farm, and out-scale. Track Across the Veil (W) before every commit and keep the wave on your side."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Aurora wins by landing Twofold Hunt (Blink), denying your pattern, and out-trading your engage windows.",
+      "after": "Aurora wins by landing Across the Veil (W), denying your pattern, and out-trading your engage windows."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Still Aurora's window — respect Twofold Hunt (Blink) fully. Passive lifesteal plus Fleet means she must commit hard to actually dent you; make those commits cost.",
+      "after": "Still Aurora's window — respect Across the Veil (W) fully. Passive lifesteal plus Fleet means she must commit hard to actually dent you; make those commits cost."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "You are the weakest level-1-to-5 champion in the lane and that's fine. Last-hit with Q, soak with passive lifesteal and Fleet, Wither Aurora's dives, and treat every stack as a late-game tower hit. Respect Aurora's Twofold Hunt (Blink) completely — the first levels are about banking small advantages, not proving a point.",
+      "after": "You are the weakest level-1-to-5 champion in the lane and that's fine. Last-hit with Q, soak with passive lifesteal and Fleet, Wither Aurora's dives, and treat every stack as a late-game tower hit. Respect Aurora's Across the Veil (W) completely — the first levels are about banking small advantages, not proving a point."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Trade strictly around Twofold Hunt (Blink): when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve her.",
+      "after": "Trade strictly around Across the Veil (W): when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve her."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Aurora burns her engage onto you, you Wither her on the way out — her attack speed and move speed melt while you walk away stacking, having lost almost nothing. Great trade: Aurora wastes Twofold Hunt (Blink) — commit the full pattern immediately. Bad trade: Fighting at even HP before 6 with Wither down — you have no trade tools early, and every losing exchange costs you the stacks-per-minute that win the game.",
+      "after": "Good trade: Aurora burns her engage onto you, you Wither her on the way out — her attack speed and move speed melt while you walk away stacking, having lost almost nothing. Great trade: Aurora wastes Across the Veil (W) — commit the full pattern immediately. Bad trade: Fighting at even HP before 6 with Wither down — you have no trade tools early, and every losing exchange costs you the stacks-per-minute that win the game."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.spikes",
+      "before": "Aurora: Twofold Hunt (Blink) online, level 6, first item. Nasus: Sheen-item spike, 300+ stacks, the level-6 R stat-check, Trinity Force first-item spike.",
+      "after": "Aurora: Across the Veil (W) online, level 6, first item. Nasus: Sheen-item spike, 300+ stacks, the level-6 R stat-check, Trinity Force first-item spike."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Aurora gets a kill, stop forcing and respect Twofold Hunt (Blink). Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Aurora gets a kill, stop forcing and respect Across the Veil (W). Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Overall difficulty: 7/10. The lane is decided by how well you track Twofold Hunt (Blink) and how disciplined your pattern is.",
+      "after": "Overall difficulty: 7/10. The lane is decided by how well you track Across the Veil (W) and how disciplined your pattern is."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Nasus vs Aurora - Track: Aurora Twofold Hunt (Blink). - Keep the wave on your side. - Engage only on Twofold Hunt (Blink)'s cooldown. - Don't fight before your item spike — stacks are the win condition. - Ultimate = kill windows only.",
+      "after": "- Nasus vs Aurora - Track: Aurora Across the Veil (W). - Keep the wave on your side. - Engage only on Across the Veil (W)'s cooldown. - Don't fight before your item spike — stacks are the win condition. - Ultimate = kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "focus.text",
+      "before": "Aurora Twofold Hunt (Blink)",
+      "after": "Aurora Across the Veil (W)"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Track Aurora's Twofold Hunt (Blink) before you commit",
+      "after": "Track Aurora's Across the Veil (W) before you commit"
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Lead banked — now convert. Shove, take plates, recall on your Trinity Force timing, then freeze and zone Aurora off the comeback farm. Dive with your jungler when Twofold Hunt (Blink) is down.",
+      "after": "Lead banked — now convert. Shove, take plates, recall on your Trinity Force timing, then freeze and zone Aurora off the comeback farm. Dive with your jungler when Across the Veil (W) is down."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Build MR, farm, and out-scale. Track Twofold Hunt (Blink) before every commit.",
+      "after": "Build MR, farm, and out-scale. Track Across the Veil (W) before every commit."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Aurora burns her engage onto you, you Wither her on the way out — her attack speed and move speed melt while you walk away stacking, having lost almost nothing. Great trade: Aurora wastes Twofold Hunt (Blink) — commit the full pattern immediately. Bad trade: Fighting at even HP before 6 with Wither down — you have no trade tools early, and every losing exchange costs you the stacks-per-minute that win the game.",
+      "after": "Good trade: Aurora burns her engage onto you, you Wither her on the way out — her attack speed and move speed melt while you walk away stacking, having lost almost nothing. Great trade: Aurora wastes Across the Veil (W) — commit the full pattern immediately. Bad trade: Fighting at even HP before 6 with Wither down — you have no trade tools early, and every losing exchange costs you the stacks-per-minute that win the game."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Twofold Hunt (Blink)'s cooldown, on your level-6 spike, and on your Trinity Force timing. Bait her answer first.",
+      "after": "Commit on Across the Veil (W)'s cooldown, on your level-6 spike, and on your Trinity Force timing. Bait her answer first."
+    },
+    {
+      "layer": "full",
+      "path": "report[10].t",
+      "before": "Your engage is premium gank setup — ping your jungler when Twofold Hunt (Blink) is down. Ward river before extended trades.",
+      "after": "Your engage is premium gank setup — ping your jungler when Across the Veil (W) is down. Ward river before extended trades."
+    },
+    {
+      "layer": "full",
+      "path": "report[12].t",
+      "before": "If Aurora gets a kill, stop forcing and respect Twofold Hunt (Blink). Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Aurora gets a kill, stop forcing and respect Across the Veil (W). Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "report[13].t",
+      "before": "Lead banked — now convert. Shove, take plates, recall on your Trinity Force timing, then freeze and zone Aurora off the comeback farm. Dive with your jungler when Twofold Hunt (Blink) is down.",
+      "after": "Lead banked — now convert. Shove, take plates, recall on your Trinity Force timing, then freeze and zone Aurora off the comeback farm. Dive with your jungler when Across the Veil (W) is down."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Aurora Twofold Hunt (Blink): matchup-defining — Her escape. Wither her when it’s down. Track it before every engage. - Aurora Across the Veil: Blinks a short distance into the spirit realm — her escape/reposition. Dodge or sidestep it.",
+      "after": "- Aurora Across the Veil: matchup-defining — 22s at rank 1, and she turns invisible on landing. That gap is your window. - Aurora The Weirding: 15s at rank 1 — the poke itself hops her backwards, out of Wither's 700 range."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Aurora's Twofold Hunt (Blink): Her escape. Wither her when it’s down. When it is down — Wither + Q her.",
+      "after": "Track Across the Veil: 22s at rank 1, invisible on landing. Bait The Weirding first, then Wither and Q her down."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Aurora wastes Twofold Hunt (Blink) — commit the full pattern immediately.",
+      "after": "Spirit Visage and Mercury's Treads before her level-6 Between Worlds."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Across the Veil is 22s — chase it and you eat poke for the whole gap."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E lets you stack safely from range when Aurora zones you. Spirit Fire the wave under tower; every stack denied is her only real win condition.",
+      "after": "Spirit Fire the wave from range when Aurora zones you. Twofold Hex is 9s at rank 1 and the recast drags the curse back — don't trail her."
+    }
+  ],
+  "notes": "SECOND fabricated tracked-ability in this slice: 'Twofold Hunt (Blink)' across 23 strings on Aurora, after 'Repeating Dashes' across 23 strings on Ambessa. Both are recently-released champions and both fabrications sit in exactly the same set of fields (focus.text, loading, breakdown.*, dosFull[0].t, report[1]/[3]/[5]/[9]/[10]/[12]/[13]), which points at one generator pass that invented a plausible-sounding name whenever it lacked real ability data. Strongly recommend grepping every champion file for tracked-ability names that do not appear in the matching champ-data/_kits entry — my slice is 2 for 8 and I would expect the rest of the roster to be similar. The suspectNames detector cannot catch these because an invented name is not a near-miss of a real one; a set-membership check against the kit file would catch all of them. Naming choice worth a sanity check: I mapped 'Twofold Hunt (Blink)' to 'Across the Veil (W)' because every occurrence describes it as 'Her escape' and carries the '(Blink)' suffix. I kept the slot suffix on purpose so the replacement stays within the length band on the short fields — without it, focus.text and dosFull[0].t both fall below 0.9 and would be rejected. NOT ASSERTED: whether Aurora's spirit-realm state from Across the Veil can be revealed by a Control Ward or sweeper the way ordinary stealth can — the kit flags Across the Veil as a dash rather than stealth, and Riot's text says 'becoming invisible', which are different things in this game. I left the topic alone; it is worth a wiki pass because a Nasus who can reveal her has a very different lane. No WKM_LINES problems seen for this pairing."
+}

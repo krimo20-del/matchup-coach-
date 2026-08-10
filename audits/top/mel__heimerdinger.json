@@ -1,0 +1,157 @@
+{
+  "ownerKey": "mel",
+  "enemy": "heimerdinger",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Both `early` and `whys[0]` call Radiant Volley a 550-range spell and conclude Mel out-pokes Hextech Micro-Rockets at level 1.",
+      "why": "champ-data/_kits/mel.json gives Radiant Volley range 950 (550 is Mel's basic-attack range, not her Q). champ-data/_kits/heimerdinger.json gives Hextech Micro-Rockets range 1325. Heimerdinger out-ranges every spell Mel owns (Q 950, E 1000) by at least 325 units, so the advice is inverted: a player told to win the range war will walk into rockets.",
+      "corrected": "Radiant Volley is 950. Micro-Rockets are 1325. Mel never wins a pure range war; level 1 is hers only because a single H-28 G Evolution Turret threatens a small area, not because she out-ranges him.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/mel.json",
+        "champ-data/_kits/heimerdinger.json"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "No real cooldown number anywhere; `spikes[1]` instead asserts an unverifiable Rebuttal limitation ('can only eat one projectile type at a time').",
+      "why": "CH-2 Electron Storm Grenade is 11 seconds at EVERY rank — it is the only Heimerdinger cooldown that never improves, which makes the post-whiff window a fixed, countable 11s all game. That is the single most useful number in the matchup and it was replaced by a guess about Rebuttal's behaviour that is not in the kit file.",
+      "corrected": "State the flat 11s grenade cooldown as the green light; drop the invented Rebuttal restriction.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/heimerdinger.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "`spikes[2]` and `mid` both say Mel gets 'rooted' by Heimerdinger and dies in his turret field.",
+      "why": "CH-2 Electron Storm Grenade stuns only on a direct hit; the surrounding area applies a slow. Nothing in Heimerdinger's kit roots. The distinction is actionable — sidestepping the centre downgrades a stun to a slow and Mel walks out.",
+      "corrected": "Stun on direct hit, slow on the outer ring. Sidestep the centre and the kill window closes.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/heimerdinger.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The content layer treats Rebuttal as a minor tool and even invents a restriction on it, when it is the reason this matchup is winnable.",
+      "why": "Every damage source Heimerdinger has is flagged projectile in the kit file — H-28 G Evolution Turret, Hextech Micro-Rockets and CH-2 Electron Storm Grenade. Rebuttal reflects enemy projectiles back at the attacker, blocks the damage outright, and grants movement speed. That is a near-total counter to his pattern and explains the 65% figure the content layer's own text contradicts.",
+      "corrected": "Frame Rebuttal as the matchup's answer: it blanks the damage, returns the projectile, and the move speed covers the walk out of the nest.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/mel.json",
+        "champ-data/_kits/heimerdinger.json"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "content `win[]` gives Heimerdinger 4 of 7 stages (levels 3, 4-5, 6, first item) while Mel's win rate here is 65% over 20 games, and the `full` layer's own phases[] read Mel/Skill across all seven.",
+      "why": "The two layers contradict each other and the Heimerdinger-heavy one contradicts the data. Levels 3 and 4-5 are the stages where Rebuttal is up and his only threats are projectiles, so they are contestable rather than his. Level 6 (UPGRADE!!! into the grenade) and first item are genuinely his and are left alone.",
+      "corrected": "win[2] and win[3] to 'Skill'; leave win[4] and win[5] with Heimerdinger. Result: Mel 1 / Skill 4 / Heimerdinger 2.",
+      "confidence": "Medium",
+      "sources": [
+        "packet winRate 65 over 20 games",
+        "champ-data/mel.full.js phases[]"
+      ]
+    },
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "65% over 20 games is the figure carried in MC_WR_TABLES and is used consistently; no elo-tier language appears anywhere in this entry.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "champ-data/content/mel.js"
+      ]
+    }
+  ],
+  "notes": "The two win[2]/win[3] chart edits change short enum labels ('Heimerdinger' -> 'Skill'), which cannot satisfy the +/-10% length band. They are flagged here so the correction survives even if the applier rejects them on length. Also: the packet's suspectNames list is empty for this matchup, but the real naming defect is the opposite of a typo — Heimerdinger's abilities are never named at all in the content layer, so the corrected strings introduce H-28 G Evolution Turret, Hextech Micro-Rockets, CH-2 Electron Storm Grenade and UPGRADE!!!.",
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Level 1 is genuinely yours — before Heimerdinger has more than one turret down, your 550-range Radiant Volley out-pokes his single W rocket, so contest the first wave and start stacking Overwhelm. The moment he gets two or three turrets nested, though, the lane flips: those beams plus his rocket poke out-range and out-chip you, and Rebuttal only returns one projectile at a time, so it can't eat a turret volley and a rocket together. Bait his E grenade with a sidestep before you ever commit a Q, because a root inside his turret field at level 2-3 is how this lane goes wrong fast.",
+      "after": "Level 1 is genuinely yours — a lone H-28 G Evolution Turret only threatens what walks into it, so tax the wave with Radiant Volley from its real 950 range and start stacking Overwhelm. Do not believe you out-range him, though: Hextech Micro-Rockets reach 1325, further than any spell you own, so the poke war is his the moment W is ranked. Sidestep CH-2 Electron Storm Grenade before you ever commit a Q — only a direct hit stuns, the ring around it merely slows, and eating that stun inside the nest at level 2-3 is how this lane goes wrong fast."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Before his turrets stack, your 550-range Radiant Volley out-pokes his lone W rocket — own the first wave and start Overwhelm.",
+      "after": "Before turrets stack, Radiant Volley's real 950 range taxes the wave — but Micro-Rockets reach 1325, so never trade poke."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Before his turrets are stacked you out-range his W rockets — land Radiant Volley on the choke and contest the first wave.",
+      "after": "You never out-range Hextech Micro-Rockets' 1325 — land Radiant Volley on the choke while he has one turret down."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "His turret nest comes online — three beams plus W poke out-zone your Q and your W wall can only eat one projectile type at a time.",
+      "after": "His turret nest comes online — beams plus Micro-Rockets out-zone your Q, and CH-2 Grenade's 11s cooldown never shortens."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "His E stun grenade into a full turret field is his kill window — Golden Eclipse can't save you if you're rooted in three beams.",
+      "after": "UPGRADE!!! into CH-2 Grenade is his kill window — Golden Eclipse cannot save you while stunned inside three turret beams."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "His three-turret nest plus W poke out-zone your Q, and Rebuttal can only eat one projectile type at a time.",
+      "after": "His nest out-zones your Q, but every beam, rocket and grenade is a projectile Rebuttal throws back at him."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "His turret field out-DPS's your short trades and walls you off the minions while you have no way to break the setup.",
+      "after": "His turrets out-DPS a short trade, so tax from 950 and pop Rebuttal to walk out — it blanks damage and adds speed."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Land his E stun grenade to lock you inside the turret field for a free chunk or kill",
+      "after": "Land CH-2 Electron Storm Grenade dead-centre to stun you inside the turret nest"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "This is his window, not yours. From level 3 through 6 his turret nest zones you off the wave and out-DPS's your short trades, and your single CC can't break the setup the way it shreds an immobile melee. At 6 his E stun into a full beam field is a kill on you — you have no dash and Golden Eclipse won't detonate fast enough if you're rooted in three turrets. Play for the slow Q chip from max range, only stepping up when his grenade is on cooldown, and use Solar Snare to root HIM when he strays from the nest rather than burning it to escape.",
+      "after": "This is his window, not yours. From level 3 through 6 his turret nest zones you off the wave and out-DPS's your short trades, and your single CC can't break the setup the way it shreds an immobile melee. At 6 UPGRADE!!! into CH-2 Grenade is a kill on you — you have no dash and Golden Eclipse won't detonate fast enough while you are stunned in three beams. Play for the slow Q chip from 950, stepping up only in the 11s after his grenade whiffs, and use Solar Snare to root HIM when he strays from the nest rather than burning it to escape."
+    },
+    {
+      "layer": "content",
+      "path": "win[2]",
+      "before": "Heimerdinger",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[3]",
+      "before": "Heimerdinger",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Heimerdinger CH-2 Grenade (Stun): matchup-defining — The stun makes his turret nest lethal — dodge it before diving. Check it before every step-up. - W Rebuttal is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+      "after": "- Heimerdinger CH-2 Grenade (Stun): a flat 11s at every rank — it never gets shorter, so the window right after a whiff is always yours. - W Rebuttal is the lifeline; chip damage never gets it. - The ult answers fights, not waves."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "W Rebuttal online — the reflect turns his poke into your poke. Hold it for his real spell, not for chip.",
+      "after": "W Rebuttal online — 38s and 80 mana at rank 1, so spend it on rockets or the grenade, never on turret chip."
+    }
+  ]
+}

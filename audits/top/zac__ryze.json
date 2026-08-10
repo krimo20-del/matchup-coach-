@@ -1,0 +1,158 @@
+{
+  "ownerKey": "zac",
+  "enemy": "ryze",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Every mention of Rune Prison (W) in both layers calls it a root: content whys[0] 'Rune Prison (W) root', whys[2] 'his root-into-combo', early 'Rune Prison (W) roots your slow E-slingshot', spikes[0].text 'never engage into an up W or you eat a full combo rooted', wants.foe[1] 'Root your engage with Rune Prison (W)', and full breakdown.cooldowns 'His point-blank root'. Riot's text: Rune Prison damages and SLOWS; 'If the target has Flux on it, they are instead rooted.'",
+      "why": "It names the wrong ability as the thing to track, which breaks the entire trading plan. Rune Prison on a clean Zac is a slow — survivable, and it does not stop a committed engage. The root only exists if Spell Flux (E) has already landed. So the tell the player must read is the Flux debuff on himself, not Ryze's W cooldown, and the safe window is 'I am unfluxed' rather than 'his W is down'. Since Spell Flux is 3.5s at rank 1 and Rune Prison is 11s, tracking the wrong one of the two is a large error in both directions.",
+      "corrected": "Rune Prison (W, 11s at rank 1, 615 range) slows. It roots only if Spell Flux (E, 3.5s at rank 1, 615 range) is already on you. Read the Flux debuff on yourself, not his W cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ryze.json (Rune Prison: 'damaging them and slowing their movement. If the target has Flux on it, they are instead rooted.')"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Flagged in the packet: Zac wins 53.75% over 160 games but the content chart gives Ryze all 7 of 7 stages. The full layer disagrees outright — full phases[].side reads Ryze, Skill, Zac, Zac, Ryze, Zac, Zac.",
+      "why": "A 7-0 sweep is not a description of a 53.75% matchup; it is a description of a losing one. The full layer's split is the one the data supports. I moved four cells (1, 2, 3, 5) to reach Ryze 3 / Zac 3 / Skill 1 and deliberately left the final stage with Ryze, because Ryze genuinely out-scales a tank one-on-one and inventing a late-game flip to make the chart symmetric would be worse than a residual disagreement.",
+      "corrected": "win[1] -> Skill, win[2] -> Zac, win[3] -> Zac, win[5] -> Zac. Chart becomes Ryze, Skill, Zac, Zac, Ryze, Zac, Ryze.",
+      "confidence": "Medium",
+      "sources": [
+        "packet zac.json (winRate 53.75, games 160, defect 'level chart contradicts data')",
+        "champ-data/zac.full.js phases[].side"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The range picture is absent. Ryze's Overload reaches 1000, but Rune Prison and Spell Flux both reach only 615 — while Zac's Stretching Strikes reaches 800.",
+      "why": "It defines where the lane is actually played and it explains why Zac has stages at all. Between 615 and 800 there is a band where Zac can Q Ryze and Ryze cannot Flux, root or slow him back — only Overload reaches, and that is a single skillshot. Neither layer mentions the band exists, so the player either stands at 1000 doing nothing or walks to 615 and gets comboed.",
+      "corrected": "Ryze: Overload 1000, Rune Prison 615, Spell Flux 615. Zac: Stretching Strikes 800. Fight at 615-800 where only his Q reaches you.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ryze.json (ranges)",
+        "champ-data/_kits/zac.json (Q range 800)"
+      ]
+    },
+    {
+      "point": 5,
+      "status": "missing",
+      "whatIsWrong": "Ryze's costs are never stated. Rune Prison is 50/60/70/80/90 mana, Spell Flux 35/45/55/65/75, Overload 40/38/36/34/32 — his whole pattern is mana-expensive, and Zac pays no mana at all.",
+      "why": "It is the mechanism behind Zac's early stages, and it is the one thing the current entry has no answer for. The advice 'farm at range' lets Ryze cast for free. Forcing Rune Prison and Spell Flux casts drains a resource Zac does not have, and every Zac cast is refunded on the blob rather than on a base trip.",
+      "corrected": "Make him spend. Rune Prison alone is up to 90 mana; a Ryze who has thrown W and E at you twice is closer to base than you are.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ryze.json (mana costs)",
+        "champ-data/_kits/zac.json (resource: None; costs are % current health)"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "full phases[4].why is the shared boilerplate line and says nothing about Realm Warp. content whys[4] calls it 'map pressure and escape you can't contest'.",
+      "why": "Realm Warp is 180s at rank 1 with a 3000-unit reach and a delayed activation — it is a repositioning tool for his team, not something that wins him a duel at 6. Reading level 6 as 'his ult changes the math' pushes the Zac player into caution during the one stage where Ryze is often not even in lane.",
+      "corrected": "Realm Warp: 180/160/140s, 3000 range, delayed teleport. It moves him and his allies; it does not beat you in a fight.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ryze.json (Realm Warp: cooldown 180/160/140, range 3000, 'After a few seconds, allies standing near the portal are teleported')"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Ryze's Overload (Q) rune-empowered spam plus Rune Prison (W) root shut down your E-slingshot on approach — never engage into an up W or you eat a full combo rooted.",
+      "after": "Rune Prison (W) only roots if Spell Flux (E) landed on you first — unfluxed it is just a slow. Track the Flux debuff on yourself, not his W, and commit as it drops."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Ryze wins 1-3: Overload (Q) with the Flux spread out-pokes you and Rune Prison (W) roots your slow E-slingshot the moment you commit, so farm at range.",
+      "after": "Ryze wins 1-3 on his 1000-range Overload (Q), but his mana is thin — Rune Prison costs up to 90. Force casts, eat blobs, and outlast the poke."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Ryze's Overload (Q) poke and Rune Prison (W) root out-trade your engage from level 1.",
+      "after": "Ryze's Overload (Q) reaches 1000 to your 800, so he pokes you free at level 1."
+    },
+    {
+      "layer": "content",
+      "path": "win[1]",
+      "before": "Ryze",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At 2 his Flux-spread Overload chunks you before you close distance.",
+      "after": "At 2 it evens — Rune Prison only slows unless Spell Flux landed first."
+    },
+    {
+      "layer": "content",
+      "path": "win[2]",
+      "before": "Ryze",
+      "after": "Zac"
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 his root-into-combo punishes any E-slingshot commit.",
+      "after": "Level 3 your 800-range Q grabs from outside his 615-range W and E."
+    },
+    {
+      "layer": "content",
+      "path": "win[3]",
+      "before": "Ryze",
+      "after": "Zac"
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Through 4-5 his sustained magic burst beats your unfinished tank stats.",
+      "after": "Through 4-5 his mana bleeds — Rune Prison alone costs him up to 90."
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Ryze",
+      "after": "Zac"
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "At first item his tear spike amps his waveclear and poke to push you off the wave.",
+      "after": "At first item your growing health pool outgrows his single-target lockdown."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Save E-slingshot until his Rune Prison (W) is on cooldown",
+      "after": "Engage unfluxed — Rune Prison only slows without Spell Flux"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Root your engage with Rune Prison (W) then unload a full combo",
+      "after": "Land Spell Flux (E) first so Rune Prison roots instead of slowing"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Ryze's ultimate changes the math too.",
+      "after": "Realm Warp is 180s at rank 1 and reaches 3000 units — a repositioning tool, not a duel win. He leaves; punish the lane he left behind."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ryze Rune Prison: matchup-defining — His point-blank root — sets up his combo. Bait it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Rune Prison: 11s at rank 1, 615 range — it roots only if Spell Flux is on you, otherwise it just slows. - Spell Flux: 3.5s, 615 range; that debuff is the real tell. - Your ultimate: kill windows only."
+    }
+  ],
+  "notes": "PRIMARY FINDING — both layers call Rune Prison a root in six separate places. Riot's text is explicit that it slows, and roots only 'if the target has Flux on it'. That means the ability the player must track is Spell Flux (3.5s at rank 1) and the tell is the debuff on his own bar, not Ryze's W cooldown (11s). Every 'engage when W is down' instruction in this entry was pointed at the wrong ability. SECOND: the packet-flagged 7/7 chart. I moved four cells to Ryze 3 / Zac 3 / Skill 1 and left the final stage with Ryze on purpose — Ryze does out-scale a tank one-on-one, and the full layer's phases[6].side='Zac' is, in my read, the layer that is wrong there, so a residual disagreement at index 6 remains and is intentional. THIRD: the 615-800 range band (his W/E reach 615, your Q reaches 800) is where this lane is winnable and neither layer mentioned it. FOURTH: Ryze pays 40-90 mana per cast and Zac pays none, which is the actual mechanism behind Zac's early stages. No web research was needed for any of this — it all comes from the kit files."
+}

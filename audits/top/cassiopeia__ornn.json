@@ -1,0 +1,93 @@
+{
+ "ownerKey": "cassiopeia",
+ "enemy": "ornn",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The full layer sets diff to \"HARD\" while diffRating is 4/10, breakdown.difficulty says \"Favoured matchup\" and the Emerald+ win rate is 54.64% over 97 games. The banner contradicts every other field on the page.",
+   "why": "Ornn has no innate sustain, no ranged answer to an 850-range Noxious Blast, and one repeatable charge on a 14s cooldown. Nothing in the kit supports a HARD banner.",
+   "corrected": "diff should read FAV. Not proposed as an edit because a 4-character enum cannot be changed inside the +/-10% length band — flagged for a manual pass.",
+   "confidence": "High",
+   "sources": [
+    "packets/cassiopeia.json",
+    "champ-data/_kits/ornn.json"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "No cooldown number appears anywhere in either layer, and dosFull[2].d invites a commit on a \"fifteen-second\" Volcanic Rupture that is actually 9/8.5/8/7.5/7.",
+   "why": "Volcanic Rupture is 9s at rank 1 and Searing Charge 14s — those two numbers are the whole spacing plan against Ornn, and one of them was stated wrong by 6 seconds.",
+   "corrected": "Real cooldowns written into spikes[0].text, breakdown.cooldowns and dosFull[2].d: Volcanic Rupture 9s, Searing Charge 14s, Miasma 24s, Petrifying Gaze 120s.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ornn.json",
+    "champ-data/_kits/cassiopeia.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[3].text tells you to \"save Petrifying Gaze to stun the elemental's charge\". The elemental summoned by Call of the Forge God is not a champion and cannot be stunned. The real interaction — Miasma grounding Searing Charge, and Petrifying Gaze stunning Ornn on the recast that redirects the elemental — is the one that decides the fight.",
+   "why": "Riot: Petrifying Gaze \"stuns any enemies in front of her that are facing her\". Ornn recasts R himself to charge into the elemental, and that recast is a champion action you can stun. Searing Charge is a charge that Miasma grounding denies, which is why the wall-slam knockup never lands on a grounded Ornn.",
+   "corrected": "spikes[3].text rewritten to aim R at Ornn on the recast, not at the elemental.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/_kits/ornn.json",
+    "champ-data/_kits/cassiopeia.json"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "\"Twin Fangs\" appears in content wants.you[0] and full phases[2].why. The ability is Twin Fang, singular.",
+   "why": "Riot Data Dragon names the E \"Twin Fang\".",
+   "corrected": "Both instances corrected and the 0.75s recast stated where the name was fixed.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/cassiopeia.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Reach your level 2-3 Q-to-E poison chain and chunk an Ornn who can't heal the DoT or run from refunded Twin Fangs",
+   "after": "Reach your level 2-3 Q-to-E poison chain and chunk an Ornn who can't heal the DoT or outrun a 0.75s Twin Fang"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Your Q-into-E poison chain comes online — Ornn has no innate sustain and no dash off cooldown, so every refunded Twin Fang on a poisoned target out-trades his Bellows Breath pokes.",
+   "after": "Your Q-into-E poison chain comes online — Ornn's only repeatable charge is Searing Charge (E) on 14s, so between them a 0.75s Twin Fang on a poisoned target out-trades his Bellows Breath poke."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Ornn's comeback is teamfight — his R elemental's double-knockup and Brittle setup. Stay spread and save Petrifying Gaze to stun the elemental's charge before it locks your carries.",
+   "after": "Ornn's comeback is teamfight — Call of the Forge God's double-knockup and the Brittle it stacks. Stay spread and hold Petrifying Gaze for Ornn himself on the recast that redirects the elemental."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "Full kit: Q poison into E-spam is real DPS already. Twin Fangs cost almost nothing on poisoned targets.",
+   "after": "Full kit: Q poison into E-spam is real DPS already. Twin Fang recasts every 0.75s and heals you off the poison."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Ornn Volcanic Rupture: matchup-defining — Pillar + knockup setup — stay off walls and sidestep the line. Count it out loud if you must. - Your W Miasma has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+   "after": "- Ornn Volcanic Rupture: 9s at rank 1 — pillar plus knockup setup, so stay off walls and sidestep the line. Searing Charge is 14s. - Your Miasma is 24s: it grounds his charge. - Petrifying Gaze is 120s: it answers his commit."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Ornn burns Volcanic Rupture on nothing — take the fifteen-second invitation.",
+   "after": "Ornn burns Volcanic Rupture on nothing — take the nine-second invitation."
+  }
+ ],
+ "notes": "diff field still reads HARD against a 54.64% favoured lane and a 4/10 diffRating — cannot be fixed inside the length band, needs a manual enum change to FAV. Ornn Searing Charge is treated as a charge that Miasma grounding denies; the kit file does not carry a dash flag on E even though Riot's text reads \"Ornn charges\", so that specific claim is Medium confidence."
+}

@@ -1,0 +1,146 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "heimerdinger",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "full breakdown.cooldowns lists two grenades: \"CH-2 Grenade (Stun)\" and \"CH-3X Lightning Grenade\". Heimerdinger has one grenade.",
+   "why": "The E is CH-2 Electron Storm Grenade. \"CH-3X Lightning Grenade\" is not an ability in his kit at all, so the entry invents a second cooldown for the player to track.",
+   "corrected": "Rewrote breakdown.cooldowns around CH-2 Electron Storm Grenade and Hextech Micro-Rockets, the two cooldowns that actually exist.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/heimerdinger.json (E CH-2 Electron Storm Grenade; W Hextech Micro-Rockets)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "Packet flags zero cooldown-sequencing cues, and the grenade is described only as \"the E grenade stun\" with no number.",
+   "why": "CH-2 Electron Storm Grenade is 11 seconds at every rank — it never gets shorter with points. It is also his only hard CC, so a spent grenade is a clean, repeatable 11-second window in which a Withered Heimerdinger has nothing to stop a walk-up. Hextech Micro-Rockets are 11/10/9/8/7 at 1325 range, which out-ranges Wither's 700, so the rockets are chip you accept, not a window you punish.",
+   "corrected": "Put the 11s-flat figure into breakdown.cooldowns, breakdown.mid, content mid and wants.you[0] as an explicit \"the instant he throws it\" cue.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/heimerdinger.json (E cd 11 at all ranks; W cd 11/10/9/8/7, range 1325)",
+    "champ-data/_kits/nasus.json (W range 700)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Nothing anywhere explains why Heimerdinger cannot escape Wither, beyond \"he has no dash\".",
+   "why": "Hextech Affinity grants him Move Speed only while he is near his own turrets or an allied tower. Outside that field he is a plain 335-class mage with no mobility at all, so the entire matchup reduces to whether the fight happens inside or outside his deployables.",
+   "corrected": "Added the Hextech Affinity condition to content late as the reason to drag the duel off his field.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/heimerdinger.json (P Hextech Affinity: Move Speed near allied towers and his turrets)"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "The two layers give contradictory level charts. content win[] is Nasus, Skill, Heimer, Heimer, Heimer, Nasus, Nasus; full phases[].side is Heimerdinger for stages 1-5 then Skill, Skill — zero Nasus stages.",
+   "why": "Nasus wins this lane at 53.85% over 247 games. A chart with no Nasus stage at all cannot be right, and full phases[0].why states outright that \"Heimerdinger wins every level-1 exchange\", which is the opposite of what the same dataset's content layer says: level 1 he has no turret down and cannot contest a melee at point-blank.",
+   "corrected": "Aligned full phases[0], [1], [5] and [6] sides to the content chart and rewrote phases[0].why to match.",
+   "confidence": "High",
+   "sources": [
+    "packet nasus.json (winRate 53.85, games 247, levelChart)",
+    "champ-data/content/nasus.js (win[] for heimerdinger)"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[4].why says level 6 is \"the first real fight you're allowed to take\" while its own side field and the content layer both call level 6 his window.",
+   "why": "Fury of the Sands is survival against a dive; it does not out-zone a turret field, and an UPGRADE!!! turret makes that field stronger, not weaker.",
+   "corrected": "Rewrote phases[4].why so the text agrees with the side label.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/_kits/heimerdinger.json (R UPGRADE!!!)",
+    "champ-data/content/nasus.js (whys[4] for heimerdinger)"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Heimerdinger CH-2 Grenade (Stun): matchup-defining — His self-peel stun. Dodge it. Track it before every engage. - Heimerdinger CH-3X Lightning Grenade: Lobs a grenade that slows, and stuns at the center. Dodge or sidestep it.",
+   "after": "- Heimerdinger CH-2 Electron Storm Grenade: matchup-defining — his only hard CC and 11s flat at every rank, so walk the moment it is spent. - Hextech Micro-Rockets: 11s at rank 1, 7s maxed, 1325-range poke — eat it behind the wave."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.mid",
+   "before": "Trade strictly around CH-2 Grenade (Stun): when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve him.",
+   "after": "Trade strictly around CH-2 Electron Storm Grenade: it is 11s flat at every rank, so the frame it is spent you walk. If ahead, freeze and starve him."
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Heimerdinger",
+   "after": "Nasus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Q start, last-hit only. Heimerdinger wins every level-1 exchange — concede the bush, concede the trades, take the stacks.",
+   "after": "Q start, free stacks. No turret exists yet and Heimerdinger cannot fight a melee point-blank — bank levers before his field goes up."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Heimerdinger",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Heimerdinger, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "Fury of the Sands buys survival, not a kill: an UPGRADE!!! turret field still out-zones you, so hold R for the dive and refuse to chase him into it."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Level 1 you just soak Q farm — Heimer can't fight a melee at point-blank yet and you out-sustain his early chip with Soul Eater lifesteal. The problem starts once his turrets are up: they wall the minions and his W rockets poke you every time you reach for a Q stack. Do NOT walk through the turret line to last-hit — eat the missed stack rather than the E grenade stun, which is the only thing that lets him or a jungler kill you here.",
+   "after": "Level 1 you just soak Q farm — Heimer can't fight a melee at point-blank yet and you out-sustain his early chip with Soul Eater lifesteal. The problem starts once his H-28 G Evolution Turrets are up: they wall the minions and Hextech Micro-Rockets (W) poke you every time you reach for a Q stack. Do NOT walk through the turret line to last-hit — eat the missed stack rather than CH-2 Electron Storm Grenade (E), his only hard CC and the one thing that gets you killed here."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 4-6 are his window, not yours — three turrets plus rockets out-zone you, and even your level 6 Fury of the Sands only buys you survival, not a kill, because his upgraded R-turrets still shred you in the field. Wither his escape if he ever steps up alone, but don't dive the turret nest. Farm stacks at the safe edge of the wave with Spirit Fire, soak the lane XP, and play for the items that flip this.",
+   "after": "Levels 4-6 are his window, not yours — three turrets plus rockets out-zone you, and your level 6 Fury of the Sands only buys survival, because an UPGRADE!!! (R) turret still shreds you inside the field. His CH-2 Electron Storm Grenade (E) is 11s flat at every rank: the frame he throws it you own eleven seconds with no stun in the lane, and that is when you cross the wave or step up. Otherwise farm the safe edge with Spirit Fire and soak XP."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "First item is where it turns: Sheen or Iceborn empowers your Q, your lifesteal eats the turret chip, and Wither glues the immobile rat in place for the all-in. By 2+ items with a real stack count, ult plus Wither plus empowered Q lets you walk straight through his turret field and one-shot him — he has no dash, no escape, and nothing to kite a Withered juggernaut. You hard out-scale this lane; just survive his mid-game zone to get here.",
+   "after": "First item is where it turns: Sheen or Iceborn empowers your Q, your lifesteal eats the turret chip, and Wither glues him in place for the all-in. Hextech Affinity only speeds him up near his own turrets and his tower, so the fight you want is the one dragged off that field. By 2+ items with a real stack count, ult plus Wither plus empowered Q walks you through the nest and one-shots him — no dash, no escape, nothing to kite a Withered juggernaut."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Soak Q stacks under tower through his turret poke without dying to the E grenade stun",
+   "after": "Soak Q stacks under tower through H-28 G turret poke without eating his 11s grenade stun"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Land the E grenade stun to chunk you or set up a gank when you walk up",
+   "after": "Land CH-2 Electron Storm Grenade to chunk you or set up a gank as you step up"
+  }
+ ],
+ "notes": "The full layer's phases[] text for this matchup is clearly template-generated (phases[1].why \"Wither online — it's your get-off-me button\" and phases[3].why \"respect CH-2 Grenade (Stun) fully. Passive lifesteal plus Fleet...\" are the same sentences used in other matchups with the enemy name substituted). I only corrected the two phases whose text contradicted their own side label or the content layer; the rest read as generic but not false. Also note the paraphrase \"CH-2 Grenade (Stun)\" is used throughout full (tldr, winCon, breakdown.early, breakdown.trading, phases[3]) — those strings are not wrong, just not the real ability name, and rewriting all of them within the length band would have cost more than it bought."
+}

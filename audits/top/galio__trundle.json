@@ -1,0 +1,333 @@
+{
+  "ownerKey": "galio",
+  "enemy": "trundle",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart is boilerplate and contradicts every explanation sitting next to it. content.win and full.phases[].side both read Trundle,Trundle,Trundle,Skill,Trundle,Trundle,Skill, while whys[1] says 'Q poke from range plus your Level 2 E or W lets you contest the lane', whys[3] says 'Shield of Durand eats his trade damage', whys[4] says 'Hero's Entrance gives you a knockup-taunt all-in here', and full.phases[0].why says 'Q-poke + the Colossal Smash empowered auto wins most level-1 exchanges'.",
+      "why": "Every row of the chart is labelled for the champion the paired text says is losing, and the whole chart says Trundle 5 of 7 in a matchup Galio wins 53.33%. A player reads the chart first; it currently tells him to play scared through exactly the levels the text tells him to fight.",
+      "corrected": "Skill, Galio, Galio, Galio, Galio, Skill, Trundle — the reading both prose layers already give, and the one consistent with 53.33%.",
+      "confidence": "Medium",
+      "sources": [
+        "champ-data/content/galio.js (whys[0..6])",
+        "champ-data/galio.full.js (phases[].why)",
+        "scratchpad packet galio.json entry trundle (levelChart derived from the prose; 53.33%, 15 games)"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags 'NO cooldown-sequencing advice anywhere'. Not one cooldown number appears in either layer — spikes, breakdown.cooldowns, dosFull and report[5] all say 'when Subjugate is down' without saying how long that is or what else is on a clock.",
+      "why": "Subjugate is 120/100/80, Pillar of Ice is 21/19.5/18/16.5/15, Frozen Domain is 18/17/16/15/14 and Chomp is a 3.5-second bite. Those numbers change the plan completely: a 120-second ultimate means the whole first item window is post-Subjugate, and a 3.5-second Chomp means there is no such thing as fighting on its cooldown. The pillar, not the ultimate, is the cooldown that decides whether Justice Punch even connects.",
+      "corrected": "Subjugate 120s at rank 1; Pillar of Ice 21s at rank 1; Frozen Domain 18s; Chomp 3.5s. Fight in the 21 seconds after the pillar is spent, not on Chomp's cooldown, which is never down long enough to matter.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/trundle.json (R 120/100/80; E 21/19.5/18/16.5/15; W 18/17/16/15/14; Q 3.5)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[2].why says 'the dash is interruptible and root-able mid-flight', and dontsFull[0] says 'E-punch into his Subjugate (it catches you mid-dash)'.",
+      "why": "Justice Punch cannot be interrupted once it is travelling; only an immobilise landing during its cast time stops activation. Subjugate is a 650-range targeted stat steal with no displacement and no immobilise at all — it cannot catch anything mid-dash. The thing that genuinely stops the dash is Pillar of Ice: it is impassable terrain, and the Justice Punch charge halts on terrain. That is the interaction the entry should be built around and it is nowhere in it.",
+      "corrected": "Pillar of Ice is impassable terrain and Justice Punch stops dead on terrain — he can drop it in your path to cancel the dash short or behind you to trap you. Subjugate cannot interrupt anything.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/trundle.json (E Pillar of Ice: 'becoming impassable terrain', flags slow,terrain; R Subjugate: steals Health/Armor/MR, range 650)",
+        "wiki.leagueoflegends.com/en-us/Galio (Justice Punch: dash cannot be interrupted mid-travel, immobilise during cast time prevents activation; the dash stops on terrain or champions)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Subjugate is described only as 'steals a chunk of your resistances and heals him through your burst'. Nothing connects the stolen magic resist to your own damage.",
+      "why": "Colossal Smash scales with 60% of Galio's bonus magic resist. Subjugate steals health, armour AND magic resist, doubling the theft over 4 seconds — so it does not just make him tankier, it directly shrinks your passive's damage while it runs. That is a second, hidden cost of fighting into it that no line in the entry mentions.",
+      "corrected": "Subjugate steals magic resist as well as armour and health, and Colossal Smash scales off 60% of your bonus MR — so his ultimate cuts your own passive damage for the four seconds it doubles.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/trundle.json (R Subjugate: 'steals a percent of his target's Health, Armor and Magic Resistance... doubled' over 4s)",
+        "wiki.leagueoflegends.com/en-us/Galio (Colossal Smash damage includes '+ 60% bonus magic resistance')"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Shield of Durand is sold as the trade-flipper throughout, with no acknowledgement of how much less it does against Trundle.",
+      "why": "The stance reduces magic damage 25/30/35/40/45% but physical damage only 12.5/15/17.5/20/22.5% — exactly half. Trundle's entire kit is physical. full.phases[3].why does say 'your shield does less here', but nowhere is the halving stated, so a player still spends the 18-second W as if it were the same button he uses into mages.",
+      "corrected": "Shield of Durand halves against physical: 12.5% at rank 1 rising to 22.5%, against 25-45% versus magic. Against Trundle the W is a taunt with a small cushion, not a damage sponge.",
+      "confidence": "High",
+      "sources": [
+        "wiki.leagueoflegends.com/en-us/Galio (W: magic 25/30/35/40/45%, physical 12.5/15/17.5/20/22.5%)",
+        "champ-data/_kits/trundle.json (Chomp, autos — physical)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Chomp is never identified as an auto-attack reset.",
+      "why": "_missing-interactions.json flags 'autoreset-burst-tell: Trundle's combo opens with an auto-attack reset (Chomp (Q))'. The kit confirms the autoReset flag. Trundle's step-up therefore lands auto-Chomp back to back, and the wind-up is the tell — that is the moment to release the W taunt, not after the bite has already landed.",
+      "corrected": "Chomp is an auto-attack reset, so his opener is auto into instant bite. The wind-up is your release cue for the taunt.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/trundle.json (Q Chomp flags: slow, autoReset; cooldown 3.5)",
+        "champ-data/_kits/_missing-interactions.json galio/trundle: autoreset-burst-tell"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Neither layer states the range gap that makes the poke plan work.",
+      "why": "Winds of War is 825; Chomp is 300. content.early says 'Sit at max Q range' without the number, which reads as ordinary spacing advice rather than the 525-unit margin it actually is.",
+      "corrected": "Winds of War is 825 against a 300-range bite — the poke plan is free as long as you never step inside 300.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/galio.json (Q range 825)",
+        "champ-data/_kits/trundle.json (Q range 300)"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "report Itemization already carries 'Oblivion Orb early — his healing fights your trade math', which is the right answer to King's Tribute (percent-max-health heal off every nearby dying unit) and Frozen Domain (increased healing from all sources). _missing-interactions.json flags needs-antiheal for this pairing and the full layer already covers it; the content layer does not, which is why the fix goes there.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/trundle.json (P King's Tribute; W Frozen Domain 'increased healing from all sources')",
+        "champ-data/_kits/_missing-interactions.json galio/trundle: needs-antiheal"
+      ]
+    },
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "53.33% over 15 games. The sample is tiny, so I did not move diffRating off 7.5/10 on 15 games alone; I only aligned the stage chart to the prose, which points the same way as the win rate.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": [
+        "scratchpad packet galio.json entry trundle"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[6].rating",
+      "before": "5/10",
+      "after": "4/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Trundle"
+    },
+    {
+      "layer": "content",
+      "path": "win[6]",
+      "before": "Skill",
+      "after": "Trundle"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].rating",
+      "before": "4/10",
+      "after": "5/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Trundle",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Trundle",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].rating",
+      "before": "3/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Trundle",
+      "after": "Galio"
+    },
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Trundle",
+      "after": "Galio"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].rating",
+      "before": "5/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Galio"
+    },
+    {
+      "layer": "content",
+      "path": "win[3]",
+      "before": "Skill",
+      "after": "Galio"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].rating",
+      "before": "4/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Trundle",
+      "after": "Galio"
+    },
+    {
+      "layer": "content",
+      "path": "win[2]",
+      "before": "Trundle",
+      "after": "Galio"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].rating",
+      "before": "3/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Trundle",
+      "after": "Galio"
+    },
+    {
+      "layer": "content",
+      "path": "win[1]",
+      "before": "Trundle",
+      "after": "Galio"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].rating",
+      "before": "3/10",
+      "after": "5/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Trundle",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[0]",
+      "before": "Trundle",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q-poke + the Colossal Smash empowered auto wins most level-1 exchanges. Identify how Trundle contests the first waves.",
+      "after": "Winds of War is 825 against a 300-range Chomp — poke free from outside the bite. Trundle has only Q and no way to reach you."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit online. E-punch windows open strictly on Subjugate's cooldown — the dash is interruptible and root-able mid-flight.",
+      "after": "Full kit online, and so is Pillar of Ice — impassable terrain that stops the Justice Punch charge. Punch in the 21s after he spends it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Trundle Subjugate: matchup-defining — Steals your stats. Trade when it’s down. Track it before every punch. - Your W: the trade-flipper — never burn it early. - Your R: a map-wide win condition — spend it on allies' fights.",
+      "after": "- Trundle Pillar of Ice: matchup-defining — 21s at rank 1, impassable terrain that halts your dash. Punch in its downtime. - Subjugate: 120s at rank 1, steals health, armour and MR. - Your W: 18s, and only 12.5% off his physical damage."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Steals your stats. Trade when it’s down. Only punch once it is down or baited.",
+      "after": "Steals health, armour and MR, and MR is 60% of Colossal Smash's damage."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].t",
+      "before": "E-punch into his Subjugate (it catches you mid-dash)",
+      "after": "E-punch into a live Pillar of Ice — terrain stops it"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Trundle's favourite window — refuse it and half his win condition is gone.",
+      "after": "The pillar is impassable, so your charge halts on it. Punch in the 21 seconds after."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Trundle's Subjugate: Steals your stats. Trade when it’s down. When it is down — Q-poke + punch the gap.",
+      "after": "Pillar of Ice is terrain and halts your charge; Subjugate steals the MR that 60% of Colossal Smash rides on."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "You both have a weak Level 1 — he has only Q and you have one ability with no engage, so trade last-hits and set up the wave rather than fighting.",
+      "after": "You both have a weak Level 1, but the range is yours — Winds of War is 825 against a 300-range bite, so chip him and set the wave rather than fighting."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Bite you with Q to steal your AD and out-stat your extended trades",
+      "after": "Auto-reset into Chomp every 3.5s to steal your AD and win long trades"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Drop his E pillar behind you to wall off your E-dash and pin you for a full drain",
+      "after": "Drop Pillar of Ice in your path — impassable terrain halts your charge mid-flight"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Poke with the center column of Winds of War from max range, then E-knockup into W-taunt when he commits his Q bite",
+      "after": "Poke with the center column of Winds of War at 825, outside his 300-range bite, then E-knockup into W-taunt"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Once you have E plus W, his point-blank Q bite is your cue: E-knockup through him as he steps up to last-hit, then W-taunt on release to lock a full Q-sweetspot follow-up.",
+      "after": "Once you have E plus W, his Chomp wind-up is the cue — it is an auto-reset, so it comes with the auto: E-knockup as he steps up, then W-taunt on release for a Q sweetspot."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Tank-AP first item keeps trades even, but do not all-in into his Subjugate — it steals a chunk of your resistances and heals him through your burst.",
+      "after": "Buy Grievous Wounds by the second item — King's Tribute and Frozen Domain heal through your chip, and Subjugate steals the MR that 60% of Colossal Smash needs."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Trundle's whole early game is his Q bite — it steals attack damage and heals him, but it's point-blank and on a cooldown. Sit at max Q range and chunk him with the center column of Winds of War, where it hits hardest; don't walk into his auto range and feed him a free bite. At Levels 2-3, once you have E and W, punish his step-up: E-knockup through him as he commits to a last-hit, then release Shield of Durand to taunt and land a Q sweetspot before his sustain matters. Mind your mana — you are the more mana-hungry of the two and his bite refunds his trades.",
+      "after": "Trundle's whole early game is his Q bite — it resets his auto, steals attack damage and heals him, but it reaches only 300 and Winds of War reaches 825. Sit at that 525-unit margin and chunk him with the center column, where it hits hardest; never step inside 300 and feed a free bite. At Levels 2-3, once you have E and W, punish his step-up: the Chomp wind-up is your tell, so E-knockup through him as he commits, then release Shield of Durand to taunt and land a Q sweetspot before his sustain matters. Mind your mana — you are the more mana-hungry of the two and his bite refunds his trades."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-6 are your window. Shield of Durand ramps damage reduction on the channel and the taunt on release locks him for a full E-Q combo before his drain can answer it. At 6, Hero's Entrance is the swing: either flag it onto him for a knockup-taunt all-in, or — better, since he out-sustains a grind — flag onto your jungler or a sidelane and convert your waveclear lead into a roam. Watch his E pillar; he'll drop it behind you to wall off your E-dash and pin you in place for a drain.",
+      "after": "Levels 4-6 are your window. Shield of Durand only cuts 12.5% of his physical damage at rank 1, so the value is the release taunt, not the cushion — chain it into a full E-Q before his drain answers. At 6, Hero's Entrance is the swing: either flag it onto him for a knockup-taunt all-in, or — better, since he out-sustains a grind — flag onto your jungler and convert waveclear into a roam. Pillar of Ice is impassable terrain on a 21-second cooldown: it halts your charge in front or traps you behind, so punch only once it is spent."
+    }
+  ],
+  "notes": "Galio facts verified at wiki.leagueoflegends.com/en-us/Galio and reused across this slice: Shield of Durand reduces magic 25/30/35/40/45% and physical exactly half that (12.5/15/17.5/20/22.5%); its passive is a magic shield of 7.5/9/10.5/12/13.5% max health that restores after 12/10/8s (by level) without taking damage; the taunt lands on release, radius 175-350 and 0.5-1.5s duration scaled by channel time. Justice Punch knocks up 0.75s, cannot be interrupted mid-travel (only an immobilise during cast time stops it), is disabled outright while Grounded, and the charge halts on terrain or champions. Winds of War is 825 range, the tornado lasts 2s and applies no slow; the windblasts are blockable individually by Wind Wall / Unbreakable and a spell shield eats the gusts but not the tornado. Hero's Entrance channels 2.75s, is CC-immune after 1.25s, and gives allies the Shield of Durand magic shield for 5s. Colossal Smash is a 5s empowered auto (reduced 3s per ability hit on a champion), 250 radius, and scales with 60% bonus magic resist. Two kit-file flag misfires on Galio: E Justice Punch is tagged 'terrain' (it creates none) and is missing 'knockup' even though Riot's own description says 'knocking up the first enemy champion he encounters' — I trusted the description. Sample here is only 15 games, so I aligned the stage chart to the entry's own prose rather than re-rating the matchup."
+}

@@ -1,0 +1,438 @@
+{
+  "ownerKey": "zac",
+  "enemy": "ambessa",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet win rate 51.46% over 171 games matches MC_WR_TABLES.zac.ambessa = 51.46. No elo-tier language in either layer.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json",
+        "champ-data/content/zac.js MC_WR_TABLES"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer is built around an ability called 'Repeating Dashes'. Ambessa has no such ability. It appears in 25 separate writable strings — tldr, winCon, enemyWin, ahead, loading, focus.text, phases[1].why, phases[3].why, phases[5].why, six breakdown keys, dosFull[0].t, dosFull[2].d and seven report entries — and it is the ability the entire matchup tells the player to track.",
+      "why": "Ambessa's kit is Drakehound's Step (P), Cunning Sweep / Sundering Slam (Q), Repudiation (W), Lacerate (E) and Public Execution (R). 'Repeating Dashes' is a description of what Drakehound's Step does, not a name Riot uses. The packet's suspectNames is empty for this matchup because the string is too far from any real name to register as a near miss, so the automated pass missed it entirely — it only flagged that no abilities are named. This is the same class of error as 'Ares of Blaze' for Brand's R in the calibration list, but larger: it is the single most repeated proper noun in the matchup. focus.text is literally 'Ambessa Repeating Dashes', so the loading screen shows the player a fabricated ability name.",
+      "corrected": "Replaced every occurrence with Public Execution. Two reasons over the alternatives. First, the surrounding framing is always 'track it, engage when it is down' — Drakehound's Step is a passive with no cooldown, so that sentence cannot be made true with it; Public Execution is 130/115/100s and is the cooldown that actually decides whether Zac may commit. Second, the content layer already independently identifies her R as the thing that beats Zac's health pool, so this makes the two layers agree. Public Execution is also exactly 16 characters, the same as the string it replaces, so every swap is length-neutral.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ambessa.json abilities",
+        "packets/zac.json enemyAbilities",
+        "champ-data/zac.full.js"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "full.focus is {text: 'Ambessa Repeating Dashes', letters: ['E']} — the fabricated name is paired with the E slot.",
+      "why": "The letters array suggests the generator meant Lacerate, Ambessa's E. But Lacerate is 13/12/11/10/9s and effectively always available, so 'engage only on its cooldown' is not actionable advice, whereas Public Execution at 130s at rank 1 is exactly the window Zac needs. I have set focus.text to Public Execution to match the rest of the repair.",
+      "corrected": "focus.letters must move from ['E'] to ['R'] alongside the focus.text edit. Not proposed as an edit because it is an array of tokens, not a string, and the applier's writable-path contract covers strings.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js focus",
+        "champ-data/_kits/ambessa.json E and R cooldowns"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Public Execution is described only as 'a hard-lockdown all-in' and 'lockdown all-in'. Neither layer says what the lockdown actually is, and neither mentions its targeting rule.",
+      "why": "Two things Riot states outright and the guide omits. First, it 'SUPPRESSES them upon her arrival' and then stuns — suppression is a distinct and much stronger category than a stun, and calling it generic lockdown hides that. Second, and decisively for a tank: she 'blinks to the FARTHEST enemy champion in a line of her choosing'. Zac's whole late-game job is standing in front of his carries, and this ability specifically ignores the person in front. A Zac player who does not know that will body-block for a backline that was never protected.",
+      "corrected": "Put the suppress-then-stun wording into content.mid, whys[4], spikes[1].text, dosFull[0].d, breakdown.cooldowns and report[5].t, and the farthest-target rule into content.spikes[3].text and phases[4].why.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ambessa.json R description, cd 130/115/100, range 1250"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Repudiation is never mentioned in either layer, and neither is the Cunning Sweep to Sundering Slam transformation.",
+      "why": "Repudiation 'gains a shield, briefly braces herself, and then slams the ground... If she blocked any non-minion damage while bracing herself, this ability will deal increased damage.' That makes it an actively punishing ability to trade into, which matters enormously for Zac because Unstable Matter is a flat 5s pulse he will otherwise happily tick into her brace and pay for. On the Q side, 'Striking an enemy will transform the next cast of this ability' — Cunning Sweep becomes Sundering Slam, so the second Q in a sequence is a different, longer-ranged ability. The guide's repeated advice to 'dodge her Q edges' treats both casts as the same shape.",
+      "corrected": "Added the brace-punishes-damage rule to content.early and wants.you[0], and the Q transformation to spikes[0].text and whys[2].",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ambessa.json W and Q descriptions"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Drakehound's Step is described only as 'her chained dashes' and 'dash mobility'.",
+      "why": "The actual rule is specific and worth knowing: 'Entering an attack or movement command while casting an ability will cause Ambessa to dash a short distance once the ability is cast.' The dash is not on its own cooldown — it rides every ability she casts, and it also grants her next attack bonus range and damage. That is why Elastic Slingshot's charge-up is so exploitable here, and it also means _missing-interactions' auto-reset warning is about the passive, not about a separate spell.",
+      "corrected": "Named Drakehound's Step and stated the rides-every-cast rule in content.early, whys[0], whys[1], spikes[0].text, wants.foe[0] and dontsFull[1].d.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ambessa.json P description",
+        "champ-data/_kits/_missing-interactions.json zac/ambessa autoreset-burst-tell"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "full.breakdown.cooldowns names the fabricated ability and fills its other two bullets with unnamed placeholders — 'Your committal tool' and 'Your ultimate'. No number appears anywhere in it.",
+      "why": "The three numbers that decide this lane are Public Execution at 130s at rank 1, Lacerate at 13s, and Zac's Elastic Slingshot at 21s at rank 1. The gap between 130 and 13 is the whole point: one of her abilities is worth waiting out and the other never is, and the guide's blanket 'engage only on its cooldown' framing cannot distinguish them while the ability is fictional.",
+      "corrected": "Rebuilt the bullet list around those three real cooldowns.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ambessa.json R and E",
+        "champ-data/_kits/zac.json E"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t ends 'Add anti-heal (Thornmail component early) — his healing fights your grind', which uses the wrong gender and never says where the healing comes from.",
+      "why": "_missing-interactions.json flags needs-antiheal for this pairing and attributes it to Public Execution specifically. Since that is a 130s ultimate rather than a sustained drain, the Grievous Wounds timing that matters is 'before her level 6 all-in', not 'at some point during the grind'. Naming the source turns a generic buy into a timing.",
+      "corrected": "Rewrote the closing clause to name Public Execution as the heal and fixed the pronoun.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/_missing-interactions.json zac/ambessa needs-antiheal",
+        "champ-data/_kits/ambessa.json R kitFlags heal"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Two Do/Don't descriptions do not match their titles: dosFull[2] 'Pick up blobs to sustain' is described with 'Ambessa wastes Repeating Dashes — commit the full pattern immediately', and dontsFull[1] 'Chase her dashes' is described with 'Burning it for tiny value leaves you naked for its full cooldown'. dontsFull[2] 'Fall behind in scaling' is described with the blob-stomping line.",
+      "why": "Same pasted-description bug as the other matchups in this slice. All three headings are answered by text written for a different heading.",
+      "corrected": "Rewrote all three to answer their own titles.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js dosFull and dontsFull"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Ambessa is referred to as male in seven strings: tradeBad and dontsFull[2].d ('Letting him stomp your blobs'), phases[1].why ('a trade he paid for'), dontsFull[0].d ('half his win condition'), breakdown.mid ('starve him'), breakdown.wave and report[4].t ('his tower'), breakdown.feeding and report[12].t ('If he snowballs'), report[8].t ('his healing'), report[9].t ('Make him flinch first').",
+      "why": "Template bleed from a male-enemy matchup, the same pattern found in the Akali entry of this file. Combined with a fabricated ability name repeated 25 times, this entry reads as entirely machine-produced.",
+      "corrected": "Fixed in every string this proposal touches.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "content.win gives Ambessa 6 of 7 stages with a Skill final row, while full.phases[].side reads [Skill, Zac, Zac, Skill, Skill, Zac, Zac]. The packet did not flag this pair as contradictory, unlike the other matchups in this slice.",
+      "why": "At 51.46% the matchup is close to even, so a content chart that never gives Zac a single row overstates Ambessa even though it is not as far off as the Akali or Akshan charts. The full layer handing Zac levels 2 and 3 is the less defensible half — Ambessa has Drakehound's Step riding every cast from level 1 and Zac has no way to punish that before items.",
+      "corrected": "content.win[6] should move from Skill to Zac and full.phases[1] and [2] from Zac to Ambessa, giving [Ambessa x5, Skill, Zac] on both layers. Not proposed as edits — categorical tokens cannot survive the length band.",
+      "confidence": "Medium",
+      "sources": [
+        "packets/zac.json winRate and levelChart",
+        "champ-data/zac.full.js phases"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeBad, dontsFull[2].d, breakdown.trading and report[3].t all claim stomped blobs cost 'your passive revive margin'.",
+      "why": "Cell Division's shed chunks are sustain and destructible; the four bloblets exist only after fatal damage and are what set the revive. Stomping chunks mid-trade costs sustain only. Cell Division's flat 5 minute cooldown is the number that matters against a 130s suppress ultimate and it appears nowhere.",
+      "corrected": "Separated the two halves and stated the 5 minute cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zac.json P description"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "E-knock her combo — sustain her burst. Zac wins the Repeating Dashes cooldown windows.",
+      "after": "E-knock her combo — sustain her burst. Zac wins the Public Execution cooldown windows."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "E-knock her combo and out-sustain. Track Repeating Dashes before every commit and keep the wave on your side.",
+      "after": "E-knock her combo and out-sustain. Track Public Execution before every commit and keep the wave on your side."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Ambessa wins by landing Repeating Dashes, denying your pattern, and out-trading your engage windows.",
+      "after": "Ambessa wins by landing Public Execution, denying your pattern, and out-trading your engage windows."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Ambessa off the comeback farm. Dive with your jungler when Repeating Dashes is down.",
+      "after": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Ambessa off the comeback farm. Dive with your jungler when Public Execution is down."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Zac vs Ambessa - Track: Ambessa Repeating Dashes. - Keep the wave on your side. - Engage only on Repeating Dashes's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+      "after": "- Zac vs Ambessa - Track: Ambessa Public Execution. - Keep the wave on your side. - Engage only on Public Execution's cooldown. - Don't chase past the wave. - Ultimate = kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "focus.text",
+      "before": "Ambessa Repeating Dashes",
+      "after": "Ambessa Public Execution"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Repeating Dashes's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "The lane-control window: trade around Public Execution's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Heartsteel is your spike — force fights the moment it completes, on Repeating Dashes's cooldown.",
+      "after": "Heartsteel is your spike — force fights the moment it completes, on Public Execution's cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Q-stretch trades and blob pickups out-sustain the early chip. Respect Ambessa's Repeating Dashes completely — the first levels are about banking small advantages, not proving a point.",
+      "after": "Q-stretch trades and blob pickups out-sustain the early chip. Respect Ambessa's Public Execution completely — the first levels are about banking small advantages, not proving a point."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Trade strictly around Repeating Dashes: when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve him.",
+      "after": "Trade strictly around Public Execution: when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve her."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Overall difficulty: 6/10. The lane is decided by how well you track Repeating Dashes and how disciplined your pattern is.",
+      "after": "Overall difficulty: 6/10. The lane is decided by how well you track Public Execution and how disciplined your pattern is."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.spikes",
+      "before": "Ambessa: Repeating Dashes online, level 6, first item. Zac: levels 2-3 (full pattern), Heartsteel first-item spike, and the 2-item front-line window.",
+      "after": "Ambessa: Lacerate online, level 6, first item. Zac: levels 2-3 (full pattern), Heartsteel first-item spike, and the 2-item front-line window."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Ambessa gets a kill, stop forcing and respect Repeating Dashes. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Ambessa gets a kill, stop forcing and respect Public Execution. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "report[12].t",
+      "before": "If Ambessa gets a kill, stop forcing and respect Repeating Dashes. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Ambessa gets a kill, stop forcing and respect Public Execution. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "report[13].t",
+      "before": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Ambessa off the comeback farm. Dive with your jungler when Repeating Dashes is down.",
+      "after": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Ambessa off the comeback farm. Dive with your jungler when Public Execution is down."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "E-knock her combo and out-sustain. Track Repeating Dashes before every commit.",
+      "after": "E-knock her combo and out-sustain. Track Public Execution before every commit."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Repeating Dashes's cooldown, on your level-6 spike, and on your Heartsteel timing. Make him flinch first.",
+      "after": "Commit on Public Execution's cooldown, on your level-6 spike, and on your Heartsteel timing. Make her flinch first."
+    },
+    {
+      "layer": "full",
+      "path": "report[10].t",
+      "before": "Your CC is premium gank setup — ping your jungler when Repeating Dashes is down. Ward river before extended trades.",
+      "after": "Your CC is premium gank setup — ping your jungler when Public Execution is down. Ward river before extended trades."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Track Ambessa's Repeating Dashes before you commit",
+      "after": "Track Ambessa's Public Execution before you commit"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: held near your side so Ambessa overextends into your pattern. Worst wave: shoved to his tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot.",
+      "after": "Best wave: held near your side so Ambessa overextends into your pattern. Worst wave: shoved to her tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: held near your side so Ambessa overextends into your pattern. Worst wave: shoved to his tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot.",
+      "after": "Best wave: held near your side so Ambessa overextends into your pattern. Worst wave: shoved to her tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Shield + pot. Core: Heartsteel  (HP feeds everything), then Spirit Visage / Thornmail; boots Plated Steelcaps. Add anti-heal (Thornmail component early) — his healing fights your grind.",
+      "after": "Start Doran's Shield + pot. Core: Heartsteel  (HP feeds everything), then Spirit Visage / Thornmail; boots Plated Steelcaps. Add anti-heal before her 6 — Public Execution heals her through your grind."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Her mobility. E-knock around it. Only engage once it is down or baited.",
+      "after": "130s at rank 1, and it suppresses then stuns — do not be its target."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Ambessa wastes Repeating Dashes — commit the full pattern immediately.",
+      "after": "Each chunk is health back; Cell Division itself is a 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Ambessa's favourite window — refuse it and half his win condition is gone.",
+      "after": "That is Ambessa's favourite window — refuse it and half her win condition is gone."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Drakehound's Step rides every cast she makes — you cannot win it."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Her carry threat is 8.5/10 — if you are not tanky by two items you never get to engage at all."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Every blob you collect is a trade he paid for. Only take the trade when Ambessa's Repeating Dashes is down.",
+      "after": "Every blob you collect is a trade she paid for. Only take it when Public Execution is down — 130s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Ambessa's ultimate changes the math too.",
+      "after": "Public Execution at 6 blinks to the farthest enemy in the line, suppresses, then stuns — it is 130s at rank 1, so bait it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ambessa Repeating Dashes: matchup-defining — Her mobility. E-knock around it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Ambessa Public Execution: matchup-defining — 130s at rank 1, it suppresses then stuns. Do not be the target. - Ambessa Lacerate: 13s at rank 1, 325 range. - Your Elastic Slingshot: 21s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Charge E from a bush as Ambessa's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush once Public Execution is spent, grab her with Q then hit a minion — the knock-together needs two."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Charge E from a bush as Ambessa's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush once Public Execution is spent, grab her with Q then hit a minion — the knock-together needs two."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Charge E from a bush as Ambessa's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Ambessa wastes Repeating Dashes — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Public Execution is spent, grab her with Q then hit a minion — the knock-together needs two. Great trade: Ambessa wastes Public Execution — commit the full pattern immediately. Bad trade: Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Charge E from a bush as Ambessa's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Ambessa wastes Repeating Dashes — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Public Execution is spent, grab her with Q then hit a minion — the knock-together needs two. Great trade: Ambessa wastes Public Execution — commit the full pattern immediately. Bad trade: Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Ambessa's Repeating Dashes: Her mobility. E-knock around it. When it is down — E-Q + R her.",
+      "after": "Track Public Execution: 130s at rank 1, suppress then stun. When it is down — E-Q + R her."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Ambessa's mobility and Q sweet-spot damage win the opening levels outright — she dashes through your slow-charging engage and out-trades you in melee, so soak XP, dodge her Q edges, and don't fight while she has dashes up.",
+      "after": "Ambessa's Drakehound's Step and Cunning Sweep win the opening levels outright — a dash rides every ability she casts, so she slips your slow-charging engage; soak XP, dodge the Q edges, and never poke Repudiation's brace."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Through 4-6 she stays ahead: her R is a hard-lockdown all-in that beats your HP pool before you scale, so hold E as an escape and answer her engages rather than starting your own.",
+      "after": "Through 4-6 she stays ahead: Public Execution suppresses you and then stuns, beating your HP pool before you scale, so hold E as an escape and answer her engages rather than starting your own."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Ambessa's Q edges and dash mobility win the level-1 trade.",
+      "after": "Cunning Sweep's edges plus Drakehound's Step win level 1."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At 2 her chained dashes let her damage you and slip your engage.",
+      "after": "At 2 Lacerate plus Drakehound's Step slips your engage entirely."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 gives her a full combo that out-trades your melee W.",
+      "after": "Level 3 completes Cunning Sweep, Repudiation and Lacerate."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Her level-6 R lockdown all-in beats your HP before you're built.",
+      "after": "Public Execution suppresses, then stuns — it beats your raw HP."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Ambessa's chained dashes and Q let her weave in and out of trades; her damage on repeat Q edges outpaces your regen, so don't sit in her combo.",
+      "after": "Drakehound's Step rides every cast, so Cunning Sweep becomes Sundering Slam while she is already moving — don't sit in the combo, and never poke her brace."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Her R is a lockdown all-in that chunks you hard — save E to disengage rather than to start a fight you'll lose.",
+      "after": "Public Execution is a 130s lock-on at rank 1 that suppresses then stuns — save E to disengage, not to open."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "By two items it's even: your tank stats blunt her burst and your E-R engage matches her all-in, so fights come down to who lands first.",
+      "after": "By two items it's even, but Public Execution blinks to the FARTHEST enemy in its line — standing in front does not screen your backline."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Dodge her Q sweet spots and don't trade into her dash windows",
+      "after": "Don't poke Repudiation's brace — blocked damage amplifies it"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Chain her dashes to weave damage while dodging your slingshot",
+      "after": "Ride Drakehound's Step out of every Elastic Slingshot charge"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "All-in with R while you're low on HP or items",
+      "after": "Open with Public Execution's suppress on you"
+    }
+  ],
+  "notes": "HIGHEST-PRIORITY ITEM IN THIS SLICE. 'Repeating Dashes' is a fabricated ability name occupying 25 writable strings in champ-data/zac.full.js for this matchup, including focus.text, which means the loading screen shows the player an ability Ambessa does not have. The automated pass could not catch it: suspectNames is empty because the string is too distant from any real Ambessa name to score as a near miss, and the only defect raised was the generic 'never names any of Ambessa's abilities'. That detection gap is worth acting on beyond this matchup — a name-invention check should test every capitalised multi-word noun phrase in a matchup against the enemy's kit ability list, not just fuzzy-match the ones that are already close. I have proposed length-neutral swaps for all 25 (Public Execution is exactly the same 16 characters as Repeating Dashes), but two things still need a human. First, full.focus.letters is ['E'] and must move to ['R'] to match focus.text; it is an array rather than a string so it is outside the edit contract. Second, I chose Public Execution over Drakehound's Step deliberately — the generator's letters array points at E, but every sentence around the name says 'track it, engage when it is down', which is meaningless for a passive and near-meaningless for a 13s ability, whereas her 130s ultimate is genuinely the window Zac waits for. If the user prefers fidelity to the original intent over usefulness, the alternative repair is Lacerate throughout, which breaks the length band on dosFull[0].t and focus.text and would need those two rewritten. Deliberately not asserted: whether Public Execution's suppression can be cleansed or QSS'd, and whether Repudiation's brace blocks or merely reduces incoming damage. ambessa.json needsResearch is empty and the brief forbids inferring either from the file."
+}

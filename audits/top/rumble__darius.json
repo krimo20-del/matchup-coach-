@@ -1,0 +1,208 @@
+{
+ "ownerKey": "rumble",
+ "enemy": "darius",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Nothing in either layer tells the player to fire Electro Harpoon before Flamespitter. The kit's own E text is 'reducing their Magic Resist' and Rumble carries two harpoons.",
+   "why": "Both harpoons shred MR and Flamespitter is a 3-second damage-over-time cone, so every tick after the shred lands is amplified. Casting Q first and E after throws away the shred on most of the Q's duration. This is the single highest-value input the Rumble player controls in a lane where the trade maths is close.",
+   "corrected": "Land both Electro Harpoons first, then Flamespitter — the MR shred applies to every tick.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/rumble.json (E: reduces Magic Resist, 2 charges; Q: cone for 3 seconds)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "The text repeatedly frames Noxian Guillotine as something to survive but never says it is true damage, and the itemization advice elsewhere pushes resistances.",
+   "why": "Riot's R text is explicit: 'strikes a lethal blow, dealing true damage.' Magic resist and armour are both irrelevant to it. A Rumble who buys defensively expecting to live through the execute dies at the same health threshold he did before. Only raw health and distance change the answer.",
+   "corrected": "Noxian Guillotine is true damage — no resistance blunts it; only a health buffer and staying outside 460 range do.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/darius.json (R description, range 460)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Overheat is described as a personal mistake ('overheat at a bad time') but never tied to the specific thing it costs you in this matchup.",
+   "why": "Riot's passive text: at 100 Heat Rumble is 'unable to cast spells for a few seconds'. Scrap Shield is Rumble's only disengage tool — he has no dash — and Apprehend is a 535-range pull. Reaching 100 Heat while inside pull range removes the shield and the harpoon slow at exactly the moment Darius needs you to have neither.",
+   "corrected": "Never reach 100 Heat inside 535 range: Overheat locks out Scrap Shield, the only answer to Apprehend.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/rumble.json (P, W)",
+    "champ-data/_kits/darius.json (E range 535)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "content.early states Apprehend has a '24-second cooldown'. The packet also reports zero cooldown-sequencing cues in the whole matchup.",
+   "why": "Apprehend is 26/23.5/21/18.5/16. Rank 1 is 26s, not 24s. The entire matchup is built around whether that one button is up, so a two-second error on the wrong side is a real risk: a Rumble counting to 24 walks in while the pull is still live.",
+   "corrected": "Apprehend 26s at rank 1 falling to 16s at rank 5; Decimate 9s to 5s; Scrap Shield 6s flat at every rank; The Equalizer 130s at rank 1. Sequencing cue added: step inside 535 only after Apprehend whiffs.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/darius.json",
+    "champ-data/_kits/rumble.json"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "content.early claims that 'at Level 2 he can E-pull into W-slow-Q for a crippling trade'.",
+   "why": "That is three abilities at level 2. Darius has two points spent at level 2, so Apprehend plus Decimate or Apprehend plus Crippling Strike, never all three. The full E-W-Q chain is a level-3 threat. Selling it as a level-2 pattern makes the player over-respect level 2 and under-respect level 3, which is when the combo actually arrives.",
+   "corrected": "At level 2 it is Apprehend into Decimate; the full pull-slow-Decimate chain is a level-3 spike.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/darius.json (5 abilities, standard levelling)"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The matchup is labelled diff 'FAVOURED' at diffRating 4/10 on a 49.56% win rate, and the two layers disagree about who wins the early levels: full.phases gives Rumble levels 1-4, while content.win and the packet level chart both give Darius levels 1-2.",
+   "why": "49.56% over 1485 games is an even lane, not a favoured one. Worse, a player reading the level chart sees 'Darius' at level 1 and then reads the level-1 phase text telling him Flamespitter 'wins every melee level 1 — walk at them'. Walking at Darius at level 1 puts Rumble inside 535 pull range and inside Decimate's blade, which heals Darius. The two layers give opposite instructions on the most dangerous level in the lane.",
+   "corrected": "Difficulty restated as 5/10 at a 49.6% win rate; the level-1 and early-game text now says Darius owns levels 1-2 and that Rumble holds the outer edge of the 600 cone rather than walking in.",
+   "confidence": "High",
+   "sources": [
+    "packet winRate 49.56 / 1485 games",
+    "champ-data/_kits/darius.json (E 535, Q heal on outer blade)"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "content.spikes[2] calls The Equalizer a 'rocket wall' that he must 'eat or flash'. The kit file's derived flags also tag R (and Scrap Shield) as 'terrain'.",
+   "why": "The Equalizer is a damaging, slowing line of fire — it does not create collision terrain and does not block movement or dashes. A player who believes it walls Darius off will drop it as a barrier and then watch Darius walk straight through it into the kill. Scrap Shield is a shield plus a move-speed burst; the kit file's 'terrain' and 'knockup' flags on W are derived false positives with no support in Riot's own W text.",
+   "corrected": "Equalizer damages and slows across a line; it never blocks. Lay it across the retreat path so he eats ticks the whole way out.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/rumble.json (R: 'creating a wall of flames that damages and slows'; W: shield + speed only)"
+   ]
+  },
+  {
+   "point": 9,
+   "status": "needs-correction",
+   "whatIsWrong": "report[6].t (Rune Setup) prescribes 'Arcane Comet, Manaflow Band, Transcendence, Scorch'.",
+   "why": "Rumble's resource is Heat. He has no mana bar, so Manaflow Band is a dead rune that can never trigger or stack — the player is running three effective runes in a four-rune tree. Nimbus Cloak or Nullifying Orb occupy the same slot and both do something on a manaless champion.",
+   "corrected": "Swap Manaflow Band for Nimbus Cloak in the Sorcery second row.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/rumble.json (resource: 'Heat'; every ability costType Heat / No Cost)']"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "needs-correction",
+   "whatIsWrong": "report[8].t (Itemization) offers 'Anti-heal (Oblivion Orb / Executioner's)'.",
+   "why": "Executioner's Calling is an attack-damage item and cannot be built on an AP Rumble. The AP anti-heal line is Oblivion Orb into Morellonomicon. Naming an AD component as an option for a full-AP mage sends the player to the wrong shop tab against Darius, whose Decimate outer-blade heal is exactly what anti-heal is meant to answer.",
+   "corrected": "Anti-heal reads Oblivion Orb into Morellonomicon.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/darius.json (Q heals off champions hit by the blade)"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Darius owns you at Level 1 and 2 — his passive bleed stacks from any Q chip damage, and at Level 2 he can E-pull into W-slow-Q for a crippling trade you cannot escape without flash. Do not Q-poke him from melee range before you have Heat control locked in; instead play for last-hits at the absolute edge of Flamespitter's cone and accept that these levels are survival, not dominance. His outer-ring Q heals him, so short back-and-forth trades feed his sustain while stacking your Hemorrhage — you need to be outside pull range or committing a full kite, never in the middle. If he burns Apprehend aggressively, note the 24-second cooldown; that window is yours.",
+   "after": "Darius owns you at Level 1 and 2 — his passive bleed stacks from any Q chip damage, and at Level 2 an Apprehend pull into Decimate is already a crippling trade you cannot escape without Flash. Do not Q-poke him from melee range before you have Heat control locked in; instead play for last-hits at the absolute edge of Flamespitter's 600-unit cone and accept that these levels are survival, not dominance. His outer-ring Q heals him, so short back-and-forth trades feed his sustain while stacking your Hemorrhage — you need to be outside pull range or committing a full kite, never in the middle. If he burns Apprehend aggressively, note the 26-second rank-1 cooldown; that window is yours."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "With double Electro-Harpoon online you can slow and sidestep Apprehend, but his Q heal and bleed sustain mean neither side reliably runs the other out — read the cooldown.",
+   "after": "Both harpoons shred his MR before Flamespitter lands, but Decimate's outer-blade heal and his bleed mean neither side runs the other out — trade on Apprehend's 26s, not on feel."
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "Danger Zone Flamespitter matches his sustained trade, but 5-stack Noxian Guillotine still executes you if you mismanage spacing — these levels are skill-check, not free.",
+   "after": "Danger Zone Flamespitter matches his sustained trade, but Noxian Guillotine deals true damage — no amount of MR blunts it; only spacing and a health buffer keep you alive."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Equalizer across his escape path forces him to eat the rocket wall or flash it — drop it perpendicular to the wave, not on his feet.",
+   "after": "Equalizer across his escape path makes him eat the burn line or Flash — it slows and damages but never blocks, so lay it across, not on him."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Sustain Danger Zone Flamespitter through his outer-Q heal by trading short and stepping back before he stacks Hemorrhage",
+   "after": "Land both Electro-Harpoons before Flamespitter so the MR shred applies to every tick, then step back before he banks 3 Hemorrhage"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Flamespitter wins every melee level 1 — walk at them. Identify how Darius contests the first waves before you commit anything.",
+   "after": "Darius owns level 1 — Decimate's outer blade heals off you. Spit Flamespitter from the cone's 600 edge and never step inside 535."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Heat management is the kit: ride 50-100, never overheat by accident. Only take the trade when Darius's Apprehend is down.",
+   "after": "Ride 50-plus Heat for Danger Zone, never touch 100 — Overheat locks Scrap Shield, and the shield is your only answer to his pull."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "The lane-control window: trade around Apprehend's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+   "after": "Apprehend is 26s at rank 1 and 21s at rank 3 — a whiff hands you 20 seconds. Harpoon twice for the MR shred, then Flamespitter."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Darius Apprehend: matchup-defining — His all-in start. E-slow + kite. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+   "after": "- Apprehend: 26s at rank 1, 16s at rank 5 — his only gap-close; step inside 535 range only once it whiffs. - Decimate: 9s to 5s. - Scrap Shield: 6s flat, save it for the pull. - Equalizer: 130s at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.early",
+   "before": "Flamespitter wins every melee level 1 — walk at them. Respect Darius's Apprehend completely — the first levels are about banking small advantages, not proving a point.",
+   "after": "Flamespitter outranges his blade, but never walk inside 535 — Apprehend starts every Darius kill. Levels 1-2 are about banking last-hits, not proving a point."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.difficulty",
+   "before": "Overall difficulty: 4/10. The lane is decided by how well you track Apprehend and how disciplined your pattern is.",
+   "after": "Overall difficulty: 5/10 at a 49.6% win rate. The lane is decided by how well you track Apprehend and space it."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Darius's Apprehend (Pull): His all-in start. E-slow + kite. When it is down — Flame + E-R him.",
+   "after": "Fire both harpoons before Flamespitter — the MR shred boosts every tick. Guillotine is true damage."
+  },
+  {
+   "layer": "full",
+   "path": "report[11].t",
+   "before": "Get pulled into bleed. Overheat at a bad time. Fight at 5 stacks. Don't spend your ultimate on chip — it is the kill window.",
+   "after": "Standing inside 535. Hitting 100 Heat next to him. Fighting at 5 stacks. Spending Equalizer on chip instead of the kill window."
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Darius wins by landing Apprehend, denying your pattern, and out-trading your engage windows.",
+   "after": "Darius wins by landing Apprehend, stacking Hemorrhage to 5, and executing with true damage."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That is Darius's favourite window — refuse it and half his win condition is gone.",
+   "after": "Apprehend is his whole kill pattern — hold past 535 and half his lane is gone."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Rumble vs Darius - Track: Darius Apprehend. - Keep the wave on your side. - Engage only on Apprehend's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+   "after": "- Rumble vs Darius - Track: Apprehend, 26s at rank 1. - Keep the wave on your side. - Both harpoons before Flamespitter. - Never reach 100 Heat inside his pull range."
+  }
+ ],
+ "notes": "Two corrections are champion-wide and the applier's exactly-once rule blocks them: (1) report[6].t Rune Setup prescribes Manaflow Band on Rumble, who is manaless (Heat) — 70 byte-identical copies across rumble.full.js, so it cannot be reached through a per-matchup proposal. It is a dead rune in every one of those 70 matchups and needs a structural fix. Nimbus Cloak is the natural replacement. (2) report[8].t Itemization offers 'Executioner's' as anti-heal — an AD item on a full-AP champion; the AP line is Oblivion Orb into Morellonomicon. Also blocked: full.diff ('FAVOURED') and full.diffRating ('4/10') contradict a 49.56% win rate, and every phases[].side/.rating is shared boilerplate, so the full layer still scores Rumble ahead at levels 1-4 while content.win and the packet level chart both give Darius levels 1-2. I corrected the phase *why* text to match the level chart but the side labels themselves are unreachable. Kit-file warning for whoever maintains _missing-interactions.json: Rumble's Scrap Shield is tagged 'knockup' and 'terrain' and The Equalizer is tagged 'terrain'. All three are derived false positives — Scrap Shield is a shield plus a move-speed burst with no displacement, and The Equalizer is a damaging, slowing line that does not block movement. Nine generated 'terrain-cuts-retreat' and 'knockup-enabler' entries for Rumble rest on those flags and should not be written into any matchup. what-kills-me.js was not touched."
+}

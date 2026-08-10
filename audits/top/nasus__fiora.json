@@ -1,0 +1,146 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "fiora",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "53.58% over 573 games, matching MC_WR_TABLES. No elo-tier language present.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packets/nasus.json"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "breakdown.cooldowns is the shortest in the whole slice — 'Parries your Q. Bait it.' — and carries no number, despite Riposte being the declared focus of the entry. The packet credits this matchup with 2 sequencing cues, but neither is a cooldown.",
+   "why": "Riposte is 24/22/20/18/16s. Siphoning Strike is 7.5/6.5/5.5/4.5/3.5s. At rank 1 that is a better than three-to-one exchange rate in Nasus's favour: throwing a Q into her parry costs Nasus 7.5 seconds and costs Fiora 24. That single ratio is the entire lane plan and it is the reason 'bait it' is correct advice — but told without the numbers, a player has no idea that deliberately feeding a Q into Riposte is a good trade rather than a mistake.",
+   "corrected": "Riposte is 24s at rank 1 against your 7.5s Q — bait it with a Q on purpose, because you get yours back three times over.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/fiora.json (W cooldown 24/22/20/18/16)",
+    "champ-data/_kits/nasus.json (Q cooldown 7.5/6.5/5.5/4.5/3.5)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Neither layer mentions that Riposte has two outcomes, or which one Nasus can actually be hit by.",
+   "why": "Riot's text: the stab 'slows the first enemy champion hit, or stuns them if Fiora blocked an immobilizing effect with this ability.' Nasus's kit contains no immobilizing effect anywhere — kitFlags are autoReset, slow, zone, percentHealth, with no hardCC, knockup or silence. Wither is a slow, and a slow is not an immobilise. So the stun version of Riposte is unreachable in a straight 1v1 with Nasus: it can only ever come back as a slow. That materially changes how much a mistimed Q costs, and it also means the danger returns the moment an ally with hard CC joins the fight, which is worth knowing before a dive.",
+   "corrected": "Her parry only stuns if it blocks an immobilise. You have none, so solo it always comes back as a slow — but your jungler's CC can hand her the stun.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/fiora.json (W Riposte description)",
+    "champ-data/_kits/nasus.json (kitFlags)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Both layers state that Grand Challenge heals Fiora as though it were unconditional. content whys[4]: 'opens all four vitals and heals her'. mid: 'she can heal off them'. No layer mentions the condition.",
+   "why": "Riot's text: 'If Fiora hits all four Vitals or if the target dies after she has hit at least one, Fiora and her allies in the area are healed over the next few seconds.' The heal is all-or-nothing on four vitals. Deny a single one and the ult heals her for zero — and denying vitals is a positioning problem, which is exactly what Wither's move-speed slow interferes with, since she has to physically rotate to the revealed side. Presenting the heal as automatic removes the counterplay from a matchup where it is the main thing the player can do during her strongest window.",
+   "corrected": "The ult heal needs all four vitals hit, or you dead. Deny one and Grand Challenge heals her nothing.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/fiora.json (R Grand Challenge description)"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "Grievous Wounds is not mentioned anywhere in either layer, despite _missing-interactions.json raising needs-antiheal for this exact pairing.",
+   "why": "The flagged sources are Duelist's Dance (P) and Grand Challenge (R) — Fiora heals off every vital she hits and again off the ult. Nasus's stated win condition here is a long sidelane grind at 2+ items, which is precisely the fight shape where per-proc healing compounds. The entry's Itemization block recommends Trinity Force into Frozen Heart and Plated Steelcaps with no anti-heal at any point.",
+   "corrected": "Buy Grievous Wounds before you take the sidelane duel — her vitals and her ult both heal.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/_missing-interactions.json (needs-antiheal, nasus vs fiora)",
+    "champ-data/_kits/fiora.json (P and R heal flags)"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[4].why is the cross-matchup boilerplate — 'Fury of the Sands flips dives ... suddenly the stat-check runs your way. First real fight you're allowed to take' — while phases[4].side says Fiora and content whys[4] correctly calls level 6 her danger spike.",
+   "why": "Level 6 in this matchup is Fiora's spike, not Nasus's. She gains a 110s ult that opens four vitals at once and can parry the committed cast Nasus needs to land. Telling the player level 6 is 'the first real fight you're allowed to take' points them into the single worst fight in the matchup, and contradicts both the side field beside it and the content layer.",
+   "corrected": "Rewrite phases[4].why as her spike, and warn against ulting into a held Riposte.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/fiora.json (R, W)",
+    "champ-data/content/nasus.js (whys[4])"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[6].side is 'Skill' while its own why text reads '300+ stacks and two items: you out-duel Fiora on cooldown and three-shot her tower', and content win[6] says 'Nasus'.",
+   "why": "Same internally-verifiable error as the Darius entry: the side field contradicts the sentence printed directly beneath it, and the other layer already says Nasus. This matchup carries the widest layer divergence in the slice — full sides are [Fiora, Fiora, Fiora, Fiora, Fiora, Skill, Skill] against content [Fiora, Fiora, Skill, Skill, Fiora, Nasus, Nasus], disagreeing at four of seven stages — but stage 6 is the only one where a layer contradicts itself rather than the other layer.",
+   "corrected": "phases[6].side = Nasus. Stages 2, 3 and 5 flagged for the owner, not edited.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/nasus.full.js",
+    "champ-data/content/nasus.js"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Fiora Riposte: matchup-defining — Parries your Q. Bait it. Track it before every engage.",
+   "after": "- Fiora Riposte: matchup-defining — 24s at rank 1 against your 7.5s Q. Bait it with a Q and profit."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Parries your Q. Bait it. Only engage once it is down or baited.",
+   "after": "Parries your Q, but costs her 24s to your 7.5s. Bait it early."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Fiora, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "Grand Challenge is her spike, not yours: four vitals open at once and she can parry the cast you commit. Never ult into a held Riposte."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That is Fiora's favourite window — refuse it and half her win condition is gone.",
+   "after": "Vitals heal her on hit, and denying the fourth denies her whole ult heal."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+   "after": "Her parry only stuns if it blocks an immobilise; you have none, so it slows."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "Her level-6 Grand Challenge opens all four vitals and heals her, and she can W-parry your committed ult or cast to burst your fat HP with true damage.",
+   "after": "Grand Challenge opens all four vitals at once and can parry the ult you commit — but its heal needs all four hit, so denying one vital denies the heal."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Save Wither for the moment she commits her Q-in, then slow her so she cannot reposition for vitals",
+   "after": "Save Wither for her Q-in, then slow her so she cannot rotate onto the vital she still needs"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Her ult opens four vitals at once; if she dodges your committed all-in with W she can burst your fat HP bar with true damage before you stack enough.",
+   "after": "Her ult opens four vitals at once, so buy Grievous Wounds before this fight — vital hits heal her and landing all four heals her again on top."
+  }
+ ],
+ "notes": "The packet lists this matchup with 0 defects, which is misleading — it has the shortest and least useful breakdown.cooldowns in the slice ('Parries your Q. Bait it.') and it presents Fiora's ult heal as unconditional when it is strictly all-or-nothing on four vitals. Being flagged clean is not the same as being right.\n\nONE CLAIM I COULD NOT VERIFY AND DELIBERATELY DID NOT RULE ON: three strings state or imply that Fiora's PASSIVE vital procs deal true damage (content early: 'her passive does percent-max-HP true damage'; whys[0]: 'passive vital true damage'; whys[4] and spikes[1].text: 'burst your fat HP with true damage'). In the kit file the trueDamage flag sits on Grand Challenge (R), not on Duelist's Dance (P), and the passive's description mentions only healing and move speed with no damage type at all. That is not proof either way — a kit flag being absent means unknown, not no. So I neither asserted nor denied it. My replacements for whys[4] and spikes[1].text simply do not depend on the damage type, which removes two instances of the claim without the site ever stating the opposite. content early and whys[0] still carry it and I left them untouched. Someone with Wiki access should settle whether passive vital damage is true or magic, then either restore the wording everywhere or strike it everywhere — right now the site is inconsistent with itself.\n\nAlso left alone: full breakdown.cooldowns lists only ONE ability for Fiora, where every other matchup in the slice lists two. Her Lunge (Q, 13s at rank 1 falling to 6s) and Bladework (E, 11s to 7s) get no mention anywhere in the full layer. Adding a second bullet would have blown the length band on an already-short string, so this needs the field lengthened by whoever owns the template rather than a swap.\n\nLayer divergence is worst here of all nine matchups I audited: full sides [Fiora, Fiora, Fiora, Fiora, Fiora, Skill, Skill] vs content [Fiora, Fiora, Skill, Skill, Fiora, Nasus, Nasus] — four of seven stages disagree. I only edited stage 6, where the full layer contradicts its own why text."
+}

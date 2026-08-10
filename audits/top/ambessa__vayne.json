@@ -1,0 +1,221 @@
+{
+ "ownerKey": "ambessa",
+ "enemy": "vayne",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Five strings say Tumble grants invisibility from the start of the game: 'her tumble (Q) goes invisible', 'Tumble (Q) to invis and reposition', 'her tumble goes invis', 'her tumble (Q) goes invisible and condemn out-ranges everything', 'her invis and condemn punish every overcommit'.",
+   "why": "Tumble by itself is a plain reposition that empowers her next attack. The invisibility is granted by Final Hour (R) — 'Invisibility during Tumble' is listed in the ultimate, not the Q. So for the entire pre-6 lane the entry has Ambessa respecting a stealth that does not exist yet, which is exactly backwards: levels 1-5 are when she is most trackable and most punishable, and 6+ is when the tumble genuinely disappears. Tumble is also 6s at rank 1 falling to 2s at rank 5, and Final Hour shortens it further — those numbers are what 'punish a tumble on cooldown' needs to mean something.",
+   "corrected": "Tumble (Q), 6/5/4/3/2: a reposition that empowers her next attack. Invisibility during Tumble only exists while Final Hour (R) is active.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/vayne.json — Q Tumble (autoReset, no stealth flag), R Final Hour 'Invisibility during Tumble', Q cd 6/5/4/3/2"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Condemn is the tracked, matchup-defining ability in the whole full layer, yet its cooldown is never given and the condition on its stun is never stated.",
+   "why": "Condemn is 20 seconds at rank 1 — one of the longest cooldowns Ambessa faces in top lane, and the single largest exploitable window in the matchup. More importantly the knockback only becomes a STUN if the target collides with terrain: in open lane it is a reposition, against a wall it is a stun plus bonus damage. 'Dash to avoid it' is therefore only half the answer; choosing where you stand decides what the ability even does, and a melee champion with three dashes can pick that ground. Neither fact appears anywhere.",
+   "corrected": "Condemn (E), 20/18/16/14/12, 550 range: knockback, and only a stun if terrain stops you. Fight in open lane and bait the 20s before you commit.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/vayne.json — E Condemn 'If they collide with terrain, they are impaled, dealing bonus damage and stunning them', cd 20/18/16/14/12"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Six strings credit Public Execution with 'passive armor-pen plus healing' / 'flat armor-pen' / 'R passive healing' (spikes[1].text, spikes[2].text, whys[4], whys[5], mid, late).",
+   "why": "Riot's Public Execution text grants neither armour penetration nor healing — it is a 1250-range blink to the FARTHEST enemy champion in a chosen line, a suppress on arrival, then a slam for damage and a stun, on 130/115/100. The kit file's 'heal' flag on R is a tooltip-parsing misfire (see notes). Here the invented healing is directly load-bearing: content.late tells the player Vayne 'out-DPSes your R passive healing', which frames a sustain race Ambessa cannot enter. The real reason her level-6 window works is the blink range and the suppress landing through a kite she has no other answer to.",
+   "corrected": "Public Execution (R), 1250 range, 130/115/100: blink to the farthest champion in the chosen line, suppress on arrival, slam for damage and a stun.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ambessa.json — R Public Execution description, range 1250, cd 130/115/100"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "missing",
+   "whatIsWrong": "Night Hunter is never mentioned.",
+   "why": "It gives Vayne move speed when moving TOWARD nearby enemy champions, and Final Hour increases that bonus. The consequence is asymmetric and counterintuitive for the Ambessa player: Vayne closes on you faster than she retreats from you, so the moment she turns to kite is the moment her speed advantage disappears. That is the beat to re-dash on, and 'she kites you' as written implies a speed edge in both directions.",
+   "corrected": "Night Hunter (P) speeds her toward you, not away — her step-up is fast, her retreat is not. Re-dash the instant she turns.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/vayne.json — P Night Hunter 'gaining Move Speed when moving toward nearby enemy champions'; R Final Hour 'more bonus Move Speed from Night Hunter'"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "HARD at 7.5/10 with Vayne carry threat 9.5/10 reads correctly, and the prose arc is right: she owns the opener with range, Ambessa's one guaranteed catch arrives at 6, and percent-max-HP true damage takes the lane back at two items. The difficulty and carry numbers needed no change.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/vayne.json — W Silver Bolts trueDamage, E range 550 vs Ambessa Q range 650"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "The level chart is inverted against its own text at three of seven stages. win[0] and phases[0].side say Ambessa wins Level 1 while whys[0] and spikes[0].text both open 'Vayne owns the opener'; win[6] and phases[6].side say Ambessa wins 2+ items while whys[6] and spikes[3].text say 'Vayne reclaims it'; the same split appears at Level 3. The ratings compound it — phases[0] reads side 'Ambessa' with rating 2/10.",
+   "why": "A side of 'Ambessa' printed above a rating of 2/10 and a paragraph explaining why Vayne wins is three different answers on one card. I did not flip it: chart edits apply atomically, they are mirrored against the Vayne page, and guessing a power shift is worse than leaving a visible inconsistency. The prose is the half I trust — it is bespoke, it matches the kit, and I kept it factually correct — so the fix is to bring win[] and phases[].side into line with it, which is a call for the user.",
+   "corrected": "By the kit maths: Vayne at Level 1 (550-range Condemn and ranged autos vs one energy-gated Cunning Sweep), Ambessa at Level 6, Vayne at 2+ items (percent-max-HP true damage). Needs a human decision — see questionsForUser.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/content/ambessa.js — win[0]='Ambessa' vs whys[0] 'Vayne owns it'",
+    "champ-data/ambessa.full.js — phases[0].side='Ambessa' rating '2/10'"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Vayne owns it — at level 1 you have only an energy-gated Cunning Sweep while her tumble goes invis and condemn out-ranges you.",
+   "after": "Vayne owns it — at level 1 you hold one energy-gated Cunning Sweep while Tumble resets her spacing every 6s and Condemn out-ranges you."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "You own it — Public Execution blinks behind her, suppresses through tumble and stuns, and its armor-pen burst flips the kill.",
+   "after": "You own it — Public Execution blinks 1250 behind her, suppresses through the kite and stuns; Condemn is 20s, so bait it first."
+  },
+  {
+   "layer": "content",
+   "path": "whys[5]",
+   "before": "Your peak — first-item Q max plus an empowered auto and R's armor-pen chunk her before Silver Bolts and her items ramp.",
+   "after": "Your peak — first-item Q max into a Drakehound's Step auto chunks her before Silver Bolts and her item curve ramp."
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "Vayne reclaims it — Silver Bolts' percent-HP true damage ignores your Steelcaps and out-scales your physical-only kit at two items.",
+   "after": "Vayne reclaims it — Final Hour shortens Tumble and Silver Bolts' percent-HP true damage cuts straight through resistances at two items."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Vayne owns the opener — her tumble (Q) goes invisible and condemn (E) out-ranges your melee, energy-gated Cunning Sweep before you've unlocked Sundering Slam or Lacerate.",
+   "after": "Vayne owns the opener — Tumble is a 6s reposition and Condemn out-ranges your melee, energy-gated Cunning Sweep before you've unlocked Sundering Slam or Lacerate."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Public Execution blinks you behind her past any kite, suppresses through a tumble and stuns — your only guaranteed catch, and its passive armor-pen plus healing makes the follow-up brutal.",
+   "after": "Public Execution blinks you 1250 behind her past any kite, suppresses and stuns — your only guaranteed catch, and Condemn's 20s means one baited bolt buys the whole follow-up."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Your Q spike: Cunning Sweep into Sundering Slam plus an empowered auto and R's flat armor-pen chunk her before Silver Bolts and her item curve come online.",
+   "after": "Your Q spike: Cunning Sweep into Sundering Slam plus a Drakehound's Step empowered auto chunks her before Silver Bolts and her item curve come online."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Vayne's window — Silver Bolts (W) percent-HP true damage ignores Plated Steelcaps, and once R is down she kites your dash chains and condemns you into a wall.",
+   "after": "Vayne's window — Silver Bolts' third hit is percent-HP true damage, and Final Hour cuts Tumble's cooldown so she kites your dash chains and walls you."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Tumble (Q) to invis and reposition so your Sundering Slam line and R direction whiff",
+   "after": "Tumble every 6s to reposition so your Sundering Slam line and R direction whiff"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Stack Silver Bolts (W) true damage and condemn (E) you into terrain for the stun",
+   "after": "Stack Silver Bolts true damage and Condemn you into a wall for the extra stun"
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Vayne owns the opener — at level 1 you have only Cunning Sweep and you're energy-gated, while her tumble (Q) goes invisible and condemn (E) out-ranges everything you have. Don't walk into auto range to last-hit; farm with the outer edge of Cunning Sweep (it doubles on the rim) and eat a little poke rather than feed her Silver Bolts stacks. Once you hit 2-3 and your Q-into-Sundering-Slam plus Lacerate are online you can punish a tumble on cooldown, but the trade only pays off if you land E's near-total slow first — without it she kites out and condemns you when you overstay.",
+   "after": "Vayne owns the opener — at level 1 you have only Cunning Sweep and you're energy-gated, while Tumble resets her spacing every 6s and Condemn out-ranges everything you have. Don't walk into auto range to last-hit; farm with the outer edge of Cunning Sweep (it doubles on the rim) and eat a little poke rather than feed her Silver Bolts stacks. Once you hit 2-3 and your Q-into-Sundering-Slam plus Lacerate are online you can punish a spent Tumble, but the trade only pays off if you land E's near-total slow first — and stand off the wall, because Condemn only stuns you into terrain."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 4-5 are your weak window — cooldowns are longest here and a tumbling Vayne pokes and kites you while you farm toward 6. Then R flips it: Public Execution blinks you behind the farthest enemy in your chosen line, suppresses through her tumble and crashes her down for a stun, and its passive flat armor-pen plus healing-on-ability-damage makes the follow-up brutal. Bait her condemn before you commit, then R in, Lacerate to lock her with the near-total slow, and Cunning Sweep into Sundering Slam — chaining each cast into a Drakehound's Step empowered auto. Without R up, do not chase; her invis and condemn punish every overcommit.",
+   "after": "Levels 4-5 are your weak window — cooldowns are longest here and a tumbling Vayne pokes and kites you while you farm toward 6. Then R flips it: Public Execution blinks you 1250 behind the farthest enemy in your chosen line, suppresses her on arrival and crashes her down for a stun, and there is no kite that outruns a blink. Bait Condemn first — 20s at rank 1 — then R in, Lacerate to lock her with the near-total slow, and Cunning Sweep into Sundering Slam, chaining each cast into a Drakehound's Step empowered auto. Without R up, do not chase; Condemn punishes every overcommit, and it hurts most next to a wall."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "This is Vayne's game, not yours. Her Silver Bolts deal percent-max-HP true damage on every third hit, so the more you build the more she eats you — and Plated Steelcaps does nothing against true damage. Once she has two items she kites your Drakehound's Step dash chains, condemns you into a wall for the stun, and out-DPSes your R passive healing the moment Public Execution is on cooldown. Win this lane on your first-item Q spike and snowball the map; if it goes long, group and force fights where your R catches her out of position rather than ever trying to 1v1 a fed Vayne in an open lane.",
+   "after": "This is Vayne's game, not yours. Her Silver Bolts deal percent-max-HP true damage on every third hit, so the more you build the more she eats you — and armour is beside the point against true damage. Once she has two items Final Hour shortens Tumble, hides it, and she kites your Drakehound's Step chains and Condemns you into a wall for the stun. Win this lane on your first-item Q spike and snowball the map; if it goes long, group and force fights where your R catches her out of position rather than ever trying to 1v1 a fed Vayne in an open lane."
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Dive her early — dash to close before she kites. Ambessa wins the Condemn cooldown windows.",
+   "after": "Dive her early — close before she kites, off the walls. Ambessa wins Condemn's 20s window."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Dash-resets stack your passive shield mid-trade. Only take the trade when Vayne's Condemn is down.",
+   "after": "Repudiation is your shield, not the passive — brace her bolts and the blocked damage amplifies the slam."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Vayne Condemn: matchup-defining — Wall-stun. Dash to avoid it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+   "after": "- Vayne Condemn: 20s at rank 1 — the wall-stun. Bait it, then commit, and fight away from terrain so it is only a knockback. - Tumble: 6s at rank 1, 2s at rank 5, shorter again under Final Hour."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Vayne's Condemn: Wall-stun. Dash to avoid it. When it is down — Dash-combo + R her.",
+   "after": "Condemn only stuns if terrain stops you — fight in open lane and it is just a knockback."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Wall-stun. Dash to avoid it. Only engage once it is down or baited.",
+   "after": "Wall-stun on a 20s timer. Bait it, then commit — and fight off the walls."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Cast-dash-empowered-hit on Vayne's step-up, weave the second dash through his answer, and exit with shield banked.",
+   "after": "Night Hunter speeds her TOWARD you, not away — she closes fast and retreats slow, so re-dash the moment she turns."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That is Vayne's favourite window — refuse it and half his win condition is gone.",
+   "after": "Condemn is 20s at rank 1 — walking into it with your dashes spent is the loss."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+   "after": "Her third hit is percent-HP true damage — resists won't save you."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Ambessa vs Vayne - Track: Vayne Condemn. - Keep the wave on your side. - Engage only on Condemn's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+   "after": "- Ambessa vs Vayne - Track: Condemn, 20s. - Fight off the walls — no terrain, no stun. - Tumble is 6s at rank 1. - Her invisibility arrives with Final Hour."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Condemn's cooldown, on your level-6 spike, and on your Eclipse timing. Make him flinch first.",
+   "after": "Commit inside Condemn's 20s, on your level-6 spike, and on Eclipse. Make her spend the bolt first."
+  },
+  {
+   "layer": "full",
+   "path": "report[11].t",
+   "before": "Get kited and condemned. Fight her at 2 items. Let her free-farm. Don't spend your ultimate on chip — it is the kill window.",
+   "after": "Getting kited into a wall. Fighting her at 2 items. Letting her free-farm. Spending Public Execution on chip, not the kill."
+  }
+ ],
+ "notes": "LEVEL CHART LOOKS INVERTED, LEFT UNTOUCHED: see audit point 3 and questionsForUser. This may not be limited to the Vayne entry — the trundle entry has the same species of chart-versus-prose split, so a scripted comparison of win[]/phases[].side against the sentiment of whys[] across the whole Ambessa file would probably be cheaper than catching them one at a time. KIT-FILE FLAG MISFIRE: champ-data/_kits/ambessa.json tags Public Execution (R) with 'heal' and tags both Repudiation (W) and Public Execution (R) with 'grounding'; Riot's own descriptions support none of the three (the parser caught 'slams the ground' / 'slams the enemy into the ground'). The bogus 'heal' flag has leaked into shipped text as 'R passive armor-pen plus healing' in this entry and in the urgot entry, and is worth a scripted sweep across all 71 Ambessa matchups. WIN RATE: MC_WR_TABLES.ambessa.vayne is 43.74 while the packet reports 52.26 over 532 games — no win-rate edit proposed. The packet's suspect name 'Silver Bolts' is a false positive; it is correct."
+}

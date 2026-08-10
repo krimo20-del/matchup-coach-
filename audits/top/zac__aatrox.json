@@ -1,0 +1,271 @@
+{
+  "ownerKey": "zac",
+  "enemy": "aatrox",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet win rate 52.96% over 287 games matches MC_WR_TABLES.zac.aatrox = 52.96. No elo-tier language anywhere in either layer.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json",
+        "champ-data/content/zac.js MC_WR_TABLES"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The two layers give contradictory level charts. content.win is [Aatrox, Aatrox, Aatrox, Aatrox, Aatrox, Zac, Zac]; full.phases[].side is [Skill, Zac, Zac, Skill, Skill, Zac, Zac]. They agree on only the last two stages.",
+      "why": "The content chart is the accurate one: Aatrox out-duels Zac at every lane level and Zac's 52.96% comes from scaling, roams and teamfight, not from winning the 1v1. The full layer handing Zac levels 2 and 3 is flatly wrong — at 2 Aatrox adds Umbral Dash (9s dash plus a passive heal whenever he damages a champion) and at 3 he adds Infernal Chains. Zac has no answer to either yet. The one stage worth softening is level 1: Stretching Strikes is an 800-range poke and Aatrox's only level-1 heal is Deathbringer Stance, so that row is genuinely skill-decided.",
+      "corrected": "Set full.phases[].side to [Skill, Aatrox, Aatrox, Aatrox, Aatrox, Zac, Zac] and content.win[0] to Skill so the two layers agree. Not proposed as an edit because these are short categorical tokens (Zac=3, Skill=5, Aatrox=6 chars) and every flip breaks the plus/minus 10% length band the applier enforces — they need a chart-aware applier path.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aatrox.json E and P",
+        "packets/zac.json levelChart",
+        "champ-data/zac.full.js phases"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The two layers name different first items. content.spikes[2].text and content.late build around Sunfire/Bami; full.report[8].t, full.phases[5].why, full.breakdown.spikes and full.ahead all build around Heartsteel.",
+      "why": "A player reading the matchup page and the report gets two different core items for the same lane. I am not adjudicating which is correct on 26.15 — that is a meta call, not a kit fact — but they cannot both stand, and against Aatrox specifically the choice is not neutral: see point 10.",
+      "corrected": "Pick one first item and make both layers say it. Flagged rather than edited because choosing between them is outside what the kit files can settle.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/content/zac.js spikes[2] and late",
+        "champ-data/zac.full.js report[8] and phases[5]"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Four separate strings claim Aatrox heals off The Darkin Blade: content.early ('his Q sweet spots heal him'), content.whys[0] ('Aatrox's Q sweet-spot healing'), content.spikes[0].text ('his healing off the sweet spots'), content.wants.foe[0] ('Land all three Q edges to heal'). The Darkin Blade does not heal.",
+      "why": "Riot's own description of The Darkin Blade is damage only, and aatrox.json kitFlags places heal on P, E and R exclusively — the Q flag block is just {zone}. Aatrox's healing is Deathbringer Stance (passive) and Umbral Dash (passive-on-damage). This is not a wording quibble: Deathbringer Stance 'deals bonus magic damage and heals him, based on the TARGET's max health', so the single biggest health bar in the game is what sizes both halves. A Zac player told 'dodge the Q or he heals' will stand there and eat the passive proc instead — the one that actually scales with his own build.",
+      "corrected": "Rewrote all four to name Deathbringer Stance and state that it scales off Zac's max health.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aatrox.json P description and kitFlags.heal = [P,E,R]"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Both layers repeatedly say 'Q-stretch the knock-together' without ever stating that Stretching Strikes needs a second target to produce it.",
+      "why": "Riot's text: 'Zac stretches an arm, grabbing an enemy. Attacking a different enemy will cause him to throw both targets towards each other.' In a 1v1 against Aatrox with no minion in reach there is no knock-together at all — the grab just sits there. The entire advertised engage pattern silently depends on a second target being available, and nothing in the matchup says so.",
+      "corrected": "Rewrote tradeGood, dosFull[1].d, breakdown.trading, report[3].t and report[5].t to state the two-target requirement explicitly.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zac.json Q description"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "full.dosFull[0].d and full.report[5].t both say 'Sweetspots knock up'. Only the third swing of The Darkin Blade knocks up; the outer-edge sweetspot is a damage bonus and exists on all three swings.",
+      "why": "The guide's own dontsFull[0].t already says 'Eat his Q3 knockup', so the file contradicts itself. A Zac player who believes every sweetspot knocks up will refuse trades during the first two swings — which are exactly the ones he is allowed to trade into.",
+      "corrected": "Rewrote both to separate the third-swing knockup from the edge damage.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aatrox.json Q 'He can swing three times, each with a different area of effect'",
+        "champ-data/zac.full.js dontsFull[0].t"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.whys[4] and content.spikes[1].text both say World Ender refreshes Aatrox's dashes.",
+      "why": "Riot's description of World Ender lists exactly three buffs — bonus attack damage, increased healing, Move Speed — plus fearing nearby enemy MINIONS (not champions) and extending on takedown. Dash refresh is not in it. The error matters because it aims the player at the wrong danger: the real reason not to fight into R is the healing amplification, which is the thing Grievous Wounds answers.",
+      "corrected": "Rewrote both to the three verified buffs and pointed them at anti-heal.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aatrox.json R description",
+        "champ-data/_kits/_missing-interactions.json zac/aatrox needs-antiheal"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.whys[1] says 'At 2 his second Q charge lets him chunk you'. The Darkin Blade is not charge-based — one rank grants all three swings from level 1.",
+      "why": "Riot's text is 'He can swing three times', off a single 14s cooldown at rank 1. Aatrox gains nothing on Q at level 2; what he actually gains is Umbral Dash, a 9s dash that also passively heals him whenever he damages a champion. The stated reason the level-2 row goes to Aatrox is therefore wrong even though the row itself is right.",
+      "corrected": "Rewrote whys[1] and full.phases[1].why around Umbral Dash and its 9s rank-1 cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aatrox.json Q and E, cooldowns 14/12/10/8/6 and 9/8/7/6/5"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "full.breakdown.cooldowns spends two of its three bullets on unnamed placeholders — 'Your committal tool: never spend it on chip' and 'Your ultimate: the win condition' — and never mentions Infernal Chains at all.",
+      "why": "Infernal Chains is 20/18/16/14/12s at 825 range, the longest non-ultimate cooldown Aatrox owns and the tool that converts a Zac step-up into the full Darkin Blade sequence. On the other side Zac's own Elastic Slingshot is 21/18/15/12/9s — 21 seconds at rank 1, longer than anything Aatrox has bar his ultimate. Those two numbers are the entire cooldown story of this lane and neither was written down.",
+      "corrected": "Replaced the placeholder bullets with Infernal Chains (20s rank 1, 825 range) and Elastic Slingshot (21s rank 1).",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aatrox.json W",
+        "champ-data/_kits/zac.json E"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Nothing anywhere notes that stacking raw maximum health against Aatrox increases both the damage and the heal he gets from Deathbringer Stance.",
+      "why": "Deathbringer Stance is explicitly scaled to the target's max health for damage and heal alike. Zac already carries an enormous base health pool and both layers push him toward more of it (Heartsteel in the full layer, Sunfire plus 'a big HP pool' in the content layer). The item is not necessarily wrong, but the trade-off is real, completely unstated, and it is the reason resistances and Grievous Wounds matter more here than another health item.",
+      "corrected": "Landed the max-health scaling in content.early, whys[0], spikes[0].text and wants.foe[0]. The item-choice half is left in notes rather than forced into a fixed-length string, because picking Heartsteel over Sunfire is a meta call the kit files cannot settle.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aatrox.json P",
+        "champ-data/_kits/zac.json"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "full.dontsFull[2] is titled 'Forget anti-heal' but its description is 'Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away', which is about blobs and says nothing about healing. The same string is reused as tradeBad.",
+      "why": "Same pasted-description bug seen elsewhere in this dataset: the card heading and its body are about different things, so the one Don't that should teach Grievous Wounds timing teaches blob pickups instead. The description is also wrong on its own terms — see point 13.",
+      "corrected": "Rewrote dontsFull[2].d to World Ender's healing amplification and the Grievous Wounds timing, matching its title.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js dontsFull[2]",
+        "champ-data/_kits/aatrox.json R"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeBad, dontsFull[2].d, breakdown.trading and report[3].t all claim that enemies stomping Zac's blobs costs him 'your passive revive margin'.",
+      "why": "Cell Division has two separate halves. The chunks Zac sheds when an ability hits are sustain, and the enemy can destroy them. The four bloblets are created only on taking fatal damage, and it is their health that sets the revive. Destroying shed chunks during a trade costs sustain and nothing else — it does not shrink the revive. The line also never states the number that actually governs the revive, which is Cell Division's flat 5 minute cooldown.",
+      "corrected": "Rewrote the bad-trade line to separate shed chunks from the revive and to give Cell Division's 5 minute cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zac.json P description"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Aatrox out-trades you at every early level: his Q sweet spots heal him and your Unstable Matter needs blobs of minions or him in melee to matter, so just soak XP and dodge the Q edges by stepping toward him through the swing rather than back into the far tip.",
+      "after": "Aatrox out-trades you early: The Darkin Blade never heals him — Deathbringer Stance does, and it scales off your max health, so the biggest bar in the game feeds it. Soak XP and dodge the Q edges by stepping toward him through the swing rather than back into the far tip."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-6 stay his: two Q charges plus World Ender let him win any extended trade and punish a mistimed Elastic Slingshot, so hold E as a peel/escape tool and never engage while his ult is up.",
+      "after": "Levels 3-6 stay his: Umbral Dash's passive heal plus World Ender win any extended trade and punish a mistimed Elastic Slingshot — yours is 21s at rank 1, so hold E to peel, never to open."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Aatrox's Q sweet-spot healing beats your level-1 regen so he owns the opening trade.",
+      "after": "Deathbringer Stance heals off your max health, and yours is the biggest bar in the game."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At 2 his second Q charge lets him chunk you before your W scales, keeping him ahead.",
+      "after": "At 2 he adds Umbral Dash — a 9s dash plus a passive heal on every hit he lands on you."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 gives him full Q combo healing that your Unstable Matter can't match yet.",
+      "after": "Level 3 adds Infernal Chains: 825 range, and the pull starts his full Q sequence."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "World Ender at 6 refreshes his dashes and healing, so the fight is his to take.",
+      "after": "World Ender at 6 gives AD, Move Speed and amped healing — anti-heal or don't fight."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Aatrox's Q edges every all-in once he has two casts; his healing off the sweet spots outpaces your passive regen if you trade into raw Q hits.",
+      "after": "Aatrox's Q edges every all-in from rank 1 — all three swings come off one cast. His heal is Deathbringer Stance, sized by your max health."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "His World Ender flips a losing fight into a kill by refreshing dashes and healing, so don't E in when his R is up.",
+      "after": "His World Ender flips a losing fight with bonus AD, Move Speed and amped healing, so don't E in when his R is up."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land all three Q edges to heal and chunk you",
+      "after": "Land Deathbringer Stance on your huge HP bar"
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Charge E from a bush as Aatrox's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush, grab him with Q then hit a minion — the knock-together needs two targets — then W and eat blobs."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Letting him stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Charge E from a bush as Aatrox's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush, grab him with Q then hit a minion — the knock-together needs two targets — then W and eat blobs."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Sweetspots knock up. Sidestep them. Only engage once it is down or baited.",
+      "after": "Only the third swing knocks up; the edge is bonus damage. Sidestep both."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "World Ender amplifies his healing — Grievous Wounds has to be on him before you commit at 6."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Every blob you collect is a trade he paid for. Only take the trade when Aatrox's The Darkin Blade is down.",
+      "after": "He takes Umbral Dash at 2 — a 9s dash and passive healing on every hit. Trade only when The Darkin Blade is down."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Aatrox's ultimate changes the math too.",
+      "after": "World Ender at 6 adds AD, Move Speed and amplified healing — get Grievous Wounds before it and never open into a live R."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Aatrox The Darkin Blade: matchup-defining — Sweetspots knock up. Sidestep them. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Aatrox The Darkin Blade: matchup-defining — the third swing knocks up. Sidestep it. - Aatrox Infernal Chains: 20s at rank 1, 825 range — the pull that starts every combo. - Your Elastic Slingshot: 21s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Charge E from a bush as Aatrox's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Aatrox wastes The Darkin Blade — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush, grab him with Q then hit a minion — the knock-together needs two targets — then W and eat blobs. Great trade: Aatrox wastes The Darkin Blade — commit the full pattern immediately. Bad trade: Letting him stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Charge E from a bush as Aatrox's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Aatrox wastes The Darkin Blade — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush, grab him with Q then hit a minion — the knock-together needs two targets — then W and eat blobs. Great trade: Aatrox wastes The Darkin Blade — commit the full pattern immediately. Bad trade: Letting him stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Aatrox's The Darkin Blade: Sweetspots knock up. Sidestep them. When it is down — E-Q + R him.",
+      "after": "Track The Darkin Blade: only the third swing knocks up. When it is down — E in, Q him, hit a minion, R."
+    }
+  ],
+  "notes": "FALSE POSITIVE in the packet: suspectNames flags 'His World Ender' as a probable wrong ability name (distance 4). World Ender is correct — aatrox.json R is 'World Ender' and the distance is entirely the 'His ' prefix. No name change made. Left for a later run: Aatrox can cast Umbral Dash during a Darkin Blade swing to reposition the sweetspot mid-animation, which is the single most useful thing a Zac player could know about dodging it, but animationCancels is null in aatrox.json and the brief forbids asserting it from the kit file — unverified here, not disproven. Also unresolved and outside kit scope: whether Sunfire (content layer) or Heartsteel (full layer) is the correct 26.15 first item — the layers disagree and one of them needs to change, and note that whichever is chosen, raw max-health stacking measurably increases Deathbringer Stance's damage and heal against Zac specifically. WKM_LINES for zac checked: both lines read correctly. 'His blobs revive him — stomp them' refers to the post-death bloblets, which is the correct use of that mechanic, so it does not carry the shed-chunk confusion found in this matchup's tradeBad."
+}

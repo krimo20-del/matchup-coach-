@@ -1,0 +1,282 @@
+{
+  "ownerKey": "zac",
+  "enemy": "akshan",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet win rate 53.38% over 133 games matches MC_WR_TABLES.zac.akshan = 53.38. No elo-tier language in either layer.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json",
+        "champ-data/content/zac.js MC_WR_TABLES"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "content.win gives Akshan 6 of 7 stages against a 53.38% Zac win rate, and disagrees with full.phases[].side, which reads [Akshan, Skill, Zac, Zac, Akshan, Zac, Zac].",
+      "why": "Akshan really does own levels 1-3 here — Avengerang out-ranges everything Zac has and Dirty Fighting shields him every third hit — and level 6 is genuinely his. But handing him the first-item row as well leaves Zac one stage out of seven while winning the matchup by three points, and the full layer already contradicts it.",
+      "corrected": "content.win should read [Akshan, Akshan, Akshan, Skill, Akshan, Zac, Zac]. Not proposed as an edit — the tokens are 3 to 6 characters and any flip breaks the plus/minus 10% length band.",
+      "confidence": "Medium",
+      "sources": [
+        "packets/zac.json winRate and levelChart",
+        "champ-data/zac.full.js phases"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.whys[4] calls Comeuppance a 'level-6 global R' and content.spikes[1].text calls it 'a global assassination and roam tool'. Comeuppance is not global.",
+      "why": "Riot lists Comeuppance at 2500 range. The 5500-range ability in Akshan's kit is Going Rogue, which is the camouflage roam tool — the guide has attributed the roaming to the wrong ability entirely. Worse, Comeuppance 'deals damage based on missing health to the first champion, MINION, or structure hit', so a single minion standing in the line absorbs the whole ultimate. A Zac player told the R is a global assassination will play the fog wrong and will never learn the one counterplay that exists, which is keeping a body between himself and the lock-on.",
+      "corrected": "Rewrote both to give Comeuppance's real 2500 range and the first-target-blocks rule, and moved the roam threat to Going Rogue where it belongs.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/akshan.json R range 2500 and description, W range 5500"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing in either layer states that Heroic Swing requires terrain to anchor to, or that colliding with a champion knocks Akshan off it mid-swing. Heroic Swing is named eleven times in the full layer as the matchup-defining cooldown and is described only as 'His dash + camera swing escape'.",
+      "why": "Riot's text: 'Akshan fires a grappling hook into terrain then swings around it... He can jump off early or gets knocked off when colliding with champions or terrain.' Both halves are counterplay a Zac player can actually execute. The terrain requirement tells him where on the lane Akshan cannot escape; the champion-collision rule means Zac's own body — the largest one available — is a hard stop on the escape the entire matchup is built around tracking. Neither is written down anywhere.",
+      "corrected": "Put the terrain requirement and the collision rule into dosFull[0].d, wants.you[0], whys[2], breakdown.cooldowns and report[5].t.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/akshan.json E description, cd 18/16.5/15/13.5/12"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Avengerang is described only as a Q that 'comes back to him'. Its range-extension property is never mentioned.",
+      "why": "Riot's text: the boomerang 'extends its range each time it hits an enemy'. Its base range is 850, but through a minion wave it reaches considerably further. This inverts the ordinary top-lane instinct — standing behind the wave normally buys safety, and against Akshan it is what lets the poke reach you. That is a genuinely non-obvious fact and it is the reason the early levels go to him.",
+      "corrected": "Added the range extension to content.early and content.spikes[0].text, and Avengerang's 9s rank-1 cooldown and 850 base range to breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/akshan.json Q description, cd 9/8/7/6/5, range 850"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.early says to 'use minion waves to build W stacks' and content.wants.you[1] says to 'use minion blobs to charge W'. Zac's W does not stack or charge.",
+      "why": "Unstable Matter is a flat 5 second cooldown at every rank with no charges and no stacking mechanic — it simply explodes for a percentage of nearby enemies' max health. What the player is actually meant to do is pick up the chunks Cell Division sheds. The advice is right in spirit and wrong in every mechanical detail, which is how players end up hoarding a resource that does not exist.",
+      "corrected": "Rewrote both lines around eating shed blobs instead of a nonexistent W resource.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zac.json W cooldown '5', P description"
+      ]
+    },
+    {
+      "point": 8,
+      "status": "missing",
+      "whatIsWrong": "_missing-interactions.json flags stealth-needs-vision for this exact pairing and nothing in either layer mentions vision as a requirement. report[10].t says only 'Ward river before extended trades'.",
+      "why": "Going Rogue is camouflage on an 18/14/10/6/2 second cooldown falling to zero mana at rank 5, and Zac's kit contains no reveal of any kind — zac.json has no revealsStealth entry. Against most laners a river ward is a convenience; against this one a control ward and a sweeper are the only way the map is legible at all, and the cooldown becomes almost free as he ranks it.",
+      "corrected": "Rewrote report[10].t to make control wards and a sweeper explicit rather than generic river warding.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/_missing-interactions.json zac/akshan stealth-needs-vision",
+        "champ-data/_kits/akshan.json W",
+        "champ-data/_kits/zac.json"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "full.breakdown.cooldowns gives Heroic Swing no number and fills its other two bullets with unnamed placeholders — 'Your committal tool' and 'Your ultimate'. Its Heroic Swing bullet also repeats the same instruction twice: 'Engage when it's down. Track it before every engage.'",
+      "why": "Heroic Swing is 18/16.5/15/13.5/12s, Avengerang is 9/8/7/6/5s, and Zac's Elastic Slingshot is 21/18/15/12/9s. Zac's own escape-and-engage tool is on the longest cooldown of the three at rank 1, which is precisely why spending it into a live Heroic Swing is the losing pattern the guide keeps warning about without ever quantifying.",
+      "corrected": "Replaced the placeholders with the three real cooldowns and cut the duplicated instruction.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/akshan.json E and Q",
+        "champ-data/_kits/zac.json E"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Three Do/Don't descriptions do not match their titles. dosFull[2] 'Pick up every blob' is described with 'Akshan wastes Heroic Swing — commit the full pattern immediately'. dontsFull[1] 'Let him stomp blobs' is described with 'Burning it for tiny value leaves you naked for its full cooldown'. dontsFull[2] 'Fight with passive down' is described with the blob-stomping line that belongs under dontsFull[1].",
+      "why": "The descriptions are one slot out of alignment with their headings — dontsFull[2]'s body is literally the answer to dontsFull[1]'s title. Same pasted-description bug seen in the Nasus slice and in this file's Akali entry.",
+      "corrected": "Rewrote all three to answer their own headings, and used dontsFull[2] to state Cell Division's 5 minute cooldown, which its title 'Fight with passive down' assumes the reader already knows.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js dosFull and dontsFull",
+        "champ-data/_kits/zac.json P"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeBad, dontsFull[2].d, breakdown.trading and report[3].t all claim stomped blobs cost 'your passive revive margin'.",
+      "why": "Cell Division's shed chunks are sustain and can be destroyed by the enemy; the four bloblets appear only on taking fatal damage and are what set the revive. Stomping chunks mid-trade costs sustain only. The number that governs the revive — a flat 5 minute cooldown — appears nowhere in the matchup even though dontsFull[2] is titled 'Fight with passive down'.",
+      "corrected": "Separated the two halves in the bad-trade line and put the 5 minute cooldown into the two cards that assume it.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zac.json P description"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Akshan out-ranges and out-mobiles you early: his Q comes back to him and his passive shields make short trades bad for you, so soak XP and use minion waves to build W stacks rather than chasing him.",
+      "after": "Akshan out-ranges and out-mobiles you early: Avengerang extends its range with every enemy it clips, and Dirty Fighting shields him on every third hit, so soak XP and eat your shed blobs instead of chasing."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-6 stay uphill — his E swing dodges your Elastic Slingshot and his R gives roam pressure you can't match, so play for wave control and answer his engages instead of starting your own.",
+      "after": "Levels 3-6 stay uphill — Heroic Swing is 18s at rank 1 and needs terrain, but it still dodges Elastic Slingshot, and it is Going Rogue's camouflage that gives the roam pressure, not his ultimate."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Akshan's returning Q and passive shield win the level-1 poke war.",
+      "after": "Avengerang returns for free and Dirty Fighting shields every third hit."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 E-swing lets him dodge your engage and control trades.",
+      "after": "Heroic Swing needs a wall, but it dodges your engage at level 3."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "His level-6 global R adds roam pressure that outweighs your kit.",
+      "after": "Comeuppance is 2500 range, not global — Going Rogue is the roam."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Akshan pokes with Q and pushes off his passive procs; his W and E swing let him dodge your Elastic Slingshot, so bait the E before you commit.",
+      "after": "Avengerang extends its range through every minion it clips, so a wave is no cover. Heroic Swing dodges Elastic Slingshot — bait it before you commit."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "His R is a global assassination and roam tool — track his flanks and don't overextend past river without vision.",
+      "after": "Comeuppance is 2500 range and the first minion in the line eats it — the flank threat is Going Rogue's camouflage."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Force his E dash out before throwing your slingshot",
+      "after": "Body-block Heroic Swing — champion collision ends it"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Use minion blobs to charge W and out-sustain his Q poke",
+      "after": "Eat your shed blobs to out-sustain his Avengerang poke"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Poke with Q and reset his passive on you",
+      "after": "Poke with Avengerang, land his third hit"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Grapple away with E every time you wind up your engage",
+      "after": "Grapple off terrain with Heroic Swing as you wind up E"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Roam with R while you're stuck farming under turret",
+      "after": "Roam under Going Rogue's camouflage while you farm"
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Charge E from a bush as Akshan's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush once Heroic Swing is spent, grab him with Q then hit a minion — the knock-together needs two."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Letting him stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His dash + camera swing escape. Engage when it's down. Only engage once it is down or baited.",
+      "after": "It needs terrain to anchor to, and colliding with a champion knocks him off it mid-swing."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Charge E from a bush as Akshan's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush once Heroic Swing is spent, grab him with Q then hit a minion — the knock-together needs two."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Akshan wastes Heroic Swing — commit the full pattern immediately.",
+      "after": "Each blob is health back, and Cell Division is a 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Akshan's favourite window — refuse it and half his win condition is gone.",
+      "after": "Heroic Swing answers a telegraphed slingshot — 18s at rank 1, so bait it first."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Every chunk he steps on is health you paid a trade to shed."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Cell Division is a flat 5 minute cooldown — without it you are a big target with one bar."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Akshan's ultimate changes the math too.",
+      "after": "Comeuppance is 2500 range and scales off your missing health, but the first minion or champion in the line eats all of it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Akshan Heroic Swing: matchup-defining — His dash + camera swing escape. Engage when it's down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Akshan Heroic Swing: matchup-defining — 18s at rank 1, needs terrain, and champion collision knocks him off it. - Akshan Avengerang: 9s at rank 1, 850 base range, extended by every enemy it clips. - Your Elastic Slingshot: 21s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Charge E from a bush as Akshan's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Akshan wastes Heroic Swing — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Heroic Swing is spent, grab him with Q then hit a minion — the knock-together needs two. Great trade: Akshan wastes Heroic Swing — commit the full pattern immediately. Bad trade: Letting him stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Charge E from a bush as Akshan's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Akshan wastes Heroic Swing — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Heroic Swing is spent, grab him with Q then hit a minion — the knock-together needs two. Great trade: Akshan wastes Heroic Swing — commit the full pattern immediately. Bad trade: Letting him stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Akshan's Heroic Swing: His dash + camera swing escape. Engage when it's down. When it is down — E-slingshot + blob sustain.",
+      "after": "Track Heroic Swing: it needs terrain, and champion collision ends it. When it is down — E-slingshot, Q into a minion, blob up."
+    },
+    {
+      "layer": "full",
+      "path": "report[10].t",
+      "before": "Your CC is premium gank setup — ping your jungler when Heroic Swing is down. Ward river before extended trades.",
+      "after": "Premium gank setup, but Going Rogue is camouflage and you have no reveal — control wards and a sweeper, not optional."
+    }
+  ],
+  "notes": "The 'global R' error in this matchup is worth checking for across the rest of the file: Comeuppance is 2500 range and the content layer asserted it was global in two separate strings, which suggests a generator that treated any long-range ultimate as global. Deliberately not asserted: whether Going Rogue's camouflage is available with no Scoundrel marked. Riot's text reads 'When activated, Akshan enters camouflage and gains Move Speed and Mana Regen while moving towards Scoundrels', which is ambiguous about whether the camouflage itself is conditional on a Scoundrel existing. Everything I wrote about Going Rogue holds either way, but the stronger claim — that he can vanish at will from minute one — needs a wiki pass. Also unverified and left alone: whether Zac's Elastic Slingshot knockup interrupts Heroic Swing mid-flight. Champion COLLISION knocking him off is stated by Riot and I used that; a knockup landing on him during the swing is a different question and akshan.json needsResearch is empty. Nothing in champ-data was modified."
+}

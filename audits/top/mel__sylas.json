@@ -1,0 +1,218 @@
+{
+ "ownerKey": "mel",
+ "enemy": "sylas",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Four places call Abscond / Abduct a stun: breakdown.cooldowns and report[5].t and dosFull[0].d all say 'Dash into chain-stun', and content wants.foe[0] says 'Land E chain-dash stun ... and lock you'. content.early calls it 'that double-dash stun'.",
+   "why": "Abscond / Abduct carries no crowd control at all. Riot's text is 'Sylas dashes to a location. Sylas can recast the ability to throw his chains out, pulling himself to an enemy he hits' — the derived flags are projectile and dash only, with no hardCC. Compare Swain's Nevermove in the same library, which does get hardCC from 'roots enemies it hits', so the flag derivation does detect CC when it is present. Sylas's only lane CC is Chain Lash's slow. This matters concretely: a Mel player who believes E stuns will hold Flash for a stun that never lands, and will not realise she can simply walk out of the follow-up.",
+   "corrected": "Abduct pulls Sylas to you and deals damage; it does not stun. The lockdown in his combo is Chain Lash's slow, and the dash itself is only 400 range.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sylas.json (E Abscond/Abduct flags: projectile, dash; range 400)",
+    "champ-data/_kits/sylas.json (Q Chain Lash flags: slow)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[2].d offers 'take the fifteen-second invitation' after Sylas wastes his E, and tradeBad / dontsFull[2].d / report[3].t / breakdown.trading all say Rebuttal is 'gone for twenty seconds'.",
+   "why": "Both numbers are wrong at every rank. Abscond / Abduct is 13/12/11/10/9 — thirteen seconds at rank 1, nine at rank 5, never fifteen. Rebuttal is 38/35/33/29/26 — the shortest it ever gets is 26s, so 'twenty seconds' understates Mel's exposure by at least a third and at rank 1 by nearly half.",
+   "corrected": "Sylas's E hole is 13s at rank 1; Rebuttal's is 38s at rank 1.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sylas.json (E cd 13/12/11/10/9)",
+    "champ-data/_kits/mel.json (W cd 38/35/33/29/26)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].t says 'Reflect Abscond / Abduct back the moment he commits', treating the whole ability as reflectable.",
+   "why": "The ability has two halves and only one is a projectile. Abscond is the dash; Abduct is the chain throw, and that is what carries the projectile flag. Telling the player to reflect 'Abscond / Abduct' invites her to burn a 38s Rebuttal on the dash, which is the half W has no purchase on.",
+   "corrected": "Name the recast specifically — the Abduct chain is the reflect target.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sylas.json (E flags: projectile, dash — the recast throws the chains)",
+    "champ-data/_kits/mel.json (W Rebuttal reflects enemy projectiles)"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The entry is labelled HARD at 8/10 with all seven phases handed to Sylas, but the recorded win rate is 55.56% over 27 games and the content layer's own chart gives Mel levels 2-4 and 6.",
+   "why": "The phase objects contradict themselves: phases[0].side is 'Sylas' while its own why reads 'Q volleys win every level-1 range war', and phases[2].side is 'Sylas' under 'Full kit: E snare into full Q volleys is your core chunk'. The side field looks bulk-filled. A 55.56% win rate on the largest sample in this slice cannot support an 8/10 hard rating, and the body text describes a lane Mel wins early and loses late — that is an even matchup with a scaling problem, not a hard one.",
+   "corrected": "Rate it EVEN at 6/10 with Sylas's carry threat left at 8.5/10, which preserves the real warning (he out-scales you) without telling the player she has already lost the lane.",
+   "confidence": "Medium",
+   "sources": [
+    "packet mel.json (sylas winRate 55.56, games 27)",
+    "champ-data/content/mel.js (win[] = Skill, Mel, Mel, Mel, Skill, Mel, Sylas)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "The packet's recorded defect is that the entry never names a single Sylas ability. The content layer says 'his E', 'his W drain', 'Q/W drain-and-heal' throughout.",
+   "why": "Named abilities are what make the advice actionable on the loading screen — 'Kingslayer' is something a player can watch for on the enemy bar, 'his W drain' is not. Riot's names are Petricite Burst, Chain Lash, Kingslayer, Abscond / Abduct and Hijack.",
+   "corrected": "Named Chain Lash, Kingslayer, Abscond and Abduct across early, spikes and wants without changing the tactical content.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sylas.json (ability names)"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "The content layer names Sylas's drain-heal as the thing that beats Mel in four separate strings (mid, late, spikes[3], whys[3], whys[6]) and never once mentions Grievous Wounds.",
+   "why": "Kingslayer heals him off champions on a 6s cooldown at rank 5, and the entry's stated late-game losing condition is exactly that heal out-pacing Mel's chip. Anti-heal is the item answer and the content layer never says so — the full layer's Itemization line does, but a player reading the content panel never sees it.",
+   "corrected": "Put the Grievous Wounds call where the drain-heal problem is actually described.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/_missing-interactions.json (mel/sylas needs-antiheal)",
+    "champ-data/_kits/sylas.json (W Kingslayer flags: dash, heal; cd 12/10.5/9/7.5/6)"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[1].text and mid both hinge on 'only commit when his R is down' but give no cooldown for Hijack.",
+   "why": "Hijack is 80/55/30 — the rank-1 window is 80 seconds, which is a genuinely long punish window, and by rank 3 it is only 30 seconds and effectively always up. That collapse from 80s to 30s is the actual shape of the matchup after level 16 and the entry never states it.",
+   "corrected": "Give the number so the player knows a level-6 Hijack is a real 80s window and a late one is not.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sylas.json (R Hijack cd 80/55/30)"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Sylas Abscond / Abduct: matchup-defining — Dash into chain-stun — punish him hard while it is down. Check it before every step-up. - W Rebuttal is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+   "after": "- Sylas Abscond / Abduct: matchup-defining — 400-range dash plus a chain pull, no stun; it is 13s at rank 1 and that hole is your step-up. - W Rebuttal is the lifeline; chip damage never gets it. - The ult answers fights, not waves."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Sylas’s Abscond / Abduct: Dash into chain-stun — punish him hard while it is down. It’s down or you don’t go.",
+   "after": "Track Sylas’s Abscond / Abduct: a 400 dash and a chain pull, no stun. Rebuttal reflects the Abduct chain. 13s at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Dash into chain-stun — punish him hard while it is down. Until it’s spent, every commit is a coin flip.",
+   "after": "A 400 dash into a chain pull — punish him hard while it is down. Until it’s spent, every commit is a coin flip."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].t",
+   "before": "Reflect Abscond / Abduct back the moment he commits",
+   "after": "Reflect the Abduct chain — the recast, not the dash"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Sylas burns Abscond / Abduct on nothing — take the fifteen-second invitation.",
+   "after": "Sylas burns Abscond / Abduct on nothing — take the 13s invitation at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "tradeBad",
+   "before": "Burning Rebuttal on chip damage and then standing in Abscond / Abduct range — your only defensive layer is gone for twenty seconds.",
+   "after": "Burning Rebuttal on chip damage and then standing in Abscond / Abduct range — your only defensive layer is gone 38s at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Burning Rebuttal on chip damage and then standing in Abscond / Abduct range — your only defensive layer is gone for twenty seconds.",
+   "after": "Burning Rebuttal on chip damage and then standing in Abscond / Abduct range — your only defensive layer is gone 38s at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "report[3].t",
+   "before": "Good trade: Snare through the wave onto his farming spot, fan two full Q volleys while he's locked, and step back with W ready before his answer comes off cooldown. Great trade: Sylas wastes Abscond / Abduct — commit immediately. Bad trade: Burning Rebuttal on chip damage and then standing in Abscond / Abduct range — your only defensive layer is gone for twenty seconds.",
+   "after": "Good trade: Snare through the wave onto his farming spot, fan two full Q volleys while he's locked, and step back with W ready before his answer comes off cooldown. Great trade: Sylas wastes Abscond / Abduct — commit immediately. Bad trade: Burning Rebuttal on chip damage and then standing in Abscond / Abduct range — your only defensive layer is gone 38s at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Snare through the wave onto his farming spot, fan two full Q volleys while he's locked, and step back with W ready before his answer comes off cooldown. Bad trade: Burning Rebuttal on chip damage and then standing in Abscond / Abduct range — your only defensive layer is gone for twenty seconds.",
+   "after": "Good trade: Snare through the wave onto his farming spot, fan two full Q volleys while he's locked, and step back with W ready before his answer comes off cooldown. Bad trade: Burning Rebuttal on chip damage and then standing in Abscond / Abduct range — your only defensive layer is gone 38s at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "diff",
+   "before": "HARD",
+   "after": "EVEN"
+  },
+  {
+   "layer": "full",
+   "path": "diffRating",
+   "before": "8/10",
+   "after": "6/10"
+  },
+  {
+   "layer": "full",
+   "path": "tone",
+   "before": "#ff5d6c",
+   "after": "#e8b84b"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.difficulty",
+   "before": "Hard matchup — difficulty 8/10, Sylas carry threat 8.5/10.",
+   "after": "Even matchup — difficulty 6/10, Sylas carry threat 8.5/10."
+  },
+  {
+   "layer": "full",
+   "path": "report[14].t",
+   "before": "Hard matchup — difficulty 8/10, Sylas carry threat 8.5/10.",
+   "after": "Even matchup — difficulty 6/10, Sylas carry threat 8.5/10."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Land E chain-dash stun to close the 550-range gap and lock you for his Q/W drain combo",
+   "after": "Abscond in and recast Abduct to close the gap, then Chain Lash slow into Kingslayer"
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Sylas has to walk into your 550 range to farm, and that is where you tax him. At level 2 with Q and Solar Snare, root him the moment he steps up for a last-hit or commits an early E, then layer Q bolts and empowered autos to stack Overwhelm. Dodge his E chain-dash — that double-dash stun is his only gap-closer onto you, so if he whiffs it he eats free poke with no answer. Hold W to negate his E projectile and any poke he throws and fire it back.",
+   "after": "Sylas has to walk into your 550 range to farm, and that is where you tax him. At level 2 with Q and Solar Snare, root him the moment he steps up for a last-hit or commits an early Abscond, then layer Q bolts and empowered autos to stack Overwhelm. His E is only a 400 dash and it does not stun — Abduct's chain is the reach, so if that whiffs he eats free poke. Hold W for the Abduct chain and fire it back."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Q poke plus Solar Snare root lets you punish every time Sylas walks up to last-hit or tries to E-Q onto you.",
+   "after": "Q poke plus Solar Snare root punishes every time Sylas walks up to last-hit or tries Abscond into Chain Lash."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Sylas's Q/W drain-and-heal out-statchecks your poke once he has AP — his all-in sustain beats your kite, so this is his window.",
+   "after": "Kingslayer's heal out-statchecks your poke once he has AP — buy Grievous Wounds before this window or his sustain beats your kite."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Golden Eclipse detonates your Overwhelm stacks for burst from range, but his R can steal that same ult and turn it back on you — only commit when his R is down.",
+   "after": "Golden Eclipse detonates your Overwhelm stacks for burst from range, but Hijack can take that same ult — at rank 1 it is 80s, so a wasted Hijack is a real window."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "With Q, E and W online you out-poke him, root his engage, and feed his E projectile back through your wall.",
+   "after": "With Q, E and W online you out-poke him, root his Abscond, and feed the Abduct chain back through your wall."
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "Two AP items turn his Q/W drain-and-heal into sustain that out-statchecks your poke and his E all-in beats your kite — his game now.",
+   "after": "Two AP items turn Kingslayer into sustain that out-statchecks unmitigated poke — without Grievous Wounds his all-in beats your kite from here."
+  }
+ ],
+ "notes": "PHASE CHART LEFT ALONE ON PURPOSE: all seven full.phases[].side read 'Sylas' while content.win reads Skill, Mel, Mel, Mel, Skill, Mel, Sylas — and several phase objects contradict their own why text (phases[0].side 'Sylas' under 'Q volleys win every level-1 range war'). I did not propose side edits because the fixed-length rule blocks them: 'Sylas' is 5 characters and 'Mel' is 3, a 40% cut that the applier will reject. Only the two 'Sylas' -> 'Skill' swaps would fit, and fixing 2 of 7 would leave the chart more incoherent than it is now. This needs either a length-rule exemption for the side field or a manual pass. It very likely affects all 71 Mel entries, not just this one. I did adjust diff / diffRating / tone / difficulty text, which are length-safe, since 'HARD 8/10' against a 55.56% win rate on 27 games is the clearest single error in the entry. UNVERIFIED, LEFT IN PLACE: spikes[1] and mid claim Sylas can Hijack Golden Eclipse and 'turn it back on you'. Hijack does steal the ultimate, but Golden Eclipse only damages targets already carrying Mel's Overwhelm stacks, which Sylas has no way to apply. Whether a hijacked Golden Eclipse does anything meaningful is not answerable from the kit files. I rewrote the sentence to keep the Hijack warning and add the real 80s cooldown without asserting either way on how hard the stolen ult hits."
+}

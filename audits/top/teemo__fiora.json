@@ -1,0 +1,196 @@
+{
+  "ownerKey": "teemo",
+  "enemy": "fiora",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers claim Fiora can Riposte a Blinding Dart and stun in return: wants.foe[1] \"Parry (W) Blinding Shot to cleanse the blind and stun Teemo, turning his primary anti-trade tool into her kill window\"; early \"she will Riposte (W) immediately to cleanse your Q and stun you in return\"; full breakdown.cooldowns and dosFull[0].d \"Parries + cleanses your blind\".",
+      "why": "Riposte's stab stuns only when Riposte parried an immobilising effect; otherwise it slows. Blind is not an immobilising effect, and Teemo's kit contains no immobilising effect at all — Noxious Trap slows, Blinding Dart blinds, Move Quick is a self-buff. So in a Teemo-vs-Fiora 1v1 Riposte can never produce the stun this entry warns about; the worst case is that she eats the blind and slows you. This is the single most decisive correction in the matchup: the entry currently teaches Teemo to never open with Q, which throws away his best tool for a threat that does not exist.",
+      "corrected": "Riposting your Blinding Dart costs her the blind and gives her a slow, not a stun — the stun requires her to parry an immobilising effect and you have none. Blind into her Riposte is a bad trade only because you lose the blind, not because you get stunned.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/fiora.json (W Riposte: 'This stab slows the first enemy champion hit, or stuns them if Fiora blocked an immobilizing effect with this ability.')", "champ-data/_kits/teemo.json (kitFlags contain no hardCC; R flags slow/zone)"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags it directly: \"level chart contradicts data: Teemo wins 52.85% but the chart gives Fiora 4/7 stages vs 1\". content win[] is [Fiora, Skill, Skill, Fiora, Teemo, Fiora, Fiora] while the full layer's phases[] already reads [Fiora, Skill, Teemo, Teemo, Fiora, Teemo, Teemo].",
+      "why": "The two layers disagree, and it is the content layer that contradicts the win rate. The two stages that are actually mis-assigned are Level 1 and Levels 4-5, and both are settled by cooldowns rather than opinion: Lunge is 13s at rank 1 against Blinding Dart's flat 7s, and Lunge is 400 range against Teemo's 680 auto/Q range, so at Level 1 she gets one committed approach for every two blinds. At Levels 4-5 Riposte is 24s/22s against a flat 7s Q, meaning three blinds per parry — that is a contested stage, not a Fiora-owned one. I did not touch Level 6, First item or 2+ items: Grand Challenge and Ravenous Hydra genuinely flip the duel and those stages should stay hers.",
+      "corrected": "win[0] Fiora -> Teemo, win[3] Fiora -> Skill (and the matching full-layer sides), giving Teemo 2 / Skill 3 / Fiora 2 — consistent with 52.85% while leaving her late-game duel dominance intact.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/fiora.json (Q Lunge cooldown 13/11.25/9.5/7.75/6, range 400; W Riposte cooldown 24/22/20/18/16)", "champ-data/_kits/teemo.json (Q cooldown 7 flat, range 680)", "scratchpad packet teemo.json entry fiora defects[0]"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "The entry is built entirely around 'bait Riposte' and 'trade around Riposte's cooldown' but never states a single cooldown number for either side.",
+      "why": "Riposte is 24/22/20/18/16 and Lunge is 13/11.25/9.5/7.75/6, against Blinding Dart's flat 7 seconds at every rank. The whole matchup is that ratio: early on you get three blinds per Riposte and two per Lunge, and that shrinks to roughly two and one by rank 5. Without the numbers 'bait it and punish' is unactionable.",
+      "corrected": "Riposte 24s at rank 1 falling to 16s at rank 5; Lunge 13s at rank 1 falling to 6s at rank 5; Blinding Dart a flat 7s at every rank. Your edge is largest at levels 1-5 and shrinks every time she ranks Q or W.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/fiora.json", "champ-data/_kits/teemo.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "mid says \"Your Q is at or near max rank\" at Levels 4-5.",
+      "why": "Blinding Dart is rank 2-3 at levels 4-5 and not maxed until level 9. It is also flat 7s at every rank, so 'near max rank' implies a spike that does not exist.",
+      "corrected": "Removed; the Levels 4-5 argument is now the Riposte-to-Blinding-Dart cooldown ratio, which is the real mechanic.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/teemo.json (Q cooldown '7' flat across ranks)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The ability name is written as \"Blind Shot\" or \"Blinding Shot\" in whys[0], whys[6], early, mid, spikes[0].text, spikes[2].text, wants.you[0], wants.foe[0] and wants.foe[1].",
+      "why": "Teemo's Q is Blinding Dart. Neither 'Blind Shot' nor 'Blinding Shot' exists.",
+      "corrected": "Blinding Dart throughout.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/teemo.json (Q: Blinding Dart)"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing explains why the blind is only a partial answer to her Vitals.",
+      "why": "_missing-interactions.json flags 'Fiora applies on-hit through Lunge (Q)'. Because Lunge deals damage and applies on-hit effects as an ability, it can take a Vital while she is blinded — the blind only stops her basic attacks and the two empowered attacks of Bladework (E). That is why 'blind her and you are safe' is wrong and why Vital positioning still matters through a blind.",
+      "corrected": "Blind kills her basic attacks and Bladework, but Lunge is an ability and still hits a Vital through the blind — keep rotating your body so the exposed Vital is on the side she cannot lunge to.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/fiora.json (Q Lunge: 'deals physical damage and applies on-hit effects'; flags dash,onHit)", "champ-data/_kits/_missing-interactions.json teemo/fiora: onhit-itemization"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text calls the item \"Liandry's Anguish\".",
+      "why": "The current item is Liandry's Torment; the Teemo full layer already writes it that way.",
+      "corrected": "Liandry's Torment.",
+      "confidence": "High",
+      "sources": ["champ-data/teemo.full.js (Itemization report line: \"then Liandry's Torment\")"]
+    },
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "52.85% over 526 games. The entry's own late text quotes '52% win rate', which is consistent.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["scratchpad packet teemo.json entry fiora"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[0]",
+      "before": "Fiora",
+      "after": "Teemo"
+    },
+    {
+      "layer": "content",
+      "path": "win[3]",
+      "before": "Fiora",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Fiora's passive Vital appears at level 1 and her basic attacks chunk Teemo's low HP before Blinding Shot can prevent it — she sets the poke tone first.",
+      "after": "Blinding Dart is a flat 7s at 680 range while Lunge is 13s at 400 — she gets one committed approach per two blinds, so level 1 is yours to bank."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Fiora's level 4-5 sustained duel — Vitals proc twice per pattern and her base stats out-trade Teemo's poison DPS in extended range — she controls the wave and dictates spacing.",
+      "after": "Riposte is 24s at rank 1 and 22s at rank 2 while your Blinding Dart is a flat 7s — you get three blinds per parry, so 4-5 is a genuine coin-flip, not her stage."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "At 2-plus items Fiora's percent-max-HP true damage from Vitals plus healing shreds Teemo's HP pool in one rotation regardless of Blind Shot — she owns every straight duel from here out.",
+      "after": "At 2-plus items Fiora's percent-max-HP true damage from Vitals plus healing shreds Teemo's HP pool in one rotation regardless of Blinding Dart — she owns every straight duel from here out."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Fiora owns level 1 cleanly — she can Q-dash onto you before your Blind Shot range forces a decision, and her passive Vital proc at level 1 deals percent-max-HP true damage that your E poison cannot trade back into. Last-hit from maximum auto range, never push toward her, and accept that this is a farm level. The moment she hits level 2 her Lunge (Q) gives her a reliable gap-close that bypasses your E poison kite entirely if she angles it off a minion; do not auto-attack her first because that telegraphs your position and she will Riposte (W) immediately to cleanse your Q and stun you in return. Your only real win here is surviving to level 3 with HP parity — use Move Quick (W) reactively to stay at the edge of your AA range and never let her walk you into her tower where she can take a free Vital.",
+      "after": "Level 1 is closer than it looks — Lunge is 13 seconds at rank 1 against your flat 7-second Blinding Dart, and her 400 range has to cross your 680, so one blinded approach costs her the whole exchange. Last-hit from maximum auto range and punish every step-in. Once Lunge is ranked it becomes a reliable gap-close that bypasses your E poison kite entirely if she angles it off a minion; do not auto-attack her first because that telegraphs your position and she will Riposte (W) the follow-up. Riposte cannot stun you, though — it only stuns when it parries an immobilising effect and nothing in your kit immobilises — so the worst it does is eat the blind and slow you. Use Move Quick (W) reactively to stay at the edge of your AA range and never let her walk you into her tower where she can take a free Vital."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 belong to Fiora in the straight duel, but your map control starts pulling ahead. Your Q is at or near max rank — use it as bait, not as an opener. Walk up, trigger her Lunge or Riposte reaction, then immediately back off; if she commits Riposte to block nothing she will try to trade into you without it, and that is your window to land Blind Shot and stack three to four E ticks before disengaging with Move Quick. Shroom the tribush, both river entrances, and the lane-center bush behind you — these do not exist to kill her, they exist to punish the Q dash landing spot and slow her enough that Move Quick breaks the gap. Level 6 flips the kill threat: Grand Challenge creates four Vitals that she can chain through your low HP pool in one rotation even through a Blind, so the moment she uses R get off the wave immediately and path toward a mushroom you already placed.",
+      "after": "Levels 4-5 are a genuine coin-flip, not her stage — Riposte is 24 seconds at rank 1 against your flat 7-second Q, so you get three blinds per parry. Use Q as bait, not as an opener. Walk up, trigger her Lunge or Riposte reaction, then immediately back off; if she commits Riposte to block nothing she will try to trade into you without it, and that is your window to land Blinding Dart and stack three to four E ticks before disengaging with Move Quick. Shroom the tribush, both river entrances, and the lane-center bush behind you — these do not exist to kill her, they exist to punish the Q dash landing spot and slow her enough that Move Quick breaks the gap. Level 6 flips the kill threat: Grand Challenge creates four Vitals that she can chain through your low HP pool in one rotation even through a blind, so the moment she uses R get off the wave immediately and path toward a mushroom you already placed."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Fiora gets Lunge (Q) at level 2 — her primary gap-close comes online and she can dash onto you before Blind Shot connects, so respect her all-in threat the moment she hits 2.",
+      "after": "Lunge (Q) is her gap-close from the moment she ranks it, but at rank 1 it is 13 seconds — once she spends it you own the next dozen seconds with nothing she can close on."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Teemo's first Liandry's Anguish is the window to force trades: your poison DoT now outdamages her Vital proc healing, and Rylai's mushrooms slow her out of Lunge range.",
+      "after": "Teemo's first Liandry's Torment is the window to force trades: your poison DoT now outdamages her Vital proc healing, and Rylai's mushrooms slow her out of Lunge range."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Fiora's Grand Challenge activates four Vitals and can execute you even through a Blind Shot — never duel her at 6 without a clear escape route or mushroom net behind you.",
+      "after": "Fiora's Grand Challenge activates four Vitals and can execute you even through a Blinding Dart — never duel her at 6 without a clear escape route or mushroom net behind you."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Bait Riposte (W) with a dummy auto, then land Blinding Shot while it is on cooldown so her Q dash auto combo misses entirely",
+      "after": "Bait Riposte (W) with a dummy auto — it is 24s at rank 1 — then land Blinding Dart in that window so her dash-auto combo misses"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Dash (Q) onto Teemo at angle, activate a Vital, and take the trade before Blind Shot's cast animation connects",
+      "after": "Dash (Q) onto Teemo at an angle, activate a Vital, and take the trade before Blinding Dart's cast connects"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Parry (W) Blinding Shot to cleanse the blind and stun Teemo, turning his primary anti-trade tool into her kill window",
+      "after": "Parry (W) Blinding Dart to eat the blind — but it only slows you, since Riposte stuns solely off immobilising CC"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Fiora",
+      "after": "Teemo"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "AA-poke + E poison wins almost every melee level 1. Identify how Fiora contests the first waves before you commit anything.",
+      "after": "AA-poke + E poison wins level 1: Lunge is 13s at rank 1 against your flat 7s blind, and 400 range against your 680."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Teemo",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Riposte's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Genuinely even: Riposte's 24s against your flat 7s blind gives you three blinds per parry. Bank small leads, do not force."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Fiora Riposte: matchup-defining — Parries + cleanses your blind. Bait it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Fiora Riposte: matchup-defining — 24s at rank 1, parries the blind but cannot stun you. Bait it. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Parries + cleanses your blind. Bait it. Only engage once it is down or baited.",
+      "after": "Parries the blind, but cannot stun you — nothing of yours immobilises. 24s."
+    }
+  ],
+  "notes": "I deliberately did not touch the claim that Fiora's Vitals deal percent-max-HP true damage. It is very likely correct, but the Data Dragon passive text in champ-data/_kits/fiora.json is a truncated tooltip variant ('Fiora has revealed a Vital on this Champion') that carries no damage type, so it is not verifiable from local sources and I was told not to speculate. Same for whether Riposte removes an already-applied blind versus preventing it during the parry window — I only corrected the stun claim, which the kit text settles outright. Residual layer divergence after my edits: content win[] and full phases[] still disagree at Level 3, Level 6, First item and 2+ items. Both charts are now individually consistent with a 52.85% win rate, so I left those alone rather than invent shifts, but somebody should decide which chart is canonical for this champion."
+}

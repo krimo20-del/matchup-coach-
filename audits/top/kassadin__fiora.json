@@ -1,0 +1,236 @@
+{
+  "ownerKey": "kassadin",
+  "enemy": "fiora",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "full.diff says FAV while diffRating is 8/10 and both difficulty lines say 'Hard matchup', against a 50% win rate over 12 games. Three different verdicts in one file.",
+      "why": "50% is even. FAV, 8/10 and 'Hard matchup' cannot all be right. I could not fix it inside the length band - 'FAV' is 3 characters and 'EVEN' is 4, and '8/10' is 4 while '6.5/10' is 6 - so both are outside the +/-10% rule. Raised as a question instead of guessing which one the user wants.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packets/kassadin.json (50%, 12 games)",
+        "champ-data/kassadin.full.js"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldowns anywhere; 'Riposte down' was the entire timing model.",
+      "why": "Riposte is 24/22/20/18/16s - by far the longest cooldown in the lane and the reason a baited Riposte is worth more than any trade. Lunge is 13s at rank 1 and only 400 range; Grand Challenge is 110/90/70s.",
+      "corrected": "breakdown.cooldowns, dosFull[0].d, dosFull[2].d, report[9].t and loading now carry 24s, 13s and 110s.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/fiora.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page says in four separate places that Riposte STUNS you when it parries Null Sphere - 'she Ripostes your Null Sphere (stunning you and blocking its shield)', 'Riposte your Null Sphere with W to stun you'. It does not. Riot: Riposte 'slows the first enemy champion hit, or stuns them if Fiora blocked an immobilizing effect with this ability'. Null Sphere is damage plus a shield, not an immobilizing effect, so parrying it can only slow you. Separately, content.early tells you to hold Q 'to stun a cast' - Null Sphere interrupts channels, it does not stun.",
+      "why": "The difference decides whether you can still Riftwalk out of a parried trade. Believing you get stunned means never casting Q near her; knowing it is only a slow means you can still leave.",
+      "corrected": "Corrected in content.spikes[1].text, content.early, content.mid, content.whys[4], content.wants.foe[1], full.dosFull[0].d and full.report[5].t.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/fiora.json (W)",
+        "champ-data/_kits/kassadin.json (Q)"
+      ]
+    },
+    {
+      "point": 5,
+      "status": "missing",
+      "whatIsWrong": "Nothing said Lunge applies on-hit effects.",
+      "why": "Riot: 'Fiora lunges in a direction and stabs a nearby enemy, dealing physical damage and applying on-hit effects.' Her item damage therefore rides a 13-second dash, which is why armour alone reads her trades wrong.",
+      "corrected": "Added to report[5].t and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/fiora.json",
+        "champ-data/_kits/_missing-interactions.json (onhit-itemization)"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "'Add anti-heal early into his sustain' - wrong pronoun, no source.",
+      "why": "Duelist's Dance restores health on every Vital hit and Grand Challenge heals Fiora AND her nearby allies, so Grievous Wounds is the difference between chunking her and chunking nothing.",
+      "corrected": "report[8].t rewritten.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/fiora.json",
+        "champ-data/_kits/_missing-interactions.json (needs-antiheal)"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer called Fiora 'he'/'his' throughout and described her as a juggernaut.",
+      "why": "Fiora is female and is a duelist-assassin.",
+      "corrected": "Fixed tldr, winCon, report[0].t, report[1].t, tradeGood, tradeBad, dosFull[1].d, dosFull[2].t, dontsFull[0].t, dontsFull[2].d, breakdown.trading, report[3].t, report[9].t and report[11].t.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/fiora.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "He dives, you can't answer yet — give the lane and steal the game at three items.",
+      "after": "She dives and you cannot answer yet - give the lane and steal the game at three items."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "He dives, you can't answer yet — give the lane and steal the game at three items.",
+      "after": "She dives and you cannot answer yet - give the lane and steal the game at three items."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Concede early, then out-blink every dive he commits. Shorthand: Riposte down, wave right, go.",
+      "after": "Concede early, then out-blink every dive she commits. Shorthand: Riposte spent, wave right, go."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Concede early, then out-blink every dive he commits. Shorthand: Riposte down, wave right, go.",
+      "after": "Concede early, then out-blink every dive she commits. Shorthand: Riposte spent, wave right, go."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Fiora Riposte: matchup-defining — Parries your damage and CC, then stuns — never lead with CC into it. Count it out loud if you must. - Your Q shield has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Riposte: 24s at rank 1 and it parries everything, but it only stuns if it blocks an immobilizing effect - and nothing you own is one. - Lunge is 13s at rank 1, only 400 range, and it carries her on-hit items. - Grand Challenge: 110/90/70s."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Parries your damage and CC, then stuns — never lead with CC into it. Bait it, count it, then go.",
+      "after": "Parries all your damage for its window, then slows - it stuns only if it blocks real CC."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Fiora’s Riposte: Parries your damage and CC, then stuns — never lead with CC into it. The whole green-light system is its cooldown.",
+      "after": "Riposte parries everything and then slows - it stuns only if it blocks CC, and yours is not. Lunge carries her on-hit items."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Riftwalk onto him the instant Riposte goes down, Q-E-W in one breath, and walk out as the shield absorbs his counter — repeat every six seconds.",
+      "after": "Riftwalk onto her the instant Riposte is spent, Q-E-W in one breath, and leave on the 5-second Riftwalk before she can stack a Vital."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Riftwalk onto him the instant Riposte goes down, Q-E-W in one breath, and walk out as the shield absorbs his counter — repeat every six seconds.",
+      "after": "Riftwalk onto her the instant Riposte is spent, Q-E-W in one breath, and leave on the 5-second Riftwalk before she can stack a Vital."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Any trade before level 6 — you have no mobility, no real damage, and every juggernaut pattern in the game beats your face in a straight exchange.",
+      "after": "Anything cast into an up Riposte - it parries the whole trade and hands her the slow, and her Lunge is back every 13 seconds anyway."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Any trade before level 6 — you have no mobility, no real damage, and every juggernaut pattern in the game beats your face in a straight exchange.",
+      "after": "Anything cast into an up Riposte - it parries the whole trade and hands her the slow, and her Lunge is back every 13 seconds anyway."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Riftwalk onto him the instant Riposte goes down, Q-E-W in one breath, and walk out as the shield absorbs his counter — repeat every six seconds. Bad trade: Any trade before level 6 — you have no mobility, no real damage, and every juggernaut pattern in the game beats your face in a straight exchange.",
+      "after": "Good trade: Riftwalk onto her the instant Riposte is spent, Q-E-W in one breath, and leave on the 5-second Riftwalk before she can stack a Vital. Bad trade: Anything cast into an up Riposte - it parries the whole trade and hands her the slow, and Lunge is back every 13 seconds anyway."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Riftwalk onto him the instant Riposte goes down, Q-E-W in one breath, and walk out as the shield absorbs his counter — repeat every six seconds. Great trade: Fiora wastes Riposte — commit immediately. Bad trade: Any trade before level 6 — you have no mobility, no real damage, and every juggernaut pattern in the game beats your face in a straight exchange.",
+      "after": "Good trade: Riftwalk onto her the instant Riposte is spent, Q-E-W in one breath, and leave on the 5-second Riftwalk before she can stack a Vital. Great trade: Fiora parries a minion - you own the next 24 seconds. Bad trade: Anything cast into an up Riposte - it parries the whole trade and hands her the slow, and Lunge is back every 13 seconds anyway."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].t",
+      "before": "Blink-kite his dives after 6",
+      "after": "Blink-kite her dives after 6"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Fiora whiffs Riposte and the lane briefly belongs to you.",
+      "after": "Fiora whiffs Riposte and you own the next 24 seconds."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].t",
+      "before": "Match his early skirmish tempo",
+      "after": "Match her early skirmish tempo"
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Match his early skirmish tempo. Stand past the river bush line. Buy fight items before Rod of Ages. And keep the ultimate holstered until a kill is actually on the table.",
+      "after": "Match her early skirmish tempo. Stand past the river bush line. Buy fight items before Rod of Ages. And cast into an up Riposte, which parries the whole trade."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Shield or Ring by lane. Tear early, Rod of Ages into Mercs or Sorcs, then Seraph's Embrace and Zhonya's. Add anti-heal early into his sustain.",
+      "after": "Start Doran's Shield or Ring by lane. Tear early, Rod of Ages into Mercs or Sorcs, then Seraph's and Zhonya's. Anti-heal early - Vitals and her R both heal."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Riposte’s cooldown, on your Rod of Ages spike, and with your jungler’s setup. His answer goes first; yours goes last.",
+      "after": "Commit on the 24 seconds of Riposte, on your Rod of Ages spike, and with your jungler's setup. Her parry goes first; yours goes last."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Kassadin vs Fiora - Track: Fiora Riposte. - No trades before 6 — not one. - No commits into Riposte. - The ultimate closes arguments; it doesn’t open them.",
+      "after": "- Kassadin vs Fiora - Track: Riposte, 24s at rank 1. - No trades before 6 - not one. - Nothing you own stuns her parry, so it can only slow you."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The survival grind: Q the wave from range, bank CS, and track Riposte purely so it doesn't kill you on the way to 6.",
+      "after": "The survival grind: Q the wave from range, bank CS, and track the 24-second Riposte so it never eats your trade."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Her R and vitals out-duel a fresh Riftwalk: she Ripostes your Null Sphere (stunning you and blocking its shield), then percent-max-HP true vitals chunk you before your R recasts ramp. Don't fight her on a stackless first blink.",
+      "after": "Her R and Vitals out-duel a fresh Riftwalk: Riposte parries your Null Sphere and slows you - it cannot stun off your kit - then percent-max-HP Vitals chunk you before your R recasts ramp. Don't fight on a stackless first blink."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Levels 1-3 are hers and you know it — your only ability is Null Sphere, a single short-range orb she Q-dashes around, and then she's on you with vitals while you have no escape and almost no mana to fight back. Don't throw Q as poke; hold it for the shield (and to stun a cast) when she commits, and last-hit at max range. Her passive vitals deal percent-max-HP TRUE damage, so Void Stone's 15% magic reduction does nothing here — every vital she lands genuinely hurts. Concede CS, hug tower, and just survive to your W.",
+      "after": "Levels 1-3 are hers and you know it - your only ability is Null Sphere, a single short-range orb she Lunges around, and then she is on you with Vitals while you have no escape and almost no mana. Don't throw Q as poke; hold it for the shield when she commits, and last-hit at max range. Her Vitals deal percent-max-HP TRUE damage, so Void Stone's 15% magic reduction does nothing here - every Vital she lands genuinely hurts. Concede CS, hug tower, and just survive to your W."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-5 you claw back toward even: maxed Null Sphere plus Nether Blade's huge mana restore (quintupled on her) finally lets you farm without going OOM and ride out her dives. But level 6 is a trap — a fresh Riftwalk is short-range and stackless, so if you blink in she Ripostes your Null Sphere (stun + no shield) and her R-plus-vitals out-duels you before your recasts ramp. Don't fight her at 6 on a single Riftwalk. Use it purely to escape her Q-dash gap-close and reset distance, then wait for your stall item.",
+      "after": "Levels 3-5 you claw back toward even: maxed Null Sphere plus Nether Blade's mana restore finally lets you farm without going OOM and ride out her dives. But level 6 is a trap - a fresh Riftwalk is short-range and stackless, so if you blink in she Ripostes it away and her R-plus-Vitals out-duels you before your recasts ramp. The parry only slows you, not stuns, so you can still leave - but don't fight her at 6 on a single Riftwalk. Use it to escape her Lunge and reset distance, then wait for your stall item."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "A fresh Riftwalk is stackless and short-range; she Ripostes your Null Sphere and her R-vitals out-duel you before recasts ramp.",
+      "after": "A fresh Riftwalk is stackless and short; Riposte parries your Null Sphere and slows you while her R-Vitals out-duel the recasts."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Riposte your Null Sphere with W to stun you and deny its damage-absorbing shield — your one defensive cast",
+      "after": "Riposte your Null Sphere with W to parry the damage, deny the shield and slow you out of the trade"
+    }
+  ],
+  "notes": "FABRICATED EFFECT: four fields said Riposte STUNS when it parries Null Sphere. Riot's text is explicit that it stuns only if it blocked an immobilizing effect and otherwise slows - and nothing in Kassadin's kit immobilizes, so against him Riposte can never stun. That changes the play: a parried Kassadin can still Riftwalk out. Also removed 'hold Q to stun a cast' - Null Sphere interrupts channels, it does not stun. LEFT ALONE and logged in unverified: the pre-existing 'Vitals deal percent-max-HP TRUE damage' claim (the kit's trueDamage flag sits on Grand Challenge, and Riot's Duelist's Dance text names no damage type), and the 'Nether Blade mana restore quintupled on champions' claim, which appears nowhere in Riot's text. VERDICT CONFLICT unresolved: diff FAV vs diffRating 8/10 vs 'Hard matchup' vs a 50% win rate - all four disagree and none can be reconciled inside the length band."
+}

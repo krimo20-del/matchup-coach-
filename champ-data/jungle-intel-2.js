@@ -1,4 +1,4 @@
-/* MatchupCoach — Jungle Intel expansion. Patch 26.11 (leashless era).
+/* MatchupCoach — Jungle Intel expansion. Patch 26.15 (content authored 26.11, leashless era).
    Patch facts baked in: camps spawn 0:55 (Krugs/Gromp 1:07), scuttle 2:55, NOBODY leashes anymore —
    junglers solo-start (50% reduced camp damage) and start on the side OPPOSITE the lane they want to
    gank ("start bot-side to end top"). 12 CS at 2:45 = 3-camp gank path; 24 CS at 3:30 = full clear.

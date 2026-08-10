@@ -1,0 +1,123 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "gwen",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Two places call Fury of the Sands a \"single-target\" ult that \"ticks on nobody\" while Gwen is untargetable.",
+   "why": "Fury of the Sands is an area aura that damages every nearby enemy for a share of their maximum health — calling it single-target is wrong. The real reason Hallowed Mist blanks Nasus is that Siphoning Strike is an auto-attack reset: it needs a valid target, so an untargetable Gwen stops his entire damage pattern, not just his ult.",
+   "corrected": "Framed around the auto-attack reset instead: with no target, the stacked Q has nothing to land on, so never spend one into the mist.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/nasus.json (Q autoReset flag; R percentHealth + zone flags)",
+    "champ-data/_kits/gwen.json (W untargetable)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "The packet flags zero cooldown-sequencing cues. Nothing anywhere gives a number for Hallowed Mist, which the entry itself calls matchup-defining.",
+   "why": "Hallowed Mist is 22/21/20/19/18s. That is by far the longest gap in Gwen's kit and the only window where a melee with a 255-range Q gets to touch her. Skip 'n Slash is 13/12.5/12/11.5/11 but refunds part of its own cooldown whenever it connects, so it is back far sooner than the base number suggests.",
+   "corrected": "Added the 22s/18s Hallowed Mist figures to breakdown.cooldowns, breakdown.mid and content mid, plus the Skip 'n Slash refund.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gwen.json (W cooldown 22/21/20/19/18; E cooldown 13/12.5/12/11.5/11 with partial refund on hit)"
+   ]
+  },
+  {
+   "point": 5,
+   "status": "needs-correction",
+   "whatIsWrong": "The level-1 text says she snips \"for free\" without saying why Nasus cannot answer.",
+   "why": "Snip Snip! is a 450-range cone; Siphoning Strike is 255 range. She is effectively a ranged trader against him at level 1, which is the mechanical reason the exchange is unwinnable rather than just a tempo claim.",
+   "corrected": "Stated the 450 vs 255 range gap in content early.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gwen.json (Q range 450)",
+    "champ-data/_kits/nasus.json (Q range 255)"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "No anti-heal anywhere, despite A Thousand Cuts healing her off every attack.",
+   "why": "Gwen's passive heals her for a portion of the bonus magic damage it deals to champions, so every attack in an extended trade refunds HP. Grievous Wounds is the item lever that decides long trades here, and _missing-interactions.json flags this exact rule for nasus vs gwen.",
+   "corrected": "Replaced a want line with a Grievous Wounds instruction.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gwen.json (P heal flag)",
+    "champ-data/_kits/_missing-interactions.json (nasus/gwen needs-antiheal)"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[4] is labelled Gwen's stage but its text says level 6 is the first fight Nasus is allowed to take and that the stat-check runs his way.",
+   "why": "The content layer, the win-rate and the phase's own side field all say level 6 is her window. Fury of the Sands buys survival against one dive; it does not out-damage a Needlework recast chain.",
+   "corrected": "Rewrote phases[4].why so the text agrees with its own side label.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/_kits/gwen.json (R Needlework, up to three casts)",
+    "champ-data/_kits/nasus.json (R Fury of the Sands)"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Gwen Hallowed Mist: matchup-defining — She’s safe inside it. Fight when down. Track it before every engage.",
+   "after": "- Gwen Hallowed Mist: 22s at rank 1, 18s maxed — she is safe inside it, so bait it out, then commit."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.mid",
+   "before": "Trade strictly around Hallowed Mist: when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve her.",
+   "after": "Trade around Hallowed Mist's 22s rank-1 cooldown: when it is down run the full pattern, when it is up give nothing. If ahead, freeze and starve her."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Gwen, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "Fury of the Sands buys survival, not a kill: R plus Wither answers one committed dive, but her Needlework recasts still out-damage you."
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Her anti-tank kit shreds you — Wither her, build MR, out-scale. Nasus wins by trading around Gwen's Hallowed Mist and cashing the pattern: build MR, Wither her, out-scale.",
+   "after": "Her anti-tank kit shreds you — Wither her, build MR, out-scale. Snip Snip's centre is true damage, so bulk alone will not save you; win by baiting Hallowed Mist and cashing stacks."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Her threat window: Gwen's R recast burst plus Hallowed Mist (W) lets her all-in and then hide untargetable while your single-target Fury of the Sands ult ticks on nobody.",
+   "after": "Her threat window: Gwen's R recast burst plus Hallowed Mist (W) lets her all-in then vanish — Siphoning Strike is an auto-attack reset, so with no target your damage stops dead."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "Her R recast burst plus Hallowed Mist lets her all-in then hide untargetable while your single-target ult finds nobody.",
+   "after": "Her R recast burst plus Hallowed Mist lets her all-in then hide untargetable, and your Q is an auto reset with no target."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "She owns this window and it gets worse at 6. Once Hallowed Mist (W) is up she dashes in with E, dumps Q true damage, and parks inside the mist where your autos, your Spirit Fire and your ult tick on nothing. Save Wither (W) for the exact frame she dashes in — slow her hard so she can't slide back to the mist circle, and only then commit. Your Fury of the Sands ult is single-target tick damage; against an untargetable carry it's nearly wasted, so don't blow it chasing her into Mist.",
+   "after": "She owns this window and it gets worse at 6. Once Hallowed Mist (W) is up she dashes in with Skip 'n Slash (E), dumps Q true damage, and parks inside the mist. Siphoning Strike is an auto-attack reset, so with nothing to attack your damage stops dead — never spend a stacked Q into the mist. Mist is 22s at rank 1 and 18s maxed, and that gap is the whole lane: Wither her the exact frame she dashes in, and count on her E coming back early because it refunds part of its own cooldown whenever it connects."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Survive to 2+ items where stacked Q plus ult finally out-duels her if she mispositions",
+   "after": "Buy Grievous Wounds early — her A Thousand Cuts passive heals off every attack she lands"
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Dead start — you're both weak level 1, so just stack. Soak Siphoning Strike (Q) on the wave and use Spirit Fire (E) to clear and chip without walking into her Q true-damage snips. The danger is her ramp: every snip she lands sets up the next, and her cottons cost her nothing. Don't fish for trades you can't finish — you have no Wither yet, so there's no lock-down to punish her with.",
+   "after": "Dead start — you're both weak level 1, so just stack. Soak Siphoning Strike (Q) on the wave and use Spirit Fire (E) to clear and chip without walking into the true-damage centre of Snip Snip (Q). Her cone reaches 450 and your Q only 255, so she snips for free and every snip sets up the next. Don't fish for trades you can't finish — with no Wither yet there's no lock-down to punish her with."
+  }
+ ],
+ "notes": "suspectNames flagged \"Soak Siphoning Strike\" in content early — false positive, Siphoning Strike is the correct Q name and the extra token is just the verb. Cross-layer chart mismatch worth knowing about: content win[] is [Skill,Gwen,Gwen,Gwen,Gwen,Gwen,Nasus] but full phases[].side is [Gwen,Gwen,Gwen,Gwen,Gwen,Skill,Skill] — level 1 and 2+ items disagree between the two layers. I left both alone rather than guess which the site renders. Second inconsistency left alone: full phases[1].why says Wither is online at level 2 while content whys[1] says \"you have no Wither yet\" — that is a skill-order choice, not a fact, but the two layers should not contradict each other. Deliberately did not assert whether Fury of the Sands damages Gwen while she is inside Hallowed Mist; untargetability vs aura damage is not answerable from the kit files."
+}

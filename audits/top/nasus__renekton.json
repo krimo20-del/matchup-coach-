@@ -1,0 +1,148 @@
+{
+  "ownerKey": "nasus",
+  "enemy": "renekton",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The content layer never names a single Renekton ability, and it never states the actual Wither/Fury interaction that decides this lane.",
+      "why": "Riot's own passive text is 'Renekton's attacks generate Fury, increased when he is low on life.' Fury is what upgrades Ruthless Predator from a 0.75s stun into a 1.5s stun that also destroys shields. Wither slows attack speed, so it directly slows the rate Renekton banks Fury — the slow is not just kiting, it is stun-duration denial. The kit files carry all of this; the current text says only 'his fury combo whiffs'.",
+      "corrected": "Wither's attack-speed component starves Renekton's Fury generation, so a Withered Renekton's follow-up Ruthless Predator is the bare 0.75s version rather than the empowered 1.5s one.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json (P Reign of Anger, W Ruthless Predator)", "champ-data/_kits/nasus.json (W Wither)"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing anywhere notes that Dominus breaks the Wither-starves-Fury rule.",
+      "why": "Dominus's own text: 'While in this form, Renekton gains Fury periodically.' Fury during ult is on a timer, not attack-driven, so the attack-speed half of Wither stops suppressing his empowered abilities the moment he ults. This is exactly the kind of detail that decides whether the level-6 bait is safe, and it is absent from both layers.",
+      "corrected": "Under Dominus, Renekton generates Fury on a timer, so Wither no longer starves it — he keeps access to empowered Ruthless Predator through the slow.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json (R Dominus, P Reign of Anger)"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns lists Ruthless Predator twice with no numbers, and never mentions Slice and Dice at all.",
+      "why": "The user's whole premise is that real numbers beat vague advice. Ruthless Predator is 16/14/12/10/8 and Slice and Dice is 16/14.5/13/11.5/10 — both are long at rank 1, which is precisely why the level 2-3 windows after he commits are survivable. Duplicating one line wastes the field.",
+      "corrected": "Replace the duplicate with the two real cooldowns plus the two stun durations, and flag the double-charge Slice and Dice commit as the punish window.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No anti-heal mention anywhere despite Cull the Meek being a heal on a 7s cooldown.",
+      "why": "_missing-interactions.json flags this matchup with rule 'needs-antiheal' — Cull the Meek (Q). Nasus wins by dragging Renekton into prolonged duels, which is exactly the fight shape Cull the Meek's repeated healing survives; Grievous Wounds timing therefore decides the late side-lane 1v1 the entry tells you to take.",
+      "corrected": "Grievous Wounds is required before the extended side-lane duel, because Cull the Meek heals on a 7s cooldown and heals more at 50+ Fury.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/_missing-interactions.json (nasus vs renekton, needs-antiheal)", "champ-data/_kits/renekton.json (Q Cull the Meek)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content 'mid' claims Wither 'pins him so he can't dash back out', and spikes[1] says he 'can't escape'.",
+      "why": "Slice and Dice is a fixed-distance dash with a second cast; a movement-speed slow does not shorten a dash. What actually strands him is having spent both casts on the way in. As written a player will Wither and expect Renekton to be trapped, then get out-traded when he simply Dices away.",
+      "corrected": "State the real condition — he is only stranded if he burned both Slice and Dice casts entering — instead of implying Wither cancels the dash.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json (E Slice and Dice)"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The two layers disagree on when Wither is available: full phases[1] puts it at Level 2, content spikes[1]/whys[2] put it at Level 3.",
+      "why": "A reader who takes the content layer's word skills W third and has no answer to the level-2 all-in the same entry warns about. Rather than assert a skill order I cannot verify as the site's intent, the edits below rewrite the content lines so they no longer make an 'online at 3' claim at all.",
+      "corrected": "Content lines rephrased around Wither's rank-1 cooldown and usage instead of its unlock level, removing the contradiction.",
+      "confidence": "Medium",
+      "sources": ["champ-data/nasus.full.js phases[1]", "champ-data/content/nasus.js spikes[1]/whys[2]"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Renekton's empowered W stun plus point-click Q heal owns the first two levels — don't trade, just soak Q stacks at range.",
+      "after": "Empowered Ruthless Predator stuns 1.5s and Cull the Meek heals it all back — don't trade, just soak Q stacks at range."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Wither comes online: when he dashes in with E, slow his attack speed and movement so his fury combo whiffs and he can't escape your turret.",
+      "after": "Wither the moment Slice and Dice lands on you: the attack-speed slow starves the Fury his attacks bank, so Ruthless Predator stays the bare 0.75s stun."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Fury of the Sands plus Wither flips the duel — bait his all-in, ult for the bonus HP and burn, and Wither him so his W stun is the only thing he lands.",
+      "after": "Fury of the Sands plus Wither flips the duel — but Dominus feeds him Fury on a timer, so Wither stops starving it and empowered Ruthless Predator comes back."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Use Wither the instant he E's in so his empowered-W stun is his only landed damage and he can't kite or escape",
+      "after": "Wither him the instant Slice and Dice lands so his Fury stalls and Ruthless Predator stays the short 0.75s stun"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Hit his level 1-2 power spike and bully you off Q stacks with point-click Q heal and W stun",
+      "after": "Bully you off Q stacks at levels 1-2 with Cull the Meek's heal and a Ruthless Predator stun"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Land the empowered W stun into a fury-Q-E combo before you have Wither up",
+      "after": "Land empowered Ruthless Predator into Cull the Meek before Wither is up"
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Renekton owns these levels and you know it — his empowered W is a hard stun and his fury Q heals him through anything you throw back, so do not contest. Last-hit with the tip of your Q (Siphoning Strike) and your Spirit Fire (E) for safe stacks, and let your Soul Eater lifesteal patch up the chip. The one trap to dodge is his level 2 all-in: if he has both W and E, he can stun-combo you for a huge chunk, so respect it and stack instead of fight.",
+      "after": "Renekton owns these levels and you know it — Ruthless Predator (W) stuns 0.75s bare and 1.5s at 50+ Fury, and Cull the Meek (Q) heals him back on a 7s cooldown, so do not contest. Last-hit with the tip of your Q (Siphoning Strike) and your Spirit Fire (E) for safe stacks, and let your Soul Eater lifesteal patch up the chip. The trap is his level 2 all-in: with Ruthless Predator and Slice and Dice both up he stun-combos a huge chunk, so stack instead of fight."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Wither (W) is your equalizer here — the moment he E-dashes onto you, slam it on him: the massive move-speed and attack-speed slow makes his fury combo whiff and pins him so he can't dash back out. You're not winning extended trades yet, but you stop conceding the lane. At 6, Fury of the Sands plus Wither is your first real swing: ult for the bonus HP and the burn, Wither his attack speed to nothing, and you survive or win the all-in he thinks he still owns.",
+      "after": "Wither (W) is your equalizer here — the moment Slice and Dice lands on you, slam it on him: his attacks are what bank Fury, so the attack-speed slow keeps Ruthless Predator at its bare 0.75s stun, and if he spent both E casts diving he has no dash out. You're not winning extended trades yet, but you stop conceding the lane. At 6, Fury of the Sands plus Wither is your first real swing: ult for the bonus HP and the burn, then survive the all-in he thinks he still owns."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "This is where the 54% comes from. Renekton falls off a cliff into items while your stacked Q just keeps climbing — once you have Sheen/Iceborn and stacks, a Wither'd Renekton has no kite, no escape, and no answer to your empowered Q plus ult burn. Drag every fight into a prolonged duel, Wither him so his only output is a single W stun, and your lifesteal grinds him out. Take Wither for him over anyone and 1v1 him on the side lane all day.",
+      "after": "This is where the 54% comes from. Renekton falls off a cliff into items while your stacked Q just keeps climbing — once you have Sheen/Iceborn and stacks, a Wither'd Renekton has no kite and no answer to your empowered Q plus ult burn. Buy Grievous Wounds before you take that duel: Cull the Meek is a 7s heal and heals harder at 50+ Fury, and the prolonged fight you want is the exact shape it survives. Take Wither for him over anyone."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Renekton's empowered W stun and fury-Q self-heal make him one of the strongest level-1 duelists — you have no ult, no Wither, just soak Q stacks.",
+      "after": "Ruthless Predator's stun and Cull the Meek's self-heal make him one of the strongest level-1 duelists — you have no ult, no Wither, just soak Q stacks."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "His level 2 W-into-E combo can stun and burst you before you have any answer — concede the level and stack safely.",
+      "after": "Level 2 Ruthless Predator into Slice and Dice stuns and bursts you before you have an answer — concede the level and stack."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Wither (W) comes online and lets you punish an overcommitted E-dash, but you still lose the straight extended trade — it's even at best.",
+      "after": "Wither is a 15s cooldown at rank 1 — spend it on an overcommitted Slice and Dice, not on poke, and the extended trade is still his."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Renekton Ruthless Predator (Stun): matchup-defining — Empowered = long stun. Don’t get caught. Track it before every engage. - Renekton Ruthless Predator: Empowered strike; with Fury it stuns longer — his all-in lockdown. Dodge or sidestep it.",
+      "after": "- Ruthless Predator: 16s at rank 1, 8s at rank 5. Bare stun 0.75s; at 50+ Fury it is 1.5s and shreds shields. - Slice and Dice: 16s at rank 1. If he spends both casts diving you, he has no dash out — Wither and walk him down."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Trade strictly around Ruthless Predator (Stun): when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve him.",
+      "after": "Trade around his Fury bar, not just his cooldowns: under 50 Fury the stun is 0.75s and you can eat it. Wither slows how fast his attacks refill it."
+    }
+  ],
+  "notes": "Two layers disagree on Wither's unlock level: nasus.full.js phases[1] says Wither is online at Level 2, while content spikes[1] and whys[2] said it 'comes online' at Level 3. I did not pick a winner (I cannot verify the site's intended Nasus skill order); instead I rewrote the two content lines so neither makes an unlock-level claim, which removes the contradiction without inventing a skill order. If you do want them reconciled, phases[1] is the one that matches how Nasus is actually played into a level-2 Renekton all-in. Separately: packet suspectNames was empty here, and full.breakdown.cooldowns contained a duplicated Ruthless Predator entry (same ability listed twice with different wording) — that duplication pattern may exist across other Nasus entries and is worth a global check."
+}

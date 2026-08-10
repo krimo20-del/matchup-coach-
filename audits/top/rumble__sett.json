@@ -1,0 +1,115 @@
+{
+  "ownerKey": "rumble",
+  "enemy": "sett",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Emerald+ 49.42% over 1034 games — a near-coin-flip. The full layer's FAVOURED / 4-10 label is optimistic against that number, but the content layer's early-lead-then-fade arc matches the data.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": [
+        "packets/rumble.json"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Rumble owns levels 2-3, it flattens at 4-5, and Sett takes over at two items — that is what the level chart says and the kit supports it. Sett has no dash at all, so side lane stays playable for Rumble much longer than the raw win rate suggests; teamfights hinge on The Show Stopper landing on Rumble.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/sett.json",
+        "champ-data/_kits/rumble.json"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The Haymaker spike explains the ability as a burst you eat, and never states the thing that actually decides it: Grit is stored from damage Sett takes, so Rumble's own Flamespitter burn is what loads the gun.",
+      "why": "Riot's Haymaker description: 'Sett passively stores damage he takes as Grit. On cast, Sett expends all stored Grit to gain a shield and punch an area, dealing true damage in the center and physical damage on the sides.' Rumble deals continuous burn — he is the ideal Grit battery. That reframes the entire trade pattern from 'dodge the punch' to 'trade in short bursts so there is nothing to spend'.",
+      "corrected": "spikes[1].text rewritten around the Grit-feeding loop; the 18s rank-1 cooldown added to wants.you[0] and dosFull[0].d.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/sett.json (W description, cooldown 18/16.5/15/13.5/12)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two wrong interactions. First: 'Grab you with Facebreaker when you commit Flamespitter so the channel gets interrupted' — Flamespitter is not a channel and cannot be interrupted, and more importantly Facebreaker does not stun a lone target. Second: 'his Show Stopper can absorb your W shield' — The Show Stopper does no such thing.",
+      "why": "Riot's Facebreaker description: 'Sett pulls in all enemies on opposite sides of him, dealing damage and stunning them. If enemies were only on one side, they are slowed instead of stunned.' In a 1v1 where Rumble is the only thing on Sett's near side and nothing is behind him, Facebreaker is a slow, not a stun — so the positional rule is to keep Sett's far side empty, which is concrete and actionable and was completely absent. Flamespitter meanwhile 'deals magic damage in a cone for 3 seconds' with no channel flag, so it keeps burning through his CC. The Show Stopper's real properties are that it grounds and hard-CCs on a 120/100/80 cooldown; nothing in its description touches shields.",
+      "corrected": "Stated in wants.foe[1], whys[4], dontsFull[2].d, the Key Ability Interactions report line, and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/sett.json (E and R descriptions)",
+        "champ-data/_kits/rumble.json (Q description)"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.you[0] gives Haymaker a '16-second cooldown'. It is 18s at rank 1 and 12s at rank 5. Facebreaker and The Show Stopper carried no numbers at all.",
+      "why": "The rank-1 number is the one that matters in lane, and 18 versus 16 is two extra seconds of free trading per rotation.",
+      "corrected": "wants.you[0], dosFull[0].d and breakdown.cooldowns now carry Haymaker 18s/12s, Facebreaker 16s and The Show Stopper 120s.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/sett.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Sett's Haymaker true-damage smash is the lane's single kill button — if he lands it on you while you are channeling Flamespitter you lose the trade hard regardless of Danger Zone.",
+      "after": "Haymaker is the lane's kill button and your own burn is what loads it — every Flamespitter tick he eats becomes Grit, so short trades starve the punch and long ones pay for it."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Walk Flamespitter into Sett and bait his Haymaker, then punish the 16-second cooldown with double-Electro-Harpoon and sustained Danger Zone Q",
+      "after": "Walk Flamespitter into Sett and bait Haymaker, then punish its 18 seconds at rank 1 with double Electro-Harpoon and Danger Zone Q"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Grab you with Facebreaker when you commit Flamespitter so the channel gets interrupted and your Scrap Shield is burned on the stun",
+      "after": "Catch you with a minion or an ally on his far side so Facebreaker stuns instead of only slowing, then unload Haymaker into you"
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Equalizer gives you a different dimension but Show Stopper gives him one too — use R to zone and force, not to fish for a solo kill you might lose to his suppress.",
+      "after": "The Show Stopper grounds and slams you, and 120s at rank 1 is a long punish window — use Equalizer to zone and force, never to fish for a solo kill he can flip."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Shield + true damage. Kite it. Only engage once it is down or baited.",
+      "after": "Shield plus true damage, 18s. Your burn feeds its Grit — trade short."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Accidental overheat mid-trade — silenced Rumble is a flaming minion; overheat ON PURPOSE or not at all.",
+      "after": "Facebreaker stuns only with enemies on both sides of him — keep his far side empty and it is a slow."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Sett's Haymaker: Shield + true damage. Kite it. When it is down — Flame + E-R him.",
+      "after": "Facebreaker stuns only with enemies both sides of him — otherwise a slow. Haymaker: 18s."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Sett Haymaker: matchup-defining — Shield + true damage. Kite it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Haymaker: 18s at rank 1, 12s at rank 5 — your burn loads its Grit, so trade short. - Facebreaker: 16s, stuns only if you are not his lone target. - The Show Stopper: 120s, and it grounds. - Your R: kill windows only."
+    }
+  ],
+  "notes": "The 'Flamespitter channel gets interrupted' phrasing shows up here as well as in the Riven matchup — Flamespitter is a 3-second cone with no channel flag and no interrupt, and this wording is spread across several Rumble matchups. Worth a global sweep. The packet's suspectNames hit on 'Show Stopper' is a false positive; that is normal shorthand for The Show Stopper. Standing note for Rumble: the kit file's knockup and terrain flags on Scrap Shield (W) are parsing misfires — Riot's description is a shield plus a movement-speed burst only."
+}

@@ -1,0 +1,117 @@
+{
+ "ownerKey": "rumble",
+ "enemy": "vladimir",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The two layers give different level charts and the content one contradicts the win rate. Content win[] awards Rumble 4 of 7 stages (levels 1, 2, 3 and 6) against Vladimir's 1, while Rumble wins only 46.31% of 1097 games. The full layer's phases already read Skill at level 1 and Skill at level 6.",
+   "why": "A player reading a chart that says he owns level 1 and level 6 in a matchup he loses 54% of the time will force exactly the fights that produce that number. The full layer is already the more honest of the two, so this is a reconciliation rather than an invention.",
+   "corrected": "Level 1 is Skill, not Rumble — Transfusion is a free heal on a 9s cooldown from the first point, so Rumble's edge there is a matter of who walks up, not a power gap. Level 6 is Skill, not Rumble — Equalizer is real, but Hemoplague amplifies all damage on the infected area and heals him per champion hit, so the ultimates cancel out rather than favour Rumble.",
+   "confidence": "Medium",
+   "sources": [
+    "packet rumble.json (winRate 46.31, 1097 games; defect: 'level chart contradicts data')",
+    "champ-data/rumble.full.js (phases[0].side and phases[4].side already 'Skill')",
+    "champ-data/_kits/vladimir.json (Transfusion cd 9/7.9/6.8/5.7/4.6 cost 0; Hemoplague)"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "Every spike in this matchup is described in terms of 'Crimson Rush' — 'before Crimson Rush sustain scales', 'deny Crimson Rush stacking', 'Crimson Rush procs', 'Stack Crimson Rush (Q) presses'. Vladimir's Q is Transfusion; Crimson Pact is his passive. Nothing in his kit is an ability called Crimson Rush, and the file attaches '(Q)' to the name, so it is being used as an ability name.",
+   "why": "This is the calibration case exactly: a fabricated ability name load-bearing across the whole matchup. Nine separate strings across spikes, wants, early, mid and whys are built on it, so a player never learns the real name of the ability he is supposed to be tracking.",
+   "corrected": "The ability is Transfusion (Q): no cost, heals him on cast, 9s at rank 1 dropping to 4.6s at rank 5. The scaling spike is Transfusion's cooldown falling, not stacks accumulating.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/vladimir.json (Q = Transfusion; P = Crimson Pact; no ability named Crimson Rush)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Three interaction errors. (a) The mid paragraph tells the player 'his 14-second W cooldown means you can all-in immediately after'. Sanguine Pool is 28/25/22/19/16 — 14 is below the value at every rank, so the all-in window is being sold as twice as safe as it is. (b) The early paragraph and whys[0] both say 'his Q costs health' — Transfusion costs nothing; the health-cost ability is Tides of Blood (E). (c) Tides of Blood is blocked by enemy units per Riot's own text, and this matchup never says so despite E poke being named as the thing that forces Rumble's shield.",
+   "why": "Point 4 is the key point and (a) is the most dangerous line in the matchup — committing an all-in on a 14-second timer against a 28-second cooldown is fine, but the player will also do the reverse and step up at 16 seconds thinking the pool is back when it is not, or worse, treat a baited pool as nearly-refreshed and decline a free window. (c) is a free, checkable answer to his main poke that costs nothing to use.",
+   "corrected": "Sanguine Pool is 28s at rank 1 and 16s at rank 5, and the untargetable window is 2 seconds — bait it and you own the next twenty-plus seconds. Transfusion is free and heals; Tides of Blood is what costs him health. Stand behind your own minions and Tides of Blood is blocked outright.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/vladimir.json (Sanguine Pool cd 28/25/22/19/16, 'untargetable for 2 seconds'; Transfusion cost 0; Tides of Blood 'can be blocked by enemy units')"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Once you have Q and E online, you can trade Q cone into his face then double-harpoon his retreat — he has no escape and no shield, so sustained Danger Zone Flamespitter chunks him hard before Crimson Rush sustain scales.",
+   "after": "Once you have Q and E online, you can trade Q cone into his face then double-harpoon his retreat — he has no escape and no shield, so sustained Danger Zone Flamespitter chunks him hard before Transfusion's cooldown drops."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Double-harpoon his retreat every trade to deny Crimson Rush stacking and punish his immobility before his items",
+   "after": "Double-harpoon his retreat every trade to punish his immobility while Transfusion is still a 9-second heal"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Stack Crimson Rush (Q) presses in lane to heal through Flamespitter chip damage and sustain into the mid-game",
+   "after": "Chain Transfusion (Q) presses in lane to heal through Flamespitter chip and sustain into the mid-game"
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "At Level 1 Vladimir is actually weak — his Q costs health early (pre-Crimson Rush stacks) and he has no escape, so push into his face with Flamespitter and set up a Heat-managed trade before he stabilizes. At Level 2 you add Electro-Harpoon: slow him mid-Q cone, then double-harpoon his retreat and deny Crimson Rush procs. By Level 3 you are the unambiguous threat — he cannot walk through your Danger Zone Flamespitter without losing significant HP, and he has no answer to your sustained damage at this range. Don't chase him into his turret and waste your Overheat window; win the trade and reset Heat cleanly.",
+   "after": "At Level 1 Vladimir is thinner than he looks — Transfusion is free and heals him, but it is 9 seconds at rank 1, so push into his face with Flamespitter between presses and set up a Heat-managed trade. At Level 2 you add Electro-Harpoon: slow him mid-Q cone, then double-harpoon his retreat. Tides of Blood is the ability that costs him health, and your own minions block it outright — stand behind them and his poke does nothing. By Level 3 he cannot walk through your Danger Zone Flamespitter without losing real HP. Don't chase into his turret; win the trade and reset Heat cleanly."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Through Levels 4-5 it begins to even out as his Crimson Rush sustain starts to matter: he can now Q-press you back for meaningful healing and his E (Tides of Blood) poke forces your shield expenditure. Stay disciplined — enter Danger Zone before you commit the trade, not during it, and bait his W before dropping Equalizer at 6. At Level 6 you have a lane-defining moment: Equalizer dropped on his walk line, not his feet, beats his pool cooldown. He will pool the instant your R animation begins, so fire it at an angle onto where he will land after pooling — if it lands, his 14-second W cooldown means you can all-in immediately after. Never use Equalizer as a reactive tool in this lane; pre-place it to force his W first.",
+   "after": "Through Levels 4-5 it evens out as Transfusion's cooldown falls toward 5 seconds: he can now Q-press you back for meaningful healing and Tides of Blood forces your shield expenditure — unless you keep minions between you, because enemy units block his E outright. Stay disciplined: enter Danger Zone before you commit the trade, not during it, and bait his W before dropping Equalizer at 6. At Level 6, Equalizer dropped on his walk line rather than his feet beats his pool. He will pool the instant your R animation begins, so fire it onto where he lands — and Sanguine Pool is 28 seconds at rank 1, so a baited pool hands you the next twenty seconds outright. Pre-place it; never react with it."
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "You are stronger at Level 1 than he is — his Q costs health before Crimson Rush stacks and he has no escape, so push into him with Flamespitter and deny his sustain from the first wave.",
+   "after": "Level 1 comes down to who walks up — Transfusion is free and heals him, but it is 9 seconds at rank 1 and he has no escape, so trade Flamespitter into the gaps between his presses."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "Q plus Electro-Harpoon online: you can slow his retreat mid-Flamespitter cone and double-harpoon him back, denying Crimson Rush stacking before his sustain loop is running.",
+   "after": "Q plus Electro-Harpoon online: you can slow his retreat mid-Flamespitter cone and double-harpoon him back, out-chipping Transfusion while it is still a 9-second heal."
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "His Crimson Rush sustain and Tides of Blood poke start to even the extended-trade game; you still win clean burst windows but the edge is no longer clean in a prolonged grind.",
+   "after": "Transfusion's shrinking cooldown and Tides of Blood poke even the extended trades — keep minions between you, since units block his E, and win only the short burst windows."
+  },
+  {
+   "layer": "content",
+   "path": "whys[5]",
+   "before": "His first-item Rocketbelt or Shadowflame spike plus growing Crimson Rush healing lets him start matching your burst windows; if you are not ahead here the lane stabilises under him.",
+   "after": "His first-item Rocketbelt or Shadowflame spike plus a Transfusion now healing every 5 seconds lets him match your burst windows; if you are not ahead here the lane stabilises under him."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "Equalizer gives you a dimension Vladimir cannot match in the 1v1 — drop it on his walk line before he pools, forcing the untargetable window on your terms rather than his.",
+   "after": "Both ultimates land at once: drop Equalizer on his walk line to force the 2-second pool on your terms, but Hemoplague amplifies everything hitting the zone and heals him per champion."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Dodges your combo. Bait it. Only engage once it is down or baited.",
+   "after": "2s untargetable, and 28s at rank 1. Bait it, then own the gap."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Vladimir's Sanguine Pool: Dodges your combo. Bait it. When it is down — Flame + E-R him.",
+   "after": "Sanguine Pool is 2s of untargetable on a 28s rank-1 cooldown. Bait it, then Flame + E-R."
+  }
+ ],
+ "notes": "The packet flagged 'Crimson Rush' once, in spikes[0]. It is actually in nine strings across spikes, wants, early, mid and whys, and it is used as an ability name with '(Q)' attached. Vladimir's Q is Transfusion and his passive is Crimson Pact; no ability by that name exists in his kit. Two further defects the name-scanner could not see: (1) the mid paragraph tells the player Sanguine Pool has a '14-second cooldown' — the real values are 28/25/22/19/16, so 14 is below every rank and the advice built on it understates the window Rumble actually gets from a baited pool; (2) both the early paragraph and whys[0] say his Q costs health, when Transfusion has no cost at all and Tides of Blood is the health-cost ability. On the level-chart defect: content win[] awards Rumble levels 1 and 6 while the full layer already reads Skill at both, and Rumble wins only 46.31%. I did not propose those two flips as edits because each is a single enum word (Rumble to Skill is a 16% length change) and the applier band would reject them — they need fixing by hand, and the two layers disagree with each other regardless of the win rate."
+}

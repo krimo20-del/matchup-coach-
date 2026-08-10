@@ -1,4 +1,4 @@
-// MatchupCoach.gg — full champion rosters per role (for the home picker). Patch 26.11.
+// MatchupCoach.gg — full champion rosters per role (for the home picker). Patch 26.15 (content authored 26.11).
 window.ROSTERS = {
   top: [
     { g: "Juggernauts", c: ["Aatrox","Darius","Dr. Mundo","Garen","Illaoi","Mordekaiser","Nasus","Sett","Trundle","Urgot","Volibear","Yorick"] },

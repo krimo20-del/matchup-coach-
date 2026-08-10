@@ -1,0 +1,266 @@
+{
+  "ownerKey": "zac",
+  "enemy": "yasuo",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The entire content layer is built on the claim that Yasuo's Wind Wall (W) blocks Zac's Elastic Slingshot (E). It does not. This is the single largest error in my slice.",
+      "why": "Wind Wall 'destroys all hostile non-turret projectiles that collide with it' — projectiles only. The wiki classifies Elastic Slingshot as a dash/leap with no projectile component (its listed counters are Grounded: Disabled and Knockdown: Interrupted, not Blocked), and states plainly that abilities like Zac's Elastic Slingshot are not projectiles and pass through unimpeded. The current text tells Zac players their only engage tool is neutralised on demand, so they farm and never commit — the exact opposite of how the matchup is actually won, and consistent with Zac in fact winning it 53.63%.",
+      "corrected": "Wind Wall blocks projectiles; Elastic Slingshot is a leap and flies straight through it. Your engage is the one tool he cannot answer.",
+      "confidence": "High",
+      "sources": [
+        "https://wiki.leagueoflegends.com/en-us/Yasuo/LoL (Wind Wall)",
+        "https://wiki.leagueoflegends.com/en-us/Zac/LoL (Elastic Slingshot counters)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Four separate places claim Zac's Let's Bounce! knock-up sets up Yasuo's Last Breath (R). It cannot.",
+      "why": "Last Breath requires 'a nearby airborne enemy champion' — enemy relative to Yasuo. Zac's knock-ups land on Yasuo and Yasuo's allies, who are not Yasuo's enemies, so they never make him ult-eligible; the wiki further notes self-applied and allied-applied airborne displacements do not allow Last Breath to target the champion. The current advice ('a greedy engage actively feeds him', 'engage only when his R is down') talks Zac players out of using their ultimate for a reason that does not exist.",
+      "corrected": "Your knock-ups never enable his Last Breath — he needs his own side to airborne one of your team. Engage without that fear.",
+      "confidence": "High",
+      "sources": [
+        "https://wiki.leagueoflegends.com/en-us/Last_Breath",
+        "champ-data/_kits/yasuo.json (Last Breath: blinks to an Airborne enemy champion)"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: 'level chart contradicts data: Zac wins 53.63% but the chart gives Yasuo 7/7 stages vs 0.'",
+      "why": "A 7/7 sweep was only defensible because of the false Wind Wall premise. With that removed, Yasuo keeps levels 1-2 on Steel Tempest range and the flow shield, and level 6 on his own Q3-into-R threat; Zac takes over from first item as a tank whose engage cannot be denied. 317 games at 53.63% is a solid sample and it should not read as a 7/0 loss.",
+      "corrected": "win[2] -> Skill, win[3] -> Skill, win[5] -> Zac, win[6] -> Zac (Yasuo 3 / Skill 2 / Zac 2).",
+      "confidence": "Medium",
+      "sources": [
+        "packet zac.json (winRate 53.63, games 317, defect)"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "GENERATOR BUG: throughout the full layer, the ability tracked as Yasuo's is 'Elastic Slingshot' — which is Zac's own E. Yasuo has no such ability.",
+      "why": "focus.text is 'Yasuo Elastic Slingshot' with letters ['E'], and that value is interpolated into tldr, winCon, enemyWin, loading, ahead, breakdown.early/mid/cooldowns/spikes/feeding/difficulty, phases[1,3,5].why, dosFull and report — producing lines like 'Yasuo wins by landing Elastic Slingshot' and 'Yasuo: Elastic Slingshot online'. The correct tracked ability is Wind Wall (W), 25/23/21/19/17s for 4s.",
+      "corrected": "Track Wind Wall (W), 25s at rank 1 for 4 seconds of cover — not Zac's own E.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js (CHAMP_FULL.zac.yasuo.focus)",
+        "champ-data/_kits/yasuo.json (Wind Wall CD 25/23/21/19/17)"
+      ]
+    },
+    {
+      "point": 5,
+      "status": "missing",
+      "whatIsWrong": "Neither layer gives Sweeping Blade (E) any trading context despite it being his entire spacing tool.",
+      "why": "Sweeping Blade is a near-zero cooldown dash through a target enemy but 'cannot be re-cast on the same enemy for a few seconds'. Against a lone Zac with no minions nearby, Yasuo's mobility collapses — he can dash through Zac once and then has nothing. Fighting where the wave is thin is a concrete, kit-derived positioning rule.",
+      "corrected": "Sweeping Blade cannot re-target the same enemy for a few seconds, so fight him away from the wave and his mobility dies.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/yasuo.json (Sweeping Blade description)"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[2]",
+      "before": "Yasuo",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[3]",
+      "before": "Yasuo",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Yasuo",
+      "after": "Zac"
+    },
+    {
+      "layer": "content",
+      "path": "win[6]",
+      "before": "Yasuo",
+      "after": "Zac"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Yasuo's Wind Wall (W) eats your Stretching Strikes (Q) and, more importantly, your Elastic Slingshot (E) projectile — if he walls your engage you've wasted your whole trade pattern and he punishes with Steel Tempest (Q) pokes.",
+      "after": "Wind Wall (W) blocks projectiles, and Elastic Slingshot (E) is a leap — it flies straight through. Your engage is the one tool he cannot wall, so stop holding it: E in, then W the percent-HP ticks while he burns Sweeping Blade."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Level 6 doesn't save you: if you E in and he has Last Breath (R) plus a knock-up from his own Q3 or a jungler, he can airborne-chain you, and Wind Wall still denies your ranged engage on demand.",
+      "after": "Level 6 is not the trap it looks like: Last Breath (R) needs an airborne enemy of HIS, so your own knock-ups never feed it. He has to land his own Q3 tornado first — that is the cue to disengage."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "In teamfights Yasuo hard-punishes your R: your Let's Bounce! knock-up is exactly the airborne he wants for Last Breath, so a careless engage feeds him a five-man ult setup.",
+      "after": "In teamfights your R does not feed Last Breath — he cannot ult off a knock-up you put on his own team. Engage freely; his ult needs his side to airborne one of yours first."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Yasuo controls the early game because Wind Wall (W) directly counters your kit — it blocks your Stretching Strikes (Q) poke and, critically, your Elastic Slingshot (E) projectile — so your standard tank engage pattern simply doesn't function on his terms, and his Steel Tempest (Q) out-ranges your safe farming.",
+      "after": "Yasuo bullies the early levels with Steel Tempest (Q) range and his flow shield, but Wind Wall does not counter your kit the way it looks: it destroys projectiles, and Elastic Slingshot is a leap that passes straight through. Farm the first two levels, then stop respecting a wall that cannot stop your engage."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Through 3-6 nothing shifts in your favor: he stacks flow shield, his Q3 tornado threatens a knock-up, and if you dash in with E while his Wind Wall is up you've thrown your engage for free, so this is a farm-and-survive lane where you look to roam or wait for your jungler.",
+      "after": "Through 3-6 the lane turns: Wind Wall is 25s at rank 1 for four seconds of cover, and it cannot stop your E anyway, so your engage is available every 15-18s against it. Bait his Sweeping Blade dashes off the wave, then E-Q-W him while his flow shield is down."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Even at 2+ items Yasuo stays ahead in this specific pairing: your Let's Bounce! knock-up is the ideal airborne setup for his Last Breath (R), so a greedy engage actively feeds him, and Wind Wall keeps denying your ranged initiation — engage only when his W is down and your team can follow the CC.",
+      "after": "At 2+ items your tank stats and unwallable engage carry: Let's Bounce! cannot be walled and does not set up his Last Breath, because he can only ult an airborne enemy of his own team. Engage when his Sweeping Blade has no minions to dash through and your team can follow the CC."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "At 3 Wind Wall (W) comes online and hard-counters your Elastic Slingshot engage and Q poke.",
+      "after": "At 3 Wind Wall comes online but it blocks projectiles, and your E leap goes through it."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "At 6 his Last Breath (R) plus self knock-up threatens to chain-airborne you if you dive.",
+      "after": "At 6 Last Breath needs an airborne enemy of his own, so your knock-ups never feed it."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "With 2+ items your R knock-up feeds his ult setup, keeping the matchup his even into teamfights.",
+      "after": "With 2+ items your R engages safely — it cannot be walled and it cannot set up his Last Breath."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Bait or wait out his Wind Wall (W) before committing Elastic Slingshot (E)",
+      "after": "Commit Elastic Slingshot (E) freely — Wind Wall cannot block your leap"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Engage from angles where his Wind Wall can't cover his whole team",
+      "after": "Engage from angles where his Sweeping Blade has no wave to use"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Wall your E engage on cooldown and neutralize your only trade tool",
+      "after": "Wall your Q poke and bully you for respecting the wall at all"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Use your R knock-ups to chain his own Last Breath (R) in fights",
+      "after": "Land his own Q3 tornado first to open up Last Breath on you"
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "E-knock him — he can’t Wind Wall a dash, out-sustain. Zac wins the Elastic Slingshot cooldown windows.",
+      "after": "E-knock him — Wind Wall cannot block a leap, and your R never feeds his. Zac wins the Wind Wall windows."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "E-knock him (beats Wind Wall) and out-sustain. Track Elastic Slingshot before every commit and keep the wave on your side.",
+      "after": "E-knock him — Wind Wall blocks projectiles, not leaps. Track Wind Wall (25s) before poking and keep the wave on your side."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Yasuo wins by landing Elastic Slingshot, denying your pattern, and out-trading your engage windows.",
+      "after": "Yasuo wins by walling your poke, bullying you off the wave, and hitting his own Q3 knock-up first."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Zac vs Yasuo - Track: Yasuo Elastic Slingshot. - Keep the wave on your side. - Engage only on Elastic Slingshot's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+      "after": "- Zac vs Yasuo - Track: Yasuo Wind Wall (25s). - Wind Wall cannot block your E leap. - Your R never feeds his Last Breath. - Don't chase past the wave. - Ultimate = kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Yasuo off the comeback farm. Dive with your jungler when Elastic Slingshot is down.",
+      "after": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Yasuo off the comeback farm. Dive with your jungler when Wind Wall is spent."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Charge E from a bush as Yasuo's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush — Wind Wall cannot stop it — Q-stretch the knock-together, W the %HP ticks, and eat your blobs."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Q-stretch trades and blob pickups out-sustain the early chip. Respect Yasuo's Elastic Slingshot completely — the first levels are about banking small advantages, not proving a point.",
+      "after": "Q-stretch trades and blob pickups out-sustain the early chip. Respect Yasuo's Steel Tempest range, not his Wind Wall — the first levels are about banking small advantages."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Trade strictly around Elastic Slingshot: when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve him.",
+      "after": "Trade strictly around Wind Wall: it is 25s for only four seconds of cover, and it cannot stop your E. If ahead, freeze and starve him."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Yasuo Elastic Slingshot: matchup-defining — Dash knockup — Wind Wall can’t block it! Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Yasuo Wind Wall: 25/23/21/19/17s for 4s — it destroys projectiles only, so your E leap goes through it. - Last Breath: 70/50/30s, and it needs an airborne enemy of HIS side — your knock-ups never feed it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.spikes",
+      "before": "Yasuo: Elastic Slingshot online, level 6, first item. Zac: levels 2-3 (full pattern), Heartsteel first-item spike, and the 2-item front-line window.",
+      "after": "Yasuo: Wind Wall online, level 6, first crit item. Zac: levels 2-3 (full pattern), Heartsteel first-item spike, and the 2-item front-line window."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Yasuo gets a kill, stop forcing and respect Elastic Slingshot. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Yasuo gets a kill, stop forcing and respect his Q range. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Overall difficulty: 6/10. The lane is decided by how well you track Elastic Slingshot and how disciplined your pattern is.",
+      "after": "Overall difficulty: 6/10. The lane is decided by whether you believe Wind Wall stops your engage — it does not."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight — build your teamfight around that. Yasuo carry threat: 9/10 — anti-heal stays core, shift to picks and wave control if he gets ahead.",
+      "after": "Slingshot from fog + R bounces win every river fight, and neither can be walled. Yasuo carry threat: 9/10 — your knock-ups never enable his Last Breath, so engage without fear of feeding it."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Every blob you collect is a trade he paid for. Only take the trade when Yasuo's Elastic Slingshot is down.",
+      "after": "Every blob you collect is a trade he paid for. Only take the trade when Yasuo's Wind Wall is spent."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Elastic Slingshot's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "The lane-control window: Wind Wall is 25s and cannot stop your E leap, so bank small leads. If behind, farm safe and keep scaling."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Heartsteel is your spike — force fights the moment it completes, on Elastic Slingshot's cooldown.",
+      "after": "Heartsteel is your spike — force the fight the moment it completes, once Wind Wall is spent."
+    }
+  ],
+  "notes": "HIGHEST-PRIORITY ITEM IN THIS SLICE. Two verified, matchup-inverting errors: (1) Wind Wall does NOT block Elastic Slingshot — it destroys projectiles and Zac's E is a leap; (2) Zac's knock-ups can NEVER set up Last Breath, because Yasuo needs an airborne ENEMY of his own side. Both were stated as fact across the content layer and both push Zac players into passive play in a lane they win 53.63% of the time. GENERATOR BUG worth fixing at source: CHAMP_FULL.zac.yasuo.focus is set to {text:'Yasuo Elastic Slingshot', letters:['E']} — Zac's own E attributed to Yasuo. That value is interpolated everywhere, so dosFull[0..2] and report[1,5,9,10,12,13] still contain 'Yasuo Elastic Slingshot' after my edits; I did not propose edits to dosFull/report because their array-of-objects shape has no documented before/after path form. Fixing focus to 'Yasuo Wind Wall' / letters ['W'] and regenerating would clear all of them at once. NOT VERIFIED, left alone: whether Wind Wall blocks Zac's Stretching Strikes (Q) — the old text asserted it did; I removed the E claim only and made no claim about Q either way. Also unverified across this dataset: whether hard CC interrupts Let's Bounce! mid-bounce."
+}

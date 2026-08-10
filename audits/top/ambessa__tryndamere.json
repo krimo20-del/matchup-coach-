@@ -1,0 +1,210 @@
+{
+ "ownerKey": "ambessa",
+ "enemy": "tryndamere",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Bloodlust is never named in either layer, yet both layers are built around anti-heal ('Anti-heal his crits', 'Anti-heal his crit healing', 'his healing fights your pattern').",
+   "why": "Tryndamere's healing is Bloodlust (Q), a 12-second, zero-cost button that converts banked Fury into health, and the same ability passively raises his Attack Damage the more wounded he is. Calling it 'crit healing' points the player at the wrong mechanic: there is no lifesteal on his crits to cut, there is a heal button on a countable 12s timer that must be pre-empted with Grievous Wounds. The 'more wounded, more AD' half is also missing, and it is the reason a half-finished all-in is worse than no all-in.",
+   "corrected": "Bloodlust (Q), 12s, no cost: spends Fury to heal, and his AD rises as his health falls. Grievous Wounds must land before your burst, not during it.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/tryndamere.json — Q Bloodlust, cd 12, cost 0, heal flag",
+    "champ-data/_kits/_missing-interactions.json — ambessa/tryndamere needs-antiheal"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "content.early: 'His Mocking Shout slows you and shaves your AD if you face away'.",
+   "why": "The conditional is attached to the wrong half. Mocking Shout reduces the Attack Damage of every nearby champion unconditionally; only the Move Speed reduction requires the target's back to be turned. As written the line implies you can dodge both effects by facing him, when in fact facing him dodges exactly one — and that one is the half that decides whether Spinning Slash catches you. Retreating while facing Tryndamere is a real, concrete micro-play and the entry currently hides it.",
+   "corrected": "Mocking Shout (W), 14s, 850 range: cuts your AD whether you face him or not; it only slows you if your back is turned. Walk out facing him.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/tryndamere.json — W Mocking Shout: 'decreasing surrounding champions' Attack Damage. Enemies with their backs turned to Tryndamere also have their Move Speed reduced.'"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns and the dos/donts track only Undying Rage, described as 'Unkillable 5s' with no cooldown, and the punishable window is never named.",
+   "why": "Every Tryndamere ability costs zero resource, so there is no mana window to wait for — the only timers that exist are cooldowns, which makes stating them the entire game. Undying Rage is 120s at rank 1. The window that actually decides lane trades is Spinning Slash at 12s at rank 1: it is simultaneously his gap-close and his only exit, so the twelve seconds after he spends it are when Ambessa's dash chain can stick. That sequence appears nowhere.",
+   "corrected": "Undying Rage 120s at rank 1; Spinning Slash 12s at rank 1 and free — it is both his engage and his escape, so commit inside the 12s after he spends it.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/tryndamere.json — R 120/100/80, E 12/11/10/9/8 cost 0, Q/W/E/R all cost 0"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[1].why: 'Dash-resets stack your passive shield mid-trade.' Ambessa's passive grants no shield.",
+   "why": "Drakehound's Step gives a dash, an empowered next attack and an energy refund. The shield is Repudiation (W), and against a crit auto-attacker it is the strongest button in her kit for a reason the entry never states: damage she blocks during the brace amplifies the slam. Tryndamere's crit autos and Spinning Slash are exactly the non-minion damage that feeds it.",
+   "corrected": "Repudiation (W), 18/17/16/15/14: brace his crit autos, and the blocked damage amplifies the slam you fire back.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ambessa.json — P Drakehound's Step (no shield), W Repudiation"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "TRICKY at 7.5/10 with Tryndamere carry threat 8.5/10 is right, and unusually the content layer already states the decisive fact correctly: Public Execution suppresses and stuns but does not execute, so Undying Rage survives the full combo. Both layers agree stage-for-stage on every side value. No side changed.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ambessa.json — R Public Execution has no execute",
+    "champ-data/ambessa.full.js — phases[].side matches content win[]"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "The four spikes are correctly placed: he owns 1-2 on crit autos plus a free Spinning Slash, level 6 is neutralised by Undying Rage rather than won, Eclipse plus Profane Hydra is her only real window, and late is his. I only added the cooldown numbers that make 'only commit when his E and R are down' actionable — 12s and 120s at rank 1.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/tryndamere.json — E 12/11/10/9/8, R 120/100/80"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "Q-into-E gives you a slow-into-burst, but his spin still out-sustains a short exchange — it's only close if you refuse to extend past one rotation.",
+   "after": "Q-into-E gives you a slow-into-burst, but Bloodlust turns his Fury straight back into health — it stays close only if you refuse to extend past a rotation."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "Your level-3 Q-E combo plus the Drakehound's Step second spin can win a quick dash-weave, but his E gap-close and Mocking Shout let him reset and disengage, keeping it a coinflip.",
+   "after": "Your level-3 Q-E combo plus the Drakehound's Step second spin can win a quick dash-weave, but Spinning Slash is 12s and costs him nothing, so he resets and disengages — still a coinflip."
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "This is your weakest window with your longest cooldowns, and his spin out-trades you flat — concede and farm toward Eclipse.",
+   "after": "Your longest-cooldown window against a champion who pays nothing for his, and Bloodlust refunds the chip — farm toward Eclipse."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Farm safely to Eclipse, then catch him with E and Undying Rage on cooldown for a Q-empowered-auto-Q burst",
+   "after": "Buy Grievous Wounds, then catch him with Spinning Slash and Undying Rage both down for a Q-empowered-auto-Q burst"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Bait Undying Rage with W's shielded slam, then back off and re-engage only once the 5s immortality and his Fury wear down",
+   "after": "Bait Undying Rage with Repudiation's braced slam, then re-engage only once the immortality ends and his Fury has drained"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Spin-DPS you down in any extended trade while his crit autos punish your long early cooldowns",
+   "after": "Extend every trade so Bloodlust and his rising low-health AD out-grind your long cooldowns"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Mocking Shout-slow you to land Spinning Slash, then E away before your R or full combo comes online",
+   "after": "Catch you with your back turned so Mocking Shout slows, land Spinning Slash, then spin out on its 12s"
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Tryndamere just out-damages you levels 1-3 — his crit autos and Spinning Slash DPS beat your single early ability, and your Q-into-E combo isn't even online at 1. Don't contest the spin trade; farm at the outer edge of your Q cone (Cunning Sweep) where it deals doubled damage, then back off. His Mocking Shout slows you and shaves your AD if you face away, so never walk in for an empowered auto you haven't set up — your cooldowns are far too long here to whiff a trade you don't have the kit for yet.",
+   "after": "Tryndamere just out-damages you levels 1-3 — his crit autos and a free Spinning Slash beat your single early ability, and your Q-into-E combo isn't even online at 1. Don't contest the spin trade; farm at the outer edge of your Q cone (Cunning Sweep) where it deals doubled damage, then back off. Mocking Shout shaves your AD whether or not you face him, but it only slows you if your back is turned — walk out facing him and Spinning Slash arrives a beat late. Bloodlust is 12s and free, so chip you don't convert is chip he simply heals back."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "At 6 you finally have a real combo, but his R is the whole problem: Public Execution blinks you behind the farthest enemy, suppresses and ends in a brief stun — yet it is NOT an execute, and Undying Rage parks him at minimum HP for five seconds while refunding Fury, so your all-in doesn't kill, it hands him a free spin-down on your exit. Only commit when his E gap-close AND Undying Rage are both on cooldown, and even then lean on E (Lacerate)'s near-total slow and your passive dash rather than trading autos into his crit. Your first item (Eclipse + Profane Hydra, Q maxed) is your one favour window: Q1-empowered-auto-Q2 chunks him, so look for the pick when his defensives are already spent.",
+   "after": "At 6 you finally have a real combo, but his R is the whole problem: Public Execution blinks you behind the farthest enemy, suppresses and ends in a brief stun — yet it is NOT an execute, so Undying Rage parks him at minimum HP while refunding Fury and your all-in hands him a free spin-down on your exit. Undying Rage is 120s at rank 1 and Spinning Slash is 12s; commit only when both are spent, and lean on E (Lacerate)'s slow and your passive dash rather than trading autos into his crit. Grievous Wounds has to be on the board before the burst, not after it — Bloodlust is a 12s heal. Your first item (Eclipse + Profane Hydra, Q maxed) is your one favour window: Q1-empowered-auto-Q2 chunks him, so look for the pick when his defensives are already spent."
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Anti-heal his crits — combo after his R. Ambessa wins the Undying Rage cooldown windows.",
+   "after": "Grievous Wounds before Bloodlust — combo after his R. Ambessa wins the Spinning Slash window."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Dash-resets stack your passive shield mid-trade. Only take the trade when Tryndamere's Undying Rage is down.",
+   "after": "Repudiation is your shield — brace his crit autos and the blocked damage amplifies the slam you fire back."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Tryndamere Undying Rage: matchup-defining — Unkillable 5s. Combo after it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+   "after": "- Undying Rage: 120s at rank 1 — commit only after it is spent. - Spinning Slash: 12s and free, his engage and his exit both; step in inside those 12s. - Bloodlust: 12s heal — Grievous Wounds first."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Tryndamere's Undying Rage: Unkillable 5s. Combo after it. When it is down — Dash-combo + R him.",
+   "after": "Mocking Shout slows only when your back is turned — retreat facing him, then commit on his R."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Unkillable 5s. Combo after it. Only engage once it is down or baited.",
+   "after": "120s at rank 1. Combo after it — only engage once it is down or baited."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].t",
+   "before": "Anti-heal his crit healing",
+   "after": "Cut Bloodlust with anti-heal"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Cast-dash-empowered-hit on Tryndamere's step-up, weave the second dash through his answer, and exit with shield banked.",
+   "after": "Bloodlust is 12s and free — it turns his Fury into health, and his AD climbs as he drops. Grievous Wounds before Eclipse."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That is Tryndamere's favourite window — refuse it and half his win condition is gone.",
+   "after": "Bloodlust is free and off a 12s timer — Grievous Wounds lands before your burst."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+   "after": "He banks Fury off your damage and heals it back — bait it, then burst."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Dumping every dash going IN — Ambessa with no dash left is a duelist who forgot the door.",
+   "after": "Spinning Slash is 12s and free — chasing it just spends your dashes and leaves you naked."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Ambessa vs Tryndamere - Track: Tryndamere Undying Rage. - Keep the wave on your side. - Engage only on Undying Rage's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+   "after": "- Ambessa vs Tryndamere - Track: Undying Rage, 120s. - Spinning Slash 12s, free. - Grievous Wounds before the burst. - Retreat facing him so Mocking Shout misses its slow."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Undying Rage's cooldown, on your level-6 spike, and on your Eclipse timing. His answer goes first; yours goes last.",
+   "after": "Commit after Undying Rage and inside the 12s his Spinning Slash is gone. Grievous Wounds first; Public Execution last."
+  },
+  {
+   "layer": "full",
+   "path": "report[11].t",
+   "before": "Fight without anti-heal. Burst him into his R. Chase his spin blind. Don't spend your ultimate on chip — it is the kill window.",
+   "after": "Fighting with no Grievous Wounds. Bursting into Undying Rage. Chasing a free 12s Spinning Slash. Spending R on chip, not the kill."
+  }
+ ],
+ "notes": "UNVERIFIED, NOT PROPAGATED: the existing text states Undying Rage lasts 5 seconds. Riot's Data Dragon description gives no duration, so I did not repeat the number in any string I rewrote — where I needed a figure I used the cooldown, 120s at rank 1, which the kit does give. I also did not touch content.late, which carries the same 5-second claim. KIT-FILE FLAG MISFIRES: champ-data/_kits/ambessa.json tags Public Execution with 'heal' and both W and R with 'grounding'; Riot's descriptions support none of them (the parser caught 'slams the ground'). Unlike most Ambessa entries this one does NOT contain the invented 'R passive lifesteal' line, so nothing needed removing here. WIN RATE: MC_WR_TABLES.ambessa.tryndamere is 45.32 while the packet reports 43.98 over 382 games. No win-rate edit proposed. The two suspect ability names the packet flagged, 'Undying Rage' and 'Mocking Shout', are both correct — false positives from the case-insensitive detector."
+}

@@ -1,0 +1,158 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "garen",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "48.84% over 1945 games, matching MC_WR_TABLES — the second-largest sample in my slice. No elo-tier language present.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packets/nasus.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "THE ADVICE IS BACKWARDS. Three strings tell the player to save Wither for the moment Garen engages with Decisive Strike — content wants.you[2] ('Save Wither for his Q-empowered strike engage'), mid ('Hold Wither for the moment he Q-silences in and commits empowered strike, slow him to a crawl'), and whys[2]. That is the single worst moment to spend it.",
+   "why": "Riot's text for Decisive Strike: 'Garen gains a burst of Move Speed, BREAKING FREE OF ALL SLOWS affecting him.' Wither is a slow. So a Wither applied before or into his Q is simply removed by the Q, and a Wither applied at the instant he engages is being spent against a champion who is at that moment both slow-immune and speed-boosted. The correct sequencing is the inverse: let the Q go first, then Wither the Garen who no longer has an answer to it. The full layer already contains this fact — breakdown.cooldowns says 'Cleanses slows, gains move speed' — but it sits there as an unused description while the content layer builds its entire Wither plan on the opposite assumption. This is the most damaging error I found in the slice, because it is confidently repeated three times and it converts Nasus's only defensive cooldown into a wasted cast.",
+   "corrected": "Decisive Strike breaks slows, so never Wither into it. Bait the Q out, then Wither the Garen who has no cleanse left.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/garen.json (Q Decisive Strike description, slow flag)",
+    "champ-data/_kits/nasus.json (W Wither, slow flag)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "Packet defect confirmed: no cooldown-sequencing anywhere. And the numbers here are unusually unfavourable, which the entry never admits.",
+   "why": "Decisive Strike is a flat 8s at every rank. Wither is 15/14/13/12/11s. Garen's cleanse comes back roughly twice as fast as Nasus's slow at rank 1 and is still faster at rank 5. That is the opposite of the Gangplank matchup, where Wither is shorter than Remove Scurvy and baiting works. Against Garen you cannot bait-and-repeat, because he will always have another Q — you can only spend Wither in the seconds after a Q is already used. Saying this plainly is what makes the difference between a player who lands Wither and one who feeds it every eight seconds.",
+   "corrected": "Decisive Strike is 8s flat against your 15s Wither — he refreshes twice as fast, so W only lands in the window straight after his Q.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/garen.json (Q cooldown 8)",
+    "champ-data/_kits/nasus.json (W cooldown 15/14/13/12/11)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Both layers describe Garen strolling out of trades to regenerate — content early: 'strolls away to regen with his passive before your lifesteal can grind anything back' — and neither mentions that the regeneration is conditional and deniable.",
+   "why": "Riot's text for Perseverance: 'If Garen has NOT RECENTLY BEEN STRUCK by damage or enemy abilities, he regenerates a percentage of his total health each second.' Any damage resets it. Nasus holds Spirit Fire — a ground-targeted zone with 650 range on a flat 12s cooldown that costs no positioning to use. Dropping it on a retreating Garen denies the regeneration outright, which is the answer to the exact complaint the entry raises and needs no items, no levels and no risk. Neither layer connects the two abilities.",
+   "corrected": "Perseverance only ticks when he is untouched. Spirit Fire the ground he walks off to and the regen never starts.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/garen.json (P Perseverance description)",
+    "champ-data/_kits/nasus.json (E Spirit Fire, range 650, cooldown 12)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Courage is referred to only as 'W damage reduction' and 'his W cut'. Its shield and tenacity components are never mentioned.",
+   "why": "Riot's text: 'activate this ability to give him a shield and TENACITY for a brief moment followed by a lesser amount of damage reduction for a longer duration.' Two things follow that matter to Nasus. The shield front-loads on cast, so burst landed into a fresh Courage is partly absorbed rather than reduced. And the ability explicitly grants tenacity, which is a second answer to Wither on top of the Q cleanse — worth flagging to the player that Garen holds two separate outs for the one tool Nasus has. I am stating only what Riot's text says and NOT quantifying how much tenacity shortens Wither, because tenacity behaviour is exactly what the kit files are documented as not covering.",
+   "corrected": "Courage is a shield plus tenacity first, damage reduction second — a second answer to Wither alongside the Q cleanse.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/_kits/garen.json (W Courage description)"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "Packet defect confirmed: neither layer names any Garen ability. Everything is 'his Q', 'his W', 'his R', 'his passive' — Perseverance, Decisive Strike, Courage, Judgment and Demacian Justice appear nowhere in the content layer.",
+   "why": "This matters more here than it would elsewhere because the two abilities the player must actually recognise on sight — Decisive Strike's speed burst and Perseverance's regeneration tick — are both visual cues rather than obvious cast animations. A player told to 'bait his Q' without the name has nothing to search for.",
+   "corrected": "Name Decisive Strike, Perseverance and Courage where the length band allows.",
+   "confidence": "High",
+   "sources": [
+    "packets/nasus.json (defect list)",
+    "champ-data/_kits/garen.json"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[4].why is the cross-matchup boilerplate 'Fury of the Sands flips dives ... First real fight you're allowed to take', while its own side says Garen and content whys[4] says 'he owns the kill threat at 6'.",
+   "why": "Level 6 hands Garen a true-damage execute. Nasus gaining bonus health does not flip that, because an execute scaling on missing health is the one thing a big health pool does not solve. Calling it Nasus's first allowed fight contradicts the side field beside it and the content layer's correct read.",
+   "corrected": "Rewrite as his kill-threat spike.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/garen.json (R flags trueDamage, execute)",
+    "champ-data/content/nasus.js (whys[4])"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[6].side is 'Skill' while its own why reads '300+ stacks and two items: you out-duel Garen on cooldown and three-shot his tower', and content win[6] is 'Nasus'.",
+   "why": "Same internally-verifiable contradiction as Darius, Fiora and Gangplank. The content layer's win array here gives Garen all six earlier stages and Nasus the last, which is a coherent story for a 48.84% matchup; only the full layer's stage-6 side disagrees with everything around it.",
+   "corrected": "phases[6].side = Nasus.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/nasus.full.js",
+    "champ-data/content/nasus.js"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Garen Decisive Strike (Silence): matchup-defining — His silence opens his trade. Don’t get caught. Track it before every engage. - Garen Decisive Strike: Cleanses slows, gains move speed; next auto silences and deals bonus damage. Dodge or sidestep it.",
+   "after": "- Decisive Strike: matchup-defining — it BREAKS SLOWS, so a Wither spent into it is cleansed off. 8s flat against your 15s W, so only Wither after his Q. - Perseverance: his regen stops the moment anything hits him. Spirit Fire denies it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His silence opens his trade. Don’t get caught. Only engage once it is down or baited.",
+   "after": "It breaks slows, so Wither only lands after the Q is spent. Never W straight into it."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Garen, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "His spike, not yours: Demacian Justice is a true-damage execute, and bonus health from R is no answer to it. Never trade down to low HP."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+   "after": "Perseverance only ticks when untouched — Spirit Fire his exit and it stops."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Save Wither for his Q-empowered strike engage so you kite his short trade and disengage",
+   "after": "Wither only AFTER Decisive Strike is spent — cast into it and his Q cleanses it off"
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "Even with Wither at 3 you only stall his engage; his Q-silence trade and W still win the short exchange, so slow him and farm, don't duel.",
+   "after": "Wither at 3 does less than it looks: Decisive Strike breaks slows outright, so W only sticks once his Q is already on cooldown."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Still Garen's window. At 6 his Fury of the Sands gives you survivability, but his R is a missing-HP true-damage execute that laughs at your big HP bar — never let a trade leave you low or you simply die through your sustain. Hold Wither for the moment he Q-silences in and commits empowered strike, slow him to a crawl so the trade stalls, then back off. Your job through first item is to not feed and keep the stack count climbing.",
+   "after": "Still Garen's window. At 6 your Fury of the Sands gives survivability, but Demacian Justice is a missing-HP true-damage execute that laughs at your big HP bar — never let a trade leave you low or you simply die through your sustain. Do NOT Wither into his engage: Decisive Strike breaks all slows, so it just gets cleansed. Wait until the Q is spent, then W the Garen who has no answer left."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Garen wins these levels outright and you have to accept it. His Q silences your cast and lands an empowered strike, he trades, then strolls away to regen with his passive before your lifesteal can grind anything back — there is no winning a short trade here. Don't throw a Q hoping to duel; just soak Siphoning Strike stacks behind the minions with Spirit Fire chipping the wave, and respect that he can W-cut your only real burst.",
+   "after": "Garen wins these levels outright and you have to accept it. Decisive Strike silences your cast and lands an empowered strike, he trades, then strolls off to regen — but Perseverance only ticks while nothing has touched him, so Spirit Fire the ground he retreats to and the regen never starts. Don't throw a Q hoping to duel; soak Siphoning Strike stacks behind the minions and respect that Courage cuts your burst."
+  }
+ ],
+ "notes": "MOST IMPORTANT FINDING IN MY SLICE. The Garen content layer tells the player, three separate times, to save Wither for the exact moment Garen engages with Decisive Strike. Decisive Strike breaks free of all slows. So the entry's core defensive instruction is to spend Nasus's only cooldown into the one ability that deletes it — and the full layer already contains the correcting fact ('Cleanses slows, gains move speed') sitting unused two fields away. If any single fix in this batch is worth applying by hand, it is this one.\n\nSecond finding, nearly as good: Perseverance regenerates only while Garen has not recently been struck, and Nasus holds a 650-range ground-targeted zone on a flat 12s cooldown. Spirit Fire denies the regeneration completely. Both layers complain about Garen walking off to heal and neither connects it to the ability that stops it.\n\nCooldown reality check worth carrying to other entries: this matchup is the mirror image of Gangplank. There, Wither (15s) is SHORTER than the enemy's cleanse (Remove Scurvy, 22s), so baiting works. Here Wither (15s) is nearly DOUBLE Garen's cleanse (Decisive Strike, 8s flat), so baiting does not work and the only real window is the few seconds after a Q is already spent. Advice templated across matchups ('bait it, then commit') is right in one and wrong in the other; the cooldown ratio is what decides which, and it is computable from the kit library for every pairing.\n\nOne thing I flagged but did NOT assert precisely: Courage grants tenacity per Riot's own ability text, which would be a second answer to Wither alongside the Q cleanse. I put the shield-and-tenacity description into the audit but kept it out of the edits, because how much tenacity actually shortens Wither is exactly the class of question the kit files are documented as not answering, and I was not willing to put a number or a strength claim on the site. Worth a Wiki check — if tenacity meaningfully cuts Wither here, the difficulty rating of 7/10 is probably generous.\n\nPacket defect 'never names any of Garen's abilities' is confirmed and partly fixed: I introduced Decisive Strike, Perseverance, Courage and Demacian Justice into the strings I was already rewriting. Judgment still appears nowhere — dontsFull[2].t says 'Get spun down early' without naming the spin, and there was no length budget to fix it inside an edit I could otherwise justify."
+}

@@ -1,4 +1,4 @@
-// MatchupCoach — Warwick (Top) champion matchup data. Patch 26.11. (with hold + tip)
+// MatchupCoach — Warwick (Top) champion matchup data. Patch 26.15 (content authored 26.11). (with hold + tip)
 window.CHAMP_DATA = window.CHAMP_DATA || {};
 window.CHAMP_DATA.warwick = {
   // ===== JUGGERNAUTS =====

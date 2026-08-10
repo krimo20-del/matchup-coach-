@@ -1,4 +1,4 @@
-// MatchupCoach — Zaahen (Top) champion matchup data. Patch 26.11. (with hold + tip)
+// MatchupCoach — Zaahen (Top) champion matchup data. Patch 26.15 (content authored 26.11). (with hold + tip)
 // Note: Zaahen is the newest champion — data is best-effort for the current patch and should be reviewed against the live patch.
 window.CHAMP_DATA = window.CHAMP_DATA || {};
 window.CHAMP_DATA.zaahen = {

@@ -1,0 +1,301 @@
+{
+ "ownerKey": "mel",
+ "enemy": "yone",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Packet win rate is 42.86 over 14 games, and content.late already quotes 'this is where the 42% lives'. The number in the prose matches the stored figure.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packet mel.json entry yone"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "HARD at 8/10 is the right call for a 42.86 win rate, and the content chart [Skill,Mel,Mel,Skill,Skill,Skill,Yone] tells a coherent story: Mel owns the level 2-3 window and loses everything after. I left the rating alone. The seven full.phases[].side values all read 'Yone' though, which contradicts the two Mel entries in the content chart.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packet mel.json entry yone"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Fate Sealed is called a knockup in six separate places — 'His R knockup is the kill threat', 'R-knockup combo', 'ult me airborne', 'R-knockup you mid-combo', 'His R-knockup arrives', 'one R-knockup off a Q-dash combo'.",
+   "why": "Fate Sealed does not knock up. Riot's text: Yone blinks behind the last champion in a line and pulls all enemies hit towards him. The knockup in his kit belongs to Mortal Steel's third cast, not the ultimate — the file has merged the two. The practical consequence is large: a pull that originates from BEHIND the last champion in the line means standing behind your own frontline is not safety, it is the exact spot he lands. A Mel player told it is a knockup will position for the wrong threat.",
+   "corrected": "Named Fate Sealed as a blink-behind-and-pull in spikes[1], spikes[3], wants.foe[2], whys[4], whys[6], phases[4].why, content.mid, content.late and loading.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/yone.json (R Fate Sealed; dash flag only, no knockup)",
+    "champ-data/_kits/yone.json (Q Mortal Steel carries the knockup)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "wants.you[1] says to hold W for 'the spirit-cleave projectile' and content.late says 'take W to deny his big spirit-blade'. phases[1].why says the reflect turns his poke into Mel's poke.",
+   "why": "Spirit Cleave is a cone swipe, not a projectile, and Yone carries no projectile on any slot — Mortal Steel's third cast dashes him forward rather than firing anything, and Fate Sealed is a blink. Rebuttal's reflect has nothing to catch in this matchup, so its entire worth is the damage prevention. Three separate lines tell the player to hold her only defensive cooldown waiting for a projectile that does not exist.",
+   "corrected": "Rewrote every reflect line as damage immunity spent on Spirit Cleave's swing or the third Mortal Steel.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/yone.json (no projectile flag on any slot)",
+    "champ-data/_kits/mel.json (W Rebuttal reflects projectiles)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Soul Unbound is called 'the clock this lane runs on' but the mechanic that makes it beatable is never stated.",
+   "why": "Yone's spirit is forced back to his body when the ability ends. The body does not move. That means the exact square he will occupy at the end of the window is known from the instant he casts — and Solar Snare is a 1000-range zone. This is the only reliable way an immobile mage lands CC on him, and it was missing while the file instead told her to 'track the cooldown'.",
+   "corrected": "Put the fixed-return-point counterplay into breakdown.cooldowns, dosFull[0].d, report[5].t, wants.you[2] and full.tldr, with the real 22/19/16/13/10 cooldown.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/yone.json (E Soul Unbound)",
+    "champ-data/what-kills-me.js (yone line 1 states the same snapshot behaviour)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Spirit Cleave is described only as a damage source; its shield and its attack-speed scaling are never mentioned.",
+   "why": "Spirit Cleave shields Yone, and the shield grows with the number of champions hit; its cooldown and cast time both scale with attack speed. For a poke mage that means two things the file never says: her chip is being eaten by a shield on a 14-second base, and as he itemises attack speed that shield arrives more often, not less. It also gives her a concrete instruction — force the cleave out before committing Golden Eclipse.",
+   "corrected": "Named Spirit Cleave and its attack-speed scaling in spikes[0], spikes[2], spikes[3], whys[2], whys[5], content.early, content.late and breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/yone.json (W Spirit Cleave)",
+    "champ-data/_kits/_missing-interactions.json (mel/yone: shield-absorbs-burst)"
+   ]
+  },
+  {
+   "point": 5,
+   "status": "missing",
+   "whatIsWrong": "Nothing accounts for the fact that Yone spends no resource.",
+   "why": "Every Yone ability costs 0 — his resource is Flow, and Q, W, E and R are all free. Mel's Radiant Volley costs 70 mana at rank 1 and Solar Snare 50. In a long poke lane that asymmetry is the whole attrition problem: his whiffs are free and hers are not, so trading blind cooldowns with him is a losing exchange even when the damage looks even.",
+   "corrected": "Added the free-cast asymmetry to whys[3] and content.mid.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/yone.json (all costs 0, resource Flow)",
+    "champ-data/_kits/mel.json (Q 70/75/80/85/90, E 50/60/70/80/90)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns carries no numbers at all, and tradeBad, dontsFull[2].d and breakdown.trading claim Rebuttal is 'gone for twenty seconds'.",
+   "why": "Rebuttal is 38/35/33/29/26 — 38 seconds at the rank she has in lane, not twenty. Soul Unbound is 22/19/16/13/10, Fate Sealed 120/100/80, Spirit Cleave 14 base. In a matchup the file itself frames as cooldown-driven, not one real number was present.",
+   "corrected": "Replaced the Rebuttal figure everywhere it appeared and filled breakdown.cooldowns with the real Yone numbers.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/mel.json (W Rebuttal)",
+    "champ-data/_kits/yone.json (E, R, W)"
+   ]
+  },
+  {
+   "point": 12,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[2] and whys[5] both explain the first-item spike as 'his dash range now closes my Solar Snare gap'.",
+   "why": "Mortal Steel's dash range does not change with items — it is a fixed 450-range ability. What actually changes when he buys Berserker's Greaves and a crit item is attack speed, which shortens Spirit Cleave's cooldown and cast time. The file attributes the spike to the wrong mechanic, so a player watching for a longer dash will keep the same spacing and keep dying to the same shield.",
+   "corrected": "Re-pointed both strings at Spirit Cleave's attack-speed scaling.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/yone.json (Q range 450 fixed; W cooldown and cast time scale with attack speed)"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Q + Solar Snare online — root him stepping up for CS and chunk him with a Q before he has the W cleave to trade back.",
+   "after": "Q + Solar Snare online — root him stepping up for CS and chunk him with a Q before Spirit Cleave shields him into a trade."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "His R knockup is the kill threat — he flashes or E-rewinds in, ults, and your single root may already be on cooldown.",
+   "after": "Fate Sealed is the kill threat — it blinks BEHIND the back of the line and pulls; hiding behind an ally is his landing zone."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "He buys Berserker's + first crit item and the Q-dash range outpaces your Solar Snare range — he can finally close the gap on cooldown.",
+   "after": "He buys Berserker's + first crit item and Spirit Cleave's cooldown scales with attack speed — the shield eating your burst arrives faster."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Two-itemed Yone E-rewinds through your poke, eats your W with raw mobility, and one R-knockup combo deletes your squishy frame.",
+   "after": "Two-itemed Yone walks through your poke behind a Spirit Cleave shield, and one Fate Sealed pull into combo deletes your squishy frame."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Hold W to eat his third Q-dash auto and the spirit-cleave projectile rather than wasting it on a single hit",
+   "after": "Hold W to eat the third Mortal Steel and the Spirit Cleave swing — he has no projectile to reflect"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Keep him out of range with Q and detonate Overwhelm stacks with R the instant he commits, before his E sends him home safe",
+   "after": "Keep him out with Q and detonate Overwhelm the instant he commits, before Soul Unbound snaps him back to the body he left behind"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Wait out your Solar Snare and Q cooldowns, then Q-dash through minions to land on you for a W cleave",
+   "after": "Wait out your Solar Snare and Q, then land the third Mortal Steel on you and shield with Spirit Cleave"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Bank his E (spirit rewind) so any all-in he makes is a free swing he can undo if it goes wrong",
+   "after": "Bank Soul Unbound so any all-in is a free swing he can undo — 22s at rank 1, 10s at rank 5"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Reach 6 and his first crit item, then R-knockup you mid-combo where one root can't save you",
+   "after": "Reach 6, then blink behind you with Fate Sealed and pull, where one root cannot save you"
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "I have a real window early — at Level 2 with Q and Solar Snare I can root him as he steps up for a minion and stack a free Q-poke on top, and he has no E-rewind escape yet to undo it. The trick is that his W spirit-cleave and third-auto Q-dash hit harder the longer he stacks marks, so I poke and back off, never standing in cleave range. Hold my W barrier for his dash-in auto or the spirit blade projectile, not for a stray poke. My root is my only CC, so if I whiff it I have nothing to peel his commit.",
+   "after": "I have a real window early — at Level 2 with Q and Solar Snare I can root him as he steps up for a minion and stack a free Q-poke on top, and Soul Unbound does not exist yet to undo it. The catch is Spirit Cleave: a 700-range cone that shields him every time it lands, so I poke and back off and never stand in cleave range. He owns no projectile at all, so my W is damage immunity, not a reflect — spend it on the third Mortal Steel. My root is my only CC, so if I whiff it I have nothing."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "From 4-6 the lane tilts toward him. My Q ranks up and Overwhelm builds from trades, but the second he hits 6 his R-knockup plus E-rewind means he can Q-dash in, cleave, ult me airborne, and rewind out if it goes badly — and my Solar Snare is a single 1.5s root I often won't have up for both his entrance and his escape. I detonate R the moment he commits to punish the stacks I've built, but I cannot reliably kill him because his E undoes the bad trade. Play for poke chip and respect that one missed root is a death.",
+   "after": "From 4-6 the lane tilts toward him. My Q ranks up and Overwhelm builds from trades, but at 6 Fate Sealed blinks him behind the last champion in the line and pulls — 1000 range, 120s at rank 1 — and Soul Unbound lets him undo the trade afterwards. My Solar Snare is a single root I often won't have up for both his entrance and his exit. Worse, every ability he casts is free while my Q costs 70 mana, so his whiffs cost him nothing and mine cost me the next trade entirely."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "This is where the 42% lives. A two-item Yone E-rewinds straight through my Q poke, has the raw movement speed and dash range to ignore my kiting, and one R-knockup off a Q-dash combo executes my squishy frame before Overwhelm or my W can matter. My infinite passive scaling does not save me when he simply gaps the range I rely on. Play for side-lane safety, take W to deny his big spirit-blade, and let my team peel — I do not win this 1v1 once he's itemized.",
+   "after": "This is where the 42% lives. A two-item Yone walks through my Q poke behind a Spirit Cleave shield whose cooldown shrinks as he stacks attack speed, and one Fate Sealed pull off a Mortal Steel combo deletes my squishy frame before Overwhelm can matter. My infinite passive scaling does not save me when he simply gaps the range I rely on. Play for side-lane safety, spend W on his burst instead of saving it for a projectile he does not own, and let my team peel."
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Both of us are weak with one ability — he can't Q-dash commit yet and I lack the projectile count, so it's even and I just set up CS.",
+   "after": "Both weak with one ability — Mortal Steel needs two stacks before it dashes at all, and I lack the projectile count, so I just set up CS."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "My Q + Solar Snare root lands a guaranteed punish on him stepping up, and he has no E-rewind to undo it at level 2.",
+   "after": "My Q + Solar Snare punishes him stepping up, and Soul Unbound is not online yet to undo the trade at level 2."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "With Q, E and W online I out-poke a Yone who can't yet sustain trades or dash in safely, and my root denies his step-up.",
+   "after": "With Q, E and W online I out-poke a Yone whose Spirit Cleave shield is still small, and my root denies his step-up outright."
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "His Q ranks and mark-stacking start to bite, but my Overwhelm builds too — it's a genuine coinflip on who lands their cooldown.",
+   "after": "His Mortal Steel ranks up and costs him nothing while my Q costs 70 mana — his misses are free and mine buy him the next window."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "His R-knockup arrives and my single Solar Snare can't cover both his Q-dash entrance and his E-rewind exit, so the window is even at best.",
+   "after": "Fate Sealed arrives — it blinks behind the last champion in the line and pulls, and my single Solar Snare can't cover entrance and exit."
+  },
+  {
+   "layer": "content",
+   "path": "whys[5]",
+   "before": "He buys his first crit item and Berserker's; his dash range now closes my Solar Snare gap on cooldown, neutralizing my kite.",
+   "after": "He buys Berserker's and a crit item; Spirit Cleave's cooldown scales with attack speed, so the shield eating my burst comes back faster."
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "He E-rewinds through my poke, ignores my kiting with raw mobility, and one R-combo deletes me before my passive scaling matters.",
+   "after": "Soul Unbound is 10s at rank 5, so he pokes from a spirit he can rewind, and one Fate Sealed combo deletes me whatever my passive scales to."
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "His dash goes through your reflect — snare the landing spot and save W for the burst, not the engage.",
+   "after": "He owns no projectile, so W is pure immunity — snare the body Soul Unbound must return to, not the spirit."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "W Rebuttal online — the reflect turns his poke into your poke. Hold it for his real spell, not for chip.",
+   "after": "W Rebuttal online — Yone casts no projectile, so this is pure damage immunity. Spend it on a Spirit Cleave swing."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Stack Overwhelm with every hit — once he's marked deep, your execute math starts working. Track Soul Unbound before stepping up.",
+   "after": "Stack Overwhelm with every hit — once he's marked deep, the execute math works. Soul Unbound is 22s at rank 1 and 10s at rank 5."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Golden Eclipse online — anyone you've stacked is now walking around with a countdown. Chip, stack, execute.",
+   "after": "Golden Eclipse online, but so is Fate Sealed — it blinks behind the back of the line and pulls. Chip, stack, execute."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Yone Soul Unbound: matchup-defining — His burst window — survive it and punish the body he snaps back to. Check it before every step-up. - W Rebuttal is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+   "after": "- Yone Soul Unbound: 22/19/16/13/10s — his spirit returns to the body, so his exit square is known the moment he casts. - Fate Sealed is 120s at rank 1 and pulls, not knocks up. - Spirit Cleave is 14s and shortens with attack speed."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Snare through the wave onto his farming spot, fan two full Q volleys while he's locked, and step back with W ready before his answer comes off cooldown. Bad trade: Burning Rebuttal on chip damage and then standing in Soul Unbound range — your only defensive layer is gone for twenty seconds.",
+   "after": "Good trade: Solar Snare through the wave onto his farming spot, fan two full Q volleys while he's rooted, and step back with W ready before his answer comes off cooldown. Bad trade: burning Rebuttal on chip and then standing in Soul Unbound range — Rebuttal is 38 seconds at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "tradeBad",
+   "before": "Burning Rebuttal on chip damage and then standing in Soul Unbound range — your only defensive layer is gone for twenty seconds.",
+   "after": "Burning Rebuttal on chip and then standing in Soul Unbound range — Rebuttal is 38 seconds at rank 1, so you are naked for a very long time."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Burning Rebuttal on chip damage and then standing in Soul Unbound range — your only defensive layer is gone for twenty seconds.",
+   "after": "Burning Rebuttal on chip and then standing in Soul Unbound range — Rebuttal is 38 seconds at rank 1, so you are naked for a very long time."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His burst window — survive it and punish the body he snaps back to. Its cooldown is the green light — wait for it.",
+   "after": "Survive it and punish the body he snaps back to — that square is fixed the instant he casts. It is 22s at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Yone whiffs Soul Unbound and the lane briefly belongs to you.",
+   "after": "A whiffed Soul Unbound is 22 seconds of lane that belongs to you."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Mel vs Yone - Track: Yone Soul Unbound. - Hold the reflect for his real spell. - No commits into Soul Unbound. - The ultimate closes arguments; it doesn’t open them.",
+   "after": "- Mel vs Yone - Track: Soul Unbound, 22s at rank 1. - No projectile to reflect; W is damage immunity. - Fate Sealed pulls, it does not knock up. - Snare the body."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Yone’s Soul Unbound: His burst window — survive it and punish the body he snaps back to. The whole green-light system is its cooldown.",
+   "after": "Soul Unbound forces his spirit back to the body — that return square is known the moment he casts, and Solar Snare owns it. 22s at rank 1."
+  }
+ ],
+ "notes": "BIGGEST FIX: the file called Fate Sealed a knockup in six places. It is a blink behind the last champion in a line followed by a pull toward him — the knockup in Yone's kit belongs to Mortal Steel's third cast. The two abilities had been merged, and the resulting advice points the player at the wrong threat: against a pull that starts BEHIND the back of the line, standing behind an ally is the landing zone, not cover. SECOND: three lines told Mel to hold Rebuttal for 'the spirit-cleave projectile' / 'his big spirit-blade'. Spirit Cleave is a cone and Yone has no projectile on any slot, so the reflect is dead here and W is purely damage immunity. This same fault appears in mel/wukong and mel/warwick — the Rebuttal reflect is being sold in matchups where the enemy owns nothing reflectable, so it is worth sweeping the whole Mel file for it. THIRD: spikes[2] and whys[5] blamed the first-item spike on his dash range growing. Mortal Steel is a fixed 450 range; what actually changes is attack speed shortening Spirit Cleave. PHASE SIDES: all seven full.phases[].side read 'Yone' while content.win reads [Skill,Mel,Mel,Skill,Skill,Skill,Yone]. The difficulty rating itself is right so I left it, but the two Mel entries in the content chart have no counterpart in the full layer. LEFT ALONE: content.mid calls Solar Snare 'a single 1.5s root'. The kit file does not carry root duration and I could not verify 1.5s, so I did not repeat the number in anything I rewrote and did not touch that claim. WKM_LINES for yone, yasuo, warwick, wukong, zac and zaahen all check out against the kit files — no errors to report there."
+}

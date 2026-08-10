@@ -1,0 +1,456 @@
+{
+  "ownerKey": "zac",
+  "enemy": "aurora",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet win rate 52.71% over 129 games matches MC_WR_TABLES.zac.aurora = 52.71. No elo-tier language in either layer.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json",
+        "champ-data/content/zac.js MC_WR_TABLES"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer is built around 'Twofold Hunt', which is not an Aurora ability. It occupies 25 writable strings including focus.text, and four of them write it as 'Twofold Hunt (Blink)'.",
+      "why": "Two errors stacked. The name is a corruption of Twofold Hex, which is Aurora's Q — a curse missile with a recast that drags the curse back through you. But the ability the guide is describing is plainly not a Q: it calls it 'Her escape', tags it '(Blink)', and full.focus.letters is ['W']. Aurora's W is Across the Veil, a leap that turns her invisible on landing. So the generator took the wrong ability's name, mangled it, and attached it to the right slot. The content layer independently gets the mechanic right ('her W blink slips your engage') while never naming it, so the two layers describe the same ability under a name that does not exist. This is the same failure mode as the fabricated 'Repeating Dashes' in zac__ambessa, and again suspectNames is empty, so the automated near-miss check caught neither.",
+      "corrected": "Replaced every occurrence with Across the Veil, and collapsed the redundant 'Across the Veil (Blink)' forms. focus.letters is already ['W'] and needs no change, which confirms the slot was right and only the name was wrong.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aurora.json Q 'Twofold Hex' and W 'Across the Veil'",
+        "packets/zac.json enemyAbilities",
+        "champ-data/zac.full.js focus"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "focus.text is 'Aurora Twofold Hunt' — the fabricated name is what the loading screen shows.",
+      "why": "Same defect as focus.text in the Ambessa entry. It is the single most visible string in the matchup.",
+      "corrected": "Should read 'Aurora Across the Veil'. NOT proposed as an edit: the current string is 19 characters and the correct one is 22, which is +15.8% and outside the applier's band. It needs a manual write or a band exemption for focus.text.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js focus.text",
+        "champ-data/_kits/aurora.json W"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.whys[4] and content.spikes[1].text call Between Worlds a 'double-blink R'. It is not a blink pair.",
+      "why": "Riot's text: Aurora 'leaps in a direction, releasing a shockwave that damages and slows any enemies it hits. Afterward, she creates an area that slows enemies within it and allows Aurora to teleport from one side of the area to the other.' It is one leap plus a persistent slowing zone she can cross repeatedly. That distinction is the whole counterplay — the zone is a fixed piece of ground with two sides, so you can position relative to it, which you cannot do against a free double blink. The guide's version tells the player the situation is hopeless when it is actually readable.",
+      "corrected": "Rewrote both to describe the zone and its crossing, and gave the 140s rank-1 cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aurora.json R description, cd 140/120/100"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The Weirding is never mentioned in either layer.",
+      "why": "Riot's text: it 'damages and slows enemies before Aurora hops backward to safety'. That makes it a second disengage on a 15/14/13/12/11s cooldown, far shorter than Across the Veil's 22s. The entire matchup is framed as 'bait her one escape, then commit' — with a second, more frequent escape in the kit that framing gets Zac killed, because he spends a 21s Elastic Slingshot believing she is out of outs.",
+      "corrected": "Added The Weirding and its 15s cooldown and 825 range to breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aurora.json E description, cd 15/14/13/12/11, range 825"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "_missing-interactions.json flags that Zac's Elastic Slingshot denies Aurora's Across the Veil and Between Worlds, and nothing in either layer states it. content.wants.you[0] says only 'Bait her W blink before committing your slingshot' — the opposite instruction.",
+      "why": "Elastic Slingshot's knockup is the reason the engage works: an airborne target cannot cast, so a landed E denies the blink outright rather than merely preceding it. That reframes the whole matchup from 'wait until her escape is spent' to 'land the knockup and the escape does not matter'. I have stated this via the knockup rather than via the grounding flag on zac.json E, because grounding and knockup are different mechanics and only the knockup is supported by Riot's own description of the ability.",
+      "corrected": "Put the knockup-denies-the-blink rule into dosFull[2].d, whose title is 'E-knock her combo'.",
+      "confidence": "Medium",
+      "sources": [
+        "champ-data/_kits/_missing-interactions.json zac/aurora enemy-dash-deniable",
+        "champ-data/_kits/zac.json E knockup flag"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.wants.foe[0] says Aurora wants to 'reset her passive on you'. Spirit Abjuration does not do anything to the target.",
+      "why": "Riot's text: 'Aurora's spells and attacks exorcise spirits from the enemies she damages. Exorcised spirits follow Aurora around and heal her.' It is a heal on her, not a mark or a reset on Zac. The line as written invents a mechanic, and it also buries the fact _missing-interactions flags for this pairing — that Spirit Abjuration is the sustain Grievous Wounds has to answer.",
+      "corrected": "Rewrote wants.foe[0] and whys[3] around Spirit Abjuration as her heal, and added Grievous Wounds to report[8].t, which currently lists no anti-heal at all.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aurora.json P description",
+        "champ-data/_kits/_missing-interactions.json zac/aurora needs-antiheal"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.early says to 'build W stacks on the wave' and content.wants.you[1] says to 'Stack W on minion blobs'. Zac's W has no stacks.",
+      "why": "Unstable Matter is a flat 5 second cooldown at every rank with no charges and no stacking. The intended action is collecting the chunks Cell Division sheds. Identical error to the one in zac__akshan, which suggests a shared template rather than a one-off.",
+      "corrected": "Rewrote both around eating shed blobs.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zac.json W cooldown '5', P description"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "content.win gives Aurora all seven stages against a 52.71% Zac win rate — the only 7/0 chart in this slice — while full.phases[].side reads [Skill, Zac, Zac, Skill, Skill, Zac, Zac].",
+      "why": "A chart with no Zac row anywhere cannot coexist with Zac winning the matchup by nearly three points. Aurora does own the lane: Twofold Hex is 900 range against Zac's 800, Across the Veil dodges the engage, and Spirit Abjuration refunds the chip. But the item stages are where a tank with a revive passive starts converting, and the full layer already says so.",
+      "corrected": "content.win should read [Aurora, Aurora, Aurora, Aurora, Aurora, Skill, Zac]. Not proposed as edits — categorical tokens cannot survive the length band.",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json winRate and levelChart",
+        "champ-data/zac.full.js phases",
+        "champ-data/_kits/aurora.json Q range 900"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "full.breakdown.cooldowns names the fabricated ability, gives it no number, and fills the other two bullets with 'Your committal tool' and 'Your ultimate' placeholders.",
+      "why": "Across the Veil at 22/21/20/19/18s is the longest non-ultimate cooldown in her kit and the actual window Zac plays for. The Weirding at 15s is the shorter second escape that ruins naive commits. Zac's own Elastic Slingshot is 21s at rank 1 — almost exactly as long as her blink, which is why trading E for W one-for-one is not the win the guide implies.",
+      "corrected": "Rebuilt the bullets around those three cooldowns.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aurora.json W and E",
+        "champ-data/_kits/zac.json E"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Three Do/Don't descriptions do not answer their titles: dosFull[1] 'Build MR' is described with the E-engage trade line, dontsFull[1] 'Eat her full combo' with 'Burning it for tiny value leaves you naked for its full cooldown', and dontsFull[2] 'Fall behind in scaling' with the blob-stomping line. dosFull[2] 'E-knock her combo' is described with a great-trade sentence rather than with how the knockup works.",
+      "why": "Same pasted-description bug as every other matchup in this slice, including the one card that carries the matchup's headline instruction.",
+      "corrected": "Rewrote all four to answer their own titles.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js dosFull and dontsFull"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Aurora is referred to as male in tradeBad and dontsFull[2].d ('Letting him stomp your blobs'), phases[1].why ('a trade he paid for'), dontsFull[0].d ('half his win condition'), breakdown.mid ('starve him'), breakdown.wave and report[4].t ('his tower'), breakdown.feeding and report[12].t ('If he snowballs'), breakdown.late ('if he gets ahead').",
+      "why": "Template bleed, the same as the Akali and Ambessa entries in this file. It is now clear this is a file-wide generator problem rather than isolated typos.",
+      "corrected": "Fixed in every string this proposal touches.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeBad, dontsFull[2].d, breakdown.trading and report[3].t all claim stomped blobs cost 'your passive revive margin'.",
+      "why": "Cell Division's shed chunks are sustain and destructible; the four bloblets appear only on fatal damage and set the revive. Stomping chunks costs sustain only. The 5 minute cooldown that governs the revive is what makes Zac able to survive a burst mage at all and it is written nowhere.",
+      "corrected": "Separated the two halves and stated the 5 minute cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zac.json P description"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Build MR — E-knock her combo, sustain her poke. Zac wins the Twofold Hunt cooldown windows.",
+      "after": "Build MR — E-knock her combo, sustain her poke. Zac wins the Across the Veil cooldown windows."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Build MR and E-knock her. Track Twofold Hunt before every commit and keep the wave on your side.",
+      "after": "Build MR and E-knock her. Track Across the Veil before every commit and keep the wave on your side."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Aurora wins by landing Twofold Hunt, denying your pattern, and kiting you off the wave.",
+      "after": "Aurora wins by landing Across the Veil, denying your pattern, and kiting you off the wave."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Aurora off the comeback farm. Dive with your jungler when Twofold Hunt is down.",
+      "after": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Aurora off the comeback farm. Dive with your jungler when Across the Veil is down."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Zac vs Aurora - Track: Aurora Twofold Hunt. - Keep the wave on your side. - Engage only on Twofold Hunt's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+      "after": "- Zac vs Aurora - Track: Aurora Across the Veil. - Keep the wave on your side. - Engage only on Across the Veil's cooldown. - Don't chase past the wave. - Ultimate = kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Twofold Hunt's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "The lane-control window: trade around Across the Veil's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Heartsteel is your spike — force fights the moment it completes, on Twofold Hunt's cooldown.",
+      "after": "Heartsteel is your spike — force fights the moment it completes, on Across the Veil's cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Q-stretch trades and blob pickups out-sustain the early chip. Respect Aurora's Twofold Hunt completely — the first levels are about banking small advantages, not proving a point.",
+      "after": "Q-stretch trades and blob pickups out-sustain the early chip. Respect Aurora's Across the Veil completely — the first levels are about banking small advantages, not proving a point."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Trade strictly around Twofold Hunt: when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve him.",
+      "after": "Trade strictly around Across the Veil: when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve her."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.spikes",
+      "before": "Aurora: Twofold Hunt online, level 6, first item. Zac: levels 2-3 (full pattern), Heartsteel first-item spike, and the 2-item front-line window.",
+      "after": "Aurora: Across the Veil online, level 6, first item. Zac: levels 2-3 (full pattern), Heartsteel first-item spike, and the 2-item front-line window."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Overall difficulty: 6/10. The lane is decided by how well you track Twofold Hunt and how disciplined your pattern is.",
+      "after": "Overall difficulty: 6/10. The lane is decided by how well you track Across the Veil and how disciplined your pattern is."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Aurora gets a kill, stop forcing and respect Twofold Hunt. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Aurora gets a kill, stop forcing and respect Across the Veil. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "report[12].t",
+      "before": "If Aurora gets a kill, stop forcing and respect Twofold Hunt. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Aurora gets a kill, stop forcing and respect Across the Veil. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight — build your teamfight around that. Aurora carry threat: 8/10 — shift to picks and wave control if he gets ahead.",
+      "after": "Elastic Slingshot from fog + R bounces win every river fight — build your teamfight around that. Aurora carry threat: 8/10 — shift to picks and wave control if she gets ahead."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Build MR and E-knock her. Track Twofold Hunt before every commit.",
+      "after": "Build MR and E-knock her. Track Across the Veil before every commit."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Twofold Hunt's cooldown, on your level-6 spike, and on your Heartsteel timing. Bait the answer, then sign.",
+      "after": "Commit on Across the Veil's cooldown, on your level-6 spike, and on your Heartsteel timing. Bait the answer, then sign."
+    },
+    {
+      "layer": "full",
+      "path": "report[10].t",
+      "before": "Your CC is premium gank setup — ping your jungler when Twofold Hunt is down. Ward river before extended trades.",
+      "after": "Your CC is premium gank setup — ping your jungler when Across the Veil is down. Ward river before extended trades."
+    },
+    {
+      "layer": "full",
+      "path": "report[13].t",
+      "before": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Aurora off the comeback farm. Dive with your jungler when Twofold Hunt is down.",
+      "after": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Aurora off the comeback farm. Dive with your jungler when Across the Veil is down."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Track Aurora's Twofold Hunt before you commit",
+      "after": "Track Aurora's Across the Veil before you commit"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: held near your side so Aurora overextends into your pattern. Worst wave: shoved to his tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot.",
+      "after": "Best wave: held near your side so Aurora overextends into your pattern. Worst wave: shoved to her tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: held near your side so Aurora overextends into your pattern. Worst wave: shoved to his tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot.",
+      "after": "Best wave: held near your side so Aurora overextends into your pattern. Worst wave: shoved to her tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Every blob you collect is a trade he paid for. Only take the trade when Aurora's Twofold Hunt is down.",
+      "after": "Every blob you collect is a trade she paid for. Only take it when Across the Veil is down — 22s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Aurora's ultimate changes the math too.",
+      "after": "Between Worlds at 6 is 140s at rank 1 and leaves a slowing zone she can teleport across, so never open a fight into a live R."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Aurora Twofold Hunt: matchup-defining — Her escape. E-knock before it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Aurora Across the Veil: matchup-defining — 22s at rank 1, and she is invisible on landing. - Aurora The Weirding: 15s at rank 1, 825 range, and it hops her backward too. - Your Elastic Slingshot: 21s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Charge E from a bush as Aurora's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush once Across the Veil is spent, grab her with Q then hit a minion — the knock-together needs two."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Charge E from a bush as Aurora's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Aurora wastes Twofold Hunt (Blink) — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Across the Veil is spent, grab her with Q then hit a minion — the knock-together needs two. Great trade: Aurora wastes Across the Veil — commit the full pattern immediately. Bad trade: Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Charge E from a bush as Aurora's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Aurora wastes Twofold Hunt (Blink) — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Across the Veil is spent, grab her with Q then hit a minion — the knock-together needs two. Great trade: Aurora wastes Across the Veil — commit the full pattern immediately. Bad trade: Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Aurora's Twofold Hunt (Blink): Her escape. E-knock before it. When it is down — E-Q + R her.",
+      "after": "Track Across the Veil: 22s at rank 1, and invisible on landing. When it is down — E-Q + R her."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Shield + pot. Core: Heartsteel  (HP feeds everything), then Spirit Visage / Thornmail; boots Mercury's Treads.",
+      "after": "Start Doran's Shield + pot. Core: Heartsteel, then Spirit Visage; boots Mercury's Treads. Add Grievous Wounds — Spirit Abjuration heals."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Her escape. E-knock before it. Only engage once it is down or baited.",
+      "after": "22s at rank 1, and she is invisible after the leap. Bait it, then E."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Charge E from a bush as Aurora's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Mercury's Treads then Spirit Visage — MR is what blunts her, and Spirit Abjuration keeps refilling her health."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Aurora wastes Twofold Hunt (Blink) — commit the full pattern immediately.",
+      "after": "A knockup lands before she can cast the blink out. Charge from fog."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Aurora's favourite window — refuse it and half his win condition is gone.",
+      "after": "Twofold Hex reaches 900 to your Q's 800 — you lose that exchange every time."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Spirit Abjuration heals her off every single hit she lands on you."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Her carry threat is 8/10 — without tank items you never survive long enough to land the engage."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Aurora out-pokes and out-mobiles you from level 1 — her Q bounces chip you and her W blink slips your engage, so soak XP, build W stacks on the wave, and never throw E while her W is up.",
+      "after": "Aurora out-pokes you from level 1 — Twofold Hex curses you then recasts to drag it back through you, and Across the Veil slips your engage, so soak XP and eat your shed blobs."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-6 stay hers: her burst plus double-blink R make her impossible to lock down alone, so play safe, ping for ganks, and only commit E when the jungler is arriving to punish her.",
+      "after": "Levels 3-6 stay hers: Between Worlds leaves a zone she can teleport across, so she is hard to lock alone — play safe, ping for ganks, and commit E only as the jungler arrives."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Aurora's Q poke and range win the level-1 exchange.",
+      "after": "Twofold Hex out-ranges you at 900 and curses on hit."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 W blink lets her dodge your engage and control trades.",
+      "after": "Across the Veil at 3 blinks and turns her invisible on landing."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Through 4-5 her burst outpaces your defenses and regen.",
+      "after": "Spirit Abjuration heals her through everything you chip."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Her level-6 double-blink R makes her impossible to pin down.",
+      "after": "Between Worlds leaves a zone she teleports across at will."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Aurora pokes with Q bounces and her W blink dodges your Elastic Slingshot; don't wind up E unless she's already used W.",
+      "after": "Across the Veil is 22s at rank 1 — the longest window she owns. Don't wind up Elastic Slingshot until she has spent it."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Her R zone plus W double-blink make her nearly impossible to pin — engaging into it just feeds her burst.",
+      "after": "Between Worlds is 140s at rank 1; its zone slows you and lets her cross it — don't engage into a live R."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Bait her W blink before committing your slingshot",
+      "after": "Bait Across the Veil before you commit slingshot"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Stack W on minion blobs to sustain through her Q poke",
+      "after": "Eat your shed blobs to sustain through Twofold Hex"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Poke with Q bounces and reset her passive on you",
+      "after": "Poke with Twofold Hex, heal off Spirit Abjuration"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Blink away with W each time you engage",
+      "after": "Blink out with Across the Veil on your E"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Zone you off farm with R and burst you when low",
+      "after": "Zone your farm with Between Worlds, burst you low"
+    }
+  ],
+  "notes": "SECOND fabricated ability name in this slice, same shape as zac__ambessa. 'Twofold Hunt' occupies 25 writable strings in champ-data/zac.full.js and is a corruption of Twofold Hex (Aurora's Q) attached to the W slot. The tell that makes the repair unambiguous is full.focus.letters = ['W'], which is correct — only the name was wrong, so Across the Veil is the right substitution and focus.letters needs no change. One edit could NOT be proposed: focus.text is 'Aurora Twofold Hunt' at 19 characters and the correct 'Aurora Across the Veil' is 22, which is +15.8% and outside the band. That string is what the loading screen displays, so it is the highest-visibility instance and it needs a manual write or a band exemption for focus.text specifically. Taken with zac__ambessa, two of the six matchups I audited carry a wholly invented enemy ability name repeated ~25 times each, and in both cases suspectNames was empty. The near-miss detector is scoring 'Twofold Hunt' against Aurora's real 'Twofold Hex' at edit distance 2 and still not flagging it, which suggests the check may only run against a subset of slots. Worth auditing the detector itself before trusting any 'suspectNames: []' in this dataset. Deliberately not asserted: whether Zac's Unstable Matter or Elastic Slingshot can damage Aurora while she is invisible after Across the Veil. Riot's text says invisible, not untargetable, which implies area damage still lands, but invisibility rules differ from Akali's untargetable shroud and aurora.json needsResearch is empty — this needs a wiki pass, not an inference. Nothing in champ-data was modified."
+}

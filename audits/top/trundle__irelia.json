@@ -1,0 +1,130 @@
+{
+  "ownerKey": "trundle",
+  "enemy": "irelia",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "EVEN at 6/10 against 48.52% over 305 games, with the chart giving Irelia 4 stages and Skill 3 and Trundle none — a lane you lose narrowly by default and win by hitting your level-6 window. Internally consistent across both layers.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/content/trundle.js MC_WR_TABLES.trundle.irelia = 48.52", "MC_REAL_GAMES 305"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Every spike is described by name with no timing attached, including the one the whole lane hinges on.",
+      "why": "Flawless Duet is 16/14.5/13/11.5/10s, Defiant Dance 20/18/16/14/12s, Bladesurge 10/9/8/7/6s with a full refresh on a Marked target or a kill, and Vanguard's Edge 125/105/85s. The 16-second Flawless Duet at rank 1 is the actual window your all-ins live in.",
+      "corrected": "Added the 16s Flawless Duet cycle to mid and to the cooldown block.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/irelia.json Q, W, E, R cooldowns"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two systematic errors. (a) Irelia is credited with armour shred from her passive in three fields — 'passive shred eats your armor', 'passive-empowered autos shred your armor', 'her passive shred hits you for less'. Ionian Fervor does not shred armour at all. (b) Defiant Dance is described three times as 'blocking' your burst or Chomp procs. It does not block anything; it reduces physical damage taken while she charges.",
+      "why": "Riot text: Ionian Fervor — 'When Irelia strikes enemies with spells she gains stacking bonus Attack Speed. At maximum stacks she also gains bonus damage on hit.' Defiant Dance — 'She takes reduced physical damage during the charge.' The distinction matters because a reduction you can wait out is playable and a block is not, and because Chomp is physical damage, which is exactly what the reduction applies to.",
+      "corrected": "Replaced the armour shred with attack speed and max-stack on-hit damage, and reframed Defiant Dance as a physical-damage cut you delay Chomp through.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/irelia.json P, W"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.you[2] tells you to Pillar to 'cancel her mid-air E trajectory'. Flawless Duet is not a dash and has no trajectory Irelia travels along — it is two blades that converge on each other.",
+      "why": "Riot text: 'Irelia sends out two blades which converge on each other. Enemies caught in between are damaged, stunned and Marked.' There is nothing mid-air to cancel. What Pillar genuinely does here is deny the ground and the minions Bladesurge chains resets off.",
+      "corrected": "Rewrote wants.you[2] around denying reset targets. I deliberately did not claim Pillar stops Bladesurge itself — that is a target-selected dash and the missing-interactions file lists no dash-denial for this pairing, so it stays unasserted.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/irelia.json E, Q", "champ-data/_kits/_missing-interactions.json trundle/irelia"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No anti-heal note, despite Bladesurge healing her on every reset in a chain.",
+      "why": "Riot text: 'Irelia dashes forward to strike her target, healing herself. If the target is Marked or dies to Bladesurge, its cooldown refreshes.' A reset chain through a wave is a heal chain, which is what makes her survive your extended trades.",
+      "corrected": "Named the Bladesurge heal in spikes[0] so the Grievous Wounds case is visible.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/irelia.json Q heal flag", "champ-data/_kits/_missing-interactions.json trundle/irelia needs-antiheal"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Vanguard's Edge leaves a blade wall behind and the late-game section never mentions it.",
+      "why": "Riot text: 'Afterwards the blades form a wall that will damage and slow enemies that walk through it.' For a champion whose whole plan is standing on his own Frozen Domain, a wall that punishes leaving the fight is directly relevant.",
+      "corrected": "Added to late.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/irelia.json R terrain flag and description"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "At level 1 you trade favorably with Chomp — biting her on her first Q approach steals flat AD and denies the clean first hit she wants to stack her passive. Do not let her reach three passive stacks for free; each free auto she lands is a meaningful power scaling gift. The problem comes at level 3 when her full kit is live: Q resets let her gap-close through minions, E stun locks you in place while passive shred eats your armor, and W blocks your burst. Respect this window — short trades on your terms are fine, but do not commit to an all-in without Pillar ready to interrupt her escape or E angle.",
+      "after": "At level 1 you trade favorably with Chomp — biting her on her first Bladesurge saps flat AD and denies the clean hit she wants for Ionian Fervor. Do not hand her free abilities; every stack is bonus attack speed, and at max it is bonus damage on hit. The problem comes at level 3 when the kit is live: Bladesurge resets gap-close through minions, Flawless Duet stuns you in place, and Defiant Dance cuts the physical damage of your Chomp while she charges. Short trades on your terms are fine, but never all-in without Pillar ready to cut her path back to the wave."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Full kit Irelia with easy Q-reset targets in the wave is genuinely dangerous; her E stun into passive-shred combo wins the extended trade and your sustain alone cannot answer it.",
+      "after": "Full-kit Irelia with easy Bladesurge reset targets in the wave is genuinely dangerous; Flawless Duet's stun into max-stack on-hit damage wins an extended trade your sustain cannot answer."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Her passive fully stacks off three Q dashes and her W blocks a timed Chomp burst — fighting a crisply piloted Irelia at 4-5 with stacks up is a losing trade every time.",
+      "after": "Ionian Fervor stacks off any ability she lands, and Defiant Dance cuts the physical damage of a mistimed Chomp — fighting a crisp Irelia at 4-5 with stacks up is a losing trade."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4 and 5 are her peak danger zone — if she has three passive stacks and her E is off cooldown she out-damages you in a straight extended trade, and her W will eat a Chomp proc if she times it well. Keep the wave even or slightly slow-pushed toward you, deny her free Q-reset minions by controlling the wave state, and play for short bite-and-disengage cycles. The moment you hit 6, your dynamic completely flips: Subjugate in the first second of any all-in strips up to half her Armor and MR onto you, meaning her passive shred hits you for less while you hit her for more. Frozen Domain plus a stolen resistance stack mid-fight is very difficult for Irelia to out-duel — look for all-ins with Pillar in pocket to cut off her Q-escape dash.",
+      "after": "Levels 4 and 5 are her peak danger zone — with Ionian Fervor stacked and Flawless Duet off cooldown she out-damages you in a straight extended trade, and Defiant Dance will soak a Chomp if she charges it in time. Keep the wave even or slightly slow-pushed toward you, deny her free Bladesurge reset minions by controlling the wave state, and play short bite-and-disengage cycles. The moment you hit 6 the dynamic flips: Subjugate in the first second of any all-in strips up to half her Armor and MR onto you, so her on-hit damage lands softer while yours lands harder. Frozen Domain plus stolen resistances is very hard to out-duel — all-in with Pillar in pocket, and count 16 seconds off every Flawless Duet."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "In true late game your Subjugate payoff depends on how much she has scaled: a full-stacked Irelia with multiple items has terrifying burst and her W blocks your key Chomp procs at the worst moments. Your edge is that Frozen Domain still gives you a portable fighting surface she cannot simply walk away from, Pillar disrupts her Q-reset chains if placed on her intended targets, and your passive healing off nearby deaths in team fights keeps your HP topped in ways she cannot easily race. Avoid fighting her with Subjugate down in a side lane at this stage — save R for the opening second of every duel and you stay ahead. In 5v5, your R should prioritize any tankier frontliner over Irelia unless she is the only threat.",
+      "after": "In true late game your Subjugate payoff depends on how much she has scaled: a fed Irelia has terrifying burst, and Vanguard's Edge leaves a blade wall that damages and slows you the moment you try to walk out of her fight. Your edge is that Frozen Domain gives you a portable fighting surface she cannot walk you off, Pillar denies the minions and Marked targets her Bladesurge chain resets on, and King's Tribute keeps you topped through team fights in a way she cannot race. Never fight her with Subjugate down in a side lane at this stage — save R for the opening second of every duel. In 5v5, R should prioritize any tankier frontliner over Irelia."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Subjugate mid-fight strips Irelia's Armor and stacks it onto you — her W burst-heal and passive shred both diminish when she cannot dent your newly borrowed resistances.",
+      "after": "Subjugate mid-fight strips Irelia's Armor and stacks it onto you — the Bladesurge heal and her max-stack on-hit both matter less when she cannot dent your borrowed resistances."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Drop Frozen Domain under your feet before trading so your move speed and healing out-sustain her W block",
+      "after": "Drop Frozen Domain before trading, and hold Chomp until Defiant Dance stops cutting your physical damage"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Use Pillar of Ice to cut off her Q-dash escape path or cancel her mid-air E trajectory",
+      "after": "Pillar the minion line she wants to Bladesurge onto — no reset target, no free gap-close"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Land Flawless Duet (E stun) to lock you in place while her passive-empowered autos shred your armor",
+      "after": "Land Flawless Duet (E) to stun you in place while max-stack Ionian Fervor autos burn you down"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Irelia Flawless Duet (Stun): matchup-defining — Her engage CC. Dodge it. Track it before every engage. - Irelia Flawless Duet: Sends two blades that converge to stun — her engage CC. Dodge or sidestep it.",
+      "after": "- Irelia Flawless Duet (Stun): matchup-defining — 16s at rank 1. Dodge the point the two blades converge on. - Irelia Defiant Dance: cuts physical damage while she charges, and Chomp is physical. Wait it out."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Irelia's Flawless Duet (Stun): Her engage CC. Dodge it. When it is down — Bite + duel her.",
+      "after": "Flawless Duet is 16s at rank 1. Defiant Dance cuts physical damage — Chomp after the charge."
+    }
+  ],
+  "notes": "Disk 48.52% / 305; packet says 56.78% / 236. Irelia has no armour-shred anywhere in her kit — that claim appeared in three fields and would have had a reader building the wrong defensive item. Left unasserted on purpose: whether Pillar of Ice denies Bladesurge. Bladesurge is a targeted dash to a unit rather than a ground dash, the missing-interactions file lists no dash-denial for this pairing, and I could not confirm it from the kit files, so the existing 'cut off her Q-escape dash' phrasing in mid was replaced with Pillar-in-pocket rather than a claim either way."
+}

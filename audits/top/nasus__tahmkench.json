@@ -1,0 +1,137 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "tahmkench",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Both layers treat the Q stun as if it could land at any time. The full layer says 'stuns at 3 passive stacks' once, in a line the player never sees, and the content layer just says 'his Q tongue stun lets him land a free trade'.",
+   "why": "An Acquired Taste builds a stack every time Tahm Kench damages you; Tongue Lash stuns only when it lands on a target already carrying three stacks, consuming them. That makes the stun the most telegraphed hard CC in the lane — it is countable, and a Nasus who counts it knows exactly which walk-up is safe and which is a free trade for Kench.",
+   "corrected": "Count his An Acquired Taste stacks; the stun is only live on the third proc. Tongue Lash is 7/6.5/6/5.5/5s.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/tahmkench.json — P An Acquired Taste, Q Tongue Lash"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The content layer calls the grey-health shield his 'passive' in wants.foe[1], whys[1], early and mid.",
+   "why": "Thick Skin (E) is what stores a percentage of damage taken and converts it to a shield, and it is on a 3s cooldown. The passive is An Acquired Taste, which is the stun/Devour counter. Naming the wrong slot means the player baits the wrong thing.",
+   "corrected": "Thick Skin (E) is the grey-health shield; An Acquired Taste (P) is the stack counter.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/tahmkench.json — P and E descriptions"
+   ]
+  },
+  {
+   "point": 5,
+   "status": "missing",
+   "whatIsWrong": "Nothing in either layer tells the player that chip damage is the wrong trading pattern here.",
+   "why": "Thick Skin stores a percentage of the damage he takes and gives it back as a shield on a 3s cooldown, plus an out-of-combat heal from the same stored pool. Poking Tahm Kench with Spirit Fire ticks and single autos literally funds his shield. Nasus is one of the few champions who can answer that, because a stacked Siphoning Strike is one large number instead of many small ones.",
+   "corrected": "Bank stacks and spend them in one burst window rather than chipping; the chip is refunded.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/tahmkench.json — E Thick Skin description and cooldown"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "The packet flags this matchup as having no cooldown-sequencing advice anywhere, and it was right — every line was \"respect him\" with no clock on it.",
+   "why": "Two numbers carry this lane: Tongue Lash at 7/6.5/6/5.5/5s and Abyssal Dive at 21/20/19/18/17s. Abyssal Dive is both his engage and his only escape, so once it is spent there is no second commitment and no way out.",
+   "corrected": "Explicit wait-then-act sequencing added at phases[2], phases[4], breakdown.cooldowns, dosFull[0] and content spikes[1].",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/tahmkench.json — cooldown fields"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "No Grievous Wounds anywhere in a matchup where three of his five abilities heal or shield.",
+   "why": "Tongue Lash heals him on champion hit, Thick Skin heals out of combat from stored damage, and Devour shields. Nasus grinds with Soul Eater lifesteal, so whoever holds the healing advantage wins the long fight.",
+   "corrected": "Flagged for the itemization block; I did not force it into an edit because the writable itemization string is inside report[], which I cannot address safely.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/_missing-interactions.json — nasus vs tahmkench, rule needs-antiheal"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The full-layer chart gives Tahm Kench stages 1-4; the content chart gives him only stages 1-2 and calls 3-5 Skill.",
+   "why": "Nasus wins 50.59% over 427 games, a genuinely even lane, and Wither is a hard answer to a champion whose whole kit needs him to walk into auto range.",
+   "corrected": "phases[2].side and phases[3].side should read Skill, and phases[6].side should read Skill rather than Nasus. I could not propose those edits: the token \"Tahm Kench\" is 10 characters and \"Skill\" is 5, so the ±10% length band rejects every side flip in this matchup. Reported instead.",
+   "confidence": "High",
+   "sources": [
+    "MC_WR_TABLES.nasus.tahmkench = 50.59",
+    "champ-data/content/nasus.js win[]"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "E lets you stack safely from range when Tahm Kench zones you. Spirit Fire the wave under tower; every stack denied is his only real win condition.",
+   "after": "Wither is online. His Tongue Lash stun only lands on the third An Acquired Taste proc, so count his stacks and never walk up on two."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Still Tahm Kench's window — respect Abyssal Dive fully. Passive lifesteal plus Fleet means he must commit hard to actually dent you; make those commits cost.",
+   "after": "Thick Skin refunds your chip damage as a shield every 3s, so poking him is wasted — bank Q stacks instead and save it all for one burst window."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Tahm Kench, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "Abyssal Dive is 21s at rank 1 and it is both his engage and his exit — pop Fury of the Sands and Wither him the moment he lands."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Tahm Kench Abyssal Dive: matchup-defining — His escape + shield. Wither him after. Track it before every engage. - Tahm Kench Tongue Lash: Lashes out to damage + slow (stuns at 3 passive stacks). Dodge or sidestep it.",
+   "after": "- Tahm Kench Tongue Lash: 7s at rank 1 — it only stuns on the third An Acquired Taste stack, so count his procs. - Tahm Kench Abyssal Dive: 21s at rank 1 — his engage and his exit, both on one cooldown."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His escape + shield. Wither him after. Only engage once it is down or baited.",
+   "after": "His engage and his exit on one 21s cooldown — commit once he has spent it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Tahm Kench wastes Abyssal Dive — commit the full pattern immediately.",
+   "after": "Tongue Lash is 7s at rank 1 and it stuns only on his third stack."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+   "after": "Thick Skin turns every point of chip damage you land into a shield."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Wither comes online — point-and-click slow his move speed and attack speed so he can't walk up, reposition his tongue, or peel a gank cleanly.",
+   "after": "Wither comes online — wait for his Tongue Lash to whiff or for its 7s cooldown, then slow him and walk up; never trade into his third stack."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "Still no Wither and his grey-health passive refills any poke you land — last-hit at Q range and don't trade into his tongue.",
+   "after": "Still no Wither and Thick Skin refunds any poke you land as a shield — last-hit at Q range and don't trade into his tongue."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Soak your poke with grey-health passive and out-sustain your early lifesteal",
+   "after": "Soak your poke with Thick Skin's shield and out-sustain your early lifesteal"
+  }
+ ],
+ "notes": "The ±10% length band makes the level-chart side tokens unfixable for any enemy whose display name is not five characters. Nasus/Skill/Swain/Sylas/Teemo/Vayne/Urgot are all 5 and flip cleanly; Trundle (7), Vladimir (8), Tahm Kench (10) and Tryndamere (10) cannot. If you want those charts reconciled, the applier needs a length exemption for phases[].side (it is a token, not prose)."
+}

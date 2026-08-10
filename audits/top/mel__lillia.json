@@ -1,0 +1,209 @@
+{
+ "ownerKey": "mel",
+ "enemy": "lillia",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "MC_WR_TABLES.mel.lillia = 62.5 on MC_REAL_GAMES 8. Eight games is far too thin to build advice on, so I left the number alone and did not let it drive any rewrite.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/content/mel.js MC_WR_TABLES / MC_REAL_GAMES"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Two of Lillia's abilities are assigned to the wrong slots. wants.foe[0] reads 'Spam W (Blooming Blows) and E (Watch Out!)'. Blooming Blows is Q; Watch Out! Eep! is W; E is Swirlseed. The same slot confusion runs through the prose as 'her W/E spam' (mid, whys[2], spikes[1]) and 'before she can W-kite away' (spikes[0], early) - the stacking move speed comes off Blooming Blows, which is Q.",
+   "why": "The entry already gets this right once, in whys[3] ('kites every trade with Blooming Blows move-speed'), so it contradicts itself. A reader tracking the wrong key is watching the wrong cooldown: Blooming Blows is 6/5.5/5/4.5/4, Watch Out! Eep! is 14/13/12/11/10, Swirlseed is 12 flat. Those are three completely different windows.",
+   "corrected": "Q Blooming Blows, W Watch Out! Eep!, E Swirlseed.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lillia.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The entry tells Mel to reflect the wrong ability. dosFull[1].t is 'Reflect Blooming Blows back the moment he commits' and wants.you[1] says 'Use Rebuttal (W) to eat her Q/W bounce projectiles'. Blooming Blows and Watch Out! Eep! are not projectiles - Q is a self-centred nova, W is an area nova. Swirlseed (E) is the only ability in Lillia's kit carrying the projectile flag.",
+   "why": "Rebuttal reflects projectiles. Holding it for a nova that will connect regardless burns Mel's only defensive layer for nothing, and it is a 38s cooldown at rank 1. Naming Swirlseed makes the reflect a real decision instead of a coin flip. dosFull[2].d has the same problem in reverse - it talks about Lillia whiffing Blooming Blows, which has nothing to sidestep.",
+   "corrected": "Swirlseed (E) is the reflect target and the only thing she can whiff.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lillia.json (kitFlags.projectile = [E])",
+    "champ-data/_kits/mel.json (W Rebuttal: 'reflects enemy projectiles back at the attacker')"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "missing",
+   "whatIsWrong": "Nothing in the entry states the condition on Lilting Lullaby. Riot's R text: 'Lillia causes all enemies with Dream Dust on them to become Drowsy before falling asleep.' The entry instead frames level 6 as a reaction test - 'whoever lands their CC first wins the all-in, so save E to cancel her sleep windup' (spikes[2]) and 'save Solar Snare to interrupt her sleep windup' (mid).",
+   "why": "This is the matchup. Lullaby is not a skillshot to dodge and there is no windup to interrupt - it hits everyone already carrying her passive mark, from up to 1600 range. The counterplay is refusing to eat a single ability before she ults, which is a completely different behaviour from the one the entry teaches. Telling a player to hold Solar Snare to cancel it will get them slept.",
+   "corrected": "Lullaby only sleeps targets already marked by Dream-Laden Bough; stay unmarked and a 150/130/110s ultimate does nothing.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lillia.json (R and P descriptions)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Blooming Blows deals bonus true damage on its outer edge - 'dealing extra true damage on the edge' - and the entry never mentions it. _missing-interactions.json flags the same thing as 'resistances-invalidated'.",
+   "why": "It inverts the normal spacing instinct. Against most short-range AoE you want to be at the rim; against Blooming Blows the rim is the punished spot and MR does not blunt it. For a squishy mage deciding where to stand while last-hitting, that is a real, actionable difference.",
+   "corrected": "Stated in phases[3].why and breakdown.trading.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lillia.json (Q: 'dealing extra true damage on the edge')",
+    "champ-data/_kits/_missing-interactions.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The entry credits Lillia with sustain in four places: 'her passive DOT out-sustain your short pokes' (spikes[1], mid), 'passive burn out-sustain your short pokes' (whys[2]), and 'slip every short trade with her healing and burn' (early). Lillia has no heal and no sustain anywhere in her kit. Dream-Laden Bough is 'additional max Health damage over time' - it is damage, not healing.",
+   "why": "It sets the wrong item plan. A reader who believes Lillia out-sustains will reach for anti-heal that does nothing here, and will misread why short trades feel bad - it is her burn out-damaging the poke, not her healing through it.",
+   "corrected": "Out-damage, not out-sustain; passive burn, not healing.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lillia.json (P description; no heal flag anywhere in kitFlags)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns gives no numbers, and breakdown.trading, tradeBad, dontsFull[2].d and report[3].t all state Rebuttal is 'gone for twenty seconds'. Rebuttal is 38/35/33/29/26.",
+   "why": "Twenty seconds is wrong by nearly double at rank 1 and is the number the reader uses to decide whether to spend the barrier on chip. Against a champion whose entire plan is chip, understating it is the most expensive possible error.",
+   "corrected": "Blooming Blows 6s to 4s, Swirlseed 12s flat, Watch Out! Eep! 14s to 10s, Lullaby 150/130/110, Rebuttal 38s at rank 1. Repaired in breakdown.cooldowns and breakdown.trading; the other three copies of the 'twenty seconds' sentence are not uniquely addressable - see notes.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lillia.json",
+    "champ-data/_kits/mel.json"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The full layer refers to Lillia as 'he'/'his' throughout - tldr 'your reflect makes his best spell a liability', breakdown.trading 'his farming spot', 'while he's locked', 'his answer', phases[3] 'once he's marked deep'.",
+   "why": "Straightforward correctness, and it is a tell that the whole block is template fill rather than matchup writing. The tldr string is shared byte-for-byte with the lucian entry.",
+   "corrected": "Fixed the pronouns in breakdown.trading, the one copy the applier can target.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/mel.full.js"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Lillia wins by landing Blooming Blows, denying your pattern, and keeping the fight at a distance your kit resents.",
+   "after": "Lillia wins by marking you with Dream Dust, kiting on Blooming Blows speed, and cashing it in with Lullaby."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Mel vs Lillia - Track: Lillia Blooming Blows. - Hold the reflect for his real spell. - No commits into Blooming Blows. - The ultimate closes arguments; it doesn’t open them.",
+   "after": "- Mel vs Lillia - Track: Lillia Lullaby. - Rebuttal answers Swirlseed, not Blooming Blows. - Unmarked by Dream Dust means her R cannot sleep you. - Stay off the Q rim."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Stack Overwhelm with every hit — once he's marked deep, your execute math starts working. Track Blooming Blows before stepping up.",
+   "after": "Stack Overwhelm with every hit — and hug inside Blooming Blows rather than sit on its rim, where its damage turns true."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Lillia Blooming Blows: matchup-defining — Her kiting speed stacks — catch her early in the chase or not at all. Count it out loud if you must. - Your W Rebuttal has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+   "after": "- Blooming Blows: 6s falling to 4s — her kiting speed stacks off it, so catch her early in the chase or not at all. - Swirlseed 12s is the only projectile Rebuttal can answer. - Lilting Lullaby 150/130/110s, and it needs you already marked."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Snare through the wave onto his farming spot, fan two full Q volleys while he's locked, and step back with W ready before his answer comes off cooldown. Bad trade: Burning Rebuttal on chip damage and then standing in Blooming Blows range — your only defensive layer is gone for twenty seconds.",
+   "after": "Good trade: Snare through the wave onto her farming spot, fan two full Q volleys while she's locked, and step back with W ready before Swirlseed comes off its 12s cooldown. Bad trade: Burning Rebuttal on chip and then standing on the rim of Blooming Blows, where its damage turns true — the barrier is gone for 38 seconds."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Her kiting speed stacks — catch her early in the chase or not at all. Its cooldown is the green light — wait for it.",
+   "after": "Her Blooming Blows speed stacks every time a spell of hers lands — catch her early in the chase or not at all."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].t",
+   "before": "Reflect Blooming Blows back the moment he commits",
+   "after": "Reflect Swirlseed — it is her one real projectile"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Lillia whiffs Blooming Blows and the lane briefly belongs to you.",
+   "after": "Lillia whiffs Swirlseed and the lane briefly belongs to you again."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That is Lillia’s whole plan in one window — decline politely and watch it retire.",
+   "after": "Her passive marks you on any spell hit, and that mark is what her R needs."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Lillia’s Blooming Blows: Her kiting speed stacks — catch her early in the chase or not at all. The whole green-light system is its cooldown.",
+   "after": "Lilting Lullaby only touches enemies already carrying her passive Dream Dust — stay unmarked and a 150s ultimate has nobody to sleep."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Blooming Blows’s cooldown, on your Blackfire Torch spike, and with your jungler’s setup. His answer goes first; yours goes last.",
+   "after": "Commit while Lullaby is on its 150s cooldown and you carry no Dream Dust — that is the window where your root converts into a kill."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Use Rebuttal (W) to eat her Q/W bounce projectiles and the slow that lets her kite",
+   "after": "Use Rebuttal (W) to eat Swirlseed (E), her only projectile, and the slow it carries"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Spam W (Blooming Blows) and E (Watch Out!) to kite out of your E range and stack her DOT",
+   "after": "Spam Q (Blooming Blows) and W (Watch Out! Eep!) to kite past your E range and mark you"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Q + Solar Snare online — root her mid-bounce and land free Overwhelm stacks before she can W-kite away.",
+   "after": "Q + Solar Snare online — root her and land free Overwhelm stacks before Blooming Blows speed carries her off."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Golden Eclipse vs her Lullaby R — whoever lands their CC first wins the all-in, so save E to cancel her sleep windup.",
+   "after": "Golden Eclipse vs her Lullaby — but Lullaby only sleeps targets already carrying Dream Dust, so stay unmarked at 6."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "Levels 3-5 her W/E spam and passive burn out-sustain your short pokes while she dances out of Solar Snare range.",
+   "after": "Levels 3-5 her Q and W spam plus passive burn out-damage your short pokes while she dances out of Solar Snare range."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Lillia is an off-meta skirmisher who lives on kite, so your whole early game is about pinning her down. Level 1 you out-range her — chip with Q and your ranged auto, but don't overstep into her passive DOT. Your real window is level 2: with Q and Solar Snare (E) up, snare her mid-bounce and dump Overwhelm stacks before she W-kites out. Hold W to swallow her ability projectiles and the move-speed she uses to dance away, then accept that from level 3 she'll try to slip every short trade with her healing and burn.",
+   "after": "Lillia is an off-meta skirmisher who lives on kite, so your whole early game is about pinning her down. Level 1 you out-range her — chip with Q and your ranged auto, but don't overstep into her passive burn. Your real window is level 2: with Q and Solar Snare (E) up, snare her and dump Overwhelm stacks before Blooming Blows speed carries her out. Hold W for Swirlseed, the one projectile she owns, then accept that from level 3 she'll try to slip every short trade with movement and burn."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 3-5 are hers if you let them be — her W/E spam and passive DOT out-sustain your one-and-done pokes while she stays outside E range and never commits. Don't chase; that's exactly what feeds her kite. Bait her abilities, last-hit at max Q range, and wait for your E to land cleanly. At 6 it becomes a CC race: your Golden Eclipse detonates everything you've stacked, but her Lullaby (R) sleep flips the all-in if she lands it first, so save Solar Snare to interrupt her sleep windup or to pin her the instant she dashes in.",
+   "after": "Levels 3-5 are hers if you let them be — her Q and W spam plus passive burn out-damage your one-and-done pokes while she stays outside E range and never commits. Don't chase; that's exactly what feeds her kite. Bait her abilities, last-hit at max Q range, and wait for your E to land cleanly. At 6 her Lullaby only puts targets already carrying Dream Dust to sleep, so the counterplay is refusing to eat a spell before she ults, not dodging the cast — and it is 150s if she spends it."
+  }
+ ],
+ "notes": "Lillia's ability slots were wrong in both layers and in opposite directions from the packet's suspectNames hint, which flagged only 'Solar Snare's' (a false positive - that is Mel's own E and the apostrophe tripped the near-miss check). The real errors were Blooming Blows filed as W and Watch Out! Eep! filed as E. Same structural blockers as the rest of this slice: full.diff/tone/diffRating/carryRating are under the applier's 12-char floor so the EVEN 5.5/10 label cannot be corrected by proposal, phases[].side cannot be changed because 'Mel' and 'Skill' are outside each other's length band, and the 'twenty seconds' Rebuttal error occurs 4x inside this entry (tradeBad, breakdown.trading, dontsFull[2].d, report[3].t) so only the breakdown.trading copy was repairable. full.tldr 'Poke mirror you usually win - your reflect makes his best spell a liability.' is shared byte-for-byte with the lucian entry and also refers to Lillia as male. No WKM_LINES issue surfaced here."
+}

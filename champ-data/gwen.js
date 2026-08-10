@@ -1,4 +1,4 @@
-// MatchupCoach — Gwen (Top) champion matchup data. Patch 26.11.
+// MatchupCoach — Gwen (Top) champion matchup data. Patch 26.15 (content authored 26.11).
 // Adds hold (your ability to save) + tip (special interaction) per matchup.
 window.CHAMP_DATA = window.CHAMP_DATA || {};
 window.CHAMP_DATA.gwen = {

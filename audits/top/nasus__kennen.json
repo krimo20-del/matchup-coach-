@@ -1,0 +1,116 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "kennen",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "MC_WR_TABLES.nasus.kennen = 58.71 over 356 games, and content.late already cites 58.71% by name. One number, consistent across the file.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/content/nasus.js MC_WR_TABLES",
+    "packet nasus.json"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "Both layers treat Slicing Maelstrom as a recurring threat without giving its cooldown. Slicing Maelstrom is a FLAT 120s at ranks 1/2/3 — it does not scale down like most ultimates. Nasus's Fury of the Sands is 120/100/80, so from R rank 2 onward Nasus's ultimate is back before Kennen's.",
+   "why": "This is the single biggest tempo fact in the matchup and it is absent. Surviving one Maelstrom is not a moment, it is a two-minute window in which Kennen has no kill pattern at all.",
+   "corrected": "Slicing Maelstrom: flat 120s at every rank. Fury of the Sands: 120/100/80 — it out-cycles his ult from rank 2.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/kennen.json R cooldown \"120\"",
+    "champ-data/_kits/nasus.json R cooldown \"120/100/80\""
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The text says he 'stacks three Marks of the Storm' but never says which casts produce them, and never states that Thundering Shuriken (950 range) outranges Wither (700). breakdown.cooldowns also calls Lightning Rush 'his escape' and gives no cooldown or cost.",
+   "why": "Mark of the Storm stuns at 3 applications. Q applies one, W's active applies another to an already-marked target, E applies one on passing through. Q-W-E is therefore the exact stun chain, and the whole lane is about denying the third mark. Lightning Rush is 10/9/8/7/6s and costs 80 of his energy pool, so a Kennen who E's in cannot immediately E out.",
+   "corrected": "Q-W-E is the three-Mark stun chain. Thundering Shuriken reaches 950, Wither only 700 — you cannot answer his poke, only his commit. Lightning Rush costs 80 energy on a 10/9/8/7/6s cooldown; once he spends it to get on top of you he is stuck there.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/kennen.json P/Q/W/E descriptions, ranges and cooldowns",
+    "champ-data/_kits/nasus.json W range 700"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Lightning Rush and Slicing Maelstrom but supplies no numbers, so 'track it' is unactionable.",
+   "why": "The 14-point audit calls for the real window length. Both numbers exist in the kit file.",
+   "corrected": "Lightning Rush 10/9/8/7/6s at 80 energy; Slicing Maelstrom flat 120s.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/kennen.json"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The two layers disagree on the level chart. content.win = [Skill, Kennen, Kennen, Nasus, Kennen, Nasus, Nasus] but full.phases sides = [Kennen, Kennen, Kennen, Kennen, Kennen, Skill, Skill]. They contradict at stages 0, 3, 5 and 6.",
+   "why": "At 58.71% the post-item stages are not 'Skill' — full.phases[6].why itself says Nasus out-duels Kennen on cooldown and three-shots his tower, which is a Nasus stage by any reading. I have aligned the two item stages (edit below). Stage 0 (Skill vs Kennen) and stage 3 (Nasus vs Kennen) still disagree between layers; I did not touch them because the length band forbids swapping a 6-character side for a 5-character one and I have no evidence strong enough to justify inventing a shift.",
+   "corrected": "full.phases[5].side and full.phases[6].side set to Nasus, matching content.win[5]/[6].",
+   "confidence": "High",
+   "sources": [
+    "champ-data/nasus.full.js phases",
+    "champ-data/content/nasus.js win[]"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "missing",
+   "whatIsWrong": "Nothing anywhere notes that Kennen's ultimate does not scale its cooldown, which is the entire reason a 58.71% matchup exists for a champion who loses levels 1-6.",
+   "why": "Kennen's kill pattern is gated behind Slicing Maelstrom. A flat 120s means Nasus gets a guaranteed two-minute stacking window after every failed all-in.",
+   "corrected": "Folded into the spikes[1] and breakdown.cooldowns rewrites.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/kennen.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Kennen Lightning Rush: matchup-defining — His escape. Wither him when it’s down. Track it before every engage. - Kennen Slicing Maelstrom: A storm around him that repeatedly damages + stuns via marks. Dodge or sidestep it.",
+   "after": "- Lightning Rush: 10/9/8/7/6s for 80 energy — his reposition and third mark. Wither him the instant it ends. - Slicing Maelstrom: a flat 120s at every rank, so surviving it buys two full minutes of free stacking."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.spikes",
+   "before": "Kennen: Lightning Rush online, level 6, first item. Nasus: Sheen-item spike, 300+ stacks, the level-6 R stat-check, Trinity Force first-item spike.",
+   "after": "Kennen: level 3 (Q-W-E stacks three Marks into a stun), level 6, first item. Nasus: Sheen spike, 300+ stacks, the level-6 R stat-check."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "His Slicing Maelstrom into an E-in stun-lock is his one clean kill timing on you before your Wither and stacks come online — survive it and the lane is yours.",
+   "after": "Slicing Maelstrom into an E-in stun-lock is his one clean kill timing — but it is a flat 120s at every rank, so surviving it hands you two minutes of free stacking."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Land Thundering Shuriken from max range and chain a third Mark of the Storm stun before you can W-wither him",
+   "after": "Poke with Thundering Shuriken at 950 range, outside Wither's 700, and chain Q-W-E into a three-Mark stun"
+  }
+ ],
+ "notes": "The packet's three suspectNames for this matchup are all FALSE POSITIVES — 'His Slicing Maelstrom', 'Land Thundering Shuriken' and 'E-in Slicing Maelstrom' are the correct Riot names with a leading word attached; the edit distance is just the prefix. No name correction was needed. Real defect found instead: the two layers ship contradictory level charts (see audit point 2) and stages 0 and 3 remain contradictory after my edits because the length band will not allow a 6-char side value to become a 5-char one. If the applier can be told to skip the band check for phases[].side, changing full.phases[3].side from Kennen to Skill would resolve stage 3."
+}

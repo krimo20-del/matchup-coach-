@@ -1,0 +1,187 @@
+{
+  "ownerKey": "nasus",
+  "enemy": "zaahen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer uses the literal word \"Ultimate\" as Zaahen's ability name in roughly twenty strings, and breakdown.cooldowns still contains an unresolved authoring placeholder: \"Zaahen Ultimate (verify): His power spike — verify the exact name + effect on the live patch.\"",
+      "why": "This is scaffolding that shipped. The kit file has had the real names all along: Cultivation of War (P), The Darkin Glaive (Q), Dreaded Return (W), Aureate Rush (E), Grim Deliverance (R). A reader is currently told to track something called \"Ultimate\" with no way to recognise it on screen, and the page openly admits it has not been checked.",
+      "corrected": "His ultimate is Grim Deliverance, 110s at rank 1 — he rises, stabs downward, and heals for a portion of the damage dealt.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zaahen.json (Riot Data Dragon 16.15.1) — ability names and cooldowns"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Cultivation of War's revive is never mentioned in either layer.",
+      "why": "Riot's text: \"Zaahen's attacks and abilities against enemy champions grant him stacks of Determination, gaining bonus Attack Damage per stack. When filled with Determination, Zaahen gains increased Attack Damage and can revive.\" A revive changes the arithmetic on every all-in Nasus takes: committing a stacked Siphoning Strike and Fury of the Sands to secure a kill that then undoes itself is the worst outcome in the matchup. It also means the stacking is visible information Nasus should be reading before he decides to fight at all.",
+      "corrected": "At full Determination he gains attack damage and can revive — the first kill may not stick, so wait that window out rather than committing into it.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zaahen.json — P description"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "The plan tells Nasus to pad health with Fury of the Sands and buy a tank item, with no mention that Aureate Rush deals percent-health damage.",
+      "why": "Aureate Rush carries the percentHealth flag, meaning raw HP is the wrong stat against it and Nasus's own ultimate — which grants bonus Health — inflates the damage he takes from it. The content explicitly recommends the opposite: \"Fury of the Sands finally pads your health enough to blunt his all-in\" and \"Wither plus your first tank item\". Armour and Grievous Wounds are the answer here, not a bigger health bar.",
+      "corrected": "Aureate Rush damages off your health, so stacking HP feeds it. Lean on armour and anti-heal instead.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zaahen.json — E flags = {dash, percentHealth}", "champ-data/_kits/_missing-interactions.json — resistances-invalidated, nasus vs zaahen"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Grievous Wounds is never mentioned though two of his abilities heal him.",
+      "why": "The Darkin Glaive heals on a 10/9/8/7/6 cooldown and Grim Deliverance heals for a portion of the damage it deals. The whole Nasus plan here is \"force long duels in the sidelane\" and \"win every prolonged exchange\" — an attrition plan against two heal sources with no anti-heal named anywhere.",
+      "corrected": "The Darkin Glaive and Grim Deliverance both heal him — carry Grievous Wounds before committing to the long duel the plan asks for.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zaahen.json — kitFlags.heal = [\"Q\",\"R\"]", "champ-data/_kits/_missing-interactions.json — needs-antiheal, nasus vs zaahen"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "Packet reports zero sequencing cues, and the ability the full layer calls matchup-defining is an unnamed placeholder with no number.",
+      "why": "The real tracking target is not the ultimate. Dreaded Return is 14/13.5/13/12.5/12 at 850 range and pulls Nasus in — it is the longest reach in the kit and the thing that starts the combo. Without the pull, the Darkin Glaive knockup has to be walked into. Grim Deliverance at 110/95/80 is the long window; Aureate Rush at 10/9.5/9/8.5/8 is the short one that governs when it is safe to step out and stack.",
+      "corrected": "Track Dreaded Return: 14s, 850 range, and it pulls you into the Darkin Glaive knockup. No pull, no combo — that is the window to stack.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zaahen.json — per-rank cooldowns and ranges"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The knockup is never attributed. Neither layer says where Zaahen's displacement comes from.",
+      "why": "Two abilities displace: The Darkin Glaive's recast makes his next attack knock up, and Dreaded Return pulls. The Q knockup is delivered by a basic attack after a recast, which means it is telegraphed by the recast and cannot be sidestepped once he is in attack range — the same shape as the Volibear error elsewhere in this dataset. Knowing the knockup rides an auto rather than a skillshot changes whether you back off or brace.",
+      "corrected": "The Darkin Glaive's recast puts the knockup on his next attack; Dreaded Return is the pull. Both are displacement, neither is a dodgeable line.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zaahen.json — Q and W descriptions, kitFlags.knockup = [\"Q\",\"W\"]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: spikes[] has 3 entries where the schema expects 4.",
+      "why": "Confirmed on disk — spikes are Lvl 6, Wither + 1st tank item, and 2+ items, with no early-game entry. Every other Nasus matchup I audited opens with a level 1-3 spike, which is also where this lane is decided (the content itself says levels 2-5 are the suffering). I have not proposed an edit: adding an array element cannot be expressed as a before/after string replacement, and the brief forbids changing entry counts.",
+      "corrected": "Needs a fourth spike covering roughly Lvl 2-3: The Darkin Glaive's healing poke taxing every last-hit before Wither exists.",
+      "confidence": "High",
+      "sources": ["champ-data/content/nasus.js — zaahen spikes[]; packet defect list"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At 2 his Darkin Glaive poke taxes you freely and you have no way to fight back — concede the chip.",
+      "after": "The Darkin Glaive slashes twice and heals him, so his level-2 poke is free — concede the chip."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "At 3 his E and glaive spacing win every short trade — a stack-hungry Nasus is exactly the target he wants to bully.",
+      "after": "At 3 Aureate Rush and glaive spacing win every short trade, and that dash damages off your health, not your armor."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Level 6 evens it out — Fury of the Sands pads your health and sustain enough to blunt his kill threat.",
+      "after": "Level 6 evens it, but Fury of the Sands' bonus health also feeds the percent-health damage on Aureate Rush."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Expect to suffer: from level 2 his glaive taxes every last-hit, and by 3 his short trades are simply better than anything you can answer with. Do not fight back — every potion spent on safe stacks is a good deal. Hug tower when zoned, stack what the wave allows and keep the death count at zero.",
+      "after": "Expect to suffer: from level 2 The Darkin Glaive taxes every last-hit and heals him doing it, and by 3 his short trades beat anything you can answer with. Do not fight back — every potion spent on safe stacks is a good deal. Hug tower when zoned, stack what the wave allows, keep deaths at zero."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 stay his, so treat farming as the victory condition and let him keep the lane bragging rights. At 6 Fury of the Sands finally pads your health enough to blunt his all-in, and once Wither plus your first tank item arrive, extended fights come back to even — you can start standing your ground.",
+      "after": "Levels 4-5 stay his, so treat farming as the victory condition and let him keep the bragging rights. At 6 Fury of the Sands pads your health — but Aureate Rush damages off health, so lean on armour and Grievous Wounds rather than raw HP, since he heals off both the glaive and his ultimate. Then fights come back to even."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "This is the whole lane paid off: stacked Siphoning Strike hits like a truck and Wither turns a glaive skirmisher into a slow-motion target. Force long duels in the sidelane, pop R mid-fight for the health swing, and win every prolonged exchange he is foolish enough to keep taking.",
+      "after": "This is the whole lane paid off: stacked Siphoning Strike hits like a truck and Wither turns a glaive skirmisher into a slow-motion target. Force long duels in the sidelane — but carry Grievous Wounds, and remember Cultivation of War lets him revive, so the first kill may not stick."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "R bulk blunts his kill threat — the bleeding stops",
+      "after": "R bulk blunts his kill threat, but health feeds his E"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Long duels once you are stacked",
+      "after": "Grievous Wounds before long duels"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Ending the game before you scale",
+      "after": "Filling Determination to revive"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Zaahen Ultimate: matchup-defining — His big cooldown. Wither him when it’s down. Track it before every engage. - Zaahen Ultimate (verify): His power spike — verify the exact name + effect on the live patch. Dodge or sidestep it.",
+      "after": "- Grim Deliverance (R): 110s at rank 1 — he rises, stabs down and heals off the damage. - Dreaded Return (W): 14s at 850 range, and it pulls you in. - Aureate Rush (E): a 10s dash dealing percent-health damage."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Zaahen's Ultimate: His big cooldown. Wither him when it’s down. When it is down — Wither + Q him.",
+      "after": "Cultivation of War lets him revive at full Determination, and Aureate Rush damages off your health."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Trade strictly around Ultimate: when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve him.",
+      "after": "Wait for Dreaded Return — 14s at 850 range, and it pulls you into the Darkin Glaive knockup. No pull, no combo: that is your window."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Overall difficulty: 6/10. The lane is decided by how well you track Ultimate and how disciplined your pattern is.",
+      "after": "Overall difficulty: 6/10. The lane is decided by how well you track Dreaded Return and Grim Deliverance."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Nasus vs Zaahen - Track: Zaahen Ultimate. - Keep the wave on your side. - Engage only on Ultimate's cooldown. - Don't fight before your item spike — stacks are the win condition. - Ultimate = kill windows only.",
+      "after": "- Nasus vs Zaahen - Track: Dreaded Return's pull. - Keep the wave on your side. - Engage on Grim Deliverance's cooldown. - Don't fight before your item spike — stacks are the win condition. - He revives at full Determination."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Farm safely, Wither, and out-scale. Track Ultimate before every commit.",
+      "after": "Farm safely, Wither, out-scale. Track Grim Deliverance before commits."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Track Zaahen's Ultimate before you commit",
+      "after": "Track Grim Deliverance before you commit"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His big cooldown. Wither him when it’s down. Only engage once it is down or baited.",
+      "after": "Grim Deliverance is 110s at rank 1 and heals him. Engage once it is down or baited."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Zaahen wastes Ultimate — commit the full pattern immediately.",
+      "after": "Aureate Rush is a 10s dash — stack while it is on cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "At full Determination he gains AD and can revive — wait the window out."
+    }
+  ],
+  "notes": "This was the most underdeveloped entry in my slice. The full layer had never been filled in for Zaahen at all: it used the literal string \"Ultimate\" as his ability name throughout and breakdown.cooldowns still carried the authoring note \"verify the exact name + effect on the live patch\", which is visible to readers. Every real name was already sitting in champ-data/_kits/zaahen.json. Three substantive mechanics were missing entirely — the Cultivation of War revive, Aureate Rush's percent-health damage, and the fact that two abilities heal him. The percent-health point actively contradicts the existing advice, which tells Nasus to pad health with Fury of the Sands and buy a tank item; that is the stat Aureate Rush punishes. The packet defect 'spikes[] has 3 entries, expected 4' is confirmed on disk and I could not fix it, because adding an array element is not expressible as a before/after string edit — it needs a hand pass, and the missing one is the early-game spike. Also worth noting: the content strings for this matchup are roughly half the length of every other Nasus entry (early is 295 chars against 450-570 elsewhere), so the length band caps how much depth can be restored here through this pipeline."
+}

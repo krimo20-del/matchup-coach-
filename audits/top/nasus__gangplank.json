@@ -1,0 +1,130 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "gangplank",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "47.16% over 723 games, matching MC_WR_TABLES. This is the only losing matchup in my slice and the entry is honest about it throughout — the content layer never pretends Nasus is favoured. No elo-tier language present.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packets/nasus.json"]
+  },
+  {
+   "point": 4,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "The central interaction is already right and I want to record that rather than change it: content whys[2], mid, spikes[2] and wants.foe[1] all correctly state that Remove Scurvy cleanses Wither. Riot's text is 'Eats citrus to cure crowd control effects and restore Health', and Wither is a slow, so the cleanse applies. This is the best-identified key interaction in my whole slice and it is why the matchup is a genuine loss rather than a Nasus scaling win.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/gangplank.json (W Remove Scurvy)", "champ-data/_kits/nasus.json (W Wither, slow flag)"]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "Both layers say to hold Wither until his W is on cooldown, but no string anywhere gives the cooldown of either ability. Without the numbers the advice is unusable, because the player has no idea whether the window is two seconds or twenty.",
+   "why": "Remove Scurvy is 22/20/18/16/14s. Wither is 15/14/13/12/11s. Wither is SHORTER at every single rank, and at rank 1 the gap is seven seconds. That turns the matchup's core problem into a solvable sequence: throw the first Wither knowing he will cleanse it, then wait — your W returns roughly seven seconds before his does, and the second Wither is the one that sticks. That is the concrete 'wait for X before you Y' the audit asks for, it is derivable purely from the two kit files, and it converts 'a mistimed Wither is just wasted' from a warning into a plan.",
+   "corrected": "Remove Scurvy is 22s at rank 1 against your 15s Wither. Spend the first W to bait the cleanse; the second one lands.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/gangplank.json (W cooldown 22/20/18/16/14)", "champ-data/_kits/nasus.json (W cooldown 15/14/13/12/11)"]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "The entry is built around tracking Powder Keg as the matchup-defining cooldown — it is the focus field, the loading line, the enemyWin line and both halves of breakdown.cooldowns, which also duplicates itself. Powder Keg has no cooldown to track.",
+   "why": "Powder Keg's cooldown in the kit file is 0. It is a stored-charge ability, so 'Engage only on Powder Kegs's cooldown' and 'Track it before every engage' describe a window that does not exist, and 'Dodge or sidestep it' is wrong for a placed object rather than a projectile. The ability that actually gates every fight in this lane is Remove Scurvy, which the content layer already identifies correctly. breakdown.cooldowns should be pointing at the 22-second cleanse, not at a chargeless barrel.",
+   "corrected": "Retarget breakdown.cooldowns onto Remove Scurvy's real 22s cooldown and note that barrels are charge-stored, not timed.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/gangplank.json (E Powder Keg cooldown 0, W cooldown 22/20/18/16/14)"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Cannon Barrage is referred to as 'global R' three times but no layer mentions that it deals true damage.",
+   "why": "The kit flags Cannon Barrage as projectile, slow, trueDamage, global and zone, and _missing-interactions.json raises 'resistances-invalidated: Gangplank bypasses stacking resistances (Cannon Barrage (R)) — raw armour or MR is the wrong answer here.' The entry's own itemization is Trinity Force into Frozen Heart with Plated Steelcaps, an armour stack. Against the ability most likely to finish a low Nasus in a splitpush, that armour does nothing — health and simply leaving the zone do. The 'global R' framing is correct, incidentally: unlike Galio, Gangplank's ult genuinely is global at range 30000 with the flag set.",
+   "corrected": "Cannon Barrage is true damage — armour will not blunt it, so walk out of the circle rather than tanking it.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/gangplank.json (R flags trueDamage, global, range 30000)", "champ-data/_kits/_missing-interactions.json (resistances-invalidated)"]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "Grievous Wounds is not mentioned anywhere, despite _missing-interactions.json raising needs-antiheal for this pairing.",
+   "why": "Remove Scurvy restores health as well as cleansing, on a cooldown that falls to 14s. In the one fight shape the entry says Nasus wins — a sustained 2+ item duel after a landed Wither — a 14-second heal-and-cleanse on repeat is exactly what drags that duel back out of reach. Anti-heal is what makes the pin lethal, which the entry correctly identifies as the whole win condition.",
+   "corrected": "Grievous Wounds before the sidelane duel — Remove Scurvy heals as well as cleansing.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/_missing-interactions.json (needs-antiheal, nasus vs gangplank)", "champ-data/_kits/gangplank.json (W heal flag)"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[4].why is the cross-matchup boilerplate calling level 6 'the first real fight you're allowed to take', while its own side says Gangplank and content whys[4] says 'Even Fury of the Sands + Wither rarely lands the all-in'.",
+   "why": "The layers state opposite conclusions about level 6. The content layer is right: an all-in that depends on a slow, against a champion holding a cleanse for that slow, does not become reliable just because Nasus gained an ult. Recommending it as the first allowed fight in a 47% matchup is the most likely way this entry loses a player the game.",
+   "corrected": "Rewrite as the cleanse problem it actually is.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/gangplank.json (W)", "champ-data/content/nasus.js (whys[4])"]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[6].side is 'Skill' while its own why reads '300+ stacks and two items: you out-duel Gangplank on cooldown and three-shot his tower', and content win[6] is 'Nasus'.",
+   "why": "Same internally-verifiable contradiction as Darius and Fiora: the side field disagrees with the sentence printed beneath it, and the content layer already says Nasus. Note that content whys[6] hedges this correctly — 'my only winning window' — so Nasus is the right call for the stage even in a losing matchup.",
+   "corrected": "phases[6].side = Nasus.",
+   "confidence": "High",
+   "sources": ["champ-data/nasus.full.js", "champ-data/content/nasus.js"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Gangplank Powder Kegs: matchup-defining — Pop barrels to deny poke + gold. Track it before every engage. - Gangplank Powder Keg: Places barrels that chain-explode when shot — his combo + poke. Dodge or sidestep it.",
+   "after": "- Remove Scurvy: the real matchup-definer — 22s at rank 1 against your 15s Wither. Spend one W to bait the cleanse; the next one sticks. - Powder Keg: charge-stored, no cooldown to wait out. Shoot the barrels instead."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Pop barrels to deny poke + gold. Only engage once it is down or baited.",
+   "after": "Pop barrels to deny poke and gold. Commit only once Remove Scurvy is spent."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Gangplank, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "Not your fight yet: an all-in built on a slow loses to a champion holding a cleanse for it. Bait Remove Scurvy first, then commit R."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+   "after": "Cannon Barrage is true damage — armour will not blunt it, so leave the zone."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "Wither arrives but his W (Remove Scurvy) cleanses the slow, so I cannot pin him and his poke keeps stacking.",
+   "after": "Wither arrives but Remove Scurvy cleanses it — though at 22s to my 15s, a baited cleanse buys me a free second W."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Save Wither for when he barrel-hops or W-cleanses, then close the gap before it cancels",
+   "after": "Bait the Remove Scurvy cleanse with one Wither, then re-Wither seven seconds before he can"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Even your Fury of the Sands + Wither all-in is hard to land — his W (Remove Scurvy) cleanses your slow and he barrel-hops away before you reach him.",
+   "after": "Your Fury of the Sands all-in is hard to land — Remove Scurvy cleanses the slow, so spend a throwaway Wither first and commit on the 22s gap."
+  }
+ ],
+ "notes": "Best-written entry in my slice. The content layer independently identified the Remove Scurvy cleanse as the reason this matchup loses, which is correct and is the sort of thing the packet's defect scan cannot detect — it reported 0 defects here, same as Fiora, where the content was considerably worse. Defect count is not tracking quality.\n\nMy main structural finding: the ENTIRE entry is built around tracking Powder Keg as the matchup-defining cooldown — focus field, loading line, enemyWin, tldr, winCon and both halves of breakdown.cooldowns. Powder Keg's cooldown in the kit file is 0, because it is charge-stored. So 'Engage only on Powder Kegs's cooldown' instructs the player to wait for a window that does not exist, and 'Dodge or sidestep it' is wrong for a placed object. I retargeted breakdown.cooldowns and dosFull[0].d onto Remove Scurvy, which is what actually gates every fight, but the focus field, loading string, tldr, winCon and enemyWin all still name Powder Kegs. Those are writable paths and should be repointed in a follow-up — I left them because changing focus.text without changing focus.letters (currently ['E']) would desync the two, and I did not want to guess at how the front end consumes that pair.\n\nSequencing note worth propagating beyond this matchup: the reason the 22s-vs-15s gap matters is that Nasus's Wither is SHORTER than the enemy's answer to it. That comparison — owner cooldown against the specific counter-cooldown, rather than either in isolation — is the shape most of these entries are missing, and it is computable from the kit library for every pairing without any research at all.\n\nThe 'global R' wording here is CORRECT and I left it — Cannon Barrage genuinely is global (range 30000, global flag). Flagging it only because I corrected the identical phrase five times in the Galio entry, where it was wrong; anyone doing a bulk find-replace on 'global R' would break this matchup."
+}

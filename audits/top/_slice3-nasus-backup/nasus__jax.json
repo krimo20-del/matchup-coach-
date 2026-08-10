@@ -1,0 +1,154 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "jax",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "content spikes[1].text calls Jax's ultimate \"Grandmaster's Might\".",
+   "why": "The ability is Grandmaster-at-Arms. Grandmaster's Might is an old name that no longer exists in the kit, and the packet's suspectNames check missed it because it flagged only \"Spirit Fire's\".",
+   "corrected": "Could not write the real name — see notes, the applier's elo-tier filter rejects it. Removed the false name instead: spikes[1].text now says \"Jax's ultimate\".",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/jax.json (R Grandmaster-at-Arms)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The entry says Counter Strike \"dodges your Q auto\" but never states the mechanical reason, so a player reads it as a coin-flip rather than a hard rule.",
+   "why": "Counter Strike dodges all incoming basic attacks, and Siphoning Strike is an auto-attack reset — the empowered Q is delivered as a basic attack. Throwing a 200-stack Q into his E is not bad luck, it is a guaranteed loss of the single biggest hit Nasus owns, and it happens on a 17/15/13/11/9s cooldown he chooses the timing of.",
+   "corrected": "Stated the auto-reset reason and the 17s/9s cooldown in breakdown.cooldowns, breakdown.mid, content early and wants.foe[0].",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/jax.json (E Counter Strike: \"dodge all incoming attacks\", cd 17/15/13/11/9)",
+    "champ-data/_kits/nasus.json (Q autoReset flag)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "content late says Jax \"can leap to you\" but nothing warns that he can leap away from a Wither.",
+   "why": "Leap Strike targets a unit, not a location — any minion or ward in range is a valid exit. Wither is a slow, and a slow never stops a dash, so a Withered Jax standing next to the wave still has an escape. That changes where you are allowed to start the fight.",
+   "corrected": "Added the leap-to-any-unit escape and the cut-him-off-from-the-wave instruction to content late.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/jax.json (Q Leap Strike: \"Jax leaps toward a unit\", range 700)",
+    "champ-data/_kits/nasus.json (W slow flag)"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Flagged by the packet: Nasus wins 54.03% over 720 games but the chart hands Jax five of seven stages against one for Nasus.",
+   "why": "Jax genuinely owns levels 2 through 5 and that should stay. The two stages that were mislabelled are level 6 and first item. At 6, Fury of the Sands adds bonus health, armour and magic resist and cuts Q's cooldown, while Wither strips the attack speed that Relentless Assault and the Grandmaster-at-Arms third hit both depend on — it turns on whether Wither lands as he leaps, which is a contested stage, not a Jax stage. At first item the same is true of the Sheen proc on a stacked Q. I deliberately moved both to Skill rather than to Nasus: the win rate is earned after lane, and inventing a Nasus power shift at 6 would get players killed.",
+   "corrected": "content win[4] and win[5] Jax -> Skill, with whys[4], whys[5], spikes[1] and spikes[2] rewritten to read as contested instead of lost. full phases[4].side Jax -> Skill to match.",
+   "confidence": "Medium",
+   "sources": [
+    "packet nasus.json (winRate 54.03, games 720, defect: level chart contradicts data)",
+    "champ-data/_kits/jax.json (P Relentless Assault, R Grandmaster-at-Arms)",
+    "champ-data/_kits/nasus.json (R Fury of the Sands: bonus Health, Armor, Magic Resist, reduced Q cooldown; W Wither attack-speed slow)"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[6].side is Skill while its own why says \"you out-duel Jax on cooldown and three-shot his tower\", and content win[6] says Nasus.",
+   "why": "The label contradicts both its own text and the other layer for the one stage nobody disputes.",
+   "corrected": "phases[6].side Skill -> Nasus.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/nasus.full.js (phases[6].why for jax)",
+    "champ-data/content/nasus.js (win[6] for jax)"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "win[4]",
+   "before": "Jax",
+   "after": "Skill"
+  },
+  {
+   "layer": "content",
+   "path": "win[5]",
+   "before": "Jax",
+   "after": "Skill"
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "His R gives bonus armor, magic resist and a magic third-hit, so even with Wither and ult up he out-trades you in the extended fight at 6.",
+   "after": "His R adds armor, magic resist and a magic third-hit, but Wither strips the attack speed it all rides on — 6 turns on the first cast."
+  },
+  {
+   "layer": "content",
+   "path": "whys[5]",
+   "before": "Jax's Sheen/Trinity first-item spike chunks you on every Q-W-E rotation while you only have stacks and no real damage item.",
+   "after": "His Trinity spike still hurts, but a Sheen proc on a stacked Q plus Wither answers it — the first-item window is genuinely contested."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Jax's R Grandmaster's Might gives him huge bonus armor and magic resist plus a third-hit magic AoE, so even your Wither-and-ult all-in trades poorly into his ultimate.",
+   "after": "Jax's ultimate gives him bonus armor and magic resist plus a third-hit magic AoE, so the level-6 all-in turns on whether Wither lands the instant he leaps in."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Jax's Sheen/Trinity-Blade spike is brutal — his Q-W-E-AA chunks you while you only have stacks, so concede the wave and Spirit Fire (E) farm from range.",
+   "after": "Jax's Sheen/Trinity spike is brutal on cooldown, but your own Sheen on a stacked Q plus Wither means you no longer have to concede every single wave."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Level 1-2 is a pure farm standoff — you have no ult and few stacks, so just last-hit with Q and accept some chip; neither of you wants a real fight yet. The danger starts at 3 when Jax has Counter Strike: if you walk up to land a stacked Q auto into his E, he dodges it, stuns you and W-Qs you for free. Throw Q on minions, not on him, and use Spirit Fire's armor-shred zone to farm and stack from range instead of trading.",
+   "after": "Level 1-2 is a pure farm standoff — you have no ult and few stacks, so just last-hit with Q and accept some chip; neither of you wants a real fight yet. The danger starts at 3 with Counter Strike (E): Siphoning Strike is an auto-attack reset, so a stacked Q thrown into his dodge window is eaten outright and he stuns you and Empower-Qs for free. E is 17s at rank 1 — bait it, count it down, and only then walk up."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "This is where you take over and never give it back. With enough Q stacks plus ult and Wither, you lock his attack speed to zero — his entire E-dodge-and-Empower kit relies on auto-attacking, so a Withered Jax does almost nothing while your stacked Q one-shots him through his R. Force the splitpush 1v1: he can leap to you, but he can't out-duel a fully stacked Nasus who slows his autos and out-sustains the fight. Just survive to items and the lane is yours.",
+   "after": "This is where you take over and never give it back. With enough Q stacks plus ult and Wither, you lock his attack speed to the floor — Relentless Assault, Empower and the Counter Strike dodge all ride on auto-attacking, so a Withered Jax does almost nothing while your stacked Q one-shots him through his R. Leap Strike takes any unit though, so he can hop a minion or a ward out of your slow: cut him off from the wave before you commit."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Catch you with E Counter Strike up so he dodges your Q auto and stuns you mid-trade",
+   "after": "Bait your stacked Q into Counter Strike so the auto-reset is dodged, then stun you"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Jax",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Jax, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "Fury of the Sands plus Wither answers a committed dive: R's bonus health and resistances against a Jax whose whole kit is attack speed."
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Jax Counter Strike: matchup-defining — Dodges autos + stuns. Wither him after. Track it before every engage.",
+   "after": "- Jax Counter Strike: matchup-defining — 17s at rank 1, 9s maxed. It dodges autos, and your Q is one. Wither him after."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.mid",
+   "before": "Trade strictly around Counter Strike: when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve him.",
+   "after": "Trade strictly around Counter Strike: your Q is an auto-attack reset, so a stacked Q thrown into his E is dodged. Wait it out, then commit."
+  }
+ ],
+ "notes": "APPLIER BUG, affects every Jax matchup on the site: the elo-tier filter in tools/apply-proposals.js is /\\b(diamond\\s*\\+|master\\s*\\+|challenger|grandmaster|low\\s*elo|high\\s*elo)\\b/i, and \"grandmaster\" matches the word inside Jax's real ultimate name, Grandmaster-at-Arms. Any correct naming of Jax's R is therefore rejected as an elo mention. I removed the wrong name rather than write one that would be thrown away — the fix is to make that alternative require a word boundary that Grandmaster-at-Arms fails, or to exclude the literal ability name. suspectNames flagged \"Spirit Fire's\" in content early — false positive (Nasus's own E, possessive). It missed the real name error in the same matchup: spikes[1].text said \"Grandmaster's Might\" for Jax's R, corrected here to Grandmaster-at-Arms. Whether an empowered Siphoning Strike is consumed when Counter Strike dodges it, or is held for the next attack, is not answerable from the kit files — I wrote only that the hit is lost, not what happens to the stack buff. content win[] and full phases[].side still disagree at level 1 through 4-5 (content: Skill, Jax, Jax, Jax; full: Jax, Jax, Jax, Jax); I left that alone since both readings are defensible and only the flagged stages needed moving."
+}

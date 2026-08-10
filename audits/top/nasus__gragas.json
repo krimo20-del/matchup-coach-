@@ -1,0 +1,161 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "gragas",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "52.88% over 399 games — the smallest sample in my slice but still well above the deferral threshold — matching MC_WR_TABLES. No elo-tier language present.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packets/nasus.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "INVENTED MECHANIC, repeated five times. The content layer describes Gragas's Q as a lingering pool that provides sustain: early ('his Q sustain pool out-pokes you'), whys[1] ('his Q-pool poke'), late ('grind through his pool sustain'), wants.foe[0] ('Poke you down with Q-pool'), and full dontsFull[1].t ('Fight in his Q puddle'). Gragas has no pool and his Q provides no healing whatsoever.",
+   "why": "Barrel Roll is a cask he rolls to a location which explodes on command or after 4 seconds, slowing whoever it catches. It leaves nothing behind and heals him for nothing. His actual sustain is Happy Hour (P): 'Gragas periodically heals upon using a skill.' That is a completely different mechanic with the opposite counterplay implication — because the heal triggers on CASTING rather than on hitting, dodging the cask does not deny the heal, and there is no puddle to avoid standing in. A player told to stay out of a pool is being told to avoid a thing that is not there, while the real sustain ticks away every time Gragas presses a button.",
+   "corrected": "Barrel Roll is a cask, not a pool — it leaves nothing on the ground. His sustain is Happy Hour, which heals him for casting any ability whether it lands or not.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gragas.json (P Happy Hour, Q Barrel Roll descriptions)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Body Slam is the declared focus of the entry — focus field, loading line, tldr, winCon, breakdown.cooldowns — and neither layer mentions the one thing that stops it.",
+   "why": "Riot's text: 'Gragas charges to a location and collides with the FIRST ENEMY UNIT he comes across.' Your own minions are enemy units to Gragas, so a wave standing between you cuts the charge short and he never arrives. This is not a general minion-block assumption — it is stated in the ability's own description. It also happens to reinforce what the entry already tells the player to do all lane (soak farm behind the wave), which means the advice and the mechanism can finally be joined up instead of sitting in separate fields. The AoE damage and stun still land around wherever he stops, so the honest framing is that the wave denies him the reach, not that it makes you immune.",
+   "corrected": "Body Slam stops on the first enemy unit it touches. Keep your own wave between you and his charge dies on a minion.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gragas.json (E Body Slam description)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "Packet reports sequencingCues: 0. breakdown.cooldowns says 'His escape. Wither him after it' with no number, and the cooldown relationship here is genuinely awkward in a way the entry never admits.",
+   "why": "Body Slam is 14/13.5/13/12.5/12s. Wither is 15/14/13/12/11s. They are within a second or two of each other at every rank, and at rank 1 Wither is actually the LONGER of the two. That matters because the standard template advice across these entries is 'bait the cooldown, then commit', which works against Gangplank (22s vs 15s) and Gnar (22s vs 15s) but does NOT work here — you cannot out-cycle a 14-second dash with a 15-second slow. Against Gragas, Wither has to land on the commit itself rather than in a window afterwards, because there is no window.",
+   "corrected": "Body Slam is 14s at rank 1 against your 15s Wither — near-identical, so there is no free window. W has to land on the engage itself.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gragas.json (E cooldown 14/13.5/13/12.5/12)",
+    "champ-data/_kits/nasus.json (W cooldown 15/14/13/12/11)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Drunken Rage is referred to only as 'W damage reduction' and 'W mitigation'. Neither layer mentions that it is a one-second drink with a visible tell, or that it empowers his next basic attack.",
+   "why": "Riot's text: 'Gragas samples his latest brew FOR 1 SECOND. After finishing, he becomes boisterous and belligerent, dealing magic damage to all nearby enemies on his next basic attack and reducing damage received.' Two useful things for Nasus. The drink is a one-second commitment with an obvious animation, so the damage reduction is telegraphed a full second before it exists — that is when to back off or when to land Wither, not after. And the kit flags Drunken Rage as an autoReset, so it is an incoming empowered attack as well as a defensive buff, which is the half the entry never mentions.",
+   "corrected": "Drunken Rage is a one-second drink with a clear tell, and it empowers his next attack as well as cutting damage — react during the drink, not after.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gragas.json (W Drunken Rage description, autoReset flag)"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "Packet defect confirmed: the content layer names none of Happy Hour, Barrel Roll, Drunken Rage or Explosive Cask. Only Body Slam appears, and only in the full layer.",
+   "why": "Compounded here by the pool error — the player is given a wrong mechanic AND no correct name to look it up under. Naming Happy Hour in particular matters because it is the thing quietly undoing their poke, and it is invisible unless you know to watch for it.",
+   "corrected": "Introduce Happy Hour, Barrel Roll and Drunken Rage into the strings being rewritten anyway.",
+   "confidence": "High",
+   "sources": [
+    "packets/nasus.json (defect list)",
+    "champ-data/_kits/gragas.json"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[4].why is the cross-matchup boilerplate 'Fury of the Sands flips dives ... First real fight you're allowed to take', while content whys[4] and spikes[1] both call level 6 Gragas's swing and content win[4] gives the stage to Gragas.",
+   "why": "The layers disagree. Explosive Cask plus Body Slam is a genuine level-6 commit tool against a Nasus who does not yet have the stacks to punish it. The boilerplate would send the player into exactly that.",
+   "corrected": "Rewrite as his window, and point at the wave as the thing that stops the engage.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gragas.json (R, E)",
+    "champ-data/content/nasus.js (whys[4], spikes[1])"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Both packet suspectNames hits for this matchup are FALSE POSITIVES. 'Spirit Fire's' in wants.you[2] and 'Soak Siphoning Strike' in early are both correct Nasus ability names, flagged only because of the adjacent word. No change needed on either.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/nasus.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Gragas Body Slam: matchup-defining — His escape. Wither him after it. Track it before every engage.",
+   "after": "- Gragas Body Slam: matchup-defining — 14s, so no free window. It stops on the first enemy unit: use your wave."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His escape. Wither him after it. Only engage once it is down or baited.",
+   "after": "His engage and escape. It dies on the first minion it touches — use your wave."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Gragas, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "His window, not yours: Explosive Cask into Body Slam commits before your stacks exist. Keep the wave between you and the charge dies early."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].t",
+   "before": "Fight in his Q puddle",
+   "after": "Chase his Barrel Roll"
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+   "after": "Happy Hour heals him for casting at all, so dodging the cask denies nothing."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Gragas owns the raw early trades — his Q sustain pool out-pokes you and his W damage reduction eats your Q autos, so don't brawl at 1-2. Soak Siphoning Strike farm and lean on Soul Eater lifesteal to heal the poke. At 3 you get Wither, your only early answer: hold it to slow his body-slam E so he can't dash in, commit, and dash back out free.",
+   "after": "Gragas owns the raw early trades — Barrel Roll pokes and Drunken Rage cuts the damage of your Q autos, so don't brawl at 1-2. His sustain is Happy Hour, which heals him for CASTING anything, so dodging the cask denies him nothing. Soak Siphoning Strike farm and lean on Soul Eater lifesteal. At 3, Wither: hold it for his Body Slam so he cannot dash in and back out free."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "Gragas out-trades you at 2 with his Q-pool poke and W damage reduction eating your autos before you have Wither to answer.",
+   "after": "Gragas out-trades you at 2 with Barrel Roll poke and Drunken Rage cutting your autos before you have Wither to answer."
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "He owns levels 4-5: barrel poke and E engage with W mitigation grind you down while you're still hoarding stacks with no ult.",
+   "after": "He owns levels 4-5: Barrel Roll and Body Slam with Drunken Rage grind you down while you're still hoarding stacks with no ult."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Poke you down with Q-pool and barrel zone you off CS before items",
+   "after": "Roll Barrel Roll through the wave to zone you off CS before items"
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "Once Sheen or Iceborn is online you take over. Empowered Q bursts him, Wither's attack-speed and movement slow shuts down his E re-engage and kite, and Soul Eater plus Spirit Fire's armor shred grind through his pool sustain in any extended duel. By 2+ items your infinite stacks and Fury of the Sands make you a splitpush monster an even AP brawler can't answer 1v1 — force side lane and end fights you start with Wither.",
+   "after": "Once Sheen or Iceborn is online you take over. Empowered Q bursts him, Wither's attack-speed and movement slow shuts down his Body Slam re-engage, and Soul Eater plus Spirit Fire's armor shred out-grind Happy Hour in any extended duel. By 2+ items your infinite stacks and Fury of the Sands make you a splitpush monster an even AP brawler can't answer 1v1 — force side lane and open with Wither."
+  }
+ ],
+ "notes": "INVENTED MECHANIC, five instances: the content layer builds its whole early-game read around Gragas's 'Q sustain pool' / 'Q-pool poke' / 'pool sustain', and the full layer's dontsFull[1] literally tells the player not to 'Fight in his Q puddle'. There is no pool. Barrel Roll is a cask that rolls, explodes and leaves nothing behind, and it heals him for zero. His sustain is Happy Hour, which heals on CASTING any ability. That inverts the counterplay: the entry implies you can avoid the healing by not standing somewhere, when in fact you cannot deny it at all by dodging — only by shortening the fight or bringing anti-heal. _missing-interactions.json flags needs-antiheal for this pairing and cites Happy Hour by name, which lines up exactly.\n\nSecond finding: Body Slam 'collides with the first enemy unit he comes across' — stated in Riot's own text, so this is not the general minion-block question the brief warns off. Your own wave cuts his charge short. This is the counterplay to the ability the entry names as matchup-defining and it appears nowhere in either layer, even though the entry already tells the player to farm behind the wave for unrelated reasons.\n\nCooldown finding worth carrying across the champion: Gragas is the case where the standard 'bait it, then commit' template BREAKS. Body Slam is 14s against Wither's 15s — Wither is actually longer at rank 1. Compare Gangplank (Remove Scurvy 22s vs W 15s) and Gnar (Hop 22s vs W 15s), where baiting works, and Garen (Decisive Strike 8s vs W 15s), where it fails in the other direction. Three different answers from the same template. The ratio is computable from the kit library for every pairing and would be worth generating as a field rather than written per-matchup.\n\nI did not add a Grievous Wounds line despite the needs-antiheal flag. Every string long enough to hold one was already being spent on correcting the pool error, and I would rather fix a fabricated mechanic than add an item note. Worth a follow-up pass on report[8] Itemization — note that field contains a double space in 'Trinity Force  (Iceborn Gauntlet' across every matchup I checked, which will break exact-match for whoever edits it.\n\nBoth packet suspectNames hits here ('Spirit Fire's', 'Soak Siphoning Strike') are false positives. That is now six false positives and zero true positives from the detector across my nine matchups, against one genuine fabricated name it missed entirely (Gnar's 'Quickness') and this pool error, which is a fabricated MECHANIC rather than a name and which no name-matching detector would ever catch."
+}

@@ -1,4 +1,4 @@
-// MatchupCoach — Aatrox (Top) champion matchup data. Patch 26.11.
+// MatchupCoach — Aatrox (Top) champion matchup data. Patch 26.15 (content authored 26.11).
 // Each entry: diff, tone, tldr, breakdown, dos[], donts[], key{slot,name,cd,note,winT,winS}, win.
 window.CHAMP_DATA = window.CHAMP_DATA || {};
 window.CHAMP_DATA.aatrox = {

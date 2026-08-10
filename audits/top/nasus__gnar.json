@@ -1,0 +1,156 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "gnar",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "52.18% over 550 games, matching MC_WR_TABLES. No elo-tier language present.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packets/nasus.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "FABRICATED ABILITY NAME. content whys[1] and wants.foe[0] both credit Gnar's move speed to 'his Quickness'. Gnar has no ability called Quickness. The packet's suspectNames detector did not catch this one — it flagged 'Spirit Fire's' and 'No Wither' instead, both of which are correct names.",
+   "why": "Gnar's W in mini form is Hyper: 'Gnar's attacks and spells hype him up, dealing bonus damage and granting him Move Speed.' That is where the move speed comes from, and it is a stacking on-hit effect rather than an activated ability, which changes how a Nasus reads it — you cannot bait it out or wait for its cooldown, you can only avoid feeding it stacks. Naming it 'Quickness' points the player at an ability that does not exist and hides the fact that the speed is something Gnar earns by hitting them.",
+   "corrected": "The move speed is Hyper (W), Gnar's mini-form passive-stacking buff — not an activated ability and not called Quickness.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gnar.json (W Hyper/Wallop description)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "The content layer never states the condition on GNAR!'s stun, even though the full layer's breakdown.cooldowns has it right. content spikes[2] and mid treat the Mega-form stun as a single unconditional threat.",
+   "why": "Gnar has TWO different stuns and they behave completely differently. Wallop (W in Mega form) stuns an area unconditionally. GNAR! (R) does not: Riot's text is 'Mega Gnar throws everything around him in a chosen direction, dealing damage and slowing them. ANY ENEMY THAT HITS A WALL is stunned and takes bonus damage.' Without terrain behind you, the ult is a knockback and a slow — survivable. With a wall behind you it is a long stun into his full burst. For Nasus specifically, who has no dash and no escape and must stand still to stack, choosing which side of the lane to farm from is free, permanent counterplay to the ability the entry names as matchup-defining. The full layer knows this and the content layer, which is what most of the prose lives in, does not.",
+   "corrected": "GNAR! only stuns if it slams you into terrain. Stack away from the wall and his ult is just a knockback and a slow.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gnar.json (R GNAR! description, terrain flag)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "The entry repeatedly says to hold Wither for the moment he hops in, but never gives the cooldown of the hop or of Wither, so the player cannot tell whether that is a good trade of cooldowns.",
+   "why": "Hop is 22/19.5/17/14.5/12s — a genuinely long escape, and the longest cooldown mini-Gnar has. Wither is 15/14/13/12/11s. Wither is SHORTER at every rank, which means the existing advice is correct and the numbers prove it: spend W on the hop, and your answer returns before his escape does. That is the same favourable ratio as the Gangplank matchup and the opposite of Garen, and stating it converts a vague instruction into a countable one. Boomerang Throw is 16s at rank 1 but its cooldown is reduced when he catches it on the return, which is why his poke feels far more frequent than 16 seconds and is worth the player knowing.",
+   "corrected": "Hop is 22s at rank 1 against your 15s Wither — spend W on his hop and you get yours back first.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gnar.json (E cooldown 22/19.5/17/14.5/12, Q cooldown 16/14.5/13/11.5/10)",
+    "champ-data/_kits/nasus.json (W cooldown 15/14/13/12/11)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Hop is described only as a leap in and out of range. Neither layer mentions that it can be extended.",
+   "why": "Riot's text: 'Gnar leaps to a location and bounces off the head of any unit he lands on, TRAVELLING FURTHER.' Any unit — minions included. So a Nasus standing behind his own wave is not safe from the hop; the wave is what lets Gnar reach him. That directly contradicts the instinct to farm from behind minions, which is what the entry otherwise tells the player to do all lane, and it is the mechanism behind the deep hops the entry warns about without explaining.",
+   "corrected": "His hop bounces off any unit it lands on and travels further — your own minions extend his reach.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gnar.json (E Hop/Crunch description)"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[4].why is the cross-matchup boilerplate 'Fury of the Sands flips dives ... First real fight you're allowed to take', while its own side says Gnar and content whys[4] correctly calls level 6 'even and bait-dependent'.",
+   "why": "The layers disagree about the same stage. Level 6 for Gnar is not really a level spike at all — his transform is Rage-driven rather than level-gated, which is what makes the stage genuinely bait-dependent rather than a clean flip either way. Declaring it Nasus's first allowed fight contradicts the side field and would walk a player into a Mega-form all-in.",
+   "corrected": "Rewrite around the Rage bar and the wall condition rather than a false flip.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/gnar.json (P Rage Gene, R)",
+    "champ-data/content/nasus.js (whys[4])"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[6].side is 'Skill' while its own why reads '300+ stacks and two items: you out-duel Gnar on cooldown and three-shot his tower', and content win[6] is 'Nasus'. The layers also disagree at stages 3, 4 and 5.",
+   "why": "Only stage 6 is internally contradictory — the side field disagrees with the sentence printed beneath it. The packet's 'level chart contradicts data' defect for this matchup is comparing the content array to the win rate; I did not act on that framing, for the reason set out in the Darius proposal.",
+   "corrected": "phases[6].side = Nasus. Stages 3, 4 and 5 flagged, not edited.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/nasus.full.js",
+    "champ-data/content/nasus.js"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Checked both packet suspectNames hits. 'Spirit Fire's' in late and 'No Wither' in whys[0] are FALSE POSITIVES — both are correct Nasus ability names, flagged only because of the adjacent word. No change needed. The genuine name error in this matchup ('Quickness') was not flagged at all.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/nasus.json",
+    "champ-data/_kits/gnar.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Gnar GNAR! (Mega Stun): matchup-defining — His Mega all-in. Don’t fight transform. Track it before every engage. - Gnar GNAR!: Mega only: knocks up + slows; against a wall it stuns long. Dodge or sidestep it.",
+   "after": "- Gnar GNAR! (Mega Stun): matchup-defining — it only STUNS against terrain. Stack away from the wall and it is just a knockback. - Gnar Hop: 22s at rank 1, longer than your 15s Wither, so spend W on the hop and you refresh first."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His Mega all-in. Don’t fight transform. Only engage once it is down or baited.",
+   "after": "His Mega all-in. Stand clear of the wall and GNAR! cannot stun you at all."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Gnar, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "Not a level spike at all — his transform is Rage-driven, not level 6. Watch the Rage bar, not the clock, and keep terrain off your back."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+   "after": "His hop bounces off any unit — your own wave is what extends his reach."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "He hops (E) in and out freely while you're still locked to auto-range farming; his Quickness move speed owns the trade tempo.",
+   "after": "He hops (E) in and out freely while you're locked to auto-range farming; Hyper (W) stacks him move speed as he lands hits."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Poke you off every Q last-hit with boomerang (Q) and Quickness move speed, denying stacks",
+   "after": "Poke you off every Q last-hit with boomerang (Q) and Hyper (W) move speed, denying stacks"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Mega-Gnar's transform plus his AOE stun is the bait window — if you Wither him on transform he can't combo, but eat the stun and you die before Fury of the Sands matters.",
+   "after": "Mega-Gnar's Wallop (W) stun is the bait window — but GNAR! (R) only stuns if it slams you into a wall, so stack in the open and his ult is a knockback with a slow."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 4-6 turn into a skill standoff. Wither is your equalizer now — the moment mini-Gnar hops (E) into your range, point it at him and his move-speed kite collapses, letting you walk him down for a Q. The trap is his Rage bar: don't blindly all-in when he's near full Rage, because the Mega transform brings an AOE stun that chains into his burst and deletes you before Fury of the Sands can swing it. Bait the transform, Wither him on the swap so the stun whiffs the follow-up, then disengage.",
+   "after": "Levels 4-6 turn into a skill standoff. Wither is your equalizer — the moment mini-Gnar hops (E) into your range, point it at him: his hop is 22s against your 15s W, so you always refresh first and he cannot repeat it. The trap is his Rage bar, not the level — at full Rage his next ability swaps him to Mega, and Wallop (W) stuns an area outright. GNAR! (R) only stuns if it slams you into terrain, so fight in open ground and the ult is just a knockback and a slow. Bait the transform, Wither the swap, then disengage."
+  }
+ ],
+ "notes": "FABRICATED ABILITY NAME the detector missed: content whys[1] and wants.foe[0] both refer to 'his Quickness move speed'. Gnar has no ability called Quickness — the move speed comes from Hyper (W). The packet's suspectNames for this matchup flagged 'Spirit Fire's' and 'No Wither' instead, and both of those are correct names. That is two false positives and one false negative in a single matchup, which is worth knowing before anyone trusts the detector as a filter for where to look. Across my nine matchups it produced six flags, all six false positives, and missed the one real name error.\n\nSecond finding: Gnar has TWO stuns and the content layer conflates them. Wallop (W, Mega form) stuns an area unconditionally. GNAR! (R) stuns ONLY if the target is thrown into terrain — otherwise it is a knockback plus a slow. The full layer's breakdown.cooldowns already had this right; the content layer, where nearly all the prose lives, did not. For a champion with no dash who has to stand still to farm, 'which side of the lane do I stack from' is free permanent counterplay to the ability this entry names as matchup-defining, and it was nowhere in the player-facing text.\n\nThird: Hop bounces off ANY unit it lands on and travels further, minions included. The entry tells the player to farm from behind the wave all lane while also warning about deep hops, without ever connecting the two — the wave is the thing giving Gnar the extra distance.\n\nOn cooldown ratios, this matchup is favourable in the same way Gangplank is: Hop at 22s against Wither at 15s means Nasus refreshes first, so spending W on the hop is correct and now has the numbers behind it. Worth noting Boomerang Throw's cooldown is REDUCED when Gnar catches it on the return, which is why his poke lands far more often than its 16s base suggests — I mentioned this in the audit but could not fit it into any edit inside the length bands.\n\nOne structural note: the full layer's focus, loading, tldr, winCon, enemyWin and bd.spikes all name 'GNAR! (Mega Stun)' as the tracked ability. Now that the stun is correctly conditional on terrain, that framing is a little misleading — Wallop is the unconditional stun and Hop is the cooldown actually worth tracking. Those fields are writable and could be repointed, but as with Gangplank I left focus.text alone because changing it without focus.letters (currently ['R']) would desync the pair."
+}

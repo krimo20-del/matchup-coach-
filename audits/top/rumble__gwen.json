@@ -1,0 +1,109 @@
+{
+  "ownerKey": "rumble",
+  "enemy": "gwen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet win rate is 54.99% over 391 games. No elo-tier language appears anywhere in either layer for this matchup.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["scratchpad/packets/rumble.json"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "full.diff is \"TRICKY\" with diffRating \"7.5/10\" on a matchup Rumble wins 54.99% of the time, and full.phases[0].side / phases[4].side both say \"Gwen\" while their own why-text says Flamespitter wins level 1 and that Equalizer decides level 6. The content layer's win[] array disagrees with the full layer at stages 0, 1, 3, 4, 5 and 6.",
+      "why": "Rumble is the favoured side into Gwen and both layers' prose already says so; only the side labels and the difficulty band contradict it.",
+      "corrected": "phases[0].side and phases[4].side should read \"Rumble\"; phases[6].side should read \"Gwen\" to match the (correct) late-game text. diff/diffRating should move toward EVEN/6.5. None of these are proposable: the applier requires a full-layer `before` of 12+ characters and these values are 4-7 characters, so they must be fixed by hand or by a separate tool pass.",
+      "confidence": "High",
+      "sources": ["champ-data/rumble.full.js", "champ-data/content/rumble.js", "tools/apply-proposals.js"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Neither layer mentions that Electro Harpoon reduces Magic Resist, or that Rumble carries two charges and the shred stacks. That is the single largest damage lever Rumble has in this lane and it changes the cast order.",
+      "why": "Riot's own Electro Harpoon text: 'electrocuting his target with magic damage, slowing their Move Speed, and reducing their Magic Resist. Rumble can carry 2 harpoons at a time.' Landing both harpoons before Flamespitter means the whole 3-second burn lands into shredded MR.",
+      "corrected": "Lead the trade with E-E for the stacked Magic Resist cut, then Danger-Zone Flamespitter into it.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/rumble.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Gwen's Skip 'n Slash is described only as a dash/escape. Its on-hit and attack-speed component is never mentioned, and its cooldown refund is never mentioned.",
+      "why": "Riot's text: 'Gwen dashes a short distance then gains Attack Speed, attack range, and magic damage On-Hit for a few seconds. If she hits an enemy during that time, this Ability's cooldown is partially refunded.' A Gwen who lands hits during E gets it back early, so treating a used E as 13 seconds of safety is wrong.",
+      "corrected": "Skip 'n Slash is her damage window, not just her escape — 13s at rank 1, part-refunded whenever she connects.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gwen.json"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns names Hallowed Mist as matchup-defining but gives no number for it or for anything else, so the reader cannot size the window.",
+      "why": "Hallowed Mist is 22/21/20/19/18s, Skip 'n Slash 13/12.5/12/11.5/11s (partially refunded on hit), Snip Snip! 6.5s falling to 3.5s, The Equalizer 130/105/80s. Real numbers turn 'track it' into an actionable count.",
+      "corrected": "See the breakdown.cooldowns edit below.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gwen.json", "champ-data/_kits/rumble.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[3] claims 'Gwen's Mist uptime is highest relative to your Q cone angle here' at levels 4-5. Hallowed Mist's cooldown only falls 1s per rank (22 to 18), and Gwen almost never puts early points into W, so nothing about her Mist uptime spikes at 4-5.",
+      "why": "The real levels 4-5 shift is Snip Snip!, which drops from a 6.5s to a 3.5s cooldown as she maxes it — that is what lets her Q into every trade window.",
+      "corrected": "See the whys[3] edit below.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gwen.json"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both packet suspectNames entries are false positives. spikes[3].text already writes 'Snip Snip!' with the exclamation mark (the tokenizer split it off), and wants.foe[0] already writes 'Hallowed Mist' correctly — the flagged token was the leading verb 'Pop'.",
+      "corrected": "No name change needed.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gwen.json", "scratchpad/packets/rumble.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Your Q-into-double-E combo comes online — zone her off the wave with Flamespitter and punish any forward step before she can activate Hallowed Mist.",
+      "after": "Both Electro Harpoons cut her Magic Resist and the two stack — land E-E before Flamespitter, zone her off the wave, and punish forward steps while Mist is down."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Equalizer is a free punish on any Gwen who steps forward to trade — drop it across her path when Hallowed Mist is on cooldown.",
+      "after": "Equalizer punishes any Gwen who steps up to trade — drop it across her path inside her 22s rank-1 Hallowed Mist cooldown."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Gwen's Mist uptime is highest relative to your Q cone angle here, and Snip Snip! stacks punish extended trades — respect it and poke rather than brawling past short windows.",
+      "after": "Snip Snip! ranks down from a 6.5s to a 3.5s cooldown, so she gets a Q into every trade window — poke on the Hallowed Mist timer and refuse anything running past two of her Q casts."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Bait Hallowed Mist's cooldown, then commit E-slow and chain the second harpoon before she dashes away",
+      "after": "Bait Hallowed Mist out, then land both harpoons for the stacked Magic Resist cut before Danger-Zone Q"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Use Skip 'n Slash dash to reposition inside or outside Mist and dodge your Electro-Harpoon",
+      "after": "Use Skip 'n Slash for its attack-speed and on-hit window, then slide back inside the Mist"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Gwen Hallowed Mist: matchup-defining — She’s safe inside. Poke when down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Gwen Hallowed Mist: matchup-defining, 22s at rank 1 — she is safe inside, so poke the gap and track it before every engage. - Skip 'n Slash: 13s, part-refunded on hit. - The Equalizer: 130s at rank 1."
+    }
+  ],
+  "notes": "BLOCKED BY THE APPLIER, needs a hand fix: full.phases[0].side and full.phases[4].side both read \"Gwen\" while their own why-text says Rumble wins those stages, and full.phases[6].side reads \"Rumble\" while every piece of prose in both layers correctly says Gwen outscales him at 2+ items. The content win[] array is the sane one (Rumble/Rumble/Rumble/Gwen/Rumble/Skill/Gwen). These cannot be proposed because apply-proposals.js rejects any full-layer edit whose `before` is under 12 characters, and side values are 4-6 characters. Same blocker on diff (\"TRICKY\") and diffRating (\"7.5/10\"), which are too pessimistic for a 54.99% matchup. Separately: this entry misgenders Gwen as \"he/his\" in breakdown.wave, breakdown.feeding, breakdown.late, dosFull[1].d and the report Itemization block; the strings are shared boilerplate so a per-matchup proposal would be rejected as ambiguous — this needs the same sweep as _quality_misgender.json."
+}

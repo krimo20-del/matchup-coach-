@@ -1,0 +1,121 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "masteryi",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The matchup's central instruction is backwards. content.late says 'Hold Wither for Highlander' and content.wants.you[1] says 'Wither timed onto Highlander'. content.whys[4] softens it to 'his Highlander all-in beats your sustain before Wither can fully do its work', implying Wither still partly works.",
+   "why": "Highlander makes Master Yi immune to all slowing effects for its duration. Wither is Nasus's entire answer to this champion, and the file tells the player to spend it at the exact moment it is negated. This is the worst kind of error in the dataset: not a missing detail, but a confident instruction that loses the fight. Highlander is a flat 85s at every rank, so the correct play is to land Wither BEFORE he ults, or to survive the duration and Wither him after — the post-Highlander window is long and it is where Nasus wins.",
+   "corrected": "Highlander grants slow immunity — Wither does nothing while it is up. Land it before he ults, or hold it until Highlander drops.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/masteryi.json R description ('making him immune to all slowing effects') and cooldown 85",
+    "champ-data/_kits/nasus.json W description"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "No Grievous Wounds guidance anywhere, despite the entry repeatedly saying his sustain beats yours.",
+   "why": "Meditate restores health and reduces damage taken on a flat 10s cooldown. It is a CHANNEL, so it is interruptible by CC — but Nasus has none. Wither is a slow, not a stun, and nothing else in his kit interrupts. That combination means Nasus's only lever against Meditate is anti-heal, which makes Grievous Wounds a genuine build decision here rather than a generic suggestion.",
+   "corrected": "Meditate heals on a flat 10s and you have no CC to break the channel — Grievous Wounds is the only answer you have.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/masteryi.json W description, channel flag, cooldown 10",
+    "champ-data/_kits/nasus.json full kit (no hardCC)",
+    "champ-data/_kits/_missing-interactions.json nasus/masteryi needs-antiheal"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "The packet flags 'NO cooldown-sequencing advice anywhere'. There is none, and there is also no FULL layer for this matchup to carry it (see notes).",
+   "why": "The numbers that decide this lane are Highlander at a flat 85s and Meditate at a flat 10s. Highlander being flat is what makes 'wait it out' a real plan rather than a hope. Alpha Strike is 20/19.5/19/18.5/18 but basic attacks reduce it, so it is not a window to count on.",
+   "corrected": "Highlander flat 85s; Meditate flat 10s; Alpha Strike 20 to 18 but shortened by his autos.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/masteryi.json cooldowns and Q description"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "content.early and content.whys[2] correctly identify Wuju Style as true damage that ignores armour, and correctly conclude that Nasus's tank build does not answer his damage. That is the right read and it is stated precisely, so I left both alone.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/masteryi.json E trueDamage flag"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "missing",
+   "whatIsWrong": "Alpha Strike's untargetability is not mentioned.",
+   "why": "Master Yi is untargetable for the duration of Alpha Strike. Wither is a targeted cast, so an Alpha Strike used as he engages will eat the cast attempt in the same way Highlander eats the effect. I have not written this into the copy — the three spike/wants fields left are too short to carry it without dropping something better — but it belongs in the fourth spike entry that is currently missing from this matchup.",
+   "corrected": "Alpha Strike makes him untargetable mid-flight; a Wither clicked during it does not go out.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/masteryi.json Q untargetable flag"
+   ]
+  },
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "50.65% over 310 games, and the chart (Nasus level 1, even at 2, Yi through 3-first item, Nasus late) matches a coinflip that swings on scaling.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/content/nasus.js MC_WR_TABLES"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 4-6 are his: a single Wither does not stop the all-in and his ult beats your sustain, so farm under tower, ward against the dive and never die for a stack. When his first item sends him roaming, ping relentlessly and keep stacking — his roam damage against your quiet scaling is a trade you accept.",
+   "after": "Levels 4-6 are his: one Wither does not stop the all-in and Highlander shrugs the slow off outright, so farm under tower, ward the dive and never die for a stack. Meditate heals through your chip and you have no CC to break the channel — bring Grievous Wounds. His first item sends him roaming; ping and keep stacking."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "Fully stacked with tank items, the duel flips completely: Wither alone reduces him to a jogging target and Siphoning Strike chunks a third of his bar per swing. Hold Wither for Highlander, R for his burst window, and take every sidelane duel — he cannot kill what he can no longer outrun.",
+   "after": "Fully stacked with tank items, the duel flips completely: Wither alone reduces him to a jogging target and Siphoning Strike chunks a third of his bar per swing. But Highlander makes him immune to slows — Wither him before he ults, or wait it out. Take every sidelane duel once it drops."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "At 6 his Highlander all-in beats your sustain before Wither can fully do its work — respect every cooldown window.",
+   "after": "At 6 Highlander makes him immune to slows, so Wither stops working for its whole duration — respect that window."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "His mobility problem becomes unsolvable",
+   "after": "Outside Highlander he cannot outrun you"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Stacked Q deletes him — the late game is yours",
+   "after": "Stacked Q deletes him once Highlander is down"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Wither timed onto Highlander",
+   "after": "Wither once Highlander expires"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Level-6 all-ins before Wither ramps",
+   "after": "Highlander to shrug off your Wither"
+  }
+ ],
+ "notes": "STRUCTURAL BUG, please read. CHAMP_FULL.nasus has 71 keys but 'masteryi' is NOT one of them — this matchup has no FULL layer at all, so every edit here is content-only and the whole full-layer surface (tldr, winCon, phases, breakdown, dosFull, dontsFull) is simply absent for a matchup with 310 games of data. The 71st key is instead 'nasus', a Nasus-vs-Nasus MIRROR entry (diff: 'MIRROR') which has no counterpart in MC_CONTENT_EXTRA and no row in MC_WR_TABLES. So the two layers are the same size but describe different sets: FULL has a mirror it should probably not have, and is missing a real matchup it should. Worth checking whether other champions' full files have the same off-by-one. SECOND UNRESOLVED DEFECT: content.spikes has 3 entries where the schema expects 4; a string edit cannot add an array element. Suggested fourth entry — when 'Lvl 6', text 'Highlander: slow-immune for its duration, flat 85s' — which would also carry the Alpha Strike untargetability point from audit point 13 if reworded. The Highlander/Wither correction is the most important single fix in my whole slice: the file currently instructs the player to spend Nasus's only answer at the exact moment it is nullified."
+}

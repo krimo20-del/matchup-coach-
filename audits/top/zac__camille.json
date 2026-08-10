@@ -1,0 +1,351 @@
+{
+  "ownerKey": "zac",
+  "enemy": "camille",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet win rate 56.62% over 136 games matches MC_WR_TABLES.zac.camille = 56.62. No elo-tier language in either layer.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json",
+        "champ-data/content/zac.js MC_WR_TABLES"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "This is Zac's 11th-best matchup out of 71 at 56.62%, and it is labelled diff HARD, diffRating 8.5/10, tone #ff5d6c (the red band), with content.win giving Camille 6 of 7 stages and full.phases giving her 5 of 7. full.phases[6].side is Camille while content.win[6] is Zac, so the two layers also contradict each other on the final row, and content.late explicitly says 'the late timeline reads for you'.",
+      "why": "I checked the whole file rather than guessing: across all 71 Zac matchups the diff label carries no relationship to the win rate. EVEN averages 51.7%, TRICKY 53.1%, HARD 52.5%, and FAVOURED averages 48.0% — FAVOURED is applied only to 47.52% and 48.57%, which is backwards. The file's own highest win rate (Maokai, 65.75%) is labelled EVEN 6/10. So HARD 8.5/10 here is not a one-off slip; the difficulty triple is being assigned from champion archetype rather than from the data, and a player is being told they will probably lose a lane they win 56.62% of the time.",
+      "corrected": "For this matchup: diff EVEN, diffRating 6/10, tone #e8b84b (the file's own EVEN triple), and content.win [Camille, Camille, Camille, Skill, Camille, Zac, Zac] with full.phases matched to it. NOT proposed as edits, and deliberately so: diff HARD to EVEN and tone to tone are both length-safe, but diffRating 8.5/10 to 6/10 is -33% and breaks the band, and applying two thirds of the triple would leave the card saying EVEN next to 8.5/10. The three must move together. The file-wide pattern is the more important finding — see notes.",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json winRate",
+        "champ-data/zac.full.js diff/diffRating/tone across all 71 entries",
+        "champ-data/content/zac.js MC_WR_TABLES"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.mid says to 'stay near minions so she can't ult you away' and content.spikes[1].text says 'never let her ult you away from your minions or tower'. The Hextech Ultimatum does not move the target.",
+      "why": "Riot's text: 'Camille dashes to target champion, anchoring them to the area.' She travels to Zac and traps him where he already is — nothing is displaced. The advice is therefore inverted in a way that costs games: being near your own tower when the ultimate lands is good, because she has to come to you and stand in it, and the guide tells the player to treat that as the danger. Its range is also only 475, which is the shortest engage range in her kit, so it cannot be used as a long-range pick tool the way the text implies.",
+      "corrected": "Rewrote both to state that she comes to you and anchors you in place, and gave the real 475 range and 140s rank-1 cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/camille.json R description, range 475, cd 140/115/90"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.early attributes the Tactical Sweep heal to walls — 'her Q's empowered second hit and W wall-heal'. Nothing about Tactical Sweep involves walls, and the guide never states what actually triggers the heal.",
+      "why": "Riot's text: 'Camille blasts in a cone after a delay... Enemies in the OUTER HALF are slowed and take extra damage, while also healing Camille.' The heal and the bonus damage both come from the outer half of the cone only. That single fact is the best piece of counterplay in the matchup and it points the player the opposite way from instinct: step toward Camille to sit in the inner half and she gets neither the extra damage nor the heal. The wall requirement belongs to Hookshot, a different ability.",
+      "corrected": "Rewrote content.early, whys[1], wants.foe[0], dontsFull[0].d and report[8].t around the outer-half rule, and moved the wall requirement onto Hookshot where it belongs.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/camille.json W and E descriptions"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Precision Protocol's recast is described as 'her Q's empowered second hit' and 'Q recast true damage', with no mention of the timing requirement.",
+      "why": "Riot's text: the recast does 'significantly increased bonus damage if Camille DELAYS a period of time between the two attacks'. The delay is the whole tell. A Camille who autos twice back to back has thrown away the spike; a Camille who pauses mid-trade is loading it. For a champion with a charged engage like Zac, reading that pause is the difference between eating the empowered hit and stepping out of it, and the guide gives the player nothing to read.",
+      "corrected": "Put the delay tell into content.spikes[0].text and wants.foe[0].",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/camille.json Q description, cd 9/8/7/6/5"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Hookshot's wall requirement is never stated, even though dontsFull[2] is titled 'Fight near walls' and content.early tells the player to 'dodge her wall pins'.",
+      "why": "Riot's text: 'Camille pulls herself to a wall, leaping off and knocking up enemy champions upon landing.' No wall means no Hookshot — she has neither engage nor escape. The guide has a Don't card literally headed 'Fight near walls' whose body text is about blob stomping, so the one card that should carry this never says it. It also never notes that Hookshot knocks up, which matters because Zac's own engage is a knockup and whichever lands first wins the exchange.",
+      "corrected": "Put the wall requirement into dontsFull[2].d, dosFull[0].d, wants.you[0], whys[2], content.early and breakdown.cooldowns, and the knockup into dosFull[2].d and dontsFull[1].d.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/camille.json E description and terrain/hardCC flags, cd 16/15/14/13/12"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Adaptive Defenses is never named or described in either layer.",
+      "why": "Riot's text: 'Basic attacks on champions grant a shield equal to a percentage of Camille's maximum health against their damage type (Physical or Magic).' Two things follow that matter specifically to Zac. The shield adapts to the damage type it is being hit by, so Zac's magic damage summons a magic shield rather than being a way around a physical one — there is no damage-type trick available here. And the shield is sized off HER maximum health, not Zac's, which is the opposite of Aatrox's Deathbringer Stance and is worth knowing for a champion whose whole identity is a giant health bar.",
+      "corrected": "Named it in whys[0] and used dontsFull[0].d, whose title is about resistance choices, to state the adapts-to-your-damage-type rule.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/camille.json P description"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "full.breakdown.cooldowns gives Hookshot no number and fills its other two bullets with 'Your committal tool' and 'Your ultimate' placeholders. Its Hookshot bullet also repeats itself: 'E-knock after it. Track it before every engage.'",
+      "why": "Hookshot is 16/15/14/13/12s, The Hextech Ultimatum is 140/115/90s at 475 range, and Zac's Elastic Slingshot is 21/18/15/12/9s. Zac's own engage is on a longer cooldown than her escape at rank 1, which is exactly why the guide's repeated 'commit when Hookshot is down' instruction is harder to execute than it sounds and needs the number attached.",
+      "corrected": "Rebuilt the bullets around those three cooldowns and cut the repetition.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/camille.json E and R",
+        "champ-data/_kits/zac.json E"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t ends 'Add anti-heal (Thornmail component early) — his healing fights your grind', with the wrong gender and no source named for the healing. dosFull[1] is titled 'Build armor early' and its description is the E-engage trade line instead.",
+      "why": "_missing-interactions.json flags needs-antiheal for this pairing and attributes it to Tactical Sweep. Since the heal only fires off the outer half of the cone, Grievous Wounds and positioning are the same answer, which is worth saying in one breath. There is also an unresolved tension the guide never acknowledges: tldr says 'Her true damage shreds your HP — build armor', and Precision Protocol does carry a true-damage component that armour cannot touch, so 'build armor' as the headline instruction against her is at best half the story.",
+      "corrected": "Rewrote report[8].t to name Tactical Sweep as the heal and fix the pronoun, and rewrote dosFull[1].d to actually be about the armour build plus Grievous Wounds. The armour-versus-true-damage tension in tldr is flagged here rather than edited, because resolving it means deciding a build, which the kit files cannot settle.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/_missing-interactions.json zac/camille needs-antiheal",
+        "champ-data/_kits/camille.json W and Q trueDamage flag"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Four Do/Don't descriptions do not match their titles. dosFull[1] 'Build armor early' carries the E-engage trade line. dosFull[2] 'E-knock her up to peel' carries a great-trade sentence. dontsFull[1] 'Get E-stunned into her combo' carries 'Burning it for tiny value leaves you naked for its full cooldown'. dontsFull[2] 'Fight near walls' carries the blob-stomping line — the single card where the wall mechanic should have been explained.",
+      "why": "Same pasted-description bug as every other matchup in this slice. Here it is costliest because 'Fight near walls' is the matchup's best single piece of advice and its body text is about something else entirely.",
+      "corrected": "Rewrote all four to answer their own titles.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js dosFull and dontsFull"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Camille is referred to as male in tradeBad and dontsFull[2].d ('Letting him stomp your blobs'), phases[1].why ('a trade he paid for'), dontsFull[0].d ('half his win condition'), breakdown.wave and report[4].t ('his tower'), breakdown.feeding and report[12].t ('If he snowballs'), breakdown.late ('if he gets ahead'), report[8].t ('his healing'), report[9].t ('Make him flinch first'), and report[2].t opens 'His early'.",
+      "why": "Template bleed, now confirmed in all four female-enemy matchups in this slice. report[2].t is the worst of them because 'His early' is the first line of the level-chart card.",
+      "corrected": "Fixed in every string this proposal touches, including report[2].t.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeBad, dontsFull[2].d, breakdown.trading and report[3].t all claim stomped blobs cost 'your passive revive margin'.",
+      "why": "Cell Division's shed chunks are sustain and destructible; the four bloblets appear only on fatal damage and set the revive. Stomping chunks costs sustain only. Against a champion whose carry threat the file itself rates 9/10, the flat 5 minute cooldown on the revive is the number that decides whether a second all-in is survivable, and it appears nowhere.",
+      "corrected": "Separated the two halves and stated the 5 minute cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zac.json P description"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Camille out-trades you early with her Q's empowered second hit and W wall-heal, and her E hookshot slips your Elastic Slingshot, so don't wind up engage into her mobility — just farm and dodge her wall pins.",
+      "after": "Camille out-trades you early: Precision Protocol's second cast hits far harder if she delays it, and Tactical Sweep only heals her off its outer half — so step INTO her, not away. Hookshot needs a wall to fire."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-6 stay hers: her Sheen-Q spike and level-6 R isolation let her all-in you cleanly, so hold E to peel, stay near minions so she can't ult you away, and lean on your jungler.",
+      "after": "Levels 3-6 stay hers: Precision Protocol's spike and The Hextech Ultimatum let her all-in cleanly. Her R does not move you — she comes to you and anchors you, so fight it near your own tower."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Camille's Q empower and W heal win the level-1 trade.",
+      "after": "Precision Protocol plus Adaptive Defenses win level 1."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At 2 her sustained Q damage keeps her ahead of your W.",
+      "after": "At 2 Tactical Sweep heals her off its outer half only."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 gives her the full combo that out-trades you.",
+      "after": "Level 3 adds Hookshot — 16s, and it needs a wall."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Her level-6 R isolation guarantees a clean all-in on you.",
+      "after": "The Hextech Ultimatum anchors you where you stand at 6."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Camille's Q recast true damage and W heal let her win extended trades; her E hookshot also dodges your slingshot, so wait it out.",
+      "after": "Her Q recast only spikes if she DELAYS between the two autos — that pause is the tell. Hookshot needs a wall, so fight in the open."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Her R isolates you and guarantees her full Q combo — never let her ult you away from your minions or tower.",
+      "after": "Her R is 475 range and anchors you where you stand — she comes to you, so be near your tower when it lands."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Force her E hookshot before you commit your engage",
+      "after": "Fight away from walls — Hookshot needs one to fire"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Sustain her Q poke with W stacks off the wave",
+      "after": "Eat your shed blobs to sustain the Q poke chip"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land Q twice for the true-damage spike and W self-heal",
+      "after": "Delay the Q recast, then heal off Tactical Sweep's edge"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Ult you into isolation for a clean full combo",
+      "after": "Anchor you with R far away from your tower"
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Charge E from a bush as Camille's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush once Hookshot is spent, grab her with Q then hit a minion — the knock-together needs two."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Her engage/stun. E-knock after it. Only engage once it is down or baited.",
+      "after": "It needs a wall to fire from, and it is 16s at rank 1. Fight open lane."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Charge E from a bush as Camille's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Plated Steelcaps then Thornmail — and Grievous Wounds early, because Tactical Sweep heals her off its outer half."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Camille wastes Hookshot — commit the full pattern immediately.",
+      "after": "Her Hookshot knocks up too — whoever lands it first wins."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Camille's favourite window — refuse it and half his win condition is gone.",
+      "after": "Adaptive Defenses shields against your damage type and is sized off her own health."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Hookshot knocks up, and that is what starts her whole combo."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Hookshot needs a wall to anchor to, so out in the open lane she has no engage and no escape."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Every blob you collect is a trade he paid for. Only take the trade when Camille's Hookshot is down.",
+      "after": "Every blob you collect is a trade she paid for. Only take it when Hookshot is down — 16s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Camille's ultimate changes the math too.",
+      "after": "The Hextech Ultimatum at 6 is 475 range and 140s at rank 1; it anchors you rather than moving you, so fight by your tower."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Camille Hookshot: matchup-defining — Her engage/stun. E-knock after it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Camille Hookshot: matchup-defining — 16s at rank 1, and it needs a wall to fire from. - Camille The Hextech Ultimatum: 140s at rank 1, 475 range, anchors you in place. - Your Elastic Slingshot: 21s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Charge E from a bush as Camille's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Camille wastes Hookshot — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Hookshot is spent, grab her with Q then hit a minion — the knock-together needs two. Great trade: Camille wastes Hookshot — commit the full pattern immediately. Bad trade: Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Charge E from a bush as Camille's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Camille wastes Hookshot — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Hookshot is spent, grab her with Q then hit a minion — the knock-together needs two. Great trade: Camille wastes Hookshot — commit the full pattern immediately. Bad trade: Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Camille's Hookshot: Her engage/stun. E-knock after it. When it is down — E-Q + R her.",
+      "after": "Track Hookshot: it needs a wall, and it knocks up. When it is down — E-Q + R her hard."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Shield + pot. Core: Heartsteel  (HP feeds everything), then Spirit Visage / Thornmail; boots Plated Steelcaps. Add anti-heal (Thornmail component early) — his healing fights your grind.",
+      "after": "Start Doran's Shield + pot. Core: Heartsteel  (HP feeds everything), then Spirit Visage / Thornmail; boots Plated Steelcaps. Add anti-heal early — Tactical Sweep's outer half heals her."
+    },
+    {
+      "layer": "full",
+      "path": "report[2].t",
+      "before": "His early — survive to your spikes. See the level-by-level chart for the swing points.",
+      "after": "Her early — survive to your spikes. See the level-by-level chart for the swing points."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Hookshot's cooldown, on your level-6 spike, and on your Heartsteel timing. Make him flinch first.",
+      "after": "Commit on Hookshot's cooldown, on your level-6 spike, and on your Heartsteel timing. Make her flinch first."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: held near your side so Camille overextends into your pattern. Worst wave: shoved to his tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot.",
+      "after": "Best wave: held near your side so Camille overextends into your pattern. Worst wave: shoved to her tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: held near your side so Camille overextends into your pattern. Worst wave: shoved to his tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot.",
+      "after": "Best wave: held near your side so Camille overextends into your pattern. Worst wave: shoved to her tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Camille gets a kill, stop forcing and respect Hookshot. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Camille gets a kill, stop forcing and respect Hookshot. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "report[12].t",
+      "before": "If Camille gets a kill, stop forcing and respect Hookshot. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Camille gets a kill, stop forcing and respect Hookshot. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight — build your teamfight around that. Camille carry threat: 9/10 — anti-heal stays core, shift to picks and wave control if he gets ahead.",
+      "after": "Elastic Slingshot from fog + R bounces win every river fight — build your teamfight around that. Camille carry threat: 9/10 — anti-heal stays core, shift to picks and wave control if she gets ahead."
+    }
+  ],
+  "notes": "FILE-WIDE FINDING, not specific to this matchup. I checked diff / diffRating / tone against MC_WR_TABLES across all 71 Zac entries because Camille at 56.62% being labelled HARD 8.5/10 looked wrong. The labels carry essentially no signal: EVEN mean win rate 51.7% (n=33), TRICKY 53.1% (n=27), HARD 52.5% (n=8), FAVOURED 48.0% (n=2). FAVOURED is applied only to Kassadin at 47.52% and Illaoi at 48.57%, i.e. to two of the matchups Zac LOSES, which is inverted. Meanwhile the file's single best matchup, Maokai at 65.75%, is labelled EVEN. Whatever generated these assigned them from champion archetype and never looked at the data. Fixing them one matchup at a time is not worth anyone's edit budget — this wants a single pass that derives the triple from win rate, and until that happens the difficulty rating on every Zac page should be treated as decorative. Note also that the triple cannot be repaired under the current length rule even where the right answer is obvious: HARD to EVEN and the tone hex are both length-neutral, but 8.5/10 to 6/10 is -33%, so the applier would let two thirds of the change through and leave the card self-contradictory. diff, diffRating and tone need to be exempt from the band and moved atomically. Unresolved and left alone: full.tldr says 'Her true damage shreds your HP — build armor', which is in tension with itself since Precision Protocol's true-damage component ignores armour. Both halves of the advice have some merit and choosing between them is a build call, not a kit fact. Also not asserted: whether Tactical Sweep deals a percentage of maximum health. dontsFull[0] is titled 'Stack pure HP vs her W', which implies it does, but camille.json puts the percentHealth flag on the passive only, so I wrote that card from the verified outer-half rule instead of endorsing the implication."
+}

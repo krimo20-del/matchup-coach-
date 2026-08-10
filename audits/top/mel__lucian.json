@@ -1,0 +1,184 @@
+{
+ "ownerKey": "mel",
+ "enemy": "lucian",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "The single most important interaction in this matchup is absent from both layers, and the entry's core advice runs directly against it. Riot's Lightslinger text: 'When Lucian is healed or shielded by an ally, or when a nearby enemy Champion is immobilized, his next 2 basic attacks will deal bonus magic damage.' Mel's Solar Snare roots. So Mel's own root arms two bonus-damage attacks for Lucian. The entry instead says 'Land Solar Snare's root to lock his E dash and guarantee a Radiant Volley follow-up' (wants.you[0]) and 'root him the instant he steps up or dashes in' (early).",
+   "why": "This inverts the advice. Rooting Lucian while standing inside his attack range does not lock him down, it powers him up - he eats the root, gets two empowered autos, and wins the trade he was losing. The root is still correct at maximum range, where the empowered attacks have nothing to hit. That distinction is the whole matchup and it appears nowhere.",
+   "corrected": "Root at max range, never beside him - immobilising him switches on Lightslinger's bonus damage.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lucian.json (P Lightslinger description)",
+    "champ-data/_kits/mel.json (E Solar Snare, hardCC)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The entry tells Mel to reflect two things Rebuttal cannot touch. dosFull[1].t is 'Reflect Relentless Pursuit back the moment he commits' - Relentless Pursuit is a dash, flagged dash only. And four separate strings describe reflecting 'his Lightslinger volley' (spikes[3], whys[5], mid) - Lightslinger is a passive attack empower, not a cast. The abilities actually carrying the projectile flag are Piercing Light (Q), Ardent Blaze (W) and The Culling (R).",
+   "why": "Rebuttal is 38s at rank 1 and it is Mel's only defensive layer. Holding it for a dash that will land regardless, or for an auto-attack buff, wastes the one cooldown that decides whether she survives his all-in. Naming the three real projectiles makes the hold a decision instead of a guess.",
+   "corrected": "Piercing Light, Ardent Blaze and The Culling are the three he throws.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/_kits/lucian.json (kitFlags.projectile = [Q, W, R]; dash = [E])",
+    "champ-data/_kits/mel.json (W Rebuttal)"
+   ],
+   "caveat": "Medium not High on the ultimate specifically: whether a reflect catches The Culling is the same class of question as spell-shield eligibility, which the brief marks UNKNOWN and off-limits to assert from file data. Q and W are ordinary projectiles and safe. Worth a Wiki check before anyone states the R case more strongly than the wording I used."
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "whys[1] says 'Relentless Pursuit refreshes off his ability hits to close distance.' Riot's E text says the opposite mechanism: 'Lightslinger attacks reduce Relentless Pursuit's cooldown.' It is his empowered ATTACKS that cut the dash cooldown, not his ability hits.",
+   "why": "It changes what you deny. If you believe abilities refresh the dash you space against his casts; in fact every empowered auto he lands on you or a minion brings the dash back sooner, so the thing to deny is his attack uptime. Base cooldown is 16/15.5/15/14.5/14, which is long enough to matter if he is not attacking.",
+   "corrected": "Every Lightslinger attack he lands cuts Relentless Pursuit's cooldown.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lucian.json (E Relentless Pursuit description)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no numbers, and breakdown.trading, tradeBad, dontsFull[2].d and report[3].t all say Rebuttal is 'gone for twenty seconds'. Rebuttal is 38/35/33/29/26.",
+   "why": "Same wrong number as the rest of this file, and it matters most in a matchup whose losing pattern is spending the barrier on chip. The useful numbers were also missing: Relentless Pursuit 16s at only 445 range, Piercing Light 9s at 500, The Culling 110/100/90 reaching 1400.",
+   "corrected": "Real cooldowns and ranges in breakdown.cooldowns; the 38s figure in breakdown.trading.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lucian.json",
+    "champ-data/_kits/mel.json"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full.phases[0] has side 'Lucian' while its own why reads 'Q volleys win every level-1 range war' - the label and the text contradict each other in the same object. phases[6].side is 'Lucian' while content.win[6] is 'Mel', and the matchup sits at 52.17% in Mel's favour.",
+   "why": "A reader looking at the chart is told Lucian owns levels 1 through 5 and the late game, while the prose beside it says Mel takes over from level 4 onward and the win rate agrees with the prose. The chart is the part that is wrong.",
+   "corrected": "NOT FIXABLE BY PROPOSAL: phases[N].side values are 3-7 characters and apply-proposals.js refuses any full-layer edit with a `before` under 12 chars. content.win[] already reads correctly, so nothing to change there. Flagged for a manual pass.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/mel.full.js",
+    "champ-data/content/mel.js"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "I deliberately did NOT add anti-heal advice here even though _missing-interactions.json flags 'Lucian sustains through chip damage (Lightslinger (P)) - Grievous Wounds timing decides extended trades'. That is a false positive: the heal flag on Lightslinger is derived from the phrase 'when Lucian is healed or shielded by an ally', which describes a trigger condition, not a heal he applies. Lucian has no self-sustain, and in a solo top lane there is no ally healer to trigger it either. Buying Grievous Wounds off that flag would be wasted gold.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lucian.json (P description)",
+    "champ-data/_kits/_missing-interactions.json (needs-antiheal - rejected)"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Lucian’s Relentless Pursuit: His dash — lock him down while it is on cooldown. Forward steps wait for its downtime.",
+   "after": "Lightslinger empowers his next two autos whenever a nearby enemy is immobilized — your own Solar Snare root is what switches it on."
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Lucian wins by landing Relentless Pursuit, denying your pattern, and out-ranging your plan one polite trade at a time.",
+   "after": "Lucian wins by dashing inside your 550, cashing Lightslinger double-shots, and cutting his own E cooldown as he autos."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Mel vs Lucian - Track: Lucian Relentless Pursuit. - Hold the reflect for his real spell. - Relentless Pursuit down is the green light. - Hold the ult for names, not waves.",
+   "after": "- Mel vs Lucian - Track: Lucian Relentless Pursuit. - Rebuttal answers Piercing Light and The Culling. - Rooting him near his autos arms Lightslinger. - Space, do not snare."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Stack Overwhelm with every hit — once he's marked deep, your execute math starts working. Track Relentless Pursuit before stepping up.",
+   "after": "Stack Overwhelm with every hit — but root him at range, never at his: immobilising him empowers Lightslinger's next two attacks."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Lucian Relentless Pursuit: matchup-defining — His dash — lock him down while it is on cooldown. It governs your forward steps. - W Rebuttal spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+   "after": "- Lucian Relentless Pursuit: 16s at rank 1 and only 445 range — but his Lightslinger attacks cut it down, so it returns faster the more he autos. - Piercing Light 9s at 500 range. - The Culling 110/100/90s, and at 1400 it reaches you anywhere in lane."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Snare through the wave onto his farming spot, fan two full Q volleys while he's locked, and step back with W ready before his answer comes off cooldown. Bad trade: Burning Rebuttal on chip damage and then standing in Relentless Pursuit range — your only defensive layer is gone for twenty seconds.",
+   "after": "Good trade: Snare through the wave onto his farming spot, fan two full Q volleys while he's locked, and step back with W ready before Piercing Light's 9s comes back up. Bad trade: Rooting him from inside his own attack range — the immobilise arms Lightslinger's bonus damage, and Rebuttal is gone for 38 seconds."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].t",
+   "before": "Reflect Relentless Pursuit back the moment he commits",
+   "after": "Reflect Piercing Light, Ardent Blaze or The Culling"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Lucian spends Relentless Pursuit early — the closest thing this matchup has to a guarantee.",
+   "after": "Lucian spends Relentless Pursuit early — it is 16s at rank 1 and carries him only 445."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That’s Lucian’s bread-and-butter play — deny it and they run out of answers.",
+   "after": "Rooting him at close range hands Lightslinger two empowered autos first."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Relentless Pursuit’s cooldown, on your Blackfire Torch spike, and with your jungler’s setup. Make him flinch first.",
+   "after": "Commit while Relentless Pursuit is on its 16s and The Culling is down — and root him at max range, never inside his autos."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Land Solar Snare's root to lock his E dash and guarantee a Radiant Volley follow-up",
+   "after": "Root him at max range, never beside him — the immobilise empowers his next two autos"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Hold Rebuttal to destroy his Lightslinger/Q projectiles and turn them into your own poke",
+   "after": "Hold Rebuttal for Piercing Light, Ardent Blaze or The Culling — the three he throws"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "With mana and AP online you chain Q pokes and pop Rebuttal to eat his Lightslinger volley and fire it back as magic damage.",
+   "after": "With mana and AP online you chain Q pokes and hold Rebuttal for Piercing Light and The Culling, the shots it can actually return."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "Lucian's Piercing Light into a double-shot auto out-damages your single Radiant Volley, and Relentless Pursuit refreshes off his ability hits to close distance.",
+   "after": "Lucian's Piercing Light into a double-shot auto out-damages your single Radiant Volley, and every Lightslinger attack he lands cuts Relentless Pursuit's cooldown."
+  },
+  {
+   "layer": "content",
+   "path": "whys[5]",
+   "before": "With mana and AP you chain Volleys at max range and pop Rebuttal to eat and reflect his Lightslinger volley as magic damage.",
+   "after": "With mana and AP you chain Volleys at max range and hold Rebuttal for Piercing Light and The Culling, the projectiles it returns."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Levels 1-3 belong to Lucian if he plays it right. His Lightslinger passive double-shots after every ability, so a Piercing Light into auto out-trades your single Radiant Volley before you have the projectile count to commit. Your one window is Level 2: if you take Q + Solar Snare, you can root him the instant he steps up or dashes in and land a guaranteed Volley. Otherwise respect his range — don't walk into a Q-auto-auto trade you can't win, and save E for when he commits his Relentless Pursuit dash.",
+   "after": "Levels 1-3 belong to Lucian if he plays it right. His Lightslinger passive double-shots after every ability, so a Piercing Light into auto out-trades your single Radiant Volley before you have the projectile count to commit. Your one window is Level 2: with Q + Solar Snare you can root him as he steps up and land a guaranteed Volley — but root from range, since immobilising him also arms two bonus-damage autos. Otherwise respect his range and don't walk into a Q-auto-auto trade you can't win."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "This is where the lane swings to you. As Radiant Volley ranks up and Overwhelm stacks pile from repeated pokes, his short-range double-shot trades stop paying off. At 6, Golden Eclipse detonates every stack from any range, so even if he dashes to safety the burst still lands — bait his Relentless Pursuit, then root him with Solar Snare's orb and field once it's down. Rebuttal is your trump card: pop it as he commits his Lightslinger volley and you eat the burst, fire it back, and shield through his all-in.",
+   "after": "This is where the lane swings to you. As Radiant Volley ranks up and Overwhelm stacks pile from repeated pokes, his short-range double-shot trades stop paying off. At 6, Golden Eclipse detonates every stack from any range, so even if he dashes to safety the burst still lands — bait his Relentless Pursuit, then root him from max range once it's down, never from beside him, since immobilising him arms two bonus autos. Hold Rebuttal for Piercing Light or The Culling instead."
+  }
+ ],
+ "notes": "The headline find here is that Mel's own root feeds Lucian: Lightslinger empowers his next two basic attacks whenever a nearby enemy champion is immobilized, and Solar Snare is an immobilise. Both layers currently teach the reverse - 'land the root to lock his dash' - so this is the one matchup in my slice where following the existing advice actively loses the trade. The fix is a range qualifier rather than a ban: rooting at 1000 is still right, rooting at 500 is not. REJECTED A FLAGGED INTERACTION ON PURPOSE: _missing-interactions.json lists 'Lucian sustains through chip damage (Lightslinger (P)) - Grievous Wounds timing decides extended trades'. That is derived from the words 'when Lucian is healed or shielded by an ally' in his passive, which is a trigger condition, not sustain. Lucian has no self-heal and no ally healer in a solo lane, so I did not write anti-heal advice and I would strip that rule from the generator - it will be producing the same false positive on every Lucian matchup in the file. Structural blockers, same as elsewhere in this slice: phases[N].side is unreachable (under the applier's 12-char floor), so phases[0].side 'Lucian' will keep contradicting its own why text 'Q volleys win every level-1 range war', and phases[6].side 'Lucian' will keep contradicting content.win[6] 'Mel' at a 52.17% win rate. The 'gone for twenty seconds' Rebuttal error occurs 4x in this entry; only the breakdown.trading copy was uniquely addressable. Rebuttal is 38/35/33/29/26."
+}

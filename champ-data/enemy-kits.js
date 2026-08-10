@@ -1,4 +1,4 @@
-// MatchupCoach — Enemy ability reference (real names + key-point writeups). Patch 26.11.
+// MatchupCoach — Enemy ability reference (real names + key-point writeups). Patch 26.15 (content authored 26.11).
 // One table for ALL champions, keyed by the same slug as CHAMP_DATA enemy keys.
 // Each champ: cls + P/Q/W/E/R — n (real name) + d (key points: what it does, the detail that matters, the counterplay cue).
 window.ENEMY_KITS = {

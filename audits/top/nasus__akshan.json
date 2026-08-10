@@ -1,0 +1,154 @@
+{
+  "ownerKey": "nasus",
+  "enemy": "akshan",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "55.08% over 374 games matches MC_WR_TABLES.nasus.akshan. No elo-tier language present.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packets/nasus.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer calls Comeuppance a 'global R' in three separate places: content.late ('his camouflage, revive and global R'), whys[5] ('roaming with his global R'), and wants.foe[2] ('Roam with camouflage and his global R').",
+      "why": "Comeuppance has a range of 2500. That is a long-range snipe, not a global. The error matters because it changes how a Nasus plays around objectives — a genuinely global ultimate means he is never safe anywhere on the map, while 2500 range means Akshan has to physically walk into a hemisphere of the fight first. Three repetitions of the same wrong claim will teach the player the wrong map model.",
+      "corrected": "Replaced 'global R' with Comeuppance named correctly, and stated the 2500 range once in content.late where there was room for the number.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akshan.json R range 2500"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing anywhere mentions that Heroic Swing requires terrain to anchor to, or that a champion collision knocks Akshan out of the swing.",
+      "why": "Riot's own text: 'Akshan fires a grappling hook into terrain then swings around it ... he can jump off early or gets knocked off when colliding with champions or terrain.' Both halves are decisive for a Nasus. Without a wall nearby Akshan simply cannot use his escape, and a Nasus who walks into the swing arc ends it early rather than chasing a champion who is already leaving. This is the single highest-value piece of tech available in this matchup and the guide currently tells the player the opposite — to give up on the chase.",
+      "corrected": "Added the terrain requirement and the body-block to content.early, dosFull[0].d and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akshan.json E"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer repeatedly describes Dirty Fighting as a 'passive second hit' or 'passive double-hit' and never mentions the shield.",
+      "why": "Dirty Fighting does two separate things: every third hit from attacks and abilities deals bonus damage AND grants Akshan a shield when the target is a champion, and separately each attack fires an additional reduced-damage shot. The guide has merged them into one 'double-hit' and dropped the shield entirely. The shield is what actually changes the all-in maths for a Nasus whose damage arrives in single large Q hits — a shield timed onto that one hit eats a disproportionate share of it.",
+      "corrected": "Named Dirty Fighting and surfaced the shield in content.early and spikes[1].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akshan.json P"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "No cooldown numbers appear for Akshan anywhere in either layer.",
+      "why": "Heroic Swing is 18/16.5/15/13.5/12s — an 18s window at rank 1 during which Akshan has no escape and no repositioning tool, which is exactly the window a Nasus needs to close and Wither. Avengerang is 9/8/7/6/5s and damages both outbound and on the return, so a Nasus who sidesteps the first pass and then walks forward into the return path takes it twice.",
+      "corrected": "Added Heroic Swing's 18s rank-1 figure to whys[3] and breakdown.cooldowns; added Avengerang's 9s and the out-and-back behaviour to phases[2].why.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akshan.json E cooldown, Q cooldown and description"]
+    },
+    {
+      "point": 8,
+      "status": "needs-correction",
+      "whatIsWrong": "The guide warns about camouflage roams but never notes the condition that limits them.",
+      "why": "Going Rogue states that 'Akshan loses the camouflage quickly while he is not in brush or near terrain'. His roam is therefore constrained to brush and wall lines, which is precisely where a Nasus should be placing the ward that the dontsFull card asks for. Warning about the roam without naming the constraint gives the player no actionable counter.",
+      "corrected": "Named Going Rogue in whys[5] and wants.foe[2], and pointed the vision advice at it in dontsFull[1].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akshan.json W"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dontsFull[1] is titled 'Stack greedily without vision' but described as 'Burning your answer for tiny value leaves you naked for its full cooldown' — a description belonging to a different card. The identical string appears on the Aatrox and Akali entries too.",
+      "why": "This is a systematic paste defect across the Nasus file, not a one-off. The card tells the player about vision and then explains something about ability cooldowns.",
+      "corrected": "Rewrote the description to match the title, anchored to Going Rogue.",
+      "confidence": "High",
+      "sources": ["champ-data/nasus.full.js dontsFull[1]", "champ-data/_kits/akshan.json W"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "content.win and full.phases[].side disagree at four of seven stages. content.win is [Nasus, Akshan, Akshan, Nasus, Akshan, Akshan, Nasus]; the full layer's sides are [Akshan, Akshan, Akshan, Akshan, Akshan, Skill, Skill]. Stages 1, 4-5, first item and 2+ items all conflict.",
+      "why": "The packet's levelChart is identical to content.win, so content.win is the source the packet reads and the full layer's phases[].side is the drifted copy. The full layer's phase text is also generic boilerplate repeated verbatim across the Aatrox, Akali and Akshan entries, which is consistent with it being the stale side.",
+      "corrected": "NOT PROPOSED AS AN EDIT — see notes. The applier's +/-10% length rule makes these particular corrections impossible: 'Akshan' is six characters and both 'Nasus' and 'Skill' are five, a ratio of 0.833, so any such edit is rejected on length before it is ever compared. This needs either a tooling exemption for enum-valued fields or a manual pass.",
+      "confidence": "High",
+      "sources": ["packets/nasus.json levelChart", "champ-data/content/nasus.js win", "champ-data/nasus.full.js phases"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Akshan can't actually duel you — his danger is the poke. He E-swings into range, throws Q, weaves an auto to proc his passive second hit, then dashes back out on E before you can land Wither. Don't chase that; you'll just walk into a Q and eat a free trade. Last-hit with the tip of Siphoning Strike, hold W until he commits, and accept that levels 3-5 are his — soak the poke and farm. Your lifesteal already laughs off most of his chip, so just don't feed him a kill.",
+      "after": "Akshan can't actually duel you — his danger is the poke. He Heroic Swings into range, throws Avengerang, weaves an auto for a Dirty Fighting proc and shield, then swings back out before you can land Wither. Heroic Swing has to hook terrain, and colliding with a champion knocks him off it — stand in the swing path rather than chasing. Last-hit with the tip of Siphoning Strike, hold Wither until he commits, and soak the poke; your lifesteal laughs off most of his chip."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "You own the straight duel completely now — Trinity/Iceborn plus a stacked Q means one empowered hit deletes him, and his poke can't out-DPS your ult HP and lifesteal. The real danger is the map: his camouflage, revive and global R make him a pick and objective threat, not a laner. Splitpush him out of relevance, force him to answer you 1v1 where he loses, and never facecheck for a camouflaged Akshan near objectives.",
+      "after": "You own the straight duel completely now — Trinity/Iceborn plus a stacked Q means one empowered hit deletes him, and his poke can't out-DPS your ult HP and lifesteal. The real danger is the map: Going Rogue camouflage, the Scoundrel revive and Comeuppance sniping from 2500 range make him a pick threat, not a laner. Splitpush him out of relevance, force him to answer you 1v1 where he loses, and never facecheck for a camouflaged Akshan."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "His E grapple plus Q poke window opens — he swings in, weaves a passive proc, and dashes out before you can land Wither.",
+      "after": "Heroic Swing plus Avengerang opens his poke window — he swings in, procs Dirty Fighting, and is gone before Wither lands."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "If he E-dives or his grapple is down you point-and-click Wither and his entire kite kit shuts off — a slowed Akshan dies in melee.",
+      "after": "With Heroic Swing down 18s at rank 1 you point-and-click Wither and his kite kit shuts off — a slowed Akshan dies in melee range."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "He keeps E-swinging poke from range and roaming with his global R — you can't pin him reliably and he chips you for free.",
+      "after": "He keeps Heroic Swing poke coming and roams on Going Rogue — you can't pin him reliably and he chips you for free."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "His real threat window: E-swing in, Q poke, weave autos to proc his passive double-hit, then E back out before your Wither lands.",
+      "after": "His real threat window: Heroic Swing in, Avengerang poke, autos to proc Dirty Fighting's shield, then swing out before Wither."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Use E grapple to swing in, Q-poke, and dash out before your Wither can point-and-click him",
+      "after": "Hook Heroic Swing off a wall, poke with Avengerang, and swing out before Wither can click him"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Roam with camouflage and his global R to snowball elsewhere instead of fighting you head-on",
+      "after": "Roam on Going Rogue camouflage and snipe with Comeuppance instead of fighting you head-on"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E lets you stack safely from range when Akshan zones you. Spirit Fire the wave under tower; every stack denied is his only real win condition.",
+      "after": "Spirit Fire the wave from range when Akshan zones you. Avengerang is 9s at rank 1 and hits going out and coming back — respect both halves."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Akshan Heroic Swing: matchup-defining — His dash + camera swing escape. Engage when it's down. Track it before every engage.",
+      "after": "- Akshan Heroic Swing: matchup-defining — 18s at rank 1, it must hook terrain, and a champion body-block knocks him out of it."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His dash + camera swing escape. Engage when it's down. Only engage once it is down or baited.",
+      "after": "It must hook terrain, and colliding with a champion ends it. Engage once it is down."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Going Rogue camouflage lets him vanish and return — ward before you stack."
+    }
+  ],
+  "notes": "BLOCKED BY THE LENGTH RULE, needs a human or a tooling change: content.win and full.phases[].side disagree at four of seven stages for this matchup (stages 1, 4-5, first item, 2+ items). I could not propose the fix because phases[].side holds a champion name, and 'Akshan' (6 chars) to 'Nasus' or 'Skill' (5 chars) is a 0.833 ratio that the applier rejects on length. The +/-10% band is sensible for prose but silently blocks every enum-valued field whose two legal values differ in length — worth exempting fields like phases[].side and win[] from the band, or the charts can never be reconciled for any six-letter champion. Note the same class of divergence exists on the Akali entry, where it happened to be fixable only because Akali, Nasus and Skill are all five letters. Deliberately not asserted: whether Wither's slow can prevent Akshan from completing a Heroic Swing already in flight (the body-block from Riot's text is a collision, not a slow interaction), and whether Fury of the Sands' bonus attack range lets Nasus reach him mid-swing. Both would be strong additions and both need a wiki pass. No WKM_LINES problems seen for this pairing."
+}

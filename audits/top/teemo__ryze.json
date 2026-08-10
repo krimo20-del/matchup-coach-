@@ -1,0 +1,258 @@
+{
+  "ownerKey": "teemo",
+  "enemy": "ryze",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer gives Ryze a shield he does not have — spikes[0] \"his shield (W) absorbs your opening Toxic Shot tick\", early \"his W shield eats your first Toxic Shot tick\", whys[0] \"Overload (Q) poke and W shield\", whys[3] \"without burning his W shield on cooldown\".",
+      "why": "champ-data/_kits/ryze.json has no shield anywhere in the kit. W is Rune Prison (slow, or root if the target carries Spell Flux). No slot carries a shield flag. A Teemo told to wait out a shield waits forever and gives up free poke every wave.",
+      "corrected": "Ryze has no shield. Nothing absorbs the first Toxic Shot tick.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ryze.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The entry describes two separate Ryze roots — early \"his E creates a root zone around you and his follow-up W root becomes a two-tap CC chain\", whys[1] \"His E root and W root\", wants.foe[0] \"Root you with E then land W to chain CC\".",
+      "why": "Ryze has exactly one root and it is conditional. Spell Flux (E) is a projectile that debuffs — no CC at all. Rune Prison (W) slows; it only roots if the target already has Flux on them. The real sequence is Flux first, then W, and a W landed without Flux is just a slow you can Move Quick out of.",
+      "corrected": "Spell Flux marks; Rune Prison roots only on a Flux-marked target, otherwise it merely slows. Flux on your bar is the cue to leave.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ryze.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "mid claims Blinding Dart \"shuts off the part of Ryze's trade pattern that requires his Q autos to proc Overload resets — when he is blinded he cannot chain spells off basic attacks\". whys[2] repeats it: \"Blinding Shot cuts off his Q-auto reset loop\".",
+      "why": "Backwards. Riot's text for Overload: \"Ryze's OTHER BASIC ABILITIES reset the cooldown of Overload and charge a rune.\" The resets come from casting W and E, not from attacking. Ryze does almost no basic-attack damage, so the blind removes close to nothing from his output. This is the most consequential error in the entry — it tells the player their main defensive cooldown counters a pattern it never touches.",
+      "corrected": "Overload resets off his other ability casts, not off autos. The blind is poke and a panic button here, not a counter to his damage.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ryze.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Teemo's Q appears as \"Blinding Shot\" (spikes[1], mid, late, whys[2]) and as \"Blind Shot\" (wants.you[1], wants.foe[1], whys[3]).",
+      "why": "champ-data/_kits/teemo.json gives slot Q as \"Blinding Dart\". Two different wrong names inside one entry.",
+      "corrected": "Blinding Dart.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/teemo.json"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "\"Liandry's Angueur\" in spikes[2] and whys[5].",
+      "why": "Not a real item. Liandry's Torment is the name the full layer of this dataset uses.",
+      "corrected": "Liandry's Torment.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/teemo.full.js"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "No cooldown number appears anywhere, despite the entry being built around \"track Rune Prison\".",
+      "why": "Rune Prison is 11/10.5/10/9.5/9s — barely shorter across the whole game, which makes it the one Ryze cooldown genuinely worth counting. Overload is 5s but resets off every W and E cast, so counting it is pointless. Spell Flux runs 3.5s down to 2.5s. Blinding Dart is a flat 7s. Naming which cooldowns are countable and which are not is the actual skill in this lane.",
+      "corrected": "Rune Prison 11s at rank 1, only 9s at rank 5 — that is the number. Overload resets constantly; do not try to count it.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ryze.json",
+        "champ-data/_kits/teemo.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "full.breakdown.cooldowns and dosFull[0] call Rune Prison \"His point-blank root\".",
+      "why": "Rune Prison has 615 range, further than Teemo attacks from. Calling it point-blank tells the player they are safe at a distance where they are not, and it omits the Flux condition that decides whether it roots at all.",
+      "corrected": "615 range, slows by default, roots only through Spell Flux.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ryze.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Realm Warp is treated as an instant reposition — \"the moment he Realm Warps to contest you with teammates, you are already gone\".",
+      "why": "Realm Warp creates a portal at up to 3000 range and only teleports allies standing near it after a delay of a few seconds. The delay is the whole counterplay: the roam announces itself before anyone arrives, so a Teemo has time to leave or to pre-shroom the landing rather than reacting to an arrival.",
+      "corrected": "The portal sits on the ground for a few seconds before anyone travels — that delay is your warning and your shroom window.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ryze.json"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "full.phases[0].why and full.breakdown.early both say \"AA-poke + E poison wins almost every melee level 1\" — Ryze is a ranged mage.",
+      "why": "The template line is wrong for this matchup and it contradicts content.win[0] = \"Ryze\" plus the content early paragraph, which correctly says level 1 is not free.",
+      "corrected": "Ryze out-ranges Teemo at level 1; the stage belongs to him.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/ryze.json",
+        "champ-data/content/teemo.js"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "late contains \"use Blinding Shot on whoever is dive-ressing your team\".",
+      "why": "\"dive-ressing\" is not a word; the intended meaning is a diver on the backline. Corrected alongside the ability name in the same sentence.",
+      "corrected": "Blind whoever is diving your carry.",
+      "confidence": "High",
+      "sources": []
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Ryze's Overload (Q) has genuine poke range and his shield (W) absorbs your opening Toxic Shot tick — respect his level-1 pressure instead of charging in.",
+      "after": "Ryze's Overload (Q) reaches 1000 units and he carries no shield to bait — the level-1 danger is simply out-ranged poke, so trade only when he steps up to CS."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Once Q is two-rank and Toxic Shot poison stacks on every poke attempt, Blinding Shot makes every Ryze Q-E-W combo safer to trade through — you dictate the pace.",
+      "after": "Once Toxic Shot poison stacks on every poke attempt, Blinding Dart adds free chip on top — you dictate the pace as long as Rune Prison is on its 11-second clock."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Liandry's Angueur converts your mushrooms into room-clearing DoT machines and makes every Toxic Shot tick threatening enough that Ryze cannot walk up to farm without losing HP.",
+      "after": "Liandry's Torment converts your mushrooms into room-clearing DoT machines and makes every Toxic Shot tick threatening enough that Ryze cannot walk up to farm without losing HP."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Full-build Ryze's Realm Warp flips the map: he outscales your damage at 2+ items and his W root chains deny the kite loop that kept you safe.",
+      "after": "Full-build Ryze outscales you at 2+ items, and a Flux-charged Rune Prison roots instead of slowing — that one root ends the kite loop that kept you alive."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Blind Shot (Q) the instant Ryze commits to a Q-E-W trade combo — his E root requires him to walk up, giving you the timing cue",
+      "after": "Blinding Dart (Q) the instant Spell Flux marks you — the Flux is the tell that his next Rune Prison roots rather than merely slows"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Root you with E then land W to chain CC and punish any attempt to kite back with Move Quick",
+      "after": "Land Spell Flux first so Rune Prison roots instead of only slowing, then punish the Move Quick"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Spam Q Overload resets to whittle you down at range where your Blind Shot and E ticks are less effective",
+      "after": "Spam Overload — every W or E cast resets its 5s cooldown, and none of it is an auto the blind can stop"
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Ryze level 1 is no pushover — Overload (Q) has real range and his W shield eats your first Toxic Shot tick, so you cannot simply walk up and start free-poking the way you would into a melee. Play just outside his Q cast range, wait for him to step toward CS, then land a Blinding Shot and immediately trade two or three Toxic Shot autos before retreating with Move Quick. The key is never letting him land his E first: his E creates a root zone around you and his follow-up W root becomes a two-tap CC chain if you are already slowed by shrooms or caught flat-footed. Set a mushroom in the tribush at 00:30 so you always know if he is looking to cut your retreat path.",
+      "after": "Ryze level 1 is no pushover — Overload (Q) reaches 1000 units, comfortably past your auto range, so you cannot simply walk up and free-poke the way you would into a melee. He has no shield to bait, though: play just outside his Q range, wait for him to step toward CS, then land a Blinding Dart and trade two or three Toxic Shot autos before retreating with Move Quick. The rule that matters is the order of his spells. Spell Flux (E) does not root anything on its own — it marks you, and only a Rune Prison (W) landed on a Flux-marked target roots instead of slowing. Flux on your health bar is the cue to leave. Set a mushroom in the tribush at 00:30 so you always know if he is cutting your retreat path."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3 through 6 are your clearest window. Q is climbing ranks, your Toxic Shot poison accumulates across every poke attempt, and Blinding Shot shuts off the part of Ryze's trade pattern that requires his Q autos to proc Overload resets — when he is blinded he cannot chain spells off basic attacks as freely, which cuts his burst meaningfully. Zone him off CS by shrooming the wave-approach angles at the second bush and river entrance; he will either take poison or give up farm. At level 6 your Noxious Trap placement accelerates: shroom both side-bush corridors so any roam attempt or gank he tries to enable via Realm Warp wards you against it before the cast animation finishes.",
+      "after": "Levels 3 through 6 are your clearest window, but be honest about what the blind does here. Ryze's Overload resets come from casting his other basic abilities, never from basic attacks, so Blinding Dart takes almost nothing off his damage output — it is poke and it is a panic button, not a counter to his pattern. You win this on Toxic Shot stacks instead. Zone him off CS by shrooming the wave-approach angles at the second bush and river entrance; he either takes poison or gives up farm. At level 6 shroom both side-bush corridors — Realm Warp drops a portal that sits for a few seconds before it fires, so the roam telegraphs itself and your mushrooms cover the landing."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Ryze at two items is a genuine threat. His Seraph's Embrace mana stack means Overload hits hard enough to delete your low HP pool in a two-second window, and his W root stops Move Quick dead — you cannot kite away once you are chain-rooted. Play the map not the duel: Noxious Trap a wide perimeter around your split-push tower so he cannot approach without revealing himself, and the moment he Realm Warps to contest you with teammates, you are already gone. Your job in teamfights is to sit invisibly on a flank, shroom all approach paths, and use Blinding Shot on whoever is dive-ressing your team — do not 1v1 a full-build Ryze.",
+      "after": "Ryze at two items is a genuine threat. His Seraph's Embrace mana stack means Overload hits hard enough to delete your low HP pool in a two-second window, and a Flux-marked Rune Prison roots rather than slows — Move Quick cannot answer a root, so that is the one spell that actually kills you. Play the map not the duel: Noxious Trap a wide perimeter around your split-push tower so he cannot approach without revealing himself, and remember Realm Warp needs a few seconds between portal and teleport, which is your window to walk away. In teamfights sit on a flank, shroom the approach paths, and use Blinding Dart on whoever is diving your carry — do not 1v1 a full-build Ryze."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Ryze's Overload (Q) poke and W shield give him genuine level-1 agency at range — you cannot simply walk up and set Toxic Shot stacks without eating a poke trade you may not win.",
+      "after": "Ryze's 1000-range Overload gives him real level-1 agency — you cannot simply walk up and set Toxic Shot stacks without eating a poke trade you may not win, and he has no shield to bait."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "His E root and W root are not yet chained efficiently at level 2, and your Move Quick escape works cleanly — neither of you has a decisive edge so the window is genuinely even.",
+      "after": "Spell Flux does not root on its own — only a Flux-marked Rune Prison does, and he rarely lands both at level 2. Move Quick still escapes cleanly, so the window is genuinely even."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Q is two ranks and Toxic Shot poison accumulates faster than his mana-gated spell spam can sustain; Blinding Shot cuts off his Q-auto reset loop, tipping the trade in your favour.",
+      "after": "Toxic Shot poison accumulates faster than his mana-gated spell spam can sustain; the blind will not touch his Overload resets, so win this on poison, not on denying damage."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Your strongest sustained lane control window: shrooms deny his safe CS angles, Blind Shot punishes every Q-up approach, and he cannot all-in through the Toxic Shot DoT without burning his W shield on cooldown.",
+      "after": "Your strongest sustained lane control window: shrooms deny his safe CS angles, Blinding Dart chips every approach, and he has no shield and no dash to survive a full Toxic Shot DoT once he commits."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "Liandry's Angueur makes every Toxic Shot tick and every shroom step threatening enough that Ryze cannot farm into his scaler fantasy safely; this is your peak power moment, force him off the wave.",
+      "after": "Liandry's Torment makes every Toxic Shot tick and every shroom step threatening enough that Ryze cannot farm into his scaler fantasy safely; this is your peak power moment, force him off the wave."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Weather the poke — blind his Rune Prison and poison every path he walks. Teemo wins the Rune Prison cooldown windows.",
+      "after": "Weather the poke — the blind barely touches him, so poison every path he walks and count Rune Prison at 11s."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Blind his Rune Prison and poison every path he walks. Track Rune Prison before every commit and keep the wave on your side.",
+      "after": "Poison every path he walks and never eat a Flux-charged Rune Prison. Track it at 11s and keep the wave on your side."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "AA-poke + E poison wins almost every melee level 1. Identify how Ryze contests the first waves before you commit anything.",
+      "after": "Ryze out-ranges you at 1000 units on Overload and has no melee level 1 to punish. Last-hit safe and take no poke trades."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Q-blind erases his auto-trade window entirely. Only take the trade when Ryze's Rune Prison is down.",
+      "after": "Ryze barely autos, so the blind is poke, not defence. Trade only when Rune Prison is down — 11s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "AA-poke + E poison wins almost every melee level 1. Respect Ryze's Rune Prison completely — the first levels are about banking small advantages, not proving a point.",
+      "after": "Ryze is ranged and out-ranges you badly — Overload reaches 1000 units. Respect the poke, not a Rune Prison he has not learned yet; level 1 is about conceding nothing."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ryze Rune Prison: matchup-defining — His point-blank root — sets up his combo. Bait it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Rune Prison: 11/10.5/10/9.5/9s at 615 range. Slows normally; roots only if Spell Flux is on you first. - Overload: 5s, but every W or E cast resets it. - Spell Flux: 3.5s to 2.5s. - Realm Warp: 180s."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].t",
+      "before": "Q-blind his Rune Prison trade",
+      "after": "Watch Spell Flux land first"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "AA Ryze on every last-hit, Q-blind his trade attempt, and walk the poison out of his reach.",
+      "after": "Flux on you means the next Rune Prison roots instead of slowing — leave before it lands."
+    }
+  ],
+  "notes": "The Ryze kit is the most badly mis-described entry in this slice: the content layer invents a shield, invents a second root, and inverts how Overload's cooldown resets work. All three errors push the player toward defensive habits that do nothing in this lane, so this entry is worth a full re-read after the applier runs rather than a spot check.\n\nfull.focus (\"Ryze Rune Prison\", letters [\"W\"]) is correct and was left alone — Rune Prison genuinely is the one cooldown worth tracking here.\n\nfull.report[] duplicates the breakdown strings and therefore still contains \"His point-blank root\" and the melee level-1 line after these edits; regenerate it from the corrected breakdown rather than patching both copies.\n\nDERIVED-FLAG FALSE POSITIVE (Teemo-wide): champ-data/_kits/teemo.json flags Noxious Trap (R) with \"knockup\". Mushrooms slow and damage; they do not displace. Nothing in this proposal relies on that flag."
+}

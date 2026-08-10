@@ -1,0 +1,111 @@
+{
+  "ownerKey": "rumble",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer calls this FAVOURED at 4/10 while the level chart hands Nasus levels 6, first item and late, and the Emerald+ win rate is 47.93% over 555 games.",
+      "why": "A sub-50% matchup that flips to the enemy for the last three stages is not a 4/10 lane; the rating misleads the player into forcing duels after 6.",
+      "corrected": "diffRating raised to 6/10. The phase sides in the full layer still read Rumble for First item and 2+ items and contradict the content level chart — flagged in notes, not edited, because a 'Rumble'->'Nasus' swap falls outside the length band.",
+      "confidence": "High",
+      "sources": [
+        "packets/rumble.json (winRate 47.93, games 555, levelChart)",
+        "champ-data/content/rumble.js",
+        "champ-data/rumble.full.js"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 spike text explains Fury of the Sands as 'bonus HP and lifesteal' only.",
+      "why": "Riot's own description says the storm also grants bonus Armor and Magic Resistance and reduces Siphoning Strike's cooldown, and the storm damage is percent-max-HP. Those are the three reasons the stat check actually flips, and none were stated.",
+      "corrected": "Spike and why rewritten to state percent-max-HP damage, the bonus resists, the Q cooldown reduction, and the 80s vs 130s ultimate cooldown gap.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/nasus.json (R: Fury of the Sands, cd 120/100/80)",
+        "champ-data/_kits/rumble.json (R: The Equalizer, cd 130/105/80)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "'Double-tap Electro-Harpoon during his Q animation to cancel his stack' — and the matching line in whys[1] — tells the player a slow cancels Siphoning Strike.",
+      "why": "Siphoning Strike is an auto-attack reset (autoReset flag, 255 range), not a channel. Electro Harpoon applies damage, a slow and a magic-resist shred; none of those interrupt an attack reset. Following this advice loses both harpoon charges for nothing and denies no stack.",
+      "corrected": "Both lines rewritten: the harpoon does not cancel the reset, so the denial is positional — hold Flamespitter range over the minion so he must eat the cone to reach 255 range.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/nasus.json (Q Siphoning Strike, autoReset, range 255)",
+        "champ-data/_kits/rumble.json (E Electro Harpoon: damage, slow, MR shred)"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "Wither is named as the cooldown to track everywhere but its length is never given.",
+      "why": "'Track Wither' is unactionable without the number; 15s at rank 1 down to 11s at rank 5 is the whole trading window.",
+      "corrected": "Real cooldowns added to the cooldown breakdown and to whys[1].",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/nasus.json (W Wither, cd 15/14/13/12/11)"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Liandry's Torment first plus early Oblivion Orb is right against Soul Eater lifesteal and his percent-HP ult.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": [
+        "champ-data/_kits/nasus.json (P Soul Eater)"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Double-tap Electro-Harpoon during his Q animation to cancel his stack and force him under tower",
+      "after": "Electro Harpoon cannot cancel Siphoning Strike — hold the cone over the minion he needs"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Nasus's Fury of the Sands is a game-changer: his bonus HP and lifesteal suddenly eat your sustained Flamespitter damage and let him Wither you through your shield.",
+      "after": "Fury of the Sands is percent-max-HP damage and it hands him bonus armour and MR while cutting his Q cooldown — his 80s ult out-cycles your 130s Equalizer, so stop duelling him."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Wither is now online but costs him his only commitment tool — bait it with a fake step-in, then walk into full Flamespitter range and double Electro-Harpoon him off his Q stack animation.",
+      "after": "Wither is online and it is a 15-second cooldown at rank 1 — bait it with a fake step-in and take the whole trade in that hole. Your harpoon slow will not cancel a Siphoning Strike reset."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Fury of the Sands flips the stat check: his bonus HP eats your Flamespitter burst and Wither crumples your movement so you cannot reset — this is now his lane to control.",
+      "after": "Fury of the Sands flips the stat check: percent-max-HP storm damage, bonus armour and MR, and a shorter Q cooldown, while Wither crumples your movement — this is now his lane to control."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Nasus Wither: matchup-defining — His only kite. Poke before it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Nasus Wither: matchup-defining — 15s at rank 1, 11s at rank 5. Poke before it, commit inside it. - Your committal tool: never spend it on chip. - Your ultimate: 130s at rank 1 — kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "diffRating",
+      "before": "4/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "The Equalizer cuts lanes and teamfights in half — aim it across the path, not on heads. Reassess every all-in at 6 — Nasus's ultimate changes the math too.",
+      "after": "The Equalizer cuts lanes and teamfights in half — aim it across the path, not on heads. His R is percent-max-HP and gives him resists, so reassess every all-in at 6."
+    }
+  ],
+  "notes": "Nasus's Fury of the Sands GRANTS him bonus armour and magic resist (Riot description) — the _missing-interactions entry 'Nasus bypasses stacking resistances (Fury of the Sands)' is worded backwards; what bypasses resistances is the storm's percent-max-HP damage. Layer conflict left unfixed: full.phases[5].side and full.phases[6].side read 'Rumble' but content.win[5] and win[6] read 'Nasus'; swapping the word breaks the +/-10% length band, so the applier would reject it — needs a manual flip. Nothing verified about Wither being cleansable, tenacity-reduced, or Flash-buffered; the kit file marks all of that unknown and no claim was made."
+}

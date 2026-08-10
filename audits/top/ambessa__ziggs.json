@@ -1,0 +1,224 @@
+{
+ "ownerKey": "ambessa",
+ "enemy": "ziggs",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Hexplosive Minefield is named four times purely as a zoning wall — 'wall the chokes', 'a Q he can flatten with Hexplosive Minefield', 'bait the minefield onto the wave' — and the property that decides how to cross it is never stated.",
+   "why": "Successive mine detonations on the SAME target deal reduced damage. For a melee champion with three dashes that inverts the instruction completely: walking the long way around a minefield costs tempo she does not have, while dashing straight through it costs one full mine and then progressively less. The field is 16 seconds flat at every rank, so it is also the only Ziggs cooldown that does not shorten as the game goes on. 'Bait the minefield onto the wave, then walk the gap it leaves' is slower and worse than simply going through.",
+   "corrected": "Hexplosive Minefield (E), 16s flat, 900 range: repeat detonations on the same target deal reduced damage. Dash through the field, don't path around it.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ziggs.json — E Hexplosive Minefield: 'Successive mine detonations on the same target deal reduced damage', cd 16"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "Satchel Charge is the tracked, matchup-defining ability across every string in the full layer — 'engage when it's down', 'track it before every engage', 'commit on Satchel Charge's cooldown' — and its cooldown is never given. Bouncing Bomb's range and cooldown are likewise missing.",
+   "why": "Satchel Charge is 20 seconds at rank 1. That single number is what makes the entry's whole plan real: it is simultaneously his knockback and his only escape, so the twenty seconds after he spends it are a window in which a champion with no mobility is standing in front of three dashes and a 1250-range blink. Bouncing Bomb at 850 range against Cunning Sweep's 650, returning every 6 seconds, is likewise the concrete version of 'out-ranges your whole kit'.",
+   "corrected": "Satchel Charge (W), 20/18/16/14/12: knockback and his only escape. Bouncing Bomb (Q), 6/5.5/5/4.5/4 at 850 range against your 650. Commit inside the Satchel's 20s.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ziggs.json — W cd 20/18/16/14/12, Q cd 6/5.5/5/4.5/4 range 850",
+    "champ-data/_kits/ambessa.json — Q Cunning Sweep range 650"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Two strings credit Ambessa with 'R's flat armor-pen passive and on-hit healing' / 'R's armor-pen passive and on-hit heal' (spikes[3].text, whys[5]). Short Fuse is never mentioned at all.",
+   "why": "Public Execution grants no armour penetration and no healing in Riot's text — blink to the farthest champion in a chosen line, suppress, slam for damage and a stun. The kit file's 'heal' flag on her R is a tooltip-parsing misfire (see notes), and against a squishy artillery mage the invented shred is not even needed: first-item physical damage on a champion with no mobility is the whole argument. Short Fuse is the genuine gap — his next attack periodically deals bonus magic damage and that cooldown shortens every time he casts an ability, so his poke rhythm is cast-then-step-up-and-hit, and the step-up is the tell Ambessa is waiting for.",
+   "corrected": "Short Fuse (P): a periodic bonus-magic-damage attack whose cooldown drops every time he casts. His cast is the tell that a step-up attack is coming.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ziggs.json — P Short Fuse: 'Periodically, Ziggs' next basic attack deals bonus magic damage. This cooldown is reduced whenever Ziggs uses an ability.'",
+    "champ-data/_kits/ambessa.json — R Public Execution"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The difficulty labelling contradicts itself three ways. diff reads 'FAV' while diffRating reads '8.5/10' and breakdown.difficulty renders that same number as 'Overall difficulty: 8.5/10'; tone is #ff5d6c, the red used by HARD matchups elsewhere in this file; and report[14] prints 'Hard matchup — difficulty 8.5/10'. Meanwhile tldr opens 'He kites you out — survive' while content.mid says 'This is where you take over' and content.late says 'You still win the straight fight'.",
+   "why": "53.41% over 264 games is a favourable lane and the prose agrees, so 'FAV' is probably the correct badge and 8.5/10 is probably a favourability score being re-rendered as a difficulty score by breakdown.difficulty and report[14]. I did not touch diff, diffRating or tone — they are mirrored against a Ziggs page that has not been audited, and the fix here is a rendering decision rather than a content one. I did rewrite tldr, which is prose and mine to fix, so the summary line no longer contradicts the two paragraphs underneath it.",
+   "corrected": "Rewrote tldr to match the FAV badge and the body text. The diffRating/breakdown.difficulty/report[14] labelling conflict needs a human — see questionsForUser.",
+   "confidence": "Medium",
+   "sources": [
+    "packet ambessa.json — ziggs winRate 53.41 over 264 games",
+    "champ-data/ambessa.full.js — diff 'FAV', diffRating '8.5/10', breakdown.difficulty 'Overall difficulty: 8.5/10'"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "win[] and phases[].side give Ziggs five of seven stages, while the phase RATINGS on those same cards read 7/10 and 8/10 — favourable to Ambessa — and the prose gives her everything from level 3 onward ('the lane flips at 3', 'this is where you take over', 'he is dead').",
+   "why": "Side, rating and text disagree on the same card, and the rating agrees with the prose and with the win rate against the side. That is the same inversion pattern several other entries in this file carry, and here the internal rating field is effectively a second witness against the side value. I did not flip it — chart edits apply atomically and mirror against the Ziggs page — but this one has the strongest evidence of the five I found.",
+   "corrected": "Sides should follow the ratings and the prose: Ziggs at 1-2, Ambessa from 3 on. Needs a human decision — see questionsForUser.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/ambessa.full.js — phases[2] side 'Ziggs' rating '8/10'",
+    "champ-data/content/ambessa.js — win[2]='Ziggs' vs 'The lane flips at 3'"
+   ]
+  },
+  {
+   "point": 7,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "The wave plan is right and, unusually, it is right for a stated reason: hold the wave near your side so a champion with no mobility has to walk up to farm. Against Ziggs specifically that is the mechanism that spends Satchel Charge, because stepping up into Lacerate range is when he needs the escape. I only added the 20-second figure that turns it into a countable trade.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ziggs.json — W cd 20/18/16/14/12, no mobility in kit"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Bouncing Bomb out-ranges your whole kit and you have no Sundering Slam or dash yet — he pokes you for free and you can't answer.",
+   "after": "Bouncing Bomb reaches 850 against your 650 Cunning Sweep and returns every 6s, so he pokes for free before your dash exists."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "With your combo online, Lacerate's slow plus a Drakehound's Step dash lets you stick through a Satchel knockback and crash a trade his poke can't sustain.",
+   "after": "With your combo online, dash straight through Hexplosive Minefield — repeat detonations on one target deal less — and crash the trade his poke cannot sustain."
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "He has no mobility and your dash-weave closes the range his bombs need — hold the wave near you and make him walk into Lacerate.",
+   "after": "Satchel Charge is his only escape and it is 20s at rank 1 — hold the wave near you and make him spend it walking up to farm."
+  },
+  {
+   "layer": "content",
+   "path": "whys[5]",
+   "before": "First-item physical plus R's armor-pen passive and on-hit heal shred his squishy frame; reach him with R up and Q1-auto-Q2 ends it.",
+   "after": "First-item physical shreds his squishy artillery frame; reach him inside Satchel Charge's 20s with R up and Q1-auto-Q2 ends it."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "First-item physical damage plus R's flat armor-pen passive and on-hit healing shred his squishy artillery frame; reach him post-6 with R up and he is dead.",
+   "after": "First-item physical damage shreds his squishy artillery frame — Satchel Charge is 20s at rank 1, so reach him once it is spent with R up and he is dead."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Bait or eat his Satchel Charge knockback, then R behind him so the displacement can't break your gap-close",
+   "after": "Make him spend Satchel Charge, then R behind him inside its 20 seconds so nothing displaces the gap-close"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Chunk you with Bouncing Bomb from max range every wave so you walk up already low",
+   "after": "Chunk you with an 850-range Bouncing Bomb every 6s so you walk up already low"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Hold Satchel Charge to knock you out of your dash-weave the instant you commit",
+   "after": "Hold the 20s Satchel Charge to knock you out of your dash-weave as you commit"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Wall the chokes with Hexplosive Minefield and kite back so you never get a clean empowered-auto window",
+   "after": "Wall the chokes with a 16s Hexplosive Minefield and kite so you never get a clean empowered auto"
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Levels 1-2 belong to him — Bouncing Bomb out-ranges your entire kit and you have no Sundering Slam follow-up or move-command dash yet, so soak the wave from the back and accept the chip rather than walking into bomb range to throw a Cunning Sweep he just steps away from. The lane flips at 3: once Q-into-empowered-auto is online and Lacerate's near-total slow lands, you can dash-weave through one Satchel knockback and finally make contact. Don't burn your dash early chasing a Q he can flatten with Hexplosive Minefield — bait the minefield onto the wave, then walk the gap it leaves.",
+   "after": "Levels 1-2 belong to him — Bouncing Bomb reaches 850 against your 650 Cunning Sweep and comes back every 6 seconds, and you have no Sundering Slam follow-up or move-command dash yet, so soak the wave from the back and accept the chip. Watch Short Fuse: every ability he casts shortens it, so a cast is the tell that a bonus-damage attack comes with his step-up. The lane flips at 3: once Q-into-empowered-auto is online and Lacerate's slow lands, you dash-weave through one Satchel knockback and make contact. Dash straight through Hexplosive Minefield rather than around it — repeat detonations on one target deal less."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "This is where you take over. His whole defense is the Satchel Charge knockback and a minefield — neither survives your R. From Levels 4-5 hold the wave near you so he has to step up to farm, slow him with Lacerate, and once Public Execution is up at 6 you blink behind him, suppress and crash the stun, then chain Q1-auto-Q2. He is a squishy artillery mage with no escape and no mobility; the moment you're on top of him with R up, Repudiation's amplified slam and your empowered autos delete him before his bombs matter.",
+   "after": "This is where you take over. His whole defence is Satchel Charge and a minefield, and neither survives your R. From Levels 4-5 hold the wave near you so he has to step up to farm, slow him with Lacerate, and once Public Execution is up at 6 you blink behind him, suppress and crash the stun, then chain Q1-auto-Q2. Satchel Charge is 20s at rank 1 and it is his only escape, so the moment he spends it you have twenty seconds against a mage with no mobility — that is the whole kill window."
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "He kites you out — survive, then dash-weave around his Satchel Charge and crash the empowered hits. Ambessa wins the Satchel Charge cooldown windows.",
+   "after": "He out-ranges you until 3, then the lane is yours — dash the minefield, make him spend his 20s Satchel Charge, then crash the empowered hits."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Dash-resets stack your passive shield mid-trade. Only take the trade when Ziggs's Satchel Charge is down.",
+   "after": "Repudiation is your shield, not the passive — brace his bomb and the blocked damage amplifies your slam."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Ziggs Satchel Charge: matchup-defining — His knockback + self-peel escape. Engage when it's down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+   "after": "- Satchel Charge: 20s at rank 1, his knockback and his only escape — engage inside those 20 seconds. - Hexplosive Minefield: 16s flat, and repeat detonations on one target deal less, so dash through it. - Bouncing Bomb: 6s, 850 range."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Ziggs's Satchel Charge: His knockback + self-peel escape. Engage when it's down. When it is down — Dash-chain + empowered crash.",
+   "after": "Hexplosive Minefield deals reduced damage on repeat detonations against the same target — dash through the field, don't path around it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His knockback + self-peel escape. Engage when it's down. Only engage once it is down or baited.",
+   "after": "His knockback and his only self-peel escape, 20s at rank 1. Engage the moment he spends it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Cast-dash-empowered-hit on Ziggs's step-up, weave the second dash through his answer, and exit with shield banked.",
+   "after": "Short Fuse loads his next attack, and every ability he casts brings it back sooner — his rhythm is cast, then hit."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Ziggs wastes Satchel Charge — commit the full pattern immediately.",
+   "after": "Satchel Charge is 20s at rank 1 — commit your full pattern now."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That is Ziggs's favourite window — refuse it and half his win condition is gone.",
+   "after": "Satchel Charge knocks you back out — keep one dash for after he spends it."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+   "after": "Short Fuse loads faster the more abilities he casts at you."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Dumping every dash going IN — Ambessa with no dash left is a duelist who forgot the door.",
+   "after": "Mega Inferno Bomb reaches 5000 units, so his R is map pressure, not a duel button."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Ambessa vs Ziggs - Track: Ziggs Satchel Charge. - Keep the wave on your side. - Engage only on Satchel Charge's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+   "after": "- Ambessa vs Ziggs - Track: Satchel Charge, 20s, his only escape. - Dash through the minefield, repeats hurt less. - Bouncing Bomb is 850 range on 6s. - R once the Satchel is spent."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Satchel Charge's cooldown, on your level-6 spike, and on your Eclipse timing. Make him flinch first.",
+   "after": "Commit inside Satchel Charge's 20s, on your level-6 spike, and on Eclipse. Make him spend the knockback first."
+  },
+  {
+   "layer": "full",
+   "path": "report[11].t",
+   "before": "Burn all dashes in. Trade without passive loaded. R into peel. Don't spend your ultimate on chip — it is the kill window.",
+   "after": "Burning all dashes going in. Pathing around the minefield instead of through it. R into his peel. R spent on chip."
+  }
+ ],
+ "notes": "STRONGEST CHART EVIDENCE IN MY SLICE: this entry's phase cards carry side='Ziggs' next to rating='8/10' on the same card, with prose underneath explaining an Ambessa win and a 53.41% win rate behind it. Three of four signals agree and only the side value dissents, which makes it the best single example to hand a developer chasing the generator bug that also affects the vayne, vladimir, volibear, yorick and yone entries. LABELLING CONFLICT: diff='FAV' sits with diffRating='8.5/10', tone '#ff5d6c' (the HARD red), breakdown.difficulty 'Overall difficulty: 8.5/10' and report[14] 'Hard matchup'. If 8.5 is a favourability score then two strings are rendering it with the wrong noun; if it is a difficulty score then the badge is wrong. I changed none of them — see questionsForUser. KIT-FILE FLAG MISFIRE: champ-data/_kits/ambessa.json tags Public Execution with 'heal' and W and R with 'grounding'; Riot's descriptions support none of them. The derived 'R armor-pen and on-hit heal' phrasing had leaked into two strings here and I removed it. The packet's two suspect names, 'Public Execution' and 'Satchel Charge', are both correct — false positives. WIN RATE: MC_WR_TABLES.ambessa.ziggs is 53.41, matching the packet exactly."
+}

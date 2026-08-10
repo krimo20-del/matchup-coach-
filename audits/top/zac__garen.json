@@ -1,0 +1,186 @@
+{
+  "ownerKey": "zac",
+  "enemy": "garen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Judgment is labelled as Garen's W in three places: spikes[0].text (\"spinning Judgment (W) shreds you in melee\"), mid (\"Q silence into Judgment (W)\"), and wants.foe[1] (\"Shred you inside spinning Judgment (W)\"). Judgment is Garen's E. His W is Courage.",
+      "why": "The ability name is right, so the suspectNames scan passed it — it only compares names, not the slot letter attached to them. The consequence is real: the full layer correctly tells the player to track Courage, so the two layers together tell a player that the spin and the damage-reduction shield are the same button.",
+      "corrected": "Relabelled Judgment as (E) in all three strings.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/garen.json (W: Courage, E: Judgment)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text says Demacian Justice scales \"with his missing HP\" and that \"Villain marks amplify it\"; mid repeats the Villain claim with \"don't feed his Villain mark\".",
+      "why": "Two errors in one sentence. The execute scales with the target's missing health, not Garen's — the text has the direction backwards, which inverts the actual safety rule. And Villain is not part of Garen's kit: Riot's current Demacian Justice text is just \"Garen calls upon the might of Demacia to attempt to execute an enemy champion\", with no marking mechanic. This is the same class of stale-mechanic error as the Adrenaline reference I found in the Dr. Mundo entry.",
+      "corrected": "Restated the execute as scaling with the player's own missing health and removed both Villain references.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/garen.json (Demacian Justice; no Villain mechanic in the current description)"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "The packet flagged this matchup as having no cooldown-sequencing advice anywhere, and that was accurate — every cooldown reference was the generic \"track Courage\" template with no number and no ordering.",
+      "why": "There are three concrete sequencing rules available from the kits and none were stated. Courage is 22s at rank 1 and grants tenacity plus damage reduction, so committing into a fresh Courage means a shortened knockup and a blunted combo. Decisive Strike is 8s and breaks free of all slows, so any plan built on kiting with Zac's Q or R slow is dead on arrival. And Perseverance only regenerates when Garen has not recently been struck, so Zac's W on a 5s cooldown shuts it off entirely.",
+      "corrected": "Added all three as explicit wait-for-X-before-Y lines in breakdown.cooldowns, breakdown.mid and breakdown.early.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/garen.json",
+        "champ-data/_kits/zac.json (W 5s cooldown)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.early says Garen's \"passive regen erases any poke you land\", which frames poking as futile.",
+      "why": "Perseverance regenerates only if Garen has not recently been struck by damage or enemy abilities. Poke does not get erased — poke is what turns the passive off. Zac's W is a 5s-cooldown AoE, which means he can deny Perseverance essentially permanently while farming. The entry told the player the opposite of the correct plan.",
+      "corrected": "Rewrote to say the regen only ticks while untouched, so W chip shuts it down.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/garen.json (Perseverance)",
+        "champ-data/_kits/zac.json (Unstable Matter, 5s)"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer awards Zac levels 2, 3, first item and 2+ items (sides Skill/Zac/Zac/Skill/Skill/Zac/Zac) in a lane he loses at 46.48% over 284 games, while the content chart gives Garen six of seven stages.",
+      "why": "This is Zac's worst matchup in the slice and the full-layer chart reads as though he is favoured through most of it. The content chart matches the data; the full chart does not.",
+      "corrected": "Aligned the full layer to the content chart — Garen through first item, Zac at 2+ items.",
+      "confidence": "High",
+      "sources": [
+        "packet zac.json (46.48%, 284 games)"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[2] pairs \"Pick up blobs to sustain\" with a body about Garen wasting Courage, and dontsFull[1] pairs \"Fight through his W\" with \"Burning it for tiny value leaves you naked for its full cooldown\".",
+      "why": "The recurring generator template mismatch. Present in every Zac entry I audited.",
+      "corrected": "Re-pointed both bodies at their titles; the Courage body now names the tenacity and damage reduction that make fighting through W a mistake.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Garen bullies you: Decisive Strike (Q) silences and boosts his auto so it cancels your E dash, and spinning Judgment (W) shreds you in melee, so never sit next to him while Q is up.",
+      "after": "Garen bullies you: Decisive Strike (Q) silences and boosts his auto, and spinning Judgment (E) shreds you in melee. His Q also breaks every slow, so your Q and R slows will not kite him."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Shred you inside spinning Judgment (W)",
+      "after": "Shred you inside spinning Judgment (E)"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Demacian Justice (R) is true-damage execute scaling with his missing HP, and Villain marks amplify it — a low Zac gets deleted through the P revive, so keep HP high near 6.",
+      "after": "Demacian Justice (R) is a true-damage execute that scales with your missing health, not his own — the lower you drop the harder it lands, so keep your HP bar high near 6."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Garen keeps the lead through mid and 6 — Q silence into Judgment (W) shreds you in melee and Demacian Justice (R) is a true-damage execute that punches through your P revive when you're low, so hold HP high and don't feed his Villain mark.",
+      "after": "Garen keeps the lead through mid and 6 — Q silence into Judgment (E) shreds you in melee, and Demacian Justice (R) is true damage that grows as your health drops, so hold your HP bar high and wait out Courage's 22s before you ever commit an engage."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Levels 1-2 are Garen's: Decisive Strike (Q) silence plus boosted auto cancels your E and out-trades you, while his passive regen erases any poke you land, so keep your distance and farm.",
+      "after": "Levels 1-2 are Garen's: Decisive Strike (Q) silence plus boosted auto cancels your E and out-trades you. Perseverance only ticks while he is untouched, so chip him with W to shut the regen off."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Garen peaks at 6 — Demacian Justice's true-damage execute beats your revive.",
+      "after": "Garen peaks at 6 — Demacian Justice hits harder the lower your health falls."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Garen Courage: matchup-defining — Damage reduction. Trade when down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Garen Courage: 22s at rank 1 — it grants tenacity and damage reduction, so wait for him to spend it before you E-Q-R. - Decisive Strike: 8s, and it breaks every slow, so never plan a kite around your Q or R slow."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Trade strictly around Courage: when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve him.",
+      "after": "Trade strictly around Courage's 22s: when it is down run the full pattern, when it is up give nothing. W-poke resets his passive regen."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Q-stretch trades and blob pickups out-sustain the early chip. Respect Garen's Courage completely — the first levels are about banking small advantages, not proving a point.",
+      "after": "Chip him with W on its 5s cooldown — any damage stops Perseverance regenerating, and that is how you win a long lane. Respect Courage and never trade into a fresh Decisive Strike."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Garen's ultimate changes the math too.",
+      "after": "Demacian Justice is a true-damage execute that scales with how low you are, so at 6 your effective health bar is shorter than it reads."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Garen"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Zac",
+      "after": "Garen"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Zac",
+      "after": "Garen"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Garen"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Garen"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Zac",
+      "after": "Garen"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Garen wastes Courage — commit the full pattern immediately.",
+      "after": "Blobs are your sustain and revive margin — trade along them."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Courage's tenacity and damage reduction blunt your whole combo."
+    }
+  ],
+  "notes": "Densest set of factual errors in the slice. (1) Judgment is tagged (W) in three strings; it is Garen's E, and his W is Courage — the full layer tells the player to track Courage while the content layer tells them Courage is the spin. The suspectNames scan cannot catch this because it compares ability names and ignores the slot letter in parentheses; a slot-vs-name cross-check would be a cheap addition to that tool and would likely find more across other champions. (2) Demacian Justice was described as scaling with GAREN's missing HP — it scales with the target's, so the safety rule was inverted. (3) \"Villain marks\" appears twice; Villain is not in Garen's current kit and does not appear anywhere in Riot's description. That is the second stale-mechanic reference in this slice after Mundo's \"Adrenaline\", both in wants/spikes text, which suggests the generator drew on outdated champion knowledge for those fields specifically. (4) content.early claimed Perseverance \"erases any poke you land\" — backwards; the passive only ticks while he is untouched, and Zac's W on a 5s cooldown denies it outright. That inverted a winning plan into a reason not to poke. The flagged missing-sequencing defect is addressed with three concrete rules (Courage 22s, Decisive Strike 8s slow-break, W denies Perseverance). NOT ASSERTED: whether Demacian Justice's execute kills through Cell Division's bloblet state — the previous text claimed it \"beats your revive\" and I removed that claim rather than restate it, because revive interaction is not in Riot's text and I could not verify it. Also left alone: whether Courage's tenacity shortens Zac's knockup specifically, since knockups are conventionally tenacity-immune; my line says tenacity and damage reduction blunt the combo without claiming it shortens the displacement."
+}

@@ -31,6 +31,15 @@ const LANES = [
 // Stable first-publication date for Article schema — the guide pages first
 // shipped in the 2026-07-27 sitemap. dateModified tracks the data refresh.
 const PUBLISHED = '2026-07-27';
+// The patch this matchup data is published as current for. Bump only when the
+// content has actually been reviewed against the new patch.
+const LIVE_PATCH = '26.15';
+// When the underlying champ-data last actually changed, and when the lolalytics
+// win rates were sampled. These are CONTENT facts, not build facts — never wire
+// them to TODAY. A dateModified/lastmod that moves on every rebuild is a false
+// freshness signal to search engines and a false "Updated <date>" to readers.
+const DATA_MODIFIED = '2026-07-27';
+const WR_SAMPLED = 'July 2026';
 const STAGES = ['Level 1', 'Level 2', 'Level 3', 'Levels 4-5', 'Level 6', 'First item', 'Two+ items'];
 
 // ---------- load all lane data ----------
@@ -126,7 +135,7 @@ function shell(title, desc, canonical, jsonld, body) {
 <div class="wrap">
 <header class="site"><a class="logo" href="/">Matchup<b>Coach</b>.gg</a></header>
 ${body}
-<footer>MatchupCoach.gg — Challenger-level matchup coaching for every champion, every lane. <a href="/matchup/">All matchup guides</a> · <a href="/">Open the interactive coach</a><br>Updated ${TODAY} — refreshed every major League patch. MatchupCoach.gg isn't endorsed by Riot Games.<br><a href="/terms">Terms</a> · <a href="/privacy">Privacy</a> · <a href="/refund">Refunds</a> · <a href="/cancel">How to cancel</a> · <a href="/contact">Contact</a></footer>
+<footer>MatchupCoach.gg — Challenger-level matchup coaching for every champion, every lane. <a href="/matchup/">All matchup guides</a> · <a href="/">Open the interactive coach</a><br>Matchup data current for patch ${LIVE_PATCH} · win rates sampled ${WR_SAMPLED} from lolalytics (Emerald+). MatchupCoach.gg isn't endorsed by Riot Games.<br><a href="/terms">Terms</a> · <a href="/privacy">Privacy</a> · <a href="/refund">Refunds</a> · <a href="/cancel">How to cancel</a> · <a href="/contact">Contact</a></footer>
 </div>
 </body>
 </html>`;
@@ -260,7 +269,7 @@ for (const L of LANES) {
       const jsonld = {
         '@context': 'https://schema.org',
         '@graph': [
-          { '@type': 'Article', headline: `${aName} vs ${bName} — ${L.label} Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: PUBLISHED, dateModified: TODAY, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
+          { '@type': 'Article', headline: `${aName} vs ${bName} — ${L.label} Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: PUBLISHED, dateModified: DATA_MODIFIED, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
           { '@type': 'FAQPage', mainEntity: faq },
           { '@type': 'BreadcrumbList', itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Matchups', item: ORIGIN + '/matchup/' },
@@ -306,7 +315,7 @@ for (const L of LANES) {
       const body = `
 <nav class="crumbs"><a href="/matchup/">Matchups</a> › <a href="/matchup/${L.key}/">${L.label}</a> › ${esc(aName)} vs ${esc(bName)}</nav>
 <h1>${esc(aName)} vs ${esc(bName)} — ${L.label} Matchup Guide</h1>
-<p class="sub">How to win lane as ${esc(aName)} against ${esc(bName)}${wrKnown ? ` · ${wr}% win rate${gamesTxt ? ` over ${gamesTxt} Emerald+ games` : ''}` : ''} · Updated ${TODAY}</p>
+<p class="sub">How to win lane as ${esc(aName)} against ${esc(bName)}${wrKnown ? ` · ${wr}% win rate${gamesTxt ? ` over ${gamesTxt} Emerald+ games` : ''}` : ''} · Patch ${LIVE_PATCH} · win rates sampled ${WR_SAMPLED}</p>
 <div class="verdict"><b>Verdict:</b> ${esc(verdict)}</div>
 ${tl}
 <h2>How should ${esc(aName)} play the early game vs ${esc(bName)}?</h2><p>${esc(e.early || '')}</p>
@@ -392,7 +401,7 @@ for (const you of jgNames) {
     const jgMore = opps.filter(f => f !== foe && f !== you).sort().slice(0, 6)
       .map(f => `<a href="/matchup/jungle/${uA}-vs-${urlslug(f)}/">vs ${esc(f)}</a>`).join(' · ');
     const jsonld = { '@context': 'https://schema.org', '@graph': [
-      { '@type': 'Article', headline: `${you} vs ${foe} — Jungle Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: PUBLISHED, dateModified: TODAY, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
+      { '@type': 'Article', headline: `${you} vs ${foe} — Jungle Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: PUBLISHED, dateModified: DATA_MODIFIED, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
       { '@type': 'FAQPage', mainEntity: faq },
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Matchups', item: ORIGIN + '/matchup/' },
@@ -402,7 +411,7 @@ for (const you of jgNames) {
     const body = `
 <nav class="crumbs"><a href="/matchup/">Matchups</a> › <a href="/matchup/jungle/">Jungle</a> › ${esc(you)} vs ${esc(foe)}</nav>
 <h1>${esc(you)} vs ${esc(foe)} — Jungle Matchup Guide</h1>
-<p class="sub">How to win the jungle race as ${esc(you)} against ${esc(foe)} · Updated ${TODAY}</p>
+<p class="sub">How to win the jungle race as ${esc(you)} against ${esc(foe)} · Patch ${LIVE_PATCH}</p>
 <div class="verdict"><b>Verdict:</b> ${esc(verdict)}</div>
 <h2>The jungle race — the windows in ${esc(you)}'s plan</h2>
 <p class="sub">Read from ${esc(you)}'s seat: the race windows this plan plays for against ${esc(foe)}.</p>
@@ -506,10 +515,14 @@ for (const L of LANES) {
 }
 
 // ---------- sitemap ----------
+// The root keeps TODAY/daily because the homepage genuinely changes every day —
+// it rotates the free champion per role on a 24h cycle. Every /matchup/ guide
+// uses DATA_MODIFIED instead: those pages only change when champ-data changes,
+// and stamping them with the build date is a freshness claim we can't back up.
 const sm = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>${ORIGIN}/</loc><lastmod>${TODAY}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
-` + sitemap.map(u => `<url><loc>${u}</loc><lastmod>${TODAY}</lastmod><changefreq>monthly</changefreq><priority>${u.endsWith('/matchup/') ? '0.9' : /\/matchup\/[a-z]+\/$/.test(u) ? '0.8' : u.includes('-vs-') ? '0.7' : '0.6'}</priority></url>`).join('\n') + '\n</urlset>\n';
+` + sitemap.map(u => `<url><loc>${u}</loc><lastmod>${DATA_MODIFIED}</lastmod><changefreq>monthly</changefreq><priority>${u.endsWith('/matchup/') ? '0.9' : /\/matchup\/[a-z]+\/$/.test(u) ? '0.8' : u.includes('-vs-') ? '0.7' : '0.6'}</priority></url>`).join('\n') + '\n</urlset>\n';
 fs.writeFileSync('sitemap.xml', sm);
 
 console.log('pages written:', pages, '| sitemap urls:', sitemap.length + 1);

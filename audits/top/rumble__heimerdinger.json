@@ -1,0 +1,124 @@
+{
+  "ownerKey": "rumble",
+  "enemy": "heimerdinger",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "44.09% over 279 games. Both layers already treat this as a losing lane in prose; no elo language present.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["scratchpad/packets/rumble.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text calls Hextech Micro-Rockets his E. Micro-Rockets is W; E is CH-2 Electron Storm Grenade. The same sentence writes the ultimate as \"UPGRADE!!\" (two marks) when Riot's name is \"UPGRADE!!!\" (three). The content 'mid' block gets the slot right (\"an upgraded W\"), so the two blocks contradict each other.",
+      "why": "A Rumble player reading spikes[1] will shield the wrong ability. Micro-Rockets is the fan-of-rockets W; the E grenade is the point-and-stun.",
+      "corrected": "Upgraded W (Hextech Micro-Rockets) is the ability that fans across the lane; UPGRADE!!! is the ult's name.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/heimerdinger.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing in either layer says the CH-2 Electron Storm Grenade only stuns on a direct hit — the surrounding splash is a slow. The whole entry treats it as an unavoidable stun.",
+      "why": "Riot's own text: 'dealing damage to enemy units, as well as stunning anyone directly hit and slowing surrounding units.' Rumble's Scrap Shield gives a burst of Move Speed on cast, which is exactly the tool for stepping off the epicentre and downgrading the stun to a slow.",
+      "corrected": "Only the direct hit stuns; clipping the edge is a slow, and Scrap Shield's speed burst is the way to convert one into the other.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/heimerdinger.json", "champ-data/_kits/rumble.json"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers name CH-2 Grenade as the cooldown to track but never give its length, and breakdown.cooldowns is pure boilerplate.",
+      "why": "CH-2 Electron Storm Grenade is 11s at EVERY rank — it never gets shorter, which is unusual and is the single most useful number in this lane. Hextech Micro-Rockets is 11/10/9/8/7s and UPGRADE!!! is 100/85/70s.",
+      "corrected": "See the breakdown.cooldowns and mid edits below.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/heimerdinger.json"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "content 'mid' claims a placed turret \"decays after roughly 8 minutes\". That number is not in the kit file and is not plausible as a turret lifetime.",
+      "why": "The kit file carries no turret duration, and turret decay behaviour is exactly the kind of thing Riot's ability text omits — so it cannot be asserted from this data. Rather than swap one unverified number for another, the claim is removed and replaced with a number that IS on record (the flat 11s grenade cooldown).",
+      "corrected": "Claim removed; no replacement duration invented. If the user wants a turret-lifetime line it needs a League Wiki check first.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/heimerdinger.json"]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "full.phases[0].why and full.breakdown.early both open with \"Flamespitter wins every melee level 1 — walk at them.\" Heimerdinger is a ranged champion with a turret placed before the wave arrives.",
+      "why": "This is boilerplate written for melee opponents and pasted into a ranged matchup. It tells the reader to do the one thing that loses this lane — walk into turret range at level 1 — and it contradicts the content layer, which correctly says to farm at max Flamespitter distance.",
+      "corrected": "See the phases[0].why and breakdown.early edits below.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/heimerdinger.json", "champ-data/content/rumble.js"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "full.phases sides read Heimerdinger / Skill / Rumble / Rumble / Heimerdinger / Rumble / Rumble, while content win[] reads Rumble / Heimerdinger x5 / Rumble. On a 44% matchup the full layer hands Rumble four of seven stages.",
+      "why": "The content chart is the correct one and matches the win rate: Heimerdinger owns levels 2 through first item, Rumble's only real claim is the late global Equalizer.",
+      "corrected": "phases[2], phases[3] and phases[5].side should read \"Heimerdinger\". Not proposable — apply-proposals.js rejects full-layer edits whose `before` is under 12 characters and side values are 6-12 characters. Needs a hand fix.",
+      "confidence": "High",
+      "sources": ["champ-data/rumble.full.js", "champ-data/content/rumble.js", "tools/apply-proposals.js"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Three of the four packet suspectNames are false positives: \"Use Equalizer\" and \"Your Equalizer\" are ordinary prose around the real name The Equalizer, and \"Evolution Turret(s)\" is a legitimate short form of H-28 G Evolution Turret. The one real name defect the scanner did NOT catch is UPGRADE!! (should be UPGRADE!!!) and the E/W slot swap on Micro-Rockets.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/heimerdinger.json", "scratchpad/packets/rumble.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Heimerdinger's UPGRADE!! lets him empower any basic ability into a super-version mid-fight — an upgraded E (HEXTECH MICRO-ROCKETS) fans across the lane and can chunk Rumble through his Scrap Shield, making the all-in window Rumble expected at level 6 far more punishing than anticipated.",
+      "after": "Heimerdinger's UPGRADE!!! empowers his next basic ability mid-fight — an upgraded W (Hextech Micro-Rockets) fans across the lane and chunks Rumble through his Scrap Shield, making the all-in window Rumble expected at level 6 far more punishing than anticipated."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Stun Rumble with CH-2 Grenade the instant he steps forward to flame, then reset the turret nest while he is locked down",
+      "after": "Land CH-2 Grenade directly on Rumble for the stun — an edge clip only slows — then reset the nest while he is held"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-6 are his peak and you need to play around turret cooldowns rather than raw trades. When he places a turret, note that it decays after roughly 8 minutes but more relevantly it can be Flamespitter-cleared if he mis-places it without full H-28G stacks — look for moments where only one or two turrets are up and he is repositioning to drop the third. That is your window: double Electro-Harpoon to slow him off his nest, Flamespitter the weakened turret, and use Scrap Shield to eat the W rocket burst he throws back. At level 6 his UPGRADE!! changes the calculus — an upgraded W fans across your entire body even through your shield — so do not all-in him at exactly 6; wait for his UPGRADE!! to be committed to a turret form before you play aggressively. Your Equalizer at this stage is best used to zone him off resetting his nest rather than for a straight kill — a rocket wall across the path he must walk to re-position forces a bad trade either way.",
+      "after": "Levels 4-6 are his peak and you need to play around turret cooldowns rather than raw trades. His CH-2 Electron Storm Grenade is 11s flat at every rank — it never shortens — and only a direct hit stuns, so a clipped edge is just a slow. Look for moments where only one or two turrets are up and he is repositioning to drop the third. That is your window: double Electro-Harpoon to slow him off his nest, Flamespitter the weakened turret, and use Scrap Shield to eat the W rocket burst he throws back. At level 6 his UPGRADE!!! changes the calculus — an upgraded W fans across your entire body even through your shield — so do not all-in him at exactly 6; wait for his UPGRADE!!! to be committed to a turret form before you play aggressively. Your Equalizer at this stage is best used to zone him off resetting his nest rather than for a straight kill — a rocket wall across the path he must walk to re-position forces a bad trade either way."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Flamespitter wins every melee level 1 — walk at them. Identify how Heimerdinger contests the first waves before you commit anything.",
+      "after": "Heimerdinger is ranged with a turret down before the wave — farm the outer edge of Flamespitter, out of turret zap range."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Flamespitter wins every melee level 1 — walk at them. Respect Heimerdinger's CH-2 Grenade completely — the first levels are about banking small advantages, not proving a point.",
+      "after": "He is ranged and his turret lands first, so level 1 is farm-only. Respect Heimerdinger's CH-2 Grenade — these levels are about banking small advantages, not proving a point."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Heimerdinger CH-2 Grenade: matchup-defining — His self-peel stun. Dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Heimerdinger CH-2 Grenade: 11s at every rank, and only a direct hit stuns — an edge clip just slows. - Hextech Micro-Rockets: 11s falling to 7s. - UPGRADE!!!: 100s at rank 1. - The Equalizer: kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "The Equalizer cuts lanes and teamfights in half — aim it across the path, not on heads. Reassess every all-in at 6 — Heimerdinger's ultimate changes the math too.",
+      "after": "The Equalizer cuts lanes in half — aim it across his path, not on heads. His UPGRADE!!! is 100s at rank 1; once it is spent on a turret form your window opens."
+    }
+  ],
+  "notes": "The \"decays after roughly 8 minutes\" turret claim in content.mid was removed rather than corrected — no turret lifetime is available in the kit data and Riot's ability text does not carry it, so replacing it with a different number would have been a guess. If the user wants that line back, it needs a League Wiki check. BLOCKED BY THE APPLIER: full.phases[2].side, [3].side and [5].side all say \"Rumble\" on a 44.09% matchup where the content chart correctly gives those stages to Heimerdinger; side strings are too short for the applier's 12-character minimum on full-layer `before`, so they need a hand fix."
+}

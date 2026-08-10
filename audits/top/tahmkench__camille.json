@@ -1,0 +1,233 @@
+{
+ "ownerKey": "tahmkench",
+ "enemy": "camille",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[1], wants.foe[1] and mid all attribute true damage to Camille's W — \"Camille's W true-damage cone\", \"her W cone's outer ring where the true-damage heals her\", \"her W outer-ring true damage\".",
+   "why": "Tactical Sweep deals no true damage. Riot's text: \"Enemies in the outer half are slowed and take extra damage, while also healing Camille.\" The true damage in her kit is on Precision Protocol (Q). This matters because it changes what you build — armour meaningfully reduces the W cone but does nothing about the Q.",
+   "corrected": "Tactical Sweep's outer half deals extra damage and heals her; the true damage belongs to Precision Protocol.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/camille.json (W: Tactical Sweep, flags slow/heal — no trueDamage; Q: Precision Protocol, flags autoReset/trueDamage)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Nothing in the entry mentions that Hookshot requires terrain. It is named ten times as the ability to track, always as though it were freely available.",
+   "why": "Riot's text: \"Camille pulls herself to a wall, leaping off and knocking up enemy champions upon landing.\" No wall means no Hookshot — no engage and no escape. For a matchup rated HARD with a 9/10 carry threat, \"fight her in open ground\" is the single largest lever the Tahm Kench player has, and it was completely absent. It also reframes wave management: where you hold the wave decides whether her E exists.",
+   "corrected": "Fight away from walls. Hookshot needs an anchor, and without one her whole pattern collapses.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/camille.json (E: Hookshot, flags include terrain; \"pulls herself to a wall\", cd 16/15/14/13/12)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "I checked _missing-interactions.json, which asserts: \"Camille's The Hextech Ultimatum (R) is a channel — your Tongue Lash (Q) cancels it outright.\" I did NOT act on this and no edit implements it.",
+   "why": "This is a false positive from the kit's derived \"channel\" flag. The Hextech Ultimatum is a dash into an anchoring zone, not an interruptible channel, and Tongue Lash does not cancel it. Acting on this would have told the reader to hold a 900-range poke as an answer to a 140s ultimate that it does nothing about — which loses the fight outright.",
+   "corrected": "No cancel advice written. What I did add is what the flags actually support: she is untargetable through the R dash, so a Devour thrown at the animation is wasted, and the arena anchors you in with her once it lands.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/camille.json (R flags: dash, untargetable, channel, zone; description: \"Camille dashes to target champion, anchoring them to the area\")",
+    "champ-data/_kits/_missing-interactions.json — channel-interruptible entry for tahmkench vs camille (REJECTED)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[0] calls Hookshot an \"E stun\".",
+   "why": "Hookshot knocks up rather than stunning. The distinction is not cosmetic — a knockup is a displacement, so it interacts differently with tenacity and with abilities that care about airborne states.",
+   "corrected": "Knockup, per Riot's text.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/camille.json (E: \"knocking up enemy champions upon landing\", flags include hardCC)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "wants.you[0], whys[3], whys[6] and late all run the \"stun into Devour\" / \"point-and-click stun into Devour\" pattern.",
+   "why": "The Q stun at 3 stacks consumes all three stacks; Devour requires 3 stacks. The combo cannot be executed.",
+   "corrected": "Three stacks buys the stun or the eat. Against Camille the eat is correct, because a stun does not stop Hookshot resetting the fight afterwards.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/tahmkench.json (P and Q text)",
+    "League of Legends Wiki — Tahm Kench (wiki.leagueoflegends.com/en-us/Tahm_Kench)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[3], mid and late build the late-game plan around \"Abyssal Voyage\" as a teleport/global repositioning tool.",
+   "why": "Abyssal Voyage is the removed pre-rework ultimate. The current W is Abyssal Dive, a short blink available from level 2. mid additionally says \"use R to threaten roams and deny her from following your teleport\", conflating Devour with a teleport it is not.",
+   "corrected": "Abyssal Dive is the blink and it has been available since level 2; Devour is the level-6 arrival and it is a 250-range grab.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/tahmkench.json (W: Abyssal Dive)",
+    "League of Legends Wiki — Tahm Kench (wiki.leagueoflegends.com/en-us/Tahm_Kench) — Devour cast range 250"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "No anti-heal recommendation, despite the entry itself observing that she \"can sustain off it simultaneously\".",
+   "why": "Tactical Sweep heals her on a 15s cooldown at rank 1, and the entry's whole plan is winning an attrition war. Naming the sustain problem without naming Grievous Wounds leaves the reader with the diagnosis and no prescription.",
+   "corrected": "Grievous Wounds folded into the build path and the mid-game plan.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/camille.json (W cd 15/14/13/12/11, flags include heal)",
+    "champ-data/_kits/_missing-interactions.json — needs-antiheal for tahmkench vs camille"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "needs-correction",
+   "whatIsWrong": "full.tldr reads \"Her true damage shreds your HP — build armor\".",
+   "why": "Armour does not reduce true damage. The sentence names true damage as the threat and then prescribes the one stat that cannot answer it. Armour is still a reasonable build against her physical autos and Tactical Sweep, but the causal chain as written is wrong and will teach the wrong lesson.",
+   "corrected": "Rewritten to say plainly that armour will not touch the Q true damage, and to point at the interaction that actually answers her.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/camille.json (Q flags: trueDamage)"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "missing",
+   "whatIsWrong": "Precision Protocol's recast timing is never mentioned.",
+   "why": "Riot's text: the recast does \"significantly increased bonus damage if Camille delays a period of time between the two attacks\". The delay between her two Q hits is a visible tell for whether the second one is the big one — useful for deciding whether to convert grey health before or after it lands.",
+   "corrected": "Added to the level 2-3 spike as a read.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/camille.json (Q: \"doing significantly increased bonus damage if Camille delays a period of time between the two attacks\")"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Camille's Hookshot-into-wall-dash comes online — she can chain her E stun into a Q true-damage proc and disengage before you stack three Acquired Taste marks, making early all-ins on her extremely punishing if you misread her cooldowns.",
+   "after": "Camille's Hookshot comes online — but it needs a wall, so she only has it near terrain. She chains the E knockup into a Q true-damage proc and leaves before you reach three marks, and delaying between her two Q casts makes the second hit far bigger."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Camille's W true-damage cone with the outer-ring heal lets her sustain through your poke and shred a chunk of your max health, so avoid standing in the cone's outer edge or she will out-trade you for free.",
+   "after": "Tactical Sweep's outer half deals extra damage and heals her — the true damage is on her Q, not this — so stay out of the cone's far edge or she sustains straight through your poke for free."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "With two items Camille's Hextech Ultimatum isolates you and her Q true-damage lines up fast enough to chunk through your stacked grey health — respect the 1v1 threat and lean on Abyssal Voyage to teleport to fights where your peel and disruption matter more than raw dueling.",
+   "after": "With two items Camille's Hextech Ultimatum isolates you and her Q true damage lines up fast enough to chunk through your stacked grey health — she is untargetable through the R dash, so never spend Devour on it, and remember the arena anchors you in with her once it lands."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Stack An Acquired Taste to three with Tongue Lash pokes and empowered autos, then stun and Devour her when her Hookshot is on cooldown",
+   "after": "Stack An Acquired Taste to three with Tongue Lash pokes and empowered autos, then spend them on Devour while Hookshot is on cooldown"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Keep trades short in early levels to deny her W true-damage cone and force her to play around your stun rather than her disengage",
+   "after": "Fight her in the open where Hookshot has no wall to anchor to — without terrain nearby she has neither the engage nor the escape"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Build Heartsteel into Sunfire Aegis and let your Thick Skin grey-health conversion outlast her sustained damage in every mid-game skirmish",
+   "after": "Build Heartsteel into Sunfire Aegis with Grievous Wounds — Tactical Sweep heals her every 15s and that is what outlasts your grey health"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Stand in her W cone's outer ring where the true-damage heals her and maximizes per-trade health swings in her favour",
+   "after": "Catch you in Tactical Sweep's outer ring, where the extra damage also heals her and swings the trade her way"
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 4-5 remain her window — her W outer-ring true damage becomes a real chunk of your health bar and she can sustain off it simultaneously, so do not let her walk you into the cone. Your lane turns at first item: Heartsteel or Sunfire Aegis brings your grey-health pool to the point where a single Thick Skin activation mid-trade gives you a shield that can absorb her Q follow-up, and she no longer has the raw damage to end the trade on her terms. At level 6 Abyssal Voyage adds global repositioning threat, but your actual dueling power spike is the item, not the ultimate — use R to threaten roams and deny her from following your teleport, not as a primary escape tool.",
+   "after": "Levels 4-5 remain her window — Tactical Sweep's outer ring chunks you and heals her at the same time, so do not let her walk you into the cone, and bring Grievous Wounds because that heal is back every 15s. Your lane turns at first item: Heartsteel or Sunfire Aegis brings your grey-health pool to the point where a single Thick Skin activation mid-trade absorbs her Q follow-up, and she no longer has the raw damage to end the trade on her terms. At 6 your arrival is Devour, not a global — Abyssal Dive has been your blink since level 2, and the one thing it cannot do is carry you out of a Hextech Ultimatum, which anchors you to its arena."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "At first item and beyond this lane belongs to you: your Thick Skin shield activations, point-and-click stun into Devour, and near-unkillable frontline presence make it very hard for Camille to do anything meaningful in extended skirmishes or teamfights without her Hextech Ultimatum. Respect the ultimate, however — if she R's you in a sidelane 1v1 at two items and chains Q true-damage procs before you can convert grey health, she can still win the isolated duel. Play through teamfights where Devour removes her from the fight entirely, and use Abyssal Voyage to reposition across the map rather than split-pushing into her isolated-duel win condition.",
+   "after": "At first item and beyond this lane belongs to you: your Thick Skin shield activations, a point-and-click Devour at three stacks, and near-unkillable frontline presence make it very hard for Camille to do anything meaningful in extended skirmishes or teamfights without her Hextech Ultimatum. Respect the ultimate, however — she is untargetable through its dash, so a Devour thrown at the animation is simply wasted, and once it lands you are anchored inside the arena with her. Play through teamfights where Devour removes her entirely, and take your side waves off walls rather than split-pushing into her duel."
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "Your sustain, stun-Devour combo, and Thick Skin grey-health conversion let you bully her in any trade where Hookshot is on cooldown — stack three marks and punish her whenever she is not mobile.",
+   "after": "Your sustain, a Devour at three stacks, and Thick Skin grey-health conversion let you bully her in any trade where Hookshot is on cooldown — fight off walls and she has no way to leave."
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "Your stun-into-Devour removes her from any teamfight or skirmish she enters, and two-item Tahm Kench is near-unkillable in extended fights; only a clean isolated Hextech Ultimatum 1v1 at late stages is a real threat.",
+   "after": "Three stacks spent on Devour removes her from any teamfight she enters, and two-item Tahm Kench is near-unkillable in extended fights; only a clean isolated Hextech Ultimatum 1v1 at late stages is a real threat."
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Her true damage shreds your HP — build armor, Q-stun. Tahm Kench wins the Hookshot cooldown windows.",
+   "after": "Armour will not touch her Q true damage — fight her off walls, where Hookshot has no anchor."
+  },
+  {
+   "layer": "full",
+   "path": "winCon",
+   "before": "Build armor and Q-stun her. Track Hookshot before every commit and keep the wave on your side.",
+   "after": "Fight away from walls and eat her at 3 stacks. Hookshot needs terrain — deny it the anchor."
+  },
+  {
+   "layer": "full",
+   "path": "tradeGood",
+   "before": "Lick Camille to 3 stacks in short exchanges, Q-stun when his answer is down, and Devour the all-in under your wave.",
+   "after": "Lick Camille to 3 stacks in short exchanges, then spend them once — Devour her all-in under your own wave."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Lick Camille to 3 stacks in short exchanges, Q-stun when his answer is down, and Devour the all-in under your wave.",
+   "after": "Lick Camille to 3 stacks in short exchanges, then spend them once — Devour her all-in under your own wave."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Her engage/stun. W-dodge it. Only engage once it is down or baited.",
+   "after": "It needs a wall to anchor to. Only engage once it is down or baited."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Camille Hookshot: matchup-defining — Her engage/stun. W-dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+   "after": "- Camille Hookshot: matchup-defining — 16s at rank 1, and it needs a wall, so open ground disarms it. - Precision Protocol: 9s, part true damage. - Hextech Ultimatum: 140s. - Devour: 120s."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Lick Camille to 3 stacks in short exchanges, Q-stun when his answer is down, and Devour the all-in under your wave. Great trade: Camille wastes Hookshot — commit the full pattern immediately. Bad trade: Q-ing with zero stacks — no stun means you spat at him and donated the trade window.",
+   "after": "Good trade: Lick Camille to 3 stacks in short exchanges, then spend them once — Devour her all-in under your wave. Great trade: Camille wastes Hookshot — commit the full pattern immediately. Bad trade: Q-ing a target already on 3 stacks you meant to eat — the stun consumes all three and Devour greys out."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Q-stun at 3 stacks is your kill switch. Only take the trade when Camille's Hookshot is down.",
+   "after": "3 stacks is your kill switch — stun or eat, not both. Take the trade when Hookshot is down."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Devour deletes him from the fight — or you from his. Reassess every all-in at 6 — Camille's ultimate changes the math too.",
+   "after": "Devour deletes her, but she is untargetable through the R dash. Hextech Ultimatum anchors you in — reassess at 6."
+  }
+ ],
+ "notes": "REJECTED A FALSE INTERACTION. _missing-interactions.json contains, for this exact matchup: \"Camille's The Hextech Ultimatum (R) is a channel — your Tongue Lash (Q) cancels it outright.\" That is wrong. It comes from a derived \"channel\" flag on R in champ-data/_kits/camille.json. Camille's ultimate is a dash into an anchoring zone; Tongue Lash does not interrupt it. I wrote no edit implementing it. If other agents in this run are treating _missing-interactions.json as ground truth, this entry will produce advice that loses the fight it claims to win — worth checking whether any \"channel-interruptible\" rows have already been applied elsewhere.\n\nThe biggest genuine gap was Hookshot's terrain requirement. It is named ten times across the entry as the ability to respect, and never once as an ability that only exists next to a wall. For a HARD-rated matchup that is the main lever the Tahm Kench player has, and it also changes the wave-management answer, since where you hold the wave decides whether her E is available at all.\n\nfull.tldr contained a self-defeating instruction — \"Her true damage shreds your HP — build armor\". Armour does not reduce true damage. Fixed.\n\nCarried over from the rest of the slice: the \"stun into Devour\" combo is impossible (the Q stun consumes the three stacks Devour needs), and \"Abyssal Voyage\" is the removed pre-rework ultimate rather than the current W, Abyssal Dive."
+}

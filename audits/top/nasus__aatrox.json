@@ -1,0 +1,187 @@
+{
+  "ownerKey": "nasus",
+  "enemy": "aatrox",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet win rate 48.06% over 926 games matches MC_WR_TABLES.nasus.aatrox = 48.06. No elo-tier language present anywhere in either layer.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packets/nasus.json", "champ-data/content/nasus.js MC_WR_TABLES"]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "diff HARD / 7-10 with a 48.06% win rate is consistent, and the level chart (Skill, Aatrox x5, Nasus) matches a lane Nasus concedes early and reclaims on scaling. No chart-vs-data contradiction was flagged for this matchup.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packets/nasus.json levelChart + winRate"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The content layer never names a single Aatrox ability — it says 'W chain-pull', 'Q knockup chain', 'his passive heal', 'his R'. The packet flags this directly.",
+      "why": "Infernal Chains (W) is the ability that actually decides this lane: Nasus has no dash, so the pull is what converts a walk-up into a full Darkin Blade sequence. Naming it, and giving its real 825 range, turns vague advice into a positioning rule.",
+      "corrected": "Name Deathbringer Stance, The Darkin Blade, Infernal Chains, Umbral Dash and World Ender in early/mid/late/whys/spikes, and anchor the walk-up rule to Infernal Chains' 825 range.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/aatrox.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing anywhere notes that Deathbringer Stance scales off the target's maximum health while Fury of the Sands grants Nasus bonus health.",
+      "why": "Riot's own text: Deathbringer Stance deals 'bonus magic damage and heals him, based on the target's max health'; Fury of the Sands 'gains increased Health ... and gains bonus Armor and Magic Resistance'. Popping R therefore raises the number his passive hits you for, and the bonus MR on the same ultimate is what offsets it. Nasus players who build raw HP against Aatrox are feeding the passive.",
+      "corrected": "Stated in notes for the user rather than forced into a fixed-length string; the R interaction is genuine but too long to land inside the length band on any existing field without displacing a higher-value fact.",
+      "confidence": "Medium",
+      "sources": ["champ-data/_kits/aatrox.json P", "champ-data/_kits/nasus.json R"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "Packet defect: 'NO cooldown-sequencing advice anywhere'. sequencingCues = 0. Not one 'wait for X before you Y' line exists in either layer.",
+      "why": "Infernal Chains is 20/18/16/14/12s — by far the longest non-ultimate cooldown Aatrox has, and it is the entry point to his combo against a dashless champion. The Darkin Blade is 14s at rank 1. Those two numbers define exactly when Nasus is allowed to step up and stack.",
+      "corrected": "Added explicit sequencing: do not walk into stacking range until Infernal Chains has missed; that buys 20s at rank 1. Added The Darkin Blade's 14s rank-1 cooldown to the cooldown breakdown.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/aatrox.json W cooldown 20/18/16/14/12, Q cooldown 14/12/10/8/6"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "content.early says 'Wither isn't up until 3'. The full layer's phases[1] says 'Wither online' at Level 2. The two layers contradict each other.",
+      "why": "Wither is a normal basic ability available from level 2 if it is taken there, which is the standard order into a hard-engage laner like Aatrox. The content layer's claim is wrong as stated and contradicts the sibling layer.",
+      "corrected": "Rewrote the closing clause of content.early so it no longer asserts a level for Wither, replacing it with the Infernal Chains cooldown window — higher value and not self-contradictory.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json W", "champ-data/nasus.full.js phases[1]"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "tldr and winCon both promise 'anti-heal', but the Itemization block lists Doran's Shield, Trinity Force, Iceborn Gauntlet, Frozen Heart, Plated Steelcaps and Sheen — no Grievous Wounds source at all.",
+      "why": "_missing-interactions.json flags needs-antiheal for this exact pairing (Deathbringer Stance, Umbral Dash, World Ender). World Ender explicitly grants 'increased healing', so the Grievous Wounds timing that matters is before his level-6 spike. The guide currently tells the player to anti-heal and then never tells them what to buy.",
+      "corrected": "Added Bramble Vest ahead of his level-6 World Ender to the Itemization line, replacing the redundant Sheen sentence already covered by the Trinity Force entry.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/_missing-interactions.json nasus/aatrox needs-antiheal", "champ-data/_kits/aatrox.json R"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Two Do/Don't entries have descriptions that do not match their titles: dosFull[2] 'Farm Q stacks safely' is described as 'Aatrox wastes World Ender — commit the full pattern immediately', and dontsFull[1] 'Fight before you have stacks' is described as 'Burning your answer for tiny value leaves you naked for its full cooldown'.",
+      "why": "Both descriptions were clearly pasted from other slots. A player reading the card gets advice that contradicts the heading it sits under.",
+      "corrected": "Rewrote both descriptions to match their titles, using real numbers (Spirit Fire's flat 12s, Wither's 80 mana / 15s at rank 1).",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json Q/W/E"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing notes that Spirit Fire's cooldown is flat 12s at every rank while its mana cost climbs 60 to 100.",
+      "why": "Players max E into ranged matchups expecting a faster shove. It never gets faster — only more expensive. In a lane where Nasus is forced to stack from range this changes how the level-3-to-5 mana budget is spent.",
+      "corrected": "Added the flat 12s fact to phases[2].why and to the dosFull entry about safe stacking.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json E cooldown '12', cost 60/70/80/90/100"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Level 1 is a wash because we're both passive — he has no W chain-pull setup yet and I'm just soaking Siphoning Strike last-hits with Soul Eater lifesteal covering the chip. From level 2 it tilts to him fast: once his Q knockup chain and W are online he wins every extended trade and his passive heals back whatever I poke, so I do not contest the wave toe-to-toe. Eat the early CS, never stand in melee trading autos into his sweetspot Q, and just stack. Wither isn't up until 3, and even then it only peels a gank or punishes a hard overstep, not flips the lane.",
+      "after": "Level 1 is a wash because we're both passive — Infernal Chains isn't online yet and I'm just soaking Siphoning Strike last-hits with Soul Eater lifesteal covering the chip. From level 2 it tilts to him fast: once The Darkin Blade and Infernal Chains are up he wins every extended trade and Umbral Dash's passive heal refunds whatever I poke, so I do not contest the wave toe-to-toe. Eat the early CS and never stand inside 825 units of a live Infernal Chains — that pull is what starts every combo on a champion with no dash. Once it misses I get 20 seconds to stack."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 are his — I'm shoving or being chunked, hoarding stacks and playing not to die while his drain out-sustains anything I throw back. The danger is his W chain-pull into the full Q-Q-Q-R sequence; never get caught walking up where he can yank me into it. At 6 my Fury of the Sands lets me survive one committed all-in, but it does not win the duel outright against his R combat stats and heal — so I bait his R or chain-pull first, drop Wither on him mid-commit to gut his attack speed and kite, and live rather than greed the kill.",
+      "after": "Levels 4-5 are his — I'm shoving or being chunked, hoarding stacks and playing not to die while Umbral Dash's drain out-sustains anything I throw back. The danger is Infernal Chains into the full Darkin Blade sequence; never get caught walking up while that pull is off cooldown. At 6 my Fury of the Sands lets me survive one committed all-in, but it does not beat World Ender's healing amp outright — so I make him spend Infernal Chains first, drop Wither on him mid-commit to gut his attack speed and kite, and live rather than greed the kill."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "This is where I take it back. By 2+ items my Q stacks one-shot through his HP, Spirit Fire's armor shred eats his durability, and Wither shuts off his R combat-stat all-in so his drain can't keep pace with my lifesteal and stacked damage. He spent the whole early game beating me but he can't out-scale a stacked Nasus the way a true-damage carry could — once I'm here a sustained fight is mine. So I survive his lane, refuse to int into his chain-pull combos before items, and cash the game out as a splitpush monster he simply can't duel anymore.",
+      "after": "This is where I take it back. By 2+ items my Q stacks one-shot through his HP, Spirit Fire's armor shred eats his durability, and Wither strips the Move Speed World Ender hands him so his drain can't keep pace with my lifesteal and stacked damage. He spent the whole early game beating me but he can't out-scale a stacked Nasus the way a true-damage carry could — once I'm here a sustained fight is mine so long as Grievous Wounds is on him. So I survive his lane, refuse to int into Infernal Chains before items, and cash out as a splitpush monster he can't duel."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Level 1 is even — he has no W chain-pull or Q chain online yet and I just soak Siphoning Strike farm while Soul Eater heals the chip.",
+      "after": "Level 1 is even — Infernal Chains and The Darkin Blade aren't online yet and I just soak Siphoning Strike farm while Soul Eater heals the chip."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "His Q knockup chain and W come online and his passive heal wins every extended trade — I concede the wave and stack from range.",
+      "after": "The Darkin Blade and Infernal Chains land and Umbral Dash's heal wins every extended trade — I concede the wave and stack from range."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Wither's up but only peels a gank or punishes a hard overstep; he still out-drains my pokes and owns any committed trade.",
+      "after": "Wither only peels a gank or punishes a hard overstep; step up to stack once Infernal Chains misses — that is 20s at rank 1."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "His R combat-stat all-in is a real kill threat and my Fury of the Sands only lets me survive one commit, not win the duel.",
+      "after": "World Ender's healing amp makes his all-in a real kill threat; Fury of the Sands only lets me survive one commit, not win it."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "By 2+ items stacked Q plus Spirit Fire shred and Wither on his R all-in let me out-grind his drain — the sustained fight is finally mine.",
+      "after": "By 2+ items stacked Q plus Spirit Fire shred and Wither on World Ender let me out-grind his drain — with anti-heal the long fight is mine."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Aatrox completes his Q-Q-Q knockup chain plus W chain-pull and starts winning every extended trade off his passive heal — your worst stretch before Wither.",
+      "after": "Aatrox completes his Darkin Blade chain plus Infernal Chains and starts winning every extended trade off Umbral Dash's heal — your worst stretch before items."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "His R combat-stat all-in is a real kill threat now, and your Fury of the Sands only lets you survive one committed dive rather than win it outright.",
+      "after": "World Ender's healing amp makes his all-in a real kill threat now, and your Fury of the Sands only lets you survive one committed dive, not win it."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land sweetspot Q knockups and W chain-pull to win extended trades off his passive heal",
+      "after": "Land sweetspot Darkin Blade knockups and Infernal Chains to win trades off Umbral Dash"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E lets you stack safely from range when Aatrox zones you. Spirit Fire the wave under tower; every stack denied is his only real win condition.",
+      "after": "Spirit Fire is a flat 12s at every rank — stack from range when Aatrox zones you. Walk up only once Infernal Chains has missed; that is 20s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Aatrox World Ender: matchup-defining — His all-in spike. Wither him and survive it. Track it before every engage. - Aatrox The Darkin Blade: Three swings; the outer-edge sweetspot knocks up and deals heavy damage. Dodge or sidestep it.",
+      "after": "- Aatrox World Ender: matchup-defining — his all-in spike, and it amplifies his healing. Wither him and survive it. - Aatrox Infernal Chains: 20s at rank 1, 825 range — the pull that starts every combo. Stack only after it misses."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Shield + Health Potion. Core: Trinity Force  (Iceborn Gauntlet if you need the slow + armor), then Frozen Heart; boots Plated Steelcaps. First back: Sheen (≈900g) — every Q after this hits twice as hard.",
+      "after": "Start Doran's Shield + Health Potion. First back: Sheen (≈900g) — every Q after this hits twice as hard. Core: Trinity Force (Iceborn Gauntlet if you need slow + armor), then Frozen Heart; boots Steelcaps. Bramble Vest before his 6."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Aatrox wastes World Ender — commit the full pattern immediately.",
+      "after": "Spirit Fire is a flat 12s at every rank — shove and stack from range."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Wither costs 80 mana and 15s at rank 1 — spend it early and you have no peel."
+    }
+  ],
+  "notes": "Deliberate omission: Aatrox's Umbral-Dash-during-The-Darkin-Blade repositioning (shifting the sweetspot mid-cast) is real high-elo tech and would be the single best addition to point 13, but animationCancels is null in aatrox.json and the brief forbids asserting it from the kit file. It is unverified here, not disproven — worth a wiki pass in a later run. Same for whether Wither's slow is reduced by tenacity (tenacityAffected is null for Nasus). Second item for a later run: Deathbringer Stance deals bonus magic damage scaled to the TARGET's max health, while Fury of the Sands grants Nasus bonus health — so popping R raises the number Aatrox's passive hits you for, offset by R's own bonus MR. Both halves are stated in Riot's text, so the composition is sound, but it needs a field with enough room to state it without dropping something better; every candidate string in this matchup was already at capacity. No WKM_LINES problems seen for this pairing. Note for the orchestrator: the scratchpad directory is shared across the slice agents and my first dump file was overwritten mid-run by a sibling agent writing the same filename; I moved to scratchpad/slice1_nasus/ to isolate. Nothing in champ-data was touched."
+}

@@ -1,0 +1,152 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "galio",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "52.56% over 567 games, matching MC_WR_TABLES. No elo-tier language present.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packets/nasus.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The content layer calls Hero's Entrance a GLOBAL ultimate in five separate places: whys[4], mid, late, spikes[1].text and wants.foe[2]. Galio's ult is not global.",
+   "why": "Hero's Entrance has range 4000/4750/5500 in the kit file and carries no global flag — its flags are knockup, hardCC, shield and zone. For contrast, Gangplank's Cannon Barrage in the same kit library has range 30000 and the global flag explicitly set, which is what a genuinely global ability looks like in this data. Two consequences follow, and both change how Nasus plays the game. First, at rank 1 Galio simply cannot reach large parts of the map from top lane, so 'he can always leave' is false. Second, and more important: Riot's text is 'Galio designates an ALLY's position as his landing spot.' He cannot ult to a place — he ults to a teammate. A Nasus splitpushing a side lane where no enemy is standing is not reachable by this ability at all, which is the exact opposite of what late currently warns about.",
+   "corrected": "Hero's Entrance is long-range, not global, and it must land on an ally. Split where none of them are and it cannot touch you.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/galio.json (R range 4000/4750/5500, flags knockup/hardCC/shield/zone, description)",
+    "champ-data/_kits/gangplank.json (R range 30000 with global flag, for contrast)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Both layers treat Shield of Durand as an instant taunt — 'his W taunt blunts your trades', 'Use W to win short trades'. It is a charged ability and neither layer says so.",
+   "why": "Riot's text: 'Galio charges a defensive stance, moving slowly. Upon releasing the charge, Galio will taunt and damage nearby enemies.' The taunt lands on release, not on cast, and while charging Galio is slowed. That gives Nasus a visible window with a physical answer: Wither during the charge stacks a move-speed slow on top of the one W already imposes, so he cannot close the distance to taunt anything. Describing it as an instant taunt removes the only counterplay Nasus has to it and makes Wither look like a post-fight tool rather than a pre-emptive one.",
+   "corrected": "W is charged — the taunt fires on release and he crawls while charging. Wither him mid-charge and he never reaches you.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/galio.json (W Shield of Durand description)",
+    "champ-data/_kits/nasus.json (W Wither, slow)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "Packet reports sequencingCues: 0. breakdown.cooldowns names Justice Punch as matchup-defining and gives no number for it or anything else.",
+   "why": "Justice Punch is 11/10/9/8/7s and Winds of War is also 11/10/9/8/7s — both short, both on the same clock. That is the useful fact and it points the opposite way from the usual advice: with a 7-second engage at rank 5, there is no long punish window to wait for, so 'engage only on its cooldown' is not a plan a Nasus can actually execute. What Nasus can do is note that Wither is 15/14/13/12/11s and therefore SLOWER than Justice Punch at every rank — meaning W has to be spent on the engage that matters, not thrown out to poke.",
+   "corrected": "Justice Punch is 11s at rank 1 and only 7s maxed, faster than your 15s Wither at every rank — so save W for his commit, never open with it.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/galio.json (E cooldown 11/10/9/8/7)",
+    "champ-data/_kits/nasus.json (W cooldown 15/14/13/12/11)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Justice Punch is described as a 'dash + knockup engage'. Neither layer mentions that Galio steps backwards before charging.",
+   "why": "Riot's text: 'Galio will briefly step back and charge, knocking up the first enemy champion he encounters.' The wind-up moves him away from you first, which means the ability reaches further than the gap you are currently looking at, and backing off by a small amount during the wind-up does not take you out of range. For a champion with no dash and no escape, misjudging that distance is how Nasus eats the knockup.",
+   "corrected": "He steps back before he charges, so the punch covers more ground than the gap suggests — small steps back do not save you.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/galio.json (E Justice Punch description)"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[4].why is the cross-matchup boilerplate 'Fury of the Sands flips dives ... First real fight you're allowed to take', while content whys[4] and spikes[1] both call level 6 Galio's hardest swing in the lane.",
+   "why": "The two layers say opposite things about the same stage. Level 6 gives Galio a taunt-plus-ult combination and the option to leave lane entirely; it gives Nasus survivability. Calling it Nasus's first allowed fight contradicts the content layer and, in a lane the same entry describes as pure concede at 4-5, would send the player into a taunt.",
+   "corrected": "Rewrite as his swing, and point Wither at the W charge rather than at a post-fight escape.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/galio.json",
+    "champ-data/content/nasus.js (whys[4], spikes[1])"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The layers carry different charts: full sides [Galio, Galio, Galio, Galio, Skill, Nasus, Nasus] against content win [Skill, Galio, Galio, Galio, Galio, Galio, Nasus]. They disagree at stages 0, 4 and 5.",
+   "why": "No side edit proposed. Unlike Darius and Fiora, no full-layer why text here contradicts its own side field, so there is no internally-verifiable error — only two editorial opinions about when the lane turns. The packet's 'level chart contradicts data' defect for this matchup is measuring the content array against the win rate, and I did not act on that framing for the reason set out in the Darius proposal.",
+   "corrected": "No edit. Flagged for the owner to reconcile once it is settled which array the front end reads.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/nasus.full.js",
+    "champ-data/content/nasus.js"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "At 6 his W taunt and global R let him win a short trade or leave to snowball off your weak lane.",
+   "after": "At 6 his charged W taunt wins short trades, and his ult can jump to any ally in a 4000-unit radius."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Galio's W taunt (Shield of Durand) plus his global R let him roam or set up a gank — his hardest swing in this lane.",
+   "after": "Shield of Durand plus Hero's Entrance let him roam — but the ult lands on an ALLY, not a place, so it needs one down there."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Press global R to roam mid/bot and snowball off your weak early lane",
+   "after": "Drop Hero's Entrance on a teammate mid or bot to snowball off your lane"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Use W (Shield of Durand) taunt to win short trades and blunt your Q",
+   "after": "Finish a Shield of Durand charge on you so the taunt lands and blunts Q"
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "This is Galio's window, not yours. At 6 his W taunt (Shield of Durand) blunts your trades and his global R lets him leave lane to snowball someone else — ward and don't get baited into a 2v1. Keep farming Q; the moment you have Wither up you can punish a careless all-in by slowing his attack speed and movement so he can't taunt-trade and walk away, but otherwise concede the lane and stack.",
+   "after": "This is Galio's window, not yours. At 6 Shield of Durand blunts your trades and Hero's Entrance drops him onto any ally within 4000 units — ward and don't get baited into a 2v1. Keep farming Q. His W is a CHARGE: he crawls while holding it and the taunt only fires on release, so Wither him mid-charge and he never closes. Otherwise concede the lane and stack."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "Now the lane flips to you. His stacked magic resist is built to wall AP — your Siphoning Strike is physical, so his MR does nothing against your one-shot Q. With Wither locking his movement and attack speed, Fury of the Sands (R) for the bonus HP and Q range, plus enough stacks, you grind him out and shred his tank HP. Force the splitpush 1v1 and don't let his global R turn it into a 2v1.",
+   "after": "Now the lane flips to you. His stacked magic resist is built to wall AP — your Siphoning Strike is physical, so his MR does nothing against your one-shot Q. With Wither locking his movement and attack speed, Fury of the Sands (R) for the bonus HP and Q range, plus enough stacks, you grind him out. Hero's Entrance needs an ALLY to land on, so split where none of them are and he cannot answer."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Galio Justice Punch: matchup-defining — His dash + knockup engage. Punish him when it's down. Track it before every engage.",
+   "after": "- Galio Justice Punch: matchup-defining — 11s at rank 1, 7s maxed, so it beats your 15s Wither. He steps back first; it reaches far."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His dash + knockup engage. Punish him when it's down. Only engage once it is down or baited.",
+   "after": "He steps back before charging, so the knockup reaches much further than the gap looks."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Galio, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "His swing, not yours: taunt plus ult. But W is a charge — he crawls holding it and only taunts on release, so Wither him mid-charge."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+   "after": "His ult lands on an ally, so a lone splitpush is the one place it cannot reach."
+  }
+ ],
+ "notes": "HEADLINE ERROR, and the most consequential thing I found in the whole slice: the content layer calls Galio's ultimate GLOBAL in five separate strings. It is not. Hero's Entrance has range 4000/4750/5500 and carries no global flag in the kit library, and it must be cast onto an ALLY rather than a location. The practical damage is that content late explicitly warns 'don't let his global R turn it into a 2v1' when splitpushing — advice that is backwards, because a splitpush away from Galio's team is precisely where that ultimate cannot follow. I have corrected all five instances.\n\nWorth checking whether the same 'global R' error appears in Galio entries under other owners and in champ-data/content/mid/galio.js and sup/galio.js — five instances in one matchup suggests a template or a generation pass rather than five independent typos, and I only had this one matchup in scope.\n\nSecond error, repeated across both layers: Shield of Durand is described as an instant taunt. It is a charged ability that slows Galio while held and only taunts on release. That is the difference between Wither being a reactive escape tool and a pre-emptive denial tool in this matchup, so I put the charge mechanic into three strings.\n\nOn cooldowns, note that the standard advice template ('Engage only on Justice Punch's cooldown', which also appears in the loading string and enemyWin) does not really work here: Justice Punch is 7s at rank 5, so there is no meaningful window to wait for. I rewrote breakdown.cooldowns around the fact that Wither is SLOWER than his engage at every rank, which is the actionable version. The loading and enemyWin strings still carry the old framing; they are writable and could be brought in line in a follow-up.\n\nOne nuance I did NOT change because it is defensible as written: the content layer says his MR 'does nothing' against Nasus. True of Siphoning Strike, which is physical, but Spirit Fire and Fury of the Sands both deal magic damage, so his MR is not entirely dead weight. The strings are talking specifically about the Q one-shot, so I left them."
+}

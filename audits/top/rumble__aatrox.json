@@ -1,0 +1,141 @@
+{
+  "ownerKey": "rumble",
+  "enemy": "aatrox",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer calls this FAVOURED at 4/10 and gives Rumble six of seven phases (Rumble, Rumble, Rumble, Rumble, Skill, Rumble, Rumble). The content layer gives Aatrox levels 3, 4-5, 6 and first item. Both cannot be right.",
+      "why": "The headline number is 50.62% over 1780 games — an even lane, not a favoured one. The content-layer chart (Rumble owns 1-2, Aatrox owns 3 through first item, even late) is the version consistent with that number and with the kits: Rumble has the stronger level 1-2 cone, Aatrox spikes when The Darkin Blade and Infernal Chains are both online.",
+      "corrected": "diff should read EVEN and diffRating around 5/10; phases[2], phases[3] and phases[5] should read Aatrox. No edit is proposed for these: 'FAVOURED' to 'EVEN' and 'Skill' to 'Aatrox' both fall outside the +/-10% length band, so the applier would reject them. They need a manual or tool-side fix.",
+      "confidence": "High",
+      "sources": [
+        "packets/rumble.json (winRate 50.62, games 1780)",
+        "champ-data/content/rumble.js win[]",
+        "champ-data/rumble.full.js phases[].side"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two problems. (a) The content layer never names a single Aatrox ability — it writes 'Q3 sweetspot', 'W chain-pull' and 'R combat-stat buff' throughout. (b) It repeatedly claims Scrap Shield blocks the Q3 knock-up: 'prioritize W to block the knock-up', 'W-shielding the Q3 knock-up', \"Rumble's W shield must block the Q3 knock-up\".",
+      "why": "Scrap Shield is a damage-absorbing shield plus a move-speed burst (champ-data/_kits/rumble.json W). A shield does not prevent a knock-up — Rumble still gets displaced and still eats the follow-up. Telling a player the shield answers the knock-up makes them stand in the sweetspot ring and take the full combo. The real answer is the move-speed component: leave the ring before the third swing lands.",
+      "corrected": "Named The Darkin Blade, Infernal Chains, Umbral Dash, Deathbringer Stance and World Ender in the content layer, and rewrote the shield claim to 'Scrap Shield absorbs the damage but never the knock-up, so walk out of the sweetspot ring instead.'",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/rumble.json (W Scrap Shield)",
+        "champ-data/_kits/aatrox.json (Q The Darkin Blade, W Infernal Chains, E Umbral Dash, P Deathbringer Stance, R World Ender)"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "Neither layer states Aatrox's most punishable cooldown or how long the window actually is. breakdown.cooldowns only says 'Aatrox The Darkin Blade: matchup-defining — Sweetspots knock up. Sidestep them.'",
+      "why": "Infernal Chains is 20/18/16/14/12 seconds. At rank 1 that is a 20-second window in which Aatrox cannot drag an immobile Rumble back into the sweetspot ring — the single largest thing that decides whether his combo lands. The Darkin Blade at 14 seconds rank 1 is the shorter, less decisive one. Rumble has no dash, so 'he cannot reposition me' is worth more than 'his damage is down'.",
+      "corrected": "breakdown.cooldowns now leads with Infernal Chains at 20s rank 1 as the window, and the content mid text says a missed Infernal Chains is the actual opening.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aatrox.json (W cooldown 20/18/16/14/12, Q 14/12/10/8/6)"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "The content layer never mentions Grievous Wounds. It describes his sustain four separate times ('passive heals', 'drain-sustain', 'out-heal your sustained Flamespitter') without ever naming the counter.",
+      "why": "Aatrox heals from Deathbringer Stance on hit, passively from Umbral Dash whenever he damages a champion, and World Ender increases that healing. Flamespitter is chip damage over three seconds — exactly the damage profile his healing is built to erase. The full layer already carries anti-heal in its itemization and late text; the content layer, which is what a player reads in lane, does not.",
+      "corrected": "spikes[1].text now says to have Executioner's up before he hits 6.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/aatrox.json (P, E, R heal flags)",
+        "champ-data/_kits/_missing-interactions.json (rumble vs aatrox: needs-antiheal)"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "The packet flags 'Use Flamespitter' in the mid text as a probable wrong ability name (distance 4).",
+      "why": "Flamespitter is the correct name of Rumble's Q per champ-data/_kits/rumble.json. This is a false positive from the near-miss detector matching a Rumble ability against Aatrox's ability list.",
+      "corrected": "No change needed on that string.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/rumble.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Land double Electro-Harpoon to slow him out of his Q3 sweetspot window and punish missed dashes",
+      "after": "Land double Electro-Harpoon to shred his MR and drag him off The Darkin Blade's sweetspot ring"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Survive the Levels 3-6 Aatrox power window by W-shielding the Q3 knock-up and keeping trades short, then swing teamfights with Equalizer",
+      "after": "Survive Levels 3-6 with Scrap Shield's speed burst to leave the sweetspot ring, keep trades short, then swing teamfights with The Equalizer"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land Q3 sweetspot into W chain-pull to delete your W shield before you can disengage with harpoon slow",
+      "after": "Land The Darkin Blade's third sweetspot into Infernal Chains and drag you back before your harpoon slow lands"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Use R combat-stat buff at Level 6 to out-heal your sustained Flamespitter and turn every all-in in his favour",
+      "after": "Pop World Ender at Level 6 to out-heal your sustained Flamespitter and fear your own minions away from you"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Aatrox gets his full kit — if he lands Q3 sweetspot and W-chains you before your W shield is up, you lose the all-in clean.",
+      "after": "Aatrox gets his full kit — land The Darkin Blade's third sweetspot into Infernal Chains and the all-in is his, shield or not."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Aatrox's R combat-stat buff turns every Flamespitter trade into a drain-brawl he is built to win — avoid prolonged trades post-6 unless you have a big Heat lead.",
+      "after": "World Ender turns every Flamespitter trade into a drain-brawl he is built to win — get Executioner's up before 6 and never brawl post-R without a Heat lead."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Aatrox's full Q1-Q2-Q3 sweetspot chain plus W chain-pull comes online and his passive heal on hit makes sustained trades overwhelmingly his — Rumble's W shield must block the Q3 knock-up or the combo is lethal.",
+      "after": "The Darkin Blade's three-swing chain and Infernal Chains come online and Deathbringer Stance heals him on hit — Scrap Shield absorbs the damage but never the knock-up, so walk out of the sweetspot ring instead."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "At Level 1 your Flamespitter pressures him off last-hits, but Aatrox's Level 1 is not weak enough to punish hard — auto-Q-auto for chip and back off before he lands the first Q sweetspot. At Level 2 your Q-into-double-E slow combo is real but he now has E to close; use the harpoons to prevent him dashing through you and completing Q3, not to start aggression. By Level 3 he has his full kit and this is where the matchup tilts his way — his Q3 sweetspot into W chain-pull combo bursts you faster than your W shield can absorb it, so prioritize W to block the knock-up, slow him with E before Q3 lands, and keep Flamespitter trading short rather than standing in brawl range.",
+      "after": "At Level 1 your Flamespitter pressures him off last-hits, but Aatrox's Level 1 is not weak enough to punish hard — auto-Q-auto for chip and back off before the first sweetspot lands. At Level 2 your Q-into-double-E slow combo is real but Umbral Dash now closes the gap; use the harpoons to stop him dashing through you into the third swing, not to start aggression. By Level 3 he has his full kit and the matchup tilts his way — the third sweetspot into Infernal Chains bursts you faster than Scrap Shield absorbs, and the shield does not stop the knock-up, so use its speed burst to leave the ring, harpoon him before the third swing, and keep Flamespitter trading short."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 are his clearest window and you have to respect it: Aatrox's Q ranks make the sweetspot chunk enormous, his passive heal on every Q hit means sustained trades go his way, and your only answer is to never give him Q3. Use Flamespitter to chip from just outside his Q1 arc, throw one harpoon the moment he dashes in to delay Q2, and use your W movement speed to exit the kill zone before Q3 can land. At Level 6 his R combat-stat buff makes him even harder to kill in the window — do not fight into a post-R Aatrox; instead save Equalizer to zone him off the kill or use it cross-map on a skirmish where your team can follow.",
+      "after": "Levels 4-5 are his clearest window: ranks in The Darkin Blade make the third sweetspot enormous and Deathbringer Stance heals him off every landed swing, so the whole lane is denying that third cast. Use Flamespitter to chip from outside the first swing's arc, harpoon him the instant Umbral Dash brings him in so the second swing comes late, and use Scrap Shield's speed burst — not its shield — to leave the ring before the third lands. A missed Infernal Chains is your real opening: it is down 20 seconds at rank 1 and he cannot drag you back without it. At Level 6 World Ender out-heals your chip, so spend Equalizer zoning him off the kill or fire it cross-map where your team can follow."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "The Equalizer cuts lanes and teamfights in half — aim it across the path, not on heads. Reassess every all-in at 6 — Aatrox's ultimate changes the math too.",
+      "after": "The Equalizer cuts lanes and teamfights in half — aim it across the path, not on heads. After 6, World Ender's healing and minion fear flip any all-in you start."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Aatrox The Darkin Blade: matchup-defining — Sweetspots knock up. Sidestep them. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Aatrox Infernal Chains: 20s at rank 1 — a miss is your window, he cannot drag you back without it. - The Darkin Blade: the third sweetspot knocks up, sidestep it. - Your ultimate: kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Aatrox's favourite window — refuse it and half his win condition is gone.",
+      "after": "Scrap Shield eats the damage, never the knock-up — walk out of the ring instead."
+    }
+  ],
+  "notes": "Full-layer level chart contradicts the content-layer chart and the 50.62% win rate (see audit point 2); diff 'FAVOURED' -> 'EVEN' and phases[4].side 'Skill' -> 'Aatrox' cannot be expressed inside the +/-10% length band, so they are reported rather than proposed. Also note champ-data/_kits/rumble.json tags Scrap Shield with 'knockup' and 'terrain' flags — both are derived false positives (the Riot text is a shield plus a move-speed burst, nothing else), and The Equalizer's 'terrain' flag is likewise wrong: it is a damaging slow zone, not impassable terrain. I have not written anything that relies on those three flags, and other slices should not either."
+}

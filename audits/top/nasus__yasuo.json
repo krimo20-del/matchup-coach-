@@ -1,0 +1,142 @@
+{
+  "ownerKey": "nasus",
+  "enemy": "yasuo",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer states in six separate places that Wind Wall blocks Spirit Fire — \"Windwalls your only ranged tool, Spirit Fire\", \"his Windwall eats your Spirit Fire, so don't waste E into a wall\", \"the wall blanks your Spirit Fire\", \"Windwalls your Spirit Fire\", \"Windwall blanks your E\", \"Windwall your Spirit Fire poke\".",
+      "why": "Wind Wall blocks projectiles. Spirit Fire is cast at a location and creates a lingering zone — it carries the zone flag and no projectile flag, and Nasus's kitFlags contain no projectile entry at all, meaning nothing in his kit can be walled. This is the most damaging error in the matchup: Nasus is told to withhold his only ranged tool, his waveclear, his safe stacking method and his armor shred, in a lane he already wins 55.62% over 1370 games. The full layer already has this right (\"Blocks projectiles — not your melee. Trade through it.\"), so the same page currently contradicts itself.",
+      "corrected": "Wind Wall cannot touch Spirit Fire. It is a ground zone, not a projectile — keep casting it through the wall for free chip and armor shred.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json — E flags = {zone}, kitFlags has no projectile entry", "champ-data/_kits/yasuo.json — W \"blocks all enemy projectiles\", flag blocksProjectiles"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Last Breath is repeatedly called \"his R knockup\" — \"survive his R knockup\", \"before his R knockup can flip the fight\", \"before his R knockup matters\".",
+      "why": "Last Breath does not knock up. Riot's text: \"Blinks to an Airborne enemy champion... holding all Airborne enemies in the area in the air.\" It requires a target that is already airborne. In a 1v1 the only thing that can put Nasus airborne is the whirlwind Steel Tempest fires at 2 stacks of Gathering Storm. That inverts the counterplay completely: the answer is not to tank the ultimate with Fury of the Sands, it is to not eat the two-stack tornado, in which case the ultimate cannot be cast at all.",
+      "corrected": "Last Breath needs an airborne target. Dodge the two-stack Steel Tempest whirlwind and his ultimate never starts in a 1v1.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/yasuo.json — R and Q descriptions, kitFlags.knockup = [\"Q\",\"R\"]"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing mentions that Sweeping Blade cannot be re-cast on the same enemy for a few seconds.",
+      "why": "Riot's text says so explicitly. It means Yasuo's mobility in a duel is rented from the minion wave, not owned — with no fresh dash target he has one dash on Nasus and then must walk. For a champion whose entire plan is to hold a Withered Yasuo in place, knowing that fighting away from the wave removes his second dash is directly actionable and appears nowhere.",
+      "corrected": "Sweeping Blade cannot re-target the same enemy for a few seconds — fight him away from the wave and he gets one dash, then walks.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/yasuo.json — E description"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "breakdown.cooldowns names Wind Wall as matchup-defining but gives no number, and the whole matchup contains no concrete cooldown.",
+      "why": "Wind Wall is 25/23/21/19/17 — a 25 second window at rank 1, one of the longest non-ultimate cooldowns in the game. It is worth a number precisely because, once the Spirit Fire error above is fixed, Wind Wall barely matters to Nasus at all and the reader needs to be told to stop planning around it.",
+      "corrected": "Wind Wall is 25s at rank 1 and blocks projectiles only — Nasus has none, so it changes nothing in the 1v1.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/yasuo.json — W cooldown \"25/23/21/19/17\""]
+    },
+    {
+      "point": 3,
+      "status": "missing",
+      "whatIsWrong": "The late-game section explains Yasuo reclaiming the matchup purely through crit DPS, with no mention of Last Breath's armor penetration.",
+      "why": "Riot's text: \"For a moderate time afterwards, Yasuo's critical strikes gain significant Bonus Armor Penetration.\" That is the actual mechanical reason a late Yasuo cuts through a Nasus who has been stacking armour and Frozen Heart, and it is the argument for why the recommended armour-heavy build answers him less than the reader would assume. Last Breath is also 70/50/30 — only 30 seconds at rank 3.",
+      "corrected": "Last Breath grants bonus armor penetration on his crits afterwards, so armour alone answers a fed Yasuo less than it looks. It is 30s at rank 3.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/yasuo.json — R description and cooldown \"70/50/30\""]
+    },
+    {
+      "point": 1,
+      "status": "needs-correction",
+      "whatIsWrong": "full.diff is \"EVEN\" and diffRating \"6/10\" for a lane Nasus wins 55.62% over 1370 games.",
+      "why": "That is one of the larger samples and one of the clearer margins in the Nasus dataset, and it is not an even matchup. I have not proposed an edit because I do not know the permitted enum values for the diff field and guessing one risks writing a value the site cannot render — and the ±10% band would in any case only admit another four-character token.",
+      "corrected": "diff should reflect a Nasus-favoured lane rather than EVEN; needs whatever the site's own vocabulary for that is.",
+      "confidence": "Medium",
+      "sources": ["packet winRate 55.62 / 1370 games", "champ-data/nasus.full.js diff, diffRating"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Yasuo dashes through minions to E-Q poke and Windwalls your only ranged tool, Spirit Fire — concede and just stack Q.",
+      "after": "Yasuo dashes through minions for Sweeping Blade poke. Wind Wall cannot touch Spirit Fire — that is a zone, not a projectile."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Fury of the Sands plus Wither lets you survive his R knockup and Q him to death in the slow before he resets flow.",
+      "after": "Last Breath needs an airborne target — dodge the two-stack Steel Tempest whirlwind and his ultimate cannot start."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Yasuo owns the first two levels — he dashes through the minion wave to E-Q poke you and his Windwall eats your Spirit Fire, so don't waste E into a wall, just farm Q stacks off the back of the wave and accept the chip. Your Soul Eater lifesteal heals most of his poke anyway. At level 3 the lane flips: Wither slows his move and attack speed, killing the crit autos that are his entire damage and stopping his dash-stacking flow — land it and you win any trade he tries.",
+      "after": "Yasuo owns the first two levels — he dashes through the minion wave for Sweeping Blade into Steel Tempest poke. But Wind Wall does not eat Spirit Fire: it blocks projectiles, and Spirit Fire is a ground zone, so keep casting it through the wall for free chip and armor shred. Soul Eater heals most of his poke anyway. At level 3 the lane flips: Wither slows his move and attack speed, killing the crit autos that are his entire damage."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "This is your window. With Wither up, every time Yasuo flow-shields in to dash on you, you slow him to a crawl and grind him out with stacked Q and lifesteal — he's a squishy who can't trade into a Withered juggernaut. At 6, Fury of the Sands gives you the bonus HP and Q range to win a committed all-in; bait his E-dash, Wither, ult, and Q him before his R knockup can flip the fight. With your first Sheen/Iceborn component your empowered Q one-shots him in a slow.",
+      "after": "This is your window. With Wither up, every time Yasuo dashes on you, you slow him to a crawl and grind him out with stacked Q and lifesteal. Sweeping Blade cannot re-cast on the same target for a few seconds, so fight him away from the wave and he gets one dash, then walks. At 6, bait the dash, Wither, ult, and kill him before a two-stack Steel Tempest can knock you up for Last Breath. Your first Sheen component one-shots him in a slow."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Once Yasuo hits full crit with Windwall, he reclaims the matchup — his sustained DPS shreds your fat HP bar faster than lifesteal answers, and the wall blanks your Spirit Fire and any team poke. Don't 1v1 him in the side lane late; his mobility and R off a teammate's knockup punish you. Win the game on your mid-game lead: take towers and stack so heavy that your Q burst still bypasses his durability, and let your team peel his flow while you front-line.",
+      "after": "Once Yasuo hits full crit he reclaims the matchup — sustained DPS shreds your HP bar faster than lifesteal answers, and Last Breath leaves his crits with bonus armor penetration, so stacking armour answers him less than it looks. Wind Wall still cannot block Spirit Fire, though it does blank your team's poke. Don't 1v1 him late; his mobility and R off a teammate's knockup punish you. Win on your mid-game lead: take towers and front-line."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Yasuo dashes through the wave to E-Q poke and Windwalls your Spirit Fire, so eat a little and just stack Q on the back line.",
+      "after": "Yasuo dashes through the wave for Sweeping Blade poke, but Wind Wall blocks projectiles and Spirit Fire is a zone — keep casting it."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Fury of the Sands plus Wither: if he flow-shields in for a duel, ult, Wither, and Q him down before his R knockup matters.",
+      "after": "Fury of the Sands plus Wither: ult, Wither, Q him down. Last Breath only fires if a two-stack Steel Tempest lands first."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Full-crit Yasuo with Windwall blanks your E and out-DPS-trades you — his window, group with your team and don't 1v1.",
+      "after": "Full-crit Yasuo out-DPS-trades you and Last Breath's armor pen follows — his window, group up and never 1v1 him."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Windwall your Spirit Fire poke and any skillshot the moment you E to stack",
+      "after": "Wind Wall your team's projectiles — it cannot stop Spirit Fire's ground zone"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Yasuo Wind Wall: matchup-defining — Blocks projectiles — not your melee. Trade through it. Track it before every engage.",
+      "after": "- Wind Wall: 25s at rank 1, and it blocks projectiles only. Nasus has none, so neither your Q nor Spirit Fire cares."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Yasuo's Wind Wall: Blocks projectiles — not your melee. Trade through it. When it is down — Wither + Q him.",
+      "after": "Wind Wall blocks projectiles; Spirit Fire is a ground zone, so cast it through the wall. Last Breath needs a knockup."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Yasuo wastes Wind Wall — commit the full pattern immediately.",
+      "after": "Sweeping Blade needs a fresh target — fight away from the wave."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "The two-stack Steel Tempest whirlwind is the only thing that starts his R."
+    }
+  ],
+  "notes": "This is the most consequential entry in my slice. The content layer told Nasus players in six places that Wind Wall blocks Spirit Fire, which is false — Nasus has no projectile in his kit, so nothing he does can be walled — and the full layer on the same page already said the opposite. Anyone following the content advice was withholding their waveclear, their safe stacking tool and their armor shred for no reason in a 55.62% lane. Second: Last Breath was consistently described as the knockup when it in fact requires one, which inverts the counterplay from 'survive his ult' to 'do not eat the two-stack Steel Tempest whirlwind, and there is no ult'. I flagged but did not edit full.diff = EVEN for a 55.62% / 1370-game lane, because I do not know the field's permitted values. WKM_LINES not checked for this matchup."
+}

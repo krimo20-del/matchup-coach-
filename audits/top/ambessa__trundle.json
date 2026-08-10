@@ -1,0 +1,234 @@
+{
+ "ownerKey": "ambessa",
+ "enemy": "trundle",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Ten strings across both layers state that Chomp heals Trundle ('his Chomp bite steals your AD and heals him', 'his Chomp heal', 'Chomp keeps refunding AD'). Chomp does not heal.",
+   "why": "Riot's text for Chomp is damage, a brief slow, and an Attack Damage sap — no healing at all. His sustain comes from King's Tribute (P), which heals him a percent of maximum health every time an enemy unit dies near him, and it is amplified while he stands in Frozen Domain (W), which increases healing from all sources. Attributing the sustain to Chomp sends the player hunting a bite cooldown when the real driver is the minion wave itself, which is why the current advice to 'keep trades short' misses: a short trade next to a dying caster still refunds him.",
+   "corrected": "Chomp (Q), 3.5s, 300 range: damage, brief slow, saps your AD — no heal. King's Tribute (P) heals him off every unit that dies near him, amplified inside Frozen Domain (W).",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/trundle.json — Q Chomp (slow, autoReset, AD sap); P King's Tribute heal; W Frozen Domain 'increased healing from all sources'"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Three strings claim Ambessa has 'R passive lifesteal' / 'your R passive heals you off every ability' (whys[4], whys[5], spikes[1].text, spikes[2].text, mid, late).",
+   "why": "Nothing in Riot's Public Execution text grants healing or on-ability lifesteal — it blinks her to the farthest enemy champion in a chosen line, suppresses on arrival, then slams for damage and a stun. The kit file does carry a 'heal' flag on R, but that flag is a tooltip-parsing misfire (see notes), and the strings build a whole sustain plan on top of it: 'your R lifesteal answers his Chomp heal' tells the player to win a healing race she has no healing for, against a champion whose real heal is King's Tribute. I replaced the invented sustain with verified facts — the 1250-range blink, the suppress into stun, and the 130/115/100 cooldown — rather than asserting the opposite.",
+   "corrected": "Public Execution (R), 1250 range, 130/115/100, no cost: blink to the FARTHEST champion in the chosen line, suppress on arrival, then slam for damage and a stun.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ambessa.json — R Public Execution description, range 1250, cooldown 130/115/100"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "The packet flags this matchup as having NO cooldown-sequencing advice anywhere, and the whole full layer tracks Subjugate as if it were the lane-defining timer.",
+   "why": "Subjugate is a 120s defensive stat-steal that decides the last four seconds of a fight, not the lane. The two numbers that actually govern play are Chomp at 3.5 seconds — short enough that waiting it out is not a plan, which is exactly why Repudiation's brace is the answer instead — and Pillar of Ice at 21s at rank 1, his single tool for denying a Drakehound's Step or Lacerate dash. Baiting a 21-second Pillar and committing into the hole is the concrete sequence the entry was missing.",
+   "corrected": "Pillar of Ice 21s at rank 1 is the bait-and-commit timer; Chomp is 3.5s so brace it rather than dodge it; Subjugate is 120s at rank 1.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/trundle.json — Q 3.5, E 21/19.5/18/16.5/15, R 120/100/80"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "Itemization says 'anti-heal early' and 'boots Plated Steelcaps' with no statement of why resistances behave differently here.",
+   "why": "Subjugate steals a PERCENT of the target's health, armour and magic resist and doubles the stolen amount over 4 seconds, so every point of resistance Ambessa stacks is partly handed to him mid-fight. King's Tribute is likewise percent-max-health. Reading the build through raw armour is the error the missing-interactions pass flagged, and the fix is burst plus Grievous Wounds, timed before Frozen Domain amplifies his healing.",
+   "corrected": "Subjugate takes a percent of your armour and MR and doubles it over 4s — stack burst and Grievous Wounds, not resistances.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/trundle.json — R Subjugate, flags percentHealth",
+    "champ-data/_kits/_missing-interactions.json — ambessa/trundle resistances-invalidated"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "TRICKY at 7.5/10 is a fair read: she has burst and a blink-suppress he cannot deny, he has a 3.5s AD sap, wave-fed sustain and a terrain wall against her only gap-closers. The two layers already agree stage-for-stage on every side value, so I changed no chart entry. See point 3 for the contradiction I did NOT resolve.",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/ambessa.full.js — phases[].side matches content win[] on all seven stages"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "The level chart and the prose disagree at two stages. win[4] and phases[4].side say Trundle wins Level 6 (rating 3/10) while whys[4] and spikes[1].text call level 6 Ambessa's 'cleanest all-in'; win[5] and phases[5].side say Trundle wins First item (4/10) while whys[5] and spikes[2].text call Eclipse 'your strongest favour window'.",
+   "why": "A phase card that renders a Trundle verdict above text explaining why Ambessa wins that phase is worse than either version alone. I did not flip the chart: chart edits are atomic and mirrored, the Trundle-side page is being written concurrently, and inventing a power shift is the one thing worse than leaving the contradiction visible. I kept the prose factually correct and raised the direction question for the user instead.",
+   "corrected": "Needs a decision, not a guess — see questionsForUser. The kit maths favour Ambessa at 6 (1250-range blink, suppress, stun versus a purely defensive Subjugate) and at Eclipse.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/content/ambessa.js — win[4]='Trundle' vs whys[4]",
+    "champ-data/ambessa.full.js — phases[4].side='Trundle' rating 3/10"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Trundle's Chomp bite steals your AD and heals him, and you're energy-gated with one ability — neither of you wins level 1, so chip with Q's outer edge and don't trade.",
+   "after": "Chomp saps your AD every 3.5s and King's Tribute heals him off each unit that dies near him, and you hold one ability — chip with Cunning Sweep's outer edge and don't trade."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "Your Q-into-Slam slow-and-trade exists but cooldowns are long and his Chomp bite sustains the poke right back, so it stays a coin-flip skirmish.",
+   "after": "Your Q-into-Slam trade exists, but Cunning Sweep is 14s while Chomp is 3.5s, so he bites four times a rotation — it stays a coin-flip skirmish."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "Your level-3 dash-weave combo bursts, but his Chomp AD-steal and heal undo a short trade — even hands trade even here.",
+   "after": "Your level-3 dash-weave bursts, but Chomp's AD sap lands again in 3.5s — brace Repudiation on the bite instead of racing it."
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "Your cooldowns are longest in this window and his Chomp drain grinds you down faster than you regen, so he edges the 4-5 farm fight.",
+   "after": "Your cooldowns are longest here and King's Tribute refunds him health off every unit that dies near him, so he edges the 4-5 farm fight."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "Public Execution guarantees the gap-close, suppress and stun, and your R passive heals you off every ability — your cleanest all-in, and his defensive ult can't deny it.",
+   "after": "Public Execution blinks 1250 to the farthest target in your chosen line, suppresses, then stuns — Subjugate is purely defensive, so he survives it rather than denying it."
+  },
+  {
+   "layer": "content",
+   "path": "whys[5]",
+   "before": "Your Eclipse spike with the level-9 Q max chunks his bar per combo while your R lifesteal answers his Chomp heal — you beat his drain-tank body here, so force every all-in.",
+   "after": "Your Eclipse spike with the level-9 Q max chunks his bar per combo, and Grievous Wounds bought now cuts King's Tribute before Frozen Domain amplifies it — force the all-in."
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "Subjugate steals your armor and MR and heals him while Chomp refunds his AD, and your damage is physical-only — at 2+ items his resist-steal and sustain out-grind you and reclaim the duel.",
+   "after": "Subjugate takes a percent of your health, armor and MR and doubles it over 4s, so stacking resists partly arms him — at 2+ items his steal plus Frozen Domain sustain reclaim the duel."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Your Q-into-Sundering-Slam combo comes online, but Trundle's Chomp bite steals your AD and heals him on every trade — chip with the doubled outer-edge Q and don't commit to extended fights yet.",
+   "after": "Your Q-into-Sundering-Slam combo comes online, but Chomp saps your AD again every 3.5s and King's Tribute tops him up off dying minions — chip with the doubled outer-edge Q, don't commit."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Subjugate steals a chunk of his target's armor and MR and heals him, his Chomp keeps refunding AD, and your damage is entirely physical — at 2+ items his resist-steal and sustain out-grind you and reclaim the duel.",
+   "after": "Subjugate takes a percent of your armor and MR and doubles it over 4 seconds, so armour stacking partly arms him, and Chomp keeps sapping your AD — at 2+ items his steal and Frozen Domain sustain reclaim the duel."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Land his Chomp bite to steal your AD and heal, flipping every short trade in his favour",
+   "after": "Chain Chomp every 3.5s to sap your AD, flipping every short trade in his favour"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Drop his Pillar of Ice to block your Drakehound dash chains and wall off your gap-close",
+   "after": "Drop Pillar of Ice, 21s at rank 1, as impassable terrain across your dash lane in"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Buy anti-heal (Bramble/Executioner's) and force your first-item Eclipse spike before his resist-steal drain-tank scaling takes over",
+   "after": "Buy Grievous Wounds early — Frozen Domain amplifies every heal he takes — and force your Eclipse spike before his resist-steal scales"
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Trundle's Chomp bite is the whole early game — it steals your AD and heals him, so every time you trade he flips the math and out-sustains you. Don't sit at one ability level 1; you're energy-gated and even-to-behind, so farm and chip with the doubled outer edge of your Cunning Sweep instead of stepping in for a full Sundering Slam he can just bite-and-heal through. Once your level-3 combo is online you can Drakehound-dash into an empowered auto for a short burst, but keep trades short — drag it out and his bite sustain wins.",
+   "after": "King's Tribute is the whole early game — he heals a slice of his maximum health off every unit that dies near him, so the wave itself out-sustains your chip. Chomp adds a 3.5s AD sap you cannot wait out; brace Repudiation on the bite instead, because non-minion damage blocked in the brace amplifies the slam you fire back. Don't sit at one ability level 1; you're energy-gated, so farm and chip with the doubled outer edge of your Cunning Sweep. Once your level-3 combo is online you can Drakehound-dash into an empowered auto, but keep trades short and off his Frozen Domain."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 4-5 are your weak window — your cooldowns are longest and his Chomp drains you down, so concede and farm toward 6. Then Public Execution flips it: blink behind him, suppress and stun, and crash down while your R passive heals you off every ability — that's your cleanest kill window, and unlike you Trundle's ult is purely defensive, so he can't deny the all-in, only survive it. Watch his Pillar of Ice; he'll drop it to wall off your dash chains, so dash around it before you commit your combo.",
+   "after": "Levels 4-5 are your weak window — your cooldowns are longest and King's Tribute refunds him off the wave, so concede and farm toward 6. Then Public Execution flips it: blink 1250 to the farthest target in your line, suppress, and crash him down for the stun — Subjugate is purely defensive, so he can only survive the all-in, not deny it. Pillar of Ice is the real timer: 21s at rank 1, and it is his one answer to your dash chains. Bait it on a step-up, then commit your combo into the 21 seconds it is gone."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "Your first-item Eclipse spike is the high point — ability into empowered auto into Q2 chunks his bar while your R passive lifesteal answers his Chomp heal. But this is a clock: at 2+ items Trundle is a drain-tank who reclaims the lane. His Subjugate steals a chunk of your armor and MR while healing him, his Chomp keeps refunding his AD, and your damage is entirely physical, so once he stacks resists and ults your stats he out-sustains everything you throw. Win it on your first-item all-ins or accept he scales past you.",
+   "after": "Your first-item Eclipse spike is the high point — ability into empowered auto into Q2 chunks his bar, and Grievous Wounds bought before it cuts King's Tribute in half. But this is a clock: at 2+ items Trundle is a drain-tank who reclaims the lane. Subjugate takes a percent of your health, armor and MR and doubles it over 4 seconds, so every resistance you stack partly arms him, while Frozen Domain amplifies every heal he takes. Win it on your first-item all-ins or accept he scales past you."
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Anti-heal him — combo-burst fast, don’t duel his W. Ambessa wins the Subjugate cooldown windows.",
+   "after": "Anti-heal him — burst fast, never duel inside Frozen Domain. Ambessa wins the Pillar of Ice window."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Dash-resets stack your passive shield mid-trade. Only take the trade when Trundle's Subjugate is down.",
+   "after": "Repudiation is your shield — brace it on his Chomp and the blocked bite amplifies your slam back."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Trundle Subjugate: matchup-defining — Steals your stats. Burst before it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+   "after": "- Chomp: 3.5s — too short to wait out, so brace Repudiation on it instead. - Pillar of Ice: 21s at rank 1, his only answer to your dashes — bait it, then commit into the hole. - Subjugate: 120s at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Trundle's Subjugate: Steals your stats. Burst before it. When it is down — Dash-combo + R him.",
+   "after": "Subjugate takes a percent of your armor and MR, doubling over 4s — burst him before he casts it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Steals your stats. Burst before it. Only engage once it is down or baited.",
+   "after": "Takes a percent of your resists, doubling over 4s. Burst before he casts."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Cast-dash-empowered-hit on Trundle's step-up, weave the second dash through his answer, and exit with shield banked.",
+   "after": "King's Tribute heals him off every unit that dies near him and Frozen Domain amplifies it — Grievous Wounds by first item."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That is Trundle's favourite window — refuse it and half his win condition is gone.",
+   "after": "Frozen Domain hands him attack speed, move speed and amplified healing — fight off it."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+   "after": "Resists you stack become his for 4 seconds — burst, don't out-stat him."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Ambessa vs Trundle - Track: Trundle Subjugate. - Keep the wave on your side. - Engage only on Subjugate's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+   "after": "- Ambessa vs Trundle - Track: Pillar of Ice, 21s. - Chomp is 3.5s — brace it, don't race it. - Bait the Pillar, then dash in. - Grievous Wounds by first item. - R = kill windows."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Subjugate's cooldown, on your level-6 spike, and on your Eclipse timing. His answer goes first; yours goes last.",
+   "after": "Bait Pillar of Ice, 21s, then commit — your level-6 R and your Eclipse spike are the windows. His answer goes first."
+  },
+  {
+   "layer": "full",
+   "path": "report[11].t",
+   "before": "Duel him in his W. Let him R-steal your stats. Fight a long brawl. Don't spend your ultimate on chip — it is the kill window.",
+   "after": "Duelling inside Frozen Domain. Stacking resists into Subjugate. Fighting long. Spending Public Execution on chip instead of the kill."
+  }
+ ],
+ "notes": "KIT-FILE FLAG MISFIRES: champ-data/_kits/ambessa.json tags Public Execution (R) with 'heal' and both Repudiation (W) and Public Execution (R) with 'grounding'. Riot's own description text supports none of the three — the parser caught 'slams the ground' / 'slams the enemy into the ground'. The bogus 'heal' flag has already leaked into the shipped Ambessa content as an invented 'R passive lifesteal', which is what point 4 above is about; it very likely appears in other Ambessa matchups too and is worth a scripted sweep. UNVERIFIED, LEFT ALONE: whether Pillar of Ice terrain can block a Public Execution blink, and whether Ambessa's R suppression is affected by tenacity or cleansable — neither is answerable from the kit files and I asserted neither. WIN RATE: MC_WR_TABLES.ambessa.trundle is 42.41 while the packet reports 51.24 over 121 games. I proposed no win-rate edit. LEVEL CHART: left untouched despite the prose contradiction at stages 5 and 6 — see audit point 3 and questionsForUser."
+}

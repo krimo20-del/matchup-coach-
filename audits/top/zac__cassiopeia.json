@@ -1,0 +1,389 @@
+{
+  "ownerKey": "zac",
+  "enemy": "cassiopeia",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet win rate 56.92% over 65 games matches MC_WR_TABLES.zac.cassiopeia = 56.92. No elo-tier language in either layer. Note this is the smallest sample in the slice at 65 games, but it is non-zero so the matchup is in scope.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json",
+        "champ-data/content/zac.js MC_WR_TABLES"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "At 56.92% this is Zac's 10th-best matchup of 71, and it is labelled diff HARD, diffRating 8.5/10, tone #ff5d6c, with content.win giving Cassiopeia 6 of 7 stages and full.phases giving her 5 of 7. full.phases[6].side is Cassiopeia while content.win[6] is Zac, and content.late says outright 'the late timeline flips to you'.",
+      "why": "Identical shape to zac__camille, and the two are the only HARD-labelled matchups in the file above 55% win rate. As documented in that proposal's notes, the diff triple across all 71 Zac entries has no relationship to win rate at all, so this is the file-wide generator problem surfacing again rather than an independent judgement about Cassiopeia.",
+      "corrected": "diff EVEN, diffRating 6/10, tone #e8b84b, and content.win [Cassiopeia, Cassiopeia, Cassiopeia, Skill, Cassiopeia, Zac, Zac] with full.phases matched. Not proposed as edits: the difficulty triple has to move atomically and diffRating 8.5/10 to 6/10 is -33%, outside the band, while the chart tokens are 3 to 10 characters and break it in both directions.",
+      "confidence": "High",
+      "sources": [
+        "packets/zac.json winRate",
+        "champ-data/zac.full.js diff across all 71 entries"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "Packet defect: 'NO cooldown-sequencing advice anywhere', sequencingCues = 0. Neither layer contains a single number. full.breakdown.cooldowns names Miasma but gives no cooldown and fills its other two bullets with 'Your committal tool' and 'Your ultimate' placeholders.",
+      "why": "This matchup has the cleanest sequencing fact in the whole slice and it was never written down. Miasma is 24/22/20/18/16s and it grounds — Riot's own text says 'Grounded enemies cannot use Movement abilities' — while Zac's Elastic Slingshot is 21/18/15/12/9s. At rank 1 her grounding tool is on a LONGER cooldown than his engage, which means she can hold Miasma purely to deny the slingshot and still have it back before he does. That single comparison tells the Zac player exactly why walking up feels impossible and exactly what to wait for. Petrifying Gaze at 120/100/80s is the second number, and Noxious Blast's flat 3.5s and Twin Fang's flat 0.75s are what make her chip feel unanswerable.",
+      "corrected": "Added the 24s-versus-21s comparison to dontsFull[0].d, Miasma's 24s to wants.you[1], whys[2], spikes[0].text, dosFull[0].d, phases[1].why, breakdown.cooldowns and report[5].t, and Petrifying Gaze's 120s to spikes[1].text and phases[4].why.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/cassiopeia.json W cd 24/22/20/18/16 and description",
+        "champ-data/_kits/zac.json E cd 21/18/15/12/9"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.early calls it 'Q and E poison' and 'her ramping E', content.whys[1] says 'her ramping E damage', and content.spikes[0].text says 'her E slows'. Twin Fang neither applies poison, ramps, nor slows.",
+      "why": "Riot's text: Twin Fang 'deals increased damage to Poisoned targets and heals her for a percentage of the damage dealt'. It consumes a poison it does not apply. The poison comes from Noxious Blast, and the slow comes from Miasma. This is the most important correction in the matchup because it inverts the counterplay: Twin Fang is not an unavoidable ramping DPS ability, it is conditional, and a Zac who is not poisoned takes a fraction of the damage and gives her no healing at all. The guide currently presents her damage as something to be endured rather than something with an off switch.",
+      "corrected": "Rewrote early, whys[1] and spikes[0].text so Noxious Blast applies the poison, Twin Fang feeds off it, and Miasma owns the slow and the grounding.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/cassiopeia.json Q, W and E descriptions",
+        "champ-data/_kits/_missing-interactions.json zac/cassiopeia needs-antiheal (Twin Fang)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content.mid says to beat Petrifying Gaze by approaching 'from odd angles' and content.wants.you[0] says to 'Angle your engage so her R can't catch you facing her'. The angle of approach is not what the ability checks.",
+      "why": "Riot's text: it stuns 'any enemies in front of her that are FACING her' and slows 'any others with their BACK TURNED'. The check is the direction the target is facing at the moment it lands, not the direction they came from. Approaching from the side while still facing her gets stunned exactly the same. The actual counterplay — turn your back as it lands and take a slow instead of a stun — is a real, executable piece of tech and the guide replaces it with something that does not work.",
+      "corrected": "Rewrote mid, spikes[1].text, wants.you[0], whys[4] and phases[4].why around the facing rule, and added the 120s rank-1 cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/cassiopeia.json R description, cd 120/100/80"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Worth recording as verified rather than assumed: full.breakdown.cooldowns, dosFull[0].d and report[5].t all correctly attribute the grounding to Miasma and correctly state that it disables movement abilities. That matches Riot's text exactly and matches the calibration note in the brief about Cassiopeia's grounding belonging to W. I kept that claim and only attached the missing number to it.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/cassiopeia.json W description and grounding flag"
+      ]
+    },
+    {
+      "point": 8,
+      "status": "needs-correction",
+      "whatIsWrong": "report[10].t is the generic 'Your CC is premium gank setup — ping your jungler when Miasma is down. Ward river before extended trades.' It never mentions the thing that makes ganks decisive here.",
+      "why": "content.mid and content.late both note in passing that Cassiopeia has no escape, and the kit confirms it — nothing in Serpentine Grace, Noxious Blast, Miasma, Twin Fang or Petrifying Gaze is a dash or a blink. Her only mobility is a Move Speed bonus on Noxious Blast, amplified by her passive. A completely dashless enemy is the single strongest gank-priority signal a laner can give a jungler, and it is buried in a subordinate clause instead of being the headline of the jungle card.",
+      "corrected": "Rewrote report[10].t to lead with the no-dash fact.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/cassiopeia.json full ability list, no dash flag anywhere"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "report[8].t lists Heartsteel, Spirit Visage, Thornmail and Mercury's Treads and contains no Grievous Wounds source, despite _missing-interactions.json flagging needs-antiheal for this pairing.",
+      "why": "Twin Fang heals her for a percentage of the damage dealt, and it fires on a 0.75s cooldown against a poisoned target — so in an extended trade it is not incidental sustain, it is the reason her health bar refuses to move. The anti-heal timing is tied to the poison rather than to a level: Grievous Wounds only matters while she is landing Noxious Blast on you.",
+      "corrected": "Added Grievous Wounds to report[8].t and named Twin Fang as the heal.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/cassiopeia.json E description, cd 0.75",
+        "champ-data/_kits/_missing-interactions.json zac/cassiopeia needs-antiheal"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Three Do/Don't descriptions do not match their titles: dosFull[2] 'Pick up every blob' carries 'Cassiopeia wastes Miasma — commit the full pattern immediately', dontsFull[1] 'Let him stomp blobs' carries 'Burning it for tiny value leaves you naked for its full cooldown', and dontsFull[2] 'Fight with passive down' carries the blob-stomping line that belongs to dontsFull[1].",
+      "why": "The descriptions are one slot out of alignment, the same off-by-one seen in zac__akshan. dontsFull[2]'s heading assumes the reader knows Cell Division's cooldown, which is stated nowhere in the matchup.",
+      "corrected": "Rewrote all three to answer their own headings and put the 5 minute cooldown where its heading assumes it.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js dosFull and dontsFull",
+        "champ-data/_kits/zac.json P"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Cassiopeia is referred to as male throughout, including in the two most prominent strings in the matchup: tldr and report[0].t both open 'He kites you out' and then say 'slingshot him'. Also winCon and report[1].t ('Slingshot him'), report[2].t ('His early'), phases[1].why ('a trade he paid for'), dontsFull[0].t ('E into his peel'), dontsFull[1].t ('Let him stomp blobs'), dontsFull[0].d ('half his win condition'), report[11].t (both), breakdown.wave and report[4].t ('his tower'), breakdown.feeding and report[12].t ('If he snowballs'), breakdown.late ('if he gets ahead'), report[9].t ('His answer goes first'), tradeBad and dontsFull[2].d ('Letting him stomp your blobs').",
+      "why": "The worst instance in the slice — here it reaches the tldr, which is the first sentence a player reads. Confirms the pattern found in the Akali, Ambessa, Aurora and Camille entries of this same file.",
+      "corrected": "Fixed in every string this proposal touches, including both Don't titles.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/zac.full.js"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeBad, dontsFull[2].d, breakdown.trading and report[3].t all claim stomped blobs cost 'your passive revive margin'.",
+      "why": "Cell Division's shed chunks are sustain and destructible; the four bloblets appear only on fatal damage and set the revive. Stomping chunks costs sustain only. The flat 5 minute cooldown never appears despite dontsFull[2] being titled 'Fight with passive down'.",
+      "corrected": "Separated the two halves and stated the 5 minute cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zac.json P description"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Cassiopeia pokes you off the wave with Q and E poison and grounds your approach with W, so walking up to charge Unstable Matter just feeds her ramping E — soak XP at range and don't slingshot into her poison.",
+      "after": "Cassiopeia poisons you with Noxious Blast every 3.5s, then Twin Fang hits harder and heals her off anything already poisoned — so the counter is not being poisoned. Soak XP at range and never slingshot into Miasma."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-6 stay hers: her sustained DPS out-damages your regen and her level-6 Petrifying Gaze cancels your engage if you face her, so approach from odd angles, bait her R, and lean on your jungler since she has zero escape.",
+      "after": "Levels 3-6 stay hers: Twin Fang is a 0.75s cooldown so the chip never stops, and Petrifying Gaze stuns whatever is FACING her — turn your back as it lands and you take a slow instead. She has zero escape, so use the jungler."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Cassiopeia's Q-E poison poke wins the level-1 exchange.",
+      "after": "Noxious Blast is a flat 3.5s cooldown at every rank."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At 2 her ramping E damage keeps you off the wave.",
+      "after": "Twin Fang only spikes on targets already poisoned."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 grounded W plus poison lets her control your approach.",
+      "after": "Miasma grounds you from 3 — 24s at rank 1, so bait it out."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Her level-6 R cancels your engage and keeps her ahead.",
+      "after": "Petrifying Gaze stuns you only if you are facing her."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Cassiopeia's Q-E poison pattern shreds you as you walk up, and her E slows charge your engage's telegraph — don't slingshot through her poison field.",
+      "after": "Noxious Blast poisons every 3.5s and Twin Fang feeds off it every 0.75s. Miasma is the slow and the ground — 24s at rank 1, and it is what stops your E."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Her R stuns you mid-air if you're facing her, so approach from an angle or after she's used it — a face-tanked Petrifying Gaze cancels your whole combo.",
+      "after": "Petrifying Gaze stuns whatever is facing her and only slows turned backs — 120s at rank 1. Turn away as it lands, or commit while it is down."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Angle your engage so her R can't catch you facing her",
+      "after": "Turn your back as Petrifying Gaze lands — slow, not stun"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Wait out her E slows before committing the slingshot",
+      "after": "Wait out Miasma — 24s at rank 1 — before you slingshot"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Zone you with Q poison and W grounded fields",
+      "after": "Poison with Noxious Blast, ground with Miasma"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Ramp E damage on you as you try to walk up",
+      "after": "Heal off Twin Fang while you are poisoned"
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Charge E from a bush as Cassiopeia's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush once Miasma is spent, then grab her with Q and hit a minion — the knock-together needs two."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Charge E from a bush as Cassiopeia's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs.",
+      "after": "Charge E from a bush once Miasma is spent, then grab her with Q and hit a minion — the knock-together needs two."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Grounds you — dashes and movement abilities are disabled inside it. Only engage once it is down or baited.",
+      "after": "Grounds you — Elastic Slingshot simply will not fire inside it. 24s at rank 1, so bait it first."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Cassiopeia wastes Miasma — commit the full pattern immediately.",
+      "after": "Each chunk is health back; Cell Division is a 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Cassiopeia's favourite window — refuse it and half his win condition is gone.",
+      "after": "Miasma is 24s at rank 1 and your Elastic Slingshot is 21s — hers outlasts yours."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Every chunk she steps on is health you paid a trade to shed."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Cell Division is a flat 5 minute cooldown — without it you are a big target with one bar."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Every blob you collect is a trade he paid for. Only take the trade when Cassiopeia's Miasma is down.",
+      "after": "Every blob you collect is a trade she paid for. Only take it when Miasma is down — 24s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Cassiopeia's ultimate changes the math too.",
+      "after": "Petrifying Gaze at 6 is 120s at rank 1 and stuns only what is facing her — turn your back as it lands and it is just a slow."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Cassiopeia Miasma: matchup-defining — Grounds you — dashes and movement abilities are disabled inside it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Cassiopeia Miasma: matchup-defining — 24s at rank 1, and it grounds, so Elastic Slingshot will not fire inside it. - Cassiopeia Petrifying Gaze: 120s at rank 1, stuns only what faces her. - Your Elastic Slingshot: 21s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Charge E from a bush as Cassiopeia's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Cassiopeia wastes Miasma — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Miasma is spent, then grab her with Q and hit a minion — the knock-together needs two. Great trade: Cassiopeia wastes Miasma — commit the full pattern immediately. Bad trade: Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Charge E from a bush as Cassiopeia's answer goes down, Q-stretch the knock-together, W the %HP ticks, and eat your blobs. Great trade: Cassiopeia wastes Miasma — commit the full pattern immediately. Bad trade: Letting him stomp your blobs — that is your sustain AND your passive revive margin walking away.",
+      "after": "Good trade: Charge E from a bush once Miasma is spent, then grab her with Q and hit a minion — the knock-together needs two. Great trade: Cassiopeia wastes Miasma — commit the full pattern immediately. Bad trade: Letting her stomp your shed chunks — sustain gone; the revive is Cell Division's own 5 minute cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Cassiopeia's Miasma: Grounds you — dashes and movement abilities are disabled inside it. When it is down — E-slingshot + blob sustain.",
+      "after": "Track Miasma: 24s at rank 1, and it grounds — your E will not fire inside it. When it is down — E-slingshot, Q a minion, blob up."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Shield + pot. Core: Heartsteel  (HP feeds everything), then Spirit Visage / Thornmail; boots Mercury's Treads.",
+      "after": "Start Doran's Shield + pot. Core: Heartsteel, then Spirit Visage; boots Mercury's Treads. Grievous Wounds — Twin Fang heals off poison."
+    },
+    {
+      "layer": "full",
+      "path": "report[10].t",
+      "before": "Your CC is premium gank setup — ping your jungler when Miasma is down. Ward river before extended trades.",
+      "after": "Premium gank setup — she has no dash of any kind, so ping your jungler the moment Miasma is spent."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "He kites you out — survive, then slingshot him on the Miasma cooldown and out-sustain on blobs. Zac wins the Miasma cooldown windows.",
+      "after": "She kites you out — survive, then slingshot her on the Miasma cooldown and out-sustain on blobs. Zac wins the Miasma cooldown windows."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "He kites you out — survive, then slingshot him on the Miasma cooldown and out-sustain on blobs.",
+      "after": "She kites you out — survive, then slingshot her on the Miasma cooldown and out-sustain on blobs."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Slingshot him on the Miasma cooldown and out-sustain on blobs. Track Miasma before every commit and keep the wave on your side.",
+      "after": "Slingshot her on the Miasma cooldown and out-sustain on blobs. Track Miasma before every commit and keep the wave on your side."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Slingshot him on the Miasma cooldown and out-sustain on blobs. Track Miasma before every commit.",
+      "after": "Slingshot her on the Miasma cooldown and out-sustain on blobs. Track Miasma before every commit."
+    },
+    {
+      "layer": "full",
+      "path": "report[2].t",
+      "before": "His early — survive to your spikes. See the level-by-level chart for the swing points.",
+      "after": "Her early — survive to your spikes. See the level-by-level chart for the swing points."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Miasma's cooldown, on your level-6 spike, and on your Heartsteel timing. His answer goes first; yours goes last.",
+      "after": "Commit on Miasma's cooldown, on your level-6 spike, and on your Heartsteel timing. Her answer goes first; yours goes last."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].t",
+      "before": "E into his peel",
+      "after": "E into her peel"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].t",
+      "before": "Let him stomp blobs",
+      "after": "Let her stomp blobs"
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "E into his peel. Let him stomp blobs. Fight with passive down. Don't spend your ultimate on chip — it is the kill window.",
+      "after": "E into her peel. Let her stomp blobs. Fight with passive down. Don't spend your ultimate on chip — it is the kill window."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: held near your side so Cassiopeia overextends into your pattern. Worst wave: shoved to his tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot.",
+      "after": "Best wave: held near your side so Cassiopeia overextends into your pattern. Worst wave: shoved to her tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: held near your side so Cassiopeia overextends into your pattern. Worst wave: shoved to his tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot.",
+      "after": "Best wave: held near your side so Cassiopeia overextends into your pattern. Worst wave: shoved to her tower with your key cooldowns down. Crash timing: crash only to reset, take plates, or set up a dive — never on autopilot."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Cassiopeia gets a kill, stop forcing and respect Miasma. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Cassiopeia gets a kill, stop forcing and respect Miasma. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "report[12].t",
+      "before": "If Cassiopeia gets a kill, stop forcing and respect Miasma. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Cassiopeia gets a kill, stop forcing and respect Miasma. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight — build your teamfight around that. Cassiopeia carry threat: 9/10 — shift to picks and wave control if he gets ahead.",
+      "after": "Elastic Slingshot from fog + R bounces win every river fight — build your teamfight around that. Cassiopeia carry threat: 9/10 — shift to picks and wave control if she gets ahead."
+    }
+  ],
+  "notes": "The Miasma-versus-Elastic-Slingshot cooldown comparison is the most useful thing I found in this matchup and I want to flag it beyond the audit entry: at rank 1 her grounding tool (24s) is on a longer cooldown than Zac's engage (21s), so a Cassiopeia who simply holds Miasma denies the slingshot indefinitely and still has it back first. That inverts as they rank up — by rank 5 Miasma is 16s and Elastic Slingshot is 9s — which is a genuine, checkable reason the lane gets easier for Zac with levels, and it is a better explanation for the 56.92% win rate than anything currently in either layer. Worth considering as a general pattern for the site: comparing the owner's key cooldown against the enemy's at the same rank produces sequencing advice that no stats page can generate. Deliberately not asserted: whether Petrifying Gaze can interrupt Zac's Elastic Slingshot while he is already airborne mid-flight. content.spikes[1].text currently claims 'Her R stuns you mid-air', which would be a decisive interaction if true, but cassiopeia.json needsResearch is empty and Riot's text says nothing about interrupting an in-progress dash. I removed the claim rather than repeating it, and did not replace it with a denial — it is unknown, and it deserves a wiki pass. Also note the sample here is 65 games, the smallest in the slice; the win rate is real data but thinner than the others, which is worth knowing before anyone rewrites the difficulty triple off it."
+}

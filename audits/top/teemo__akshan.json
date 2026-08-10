@@ -1,0 +1,184 @@
+{
+ "ownerKey": "teemo",
+ "enemy": "akshan",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The content layer puts Heroic Swing on W in four places — 'Blind his W Heroic Swing approach', 'Use W Heroic Swing to bounce over your shrooms', 'his W is a dash-then-auto gap-close'. Meanwhile the full layer's own focus block correctly reads letters: ['E'].",
+   "why": "Heroic Swing is Akshan's E. His W is Going Rogue, a completely different spell (camouflage, Scoundrel marks, ally resurrection). A player told to watch W will be tracking the wrong button and the wrong cooldown. The two layers of this same matchup currently contradict each other on the slot.",
+   "corrected": "Heroic Swing = E, 18/16.5/15/13.5/12. Going Rogue = W.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akshan.json — E Heroic Swing; W Going Rogue",
+    "champ-data/teemo.full.js — focus.letters ['E'] for akshan"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Three strings credit Akshan with a self-revive: 'revive passive' (spikes[3]), 'his revive passive' (whys[6]), 'his passive revive can flip a 3v3 if he dies first and comes back healthy ... never fight in a spot where fog lets him revive uncontested' (late).",
+   "why": "Akshan does not revive himself, and the effect is not on his passive. Going Rogue (W) marks enemies as Scoundrels when they kill his ALLIES; if Akshan then kills that Scoundrel, the allies they killed are resurrected. So the resurrection is of teammates, it requires Akshan to secure a specific kill first, and it triggers wherever those allies died — not 'in fog where he revives uncontested'. As written the entry tells a Teemo that killing Akshan is futile, which inverts the correct play: killing Akshan is precisely what stops the ally resurrection.",
+   "corrected": "Going Rogue (W): killing the marked Scoundrel resurrects the allies that Scoundrel killed. Akshan himself never comes back. Denying him the Scoundrel kill, or killing him first, is what removes the effect.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akshan.json — W Going Rogue: 'passively marks enemy champions as Scoundrels when they kill his ally champions. If Akshan kills a Scoundrel, he resurrects the allies they killed'"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The mid section calls Comeuppance 'a long-channel global, giving you a full second to W out of the line' and advises 'sidestep laterally rather than running straight back'.",
+   "why": "Comeuppance is 2500 range, not global. More importantly the entry misses the interaction that actually decides the fight: the stored bullets hit the FIRST champion, minion or structure in their path, so a single minion body between you and Akshan eats the entire ult. Sidestepping is the weaker answer and, against a lock-on channel, often the wrong one. The damage also scales on the target's MISSING health, so the lower you are the harder it hits — the exact opposite of the intuition that you can tank it once and walk away.",
+   "corrected": "Comeuppance: 2500 range, 100/85/70s. Bullets stop on the first champion, minion or structure hit — stand behind a minion. Damage scales with your missing health.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akshan.json — R Comeuppance, range 2500, cooldown 100/85/70: 'dealing damage based on missing health to the first champion, minion, or structure hit'"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "The packet flags this matchup as having NO cooldown-sequencing advice anywhere, and the mid section instead asserts 'Max Q first: its cooldown drops low enough that you can blind every Heroic Swing attempt'.",
+   "why": "Blinding Dart is 7 seconds flat at all five ranks — maxing Q buys damage and blind duration, not a shorter cooldown, so the stated mechanism for the whole mid-game plan does not exist. The real sequencing is far better than the invented one: Heroic Swing is 18s at rank 1 against a 7s blind, which is more than two blinds per swing. Avengerang is 9s at rank 1, so his poke button, not his dash, is what is actually up most of the time.",
+   "corrected": "Blinding Dart 7s flat. Heroic Swing 18/16.5/15/13.5/12 — over two blinds per swing early. Avengerang 9/8/7/6/5. Wait for Heroic Swing to be spent before you commit; blind the autos it fires.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/teemo.json — Q cooldown '7'",
+    "champ-data/_kits/akshan.json — E '18/16.5/15/13.5/12', Q '9/8/7/6/5'"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "missing",
+   "whatIsWrong": "Nothing states the two hard constraints on Heroic Swing: it needs terrain, and it can be knocked off early.",
+   "why": "Heroic Swing fires a grappling hook into TERRAIN — in open lane away from a wall he simply cannot cast it, which is a positional answer a Teemo can use every wave. And Akshan 'gets knocked off when colliding with champions or terrain', so a body in the swing arc ends it early. Both are actionable and both are absent.",
+   "corrected": "Heroic Swing needs a wall to hook. Standing in open lane denies it outright; a champion or terrain in the arc knocks him off mid-swing.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akshan.json — E: 'fires a grappling hook into terrain then swings around it ... gets knocked off when colliding with champions or terrain'"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "wants.foe[2] treats Dirty Fighting as a burst Akshan 'procs' at will during the blind window.",
+   "why": "Dirty Fighting is a running count: every third hit from his attacks AND abilities deals bonus damage and shields him off a champion. The important consequence for Teemo is that blind stops the attack half but not the ability half — Avengerang still advances the counter — so a blinded Akshan still reaches the shield, just slower. The passive also fires a second reduced-damage attack per auto, which blind removes as well.",
+   "corrected": "Dirty Fighting counts attacks and abilities; blind stalls the attack half only, since Avengerang keeps ticking the counter toward the shield.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akshan.json — P: 'Every three hits from Akshan's Attacks and Abilities deals bonus damage and grants him a Shield if the target was a champion. When Akshan Attacks, he fires an additional Attack for reduced damage.'"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[2] names the first item 'Liandry's Angueur'.",
+   "why": "Misspelt and outdated; the full layer's Itemization line for this same matchup already says Liandry's Torment.",
+   "corrected": "Liandry's Torment.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/teemo.full.js — akshan report Itemization"
+   ]
+  },
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "53.83% over 626 games; EVEN / 6-10 understates it slightly but is within reason and no elo language is present. Left alone.",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": [
+    "packet teemo.json — akshan winRate 53.83, games 626"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Blinding Shot comes online and erases Akshan's auto-pattern — the moment he walks up to Q-poke, blind him and stack E poison freely.",
+   "after": "Blinding Dart comes online and erases Akshan's auto-pattern — the moment he walks up to Q-poke, blind him and stack E poison freely."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Liandry's Angueur turns your E poison into a sustained burn Akshan cannot out-trade or kite clear — force every bush skirmish here where shrooms do the work.",
+   "after": "Liandry's Torment turns your E poison into a sustained burn Akshan cannot out-trade or kite clear — force every bush skirmish here where shrooms do the work."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Akshan's Comeuppance R and revive passive let him flip skirmishes from a deficit — never group under three targets and shroom every fog-of-war angle near objectives.",
+   "after": "Comeuppance stops on the first minion in its path and scales off your missing health — keep a body between you, and never let it fire while you are already low."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Blind his W Heroic Swing approach and stack E poison on every walk-up so trades always end in your favour",
+   "after": "Blind his Heroic Swing (E) approach and stack E poison on every walk-up so trades always end in your favour"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Use W Heroic Swing to bounce over your shrooms and close the gap before Blinding Shot lands",
+   "after": "Hook Heroic Swing (E) off nearby terrain to close the gap before Blinding Dart lands"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Proc his passive Dirty Fighting shield burst during the blind window to absorb your poison and win short trades",
+   "after": "Tick Dirty Fighting with Avengerang while blinded — abilities still count toward his third-hit shield"
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Both of you are ranged at level 1 and his Dirty Fighting passive burst offsets pure auto trades — accept a skill-check start and don't blow Blinding Shot pre-emptively.",
+   "after": "Both of you are ranged at level 1 and Dirty Fighting shields him every third hit from attacks or abilities — accept a skill-check start and hold Blinding Dart."
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "Comeuppance R and his revive passive let him spike back into relevance in grouped fights — play the split rather than grouping, and shroom every fog-of-war revive angle near objectives.",
+   "after": "Comeuppance stops on the first minion or champion in its path and hits harder the lower you are — keep a body between you, and kill him before he can claim a Scoundrel and revive an ally."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "At level 1 both of you are ranged auto-pokers, so the edge is marginal — but your E Toxic Shot poison stacks faster than his Q Avengerang chip, and you do not need to stand still to deal it. When he walks up to last-hit, one auto-E stack forces him to decide between the minion and taking more poison. Do not blind him pre-emptively at level 1; save Blinding Shot for the instant he primes a Heroic Swing approach or tries to trade autos. At level 2 the dynamic shifts hard in your favour: his W is a dash-then-auto gap-close, and Blinding Shot shuts off every auto he throws during that swing animation, making his entire engage pattern whiff while your poison ticks freely. Respect his range and stay out of his Q arc — he can throw Avengerang for free damage while you are busy poisoning a minion.",
+   "after": "At level 1 both of you are ranged auto-pokers, so the edge is marginal — but your E Toxic Shot poison stacks faster than his Q Avengerang chip, and you do not need to stand still to deal it. When he walks up to last-hit, one auto-E stack forces him to decide between the minion and taking more poison. Do not blind him pre-emptively at level 1; save Blinding Dart for the instant he primes a Heroic Swing approach or steps up to trade autos. At level 2 the dynamic shifts hard in your favour: Heroic Swing is his E, it needs a wall to hook into, and Blinding Dart shuts off every auto he fires during that swing animation while your poison ticks freely. Stand in open lane away from terrain and he cannot cast it at all — respect his Avengerang arc instead."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 4-5 are your firmest control window. Max Q first: its cooldown drops low enough that you can blind every Heroic Swing attempt he makes and still have it back before the next wave. Plant a shroom in the tribush pixel brush and one at the river entrance — his passive camouflage requires standing still near walls, and mushrooms reveal that entirely, stripping his gank-setup threat and punishing any rotation attempt. He has no reliable way to walk through a poisoned shroom-covered lane without burning his Heroic Swing for escape, which means every trade he starts is one where he has already committed his only mobile tool. At level 6 your Noxious Trap accelerates: drop one at the dragon mouth, one in the enemy jungle tri-path, and hold one in your pocket for the lane bush. His Comeuppance R is a long-channel global, giving you a full second to W out of the line — listen for the audio cue and sidestep laterally rather than running straight back.",
+   "after": "Levels 4-5 are your firmest control window. Blinding Dart is 7s flat at every rank, while Heroic Swing is 18s at rank 1 — that is over two blinds per swing, so you never have to guess. Plant a shroom in the tribush pixel brush and one at the river entrance — Going Rogue's camouflage only holds near brush or terrain, and mushrooms strip that entirely, killing his gank-setup threat and punishing any rotation. He has no reliable way to cross a shroomed lane without spending Heroic Swing to escape, which means every trade he starts is one where he has already committed his only mobile tool. At level 6 your Noxious Trap accelerates: drop one at the dragon mouth, one in the enemy jungle tri-path, and hold one for the lane bush. His Comeuppance is a 2500-range lock-on, not a global, and its bullets stop on the first champion, minion or structure hit — put a minion between you and him rather than sidestepping."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "After Liandry's your poison DoT genuinely threatens to kill him between trades — he cannot sit in a shroomed brush to reset his passive without taking 6 seconds of burn. The danger zone is grouped skirmishes: his passive revive can flip a 3v3 if he dies first and comes back healthy, so never fight in a spot where fog lets him revive uncontested. Keep your split-push pressure going with a shroomed side lane; he wants to match you, but Heroic Swing alone cannot traverse a properly-warded lane without triggering three mushrooms. If he builds Immortal Shieldbow or Black Cleaver to chase you, respect that he can now tank one full poison cycle — land Blinding Shot before he reaches auto range rather than after.",
+   "after": "After Liandry's your poison DoT genuinely threatens to kill him between trades — he cannot sit in a shroomed brush to reset Going Rogue without taking 6 seconds of burn. The danger in grouped fights is his W: if a teammate of yours kills one of his allies they become a Scoundrel, and killing them resurrects Akshan's dead ally — so deny him that pick rather than fearing a revive of his own, which does not exist. Keep your split-push pressure going with a shroomed side lane; Heroic Swing alone cannot traverse a properly-warded lane without triggering three mushrooms. If he builds Immortal Shieldbow or Black Cleaver to chase you, land Blinding Dart before he reaches auto range rather than after."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Akshan Heroic Swing: matchup-defining — His dash + camera swing escape. Engage when it's down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+   "after": "- Akshan Heroic Swing (E): 18s at rank 1 against a flat 7s Blinding Dart — two blinds per swing, and it needs a wall to hook. Engage once it is spent. - Avengerang: 9s, his real poke button. - Your ultimate: kill windows only."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His dash + camera swing escape. Engage when it's down. Only engage once it is down or baited.",
+   "after": "His E dash — needs a wall, 18s at rank 1. Engage once it is spent or he has no terrain."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Akshan's Heroic Swing: His dash + camera swing escape. Engage when it's down. When it is down — Blind the trade, shroom the map.",
+   "after": "Heroic Swing is E, 18s, and needs terrain to hook. Comeuppance stops on the first minion hit — body-block it. Blind stops autos, not Avengerang."
+  }
+ ],
+ "notes": "The two flagged suspect names behaved differently: 'Blinding Shot' is a genuine error for Blinding Dart and is fixed everywhere it appears in my edits, but 'His Comeuppance' in mid was a FALSE POSITIVE — Comeuppance is the correct name and the detector tripped on the preceding word. Biggest real problem in this matchup was not a name at all: the content layer places Heroic Swing on W in four separate strings while the full layer's focus block correctly says E, and three strings credit Akshan with a self-revive he does not have. Going Rogue resurrects his fallen ALLIES after he kills the Scoundrel who killed them; Akshan never comes back himself, so the old 'never fight where fog lets him revive uncontested' advice was steering players away from the kill that actually prevents the resurrection. Also added the two Comeuppance facts that decide late skirmishes — 2500 range rather than global, and bullets stopping on the first minion — which give the player a body-block answer the entry did not have."
+}

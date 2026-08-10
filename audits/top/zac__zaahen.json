@@ -1,0 +1,229 @@
+{
+  "ownerKey": "zac",
+  "enemy": "zaahen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two invented ability names that the packet's suspectName detector did not catch: 'E Golden Onslaught' (in early) and 'R Final Retribution' (in mid and whys[4]). Neither exists.",
+      "why": "Zaahen's E is Aureate Rush ('dashes to a location and slices around himself') and his R is Grim Deliverance ('rises then stabs downward, damaging enemies and healing for a portion of the damage dealt'). The packet only flagged \"Let's Bounce\" and \"Unstable Matter's\", both of which are false positives, so these two real errors would have shipped. The R error is compounded: the text calls Grim Deliverance a 'peel' that 'peels your dive', but Riot describes a self-centred damage-and-heal, not a displacement or disengage.",
+      "corrected": "E is Aureate Rush (dash plus a slice around himself); R is Grim Deliverance (damage plus a heal off it), not a peel.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zaahen.json (Aureate Rush E, Grim Deliverance R)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing in either layer mentions that BOTH champions in this matchup have a revive passive.",
+      "why": "Cultivation of War (P): 'When filled with Determination, Zaahen gains increased Attack Damage and can revive.' Cell Division (P) revives Zac off surviving bloblets on a 5 minute cooldown. So a trade that looks lethal for either side may not be, and the all-in maths in this lane are unlike any other matchup Zac plays. Crucially his revive is gated on Determination stacks he earns by hitting Zac with attacks and abilities — so refusing chip trades delays it.",
+      "corrected": "Both of you revive: his off full Determination stacks he earns by hitting you, yours off bloblets on a 5 minute cooldown.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zaahen.json (Cultivation of War)",
+        "champ-data/_kits/zac.json (Cell Division)"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "Packet defect: 'NO cooldown-sequencing advice anywhere.' The full layer compounds it by tracking a placeholder called 'Ultimate' rather than a named ability.",
+      "why": "The Darkin Glaive (Q) is 10s at rank 1, and the knock-up is on the RECAST, not the first cast — 'Zaahen can recast this ability to have his next attack deal bonus damage and knock up his target.' So the first glaive hit is the warning and the recast is the punish. Aureate Rush (E) is 10s, Dreaded Return (W) is 14s, Grim Deliverance (R) is 110s at rank 1. The level-2 all-in the content layer warns about is Q into E on two 10s cooldowns — that is the actual clock.",
+      "corrected": "His Q is 10s and the knock-up only comes on the recast; E is 10s, W 14s, R 110s at rank 1.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/zaahen.json (all cooldowns and The Darkin Glaive recast text)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Both sides carry displacement and neither layer says who wins the race.",
+      "why": "_missing-interactions.json flags knockup-enabler for this pairing: Zac's Stretching Strikes (Q) and Elastic Slingshot (E) against Zaahen's Darkin Glaive recast (Q) and Dreaded Return (W) pull. Whoever lands displacement first owns the trade, and Zac's E is a charged leap with a visible wind-up while Zaahen's W is a 850-range line — so Zac charging E in the open loses that race.",
+      "corrected": "Both of you displace. Charge E from fog or behind terrain, because his W pull at 850 range beats a telegraphed charge.",
+      "confidence": "Medium",
+      "sources": [
+        "champ-data/_kits/_missing-interactions.json (zac vs zaahen, knockup-enabler)",
+        "champ-data/_kits/zaahen.json (Dreaded Return, range 850)"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Grievous Wounds is never mentioned, and the full layer even omits the anti-heal clause it includes for other matchups.",
+      "why": "_missing-interactions.json flags needs-antiheal on The Darkin Glaive (Q) and Grim Deliverance (R), and resistances-invalidated on Aureate Rush (E) — his E carries percent-health damage, so stacking raw HP against him is a worse answer than it looks for a Heartsteel Zac.",
+      "corrected": "Grievous Wounds matters here, and his E deals percent health — resistances beat raw HP stacking against it.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/_missing-interactions.json (zac vs zaahen: needs-antiheal, resistances-invalidated)"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Survive this window: his Q-into-E all-in lands before your blobs stabilise you - hug tower, concede a few CS, and do not fight him on his timer.",
+      "after": "Survive this window: Q into E is two 10s cooldowns and lands before your blobs stabilise you - hug tower, concede CS, and never fight on his timer."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Passive blobs start sustaining you back to even - absorb his poke, farm safely, and let the scaling clock run in your favor.",
+      "after": "Passive blobs sustain you back to even - absorb his poke, deny the Determination stacks that arm his revive, and let the clock run."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Your R roam threat versus his R peel cancels out in lane - use Let's Bounce on the map instead: a mid-lane gank converts your losing lane into a winning game.",
+      "after": "Grim Deliverance (R) is a damage-and-heal, not a peel, and 110s - but your R roams better than it duels: a mid-lane gank converts your losing lane into a winning game."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Tank stats plus blob sustain now out-last his whole poke pattern - the lane stops being losable and starts being yours.",
+      "after": "Tank stats plus blob sustain out-last his poke - but keep Grievous Wounds up, because his Q and R both heal him back."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Level 1 is even farming - you are a famously weak early laner but nothing he has yet punishes that. Level 2 is his window and your job is damage control: his Q Darkin Glaive into E Golden Onslaught all-in beats a blob-less Zac, so hug tower, give up contested CS, and reach 3 healthy where passive blobs even it back out.",
+      "after": "Level 1 is even farming - you are a famously weak early laner but nothing he has yet punishes that. Level 2 is his window: The Darkin Glaive (Q) into Aureate Rush (E) is two 10s cooldowns and it beats a blob-less Zac, so hug tower, give up contested CS, and reach 3 healthy where blobs even it back out."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-5 are a patience contest that suits you fine: absorb poke, collect every blob, and scale. At 6 the ultimates cancel in lane - his R Final Retribution peels your dive while your R roams better than it duels - so shove and bounce mid or bot, because your map game beats winning this lane straight.",
+      "after": "Levels 3-5 are a patience contest that suits you fine: absorb poke, collect every blob, and deny the Determination stacks that arm his revive. At 6 his Grim Deliverance heals him through your damage while your R roams better than it duels - so shove and bounce mid or bot, because your map game beats winning this lane straight."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Your first tank item flips the lane for good: blob sustain out-lasts his poke and his kill script needs windows that no longer exist. Two items in you are simply ahead - W Unstable Matter's percent-HP damage chews his bruiser frame and a charged E into R Let's Bounce engage wins any fight he takes.",
+      "after": "Your first tank item flips the lane for good: blob sustain out-lasts his poke and his kill script needs windows that no longer exist. Two items in you are simply ahead - W Unstable Matter's percent-HP damage chews his bruiser frame and a charged E into R engage wins any fight he takes, with anti-heal up."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "He owns level 2: his Q plus E all-in punishes you before blobs stabilise you.",
+      "after": "He owns level 2: Q into E, both on 10s, punishes you before blobs land."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Level 6 is even - your R roam threat is offset by his R Final Retribution peel.",
+      "after": "Level 6 evens out - his R is a 110s damage-heal, not the peel it looks like."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Blob pickups that blank his poke math",
+      "after": "Blobs that blank his poke and stack math"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "The level-2 all-in before blobs stabilise",
+      "after": "The level-2 Q-E all-in before blobs land"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Q Darkin Glaive chip denying blob pickups",
+      "after": "Darkin Glaive chip that arms his revive"
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "New-champ respect — E-knock his combo, out-sustain. Zac wins the Ultimate cooldown windows.",
+      "after": "Both of you revive — deny his stacks, out-sustain. Zac wins the Darkin Glaive windows."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "E-knock his combo and out-sustain. Track Ultimate before every commit and keep the wave on your side.",
+      "after": "Deny his Determination stacks and out-sustain. Track The Darkin Glaive (10s) and keep the wave on your side."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Zaahen wins by landing Ultimate, denying your pattern, and out-trading your engage windows.",
+      "after": "Zaahen wins by chaining Q into E at level 2, arming his revive stacks, and out-trading you early."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Zac vs Zaahen - Track: Zaahen Ultimate. - Keep the wave on your side. - Engage only on Ultimate's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+      "after": "- Zac vs Zaahen - Track: The Darkin Glaive (10s). - His knock-up is on the RECAST. - Both of you have a revive passive. - Don't chase past the wave. - Anti-heal before you commit."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Zaahen Ultimate: matchup-defining — His big cooldown. Trade around it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Zaahen The Darkin Glaive: 10s at rank 1, and the knock-up is on the RECAST — the first hit is your warning. - Aureate Rush: 10s. - Dreaded Return: 14s, 850-range pull. - Grim Deliverance: 110s, damage plus heal."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Trade strictly around Ultimate: when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve him.",
+      "after": "Trade around The Darkin Glaive: the recast is what knocks you up, so break spacing after the first hit lands. If ahead, freeze and starve him."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.spikes",
+      "before": "Zaahen: Ultimate online, level 6, first item. Zac: levels 2-3 (full pattern), Heartsteel first-item spike, and the 2-item front-line window.",
+      "after": "Zaahen: level 2 Q-E all-in, full Determination stacks, first item. Zac: levels 2-3 (full pattern), Heartsteel spike, and the 2-item front-line window."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Overall difficulty: 6/10. The lane is decided by how well you track Ultimate and how disciplined your pattern is.",
+      "after": "Overall difficulty: 6/10. The lane is decided by whether you survive level 2 and deny his Determination stacks."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight — build your teamfight around that. Zaahen carry threat: 8/10 — shift to picks and wave control if he gets ahead.",
+      "after": "Slingshot from fog + R bounces win every river fight. Zaahen carry threat: 8/10 — his E deals percent health, so resistances beat raw HP, and anti-heal beats his Q and R heals."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Every blob you collect is a trade he paid for. Only take the trade when Zaahen's Ultimate is down.",
+      "after": "His level-2 window: Q into E on two 10s cooldowns, before your blobs have stabilised you at all."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Ultimate's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "The lane-control window: his Q is 10s and his W 14s, so trade in the gap and bank small leads. If behind, farm safe."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Zaahen's ultimate changes the math too.",
+      "after": "Grim Deliverance is 110s and heals him rather than peeling you off — your R roams better than it duels, so bounce mid."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Zaahen off the comeback farm. Dive with your jungler when Ultimate is down.",
+      "after": "Lead banked — now convert. Shove, take plates, recall on your Heartsteel timing, then freeze and zone Zaahen off the comeback farm and off the stacks that arm his revive."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Zaahen gets a kill, stop forcing and respect Ultimate. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.",
+      "after": "If Zaahen gets a kill, stop forcing and stop feeding Determination stacks. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Q-stretch trades and blob pickups out-sustain the early chip. Respect Zaahen's Ultimate completely — the first levels are about banking small advantages, not proving a point.",
+      "after": "Q-stretch trades and blob pickups out-sustain the early chip. Respect his level-2 Q-into-E window completely — the first levels are about damage control, not proving a point."
+    }
+  ],
+  "notes": "BIGGEST SAMPLE IN THIS SLICE (805 games) AND THE WORST WIN RATE (43.23%), so I put the most work here. Two REAL ability-name errors that the packet's detector missed entirely: 'E Golden Onslaught' should be Aureate Rush, and 'R Final Retribution' should be Grim Deliverance (appearing in early, mid and whys[4]). The R error also carried a functional mistake — the text called it a peel that 'peels your dive', but Riot describes a self-centred damage-and-heal with no displacement. Worth checking whether the same two invented names appear in other champions' Zaahen entries, since they read like they came from one bad source rather than one bad guess. Both packet suspectNames are FALSE POSITIVES (\"Let's Bounce\" missing its '!', and \"Unstable Matter's\" being flagged for the possessive). GENERATOR BUG: CHAMP_FULL.zac.zaahen.focus is the literal placeholder {text:'Zaahen Ultimate', letters:['R']}, so the whole full layer said 'track Ultimate'; I retargeted the strings I could reach to The Darkin Glaive, but dosFull and report still say 'Ultimate' because their array-of-objects shape has no documented before/after path form. NOT VERIFIED and left alone: whether Zaahen's revive can be denied by Grievous Wounds or by a killing blow of a specific type, and whether Dreaded Return's pull interrupts Zac's E charge."
+}

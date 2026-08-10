@@ -1,0 +1,163 @@
+{
+  "ownerKey": "teemo",
+  "enemy": "swain",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Six fields call Vision of Empire Swain's E and treat it as the root: spikes[0].text \"Swain's E (Vision of Empire) root\", wants.you[0] \"before his E (Vision of Empire) lands\", early \"his auto-attack plus E (Vision of Empire) threat\" and \"his Vision of Empire root\", whys[0], whys[6].",
+      "why": "Vision of Empire is Swain's W — a placed demon eye that damages, slows and reveals, on a 22/21/20/19/18s cooldown with 5500+ cast range. The root is Nevermove, his E (850 range, 12/11.5/11/10.5/10s). The two are swapped throughout, which also makes spikes[1].text's \"walk poison stacks out of his Vision of Empire range\" incoherent — at 5500+ range it is a zone you sidestep, not something you outrange.",
+      "corrected": "Nevermove (E) = the root, 850 range, 12s at rank 1. Vision of Empire (W) = placed reveal/slow zone, 22s.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/swain.json (W Vision of Empire, E Nevermove)"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing states that Vision of Empire reveals, and nothing states which half of Nevermove roots.",
+      "why": "Two decisive mechanics are absent. (1) Vision of Empire reveals champions it hits — that is a direct answer to Guerrilla Warfare, Teemo's whole camouflage game, and no other line in the entry acknowledges Swain can simply light Teemo up. (2) Riot's own Nevermove text says the wave travels out and THEN returns to Swain, rooting what it hits on the way back — so the dodge is to step into the gap behind the outgoing wave, which is the opposite of what \"respect his pull cone\" implies.",
+      "corrected": "Vision of Empire reveals you through camouflage. Nevermove roots on the return pass — step in behind the outgoing wave.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/swain.json (W flags revealsStealth; E description \"It then returns to Swain and roots enemies it hits\")",
+        "champ-data/_kits/teemo.json (P Guerrilla Warfare)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "full phases[1].why and content whys[1] both build the lane around \"Q-blind erases his auto-trade window entirely\".",
+      "why": "Swain's lane damage is Death's Hand (Q) and Nevermove (E) — abilities, which a blind leaves untouched. Blinding Dart only takes his walk-up basic attacks, so it is a spacing tool here rather than the answer the entry claims.",
+      "corrected": "Bank Blinding Dart for his walk-up autos; Death's Hand keeps ticking through it.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/swain.json (Q Death's Hand, E Nevermove)",
+        "champ-data/_kits/teemo.json (Q Blinding Dart)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "\"Blinding Shot\" in spikes[0].text, early, mid, whys[0], whys[1].",
+      "why": "Teemo's Q is Blinding Dart.",
+      "corrected": "Blinding Dart",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/teemo.json (Q Blinding Dart)"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "content mid says \"Max-ranked Blinding Shot means roughly a one-second blind on a short cooldown\", implying the cooldown falls with rank. Packet also flags no sequencing cues anywhere (sequencingCues = 0).",
+      "why": "Blinding Dart is a flat 7s at every rank — only the blind duration scales. Ranking Q up does not tighten the poke loop, which changes how the level 4-5 window actually works.",
+      "corrected": "Blinding Dart: flat 7s at all ranks, duration scales. Nevermove 12s at rank 1; Demonic Ascension 120s.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/teemo.json (Q cooldown \"7\")",
+        "champ-data/_kits/swain.json (E 12/11.5/11/10.5/10, R 120)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.foe[1] \"Stack Demonic Ascension souls\".",
+      "why": "Soul Fragments are the Ravenous Flock passive (and Vision of Empire grants one on champion hit). Demonic Ascension is the drain transform, not the stacking mechanic.",
+      "corrected": "Stack Ravenous Flock soul fragments",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/swain.json (P Ravenous Flock, W Vision of Empire)"
+      ]
+    },
+    {
+      "point": 1,
+      "status": "needs-correction",
+      "whatIsWrong": "diff \"EVEN\" / diffRating \"6/10\" against a 59.38% win rate over 485 games.",
+      "why": "59.38% is the highest win rate of any of the 39 entries labelled EVEN and sits above the median of the 12 labelled FAVOURED (54.34%), so the label understates the matchup. I did NOT propose the edit: diff, tone and diffRating are rigidly coupled in this file (FAVOURED always pairs with #3ddc97 and 4/10), and the same 6/10 is restated in breakdown.difficulty, report[14] and the phases ratings. A partial relabel would leave the entry self-contradicting, and the taxonomy is inconsistent globally (EVEN spans 46.28%-59.38% win rate), so this needs a decision from you, not a one-entry patch.",
+      "corrected": "Candidate: diff FAVOURED / tone #3ddc97 / diffRating 4/10, with breakdown.difficulty, report[14] and phases ratings updated together.",
+      "confidence": "Medium",
+      "sources": [
+        "packet winRate 59.38 over 485 games",
+        "champ-data/teemo.full.js (diff/tone/diffRating coupling across 71 entries)"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Swain's E (Vision of Empire) root lets him set up a level-1 trading pattern before your Blinding Shot can answer — respect his pull range and deny him the first proc.",
+      "after": "Swain's Nevermove (E) roots on the return pass, not the way out — step into the gap behind the outgoing wave and his level-1 pattern dies before Blinding Dart matters."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Once your Q is online you can blind every auto he tries in short trades and walk poison stacks out of his Vision of Empire range — this four-level window is where you build your lead.",
+      "after": "Once your Q is online you can blind every auto he tries in short trades and sidestep Nevermove's return pass on its 12s — this four-level window is where you build your lead."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Poke with Toxic Shot every time he walks up to last-hit and walk back before his E (Vision of Empire) lands",
+      "after": "Poke with Toxic Shot every time he walks up to last-hit, then step out before Nevermove's return pass roots you"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Stack Demonic Ascension souls through extended trades and eventually overwhelm your poison damage with raw sustain",
+      "after": "Stack Ravenous Flock soul fragments through extended trades and overwhelm your poison damage with raw sustain"
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Swain level 1 is stronger than most people expect from a mage — his auto-attack plus E (Vision of Empire) threat means the very first wave is not a free Teemo poke lane. Stand outside his E range (roughly two turret-lengths) and last-hit with your Toxic Shot auto-attack poke rather than walking into his pull cone. Once your Q Blinding Shot comes online at level 2 the dynamic flips: any auto trade he attempts is cancelled by the blind, your E poison stacks tick while he stands confused, and his Vision of Empire root is completely wasted if he lands it while you are already poisoned and backing off at Move Quick speed.",
+      "after": "Swain level 1 is stronger than most people expect from a mage — Death's Hand reaches 750 to your 680, so the very first wave is not a free Teemo poke lane. Hold the wave back and last-hit with your Toxic Shot auto poke rather than stepping into his bolt cone. Once Blinding Dart is online the dynamic flips for his walk-up autos, though Death's Hand keeps ticking straight through the blind. Nevermove is the real trap: the wave roots on its way BACK to Swain, so step into the gap behind it — and treat Vision of Empire as a hard counter to your passive, because it reveals you outright at 22s a cast."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 are your peak control window. Max-ranked Blinding Shot means roughly a one-second blind on a short cooldown, and Swain has no dash to reset positioning after you blind him — he must walk out, eat two more Toxic Shot autos, and reset. Use this loop to deny him every third wave of CS while keeping your mushrooms in the tribush and the river entrance above the lane so his jungler cannot counter-gank without revealing themselves. At level 6 Swain's Demonic Ascension drain changes the math on extended fights — never let him root you with E and then pop R over you. Take short poke trades only, maintain your HP advantage, and begin setting shrooms further into his jungle so you convert lane lead into map pressure.",
+      "after": "Levels 4-5 are your peak control window. Blinding Dart sits on a flat 7s at every rank — only the blind duration grows — and Swain has no dash to reset after you blind him, so he must walk out, eat two more Toxic Shot autos, and reset. Use this loop to deny him every third wave of CS while keeping your mushrooms in the tribush and the river entrance above the lane so his jungler cannot counter-gank without revealing themselves. At level 6 Swain's Demonic Ascension drain changes the math on extended fights — never let him root you with Nevermove and then pop R over you. Take short poke trades only, hold your HP advantage, and set shrooms deeper in his jungle so you convert lane lead into map pressure."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Swain's E (Vision of Empire) at level 1 threatens a root-into-auto trade before you have Blinding Shot online — he dictates the opening skirmish and you must respect his pull cone.",
+      "after": "Death's Hand outranges you 750 to 680 at level 1, so he dictates the opening skirmish before Blinding Dart exists — hold the wave back and take your poison autos on his walk-up instead."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Blinding Shot is online and negates his auto-trade pattern, but his range and E threat keep the lane genuinely even — neither side can force a decisive trade yet.",
+      "after": "Blinding Dart is online, but his damage is Death's Hand and Nevermove — abilities the blind leaves alone — so bank it for his walk-up autos and keep every trade short."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Two completed AP items let Swain sustain through your poison in extended fights; a single Vision of Empire root into Demonic Ascension is lethal now, and your split-push is the only safe win condition.",
+      "after": "Two completed AP items let Swain sustain through your poison in extended fights; a single Nevermove root into Demonic Ascension is lethal now, and your split-push is the only safe win condition."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Q-blind erases his auto-trade window entirely. Only take the trade when Swain's Demonic Ascension is down.",
+      "after": "His damage is Death's Hand, not autos. Bank Blinding Dart for the walk-up and keep the trade short."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Swain Demonic Ascension: matchup-defining — His drain. Poke when it’s down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Swain Demonic Ascension: 120s — his drain. Poke the moment it drops. - Nevermove: 12s at rank 1, and it roots on the return pass, not the way out. - Vision of Empire: 22s, and it reveals you."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Swain's Demonic Ascension: His drain. Poke when it’s down. When it is down — Blind + poke him.",
+      "after": "Vision of Empire reveals you through camouflage, 22s. Nevermove roots on its return pass — step in behind it."
+    }
+  ],
+  "notes": "The Vision-of-Empire/Nevermove swap is systemic, not local to this matchup — every Teemo-vs-Swain field that names an ability had it backwards, so it is worth grepping \"E (Vision of Empire)\" across all owners. Separately, Vision of Empire revealing through camouflage is a Teemo-specific counter that is likely missing from every Swain matchup in the file, not just this one. Difficulty label mismatch is written up in the audit but deliberately not proposed as an edit — see point 1. WKM_LINES not inspected."
+}

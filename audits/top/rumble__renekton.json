@@ -1,0 +1,100 @@
+{
+  "ownerKey": "rumble",
+  "enemy": "renekton",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Emerald+ win rate 54.05% over 1123 games matches the favoured framing already in the text.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packets/rumble.json"]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Difficulty framing is right: Rumble owns levels 1-5 because Flamespitter (10/9/8/7/6s) out-pressures a melee with a 16s rank-1 Ruthless Predator, Renekton takes level 6 on Dominus, and Rumble retakes the game at two items. Side lane and teamfights favour Rumble because The Equalizer punishes a dash-less bruiser.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json", "champ-data/_kits/rumble.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level 6 spike named Dominus but gave no number, so the advice was 'respect it' with nothing to act on.",
+      "why": "Dominus is 120/100/80s. At rank 1 that is a two-minute window after he burns it in which Rumble's own pattern is uncontested — that is the actionable half of the spike.",
+      "corrected": "Spike text now states the 120s rank-1 cooldown and tells the player to force fights inside it.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The single most important interaction in this matchup was absent everywhere: Ruthless Predator at 50+ Fury DESTROYS damage shields on the target. That deletes Scrap Shield before the stun even applies.",
+      "why": "Riot's own description of Ruthless Predator: at more than 50 Fury he slashes three times, 'destroying damage shields on the target'. Rumble's entire defensive layer against a Renekton all-in is Scrap Shield (6s flat cooldown). Pre-shielding into a full-fury Renekton therefore throws the shield away for free — the correct sequencing is to shield AFTER the stun resolves, not before it.",
+      "corrected": "Stated in wants.you[1], dosFull[0].d, dontsFull[1].d and the Key Ability Interactions report line, with the 16s rank-1 / 8s rank-5 cooldown attached.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json (W description)", "champ-data/_kits/rumble.json (W)"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags zero cooldown-sequencing cues, and breakdown.cooldowns listed abilities with no numbers.",
+      "why": "Real numbers make the advice usable: Ruthless Predator 16s at rank 1 down to 8s at rank 5, Slice and Dice 16/14.5/13/11.5/10s and his only escape, The Equalizer 130s at rank 1.",
+      "corrected": "breakdown.cooldowns rewritten with all three numbers.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json", "champ-data/_kits/rumble.json"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "_missing-interactions flags Renekton's Cull the Meek sustain as needing Grievous Wounds; the Itemization report line already calls for Oblivion Orb / Executioner's early. Nothing to add.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/_missing-interactions.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Track Ruthless Predator's fury bar — commit your full pattern only in the window after he burns his empowered W stun",
+      "after": "Watch his Fury: past 50, Ruthless Predator destroys Scrap Shield before it stuns — shield after his stun, never before"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Renekton's Dominus gives him resistances and a rage burst that turns a losing all-in around — respect it and never commit your Equalizer into his ultimate activation window.",
+      "after": "Dominus gives Renekton bonus health, resistances and a fury refill that flips a losing all-in — it is 120s at rank 1, so the two minutes after he burns it are yours to force."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Empowered = long stun. Kite it. Only engage once it is down or baited.",
+      "after": "At 50+ Fury it eats Scrap Shield, then stuns. Fight only when it is down."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Empowered it eats Scrap Shield — shield after his stun, never before."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Renekton's Ruthless Predator (Stun): Empowered = long stun. Kite it. When it is down — Flame + E-R him.",
+      "after": "At 50+ Fury Ruthless Predator destroys Scrap Shield before it stuns — shield after it lands. Down 16s: your window."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Renekton Ruthless Predator: matchup-defining — Empowered = long stun. Kite it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Ruthless Predator: 16s at rank 1, 8s at rank 5 — empowered, it eats Scrap Shield first. - Slice and Dice: 16s, his only escape — punish after he dashes in. - The Equalizer: 130s at rank 1, kill windows only."
+    }
+  ],
+  "notes": "Rumble's kit file mis-derives knockup and terrain flags on Scrap Shield (W) — Riot's description is only a shield plus a movement-speed burst, no displacement and no terrain. _missing-interactions.json inherits that error and emits a 'both sides carry displacement' rule for Rumble vs Riven, Singed and Zac. Do not write displacement claims for Scrap Shield. The packet's suspectNames hit on 'Use Equalizer' is a false positive — that is normal shorthand for The Equalizer."
+}

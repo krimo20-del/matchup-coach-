@@ -1,0 +1,157 @@
+{
+  "ownerKey": "teemo",
+  "enemy": "galio",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The entry invents an MR-stacking passive for Galio and treats it as the reason Teemo's poke fails: whys[0] \"Galio's passive MR-shield absorbs your level-1 Toxic Shot chip\", whys[2] \"Galio's MR scaling blunts your poison damage\", early \"Galio's passive stacks MR from his own items and runes\", spikes[0].text \"MR-scaling shield absorbs your poison chip\", wants.foe[0] \"Shield of Durand's MR passive is stacked\".",
+      "why": "Galio's passive is Colossal Smash: 'Every few seconds, Galio's next basic attack deals bonus magic damage in an area.' There is no MR-stacking passive and no MR passive on Shield of Durand — W is a charged defensive stance that shields and then taunts. The correction inverts the advice, because Colossal Smash is a basic attack: Blinding Dart blanks it outright. Telling a Teemo his poison is nullified by phantom resistances makes him play passive in a lane where his blind actually deletes Galio's only auto-attack threat.",
+      "corrected": "Colossal Smash is an empowered basic attack, so one blind cancels it. What you cannot blind is Winds of War (Q) — an 825-range damage-over-time tornado. Shield of Durand is a charged stance he has to commit to, not a passive resistance stack.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/galio.json (P Colossal Smash: 'Every few seconds, Galio's next basic attack deals bonus magic damage in an area', flags autoReset,zone; W Shield of Durand: 'charges a defensive stance, moving slowly. Upon releasing the charge, Galio will taunt', flags hardCC,slow,shield — no MR)", "champ-data/_kits/teemo.json (Q Blinding Dart)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.foe[1] attributes the knock-up to Q: \"Taunt you into his team with W and follow with a Q knock-up to lock you down\".",
+      "why": "Winds of War (Q) is a converging windblast tornado that deals damage over time — it has no displacement. The knock-up is Justice Punch (E), a 650-range dash that knocks up the first enemy champion it meets. Getting the slot wrong here matters because the whole matchup is about respecting the E range, not the Q.",
+      "corrected": "Justice Punch (E) is the knock-up and the engage; Winds of War (Q) is chip. The order is E in, then W taunt.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/galio.json (E Justice Punch: 'briefly step back and charge, knocking up the first enemy champion he encounters', range 650; Q Winds of War: 'two windblasts that converge into a large tornado that deals damage over time')"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "early and whys[1] make Shield of Durand the ranged kill threat: \"if you stand at Q range and he has W up, he charges Shield of Durand silently and taunts you\"; \"Galio can silently stack the W taunt while you try to poke\". wants.you[0] also claims blinding before his E means \"his dash does zero auto-attack damage mid-flight\".",
+      "why": "Shield of Durand is 275 range. Teemo's auto and Blinding Dart are both 680. Galio physically cannot taunt you from your own spacing, and while charging W he moves slowly, which is the opposite of silent. The real threat is Justice Punch at 650 range closing the gap first. And a blind does not stop Justice Punch: the dash and its knock-up are ability effects, unaffected by blind — the blind's value is cancelling the Colossal Smash auto that follows.",
+      "corrected": "Outspace the 275-range W entirely; the button that beats your spacing is the 650-range Justice Punch. Hold Blinding Dart for the autos after his E lands, since blind stops neither the dash nor the knock-up.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/galio.json (W range 275, 'moving slowly'; E range 650)", "champ-data/_kits/teemo.json (Q range 680, E Toxic Shot range 680)"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "The full layer is built around 'track Justice Punch' and the content around 'respect his E commitment windows', but no cooldown number appears anywhere in either layer.",
+      "why": "Justice Punch is 11/10/9/8/7 and Shield of Durand is 18/17/16/15/14, against Blinding Dart's flat 7 seconds. At rank 1 that is one guaranteed free blind per engage attempt and roughly two per W. Hero's Entrance is 180/160/140 — long enough that a roam genuinely costs him lane presence, which is the entry's own level-6 argument but currently unquantified.",
+      "corrected": "Justice Punch 11s at rank 1 (7s at rank 5); Shield of Durand 18s at rank 1; Hero's Entrance 180s at rank 1. Blinding Dart is a flat 7s, so early on you always have a blind for his engage.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/galio.json (E 11/10/9/8/7; W 18/17/16/15/14; R 180/160/140)", "champ-data/_kits/teemo.json (Q cooldown 7 flat)"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing addresses that Teemo has no dash against a champion whose engage can cut him off from terrain.",
+      "why": "_missing-interactions.json flags 'terrain-cuts-retreat: Galio can cut your retreat with Justice Punch (E) and you have no dash — hold Flash for the wall, not the damage.' Justice Punch steps Galio back and then charges, so he can end up between Teemo and the retreat path. Move Quick is a speed buff, not a blink, and it is cancelled by being struck by an enemy champion or turret — so it does not rescue a Teemo who has already been cut off.",
+      "corrected": "Move Quick is passive speed that breaks the moment a champion or turret hits you, so it is a spacing tool, not an escape. Once Justice Punch is behind you, Flash is the only out — hold it for the reposition, not for damage.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/teemo.json (W Move Quick: 'passively increasing his Move Speed until he is struck by an enemy champion or turret')", "champ-data/_kits/galio.json (E Justice Punch: dash, 'briefly step back and charge')", "champ-data/_kits/_missing-interactions.json teemo/galio: terrain-cuts-retreat"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "mid attributes an MR spike to \"a first component (Kindlegem, Blasting Wand)\".",
+      "why": "Neither component gives magic resist — Kindlegem is health and cooldown reduction, Blasting Wand is ability power. The stated cause of the Levels 4-5 stall is simply not a thing.",
+      "corrected": "The Levels 4-5 stall is a cooldown story, not a resistance story: your Q is rank 2-3 and his Justice Punch is down to 9-10 seconds.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/galio.json (no MR in kit); standard item components"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "mid says \"your Q is near-maxed\" at Levels 4-5.",
+      "why": "Blinding Dart is rank 2 at level 4 and rank 3 at level 5, maxed at level 9, and it is a flat 7s cooldown at every rank — ranking it produces no spike.",
+      "corrected": "Q is rank 2-3 at this stage.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/teemo.json (Q cooldown '7' flat)"]
+    },
+    {
+      "point": 4,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The packet flags \"Shield of Durand's\" and \"Use Hero's Entrance\" as probable wrong ability names. Both are false positives from the near-miss matcher — Shield of Durand and Hero's Entrance are the correct names for W and R. The real error in wants.foe[0] is the phantom 'MR passive' attached to the correct name, and in wants.foe[2] there is no error at all.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/galio.json (W: Shield of Durand; R: Hero's Entrance)"]
+    },
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "52.61% over 690 games; the chart's Galio 2 / Skill 3 / Teemo 2 split does not contradict a near-even win rate.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["scratchpad packet teemo.json entry galio"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Galio's passive MR-shield absorbs your level-1 Toxic Shot chip before it can set a poke advantage — his Colossal Smash empowered auto wins the first extended trade.",
+      "after": "Galio's passive is Colossal Smash, an empowered basic attack, so your blind blanks it outright — what actually wins his level 1 is Winds of War poke you cannot blind."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Shield of Durand comes online at level 2 and Galio can silently stack the W taunt while you try to poke; stepping into his charge range gifts him a free empowered-auto combo before Blinding Dart can save you.",
+      "after": "Shield of Durand comes online at level 2, but its taunt only reaches 275 units against your 680 — he cannot open with it. His kill pattern is Justice Punch (E) in first and W second, so blind the follow-up."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Both kits are fully online but Galio's MR scaling blunts your poison damage enough that neither side finds a clean kill — respect his E commitment windows and keep Q on cooldown for when he dashes.",
+      "after": "Both kits are fully online and Justice Punch is 11 seconds at rank 1 against your flat 7-second blind — you get one free blind per engage attempt, so hold Q for his dash rather than spending it on chip."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Galio's passive stacks MR from his own items and runes, meaning your Toxic Shot poison and E damage are partially nullified from the opening seconds — do not expect the same chip-trade dominance you get against a squishy melee. His level-2 W taunt is the kill threat: if you stand at Q range and he has W up, he charges Shield of Durand silently and taunts you into a full Colossal Smash empowered auto combo. Respect the W charge animation and step back the moment you see it; once his W is on cooldown you have a clean window to land Blinding Dart and two poison autos before retreating. Never commit to chasing — Galio's Q poke costs him nothing and he wants you to step forward into taunt range.",
+      "after": "Galio's passive is Colossal Smash, an empowered basic attack that comes up every few seconds — and because it is a basic attack, one Blinding Dart erases it. What you cannot blind is Winds of War (Q), an 825-range tornado that ticks damage over time, so do not try to win a pure poke war against it. Shield of Durand only reaches 275 units against your 680, so he can never taunt you from your own spacing — the kill pattern is Justice Punch (E) in from 650 range first, then the W taunt on top. That means your blind is reserved for the autos after his E commits, not for the W charge animation. Never step forward to chase; 650 units is exactly the range he wants you at."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Galio's passive Colossal Smash empowered auto + MR-scaling shield absorbs your poison chip before Blinding Dart can set a poke lead — respect his level-2 W taunt window or he eats a full trade for free.",
+      "after": "Galio's Colossal Smash is a passive empowered basic attack, so a single Blinding Dart cancels it — the level 1-2 danger is Winds of War chip and the 650-range Justice Punch, not a W taunt that only reaches 275."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Trade into your magic damage while Shield of Durand's MR passive is stacked, soaking Toxic Shot with bonus resistances",
+      "after": "Charge Shield of Durand's damage reduction before trading into your magic damage, soaking Toxic Shot behind the stance"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Taunt you into his team with W and follow with a Q knock-up to lock you down before Blinding Dart lands",
+      "after": "Justice Punch (E) in for the knock-up, then taunt with W, locking you down before Blinding Dart lands"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Land Blinding Dart before Galio's E commit so his dash does zero auto-attack damage mid-flight",
+      "after": "Save Blinding Dart for his post-E autos — blind stops the follow-up, not the dash or the knock-up"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 are genuinely even because your Q is near-maxed and shroom radius is expanding into the tribush, but Galio's MR spike from a first component (Kindlegem, Blasting Wand) keeps your damage muted enough that you cannot burst him. Play the lane like a slow-bleed: drop one shroom at the lane brush entrance on every cooldown, force Galio to reveal his walk-path to trade, then blind and disengage. At 6, his Hero's Entrance global is strong but costs him the wave every time — the instant he recalls or pings bot, shove a cannon wave and spend 30 seconds dropping mushrooms at both river entrances so he cannot sneak back in without your vision seeing him re-path.",
+      "after": "Levels 4-5 are genuinely even: your Q is only rank 2-3 and Justice Punch is down to 9-10 seconds, but your shroom radius is expanding into the tribush. Play the lane like a slow-bleed: drop one shroom at the lane brush entrance on every cooldown, force Galio to reveal his walk-path to trade, then blind the autos that follow his dash and disengage. At 6, his Hero's Entrance global is strong but costs him the wave every time and runs 180 seconds at rank 1 — the instant he recalls or pings bot, shove a cannon wave and spend that window dropping mushrooms at both river entrances so he cannot sneak back in without your vision seeing him re-path."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Galio Justice Punch: matchup-defining — His dash + knockup engage. Punish him when it's down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Galio Justice Punch: matchup-defining — his 650-range dash + knockup engage, 11s at rank 1. Punish the downtime. - His W taunt only reaches 275 units, so outspace it rather than fear it. - Your ultimate: kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].t",
+      "before": "Q-blind his Justice Punch trade",
+      "after": "Q-blind the autos after his E"
+    }
+  ],
+  "notes": "champ-data/_kits/galio.json derives no 'knockup' flag for E Justice Punch even though its own description text says 'knocking up the first enemy champion he encounters'. The flag derivation missed it; the description is authoritative and I used that. Worth checking whether other kits have the same gap, because a missing knockup flag will suppress genuine displacement interactions in _missing-interactions.json."
+}

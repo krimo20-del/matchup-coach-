@@ -1,0 +1,144 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "lucian",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "The whole entry is built on 'track Relentless Pursuit' — it is named in tldr, winCon, enemyWin, ahead, loading, phases[3].why, breakdown.mid/cooldowns/trading/spikes/feeding/difficulty and dosFull — yet the cooldown is never given, and more importantly the file treats it as a fixed timer. It is not.",
+   "why": "Relentless Pursuit is 16/15.5/15/14.5/14s, but Lightslinger attacks reduce its cooldown. Every double-shot Lucian lands shortens his escape. A Nasus who starts a mental 15-second count after Lucian dashes will walk into a dash that is already back — and 'engage when it's down' is the file's stated win condition, so this error sits directly on top of the advice that matters most. The correct instruction is to count his ability casts and hits, not seconds. It also costs 32/24/16/8/0 mana, so it is entirely free at rank 5.",
+   "corrected": "Relentless Pursuit is 16 down to 14s on paper, but Lightslinger hits keep cutting it — count his casts, not seconds.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lucian.json E description, cooldown and cost"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "The packet flags that the entry never names any of Lucian's abilities, and the content layer indeed says only 'his passive double-shot', 'Q poke' and 'his E dash'. Beyond the naming, Piercing Light's actual behaviour is never described.",
+   "why": "Piercing Light is cast on a target and fires THROUGH it. Lucian can cast it on a caster minion and the beam still lands on the Nasus standing behind the wave. That is the single most common way a Nasus bleeds health in this lane while believing he is safe, and it is not derivable from 'Q poke'. Lightslinger's double-shot is also specifically triggered by an ability cast, which makes his burst window predictable: ability, then empowered auto.",
+   "corrected": "Lightslinger (P) turns his next attack into a double-shot after every ability. Piercing Light (Q) fires through its target — standing behind minions does not protect you. Ardent Blaze (W) marks you and gives him Move Speed for attacking the mark.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lucian.json P, Q and W descriptions"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The packet flags the chart directly: Nasus wins 53.86% over 1255 games, but the content chart gives Lucian 4 stages to Nasus's 1. The FULL layer is worse still — full.phases hands Lucian five stages and Nasus none.",
+   "why": "full.phases[6].why says in plain words 'you out-duel Lucian on cooldown and three-shot his tower', and phases[5].why says 'The lane bully phase is over; he knows it'. Both describe Nasus-favoured stages while the side field says 'Skill'. This is not a judgement call — the prose and the label contradict each other inside the same object. Correcting the two item stages in FULL, and the first-item stage in content, gives Lucian 4 / Skill 1 / Nasus 2, which is a coherent read of a scaling matchup won 53.86%.",
+   "corrected": "full.phases[5].side and full.phases[6].side -> Nasus; content.win[5] -> Nasus.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/nasus.full.js nasus.lucian phases[5]/[6] why text",
+    "champ-data/content/nasus.js MC_WR_TABLES nasus.lucian 53.86"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "content.late and content.whys[6]/spikes[3].text claim Lucian has no percent-health and no true damage. I checked this against the kit and it is accurate — Lucian carries no percentHealth or trueDamage anywhere. Normally I would cut a stated negative as filler, but here it is load-bearing: it is the reason Nasus's health bar is a real win condition in this specific matchup, so I left all three alone.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lucian.json full flag set"
+   ]
+  },
+  {
+   "point": 5,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "content.mid's level-6 read is right and specific — Wither's attack-speed component is what breaks the Lightslinger rhythm and the Ardent Blaze move-speed kite at the same time. I only renamed the abilities inside it rather than rewriting the logic.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/lucian.json P and W",
+    "champ-data/_kits/nasus.json W"
+   ]
+  },
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "53.86% over 1255 games — the largest sample in this slice, and consistent everywhere it appears.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/content/nasus.js MC_WR_TABLES"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Lucian Relentless Pursuit: matchup-defining — His dash + reset. Engage when it's down. Track it before every engage.",
+   "after": "- Relentless Pursuit: 16 down to 14s on paper, but every Lightslinger double-shot cuts it — count his casts, not seconds."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His dash + reset. Engage when it's down. Only engage once it is down or baited.",
+   "after": "Lightslinger hits shorten it — count his ability casts, not the 14-16s timer."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "content",
+   "path": "win[5]",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Levels 1-3 belong to Lucian — his passive double-shot and Q poke punish you every single time you walk up to last-hit a Q stack, and you have no answer but to eat it. Don't try to trade; farm with Spirit Fire on the back of the wave to grab stacks safely and let Soul Eater lifesteal heal the chip. Respect his E dash — if you over-commit on a Q he just dashes out and double-shots you free. Concede the lane, hoard stacks, and play not to die.",
+   "after": "Levels 1-3 belong to Lucian — Lightslinger's double-shot after every ability plus Piercing Light (Q) punish you every time you walk up to last-hit a Q stack, and you have no answer but to eat it. Don't try to trade; farm with Spirit Fire on the back of the wave and let Soul Eater lifesteal heal the chip. Piercing Light fires THROUGH its target, so hiding behind a minion does not save you. Concede the lane, hoard stacks, play not to die."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 4-5 stay his — he's still poking you off the wave and your Wither alone doesn't win a kite war against his range and E. Level 6 is your first real swing: Fury of the Sands plus a well-timed Wither flips a committed all-in, because dropping his attack speed and movement speed shuts off the double-shots and E repositioning that beat you. Don't chase him across the lane — only punish when he steps up to deny a stack or burns E aggressively, then W and ult on top of him.",
+   "after": "Levels 4-5 stay his — he's still poking you off the wave and Wither alone doesn't win a kite war against his range and Relentless Pursuit. Level 6 is your first real swing: Fury of the Sands plus a well-timed Wither flips a committed all-in, because dropping his attack speed and movement shuts off the Lightslinger double-shots and the Ardent Blaze (W) speed he kites with. Don't chase him across the lane — punish only when he steps up to deny a stack or burns E, then W and ult on top of him."
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Lucian's passive double-shot and Q poke chunk you the instant you step up to last-hit a Q stack, and you have no ranged answer but Spirit Fire farm.",
+   "after": "Lightslinger double-shots and Piercing Light chunk you the instant you step up to last-hit a Q stack, and Spirit Fire is your only ranged answer."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "Wither at 3 can peel one all-in but he just E-dashes out and keeps poking; you still lose the extended trade.",
+   "after": "Wither at 3 peels one all-in, but Relentless Pursuit walks him out and he keeps poking; you lose the long trade."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Lucian's passive double-shot plus Q poke and his E dash chunk you every time you walk up for a Q stack — your worst window.",
+   "after": "Lightslinger double-shots, Piercing Light and Relentless Pursuit chunk you every time you walk up for a Q stack — your worst window."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Use his E dash and movement to kite back and never let Wither stick or your ult reach him",
+   "after": "Shorten Relentless Pursuit with Lightslinger hits so a dash is always up when you commit"
+  }
+ ],
+ "notes": "The packet listed no suspectNames here, but both flagged defects were real and the naming one understated the problem: it was not just that abilities went unnamed, it was that the file's single stated win condition ('track Relentless Pursuit') rests on a cooldown that is dynamic, which nothing in either layer said. The chart edit is the one item in this proposal I would rate Medium rather than High — I made it because the phases[5]/[6] why-text and the side labels contradict each other inside the same object, not because I re-judged the matchup from scratch."
+}

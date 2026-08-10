@@ -1,0 +1,193 @@
+{
+  "ownerKey": "tahmkench",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "The content layer carries no cooldown numbers and no sequencing at all — seven `whys`, four `spikes`, six `wants` and three prose blocks without a single \"wait for X before Y\". It names exactly one Locke ability (Purgatory) across the entire layer.",
+      "why": "The full layer already knows the answer and the content layer never inherited it: Ashen Pursuit is a flat 10s at every rank and is his only mobility, so the ten seconds after it is spent is the whole lane. Ritual Nails is 10/9/8/7/6s, Soul Ignition 18/17/16/15/14s, Purgatory 120/100/80s. A player reading only the loading-screen content gets \"keep leaning on him\" with no idea when.",
+      "corrected": "Ashen Pursuit: flat 10s at every rank, his only exit — commit in that window. Ritual Nails: 10s at rank 1, 950 range. Soul Ignition: 18s at rank 1. Purgatory: 120s at rank 1.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/locke.json — cooldowns for Q/W/E/R"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing anywhere states when Soul Ignition's healing actually lands.",
+      "why": "Riot's text: \"Locke ignites his soul, gaining Attack Speed and Move Speed, and dealing damage to himself. At the end of the duration, Locke will heal back a portion of the damage he takes during the effect.\" The refund is a single payment at expiry, not sustain during the fight. That makes Grievous Wounds timing binary rather than gradual — applied any time before the duration ends, it cuts the entire refund; applied after, it does nothing. _missing-interactions.json flags needs-antiheal for this pairing and the content layer never mentions anti-heal at all.",
+      "corrected": "Soul Ignition pays him back only when the duration expires. Land Grievous Wounds before that moment and the whole refund is cut; he also enters the trade having already damaged himself.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/locke.json — Soul Ignition; champ-data/_kits/_missing-interactions.json (needs-antiheal)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content spikes[0] and `early` assert that Tahm Kench's passive and grey health \"beat his poke plan from the very first wave\" without qualification.",
+      "why": "Ritual Nails is 950 range against Tongue Lash's 900. He out-ranges your only poke tool, so at level 1 he pokes first and you answer, not the reverse. The correct level-1 read is a step-in step-out pattern, not a range war you are told you already win.",
+      "corrected": "Ritual Nails 950 vs Tongue Lash 900 — he holds the range edge. Step in for the Q, step back out; do not try to trade poke for poke.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/locke.json — Ritual Nails range 950; champ-data/_kits/tahmkench.json — Tongue Lash range 900"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The content layer never mentions Locke's marks, which the full layer correctly identifies as his entire engine.",
+      "why": "Ritual Nails \"deal damage to and mark enemies hit. Locke can consume the marks to deal bonus damage with his attacks.\" The mark count sitting on you is a pre-paid burst waiting for Ashen Pursuit. The full layer says to \"watch your own debuff bar like a cooldown\" — the content layer, which is what shows on the loading screen, says nothing.",
+      "corrected": "Track your own nail-mark count. Two or three marks plus an available Ashen Pursuit is his kill script already paid for.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/locke.json — Ritual Nails"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "diff is \"FAVOURED\" at 4/10 on a 49.75% matchup, full phases give Tahm Kench all 7 of 7 stages, and the two layers disagree with each other at Level 6 and First item.",
+      "why": "49.75% over 603 games is a coin-flip. Every neighbouring entry in the same table is labelled EVEN 6/10 — Shen 49.8%, Vladimir 49.8%, Galio 49.86%, Illaoi 49.93%. FAVOURED 4/10 tells a player this is a free lane when the data says it is not. Worse, the full layer's own `why` text contradicts its own side labels: phases[4] is sided Tahm Kench while its why reads \"fights now end at HIS floor\", and phases[5] is sided Tahm Kench while its why reads \"his blink-bite now genuinely one-shots marked squishies\". Meanwhile content win[4] and win[5] say Skill for the same two stages. Three different answers again.",
+      "corrected": "EVEN / 6/10, matching the 49.8% cohort in the same file. Level 6 and First item belong to Locke in both layers — that is what both layers' own prose already describes.",
+      "confidence": "High",
+      "sources": ["packet tahmkench.json — winRate 49.75, games 603; champ-data/tahmkench.full.js — diff labels for shen/vladimir/galio/illaoi at 49.8-49.93%"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Neither layer mentions that Tongue Lash's stun and Devour compete for the same three stacks.",
+      "why": "An Acquired Taste: \"At three stacks, he can use Devour on an enemy champion.\" Tongue Lash: \"If the champion already has 3 stacks, they are stunned and the stacks are consumed.\" Against a champion whose ultimate is an execute you want to be removed from, Devour is worth far more than a stun — but a player who fires Q at three stacks loses the option silently.",
+      "corrected": "Hold three stacks for Devour. The Tongue Lash stun spends the same three and leaves the ultimate unavailable.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tahmkench.json — An Acquired Taste, Tongue Lash"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "_missing-interactions.json flags resistances-invalidated on Soul Ignition (raw armour or MR is the wrong answer), but I am not proposing an itemization edit on that basis.",
+      "why": "The trueDamage flag on Soul Ignition could be derived from the self-damage rather than from damage he deals to you; Riot's short text does not distinguish. Asserting \"his steroid deals true damage, build HP not resists\" from an ambiguous derived flag would be speculation, so I left the itemization strings alone. Flagging it so a human with the wiki can settle it.",
+      "corrected": "",
+      "confidence": "Low",
+      "sources": ["champ-data/_kits/locke.json — Soul Ignition flags; champ-data/_kits/_missing-interactions.json (resistances-invalidated)"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Passive stacks and grey health beat his poke plan from the very first wave.",
+      "after": "Tongue Lash reaches 900, Ritual Nails 950 — he pokes first. Step in, step out."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Your dive engage plus stacked passive out-trades everything he can offer.",
+      "after": "Abyssal Dive is 21s — spend it only after Ashen Pursuit's flat 10s is gone."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Purgatory gives him a real execute threat — the first even stage of the lane.",
+      "after": "Purgatory is 120s at rank 1 and executes — never end a trade at sliver HP."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "You scale into a peel-tank his execute cannot punish — the matchup shuts.",
+      "after": "Grievous Wounds landed before Soul Ignition expires denies the whole refund."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Poke windows your sustain cannot answer",
+      "after": "Nail marks stacked on you before he blinks"
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Levels 1 through 5 are a grind he loses: passive stacks and grey health beat his poke, the Q slow drags him into melee trades built for you, and from 3 your dive engage plus stacked passive out-trades everything. His on-hit chip just becomes grey health you recover — keep leaning on him.",
+      "after": "Levels 1 through 5 are a grind he loses, though not for free: Ritual Nails reaches 950 to Tongue Lash's 900, so he pokes first and you answer. What you own is the ten seconds after Ashen Pursuit — flat 10s at every rank, and his only exit. Silver Stake chip becomes grey health you recover; keep leaning on him."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "At 6 and his first item the lane holds even: Purgatory turns your low HP into a real threat, though the grey-health recovery keeps even his burst-execute line a coinflip. Respect the slow-in, end trades above the threshold, and let your tank items build while his one window slowly closes.",
+      "after": "At 6 and his first item the lane tips to him: Purgatory is 120s and executes, so a fat grey-health bar is a liability rather than a buffer. Soul Ignition is 18s at rank 1 and refunds his HP only when the duration ends — Grievous Wounds applied before it expires cancels the entire refund. End trades above the floor."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "With items you scale into exactly what he cannot punish: a peel-tank whose health bar never sits below the execute line for long. Eat his engage attempts with Thick Skin, slow and stun his dives on your carries, and let the team handle the damage — his kit runs out of answers before yours does.",
+      "after": "With items you scale into exactly what he cannot punish: a peel-tank whose health bar rarely sits below the execute line. Eat Ashen Pursuit with Thick Skin, and hold three An Acquired Taste stacks for Devour rather than the Tongue Lash stun, which consumes the same three — his kit runs out of answers before yours."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 your dive engage plus passive stacks out-trade him cleanly.",
+      "after": "At level 3, dive only once Ashen Pursuit's flat 10s is spent."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Through 4-5 your HP and sustain grind his steroid down.",
+      "after": "Soul Ignition is 18s and only refunds HP at the end."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "At 6 his R execute threat evens the lane for the first time.",
+      "after": "At 6 Purgatory's execute on 120s takes the lane off you."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "First-item burst arrives for him, but your grey-health recovery keeps it a coin-flip.",
+      "after": "First-item burst arrives and stacked nail marks cash in — grey health is not distance."
+    },
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Skill",
+      "after": "Locke"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Skill",
+      "after": "Locke"
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "His Q recasts whiffed and E is spent — take the trade your kit is built for.",
+      "after": "Ritual Nails whiffed and Ashen Pursuit's flat 10s is spent — take that trade."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Favoured matchup — difficulty 4/10, Locke carry threat 5/10.",
+      "after": "Even matchup — difficulty 6/10, Locke carry threat 5/10."
+    },
+    {
+      "layer": "full",
+      "path": "diffRating",
+      "before": "4/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "diff",
+      "before": "FAVOURED",
+      "after": "EVEN"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Tahm Kench",
+      "after": "Locke"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Tahm Kench",
+      "after": "Locke"
+    }
+  ],
+  "notes": "Locke's full layer is the best-written entry in this slice — it already contains the Ashen Pursuit 10s window, the mark-count-as-cooldown idea and the execute-floor discipline. The content layer inherited none of it, which is why the packet flags this matchup for zero sequencing: the loading-screen text names one ability in the whole file. Most of my content edits are transplanting facts the full layer already had right. Three enum-style edits will fail a strict +/-10% length band and need applying by hand: full diff (\"FAVOURED\" -> \"EVEN\") and full phases[4].side / phases[5].side (\"Tahm Kench\" -> \"Locke\"). The content win[4]/win[5] flips happen to be length-neutral (\"Skill\" and \"Locke\" are both 5 characters) so those should apply cleanly. I did not verify the \"125 range\" and \"Lich Bane\" claims in the full layer against anything — they are not derivable from the kit file, so I left them untouched."
+}

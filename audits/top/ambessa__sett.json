@@ -1,0 +1,257 @@
+{
+ "ownerKey": "ambessa",
+ "enemy": "sett",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Facebreaker is described as a pull-stun in eight places — spikes[1], early, mid, wants.you[1], wants.foe[0], whys[2], dontsFull[2] and the report row built from it. Its actual condition is never stated.",
+   "why": "Riot's Facebreaker text: \"Sett pulls in all enemies on opposite sides of him, dealing damage and stunning them. If enemies were only on one side, they are slowed instead of stunned.\" In a solo lane against one champion it is a SLOW by default. It only stuns when Sett has enemies on both sides of him, which in practice means you on one side and a minion on the other. That converts the most feared ability in the matchup into something the reader controls with their feet: keep the wave off his far side and the pull cannot hold you for the Haymaker. Told only that it stuns, a reader plays the entire lane out of a 490-range circle for no reason, and still gets stunned because they never learned what causes it.",
+   "corrected": "The both-sides condition written into spikes[1], early, mid, wants.you[1], wants.foe[0], whys[2], breakdown.cooldowns, dontsFull[2] and report[5], with the real 16s rank-1 cooldown.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sett.json (E, cd 16/14.5/13/11.5/10, range 490)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Haymaker is described as \"% true damage\" that \"cracks through your armor\", and wants.you[2] tells the reader to \"sidestep the aimed Haymaker cone — it's a directional smash, not a zone\". The part that matters is missing and one detail is invented.",
+   "why": "Riot's text: \"Sett passively stores damage he takes as Grit. On cast, Sett expends all stored Grit to gain a shield and punch an area, dealing true damage in the center and physical damage on the sides.\" There is no percentage in it. And it is not sidestep-or-eat-it: the sides of the punch still hit you, they just hit for physical instead of true. So the instruction is not \"dodge the cone\", it is \"do not be in the middle of it\" — which is a much smaller and much more achievable movement. The shield is also the reason _missing-interactions.json flags this matchup for shield-absorbs-burst, and it is the reason feeding Grit is self-defeating.",
+   "corrected": "Centre-versus-sides written into wants.you[2], late, dosFull[1], dontsFull[1], breakdown.cooldowns and report[5]; the unsupported percentage removed; the shield tied to the Grit you personally put into the bar.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sett.json (W, cd 18/16.5/15/13.5/12)",
+    "champ-data/_kits/_missing-interactions.json (shield-absorbs-burst, true positive)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Three effects are attributed to abilities that do not have them. mid and wants.foe[1] credit Sett with \"lifesteal sustain\"; spikes[2] says The Show Stopper deals \"bonus-HP damage\"; late calls him a \"grab-and-suppress threat\".",
+   "why": "Pit Grit gives \"additional health regeneration based off of his missing health\" — regeneration, not lifesteal, which matters because it works out of combat and cannot be reduced by hitting him less. The Show Stopper's text is \"carries an enemy champion through the air and slams them into the ground, dealing damage and slowing all enemies near where they land\" — no bonus-HP scaling and no suppression anywhere in it.",
+   "corrected": "Lifesteal replaced with missing-health regen, the bonus-HP claim dropped, and the suppress claim removed. Show Stopper restated with its real 400 range and 120s cooldown.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sett.json (P and R)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "late and whys[6] credit \"the flat armor pen from your R passive\" / \"R armor pen\", and early and wants.you[0] call the empowered auto a \"Medarda-empowered auto\".",
+   "why": "Public Execution has no armour penetration — it blinks to the farthest enemy champion in a line, suppresses, then slams for damage and a stun. And \"Medarda Maxim\" is not an ability; Ambessa's only passive is Drakehound's Step. Against Sett the invented penetration is specifically misleading, because the entry uses it as the reason the first-item burst works against a champion whose defining defensive tool is a shield rather than armour.",
+   "corrected": "Both replaced with the real names and the real reason short trades work — Grit has not filled yet.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ambessa.json (P and R)"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The chart disagrees with its own whys[] at four of seven stages, and the lane is rated EVEN 6/10 at a 46.24% win rate over 519 games. whys[0] says level 1 is Ambessa's (\"your Q cone's doubled outer edge beats his bare alternating-punch autos\") but the chart gives it to Sett; whys[1] calls level 2 \"genuinely even\" but the chart gives it to Sett; whys[3] says \"he owns levels 4-5\" but the chart says Skill; whys[5] says \"he keeps the edge\" at first item but the chart says Skill.",
+   "why": "The packet levelChart (Ambessa, Skill, Sett, Sett, Sett, Sett, Skill) matches the prose exactly and matches the win rate: Ambessa's one clean window is level 1 before Grit and Facebreaker exist, then Sett owns the middle of the lane, then it evens out. A 46.24% lane that the text describes as his from 3 through first item is not a 6/10.",
+   "corrected": "diffRating raised to 7/10 and the Final Matchup Rating row updated to match. The side flips could not be applied — \"Sett\" is 4 characters, \"Skill\" 5 and \"Ambessa\" 7, so every swap crosses the length band. Documented in notes.",
+   "confidence": "High",
+   "sources": [
+    "packets/ambessa.json (winRate 46.24, games 519, levelChart)"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[1].why repeats the champion-wide \"Dash-resets stack your passive shield mid-trade\" error, and neither layer carries a single cooldown number.",
+   "why": "Drakehound's Step grants no shield. And the spike shape is entirely cooldown-driven: Haymaker 18s at rank 1, Facebreaker 16s, Knuckle Down 9s, The Show Stopper 120s. Facebreaker's 16s is the gap the reader is being told to punish and the number was never given.",
+   "corrected": "phases[1].why corrected; numbers written into spikes[1], mid, wants.you[1], breakdown.cooldowns and dosFull[0].",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sett.json",
+    "champ-data/_kits/ambessa.json"
+   ]
+  },
+  {
+   "point": 12,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1], dosFull[2] and all three dontsFull descriptions are stock boilerplate unrelated to their titles; the three don't-strings also form report[11].",
+   "why": "Each has a concrete answer here: the centre of Haymaker is the true-damage part, Grit is stored from damage he takes, and Facebreaker's stun needs enemies on both sides.",
+   "corrected": "All five rewritten against the kit.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/sett.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "With E (Facebreaker) and a Q/W lead online, Sett pulls-and-stuns then unloads a grit-fed Haymaker that cracks % true damage through your armor — his peak extended-trade window where his sustain out-grinds your energy combo.",
+   "after": "Facebreaker only stuns if it catches enemies on both sides of him — alone on one side you are only slowed. Keep the wave off his far side and his 16s pull cannot hold you still for the grit-fed Haymaker."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Both ult at 6, but his R (Show Stopper) grabs and slams you for bonus-HP damage and out-bullies your R blink — if you dive he flips it into a 100-to-0 with a charged Haymaker waiting.",
+   "after": "Both ult at 6. The Show Stopper carries you 400 units and slams, and he saves a stored Haymaker for the landing — so dive only after his Grit bar is spent, never into a full one."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Eclipse or Profane Hydra lets you burst back in short windows, but a Bami's-into-Sundered-Sky Sett still out-sustains your extended trades — punish his cooldowns, don't facetank the all-in.",
+   "after": "Eclipse or Profane Hydra lets you burst back in short windows, but Haymaker's shield scales with the damage you just dealt him — punish his 18s cooldown, don't fill the bar first."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Level 1 is your cleanest window — Sett's W (Haymaker) is empty until he soaks damage to fill its grit bar, so chip him with the doubled outer edge of your Q cone and walk off before his alternating-punch passive adds up. The moment he hits 2 and picks up E (Facebreaker), he can pull-stun you, lock your Drakehound's-Step dash, and feed the held trade into a true-damage Haymaker. Trade in single rotations only — Q into one Medarda-empowered auto, then dash out on the input — and never stand in front of him when his grit bar is high and the Haymaker cone is loaded.",
+   "after": "Level 1 is your cleanest window — Haymaker is empty until he soaks damage to fill its Grit bar, so chip him with the doubled outer edge of your Q cone and walk off before his alternating punches add up. From 2 he has Facebreaker, but it only stuns when it catches enemies on both sides of him: stand so the wave is never on his far side and the pull is a slow, not a hold. Trade in single rotations — Q into one Drakehound's Step empowered auto, then dash out on the input — and never stand in the centre of a loaded Haymaker."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 3 through 6 are his lane to own. Your cooldowns are at their longest here while his grit, lifesteal, and a charged Haymaker let him out-grind your energy-gated combo in any fight past one rotation. Bait the Facebreaker pull with your dash before you commit — if he whiffs it, that's your real opening to land Q1, the Sundering Slam line, and an empowered auto on its long cooldown. At 6 don't trust your R to win the all-in: his Show Stopper grab-slam plus a stored Haymaker flips your dive into a kill on you. Farm, dodge the pull, and concede the levels you can't fight through.",
+   "after": "Levels 3 through 6 are his lane to own. Your cooldowns are at their longest here while Grit, his missing-health regen and a charged Haymaker let him out-grind your energy-gated combo past one rotation. Bait Facebreaker with your dash before you commit — it is 16s at rank 1, and if he whiffs it that is your opening for Q1, the Sundering Slam line and an empowered auto. At 6 don't trust your R to win the all-in: The Show Stopper plus a stored Haymaker flips your dive into a kill on you. Farm, keep off his far side, and concede the levels you can't fight through."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "Once Eclipse or Profane Hydra and the level-9 Q max come online, the lane finally levels off — your Q1-auto-Q2 burst plus the flat armor pen from your R passive let you trade in short windows where his Haymaker can't fully charge. But Sett never stops being a grit threat: a Bami's-into-Sundered-Sky build out-sustains you in long fights, so keep punishing his cooldowns rather than facetanking the alternating-punch passive. You scale into a clean bruiser, he stays a teamfight grab-and-suppress threat — this stays a coinflip skill matchup decided by who lands their CC and who refuses the extended trade.",
+   "after": "Once Eclipse or Profane Hydra and the level-9 Q max come online, the lane finally levels off — your Q1-auto-Q2 burst lands in short windows where his Grit bar cannot fill. Remember which part of Haymaker hurts: the centre is true damage and the sides are physical, so step off the line rather than trying to armour through it. Sett never stops being a Grit threat, and a Bami's-into-Sundered-Sky build out-sustains you in long fights, so punish his 18s cooldown instead of facetanking. This stays a coinflip decided by who lands their CC and who refuses the extended trade."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Keep trades SHORT — land the Q cone's doubled outer edge plus one Medarda-empowered auto, then Drakehound's-Step dash out before his Haymaker grit fills",
+   "after": "Keep trades SHORT — land the Q cone's doubled outer edge plus one Drakehound's Step empowered auto, then dash out before his Grit bar fills"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Bait his E (Facebreaker) pull with your dash, then punish its long cooldown with a Q1-into-Sundering-Slam line combo while it's down",
+   "after": "Bait Facebreaker with your dash and punish the 16s gap, and never let a minion sit on his far side or the pull becomes a stun"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Sidestep the aimed Haymaker cone — it's a directional smash, not a zone — and never extend past one rotation while his grit bar is high",
+   "after": "Stand off the centre line of Haymaker — the middle is true damage and the sides are only physical — and never extend past one rotation"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Land Facebreaker to pull-stun you and lock your dash chain, then dump a grit-charged Haymaker's true damage while you're held",
+   "after": "Line you up with a minion on his far side so Facebreaker stuns instead of only slowing, then dump a full Grit Haymaker"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Drag every trade long so his alternating-punch passive and lifesteal sustain out-grind your energy-gated combo",
+   "after": "Drag every trade long so his alternating punches and missing-health regen out-grind your energy-gated combo"
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "With Facebreaker online to pull-stun your dash chain and a grit-fed Haymaker cracking true damage, Sett out-trades you in any extended fight.",
+   "after": "Facebreaker plus a Grit-fed Haymaker out-trades you in any extended fight — and the pull stuns whenever the wave is on his far side."
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "Your cooldowns are longest in this window while his grit and alternating-punch passive out-grind your energy-gated combo — he owns levels 4-5.",
+   "after": "Your cooldowns are longest in this window while Grit and his missing-health regen out-grind your energy-gated combo — he owns 4-5."
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "Your Eclipse/Profane spike, Q max, and R armor pen let you trade back in short bursts — the lane evens into a CC-and-discipline coinflip.",
+   "after": "Your Eclipse/Profane spike and Q max let you trade back in short bursts before Grit fills — the lane evens into a discipline coinflip."
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Dash his W — don’t feed grit, combo his cooldowns. Ambessa wins the Haymaker cooldown windows.",
+   "after": "Don't feed his Grit, and stay off Haymaker's centre line — the middle is true damage."
+  },
+  {
+   "layer": "full",
+   "path": "winCon",
+   "before": "Dash his W and combo him. Track Haymaker before every commit and keep the wave on your side.",
+   "after": "Trade in one rotation and punish Facebreaker's 16s. Keep the wave off his far side."
+  },
+  {
+   "layer": "full",
+   "path": "diffRating",
+   "before": "6/10",
+   "after": "7/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Dash-resets stack your passive shield mid-trade. Only take the trade when Sett's Haymaker is down.",
+   "after": "Drakehound's Step empowers your next auto, not a shield. Trade before his Grit bar fills."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Sett Haymaker: matchup-defining — Shield + true damage. Dash it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+   "after": "- Haymaker: 18s at rank 1 — shield plus true damage in the centre, physical on the sides. - Facebreaker: 16s, and it only stuns with enemies on both sides. - Knuckle Down: 9s. - The Show Stopper: 120s."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.difficulty",
+   "before": "Overall difficulty: 6/10. The lane is decided by how well you track Haymaker and how disciplined your pattern is.",
+   "after": "Overall difficulty: 7/10. The lane is decided by how well you track Haymaker and how disciplined your pattern is."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Shield + true damage. Dash it. Only engage once it is down or baited.",
+   "after": "Shield plus true damage in the centre. 18s at rank 1. Bait it out."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Cast-dash-empowered-hit on Sett's step-up, weave the second dash through his answer, and exit with shield banked.",
+   "after": "The centre of Haymaker is true damage and the sides are physical — step sideways, do not try to armour it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Sett wastes Haymaker — commit the full pattern immediately.",
+   "after": "Grit is stored from damage he takes — stop hitting him."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That is Sett's favourite window — refuse it and half his win condition is gone.",
+   "after": "Every point you put into that bar comes back to you as shield and true damage."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+   "after": "Armour does nothing to the centre of the punch — stand to the side."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Dumping every dash going IN — Ambessa with no dash left is a duelist who forgot the door.",
+   "after": "Facebreaker only stuns with enemies on both sides — keep the wave off his far side."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Sett's Haymaker: Shield + true damage. Dash it. When it is down — Dash-combo + R him.",
+   "after": "Haymaker: true damage centre, physical sides. Facebreaker stuns only from both sides."
+  },
+  {
+   "layer": "full",
+   "path": "report[14].t",
+   "before": "Even matchup — difficulty 6/10, Sett carry threat 7/10.",
+   "after": "Even matchup — difficulty 7/10, Sett carry threat 7/10."
+  }
+ ],
+ "notes": "The Facebreaker one-side rule is the highest-value thing in this file. Riot's text says plainly that enemies on only one side are slowed rather than stunned, which means in a 1v1 lane the stun is opt-in by positioning — and the entry told the reader eight separate times that it simply stuns. Everything downstream of that (when to step up, when to dash, whether Haymaker can be set up on you) was being taught off the wrong premise.\n\nPACKET FALSE POSITIVE: suspectNames flags \"Show Stopper\" in spikes[2] against \"the show stopper\" at distance 4. The ability name is correct; the distance is entirely the missing article.\n\nDIFFICULTY LABEL, partially fixed: diffRating is now 7/10 and the Final Matchup Rating row matches, but the diff field still reads \"EVEN\" at a 46.24% win rate in a lane the text hands to Sett from level 3 through first item. The vocabulary in this file is EVEN / TRICKY / HARD / FAV / MIRROR, and \"EVEN\" (4 characters) to \"TRICKY\" (6) crosses the band, so the label needs changing by hand. Worth noting for consistency: Poppy sits at TRICKY 7.5/10 on a 45.6% win rate, so Sett at EVEN was out of line with the champion's own scale.\n\nCOULD NOT FIT IN THE BAND, for the user to apply by hand: content win[] and full phases[].side should read Ambessa, Skill, Sett, Sett, Sett, Sett, Skill — the packet levelChart, and what this entry's own whys[] already say. \"Sett\" is 4 characters, \"Skill\" 5, \"Ambessa\" 7; every swap crosses +/-10%.\n\nCHAMPION-LEVEL FABRICATIONS, both seen again here and still outstanding elsewhere: \"R passive armor-pen\" (Public Execution has none) and \"Medarda Maxim\" (not an ability; her passive is Drakehound's Step, 6 occurrences in champ-data/content/ambessa.js).\n\nKIT-FILE DATA WARNING: champ-data/_kits/ambessa.json carries spurious \"heal\" and \"grounding\" flags on Public Execution and a spurious \"grounding\" flag on Repudiation. Sett's kit file also flags The Show Stopper with \"grounding\", which is not in Riot's description of it either."
+}

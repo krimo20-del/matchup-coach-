@@ -1,0 +1,186 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "darius",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Both layers repeatedly credit Darius with a 'passive heal' (content early, mid, whys[0]). Hemorrhage does not heal Darius at all — it is a bleed that damages the target and, at 5 stacks, grants Darius bonus AD (Noxian Might).",
+   "why": "Darius's only in-combat sustain is Decimate (Q), and per Riot's own text it heals 'based on enemy champions and large monsters hit by the blade' — the outer ring only. The inner handle deals reduced damage and heals him nothing. That inverts the correct play for a melee stacker: when you are caught in Decimate range, stepping INTO Darius is strictly better than backing out, because backing out walks you into the blade.",
+   "corrected": "Darius has no passive heal. Decimate heals only off its outer blade, so hug him and it lands as the weak, heal-less handle.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/darius.json (P Hemorrhage, Q Decimate descriptions)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Nothing in either layer explains how Fury of the Sands interacts with Noxian Guillotine. The level-6 phase text says popping R makes 'the stat-check run your way', which is actively dangerous here.",
+   "why": "Noxian Guillotine deals true damage that scales per Hemorrhage stack. Nasus's R grants bonus Health AND bonus Armour/Magic Resist — against true damage only the Health half does anything. A Nasus who pops R believing his resistances answer Darius's ult dies to it.",
+   "corrected": "R's bonus armour and MR do nothing against Noxian Guillotine's true damage — only the bonus HP counts, and the damage grows with every bleed stack on you.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/darius.json (R Noxian Guillotine: trueDamage flag)",
+    "champ-data/_kits/nasus.json (R Fury of the Sands)",
+    "champ-data/_kits/_missing-interactions.json (resistances-invalidated, nasus vs darius)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "Packet defect confirmed: zero cooldown-sequencing lines. Both layers say 'track Apprehend' without ever giving the number, so the reader has no idea how long the punish window is.",
+   "why": "Apprehend is 26/23.5/21/18.5/16s and it is Darius's longest cooldown by a wide margin — nothing else in his kit is above 9s. A spent Apprehend at rank 1 is roughly 26 seconds in which Darius cannot start a fight on a champion with no dash and no escape. That single number is the whole lane plan for Nasus.",
+   "corrected": "Apprehend is 26s at rank 1 (16s at rank 5). Once he burns it, walk up and stack for the next twenty-plus seconds.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/darius.json (E Apprehend cooldown 26/23.5/21/18.5/16)"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "Grievous Wounds is never mentioned, despite Decimate being Darius's entire sustain engine in an extended duel.",
+   "why": "Nasus's win condition is a long grind at 2+ items. Decimate is on a 9s cooldown at rank 1 dropping to 5s, and each blade hit on a champion heals Darius — over a 15-second sidelane duel that is a lot of healing to out-damage. Anti-heal is the item that makes the late-game 1v1 actually lopsided rather than close.",
+   "corrected": "Buy Grievous Wounds before you force the sidelane duel — Decimate blade heals are what keep him alive through a stacked Q.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/darius.json (Q Decimate heal flag)",
+    "champ-data/_kits/_missing-interactions.json (needs-antiheal, nasus vs darius)"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Packet defect: the chart gives Darius 5 of 7 stages and Nasus only 1, while Nasus wins 52.45% over 1100 games. The full layer additionally marks the '2+ items' stage 'Skill' even though its own why text reads 'you out-duel Darius on cooldown and three-shot his tower'.",
+   "why": "Losing levels 1-6 to Darius is correct and should stay — that is the shape of the matchup. The genuinely wrong cell is the last one: at 2+ items with a real stack count, Nasus beats Darius in a sustained 1v1, which is exactly why the aggregate win rate is above 50 despite a losing lane. The content layer already says 'Nasus' there; only the full layer disagrees with itself.",
+   "corrected": "phases[6].side = Nasus, matching both its own why text and the content layer.",
+   "confidence": "High",
+   "sources": [
+    "packet nasus.json (winRate 52.45, games 1100)",
+    "champ-data/content/nasus.js (win[6] = Nasus)"
+   ]
+  },
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Win rate 52.45% over 1100 games matches the stored table; no elo-tier language present in either layer.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packet nasus.json"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "breakdown.trading still has no numbers, and nothing anywhere states the relationship between Apprehend's cooldown and Nasus's own Wither cooldown.",
+   "why": "Apprehend is 26/23.5/21/18.5/16s; Wither is 15/14/13/12/11s. At rank 1 that is an eleven-second gap in Nasus's favour — after Darius burns the pull, Nasus's only defensive tool comes back well before Darius's only engage tool does. That is the concrete 'wait for X before you Y' the packet defect asks for, and it is why baiting Apprehend is worth taking chip damage for.",
+   "corrected": "After he burns Apprehend (26s at rank 1) your Wither (15s) is back long before his E is — that gap is the window to walk up and stack.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/darius.json (E 26/23.5/21/18.5/16)",
+    "champ-data/_kits/nasus.json (W 15/14/13/12/11)"
+   ]
+  },
+  {
+   "point": 12,
+   "status": "needs-correction",
+   "whatIsWrong": "dontsFull[0].t is 'Trade into his outer Q' but dontsFull[0].d never says what makes the outer Q different, so the entry tells the player to avoid something without telling them how.",
+   "why": "The mechanical answer is counter-intuitive: step in rather than out. Only Decimate's outer blade deals the bonus damage and heals Darius, so a melee stacker who is already standing next to him is safest staying there. Backing away is what walks you into the blade band.",
+   "corrected": "Put the blade/handle split into the .d text so the 'don't' carries its own fix.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/darius.json (Q Decimate description)"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "content whys[2] carries the third instance of the fabricated 'passive heal' claim, which the other two edits in this proposal remove from whys[0] and early.",
+   "why": "Leaving one instance in place is worse than leaving three, because the corrected strings around it will read as contradicting it. Hemorrhage is a bleed with a 5-stack AD enrage and no healing component of any kind.",
+   "corrected": "Replace the passive-heal clause with the real reason Spirit Fire poke loses: Decimate's blade heal outpaces it.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/darius.json (P Hemorrhage, Q Decimate)"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Nasus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Darius, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "Noxian Guillotine is true damage that scales with your bleed stacks — R's bonus armour does nothing, only the bonus HP does. Shed stacks first."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Darius Apprehend (Pull): matchup-defining — His all-in starts on the pull. Wither him after it. Track it before every engage. - Darius Apprehend: Pulls all enemies in a cone toward him and grants armor pen — his engage. Dodge or sidestep it.",
+   "after": "- Darius Apprehend (Pull): matchup-defining — 26s at rank 1, still 16s at rank 5, and nothing else in his kit is over 9s. Spent pull = a free wave. - Darius Decimate: 9s at rank 1; only the outer blade hits hard and heals him, so step INSIDE and eat the handle."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Darius wastes Apprehend (Pull) — commit the full pattern immediately.",
+   "after": "Apprehend spent means 26 free seconds at rank 1 — walk up and stack."
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Darius E-pulls you into a bleed-stacked, empowered Q trade and his passive heal beats your level-1 lifesteal — soak Q farm, do not auto into his E.",
+   "after": "Darius has no passive heal — only Decimate's outer blade heals him, and Apprehend (E) pulls you to exactly that range. Soak Q farm, never eat the tip."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "E-pull you in, stack Hemorrhage bleed and empowered Q to win every melee all-in levels 1-9",
+   "after": "Apprehend (E) you onto Decimate's outer blade — the only part that hits hard and heals him"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Darius owns every early all-in — his E pull, bleed stacks and empowered Q out-trade you before Wither exists, so soak Q farm and refuse the fight.",
+   "after": "Darius owns every early all-in — Apprehend (E) is 26s at rank 1, so the only safe window to walk up and stack is the half-minute after he burns it."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Darius owns this lane from the first wave — his E pull yanks you into bleed-stacked, empowered Q trades you cannot win without Wither, and his Hemorrhage plus passive heal beats your level-1 lifesteal. Do not walk up to last-hit with an auto when his E is up; soak Q farm at max range and accept chip damage. Your Soul Eater sustain is the only thing keeping you in lane, so let it grind minion damage back and hoard stacks — every stack you bank now kills him at 2 items.",
+   "after": "Darius owns this lane from the first wave — Apprehend (E) yanks you into Decimate range and the bleed out-grinds your level-1 lifesteal. He has no passive heal: Hemorrhage only bleeds you, and Decimate heals him solely off its outer blade, so if you get caught, walk INTO him and take the weak handle instead. Do not last-hit with an auto while Apprehend is up — it is 26s at rank 1, so simply wait it out and soak Q farm at max range. Every stack you bank now kills him at 2 items."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 4-5 stay his — he can E-pull-Q-W you and the bleed plus his passive heal out-trades your Spirit Fire poke and lifesteal, so keep shoving with E to farm and giving ground. Level 6 is your first breath: Fury of the Sands gives bonus HP and a magic DoT, and Wither cuts his attack speed so his Hemorrhage stacks crawl — pop both together and you survive the all-in you'd have died to a minute ago. Bait his E; if he whiffs the pull, that's your only clean window to Wither and trade back under ult.",
+   "after": "Levels 4-5 stay his — Apprehend into Decimate and Crippling Strike out-trades your Spirit Fire poke and lifesteal, so keep shoving with E and giving ground. Level 6 is your first breath: Fury of the Sands gives bonus HP and a magic DoT, and Wither guts the attack speed his Hemorrhage stacking runs on. But Noxian Guillotine is true damage, so R's bonus armour will not save you there — only its bonus HP will. Bait Apprehend; the 26 seconds after a whiffed pull is your one clean window to Wither and trade under ult."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That is Darius's favourite window — refuse it and half his win condition is gone.",
+   "after": "Only the outer blade heals him; stand chest-to-chest and he gets the handle."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Darius burns his engage onto you, you Wither him on the way out — his attack speed and move speed melt while you walk away stacking, having lost almost nothing. Great trade: Darius wastes Apprehend (Pull) — commit the full pattern immediately. Bad trade: Fighting at even HP before 6 with Wither down — you have no trade tools early, and every losing exchange costs you the stacks-per-minute that win the game.",
+   "after": "Good trade: Darius burns Apprehend on you, you Wither him on the way out — his attack speed and move speed melt while you walk away stacking, having lost almost nothing. Great trade: he whiffs the pull — that is 26s at rank 1 against your 15s Wither, so your answer is back first. Bad trade: fighting at even HP before 6 with Wither down. Never retreat through blade range; the outer half of Decimate is the half that heals him."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "You get Wither at 3 but he out-trades through it — his bleed and passive heal beat your Spirit Fire poke, so only use W to peel a whiffed E.",
+   "after": "You get Wither at 3 but he out-trades through it — Decimate's blade heal outpaces your Spirit Fire poke, so only use W to peel a whiffed E."
+  }
+ ],
+ "notes": "Darius's 'passive heal' appears three times in the content layer and is a fabricated mechanic — Hemorrhage has no healing component. Two further instances I could not fit inside the length band without gutting the surrounding advice: content whys[2] ('his bleed and passive heal beat your Spirit Fire poke'). Recommend a follow-up pass on that one string. Also note full-layer breakdown.cooldowns originally said Apprehend 'grants armor pen' on activation — the armour penetration is Apprehend's passive and is always on, not tied to the cast; the replacement text drops the claim rather than restating it.\n\nSYSTEMIC, affects far more than this matchup: the full layer and the content layer carry two DIFFERENT level charts for every one of the nine matchups in this slice, disagreeing at one to five stages each. The full layer's stage-5 and stage-6 why-strings are boilerplate with the enemy name substituted in ('Sheen-item spike — Q now chunks a third of <enemy>'s HP...' and '300+ stacks and two items: you out-duel <enemy> on cooldown and three-shot his tower'), and phases[].side was frequently left at 'Skill' even where that same boilerplate says Nasus out-duels them. Worth deciding which array the front end actually reads — whichever it is, the other is unmaintained, and that divergence is what the packet's 'level chart contradicts data' defect is really detecting. I only proposed a side change where the full layer's own why text contradicted its own side field.\n\nOn the packet defect wording 'level chart contradicts data: Nasus wins 52.45% but the chart gives Darius 5/7 stages vs 1' — I deliberately did not flatten the early stages. Nasus genuinely loses levels 1-5 to Darius and wins the game on stacks; a lane chart that says so is correct, and rewriting it to track the headline win rate would make the site advise fights Nasus loses. The detector appears to assume chart share should follow win rate, which is wrong for hard-scaling champions as a class, not just here.\n\nUnresolved and left alone deliberately: content whys[1] says 'Still no Wither and no ult' at level 2, whys[2] says 'You get Wither at 3', but full phases[1].why says 'Wither online' at level 2. The two layers assume different skill orders. Which is right is a build decision rather than a fact, so I changed neither — but someone who owns the recommended skill order should reconcile them, because right now the site tells the player both things.\n\nAlso flagging for any future edit: full report[8] (Itemization) contains a double space in 'Trinity Force  (Iceborn Gauntlet' that will break exact-match on that field."
+}

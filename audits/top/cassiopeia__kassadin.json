@@ -1,0 +1,131 @@
+{
+ "ownerKey": "cassiopeia",
+ "enemy": "kassadin",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "58% over 100 games. Cassiopeia owns levels 1 through first item, Kassadin takes 2+ items — both layers already read that way, and the mirror file audits/top/kassadin__cassiopeia.json agrees (its loading line is 'No trades before 6 - not one').",
+   "corrected": "No side changes. Mirror kept intact.",
+   "confidence": "High",
+   "sources": [
+    "packets/cassiopeia.json",
+    "audits/top/kassadin__cassiopeia.json"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "The packet flags this matchup as having no cooldown-sequencing advice anywhere, and it was right — 'rank-3 Riftwalk' appeared twice with no number attached.",
+   "why": "Riftwalk is 5s at rank 1 and 2s at rank 3 over 500 units; Miasma is 24s; Petrifying Gaze is 120s at rank 1. The 5s-versus-24s gap is the entire pre-6 lane and the 2s figure is what makes the late game unwinnable — the reader needs both.",
+   "corrected": "Numbers written into content.spikes[1].text, content.spikes[3].text, content.mid, full.breakdown.cooldowns, full.dosFull[0].d and full.loading. This matches the numbers the mirror file already committed to.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/kassadin.json",
+    "champ-data/_kits/cassiopeia.json",
+    "audits/top/kassadin__cassiopeia.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Three places said Null Sphere silences: early ('a damage-and-silence that grants him a shield'), whys[1] ('Null Sphere's shield-and-silence') and wants.foe[1] ('to silence you and cut a Twin Fang chain'). Null Sphere does not silence. The full layer's tldr also called Kassadin 'shieldless'.",
+   "why": "Riot: Null Sphere 'deals damage and interrupts channels. The excess energy forms around himself, granting a temporary shield that absorbs magic damage.' No silence, and the shield is explicitly magic-only — which is the whole interaction, because every point of Cassiopeia's damage is magic. A player who thinks he silences will hold the Twin Fang chain that he actually cannot stop.",
+   "corrected": "All three lines rewritten around the magic-absorb shield, and full.tldr / full.report[0].t no longer call him shieldless. Also added the Force Pulse interaction: Twin Fang's 0.75-second cooldown means her own spam is what keeps his E charged.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/kassadin.json",
+    "champ-data/_kits/cassiopeia.json"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "Miasma was described as the answer to Riftwalk with no sense of what it costs to be wrong.",
+   "why": "Miasma is 24s; Riftwalk is 5s at rank 1. He gets several blinks per Miasma cycle, so the cloud has to land on the blink that matters, not the first one.",
+   "corrected": "Written into content.mid, full.breakdown.cooldowns and full.loading.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/cassiopeia.json",
+    "champ-data/_kits/kassadin.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Kassadin is melee and miserable here — this is one of the cleanest early lanes Cassiopeia gets. Level 1 you both do little, but from level 2 you prime him with Noxious Blast (Q) and slam Twin Fang (E) on the poisoned target, refunding most of E's cooldown and mana so you chain another almost instantly. He has no Riftwalk until 6, and his only answer is Null Sphere (Q) — a damage-and-silence that grants him a shield — so bait that silence on a CS step rather than eating it mid-combo. Last-hit, poke with Q, and out-trade him every level so his scaling falls behind.",
+   "after": "Kassadin is melee and miserable here — one of the cleanest early lanes Cassiopeia gets. Level 1 you both do little, but from level 2 you prime him with Noxious Blast (Q) and slam Twin Fang (E) on the poisoned target, refunding most of E's cooldown and mana so you chain another almost instantly. He has no Riftwalk until 6, and his only answer is Null Sphere (Q) — it does not silence you, it shields him, and that shield absorbs magic damage only, which is all you deal. Bait it on a CS step, then poke through the empty window."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "Your two-ability Q-prime into refunded Twin Fang out-trades a melee Kassadin whose only tool is Null Sphere's shield-and-silence.",
+   "after": "Your two-ability Q-prime into refunded Twin Fang out-trades a melee Kassadin whose only answer is Null Sphere's magic shield."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Bait or hold Null Sphere (Q) to silence you and cut a Twin Fang chain mid-trade, using its shield to eat the burst",
+   "after": "Hold Null Sphere (Q) so its magic-absorbing shield eats a whole Twin Fang chain rather than a single poison tick"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Petrifying Gaze is your hard answer to his first Riftwalk all-in — face him as he blinks in, stun the channel-less assassin, and ramp Twin Fangs on a target who buys no MR.",
+   "after": "Petrifying Gaze is your hard answer to his first Riftwalk all-in — he faces you to blink in, so the 120-second R stuns him, then ramp Twin Fang on a target who buys no MR."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Once Kassadin hits Rod of Ages / Riftwalk rank-3, his low-cooldown blink kites your ~825 cast range and his Void Stone magic-damage reduction blunts your poison ticks — you build no resistances, so his combo bursts you. Close the game before this.",
+   "after": "Once Kassadin hits Rod of Ages and rank-3 Riftwalk — a 2-second blink over 500 units — he kites your 825 cast range at will, and Void Stone's magic-damage reduction blunts every poison tick. You build no resistances, so his combo bursts you. Close the game before this."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "This is your takeover window. Ranks in Q and E mean near-continuous Twin Fangs, and your Serpentine Grace passive move speed (plus Q's speed buff on champion hits) lets you kite him while you shred. The moment he Riftwalks (R) onto you, drop Miasma (W) — the cloud grounds him, disabling the blink so he can't Riftwalk back out, then poisons him so every Twin Fang is refunded. At 6 your Petrifying Gaze stuns him as he blinks in, and with first item (Malignance or Liandry's) you simply poke him off the wave and deny CS so his power spike never arrives.",
+   "after": "This is your takeover window. Ranks in Q and E mean near-continuous Twin Fang, and Serpentine Grace plus Q's move speed on champion hit let you kite him while you shred. The moment he Riftwalks (R) onto you, drop Miasma (W) — the cloud grounds him so the 5-second blink cannot take him back out, and the poison makes every Twin Fang refund. Miasma is 24 seconds, so spend it on the blink that commits, not the first one you see. One caution: your 0.75-second E spam is what keeps his Force Pulse charged, so expect the slow when he steps up. At 6, Petrifying Gaze stuns him as he blinks in."
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Shieldless melee mage who wants spell-spam lanes — unfortunately your E feeds his passive less than it hurts him. Bully pre-6 relentlessly.",
+   "after": "Melee mage with a magic-only shield and Void Stone reduction — both aimed at your kit. Bully him flat before Riftwalk lands at 6."
+  },
+  {
+   "layer": "full",
+   "path": "report[0].t",
+   "before": "Shieldless melee mage who wants spell-spam lanes — unfortunately your E feeds his passive less than it hurts him. Bully pre-6 relentlessly.",
+   "after": "Melee mage with a magic-only shield and Void Stone reduction — both aimed at your kit. Bully him flat before Riftwalk lands at 6."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Kassadin Riftwalk: matchup-defining — His mobility spike — the lane is decided before it scales. Read it like a second minimap. - Guard your W Miasma like a fifth summoner spell. - Ultimate goes to kill windows only.",
+   "after": "- Riftwalk: 5s at rank 1, 2s at rank 3 — the lane is decided before that. - Miasma is 24s and grounds the blink outright: spend it on the blink that commits. - Petrifying Gaze is 120s and only stuns what faces you."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Kassadin’s Riftwalk: His mobility spike — the lane is decided before it scales. The whole green-light system is its cooldown.",
+   "after": "Miasma grounds Riftwalk. Null Sphere's shield absorbs magic only — all of yours. Your 0.75s E spam keeps his Force Pulse charged."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Cassiopeia vs Kassadin - Track: Kassadin Riftwalk. - E only poisoned targets — mana is the lane. - No commits into Riftwalk. - The ultimate closes arguments; it doesn’t open them.",
+   "after": "- Cassiopeia vs Kassadin - Track: Riftwalk, 5s at rank 1. - E only poisoned targets — mana is the lane. - W grounds the blink, 24s cooldown. - He faces you to blink; R stuns."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His mobility spike — the lane is decided before it scales. Bait it, count it, then go.",
+   "after": "His mobility spike at 6 — the lane must be decided before rank-3 Riftwalk. Bait, count, go."
+  }
+ ],
+ "notes": "Mirror reuse: audits/top/kassadin__cassiopeia.json was already written, and I took its mechanical findings rather than re-deriving them — Miasma 24s grounds Riftwalk, Petrifying Gaze 120s stuns only what faces her, Twin Fang recycles in 0.75s but needs poison first, and Cassiopeia's Q at 850 out-ranges Null Sphere's 650. Same facts, stated from her side, same numbers, no contradiction. I also honoured that file's warning and did NOT write the _missing-interactions line claiming Petrifying Gaze cancels Null Sphere as a channel: Riot's text says Null Sphere interrupts channels, it is not one, so the channel flag is a tooltip-parsing misfire. Kassadin's Nether Blade auto-reset tell is real per the missing-interactions file but I could not fit it without displacing a verified fact — flagged rather than crammed."
+}

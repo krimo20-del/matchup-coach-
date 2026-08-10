@@ -1,0 +1,181 @@
+{
+  "ownerKey": "nasus",
+  "enemy": "camille",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "True damage is attributed to Camille's W (Tactical Sweep) in five places: content.early 'W true-damage cone', content.late 'her W true damage and percent-HP heal', whys[3] 'pokes with W true damage', spikes[3] 'Camille's W true-damage cone', wants.foe[2] 'her W true damage and percent-HP'. The same file also correctly attributes true damage to Q in whys[1] and spikes[0], so it contradicts itself.",
+      "why": "The kit puts trueDamage on Precision Protocol (Q). Tactical Sweep (W) carries slow and heal — Riot's text is 'Enemies in the outer half are slowed and take extra damage, while also healing Camille', with no true damage anywhere in it. This matters more here than in most matchups: the recommended Nasus build is Frozen Heart plus Plated Steelcaps plus Fury of the Sands' bonus armour, and a player told the true damage comes from a dodgeable cone will believe that armour answers her. It does not — the true damage rides her auto-attack reset, which is the one thing he cannot sidestep.",
+      "corrected": "Moved every true-damage reference onto Precision Protocol and described Tactical Sweep by what it actually does.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/camille.json Q flags trueDamage, W flags slow+heal"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing anywhere states that only the OUTER half of Tactical Sweep slows, deals bonus damage and heals Camille.",
+      "why": "Riot's text is explicit that the outer half carries all three effects. The counterplay is therefore to walk toward her rather than away — the instinct every player has when a cone appears is exactly wrong. For a melee champion who wants to be in Siphoning Strike range anyway this is free, and it simultaneously denies the heal that _missing-interactions.json flags for this pairing. This is the highest-value single line available in the matchup and it is absent.",
+      "corrected": "Added to content.mid and wants.you[1].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/camille.json W", "champ-data/_kits/_missing-interactions.json nasus/camille needs-antiheal"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Hookshot is repeatedly called a stun — 'it stuns you out of nowhere', 'E hookshot stun', 'E-stuns you into a free combo'.",
+      "why": "Hookshot knocks up; Riot's text is 'leaping off and knocking up enemy champions upon landing'. Knockup and stun behave differently enough that the distinction is worth keeping straight in a guide that talks about tenacity and peel elsewhere.",
+      "corrected": "Changed to knockup in content.early, whys[1], spikes[0] and wants.foe[0].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/camille.json E"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "No cooldown numbers for Camille anywhere, and no statement that Hookshot requires terrain.",
+      "why": "Hookshot is 16/15/14/13/12s and 'pulls herself to a wall'. Both halves are decisive. The cooldown gives Nasus a 16s rank-1 walk-up window, and the terrain requirement means the middle of the lane away from walls is a zone where Camille has no engage and no escape at all. The guide's own dontsFull card is titled 'Fight near walls' and then never explains why, because its description is a paste error.",
+      "corrected": "Added the 16s figure and the wall requirement to breakdown.cooldowns, report[5].t, dontsFull[1].d, content.early and whys[2]/whys[5]; added Precision Protocol's 9s and its delayed-recast behaviour to phases[2].why.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/camille.json E cooldown 16/15/14/13/12, Q cooldown 9/8/7/6/5"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "The item block is Trinity Force into Frozen Heart with Plated Steelcaps and contains no Grievous Wounds, in a matchup flagged needs-antiheal.",
+      "why": "Two problems compound. Tactical Sweep heals her through exactly the extended trades this build is meant to win, and Precision Protocol's true damage means the armour half of the build does nothing against her main damage. Stacking more armour is the intuitive response to a physical bruiser and it is the wrong one here.",
+      "corrected": "Added Bramble Vest for the Tactical Sweep healing, trimming the redundant Sheen sentence which the Trinity Force entry already implies.",
+      "confidence": "Medium",
+      "sources": ["champ-data/_kits/_missing-interactions.json nasus/camille needs-antiheal", "champ-data/_kits/camille.json Q and W"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[2] titled 'Farm Q stacks safely' is described as 'Camille wastes Hookshot — commit the full pattern immediately'; dontsFull[1] titled 'Fight near walls' carries the same 'Burning your answer for tiny value...' string present on all five previous matchups.",
+      "why": "Six of six matchups audited carry the dontsFull[1].d defect. It is a template-level bug in whatever generated this file, not a per-matchup slip.",
+      "corrected": "Rewrote both to match their titles.",
+      "confidence": "High",
+      "sources": ["champ-data/nasus.full.js"]
+    },
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "50.12% over 405 games matches MC_WR_TABLES. A dead-even matchup, and the text's overall framing of an even lane that Camille scales out of is consistent with it.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packets/nasus.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Camille's whole early game is her E hookshot — it stuns you out of nowhere and lets her stack a Q proc and W true-damage cone on top before you can react. At levels 1-2 you have no Wither and no answer to that burst, so just soak Q last-hits with your Soul Eater lifesteal and accept the chip. Do not chase a cannon she walked past — that is exactly when she E-stuns you into a free combo. Use Spirit Fire to stack and shove from range instead of stepping into auto-E range.",
+      "after": "Camille's whole early game is Hookshot — it knocks you up out of nowhere and lets her stack a Precision Protocol proc and Tactical Sweep on top before you can react. At levels 1-2 you have no answer to that burst, so just soak Q last-hits with your Soul Eater lifesteal and accept the chip. Hookshot has to grab a wall, so out in the open lane she cannot open on you at all. Use Spirit Fire to stack and shove from range instead of stepping into auto range."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "This is her window, and at 6 it gets sharper — her R drops a cage around you and turns the lane into the 1v1 she always wins right now. Hold Wither for the exact moment she E-dashes in: the movement and attack-speed slow blunts her hookshot follow-up and buys you the trade. You can survive a single all-in with Fury of the Sands' bonus HP and the damage-per-second tick, but you still are not winning extended trades, so play for stacks and don't flash her into a cage you can't escape.",
+      "after": "This is her window, and at 6 it gets sharper — The Hextech Ultimatum anchors you into the 1v1 she always wins right now. Hold Wither for the exact moment Hookshot lands: the slow blunts her follow-up and buys you the trade. When Tactical Sweep comes out, walk into her instead of away — only the outer half slows, deals the bonus damage and heals her, so hugging her denies all three. Survive on Fury of the Sands, play for stacks, don't get caught in the cage."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "First item flips your half of it — Sheen or Iceborn into empowered Q plus Spirit Fire armor shred finally lets you punch back and win prolonged duels. But Camille is a hard scaler, and the 2+ item window is hers: her W true damage and percent-HP heal carve straight through your fat HP bar faster than Soul Eater can answer, and her R still isolates you. Use your stacks and Wither to splitpush and dodge her R catch — don't take the clean 1v1 into two items, make your team handle the isolation pick.",
+      "after": "First item flips your half of it — Sheen or Iceborn into empowered Q plus Spirit Fire armor shred finally lets you punch back and win prolonged duels. But Camille is a hard scaler, and the 2+ item window is hers: Precision Protocol's true damage carves straight through every point of armour you stacked, and The Hextech Ultimatum still isolates you. Bring Grievous Wounds for the Tactical Sweep healing, splitpush on your stacks, and let your team answer the isolation pick."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Her E hookshot stun plus Q true-damage proc bursts you before you have Wither to answer.",
+      "after": "Hookshot's knockup into a Precision Protocol proc bursts you before Wither can answer."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "She gets her full E-Q-W combo online and out-trades you while you have no peel for the dash-in.",
+      "after": "Her full Hookshot combo lands every 16s at rank 1 and out-trades you — you have no peel for it."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "She controls the wave and pokes with W true damage while you hoard stacks playing not to die.",
+      "after": "She controls the wave and pokes with Tactical Sweep while you hoard stacks playing not to die."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "She still edges the duel, but bait her E and Wither the dash to survive until your spike lands.",
+      "after": "She still edges the duel, but Hookshot needs a wall — fight in open lane and Wither the dash."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Camille's E hookshot stun plus Q true-damage proc lets her dive your stack rhythm the moment her abilities are up.",
+      "after": "Hookshot's knockup into Precision Protocol's true damage lets her dive your stack rhythm off any nearby wall."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Camille's W true-damage cone and percent-HP shred reclaim the late fight — she carves your fat HP bar faster than Soul Eater heals.",
+      "after": "Precision Protocol's true damage reclaims the late fight — it ignores every point of armour you built and Soul Eater cannot heal through it."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Save Wither for her E hookshot engage to neuter the dash-in burst",
+      "after": "Stand in the inner half of Tactical Sweep to deny the heal and slow"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land E hookshot stun into Q proc to burst your stacks before your sustain answers",
+      "after": "Land Hookshot's knockup into a Precision Protocol proc before your sustain answers"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Farm to two items so her W true damage and percent-HP carve your HP bar",
+      "after": "Farm to two items so Precision Protocol's true damage ignores your armour"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Camille Hookshot: matchup-defining — Her engage/escape. Wither her after it. Track it before every engage.",
+      "after": "- Camille Hookshot: matchup-defining — 16s at rank 1, and it has to grab a wall. No terrain, no engage."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Camille's Hookshot: Her engage/escape. Wither her after it. When it is down — Wither + Q her.",
+      "after": "Track Camille's Hookshot: 16s at rank 1 and it needs a wall. Fight in open lane, then Wither + Q."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E lets you stack safely from range when Camille zones you. Spirit Fire the wave under tower; every stack denied is her only real win condition.",
+      "after": "Spirit Fire the wave from range when Camille zones you. Precision Protocol is 9s at rank 1 and the delayed second hit is the big one — space it."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Camille wastes Hookshot — commit the full pattern immediately.",
+      "after": "Spirit Fire from range; step in only once Hookshot is spent."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Hookshot has to grab terrain — away from walls she cannot open on you."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Shield + Health Potion. Core: Trinity Force  (Iceborn Gauntlet if you need the slow + armor), then Frozen Heart; boots Plated Steelcaps. First back: Sheen (≈900g) — every Q after this hits twice as hard.",
+      "after": "Start Doran's Shield + Health Potion. First back: Sheen (≈900g) — every Q after this hits twice as hard. Core: Trinity Force, then Frozen Heart; boots Steelcaps. Bramble Vest for the Tactical Sweep healing."
+    }
+  ],
+  "notes": "The suspectName flag on content.early ('Use Spirit Fire') is a false positive — Spirit Fire is Nasus's own E. Left untouched. The real defect in this matchup was invisible to the detector: true damage attributed to Camille's W in five places while the same file correctly attributes it to Q in two others. A cross-check that ability-effect claims (true damage, heal, shield, knockup, silence) match the kit's own flags for that slot would catch this class of error, and it is more dangerous than a wrong ability NAME because it silently invalidates the recommended item build. NOT ASSERTED: the kit flags The Hextech Ultimatum as 'channel: interruptible — any CC cancels it'. I did not write anything about interrupting it, because that flag looks auto-derived rather than sourced, and in any case Nasus has no hard CC — Wither is a slow — so per the relevance rule there is nothing to say. If the flag is accurate it would matter for his team, and it is worth a wiki pass. Also not asserted: whether Flash escapes the Ultimatum's anchor zone; the existing text says it cannot and I found nothing in the kit either way, so I left that claim alone rather than confirm or remove it. No WKM_LINES problems seen for this pairing."
+}

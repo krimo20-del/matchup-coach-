@@ -1,0 +1,165 @@
+{
+ "ownerKey": "malphite",
+ "enemy": "poppy",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "53.19% over 737 games and the survive-to-4 shape is right: Poppy's early trades are front-loaded and Malphite has no answer until Thunderclap and Ground Slam arrive. What the difficulty rating misses is that the lane is not decided by trading at all but by one button, which is covered under point 4.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packet malphite.json",
+    "champ-data/_kits/poppy.json"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "content.win reads Skill, Malphite, Malphite, Skill, Skill, Malphite, Malphite — it gives Malphite levels 2 and 3 while content.early says 'Poppy owns the opening' and 'don't try to fight before W and E'.",
+   "why": "The packet levelChart is Poppy, Skill, Skill, Malphite, Malphite, Malphite, Skill, which matches the page: she owns level 1, the middle levels are a coinflip on her Heroic Charge, Malphite takes over from 4, and the late stage is even because Keeper's Verdict peels the one thing he does. Recorded here because one-word cells cannot survive the ±10% band.",
+   "corrected": "win and phases sides should read: Poppy, Skill, Skill, Malphite, Malphite, Malphite, Skill.",
+   "confidence": "High",
+   "sources": [
+    "packet malphite.json levelChart",
+    "champ-data/content/malphite.js early text"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "content.mid says 'her W blocks dashes on impact but can't deny the knockup once you've committed the engage', spikes[2].text says Unstoppable Force 'can't be stopped by her W (her dash-block only eats your dash on impact, not the knockup pre-arrival)', whys[4] repeats it, and wants.you[2] tells the player 'her W can't deny the knockup before impact'.",
+   "why": "This is the most damaging error in the slice. Riot's Steadfast Presence text: 'Poppy can activate Steadfast Presence to gain Move Speed and stop enemy dashes around her. If a dash is stopped, the enemy is...' — the dash is stopped and the dasher is punished. Unstoppable Force is a dash. So four separate strings tell a Malphite player that his 130-second ultimate goes through the single ability in Poppy's kit built to eat it, and the only don't in the full layer that touches it ('Get R-knocked mid-combo') is about her ultimate instead. A player who trusts this page throws his ult into an up W every game and never learns why the engage keeps failing.",
+   "corrected": "Steadfast Presence stops dashes and punishes the dasher, and Unstoppable Force is a dash — never R into an up W. It is 20s at rank 1 and 12s at rank 5, so count it or bait it first.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/poppy.json W description",
+    "champ-data/_kits/malphite.json R dash flag",
+    "champ-data/_kits/_missing-interactions.json poppy/malphite"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "content.early, spikes[0].text, wants.foe[0] and whys[0] all describe 'her Q knockup', and early also credits her passive with 'movement-speed shield-blocks'.",
+   "why": "Hammer Shock has no knock-up: Riot's text is a hammer swing that damages and 'creating a zone that will slow enemies and explode after a delay'. The only knock-ups Poppy owns are Heroic Charge's wall stun, which is a stun rather than a knock-up, and Keeper's Verdict. Separately, Iron Ambassador is a thrown buckler that shields her when she picks it up — the move speed and the resistances the text is groping for belong to Steadfast Presence's passive. Three abilities were blended into one imaginary one.",
+   "corrected": "Hammer Shock is a slowing zone that explodes after a delay, 8/7/6/5/4. Iron Ambassador shields her when she retrieves the buckler.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/poppy.json P and Q descriptions"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Keeper's Verdict is never named, and the page never says it is a channel.",
+   "why": "Riot's text describes Keeper's Verdict as a channelled hammer strike on 140/120/100. A channel can be broken by a knock-up, so the correct read on her ultimate is a race rather than a hard counter to the engage: if Malphite's R lands first, hers does not happen. That is the one thing that keeps the late-game teamfight even rather than lost.",
+   "corrected": "Keeper's Verdict is a 140/120/100 channel — your knock-up breaks it if you land first.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/_kits/poppy.json R description and channel flag"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "The packet flags 'NO cooldown-sequencing advice anywhere' and separately that no Poppy ability is ever named. Both are accurate — breakdown.cooldowns pointed at Heroic Charge with no number and two placeholder lines.",
+   "why": "The number that runs this matchup is Steadfast Presence at 20/18/16/14/12, because it is the gate on Malphite's only win condition. Heroic Charge 14/13/12/11/10 and Hammer Shock 8/7/6/5/4 fill in the trading rhythm. Twenty seconds at rank 1 is a long, countable window, which is what makes 'bait the W, then engage' a real instruction rather than a slogan.",
+   "corrected": "Steadfast Presence 20/18/16/14/12; Heroic Charge 14/13/12/11/10; Hammer Shock 8/7/6/5/4; Keeper's Verdict 140/120/100.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/poppy.json cooldowns",
+    "packet malphite.json defects"
+   ]
+  },
+  {
+   "point": 12,
+   "status": "needs-correction",
+   "whatIsWrong": "dontsFull did not contain the one mistake that loses this lane.",
+   "why": "The full layer's don'ts are 'Get E-pinned on a wall', 'Get R-knocked mid-combo' and 'Fall behind in scaling'. The actual defining mistake — engaging into an available Steadfast Presence — is missing from the don'ts and actively encouraged in the content layer. The corrected cooldowns and report entries now carry it; a dedicated don't would be better still but the entry count is fixed at three and all three current entries are at least true.",
+   "corrected": "Never spend Unstoppable Force while Steadfast Presence is up.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/malphite.full.js poppy.dontsFull",
+    "champ-data/_kits/poppy.json W"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Poppy owns the opening — her Q knockup and her passive movement-speed shield-blocks out-trade your level 1-3 where you have no real trade pattern and just eat damage. Don't try to fight before W and E; last-hit at max range, mind her E and stay off walls so she can't pin-stun you. Your Granite Shield passive is your only buffer here, so disengage to refresh it and concede the lane until your kit comes online.",
+   "after": "Poppy owns the opening — Hammer Shock (Q, 8s at rank 1) leaves a slowing zone that explodes after a delay, and Iron Ambassador hands her a shield when she picks her buckler back up, so she out-trades your level 1-3. Don't fight before W and E; last-hit at max range and stay off walls so Heroic Charge (E, 14s at rank 1) cannot pin-stun you. Granite Shield is your only buffer, so disengage to refresh it and concede the lane."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "This is where it flips. Once W (Thunderclap) gives you bonus armor and empowered AoE autos, and E hits her with the attack-speed slow plus armor-scaling magic damage, you start trading even and farming through her. At 6, R is your real weapon — her W blocks dashes on impact but can't deny the knockup once you've committed the engage, so use it to all-in on a cooldown or roam, which her immobility can't match.",
+   "after": "This is where it flips, with the one caveat that decides the matchup. Thunderclap's armour and Ground Slam's attack-speed cut let you trade even and farm through her. But Steadfast Presence (W) stops enemy dashes around her and stuns whoever was dashing, and Unstoppable Force is a dash — R into an up W is thrown away. It is 20s at rank 1 down to 12s at rank 5, so bait it or count it, and only then engage or roam."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "You stabilize into a favoured frontline here — your armor stacking makes her flat tank trades irrelevant, and your E plus W out-grind her in extended fights. Poppy stays even because her R can peel your engage and her E can wall-pin you off, but in a straight 1v1 your armor-scaling and Granite Shield win. Keep R for picking her carry, not dueling Poppy, and respect her wall-pin near terrain.",
+   "after": "You stabilize into a favoured frontline — armour stacking makes her flat tank trades irrelevant and your E plus W out-grind her. She stays even because Keeper's Verdict peels your engage and Heroic Charge wall-pins you, though her R is a channel, so your knock-up breaks it if you land first. Keep R for her carry rather than for duelling Poppy, and respect the wall-pin near terrain."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Poppy's biggest window: her Q knockup and passive shields out-trade your empty early kit before W/E come online.",
+   "after": "Poppy's window: Hammer Shock's slow zone and her Iron Ambassador shield out-trade your empty kit before W and E."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Unstoppable Force can't be stopped by her W (her dash-block only eats your dash on impact, not the knockup pre-arrival) — your hardest all-in and roam window.",
+   "after": "Steadfast Presence stops dashes and stuns the dasher, and Unstoppable Force IS a dash — never R into an up W: 20s at rank 1, 12s at rank 5. Count it, then all-in."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Hit Level 6 and use R to engage or roam — her W can't deny the knockup before impact",
+   "after": "Count Steadfast Presence — 20s at rank 1 — and only R once her dash-block is spent"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Win the level 1-3 window with her Q knockup and passive damage-block shields before your kit comes online",
+   "after": "Win levels 1-3 with Hammer Shock's slow zone and her Iron Ambassador shield before your kit lands"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Bait your R into her W to block the dash and waste your engage",
+   "after": "Catch your Unstoppable Force with Steadfast Presence and stun you"
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Poppy's Q knockup and passive shield-blocks out-trade your empty level-1 kit before W or E exist.",
+   "after": "Hammer Shock's slowing zone and her buckler shield out-trade your empty level-1 kit before W or E."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "R engages through her W (the dash-block only catches the impact, not the pre-arrival knockup) — your hardest all-in and roam.",
+   "after": "R is your hardest all-in, but Steadfast Presence stops dashes and stuns you for it — engage only once her W is spent."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Poppy Heroic Charge: matchup-defining — Wall-pin stun. Dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+   "after": "- Poppy Steadfast Presence: 20/18/16/14/12 — it stops dashes and stuns the dasher, and your R is a dash. Never engage into it. - Heroic Charge: 14/13/12/11/10, the wall-pin. - Hammer Shock: 8/7/6/5/4."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Poppy's Heroic Charge: Wall-pin stun. Dodge it. When it is down — R-W-E her.",
+   "after": "Steadfast Presence stops dashes and stuns — your R is a dash. Engage after it is spent."
+  }
+ ],
+ "notes": "This is the highest-value matchup in the slice and it was inverted. Four strings across both layers told the player that Unstoppable Force beats Steadfast Presence; Riot's own W text says it stops enemy dashes around her and punishes the dasher, and Malphite's R is flagged as a dash in his own kit. The corrected rule is simple and countable: 20s at rank 1, 12s at rank 5, bait it or count it, then engage. Second real error: Hammer Shock has no knock-up, it is a slowing zone that explodes after a delay, and the 'passive shield-blocks' the page describes are two different abilities — Iron Ambassador's retrievable buckler shield and Steadfast Presence's passive resistances. Also newly named: Keeper's Verdict is a channel on 140/120/100, so your knock-up beats it if you land first. Chart: content.win gives Malphite levels 2-3 against its own 'don't try to fight before W and E'; target is Poppy, Skill, Skill, Malphite, Malphite, Malphite, Skill."
+}

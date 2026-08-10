@@ -1,0 +1,157 @@
+{
+  "ownerKey": "nasus",
+  "enemy": "volibear",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The matchup repeatedly attributes Volibear's stun to his E (\"E hand-of-the-god stun\", \"E-stun all-in\", \"E-stun dive\"). Volibear has no stun on E.",
+      "why": "Riot's own kit data gives hardCC to Q only. Thundering Smash (Q): \"Volibear gains speed towards enemies, Stunning and damaging the first one he Attacks.\" Sky Splitter (E): \"deals damage and Slows enemies while granting Volibear a Shield if he's inside the blast radius\" — slow and self-shield, no CC. A Nasus who saves Wither for a phantom E-stun spends it on the wrong ability and eats the real one.",
+      "corrected": "The stun is Thundering Smash (Q). Sky Splitter (E) only slows and shields him — and only shields if he is standing inside his own blast.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/volibear.json (Riot Data Dragon 16.15.1) — kitFlags.hardCC = [\"Q\"], E flags = projectile/slow/shield/zone"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Thundering Smash is called a \"Q dash\" / \"empowered Q dash\" in seven separate strings.",
+      "why": "Q is a movement-speed buff toward enemies whose stun is delivered by a basic attack; it is not a dash. kitFlags.dash lists R only. This is not cosmetic: a dash implies something you sidestep, that crosses terrain, and that grounding stops. A run-down auto-attack stun is none of those — it is unavoidable once he is in attack range, which is exactly why Wither's 700-range point-and-click has to go out during the approach rather than after.",
+      "corrected": "Thundering Smash is a run-down: he gains speed toward you and his next attack stuns. Stormbringer (R) is his only dash.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/volibear.json — Q flags = hardCC/autoReset, kitFlags.dash = [\"R\"]"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "Packet flags zero cooldown-sequencing cues. Nothing anywhere states a real number or a \"wait for X before you Y\" rule.",
+      "why": "Thundering Smash is 12/11.5/11/10.5/10 and Wither is 15/14/13/12/11. At the ranks that decide this lane his stun is back up before your answer is — so spending Wither on chip poke leaves a 3s naked window at rank 1. Sky Splitter is a flat 16s at every rank, which is the longest real gap in his kit and the only one that does not shrink as he levels.",
+      "corrected": "Thundering Smash 12s at rank 1 vs Wither 15s — his stun returns first, so Wither only the committed approach. Sky Splitter is flat 16s at every rank.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/volibear.json, champ-data/_kits/nasus.json — per-rank cooldowns"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The late-game text says to respect \"his R tower disable and shield\".",
+      "why": "Stormbringer (R) grants bonus Health and disables nearby enemy towers; it does not grant a shield. The shield belongs to Sky Splitter (E). Conflating them makes the reader expect a burst-absorbing layer on the dive that is not there.",
+      "corrected": "Stormbringer disables your tower and gives him bonus Health. The shield is Sky Splitter's, and only if he lands in his own blast.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/volibear.json — R description, kitFlags.shield = [\"E\"]"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Grievous Wounds is never mentioned despite Frenzied Maul being the reason he wins extended trades.",
+      "why": "Frenzied Maul is a flat 5s cooldown and the second cast on a marked target heals him. Over a 10-second duel that is multiple heals against Nasus chip. The late-game text claims Q stacking simply out-paces the heal, which is only reliably true with an anti-heal source.",
+      "corrected": "Frenzied Maul is 5s flat; his re-bite heal out-paces your chip until you carry a Grievous Wounds source.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/volibear.json — W cooldown \"5\", heal flag", "champ-data/_kits/_missing-interactions.json — needs-antiheal, nasus vs volibear"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer's phase chart and the content layer's chart disagree. Content gives Nasus stages 4-7 (Nasus 4 / Skill 1 / Volibear 2); full gives Volibear stages 1-4, Skill at 6, Nasus only 6-7.",
+      "why": "Nasus wins this lane 53.23% over 511 games. The content chart matches that shape; the full chart hands Volibear four of seven stages including Levels 4-5, where Wither is already online and the content layer explicitly says the lane has swung. Both charts render, so a reader sees two different answers for the same stage.",
+      "corrected": "full phases[2].side should be Skill and phases[3].side should be Nasus, matching content win[2] and win[3]. NOT PROPOSED AS AN EDIT — the ±10% length band makes \"Volibear\" (8) to \"Skill\"/\"Nasus\" (5) impossible to submit. Needs applying by hand or a band exemption for enum fields.",
+      "confidence": "High",
+      "sources": ["champ-data/content/nasus.js win[], champ-data/nasus.full.js phases[].side, packet winRate 53.23 / 511 games"]
+    },
+    {
+      "point": 4,
+      "status": "correct",
+      "whatIsWrong": "Packet suspectNames flags \"Spirit Fire's\" in mid as a probable wrong ability name (distance 2 from \"spirit fire\").",
+      "why": "False positive. Spirit Fire is the correct Riot name for Nasus's E; the edit distance comes from the possessive apostrophe-s. No change needed on that ground.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json — E names = [\"Spirit Fire\"]"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Volibear's empowered Q dash and W bite-heal win the level-1 brawl before you have Wither, so you soak farm and concede.",
+      "after": "Thundering Smash is a run-down auto stun, not a dash, and Frenzied Maul bites through your autos — soak farm, concede level 1."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Wither comes online and slows his Q dash and attack speed to nothing, so the level-3 all-in is a coin-flip you can now refuse or punish.",
+      "after": "Wither lands from 700 range and guts the run-down speed Thundering Smash needs, so the level-3 all-in is one you can refuse or punish."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Fury of the Sands plus Wither lets you win his committed E-stun all-in — the bonus HP and AoE burn beat his bite-heal.",
+      "after": "Fury of the Sands plus Wither wins his committed Thundering Smash all-in — bonus HP and AoE burn beat Frenzied Maul's heal."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-6 swing to you. Wither shuts down his entire kit — slowed, he can't kite, dash out, or out-DPS your empowered Q, and Spirit Fire's armor shred makes every Siphoning Strike land harder. The danger is his E hand-of-the-god stun setting up a gank or dive, so respect it when his jungler is near. At 6, Fury of the Sands plus Wither means you win any single committed all-in: the bonus HP and AoE burn eat his bite-heal and you out-duel him cleanly.",
+      "after": "Levels 4-6 swing to you. Wither shuts down his entire kit — slowed, he can't kite, dash out, or out-DPS your empowered Q, and Spirit Fire's armor shred makes every Siphoning Strike land harder. His stun is Thundering Smash (Q), an auto-attack you cannot sidestep; Sky Splitter (E) only slows and shields him, so spend Wither on the Q approach, never on the E. At 6, Fury of the Sands plus Wither wins any committed all-in: bonus HP and AoE burn eat his bite-heal."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "This is your game. Volibear is a scaling bruiser-tank, but he has no true damage and no percent-HP — so your infinite Q stacking plus Spirit Fire's armor shred grinds his big HP bar down faster than W can heal it. In a sustained duel you Wither his attack speed, burn him with ult, and one-shot him on an empowered Q. Just respect his R tower disable and shield in 5v5 dives; in the 1v1 splitpush you out-scale him outright.",
+      "after": "This is your game. Volibear is a scaling bruiser-tank with no true damage and no percent-HP, so infinite Q stacking plus Spirit Fire's armor shred grinds his HP bar down faster than Frenzied Maul heals it — and one Grievous Wounds source ends the argument. In a sustained duel you Wither his attack speed, burn him with ult, and one-shot him on an empowered Q. Respect Stormbringer's tower disable in 5v5 dives; in the 1v1 splitpush you out-scale him outright."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Volibear's empowered Q dash and W bite-heal let him win the level-1/2 brawl before you have Wither, so concede and stack Q.",
+      "after": "Thundering Smash's run-down auto stun and Frenzied Maul's bite-heal win him the level-1/2 brawl before Wither, so concede and stack."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Wither comes online — point-and-click slow that kills his Q dash and attack-speed brawl, flipping the lane the moment he tries to all-in.",
+      "after": "Wither comes online — 700-range point-and-click that kills the run-down speed Thundering Smash needs, flipping the lane the moment he all-ins."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Fury of the Sands plus Wither turns his E-stun dive into a death: the bonus HP, AoE burn and empowered Q out-duel his bite-heal.",
+      "after": "Fury of the Sands plus Wither turns his Thundering Smash dive into a death: bonus HP, AoE burn and empowered Q out-duel Frenzied Maul."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Win the level-1/2 brawl with empowered Q dash and W bite-heal before Wither exists",
+      "after": "Win the level-1/2 brawl with Thundering Smash and Frenzied Maul before Wither exists"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Use E hand-of-the-god stun to set up dives and deny your stacking under tower",
+      "after": "Land Thundering Smash's auto stun to set up dives and deny stacking under tower"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Volibear Thundering Smash (Stun): matchup-defining — His engage. Wither him after it. Track it before every engage. - Volibear Thundering Smash: Move speed toward enemies; the next auto stuns after running them down. Dodge or sidestep it.",
+      "after": "- Thundering Smash (Stun): 12s at rank 1 — an auto-attack stun, not a skillshot. You cannot sidestep it, only Wither the approach at 700 range. - Sky Splitter (E): flat 16s at every rank, and it only shields him if he stands in his own blast."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Trade strictly around Thundering Smash (Stun): when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve him.",
+      "after": "Thundering Smash is 12s at rank 1 and Wither is 15s — his stun comes back first, so never spend Wither on poke you could have walked out of."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Volibear's Thundering Smash (Stun): His engage. Wither him after it. When it is down — Wither + Q him.",
+      "after": "Thundering Smash stuns through an auto, so Wither the approach at 700 range. Sky Splitter only slows and shields."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Frenzied Maul is 5s — the re-bite heal beats your chip without Grievous Wounds."
+    }
+  ],
+  "notes": "Two systematic factual errors run through this matchup and are worth checking on every other Nasus-vs-Volibear-shaped entry: (1) the stun attributed to Sky Splitter (E) when it belongs to Thundering Smash (Q), and (2) Thundering Smash described as a dash when Stormbringer (R) is Volibear's only dash. The full-layer phase chart contradicts the content-layer chart at stages 3 and 4 (see audit point 2); I could not submit that fix as an edit because the ±10% length band forbids replacing \"Volibear\" with \"Skill\"/\"Nasus\" in a .side field. Enum-valued paths (.side, .diff, .tone, ratings) probably need a band exemption in the applier, otherwise no chart contradiction anywhere in the dataset is fixable through this pipeline. Packet suspectName \"Spirit Fire's\" is a false positive."
+}

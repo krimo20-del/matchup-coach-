@@ -1,0 +1,192 @@
+{
+ "ownerKey": "mel",
+ "enemy": "ksante",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "MC_WR_TABLES.mel.ksante = 33.33 with MC_REAL_GAMES.mel.ksante = 9. One Emerald+ number, already in the data. Nine games is directional only, but it points the same way the kit maths does, so I did not argue with it.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/content/mel.js MC_WR_TABLES / MC_REAL_GAMES"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full.diff is EVEN, full.diffRating 5.5/10, full.carryRating 6/10, and full.tldr reads 'Free stacking lane - every Q volley builds your execute while he farms politely.' The tldr is boilerplate: that exact string appears 26 times across mel.full.js. It contradicts the 33.33% win rate and the file's own content.win chart, which gives K'Sante levels 3 through first item.",
+   "why": "A 550-range mage with one root, no dash and no self-peel against a tank with three dashes, a pull, a stun and a 250-range ult is not an even lane. Every other signal in the file already says K'Sante is ahead; only the difficulty label and the tldr disagree.",
+   "corrected": "Should read HARD / #ff5d6c / 7.5/10 / carry 8/10, with a matchup-specific tldr. NOT PROPOSED AS AN EDIT: apply-proposals.js refuses any full-layer edit whose `before` is under 12 characters (line 177), which rules out diff, tone, diffRating and carryRating; and it refuses a `before` that occurs more than once in the file (line 186), which rules out the tldr at 26 occurrences. Flagged here for a manual pass - see notes.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ksante.json",
+    "champ-data/_kits/mel.json",
+    "champ-data/content/mel.js"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The entry calls Ntofo Strikes (Q) a knockup in six places: 'his Q knockup', 'his Q projectile knockup', 'Q knockup + W dash'. Ntofo Strikes does not knock up. Riot's text: 'At 2 stacks, K'Sante fires a shockwave that pulls enemies in.' The Q kit flags are projectile / hardCC / slow, with no knockup. K'Sante's only knockups are Path Maker (W) and All Out (R). The entry also frames Path Maker as a 'W block' that 'negates your poke'; it is a charge-up that takes reduced damage and then dashes with a knockback and stun, so it soaks damage rather than blocking projectiles.",
+   "why": "Pull versus knockup changes where Mel stands. A pull drags her toward him, which makes max-range spacing the counterplay and makes standing just outside 450 a trap rather than safety. Calling it a knockup teaches the reader the CC is unavoidable once in the area, which is the wrong lesson for an immobile mage.",
+   "corrected": "Ntofo Strikes is a two-stack pull; Path Maker is the charge that soaks the volley and stuns on release.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ksante.json (Q and W descriptions, kitFlags)"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "missing",
+   "whatIsWrong": "Nothing in the entry mentions that All Out removes Path Maker's own CC. Riot's W text: 'When All Out, deals increased damage and no longer knocks back or stuns.'",
+   "why": "This is the most decision-changing fact in the matchup for an immobile mage. Once K'Sante ults, his follow-up W is damage only and cannot re-CC Mel. So the R knockback is the single beat she has to survive; after it she is running from a dash that cannot lock her down, not eating a chain. Not knowing this is what makes players hold Flash one beat too long.",
+   "corrected": "Stated in report[5] Key Ability Interactions and in the loading line.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ksante.json (W: 'When All Out, deals increased damage and no longer knocks back or stuns')"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "Path Maker deals true damage (kit flag trueDamage on W) and the entry never says so. _missing-interactions.json flags the same thing as 'resistances-invalidated'.",
+   "why": "The instinct against a tank top laner is to buy MR or HP. Against the one ability that opens his all-in, resistances do nothing. That changes the level 4-5 advice from 'survive at higher HP' to 'do not be inside 600 units at all'.",
+   "corrected": "Folded into phases[3].why, which is the Levels 4-5 slot.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ksante.json (W kitFlags.trueDamage)",
+    "champ-data/_kits/_missing-interactions.json"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns carries no numbers at all. Worse, tradeBad, breakdown.trading, dontsFull[2].d and report[3].t all claim Rebuttal is 'gone for twenty seconds'. Rebuttal's cooldown is 38/35/33/29/26.",
+   "why": "Twenty seconds is wrong by nearly double at rank 1, and it is exactly the number a reader uses to decide whether to spend the barrier on chip. Under-reporting it makes Rebuttal look cheap. Meanwhile Ntofo Strikes is up every 3.5s flat, so 'wait out his Q' is not a plan - the punishable cooldowns are Path Maker at 14s and Footwork at 10s.",
+   "corrected": "All Out 120/100/80, Path Maker 14s rank 1, Footwork 10s rank 1, Ntofo Strikes 3.5s flat, Rebuttal 38s rank 1. Fixed in breakdown.cooldowns and breakdown.trading; tradeBad and dontsFull[2].d carry the identical string 4x in the file so the applier cannot target them - see notes.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ksante.json",
+    "champ-data/_kits/mel.json"
+   ]
+  },
+  {
+   "point": 12,
+   "status": "needs-correction",
+   "whatIsWrong": "report[11] Common Mistakes lists 'Force full rotations into full-HP tank stats' and two generic lines. It never names the mistake this matchup actually produces.",
+   "why": "The real error is spending the Q rotation into a Path Maker charge, which is precisely when the damage is reduced, and misspacing against Ntofo Strikes because the entry told the reader it lifts. Both are matchup-specific and both are correctable.",
+   "corrected": "Replaced with the two mistakes the kit actually punishes.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/ksante.json"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "The four content spikes (Lvl 2 root window, Lvl 6 All Out, first-item gap-close, late scaling) are the right beats. Only the first-item spike needed the Q wording repaired.",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/content/mel.js"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "K'Sante wins by landing All Out, denying your pattern, and front-loading the violence while your kit is still stretching.",
+   "after": "K'Sante wins by walking Path Maker through your poke and landing All Out at 250 range while your kit is still stretching."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Mel vs K'Sante - Track: K'Sante All Out. - Hold the reflect for his real spell. - All Out down is the green light. - Hold the ult for names, not waves.",
+   "after": "- Mel vs K'Sante - Track: K'Sante All Out. - Hold Rebuttal for Path Maker, not chip. - In All Out his W cannot stun. - Ntofo pulls you in, it never lifts."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Stack Overwhelm with every hit — once he's marked deep, your execute math starts working. Track All Out before stepping up.",
+   "after": "Stack Overwhelm with every hit — but Path Maker's damage is true, so resists never soften his engage. Respect it at full HP."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- K'Sante All Out: matchup-defining — His duelist mode — fight the tank, never the duelist. Check it before every step-up. - W Rebuttal is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+   "after": "- K'Sante All Out: 120/100/80s — his duelist mode; fight the tank, never the duelist. - Path Maker 14s and Footwork 10s are the engage tools worth counting. - Ntofo Strikes returns every 3.5s, so never wait on it."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Snare through the wave onto his farming spot, fan two full Q volleys while he's locked, and step back with W ready before his answer comes off cooldown. Bad trade: Burning Rebuttal on chip damage and then standing in All Out range — your only defensive layer is gone for twenty seconds.",
+   "after": "Good trade: Snare through the wave onto his farming spot, fan two full Q volleys while he's locked, and step back with W ready before Path Maker comes off its 14s cooldown. Bad trade: Burning Rebuttal on Ntofo chip and then standing inside his 250-range All Out — that barrier is gone for 38 seconds at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His duelist mode — fight the tank, never the duelist. Commit on its cooldown, never into it.",
+   "after": "Fight the tank, never the duelist — commit while All Out is down, and never into a Path Maker charge."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That’s K'Sante’s bread-and-butter play — deny it and they run out of answers.",
+   "after": "Path Maker's charge soaks the volley — he walks out of the rotation whole."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track K'Sante’s All Out: His duelist mode — fight the tank, never the duelist. Forward steps wait for its downtime.",
+   "after": "All Out strips Path Maker's own knockback and stun, so after his ult that W is damage only — and that damage is true."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on All Out’s cooldown, on your Blackfire Torch spike, and with your jungler’s setup. Make him flinch first.",
+   "after": "Commit while All Out is down and Path Maker is on its 14s — that is the only window your 550 range survives."
+  },
+  {
+   "layer": "full",
+   "path": "report[11].t",
+   "before": "Force full rotations into full-HP tank stats. Eat All Out for free in a won lane. Sit top when your execute wins fights elsewhere. Save the R for moments with names on them.",
+   "after": "Force full rotations into a Path Maker charge that soaks them. Space against Ntofo Strikes as a pull, not a knockup. Sit top when your execute wins fights elsewhere."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Use Rebuttal's wall to eat his Q projectile knockup and deny the engage cleanly",
+   "after": "Hold Rebuttal for the Path Maker stun, not for Ntofo chip — it is your only layer"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Land his Q knockup, then R to isolate you, strip his resists, and execute your squishy frame",
+   "after": "Land the two-stack Ntofo pull, then All Out you through a wall and burst your squishy frame"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "His Q knockup + W dash close your 550 range instantly once he has a sustain item — your poke can no longer kite him off.",
+   "after": "His Ntofo pull plus a 10s Footwork dash close your 550 range once he has a sustain item — your poke can no longer kite him off."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "Solar Snare's root lets you land a guaranteed Q punish, but his W block and Q knockup answer back — your best early window, still a coin-flip.",
+   "after": "Solar Snare's root lands a guaranteed Q punish, but Path Maker's charge soaks the damage and stuns straight back — a coin-flip at best."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Open careful and cash the one clean window you get: at 2, Solar Snare's root into a full Q barrage is a guaranteed punish when he steps up — and even that is only a coin-flip, because his W block and Q knockup answer straight back. From 3 the lane slides his way: he blocks your Q with W, walks you down off one root, and you have no dash to reset the trade. Stack Overwhelm off safe pokes, hold Rebuttal to eat his Q knockup, and treat every trade past level 3 as something to escape from cleanly rather than something to win.",
+   "after": "Open careful and cash the one clean window you get: at 2, Solar Snare's root into a full Q barrage is a guaranteed punish when he steps up — and even that is only a coin-flip, because Path Maker's charge soaks the damage and stuns straight back. From 3 the lane slides his way: he eats your Q inside that charge, walks you down off one root, and you have no dash to reset the trade. Stack Overwhelm off safe pokes, hold Rebuttal for Path Maker rather than Ntofo chip, and treat every trade past level 3 as something to escape cleanly rather than something to win."
+  }
+ ],
+ "notes": "I read tools/apply-proposals.js to get its real rules rather than guess, and two structural blockers fall out of it - both need a manual pass because no proposal can express them. (1) Full-layer short fields are unreachable: line 177 refuses any full-layer edit whose `before` is under 12 characters. That covers diff ('EVEN'), tone, diffRating ('5.5/10'), carryRating and every phases[N].side. So the wrong EVEN / 5.5/10 label and the phases chart cannot be fixed by proposal. This matchup should read HARD / #ff5d6c / 7.5/10 / carry 8/10, and phases[2..5].side should read K'Sante to match content.win. Note the length rule is NOT the obstacle - line 80 skips the drift check entirely when `before` is under 25 chars. (2) Boilerplate defeats the exact-match requirement: line 186 refuses a `before` that occurs more than once in the file. full.tldr here is byte-identical across 26 entries in mel.full.js, and the 'gone for twenty seconds' sentence occurs 4x inside this one entry (tradeBad, breakdown.trading, dontsFull[2].d, report[3].t). I could only repair the copy inside breakdown.trading; the other three still carry the wrong number. FACTUAL: Rebuttal is 38/35/33/29/26, never twenty seconds - worth a global find-and-replace across mel.full.js, since the same sentence is templated into other matchups too. Minor applier bug, unrelated to this matchup: at line 206 the else-branch references an undeclared `chunk`, but it is unreachable because full-layer edits already `continue` at line 189 and checkEdit rejects any other layer, so it never fires. I did not propose an edit to WKM_LINES; nothing in it surfaced as wrong here."
+}

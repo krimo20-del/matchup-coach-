@@ -1,0 +1,137 @@
+{
+  "ownerKey": "sejuani",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "needs-correction",
+      "whatIsWrong": "My packet says 51.61% over 93 games; MC_WR_TABLES.sejuani.nasus is 48.97 and MC_REAL_GAMES gives 292 games.",
+      "why": "The already-audited mirror used 51.03 over 292, which is exactly 100 - 48.97. Table and mirror agree; the packet does not.",
+      "corrected": "48.97% over 292 games.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/content/sejuani.js",
+        "audits/top/nasus__sejuani.json"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "win[] here is ['Sejuani','Sejuani','Sejuani','Sejuani','Skill','Nasus','Nasus'] and the Nasus-side file carries the identical array with matching phase sides. The two directions already agree, so I changed nothing — EVEN at 5.5/10 against 48.97% is right.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "champ-data/content/nasus.js",
+        "champ-data/nasus.full.js",
+        "audits/top/nasus__sejuani.json"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The first-item spike was 'Nasus completes Sheen or Triforce', and the late spike was 'Full-stack Nasus with Spirit Visage'.",
+      "why": "No item data exists in the kit files, and the packet already flagged 'Spirit Visage' as a suspect name. The verifiable spikes are in his kit: Siphoning Strike falls from 7.5s to 3.5s and is an auto-attack reset, and Fury of the Sands (120/100/80s) grants bonus health, attack range, armour and magic resist while it runs.",
+      "corrected": "Both spikes now rest on kit facts instead of item guesses.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/nasus.json",
+        "packets/sejuani.json suspectNames"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.foe[2] told the player that Nasus converts his hits to true damage. He has none. wants.foe[1] and whys[3] again called Sejuani's resistances 'passive Permafrost resistances' and said Frost stacks 'accumulate passively'.",
+      "why": "Nothing in Nasus's kit is true damage — Soul Eater is lifesteal, Siphoning Strike is a scaling on-hit strike, Spirit Fire shreds armour, and Fury of the Sands carries the percentHealth flag for its aura. Telling a Sejuani her armour is bypassed makes her build the wrong item. On the Sejuani side: her resistances are Fury of the North / Frost Armor, and Frost stacks come from Winter's Wrath — they do not accumulate on their own. The decisive interaction, mirrored from the Nasus-side audit, is that Frost Armor grants IMMUNITY TO SLOWS, so Wither's movement slow does not stick until Nasus has damaged her out of it.",
+      "corrected": "True-damage claim removed, correct passive and Frost-stack source used, and the Frost Armor / Wither interaction now stated from Sejuani's side.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/nasus.json",
+        "champ-data/_kits/sejuani.json",
+        "audits/top/nasus__sejuani.json"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns gave no numbers — 'read it like a second minimap'.",
+      "why": "Wither is 15/14/13/12/11s at 700 range; Siphoning Strike 7.5/6.5/5.5/4.5/3.5s at 255 range; Fury of the Sands 120/100/80s.",
+      "corrected": "All three stated.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/nasus.json"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Siphoning Strike's auto-attack reset was never used as a timing tell.",
+      "why": "The kit flags autoReset on Q. Against a 255-range melee, the wind-up rather than the cast is what tells you the empowered hit is coming.",
+      "corrected": "Now stated in the first-item spike.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/nasus.json",
+        "_missing-interactions.json rule autoreset-burst-tell"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Nasus completes Sheen or Triforce and suddenly his Q one-shots casters — respect the damage spike and trade only through your full stun chain.",
+      "after": "Siphoning Strike is an auto-attack reset that falls to 3.5s at max rank — the wind-up is the tell, so trade only through your full stun chain."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Full-stack Nasus with Spirit Visage is unkillable in a straight 1v1; your job is to R the enemy carry in teamfights, not to duel him.",
+      "after": "Fury of the Sands (120s) stacks health, range and resists on top of full Q stacks — R the enemy carry in fights, never duel him."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land Wither on your Q approach to cripple your movement and attack speed, killing your trade pattern",
+      "after": "Damage you first to break Frost Armor, then Wither — its slow does nothing through slow immunity"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Farm Q stacks freely on cannon minions while your passive Permafrost resistances don't yet exist",
+      "after": "Farm Siphoning Strike stacks freely on cannons while Fury of the North's resists are still thin"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Reach 200+ Q stacks and R up so your Frost armor is irrelevant against his per-hit True Damage conversion",
+      "after": "Reach 200+ Siphoning Strike stacks and pop Fury of the Sands so your Frost Armor stops mattering"
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Wither is on a 15-second CD and Frost stacks accumulate passively — any time Wither is down, Sejuani owns a clean Q-W-E window that Nasus cannot escape.",
+      "after": "Wither is 15/14/13/12/11s and Winter's Wrath is what applies Frost — whenever Wither is spent you own a clean Q-W-E window Nasus cannot escape."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Nasus Wither: matchup-defining — His only answer to kiting — bait it before you commit. Read it like a second minimap. - Guard your Q dash like a fifth summoner spell. - Ultimate goes to kill windows only.",
+      "after": "- Nasus Wither: 15/14/13/12/11s at 700 range — his only answer to your engage, so step up the moment it is spent. - Siphoning Strike (Q): 7.5s down to 3.5s, an auto-attack reset. - Fury of the Sands (R): 120/100/80s."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Nasus’s Wither: His only answer to kiting — bait it before you commit. Forward steps wait for its downtime.",
+      "after": "Frost Armor grants immunity to slows: Wither's slow will not stick until Nasus has damaged you out of it first."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His only answer to kiting — bait it before you commit. Bait it, count it, then go.",
+      "after": "Wither is his only answer to kiting — bait it, count 15s at rank 1, then go."
+    }
+  ],
+  "notes": "Mirror reused from audits/top/nasus__sejuani.json — the level chart already matched inversely so I left it alone, and I restated that file's Frost Armor / Wither finding from Sejuani's side. I inherited its scope limit deliberately: every line I wrote says the SLOW does not stick, never that Wither's attack-speed reduction is blocked. Riot's Fury of the North text says 'immunity to slows' and whether that covers the attack-speed component is not answerable from these files. Worst error found on my side: wants.foe[2] told Sejuani players that Nasus converts his hits to true damage. He has no true damage anywhere in his kit, and that line would push a Sejuani away from buying armour against a champion whose entire threat is physical."
+}

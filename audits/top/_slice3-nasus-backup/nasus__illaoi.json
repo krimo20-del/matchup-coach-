@@ -1,0 +1,140 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "illaoi",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "content early tells the player that after Test of Spirit \"you have to run from your own tentacles\". That is the losing play.",
+   "why": "Test of Spirit turns the target into a Vessel if the spirit is killed OR if the target gets too far from it. Running away is one of the two ways to fail the mechanic. The spirit also echoes a share of the damage it takes back onto the original target, so letting minions and tentacles chew on it damages you directly. The survival line is: stay inside the leash on the spirit, keep out of tentacle reach, and outlast the duration.",
+   "corrected": "Rewrote content early: do not sprint away, straying turns you into a Vessel; the spirit echoes damage; stay near it out of tentacle reach and ride the timer.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/illaoi.json (E Test of Spirit: \"If killed, or if the target gets too far from the spirit, the target will become a Vessel\"; \"Spirits echo a percentage of the damage they take to the original target\")"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "The entry repeatedly says \"fight off her tentacle field\" without ever saying where the field comes from or how to deny it.",
+   "why": "Prophet of an Elder God spawns tentacles on nearby impassable terrain — the lane walls. Where you stand decides how many tentacles exist, which is the single most controllable variable in the matchup. Her tentacle damage is delivered through Harsh Lesson, a 4-second dash-and-auto-reset that makes every nearby tentacle swing at the target, so an open-lane trade removes most of her damage before it happens.",
+   "corrected": "Added the terrain condition and the 4s Harsh Lesson trigger to content mid, wants.you[0], wants.foe[1] and tldr.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/illaoi.json (P: tentacles spawn on nearby impassible terrain; W Harsh Lesson cd 4, causes nearby Tentacles to swing at the target)"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "Packet flags zero cooldown-sequencing cues, and breakdown.cooldowns gives Test of Spirit no number at all.",
+   "why": "Test of Spirit is 16/15/14/13/12s and is the ability the whole entry is built around. A missed E is a 16-second stretch in which she is a slow melee with no pull, which is the only reliable window a 255-range Nasus gets before items.",
+   "corrected": "Put the 16s/12s figures into breakdown.cooldowns and breakdown.mid as an explicit walk-at-her cue.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/illaoi.json (E cd 16/15/14/13/12)"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "No anti-heal anywhere, despite her passive healing off every tentacle hit on a champion.",
+   "why": "Prophet of an Elder God heals Illaoi whenever her tentacles damage a champion, which is exactly the extended-trade pattern this entry tells the player to survive. _missing-interactions.json flags this rule for nasus vs illaoi.",
+   "corrected": "Replaced a want line with a Grievous Wounds instruction.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/illaoi.json (P heal flag)",
+    "champ-data/_kits/_missing-interactions.json (nasus/illaoi needs-antiheal)"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[0].why says \"Illaoi wins every level-1 exchange\" and phases[3].why says \"Still Illaoi's window\", but both stages are labelled side: Skill. phases[4] is labelled Nasus and claims level 6 is the first fight he is allowed to take, while the content layer says level 6 is her hardest all-in.",
+   "why": "The full chart gives Illaoi zero stages in a lane Nasus loses at 48.51%, and three of its phases contradict their own text or the content layer. Level 6 is Leap of Faith plus a stacked field against a Nasus whose R is a survival tool.",
+   "corrected": "Set phases[0], [3] and [4] to Illaoi and rewrote phases[4].why to match its label.",
+   "confidence": "Medium",
+   "sources": [
+    "packet nasus.json (winRate 48.51, games 604)",
+    "champ-data/content/nasus.js (win[] and whys[4] for illaoi)",
+    "champ-data/_kits/illaoi.json (R Leap of Faith)"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Illaoi owns these levels and you cannot contest it — you have no Wither until 3 and zero stacks, so just soak Q farm at the very tip and refuse to walk into E (Test of Spirit) range. If she rips your spirit you have to run from your own tentacles, eating free damage, so respect the cast and keep tentacles on your flank, never between you and the wave. Your Soul Eater lifesteal sustains the passive poke, but do not trade — there is no trade you win here, only chip you survive.",
+   "after": "Illaoi owns these levels and you cannot contest it — you have no Wither until 3 and zero stacks, so soak Q farm at the very tip and refuse to walk into Test of Spirit (E) range. If she does rip your spirit, do not sprint away: straying from it turns you into a Vessel, and every hit the spirit eats echoes straight back onto you. Stay inside its leash, out of tentacle reach, and ride the timer out. Soul Eater sustains the passive chip, but there is no trade you win here, only chip you survive."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Still her window. Wither at 3 lets you peel a gank or punish a wild E, but extended trades on her tentacle field grind you down and her sustain refills faster than your stacks matter yet. At 6 her R plus a stacked field is lethal — if she E-pulls you near tentacles she can burst you before Fury of the Sands lifesteal kicks in, so hold ult for survival, Wither her the instant she ults, and back off rather than greed a stack. Keep farming; you are playing not to die.",
+   "after": "Still her window. Wither at 3 lets you peel a gank or punish a wild E, but her tentacles grow on the walls beside the lane and Harsh Lesson (W) is a 4s dash that makes every one of them swing at you — trade in open lane or not at all. At 6, Leap of Faith into a stacked field bursts you before Fury of the Sands lifesteal kicks in, so hold ult for survival, Wither her the instant she ults, and back off rather than greed a stack."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Soak Q farm at max range and never get hit by her E (Test of Spirit) near a tentacle",
+   "after": "Soak Q farm at max range, holding the wave in open lane away from tentacle-spawning walls"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Stack Q uncontested until your durability and lifesteal out-grind her sustain at 2+ items",
+   "after": "Buy Grievous Wounds — her tentacles heal her off every champion they hit in a long fight"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Stack tentacles around you so her passive smashes hit every trade",
+   "after": "Fight beside walls where tentacles spawn so every W swing lands free"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Illaoi Test of Spirit: matchup-defining — Dodging this denies her sustain. Avoid it. Track it before every engage.",
+   "after": "- Illaoi Test of Spirit: matchup-defining — 16s at rank 1, 12s maxed. A missed E is your window; walk at her as it whiffs."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.mid",
+   "before": "Trade strictly around Test of Spirit: when it is down, run your full pattern; when it is up, give nothing. If ahead, freeze and starve her.",
+   "after": "Trade strictly around Test of Spirit's 16s cooldown, and only in open lane away from the walls her tentacles grow on. If ahead, freeze."
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Illaoi"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Illaoi"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Nasus",
+   "after": "Illaoi"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Illaoi, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "Fury of the Sands buys survival, not a kill: Leap of Faith into a full tentacle field still out-damages your lifesteal, so Wither and leave."
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Dodge her E, Wither her — out-scale her tentacle bruiser kit. Nasus wins by trading around Illaoi's Test of Spirit and cashing the pattern: dodge E, Wither her, and out-scale.",
+   "after": "Dodge her E, Wither her — out-scale her tentacle bruiser kit. Tentacles only grow on nearby walls, so a duel fought in open lane strips most of her damage before it starts."
+  }
+ ],
+ "notes": "The derived kit flag grounding on Illaoi's Leap of Faith looks wrong — Leap of Faith is a leap-and-slam with a brief untargetable window, and I could not confirm any dash-denial component from the kit text, so I wrote nothing based on that flag. Nothing in this matchup was written from the empty needsResearch block. content whys[6] claims Illaoi has \"no percent-HP or true damage\" — that reads as accurate against her kit, but it is a negative claim of the sort the applier rejects, so I left the existing string untouched rather than restate it."
+}

@@ -1,0 +1,150 @@
+{
+ "ownerKey": "teemo",
+ "enemy": "akali",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Assassin's Mark is described as stacking 'off her own Q and any auto' (early) and 'activates on her own Q' (whys[0]), and as 'passive Mark + auto burst trades' (spikes[0]). Two later strings call her burst 'R+E+empowered Q'.",
+   "why": "Assassin's Mark is created by SPELL damage only — basic attacks do not create it — and it does not stack. It draws a ring around the target; Akali has to EXIT that ring to empower her next attack, which then gains bonus range and damage. That exit is the visible tell a Teemo can play around, and it is currently missing. The empowered hit is also a basic attack, so Blinding Dart cancels it outright — the single strongest piece of tech in this lane and nowhere in the entry. 'Empowered Q' is not a thing; the empowerment lands on her auto.",
+   "corrected": "Assassin's Mark: spell damage draws a ring, Akali exits the ring, her next basic attack gains range and damage. Blind that attack — Blinding Dart removes it.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akali.json — P Assassin's Mark: 'Dealing spell damage to a champion creates a ring of energy around them. Exiting that ring empowers Akali's next Attack with bonus range and damage.' flags: autoReset",
+    "champ-data/_kits/teemo.json — Q Blinding Dart blinds the target"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "The mid section states 'Twilight Shroud has a real 25-second cooldown you can exploit'. Nothing anywhere gives Shuriken Flip's cooldown, and the entry never states what Twilight Shroud actually does to Blinding Dart.",
+   "why": "Twilight Shroud is 20/19/18/17/16 — 20s at rank 1, not 25s. Five seconds of imagined downtime is exactly the kind of error that gets a Teemo killed walking up on a shroud he thinks is still down. Separately, untargetability means Blinding Dart cannot be cast on her at all while she is in the smoke (Q is a targeted single-target spell), whereas poison and mushroom damage already applied keep ticking — the entry gets the second half right in 'late' but never states the first half. Shuriken Flip is 16s at rank 1 and only lets her dash if the shuriken actually connects.",
+   "corrected": "Twilight Shroud 20/19/18/17/16. Shuriken Flip 16/14.5/13/11.5/10 and must hit to enable the dash. Inside shroud she cannot be targeted by Blinding Dart; existing Toxic Shot ticks continue.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akali.json — W '20/19/18/17/16', E '16/14.5/13/11.5/10', W 'unable to be selected by enemy spells and attacks'"
+   ]
+  },
+  {
+   "point": 5,
+   "status": "missing",
+   "whatIsWrong": "The level 1-2 advice is 'don't force it' with no mechanical reason a Teemo can act on, and Akali's resource is never mentioned.",
+   "why": "Akali is on Energy with a 200 pool, and Five Point Strike costs 110 at rank 1. Two Qs cost 220, so she physically cannot cast it twice from full — after one Q she is at 90 energy and, with Shuriken Flip at 30 on top, she is dry. That is a hard, countable second trade window, and it turns a vague 'respect her' into something a player can time.",
+   "corrected": "Five Point Strike costs 110 energy of a 200 pool at rank 1 — she cannot double-Q. The trade after her first Q is free.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akali.json — resource Energy; Q cost '110/100/90/80/70'; E cost '30'"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The two layers disagree about who wins five of the seven stages. The content layer's win array is Akali, Akali, Skill, Skill, Teemo, Teemo, Skill; the full layer's phases sides are Akali, Skill, Teemo, Teemo, Akali, Teemo, Teemo. On top of that, full phases[0] is sided to Akali but its why text reads 'AA-poke + E poison wins almost every melee level 1'.",
+   "why": "A stage whose side says one thing and whose explanation says the opposite is worse than either alone — the player cannot tell which to believe. I have corrected the phases[0] text so it agrees with its own Akali side rather than changing any side, since inventing a power shift to force the two layers to agree is exactly what the brief warns against. The layer-vs-layer disagreement itself needs a human decision about which array is authoritative.",
+   "corrected": "phases[0].why rewritten to match its Akali side. Cross-layer side disagreement flagged for the user, not silently resolved.",
+   "confidence": "Medium",
+   "sources": [
+    "champ-data/content/teemo.js — win array",
+    "champ-data/teemo.full.js — phases[].side"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "The 'late' claim that Liandry's burn 'ticks regardless of her untargetability' is right and is the correct way to beat the shroud — damage already applied is not removed by becoming untargetable. Left as written.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akali.json — W wording covers targeting, not existing damage-over-time"
+   ]
+  },
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "52.01% over 1021 games. TRICKY / 7.5-10 is a defensible read of a near-even lane with a high Akali carry ceiling. No elo language. No change.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packet teemo.json — akali winRate 52.01, games 1021"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Akali's passive Mark + auto burst trades beat your single E proc before Q comes fully online — respect her level 2 all-in window.",
+   "after": "Assassin's Mark comes off her spell damage, not autos — she Qs, steps out of the ring, then the empowered hit lands. Blind that hit."
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Akali's passive Mark activates on her own Q and lets her all-in at level 1 before your Q blind is leveled — farm at max AA range and accept the early deficit.",
+   "after": "Assassin's Mark is drawn by her spell damage and only fires when she exits the ring — the empowered hit is a basic attack, so a held Blinding Dart erases it entirely."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "She hits level 2 with a full trade combo (Q slow into auto into empowered auto) that out-damages your single E proc before Twilight Shroud is even relevant — hold your ground but don't force it.",
+   "after": "She hits level 2 with a real combo, but Five Point Strike costs 110 energy of a 200 pool — she cannot cast it twice, so the trade right after her first Q is the free one you want."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Akali wins levels 1 and 2 cleanly. Her passive Mark stacks off her own Q and any auto, and she can trade back onto you before your E poison has time to deliver meaningful damage — she is not a pure auto-trader you can just blind and walk away from. Do not try to prove anything pre-level 3: last-hit at the tip of AA range, keep a poison stack ticking if she steps up, and most importantly identify when her Twilight Shroud is on cooldown before you commit a single step forward. She cannot trade through a blind IF she has already used W, so your whole early-game job is forcing her to spend that button on poke rather than a kill attempt.",
+   "after": "Akali wins levels 1 and 2 cleanly. Assassin's Mark comes off her spell damage, never her autos: she Qs you, walks out of the ring it draws, and her next basic attack gains bonus range and damage — that exit step is your cue to hold Blinding Dart, because the empowered hit is a basic attack and blind deletes it. Five Point Strike also costs 110 energy of a 200 pool, so she cannot chain two of them; the trade immediately after her first Q is the free one. Do not force anything pre-level 3: last-hit at the tip of AA range, keep a poison stack ticking, and know whether Twilight Shroud is down before you step forward."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 3 through 5 are the contested window where this lane can swing either direction. Your Q is approaching max rank, your shrooms are cheap enough to drop on every bush approach, and Twilight Shroud has a real 25-second cooldown you can exploit. The pattern: auto-poke her whenever she steps to a minion, blind her when she retaliates, and immediately walk backward out of her Q range. If she burns W to dodge a blind, that is your full commitment window — run your entire pattern while she is visible and grounded. Shroom the tribush and both side bushes so her approach paths are permanently lit; she cannot enter your half of the lane unseen, and any attempt to walk through a shroom burns her W or eats a slow that lets you kite to tower.",
+   "after": "Levels 3 through 5 are the contested window where this lane can swing either direction. Your Q is approaching max rank, your shrooms are cheap enough to drop on every bush approach, and Twilight Shroud has a real 20-second cooldown at rank 1 you can exploit. The pattern: auto-poke her whenever she steps to a minion, blind her when she retaliates, and immediately walk backward out of her Q range. If she burns W to dodge a blind, that is your full commitment window — run your entire pattern while she is visible and W-less. Shroom the tribush and both side bushes so her approach paths are permanently lit; she cannot enter your half of the lane unseen, and any attempt to walk through a shroom burns her W or eats a slow that lets you kite to tower."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Pop Twilight Shroud (W) to dodge your Q blind and E poison, then burst you from inside untargetable fog",
+   "after": "Pop Twilight Shroud (W) to break your Q's target lock and vanish, then burst you from inside untargetable fog"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Akali's two-item burst from R+E+empowered Q can one-combo you through MR — stay split-pushed and never 1v1 her off your shroom net.",
+   "after": "Akali's two-item burst from R, E and an empowered auto can one-combo you through MR — stay split-pushed, never 1v1 her off your shroom net."
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "Akali's two-item burst from R+E+empowered Q can one-combo a squishy Teemo — this is a genuine Skill window where positioning and shroom net density decide who wins, not the lane verdict.",
+   "after": "Akali's two-item burst from R, E and the empowered passive auto can one-combo a squishy Teemo — a genuine Skill window where positioning and shroom density decide it, not the lane verdict."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Akali Twilight Shroud: matchup-defining — Untargetable inside. Poke when down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+   "after": "- Akali Twilight Shroud: 20s at rank 1 — untargetable inside, so Blinding Dart cannot even be cast on her. Poke when it is down. - Shuriken Flip: 16s, and it must hit to let her dash in. - Your ultimate: kill windows only."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Untargetable inside. Poke when down. Only engage once it is down or baited.",
+   "after": "Untargetable inside — Q cannot be cast on her. 20s at rank 1. Poke when down."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Akali's Twilight Shroud: Untargetable inside. Poke when down. When it is down — Blind + poke her.",
+   "after": "Twilight Shroud (20s) blocks your Q, but poison already applied ticks through it. Blind her empowered auto."
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "AA-poke + E poison wins almost every melee level 1. Identify how Akali contests the first waves before you commit anything.",
+   "after": "Akali takes level 1: Five Point Strike outranges your auto and Assassin's Mark turns it into an empowered follow-up hit."
+  }
+ ],
+ "notes": "Both 'probable wrong ability name' flags on this matchup are FALSE POSITIVES — 'Pop Twilight Shroud (W)' in wants.foe[0] and \"Twilight Shroud's\" in late are the correct Riot name; the detector tripped on the surrounding verb and the possessive. No name change was needed. The real errors were mechanical: Assassin's Mark attributed to autos, a 25s Twilight Shroud that is actually 20s, and 'empowered Q' where the empowerment lands on her basic attack. UNRESOLVED FOR YOU: the content win array and the full-layer phases[].side disagree on five of seven stages for this matchup (content has Akali/Akali/Skill/Skill/Teemo/Teemo/Skill, full has Akali/Skill/Teemo/Teemo/Akali/Teemo/Teemo). I did not change any side, only made phases[0].why stop contradicting its own Akali side. Also note the full layer refers to Akali as 'his'/'he' throughout (breakdown.trading, feeding, wave, phases) — cosmetic template artifact, left alone since fixing it would burn the length budget without adding information."
+}

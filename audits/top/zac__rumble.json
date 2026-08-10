@@ -1,0 +1,126 @@
+{
+  "ownerKey": "zac",
+  "enemy": "rumble",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer treats Overheat as something Rumble wants and something that hurts Zac, in three separate places: wants.foe[1] 'Manage his heat bar to overheat for empowered burst', whys[2] 'Level 3 his overheat burst still beats your unfinished kit', and spikes[1].text 'his overheated Flamespitter can chunk you through your engage'. Riot's own text says Overheating makes him UNABLE TO CAST SPELLS for a few seconds.",
+      "why": "This is the single most important error in the entry and it is exactly backwards. Overheat is Rumble's punishment state, not his spike — the spike is Danger Zone at 50% Heat, which empowers his basics while he can still cast. An overheated Rumble cannot cast Flamespitter at all, so 'his overheated Flamespitter can chunk you' describes something the game does not allow. Worse, it teaches the Zac player to avoid the exact window that is his free engage: Rumble at 100% Heat has no Scrap Shield, no Electro Harpoon and no Flamespitter for the duration.",
+      "corrected": "Danger Zone (50% Heat) is his empowered window. Overheat (100% Heat) locks him out of casting for a few seconds — that lockout is Zac's free E-Q-R, because Scrap Shield and Electro Harpoon are unavailable too.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/rumble.json (Junkyard Titan: 'When he reaches 100% Heat, he starts Overheating... making him unable to cast spells for a few seconds')"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers tell the Zac player to 'Build MR' with no caveat, while Electro Harpoon (E) reduces Magic Resist on hit and Rumble carries two charges of it.",
+      "why": "It makes the itemization advice quietly wrong. Rumble shreds the exact resistance the entry tells you to buy, twice per volley, on a 0.5s recharge — so flat MR is worth measurably less here than the advice implies. The correct build reads HP plus MR rather than MR alone, because health is the stat he cannot strip.",
+      "corrected": "Electro Harpoon reduces your Magic Resist on hit and he holds two charges. Buy MR alongside health rather than instead of it, and do not commit having eaten both harpoons.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/rumble.json (Electro Harpoon: 'reducing their Magic Resist', 2 charges)"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Flagged in the packet: Zac wins 63.86% over 83 games but the content chart gives Rumble 5 of 7 stages to Zac's 2. The full layer already disagrees with it — full phases[].side reads Rumble, Skill, Zac, Zac, Rumble, Zac, Zac.",
+      "why": "A near-64% matchup cannot honestly read as the enemy owning five stages. The two layers already contradict each other at exactly indices 1 and 5, and the full layer's split is the one the win rate supports, so the content chart is the side to move. I changed only those two cells rather than rebuilding the chart, because levels 1, 3 and 6 are genuinely Rumble's (Flamespitter range, Danger Zone, The Equalizer) and inventing a swing there would be worse than leaving it.",
+      "corrected": "win[1] Rumble -> Skill, win[5] Rumble -> Zac. Chart becomes Rumble 3 / Zac 3 / Skill 1, matching the full layer and a 63.86% win rate.",
+      "confidence": "Medium",
+      "sources": [
+        "packet zac.json (winRate 63.86, games 83, defect 'level chart contradicts data')",
+        "champ-data/zac.full.js phases[1].side='Skill', phases[5].side='Zac'"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "full breakdown.cooldowns names Scrap Shield as the matchup-defining cooldown with 'Bait it, then commit' and no numbers. Scrap Shield is on 6s flat.",
+      "why": "A 6s cooldown is not a window — it is back before you finish a trade, so building the entire plan around baiting it is unsound. The cooldowns that actually gate this lane are Flamespitter at 10s rank 1 and The Equalizer at 130s rank 1; Electro Harpoon on 0.5s recharge is effectively always available. Naming the wrong ability as matchup-defining sends the player hunting a window that does not exist.",
+      "corrected": "Flamespitter 10/9/8/7/6s, 600-range cone. Scrap Shield 6s flat. Electro Harpoon 0.5s recharge, 2 charges, 850 range. The Equalizer 130/105/80s.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/rumble.json (cooldowns and ranges from Riot Data Dragon)"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "full phases[4].why for Level 6 is the same boilerplate line used in every Zac matchup and says nothing about The Equalizer.",
+      "why": "Level 6 is where Rumble's stage advantage is real, and the reason is specific: The Equalizer is a 1750-range terrain wall that cuts retreat, not a burst ult. The generic 'Elastic Slingshot from fog + R bounces win every river fight' tells the player to take the fight the wall is designed to punish.",
+      "corrected": "The Equalizer is 130s at rank 1 and lays a slow-wall across 1750 units — it takes your exit, not your health.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/rumble.json (The Equalizer: cooldown 130/105/80, range 1750, terrain + slow flags)"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Manage his heat bar to overheat for empowered burst",
+      "after": "Sit at 50% Danger Zone without tipping into Overheat"
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 his overheat burst still beats your unfinished kit.",
+      "after": "Level 3 his Danger Zone Flamespitter beats your unfinished kit."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "The Equalizer (R) is a huge zone-control ultimate that beats your R disengage in prolonged fights; his overheated Flamespitter can chunk you through your engage.",
+      "after": "The Equalizer (R) is a 1750-unit wall that takes your exit, not your health. But if he tips to 100% Heat he Overheats and cannot cast at all — that lockout is your free engage."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Build MR and scale to two items to soak his Flamespitter",
+      "after": "Buy HP alongside MR — Electro Harpoon (E) shreds MR twice"
+    },
+    {
+      "layer": "content",
+      "path": "win[1]",
+      "before": "Rumble",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At 2 Scrap Shield (W) and Electro Harpoon (E) slow let him kite your engage.",
+      "after": "At 2 it evens out — your Q reaches 800 to his 600-range Flamespitter."
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Rumble",
+      "after": "Zac"
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "At first item his AP spike and Flamespitter DPS re-establish his lane control.",
+      "after": "At first item your tank HP simply outlasts his 10s-cooldown Flamespitter."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Elastic Slingshot from fog + R bounces win every river fight. Reassess every all-in at 6 — Rumble's ultimate changes the math too.",
+      "after": "The Equalizer is 130s at rank 1 and walls off 1750 units — it takes your exit, not your health. Don't fight standing behind it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Rumble Scrap Shield: matchup-defining — Bait it, then commit. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Flamespitter: 10s at rank 1, a 600-range cone — that gap is your engage. - Scrap Shield: 6s, too short to bait. - Electro Harpoon: 850 range, shreds your MR. - Your ultimate: kill windows only."
+    }
+  ],
+  "notes": "PRIMARY FINDING — the content layer has Overheat backwards in three places. Riot's Junkyard Titan text says 100% Heat makes Rumble 'unable to cast spells for a few seconds'; the entry described it as his empowered burst window and even claimed 'his overheated Flamespitter can chunk you', which the game does not permit. The spike Rumble actually plays for is Danger Zone at 50% Heat. Fixed in wants.foe[1], whys[2] and spikes[1].text. SECOND: both layers say 'build MR' while Electro Harpoon reduces Magic Resist and he carries two charges — corrected to HP alongside MR. THIRD: the flagged chart contradiction is fixed at the two indices where the content and full layers already disagreed (win[1], win[5]); I left levels 1/3/6 with Rumble because those are genuinely his. UNVERIFIED, LEFT ALONE: full.tldr says 'His %HP DoT hurts' and dontsFull[1].t says 'Stack pure HP vs %damage'. The Rumble kit file gives Flamespitter no percentHealth flag and Riot's description says only 'magic damage', so I cannot confirm a max-health component on current patch 26.15 from local data — I did not edit it either way, but it should be verified before the '%HP' framing is trusted. ALSO UNVERIFIED: the Rumble kit lists 'knockup' and 'terrain' flags on Scrap Shield, which Riot's own description (shield + move speed) does not support; that looks like a derivation artifact, and the _missing-interactions entry claiming 'Both sides carry displacement ... vs Scrap Shield (W)' rests on it. I did not write anything based on that flag."
+}

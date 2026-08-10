@@ -1,0 +1,137 @@
+{
+ "ownerKey": "cassiopeia",
+ "enemy": "olaf",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Olaf takes level 1 on Undertow plus Reckless Swing true damage against zero resistances, Cassiopeia takes level 3 once the Q-into-Twin-Fang loop is online, and everything from 4 onward is a genuine skill row because Ragnarok answers her ultimate. That matches 49.12% over 114 games - the most honest chart in my slice - and both layers agree.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/olaf.json",
+    "champ-data/_kits/cassiopeia.json",
+    "packet: winRate 49.12 / 114 games"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "Undertow is the named matchup-defining cooldown in four fields with no number, Ragnarok is called the all-in flip with no number, and Tough It Out never appears anywhere.",
+   "why": "Undertow is a flat 9s and its cooldown RESETS if Olaf picks the axe up, which is what makes 'stand on the pickup spot' worth doing and turns a 9-second window into a real one. Ragnarok is 100/90/80s. Reckless Swing reaches only 325, the tightest spacing number in the matchup. Tough It Out is a 16s shield plus attack speed, and it is the reason a poke that should have won the trade does not.",
+   "corrected": "9s and the pickup reset added to breakdown.cooldowns, dosFull[0].d and report[5].t; Ragnarok's 100s added to spikes[2].text and wants.you[2]; Reckless Swing's 325 added to wants.you[0] and breakdown.cooldowns; Tough It Out added to spikes[3].text.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/olaf.json",
+    "champ-data/_kits/_missing-interactions.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "MOST VALUABLE FINDING: three fields say Ragnarok makes Olaf CC-immune and conclude that Cassiopeia should simply disengage. Ragnarok grants immunity to DISABLES, not to slows. Miasma's slow and the back-turned half of Petrifying Gaze both still land on an ulting Olaf, which means the correct play is to keep kiting him rather than to abandon the fight.",
+   "why": "Riot's Ragnarok text: he can activate this ability to become immune to disables for as long as he keeps attacking. Compare Master Yi's Highlander in the same dataset, which says explicitly 'making him immune to all slowing effects' - Riot distinguishes the two, and Ragnarok does not carry the slow clause. The 'keeps attacking' condition matters too: it is not a fire-and-forget duration. So the stun genuinely whiffs, but the kite does not, and the existing text throws away Cassiopeia's actual answer.",
+   "corrected": "spikes[2].text, whys[4], mid and wants.you[2] now say the stun whiffs while the slows still land, and keep the kite as the plan.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/olaf.json",
+    "champ-data/_kits/masteryi.json",
+    "champ-data/_kits/cassiopeia.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "CHAMP_FULL tldr reads 'Miasma is the anti-dash button - ground his engage and the dive kit becomes a farm bot', and dontsFull[1].d warns about leaving 'the dash window wide open'. Olaf has no dash. This directly contradicts the content layer's own mid text, which correctly says the grounding does almost nothing to him.",
+   "why": "Riot's kit: Undertow is a thrown axe, Tough It Out is a self-buff, Reckless Swing is a melee hit and Ragnarok is a self-buff. No dash, blink or leap anywhere. content.mid already got this right and deserves credit; the FULL layer was still emitting the generic Cassiopeia grounding line.",
+   "corrected": "tldr and dontsFull[1].d rewritten around the slow, matching what content.mid already says.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/olaf.json",
+    "champ-data/_kits/cassiopeia.json"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "The kit file tags Undertow (Q) with a 'grounding' flag.",
+   "why": "Riot's description says Undertow reduces Armor and Move Speed - a slow and an armour shred, with no grounding. Another tooltip-parser misfire, the third in my slice. It happens not to change Cassiopeia's play since she has no dash to lose, but the armour shred is a real detail the text never mentions.",
+   "corrected": "No claim that Olaf grounds Cassiopeia appears in my text.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/olaf.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "His Ragnarok flips the all-in: it makes him CC-immune so your R stun does nothing, and its lifesteal plus true damage eat through your poke. Disengage on your speed when he ults — do not duel into it.",
+   "after": "Ragnarok flips the all-in: 100s of disable immunity, so your R stun does nothing — but it is not slow immunity, so Miasma and your move speed still kite him. Never duel into it; walk instead."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Your Liandry's/Malignance spike lets you poke and kite him off the wave while Undertow is down — but his bruiser items and R lifesteal keep it close every time he lands an axe.",
+   "after": "Your Liandry's/Malignance spike lets you poke and kite him off the wave while Undertow's 9s is down — but Tough It Out shields the burst and R lifesteal keeps it close on every landed axe."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "Skill at 6 — your R catches most champs, but Ragnarok makes Olaf CC-immune, so your stun whiffs and his lifesteal answers your poke.",
+   "after": "Skill at 6 — Ragnarok makes Olaf disable-immune so your stun whiffs, but it blocks no slows: Miasma still kites him out."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Sidestep his Undertow so the axe-slow misses, then ride your level-scaled move speed to stay outside Reckless Swing range",
+   "after": "Sidestep his Undertow so the axe-slow misses, then ride your level-scaled move speed to stay outside Reckless Swing's 325"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[2]",
+   "before": "Bait out Ragnarok and disengage — never commit your R while he is CC-immune, since the stun is wasted",
+   "after": "Bait Ragnarok's 100s and disengage — the stun is wasted while he is disable-immune, but slows still land"
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "This is your best stretch, but understand the catch: your W Miasma grounds dashes and blinks — and Olaf has none, so the part of your kit that hard-counters Riven or Camille does almost nothing to him here. Use W only for the slow and the poison it primes, then ramp Twin Fang off either Q or W. The real problem is 6: Ragnarok makes him CC-immune, so your Petrifying Gaze stun whiffs entirely during his all-in while its lifesteal heals him through your DPS. Win the trade while his R is down, and the instant he pops it, kite away on your move speed instead of dueling into a CC-immune bruiser.",
+   "after": "This is your best stretch, but understand the catch: your W Miasma grounds dashes and blinks — and Olaf has none, so the part of your kit that hard-counters Riven or Camille does almost nothing to him here. Use W only for the slow and the poison it primes, then ramp Twin Fang off either Q or W. The real problem is 6: Ragnarok makes him immune to disables, so Petrifying Gaze's stun whiffs during his all-in while lifesteal heals him. It is not slow immunity, though — Miasma still bites — so win the trade while his 100-second R is down, and when he pops it, kite on the slow rather than dueling."
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Miasma is the anti-dash button — ground his engage and the dive kit becomes a farm bot.",
+   "after": "Olaf has no dash for Miasma to ground — the slow and your move speed are the whole plan."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Olaf Undertow (Axe): matchup-defining — Axe slows let him reach you — stand on the pickup spot to deny resets. Step up only on its downtime. - Budget W Miasma for emergencies and the R for opportunities — never swap them.",
+   "after": "- Olaf Undertow (Axe): matchup-defining — 9s, but picking the axe up resets it, so stand on the pickup spot. - Ragnarok blocks disables, not slows: Miasma still kites him. - Reckless Swing reaches only 325 — live outside it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Axe slows let him reach you — stand on the pickup spot to deny resets. Bait it, count it, then go.",
+   "after": "Undertow is 9s and resets when he picks the axe up — stand on the pickup spot to deny it."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Miasma is your only anti-engage tool — wasting it on spacing chip leaves the dash window wide open.",
+   "after": "Olaf has no dash for the grounding to catch — Miasma's slow is the only anti-engage tool you own."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Olaf’s Undertow (Axe): Axe slows let him reach you — stand on the pickup spot to deny resets. It’s down or you don’t go.",
+   "after": "Track Olaf’s Undertow: 9s, and picking the axe back up resets it. Stand on the pickup spot and it stays a 9-second wait."
+  }
+ ],
+ "notes": "The highest-value correction here is the Ragnarok distinction. Three fields told the player to disengage because Olaf becomes CC-immune; Ragnarok grants immunity to disables, not to slows, so Miasma and the back-turned half of Petrifying Gaze both still land and kiting remains the answer. Riot draws that distinction explicitly in the same dataset — Master Yi's Highlander says 'immune to all slowing effects' while Ragnarok says only 'immune to disables'. Credit where due: content.mid already correctly states that Miasma's grounding does nothing to a dashless Olaf, while the FULL tldr still called Miasma 'the anti-dash button' — the two layers contradicted each other and the content layer was right. Left unverified and unclaimed: whether Ragnarok's disable immunity also cleanses an already-applied Petrifying Gaze stun, and whether Tough It Out's shield fully absorbs a Twin Fang or only reduces it."
+}

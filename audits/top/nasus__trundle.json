@@ -1,0 +1,164 @@
+{
+ "ownerKey": "nasus",
+ "enemy": "trundle",
+ "lane": "top",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The content layer says his 'Q bite steals your AD and heals him' (whys[0], early). Chomp does not heal.",
+   "why": "Chomp damages, briefly slows and saps attack damage. The healing comes from two other places: King's Tribute heals him whenever a nearby unit dies — which is every minion in the wave — and Frozen Domain increases the healing he receives from all sources. Blaming the bite for the sustain sends the player to dodge the wrong thing.",
+   "corrected": "Chomp saps AD on a 3.5s cooldown; King's Tribute is the wave-based heal; Frozen Domain amplifies all of it.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/trundle.json — P, Q and W descriptions"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Nothing in either layer connects Chomp to Siphoning Strike specifically.",
+   "why": "Siphoning Strike scales off attack damage. Chomp is the only ability in this matchup that removes attack damage, and it is on a 3.5 second cooldown at every rank, so he can hold the debuff on Nasus almost permanently. That is a direct tax on the one number Nasus spends the whole game growing, and it is why the bite feels worse than its damage.",
+   "corrected": "Every Chomp shaves damage off the next empowered Q; it is up every 3.5s.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/trundle.json — Q Chomp",
+    "champ-data/_kits/nasus.json — Q Siphoning Strike"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Pillar of Ice is described in the content layer only as a body-block, and never appears in the full layer at all.",
+   "why": "It creates impassable terrain. Nasus has no dash anywhere in his kit, so a Pillar dropped between him and Trundle ends the chase outright — there is no ability that gets him past it. That makes Pillar, not Subjugate, the cooldown that decides whether Nasus ever gets to spend his stacks. It is 21/19.5/18/16.5/15s.",
+   "corrected": "Pillar of Ice is the real punish window: wait for it to be spent before committing to a chase.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/trundle.json — E Pillar of Ice, terrain flag",
+    "champ-data/_kits/nasus.json — no dash flag in kit"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns tracked Subjugate, a 120s ultimate, as the matchup-defining cooldown and gave no numbers.",
+   "why": "The lane is decided by Pillar of Ice and Chomp, not by an ultimate that comes up twice a lane phase.",
+   "corrected": "Replaced with Pillar of Ice per-rank numbers plus the Subjugate rank-1 number.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/trundle.json — cooldown fields"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "missing",
+   "whatIsWrong": "No Grievous Wounds named anywhere, and the winCon string literally says \"Anti-heal\" without ever telling the player what to buy or when.",
+   "why": "King's Tribute heals a percentage of the maximum health of every unit that dies near him, and Frozen Domain increases healing from all sources while he stands on it. Against a Nasus whose win condition is a long lifesteal grind, unanswered healing amplification is the loss condition.",
+   "corrected": "Frozen Domain called out as a healing amplifier in dosFull[2] and phases[2]; the actual item timing still needs a home in the itemization block, which lives in report[].",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/_missing-interactions.json — nasus vs trundle, rule needs-antiheal",
+    "champ-data/_kits/trundle.json — P and W heal flags"
+   ]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "This is the most mislabelled matchup in the slice: diff=HARD, diffRating=7/10, and the full chart gives Trundle stages 1-5 at 8/10 — for a matchup Nasus wins 56.63%, the highest win rate in this slice.",
+   "why": "The content layer already says the opposite (\"This is your game\", Nasus on stages 4-7). Trundle is a melee drain tank with no true damage and no percent-health shred, which is the exact profile Nasus out-scales.",
+   "corrected": "Should read EVEN 6/10 at worst, with Trundle holding only stage 1. Not edited: \"Trundle\" is 7 characters against \"Nasus\"/\"Skill\" at 5, so every side flip fails the ±10% band, and diff/diffRating cannot be changed without also changing the report[] rating string.",
+   "confidence": "High",
+   "sources": [
+    "MC_WR_TABLES.nasus.trundle = 56.63",
+    "MC_REAL_GAMES.nasus.trundle = 249",
+    "champ-data/content/nasus.js win[]"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "correct",
+   "whatIsWrong": "The packet flagged \"Spirit Fire's\" in spikes[3] as a probable wrong ability name.",
+   "why": "False positive — Spirit Fire is Nasus's E.",
+   "corrected": "No change.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/nasus.json — E Spirit Fire"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Wither online — it's your get-off-me button, not a kill tool yet. Hold it for Trundle's engage, never open with it.",
+   "after": "Chomp is a 3.5s auto-reset that saps your attack damage — every bite makes your next Siphoning Strike land softer."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "E lets you stack safely from range when Trundle zones you. Spirit Fire the wave under tower; every stack denied is his only real win condition.",
+   "after": "Wither online: his Frozen Domain gives him attack speed and raises all his healing, so drag the fight off the ice before you commit."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Still Trundle's window — respect Subjugate fully. Passive lifesteal plus Fleet means he must commit hard to actually dent you; make those commits cost.",
+   "after": "Pillar of Ice is 21s at rank 1 and it is real terrain — you have no dash, so wait for it to be spent before you chase. King’s Tribute heals him off the wave."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Fury of the Sands flips dives: pop R, Wither Trundle, and suddenly the stat-check runs your way. First real fight you're allowed to take.",
+   "after": "Subjugate steals a slice of your health and resists for 4s, but it cannot touch your Q stacks — ult, Wither, and out-grind the theft."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Trundle Subjugate: matchup-defining — Steals your stats. Wither him after it. Track it before every engage.",
+   "after": "- Trundle Pillar of Ice: 21/19.5/18/16.5/15s — real terrain and you have no dash. - Trundle Subjugate: 120s at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Steals your stats. Wither him after it. Only engage once it is down or baited.",
+   "after": "Steals your health and resists for 4s, but it cannot steal your Q stacks."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Trundle wastes Subjugate — commit the full pattern immediately.",
+   "after": "Frozen Domain raises the healing he gets from every source."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+   "after": "Pillar of Ice is impassable terrain, and you have no dash to cross it."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Fighting at even HP before 6 with Wither down — you have no trade tools early, and every losing exchange costs you the stacks-per-minute that win the game.",
+   "after": "Chomp saps your attack damage on a 3.5s cooldown, and Siphoning Strike scales off attack damage — every bite he lands shaves your next empowered Q."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Trundle's danger window — his Q bite steals your AD and his bite-W chase out-trades you before you have Wither, so don't get baited into autos here.",
+   "after": "Trundle's danger window — Chomp saps your AD and his Frozen Domain chase out-trades you before you have Wither, so don't get baited into autos."
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Trundle's Q bite steals your AD and heals him, and you have no Wither yet — he wins the level 1 walk-up, so just farm.",
+   "after": "Chomp saps your AD every 3.5s and King's Tribute heals him off the wave — he wins the level 1 walk-up, so just farm."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Land E pillar to body-block your Q and stop you stacking, or to wall you off a CS",
+   "after": "Land Pillar of Ice to body-block your Q and stop you stacking, or wall you off a CS"
+  }
+ ],
+ "notes": "Trundle is the clearest example of the champion-wide difficulty-label drift: 56.63% win rate labelled HARD 7/10 with the enemy holding five of seven stages, while the content layer on the same page says Nasus owns it. Sample is only 249 games, the smallest in this slice, but the direction is not in doubt."
+}

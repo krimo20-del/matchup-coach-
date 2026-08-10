@@ -1,0 +1,169 @@
+{
+  "ownerKey": "singed",
+  "enemy": "tryndamere",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Tryndamere, Skill, Singed, Singed, Tryndamere, Singed, Singed — and level 6 is scored Tryndamere while every sentence of prose about level 6 says the opposite. spikes[1].text: 'Insanity Potion's stat dump makes you tanky enough to run at Tryndamere and force him to pop Undying Rage on your terms'. whys[4] says the same. Meanwhile levels 2 and 3 are scored Skill/Singed while spikes[0] says 'concede the first two levels entirely' and whys[2] admits 'his DPS still edges the full trade'.",
+      "why": "Emerald+ 51.50% over 969 games is a near-even lane, and the packet chart reads Tryndamere, Tryndamere, Skill, Skill, Singed, Singed, Skill — which matches both the number and the prose the page already prints. The current chart is internally contradictory in two places at once: it gives Singed the stage his own text concedes, and takes away the stage his own text claims.",
+      "corrected": "Whole chart moved as one atomic group to the packet read across both layers, with the flipped stages' why lines rewritten to state the real reason.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/singed.json (winRate 51.5, games 969, levelChart)", "champ-data/content/singed.js (spikes[0], spikes[1], whys[2], whys[4])"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[3].text asserts 'Undying Rage on a 110-second cooldown'. There is no rank at which Undying Rage is 110 seconds.",
+      "why": "Riot's value is 120/100/80. The whole late-game spike is an argument built on a cooldown number, so a wrong number breaks the argument: at rank 3 it is 80s, forty seconds shorter than the page implies, which changes how often he can survive your attrition and how long your re-engage window actually is. The other three spikes — levels 1-2, level 6, Rylai's — are the right four moments.",
+      "corrected": "Real value 120/100/80s written into spikes[3].text and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tryndamere.json (Undying Rage cooldown 120/100/80)"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Mocking Shout (W) appears nowhere in either layer. Riot's text: 'decreasing surrounding champions' Attack Damage. Enemies with their backs turned to Tryndamere also have their Move Speed reduced.'",
+      "why": "This is the single most Singed-specific ability in Tryndamere's kit and the page is silent on it. Singed's entire pattern is running away with poison behind him — which means his back is turned by definition. Mocking Shout's slow half is conditional on exactly the thing Singed does all game, from 850 range, on a flat 14s. The AD-reduction half is worthless against an AP Singed, so the page is not merely incomplete, it omits the only part of the ability that matters and keeps none of it. A Singed who does not know this reads his failed disengages as bad luck.",
+      "corrected": "Mocking Shout: 14s, 850 range. Its slow only applies while your back is turned — i.e. every time you kite away. Turn to face him through the goo, or eat the slow.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tryndamere.json (Mocking Shout description, cooldown 14, range 850)"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The entry says 'anti-heal his crits' in tldr, winCon and dosFull, but never names where Singed's anti-heal comes from. Bloodlust (Q) is the heal — 12s, no cost — and Insanity Potion is what makes Poison Trail apply Grievous Wounds.",
+      "why": "'Anti-heal' is being used as an item instruction only, when Singed's own ultimate is a Grievous Wounds source. That changes the level-6 fight: drinking before the commit is not just a stat dump, it directly halves the Bloodlust heal that is Tryndamere's only sustain. Naming the mechanism turns a vague build note into a sequencing rule.",
+      "corrected": "Insanity Potion (100s flat) makes Poison Trail apply Grievous Wounds — it caps Bloodlust (12s) for its whole duration. Drink before the commit, not after.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/singed.json (Insanity Potion: 'making his Poison Trail apply Grievous Wounds')", "champ-data/_kits/tryndamere.json (Bloodlust: heal, cooldown 12)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.you[1] says 'Use Mega Adhesive to root Tryndamere at the edge of your poison cloud'. Mega Adhesive does not root anything on its own; whys[2] repeats the same shape as 'Mega Adhesive root plus Fling'.",
+      "why": "Riot's Fling text: 'If the target Singed flings lands in his Mega Adhesive, they are also rooted.' The root is a sequence — goo on the ground first, then Fling into it — and stated as a property of the goo the player will drop W on him and wonder why nothing rooted. Order is the whole trick.",
+      "corrected": "Goo first, then Fling into it. Landing in the Mega Adhesive is what roots.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/singed.json (Fling description)"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns carries one ability with no number attached and two generic placeholder lines.",
+      "why": "Every cooldown in this matchup is knowable: Undying Rage 120/100/80, Spinning Slash 12/11/10/9/8, Mocking Shout flat 14, Bloodlust flat 12. Spinning Slash is the punishable one at rank 1 — 12s of no gap-closer is a full proxy trip.",
+      "corrected": "breakdown.cooldowns rewritten with the real numbers and the Mocking Shout condition.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tryndamere.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[1]", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[2]", "before": "Singed", "after": "Skill" },
+    { "layer": "content", "path": "win[3]", "before": "Singed", "after": "Skill" },
+    { "layer": "content", "path": "win[4]", "before": "Tryndamere", "after": "Singed" },
+    { "layer": "content", "path": "win[6]", "before": "Singed", "after": "Skill" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[1].rating", "before": "6/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[2].side", "before": "Singed", "after": "Skill" },
+    { "layer": "full", "path": "phases[2].rating", "before": "6/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[3].side", "before": "Singed", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].rating", "before": "6/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[4].side", "before": "Tryndamere", "after": "Singed" },
+    { "layer": "full", "path": "phases[4].rating", "before": "3/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[6].side", "before": "Singed", "after": "Skill" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "5/10" },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Fling + glue starts punishing anyone who chases. Only take the trade when Tryndamere's Undying Rage is down.",
+      "after": "Still his level. Spinning Slash is 12s at rank 1 and his crit autos beat anything Poison Trail alone threatens."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit online — your core pattern starts now. Keep the wave near your side so Tryndamere must walk into your range.",
+      "after": "Goo down first, then Fling into it for the root — a real deterrent, but his crit DPS still edges the full trade."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Undying Rage's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Proxy fork, and it is even: he farms freely while you do, and Mocking Shout slows you every time you turn your back to leave."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Ult-ghost-proxy is a macro weapon — you win by farming where he is not. Reassess every all-in at 6 — Tryndamere's ultimate changes the math too.",
+      "after": "Your stage: Insanity Potion blunts the crits and makes Poison Trail apply Grievous Wounds, halving Bloodlust — force Undying Rage out on your clock."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your pattern is at full power. Tryndamere carry threat 8.5/10 — close before the map decides instead of you.",
+      "after": "Genuinely split: your proxy pressure against a full-crit burst that still kills you with Insanity Potion down. Threat 8.5/10."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Tryndamere Undying Rage: matchup-defining — Unkillable 5s. Kite it out. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Undying Rage: 120/100/80s, unkillable 5s — kite it, then commit. - Spinning Slash: 12/11/10/9/8s. - Mocking Shout: 14s, slows only while your back is turned. - Bloodlust: 12s heal, capped by your R's Grievous Wounds."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Tryndamere's Undying Rage: Unkillable 5s. Kite it out. When it is down — Poison-kite + fling him.",
+      "after": "Mocking Shout slows you only with your back turned — exactly when you kite. Undying Rage: 120/100/80s."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Unkillable 5s. Kite it out. Only engage once it is down or baited.",
+      "after": "Unkillable 5s on a 120/100/80s cooldown. Kite it out, then commit."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "With Undying Rage on a 110-second cooldown and your proxy game in full motion, you win the resource war by forcing him to follow you rather than take objectives.",
+      "after": "With Undying Rage on a 120/100/80-second cooldown and your proxy game in full motion, you win the resource war by forcing him to follow you rather than take objectives."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Use Mega Adhesive to root Tryndamere at the edge of your poison cloud so Spinning Slash lands him deeper into the slow zone",
+      "after": "Drop Mega Adhesive first, then Fling him into it — landing in the goo is what roots him, and it drops him deeper into the cloud"
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "He Spinning Slashes onto you the moment you try to set up Poison Trail — concede the trade and prep Mega Adhesive for level 3 before committing.",
+      "after": "He Spinning Slashes onto you the moment you set up Poison Trail, and Mocking Shout slows you while your back is turned — concede level 2 outright."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Mega Adhesive root plus Fling drops him into a slow zone he cannot instantly exit — this is your first real deterrent, though his DPS still edges the full trade.",
+      "after": "Goo on the ground first, then Fling him into it — landing in the Mega Adhesive is what roots. A real deterrent, though his crit DPS still edges the full trade."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Proxy farm behind his tower once the wave is in his half — Tryndamere has no safe way to contest a Poison Trail without walking into it himself.",
+      "after": "Proxy behind his tower once the wave is his half, but the stage is even — he farms freely too, and Mocking Shout bites every time you turn to leave."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Insanity Potion's armor and MR cut his crit damage enough that you can run at him and force Undying Rage on your cooldown rather than his — disengage the moment it pops.",
+      "after": "Insanity Potion blunts his crits and makes Poison Trail apply Grievous Wounds, halving his 12-second Bloodlust — force Undying Rage out, then walk away for its 5 seconds."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 are a proxy-or-farm fork: if the wave is near his side, walk behind his tower and start absorbing minions under Insanity Potion's cooldown — Tryndamere's kit is built for dueling, not for chasing a Poison Trail into his own jungle while his tower bleeds. Once Insanity Potion is online at 6 the lane flips meaningfully — the armor, MR, and regen make his crit pattern much less punishing, and you can finally run at him in a straight line, drop Mega Adhesive to cut off the Spinning Slash escape route, and force him to burn Undying Rage on a 1-HP kite that still has your cloud burning underneath him. The correct play after he pops R is to disengage entirely: sit just outside auto range, let the 5 seconds tick, then re-engage the moment Undying Rage falls.",
+      "after": "Levels 4-5 are a proxy-or-farm fork: if the wave is near his side, walk behind his tower and absorb minions — Tryndamere's kit is built for dueling, not for chasing a Poison Trail into his own jungle while his tower bleeds. Watch Mocking Shout on the way out: it is a flat 14 seconds from 850 range and its slow only applies while your back is turned, which is every second you are kiting. Once Insanity Potion is online at 6 the lane flips — the stats blunt his crit pattern and Poison Trail now applies Grievous Wounds, halving the 12-second Bloodlust he lives on, so you can run at him and force Undying Rage. After he pops it, disengage: sit outside auto range, let the 5 seconds tick, then re-engage."
+    }
+  ],
+  "notes": "Mocking Shout was the find here and it was absent from every field: its slow is conditional on the target's back being turned, which is Singed's entire pattern, and it is a flat 14s from 850 range. Also corrected a fabricated cooldown — Undying Rage was written as '110 seconds' and is 120/100/80 — and the Mega-Adhesive-roots claim, which is really Fling-into-the-goo. Level chart moved as one group to the packet read (Trynd, Trynd, Skill, Skill, Singed, Singed, Skill); the old chart scored level 6 for Tryndamere while its own spikes[1] and whys[4] both describe Singed winning it. NOT ASSERTED: the content layer says Mega Adhesive 'cuts off the Spinning Slash escape route', which is a grounding claim. Mega Adhesive does ground, but Riot's Spinning Slash text is 'slices toward a target unit' with no dash flag in the kit and no enemy-dash-deniable rule in _missing for this pair, so I left the existing sentence alone rather than sharpen or repeat it. Worth a human ruling — see questionsForUser."
+}

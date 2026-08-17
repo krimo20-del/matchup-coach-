@@ -1,0 +1,85 @@
+{
+  "ownerKey": "fiora",
+  "enemy": "malphite",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart and the whys openly disagree on this page: win[] gives Fiora six of seven stages while whys[0], whys[2], whys[3] and whys[5] all describe Malphite winning those same stages, and packet.levelChart matches the whys exactly (Malphite/Skill/Malphite/Malphite/Fiora/Malphite/Skill).",
+      "why": "I did NOT change any side value. The mirror audit (malphite__fiora) hit the same conflict from the other direction and deliberately left sides alone, noting a 56.8% Emerald+ win rate over 970 games on Malphite's packet against 46.05% over 1062 games on this one. Flipping one side alone would create exactly the mirror contradiction mirror-fix.js exists to overwrite, and the two packets cannot both be right.",
+      "corrected": "",
+      "confidence": "Low",
+      "sources": ["packet.levelChart", "packet.winRate", "mirrorFindings.notes"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldowns for Unstoppable Force anywhere, and Granite Shield's recharge condition — the thing that decides whether your chip sticks — is never stated.",
+      "why": "Unstoppable Force is 130/115/100; Granite Shield absorbs 10% of his max HP and recharges only after he goes a few seconds without being hit; Seismic Shard is a flat 8s, Ground Slam a flat 7s; Fiora W is 24s.",
+      "corrected": "breakdown.cooldowns, dosFull[0].d, dosFull[2].d and dontsFull[1].d now carry 130s, the 10% shield and its recharge rule, and the 24s parry.",
+      "confidence": "High",
+      "sources": ["ownerKit", "enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page calls Q 'Ground Slam' and attributes a movement slow to it. Q is Seismic Shard (it steals move speed for 3s); Ground Slam is E and cuts ATTACK speed, not movement.",
+      "why": "Riot's text: Q 'sends a shard of the earth through the ground at his foe, dealing damage upon impact and stealing Move Speed for 3 seconds'; E 'reduces the Attack Speed of enemies'. The two are swapped in early, whys[2] and wants.foe[0], which sends the player dodging the wrong ability.",
+      "corrected": "early, whys[2] and wants.foe[0] now name Seismic Shard for the move-speed steal; dontsFull[0].d describes Thunderclap's aftershock window.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/E/W/P text", "missingInteractions.shield-absorbs-burst"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Once he has Q and E his Ground Slam slow still pulls you out of Vital range and resets the trade in his favor before your crit lands.",
+      "after": "Once he has Q and E, Seismic Shard steals your move speed and pulls you out of Vital range, resetting the trade before your crit lands."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land Ground Slam's slow to kite your Lunge out of Vital range and poke you down",
+      "after": "Land Seismic Shard to steal your move speed and kite your Lunge out of Vital range"
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Do not be fooled by the tank-shredder reputation — early Malphite is annoying because his W passive hands him free armor plus one empowered auto, and his Q (Ground Slam) slow lets him poke and walk out of your Lunge range. At Levels 1-3 his short trades actually beat yours if you facecheck a Q. Last-hit by popping Vitals with Lunge at max range, chase the side the Vital marks, and only commit an E-Bladework crit-Vital combo when his Q is on cooldown — otherwise he slows you, the Vital re-marks awkwardly, and the trade evens out.",
+      "after": "Do not be fooled by the tank-shredder reputation — early Malphite is annoying because his W passive hands him free armor plus one empowered auto, and his Q (Seismic Shard) steals your move speed so he pokes and walks out of Lunge range. At Levels 1-3 his short trades actually beat yours if you facecheck a Q — it is a flat 8s. Last-hit by popping Vitals with Lunge at max range, chase the side the Vital marks, and only commit an E-Bladework crit-Vital combo once that 8s is spent."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Malphite Unstoppable Force: matchup-defining — Saved for fights. Lane is fine without it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Malphite Unstoppable Force: matchup-defining — 130s at rank 1, saved for fights; parry it and the knockup returns as your stun. - Granite Shield: 10% max HP, and it recharges only if he goes unhit. - Riposte: 24s, held for his R."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Saved for fights. Lane is fine without it. Only engage once it is down or baited.",
+      "after": "Saved for fights — 130s at rank 1. Parry it and his knockup becomes your stun."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Malphite wastes Unstoppable Force — commit the full pattern immediately.",
+      "after": "Malphite spends Unstoppable Force — 130s down, commit everything now."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Malphite's favourite window — refuse it and half his win condition is gone.",
+      "after": "Thunderclap aftershocks run for a few seconds — trade after it expires, not into it."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Granite Shield recharges if you stop hitting him — keep the chip on."
+    }
+  ],
+  "notes": "suspectNames flagged 'Hold Unstoppable Force' in wants.foe[2] — FALSE POSITIVE, correct Riot name. KIT FLAG MISFIRE: the kit file derives 'grounding' on Seismic Shard and Ground Slam and 'shield' on Thunderclap; Riot's descriptions of all three say no such thing (move-speed steal, attack-speed reduction, and aftershock autos respectively), so I trusted the descriptions and asserted none of it. The Riposte-parries-R-into-a-stun claim is CORRECT — Unstoppable Force knocks up, which is immobilizing. Level sides deliberately untouched; see questionsForUser."
+}

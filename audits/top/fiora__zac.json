@@ -1,0 +1,73 @@
+{
+  "ownerKey": "fiora",
+  "enemy": "zac",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "54.38% over 331 games from Fiora's side, difficulty 4/10 — she wins the 1v1 at every lane stage. The Zac-side audit records that Zac's own win rate is earned by grouping and engaging, not by the sidelane, which is why the later rows are not Fiora's.",
+      "corrected": "No change to diff/diffRating.",
+      "confidence": "High",
+      "sources": ["packet", "mirrorFindings (zac__fiora)"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "This side's chart reads Fiora/Fiora/Fiora/Fiora/Skill/Fiora/Fiora, which disagrees with the already-audited mirror at three of seven stages.",
+      "why": "The zac__fiora audit reconciled both layers to Fiora/Fiora/Fiora/Fiora/Fiora/Skill/Zac. Level 6 is Fiora's (Grand Challenge on an all-HP target), first item is even, and 2+ items goes to Zac on teamfight value. Leaving this side as-is guarantees mirror-fix.js overwrites it.",
+      "corrected": "win[4] to Fiora, win[5] to Skill, win[6] to Zac, with the full phases sides/ratings matched as one group.",
+      "confidence": "High",
+      "sources": ["mirrorFindings.keyPoints[0]", "packet.levelChart"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Only Elastic Slingshot is treated as an immobilize; Stretching Strikes (Q) — his grab, which throws two targets together — is never named as a second Riposte target, and no cooldowns appear.",
+      "why": "Q is 14/12.5/11/9.5/8s with a knockup/displacement; E is 21/18/15/12/9s; W is a flat 5s percent-max-health pulse. The E window at rank 1 is 21 seconds — that is the single most punishable gap in the lane and the page never says how long it is.",
+      "corrected": "Cooldowns and the second immobilize added to breakdown.cooldowns and dontsFull[1].d.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E cooldowns and flags"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "missingInteractions claims Zac's Elastic Slingshot grounds and denies your Lunge.",
+      "why": "That comes from a derived 'grounding' flag, but Riot's own E description is only 'Zac attaches his arms to the ground and stretches back, launching himself forward' — no grounding effect on enemies. Per the calibration rule, the description wins over a misfiring flag.",
+      "corrected": "No grounding claim added to the page. The existing text — hold Riposte for the E landing knockup — stands.",
+      "confidence": "High",
+      "sources": ["enemyKit E text vs derived flags", "missingInteractions: dash-denied"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Fiora" },
+    { "layer": "content", "path": "win[5]", "before": "Fiora", "after": "Skill" },
+    { "layer": "content", "path": "win[6]", "before": "Fiora", "after": "Zac" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Fiora" },
+    { "layer": "full", "path": "phases[4].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[5].side", "before": "Fiora", "after": "Skill" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[6].side", "before": "Fiora", "after": "Zac" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "4/10" },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "Profane Hydra is your power peak and Zac is still a damageless tank; force every duel and splitpush now.",
+      "after": "Profane Hydra is your duel peak, but a first-item Zac already trades your sidelane pressure for an engage somewhere else on the map."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "His E lands the knockup and it is 21s at rank 1 — punish that gap."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Zac Elastic Slingshot: matchup-defining — His engage. Out-duel when it’s down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Zac Elastic Slingshot: 21s at rank 1, 9s at rank 5 — his engage and the knockup you parry. - Stretching Strikes: 14s, his other immobilize. - Unstable Matter: a flat 5s. - Your ultimate: kill windows only."
+    }
+  ],
+  "notes": "Mirror reuse: I took the level chart straight from the already-written zac__fiora audit rather than from packet.levelChart, which disagreed with it at 2+ items (packet said Skill, the mirror settled on Zac). The two pages now state the same facts from opposite sides. The early text's warning not to burn Riposte on Unstable Matter is correct — Riot's W text carries no CC. spikes[2] names Profane Hydra/Hullbreaker while report[8] names Ravenous Hydra: the recurring Fiora build inconsistency, left alone. spikes[3].when is 'Lvl 6+' where the 2+ items row is expected."
+}

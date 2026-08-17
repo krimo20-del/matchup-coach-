@@ -1,0 +1,76 @@
+{
+  "ownerKey": "fiora",
+  "enemy": "kassadin",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart claims Fiora owns every stage except a 'Skill' level 6, but the packet chart and the page's own whys say Kassadin takes levels 3-5 and everything from first item onward.",
+      "why": "packet.levelChart is Fiora, Fiora, Kassadin, Kassadin, Fiora, Kassadin, Kassadin; whys[2], whys[3], whys[5] and whys[6] all describe Kassadin ahead, and whys[4] calls level 6 Fiora's last owned window.",
+      "corrected": "win[2], win[3], win[5], win[6] -> Kassadin; win[4] -> Fiora; matching phases[N].side and ratings.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Cooldown advice was generic — no real numbers for Riftwalk, Riposte or Grand Challenge.",
+      "why": "Kassadin R is 5/3.5/2s with an escalating mana cost per recast; Fiora W is 24/22/20/18/16 and R is 110/90/70.",
+      "corrected": "breakdown.cooldowns and dosFull[0].d now carry 5s Riftwalk, 24s Riposte and 110s Grand Challenge.",
+      "confidence": "High",
+      "sources": ["ownerKit", "enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nether Blade is an auto-attack reset and the page never says so; and dosFull[2] implies Riposte does something special to Riftwalk.",
+      "why": "Riot's text: Nether Blade's active empowers his NEXT basic attack, so the wind-up animation is the tell, not a cast. Riposte only stuns if it blocked an immobilizing effect — nothing in Kassadin's kit immobilizes, so it can never stun him.",
+      "corrected": "spikes[1].text now names the auto-reset wind-up as the step-back cue; dosFull[2].d no longer implies a parry stun.",
+      "confidence": "High",
+      "sources": ["enemyKit W text", "ownerKit W text", "missingInteractions.autoreset-burst-tell"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[2]", "before": "Fiora", "after": "Kassadin" },
+    { "layer": "content", "path": "win[3]", "before": "Fiora", "after": "Kassadin" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Fiora" },
+    { "layer": "content", "path": "win[5]", "before": "Fiora", "after": "Kassadin" },
+    { "layer": "content", "path": "win[6]", "before": "Fiora", "after": "Kassadin" },
+    { "layer": "full", "path": "phases[2].side", "before": "Fiora", "after": "Kassadin" },
+    { "layer": "full", "path": "phases[3].side", "before": "Fiora", "after": "Kassadin" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Fiora" },
+    { "layer": "full", "path": "phases[5].side", "before": "Fiora", "after": "Kassadin" },
+    { "layer": "full", "path": "phases[6].side", "before": "Fiora", "after": "Kassadin" },
+    { "layer": "full", "path": "phases[2].rating", "before": "7/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "7/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "2/10" },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Once Null Sphere is leveled, its silence interrupts your Lunge-chain mid-combo and his Nether Blade mana sustain lets him farm through your poke — all-in only when his Q is on cooldown.",
+      "after": "Null Sphere's silence interrupts your Lunge-chain mid-combo, and Nether Blade (7s) sustains his mana through poke — its auto-reset wind-up, not a cast, is your cue to step out."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Kassadin Riftwalk: matchup-defining — His mobility spike at 6. Kill him before it scales. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Kassadin Riftwalk: matchup-defining — 5s at rank 1 and cheap only once, so his second blink is the punish window. - Riposte: 24s at rank 1, spend it on his commit. - Grand Challenge: 110s — kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His mobility spike at 6. Kill him before it scales. Only engage once it is down or baited.",
+      "after": "His level-6 spike. Riftwalk is 5s at rank 1 — punish the second blink, when the mana cost doubles."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Kassadin wastes Riftwalk — commit the full pattern immediately.",
+      "after": "Once he blinks in, commit the full pattern — his blink is spent."
+    }
+  ],
+  "notes": "suspectNames flagged 'Null Sphere's' in wants.foe[0] — FALSE POSITIVE, that is the correct Riot name. Mirror (kassadin__fiora) established that Riposte can never stun Kassadin (nothing in his kit immobilizes); Fiora's page never claimed a stun, so no correction needed there, but dosFull[2].t 'Riposte his Riftwalk' is a weak title (under 25 chars, applier skips it) and should be retitled by hand."
+}

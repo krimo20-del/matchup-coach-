@@ -1,0 +1,112 @@
+{
+  "ownerKey": "drmundo",
+  "enemy": "swain",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Three chart rows contradict their own explanation text: whys[3] says levels 4-5 flip to you but win[3] is Swain; whys[4] says 6 swings back to Swain but win[4] is Skill; whys[5] says first item favours you but win[5] is Skill.",
+      "why": "The packet chart is [Swain, Swain, Swain, Dr. Mundo, Swain, Dr. Mundo, Skill], which matches the whys[] on all seven rows. The shape is right too: Swain owns the ranged phase, Mundo steals 4-5 once the Q slow and Heart Zapper are online, Demonic Ascension takes 6 back, and the first tank item plus tenacity flips it again.",
+      "corrected": "L1-L3 Swain, L4-5 Dr. Mundo, L6 Swain, first item Dr. Mundo, 2+ items Skill.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Demonic Ascension's cooldown is printed as an em-dash — literally '(—)' — in breakdown.cooldowns and report[5].t, the two places the reader goes to find it.",
+      "why": "It is 120s at all ranks, 650 range, and Riot's text says the form 'is indefinite as long as Swain drains enemy champions'. That last clause is the spike: it is not a duration you wait out, it is a heal you have to cut. Your own Maximum Dosage is also 120s, so the two ults are on the same clock and whoever presses second usually wins.",
+      "corrected": "120s written into both fields, with the indefinite-while-draining condition and the Grievous Wounds answer.",
+      "confidence": "High",
+      "sources": ["brief enemyKit (Demonic Ascension)", "brief ownerKit (Maximum Dosage 120)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Four fields state that Ravenous Flock is a percent-max-health effect that 'punishes your health-stacking'. It is not. Nevermove's actual mechanic — it roots on the RETURN, not the outgoing cast — is never stated, and Mundo's passive is never connected to it.",
+      "why": "Riot's text for Ravenous Flock: 'Swain's ravens collect Soul Fragments that heal him and permanently increase his maximum health.' The maximum health it raises is Swain's own. Nothing in it scales off your health bar. The kit file's percentHealth flag came from that sentence and misread whose health it meant. Nevermove: 'Swain launches a wave of demonic power forward. It then returns to Swain and roots enemies it hits' — you dodge the return path, not the throw. And that root is an Immobilizing effect, so Goes Where He Pleases eats the first one and drops a cannister.",
+      "corrected": "whys[0], spikes[0].text, early and wants.foe[2] now describe the passive as Swain's own sustain and health growth. tradeGood and breakdown.cooldowns now carry the return-path root and the passive interaction.",
+      "confidence": "High",
+      "sources": ["brief enemyKit (Ravenous Flock, Nevermove)", "brief ownerKit passive"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "No usable cooldown appeared anywhere; the only one printed was blank.",
+      "why": "Death's Hand 7/6/5/4/3 at 750 range, Vision of Empire 22/21/20/19/18, Nevermove 12/11.5/11/10.5/10 at 850, Demonic Ascension 120s. Nevermove's 12s is the window you step into.",
+      "corrected": "Nevermove's 12s and Death's Hand's 750/7s now appear in breakdown.cooldowns, early and tradeGood.",
+      "confidence": "High",
+      "sources": ["brief enemyKit"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spirit Visage and Mercury's Treads are right and report[8].t already names both. The supplied 'needs-antiheal' interaction is also correct — Ravenous Flock heals off Soul Fragments and Demonic Ascension is a sustained drain, so Grievous Wounds timing genuinely decides the extended fight, and that is now stated with the cooldown.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "missingInteractions rule needs-antiheal"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[3].side", "before": "Swain", "after": "Dr. Mundo" },
+    { "layer": "full", "path": "phases[3].rating", "before": "3/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Swain" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Dr. Mundo" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "7/10" },
+    { "layer": "content", "path": "win[3]", "before": "Swain", "after": "Dr. Mundo" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Swain" },
+    { "layer": "content", "path": "win[5]", "before": "Skill", "after": "Dr. Mundo" },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Maximum Dosage online — dives and all-ins flip when you press R mid-fight and regen half your HP. Force Swain to commit, then out-last the commit.",
+      "after": "His window: Demonic Ascension is also 120s and it does not expire while he drains you. Refuse the 6 all-in unless your R is already up."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Swain Demonic Ascension (—): matchup-defining — His drain. Don’t fight into it. Track it before every commit. - Your ultimate: spend it on kill windows, never on waves. - Summoners: track his Flash after any close call — it changes every dive call.",
+      "after": "- Swain Demonic Ascension (120s, 650 range): matchup-defining — it stays up while he drains champions, so Grievous Wounds ends it, not spacing. - Nevermove (12s at rank 1) roots on the return; your passive eats the first one. - Your ultimate is also 120s: match his."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Swain’s Demonic Ascension (—): His drain. Don’t fight into it. It’s down or you don’t go.",
+      "after": "Demonic Ascension (120s) lasts as long as he drains a champion — Grievous Wounds is what ends it."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Line up your trajectory cleanly past enemy minion models. Launch an Infected Bonesaw (Q) to slow and chunk their current health, then step forward only when they are slowed to execute a quick auto-attack into an enhanced Blunt Force (E) reset. If they retaliate with heavy crowd control, your passive will pop a canister backward—walk over it immediately to heal up and walk away clean. • • Dr. Mundo Top Lane Matchup Database 79",
+      "after": "Nevermove is the whole lane: it throws out at 850 range and roots only on the way back, so walk perpendicular to the return path. Your passive resists the first root outright and drops a cannister — walk over it. Infected Bonesaw (Q) reaches 975 against his 750, so poke him while he is stepping up for Death's Hand, and step in for an auto into the E reset only once Nevermove has been spent."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Level 1 favours Swain — his W poke and %-HP passive punish your stacking.",
+      "after": "Level 1 favours Swain — his Death's Hand out-damages you at 750 range."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "This is Swain's window: his W Vision of Empire and E Nevermove root plus Q Death's Hand shred you as a big single target, and his passive %-max-HP sustain punishes exactly your health-stacking, so eat minimal poke and don't walk into E range.",
+      "after": "This is Swain's window: Nevermove (E, 850 range) roots on the way back and Death's Hand stacks per bolt, so he shreds you as a single target. Ravenous Flock heals him and grows his own health pool — it does not burn yours, but chip damage never sticks."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Levels 1-3 belong to Swain: his W poke, E root and %-max-HP passive punish your health-stacking hard, and you have no answer to his single-target burst, so respect his range and soak minimal damage.",
+      "after": "Levels 1-3 belong to Swain: Death's Hand (750 range, 7s at rank 1) out-ranges everything you have, Vision of Empire pokes from off-screen, and Nevermove roots on the return. Soak minimal damage and farm."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Poke with W Vision of Empire and %-max-HP passive to punish your stacking",
+      "after": "Poke with W Vision of Empire and farm Soul Fragments off your health bar"
+    }
+  ],
+  "notes": "REJECTED A SUPPLIED INTERACTION. missingInteractions offers: \"Swain bypasses stacking resistances (Ravenous Flock (P)) — raw armour or MR is the wrong answer here.\" Ravenous Flock does not bypass resistances and does not scale off your health at all; Riot's text has it healing Swain and raising Swain's own maximum health. The kit's percentHealth flag misread whose maximum health the sentence refers to. The same false claim was already in four fields on the page and I corrected all four. The other supplied interaction (needs-antiheal) is correct and is now stated with the 120s cooldown.\n\nDemonic Ascension's cooldown was rendered as '(—)' in both places it appears. It is 120s — the same as Maximum Dosage, which is the single most useful sequencing fact in this matchup.\n\nNevermove roots on the RETURN pass, not the outgoing cast. No field said so.\n\nWIN-RATE CONFLICT, not acted on: diff is FAV with diffRating 8/10 and Swain carryRating 8.5/10, on a lane Dr. Mundo wins 56.83% over 1084 games. Those four enum fields plus breakdown.difficulty and report[14].t all agree with each other and all disagree with the data. Changing them means rewriting the two prose strings as well, and 'how hard should this be rated' is a judgement call rather than a fact I can pull from the kits — recorded as a question instead.\n\nPDF footer artifact '• • Dr. Mundo Top Lane Matchup Database 79' remains in breakdown.trading and report[3].t."
+}

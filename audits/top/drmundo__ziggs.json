@@ -1,0 +1,140 @@
+{
+  "ownerKey": "drmundo",
+  "enemy": "ziggs",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The diff enum reads 'FAV' while tone is the red #ff5d6c, diffRating is 8/10, breakdown.difficulty says 'Hard matchup' and report[14] says 'Hard matchup'.",
+      "why": "Four fields say hard and one enum says favoured. Three of the four are prose the user can read on the page, and the tone colour is already the hard-matchup red, so the enum is the outlier.",
+      "corrected": "diff 'FAV' -> 'HARD'. Enum field, exempt from the length band.",
+      "confidence": "Medium",
+      "sources": ["currentText.full.tone", "currentText.full.diffRating", "currentText.full.breakdown.difficulty"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "win[4], win[5], win[6] and the matching phases[].side all read 'Skill' while whys[4] says 'Level 6 flips to you', whys[5] says 'you walk him down and kill on contact' and whys[6] says 'you're immune to his poke and delete him'.",
+      "why": "Those three why-lines are unambiguously Dr. Mundo-favoured, and late[] repeats it: 'Level 6 and 2+ items flip it hard to you.' The packet is explicitly flagged defective for this matchup ('level chart contradicts data: Dr. Mundo wins 52.14% but the chart gives Ziggs 5/7 stages vs 2'), so the packet chart is not the arbiter — but giving Dr. Mundo the three stages his own text already claims is what resolves that flagged contradiction with a 52.14% win rate.",
+      "corrected": "Three flips as one atomic group across both layers, ratings raised to 6/7/8. The why-lines already state the Dr. Mundo case and are left untouched.",
+      "confidence": "Medium",
+      "sources": ["packet.defects[0]", "packet.winRate 52.14 / 1007", "currentText.content.whys[4..6]", "currentText.content.late"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Hexplosive Minefield's diminishing-damage rule is absent, and Mega Inferno Bomb is called a 'long-range execute'.",
+      "why": "Riot's text on the minefield: 'Successive mine detonations on the same target deal reduced damage.' That is the whole answer to being zoned by it — a health-stacking tank should walk straight through in one line, because each additional mine hits him for less, and the worst thing he can do is back out and re-enter fresh. Nothing on the page said this; the mines were presented as a wall. Mega Inferno Bomb, meanwhile, has no execute component in Riot's text at all — it is 5000-range area damage where 'enemies in the primary blast zone take more damage than those farther away', so the outer ring is survivable. Calling it an execute tells a tank to fear the one thing he can eat.",
+      "corrected": "report[5].t and breakdown.cooldowns now carry the diminishing mines; report[11].t turns it into the concrete instruction; spikes[1].text drops 'execute' and states the centre-vs-edge falloff with the 120s rank-1 cooldown.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ziggs.json E text and cd 16", "champ-data/_kits/ziggs.json R text and cd 120/95/70"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Satchel Charge was listed as 24s in breakdown.cooldowns and report[5]. Hexplosive Minefield's cooldown was never given.",
+      "why": "Satchel Charge is 20/18/16/14/12 — four seconds shorter than stated at rank 1 and half the stated figure maxed. The minefield is a flat 16s at every rank, which makes it the more reliable zoning tool of the two and the one worth tracking.",
+      "corrected": "20s at rank 1 / 12s maxed, plus the minefield at a flat 16s.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ziggs.json W cd 20/18/16/14/12, E cd 16"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "diff",
+      "before": "FAV",
+      "after": "HARD"
+    },
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Skill",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Skill",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "content",
+      "path": "win[6]",
+      "before": "Skill",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].rating",
+      "before": "6/10",
+      "after": "7/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].rating",
+      "before": "5/10",
+      "after": "8/10"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ziggs Satchel Charge (24s): matchup-defining — His knockback + self-peel escape. Engage when it's down. Track it before every commit. - Your ultimate: spend it on kill windows, never on waves. - Summoners: track his Flash after any close call — it changes every dive call.",
+      "after": "- Ziggs Satchel Charge (20s at rank 1, 12s maxed): his knockback escape — engage when it is down. - Hexplosive Minefield (flat 16s): repeat mines on the same target deal reduced damage, so walk straight through it. - Your ultimate: kill windows only. - Track his Flash."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Ziggs’s Satchel Charge (24s): His knockback + self-peel escape. Engage when it's down. It’s down or you don’t go.",
+      "after": "Mines deal reduced damage on repeat hits to the same target — walk the minefield in one straight line, never back out of it."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Ziggs R Mega Inferno Bomb adds long-range execute and waveclear, letting him poke and shove while you have no gap-closer. Your R Maximum Dosage heals, but you can't reach him to make it matter, so this is his safest zone.",
+      "after": "Mega Inferno Bomb is 5000-range waveclear and chip on 120s at rank 1 — not an execute, and its outer ring hurts far less than the centre. Your R heals that off, but you still cannot reach him, so this is his safest window."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Eat poke without your passive canister. Burn R while Satchel Charge is up. Fight before your HP items come online. The R buys fights, not poke — spend it like the last one in stock.",
+      "after": "Eat poke without your passive canister. Retreat back through his minefield — repeat mine hits deal less, so the cheap way out is forward. Fight before your HP items land."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.spikes",
+      "before": "His windows: Level 1, Level 2, Level 3, Levels 4-5. Fight at your spikes, concede his — the level chart above is the trade calendar.",
+      "after": "His windows: Levels 1 through 5. Yours: Level 6, First item, 2+ items. Fight at yours, concede his — the chart above is the trade calendar."
+    },
+    {
+      "layer": "full",
+      "path": "report[2].t",
+      "before": "See the level-by-level chart — fight in your windows (your item spikes), respect his (Level 1, Level 2, Level 3, Levels 4-5).",
+      "after": "See the level-by-level chart — fight in your windows (Level 6, First item, 2+ items), respect his (Levels 1 through 5)."
+    }
+  ],
+  "notes": "Best new fact in this matchup: successive mine detonations on the same target deal reduced damage. For a health-stacking tank that inverts the correct play — walk through the minefield in one line rather than backing out and re-entering fresh — and it was nowhere on the page. Mega Inferno Bomb was also described as an execute, which Riot's text does not support; it is falloff area damage. Satchel Charge's cooldown was wrong at every rank.",
+  "unverified": [
+    "The page repeatedly claims Ziggs deals percent-max-health damage (whys[3] 'percent-HP poke', spikes[0] 'percent-max-HP magic damage every wave'). The kit file carries a percentHealth flag on Satchel Charge, but Riot's own W description says only 'deals magic damage to enemies, knocking them away' with no health scaling, and nothing on Q or E suggests it either. Per the derived-flag rule I did not build new advice on that flag, and I did not delete the existing claims — they may be right. Worth one check before the next pass.",
+    "diff 'FAV' -> 'HARD' assumes the three prose fields (tone, diffRating 8/10, 'Hard matchup') are the intended reading rather than the enum. If the enum was the deliberate one, then diffRating, tone, breakdown.difficulty and report[14] all need to move the other way instead."
+  ]
+}

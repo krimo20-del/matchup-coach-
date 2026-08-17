@@ -1,0 +1,286 @@
+{
+  "ownerKey": "darius",
+  "enemy": "jayce",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "needs-correction",
+      "whatIsWrong": "Not on this page, but flagged by the mirror and worth carrying forward: the Jayce-side audit reports MC_WR_TABLES.jayce lists darius at 49.78 while that packet said 51.9. My packet here says 50.22 over 3224 games. Three different numbers describe the same matchup.",
+      "why": "No writable field on this page quotes a win rate, so nothing here to correct — but the two directions of this matchup are being generated against different figures, and the Jayce page's 'EVEN / 6-10' framing was written against the lower one. Recorded so the reconciliation pass has all three numbers in one place.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["packet", "mirrorFindings.notes"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "content win[0], win[1], full phases[0].side and phases[1].side all read 'Darius'. The packet gives both levels to Jayce, and every prose field agrees: whys[0] 'Jayce's ranged Cannon Q and Gate poke beat your melee reach at level 1', whys[1] 'At level 2 Jayce still zones and pokes freely before you have Apprehend', early 'Jayce owns levels 1-2', spikes[0] 'Jayce peaks at 1-2'.",
+      "why": "This is the exact defect the mirror already found from the other side and could NOT fix. Its notes say: 'A six-character enum swapped for a five-character one cannot land inside the applier's +/-10% length band, so I corrected the two ratings and both phase reasons instead.' That belief is false. side/rating/win are ENUM_FIELD and exempt from the band (apply-proposals.js:78), and the applier also skips any string under 25 characters — 'Darius' to 'Jayce' is both. The mirror left four chart cells wrong for a reason that does not exist, so I am fixing all four from this side. Rows 2-6 already match the packet and the mirror did not dispute them.",
+      "corrected": "win[0], win[1], phases[0].side and phases[1].side all set to Jayce. phases[0].why and phases[1].why rewritten — both argued that Darius wins a standing fight, on rows that now read Jayce. Whole chart's flips proposed as one group.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys[0]", "currentText.content.whys[1]", "currentText.content.early", "currentText.content.spikes[0].text", "mirrorFindings.audit[point 2]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why is the same champion-wide boilerplate the mirror flagged on its own page, complete with a raw LaTeX fragment leaking into player-facing text: 'R = d + a \\times Stacks'.",
+      "why": "The mirror rewrote its version around the true damage, the stack scaling and the kill reset. I am stating the same facts from this side and adding the piece that is specific to Jayce: his R swap into Hammer grants him Armor and Magic Resist, and Noxian Guillotine's true damage ignores both. Spike shape otherwise holds — Jayce at 1-2 and on every Gate-boosted Shock Blast; Darius at 3 (Apprehend), 6, and first item.",
+      "corrected": "phases[4].why rewritten around true damage, Hemorrhage scaling, the kill refresh, and the fact that resistances are not an answer. The LaTeX fragment is gone.",
+      "confidence": "High",
+      "sources": ["ownerKit.R.text", "ownerKit.R.flags", "enemyKit.R.text", "mirrorFindings.audit[point 3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three interactions absent. (1) Thundering Blow (E, Hammer) knocks Darius back and is the single reason he cannot stick — the page names it only as 'hammer knockback' and 'Get E-knocked' and never gives its 20s rank-1 cooldown or its 240 range. (2) Shock Blast fired THROUGH the Acceleration Gate gains missile speed, range AND damage — the page says 'Q-gate' once, as a title, with a body about something else. (3) Mercury Hammer form grants Jayce Armor and Magic Resist, which Noxian Guillotine's true damage ignores entirely.",
+      "why": "(1) is the matchup. Thundering Blow at 240 range on a 20-second cooldown is a shorter leash than Apprehend's 26s, and 'bait the E, then pull' is only actionable once the player knows he has a 20-second window afterwards. (2) turns a dodge into a read — the Gate landing is the tell that the next Shock Blast is the dangerous one. (3) matters at 6: his defensive stance swap does not protect him from the execute. Also restating from the mirror, which found it first: Decimate heals Darius only off champions hit by the BLADE, not the handle — the page references 'the Q outer ring' and 'aim the outer blade' four times without once saying the handle heals nothing.",
+      "corrected": "Thundering Blow's 20s and 240 range written into tldr, report[0].t, dosFull[2].d, dontsFull[1].d, breakdown.early, breakdown.cooldowns and spikes[3].text. The gated Shock Blast written into dosFull[0].d, dontsFull[0].d and breakdown.cooldowns. True-damage-vs-Hammer-resists written into phases[4].why, tldr and spikes[1].text. The blade-versus-handle heal written into tradeGood, dosFull[1].d, report[5].t and spikes[0].text.",
+      "confidence": "High",
+      "sources": ["enemyKit.E.text", "enemyKit.E.cd", "enemyKit.E.range", "enemyKit.Q.text", "enemyKit.Q.cd", "enemyKit.R.text", "ownerKit.R.text", "ownerKit.Q.text", "mirrorFindings.audit[point 4]"]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeGood and dosFull[1].d carry the same templated pull line, ending 'with the heal banked' — while never saying the heal is conditional on hitting the blade rather than the handle.",
+      "why": "Against a champion whose whole plan is to knock Darius back to exactly handle range, 'the heal banked' is the wrong promise. Naming the condition in the same space makes the line true.",
+      "corrected": "Both rewritten with 'land the Q blade edge — the handle heals you nothing'.",
+      "confidence": "High",
+      "sources": ["ownerKit.Q.text", "enemyKit.E.text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no Jayce numbers at all and the same duplicated Apprehend/Ghost paragraph as every other page in this slice. The mirror separately noted that the packet flags this matchup as having no cooldown-sequencing advice anywhere — sequencingCues is 1, the lowest in my slice.",
+      "why": "Two long cooldowns decide this lane and neither was written down: Thundering Blow at 20s rank 1 and Apprehend at 26s rank 1. Whoever spends first loses the next twenty seconds. Shock Blast's 16s-to-6s slide is the other half of why the lane tightens as ranks go in.",
+      "corrected": "Rewritten with Shock Blast 16s to 6s and the Gate interaction, Thundering Blow 20s and 240 range, the 6s stance swap and its first-attack tell, and Apprehend 26s at 535 range.",
+      "confidence": "High",
+      "sources": ["enemyKit.Q.cd", "enemyKit.E.cd", "enemyKit.E.range", "enemyKit.R.cd", "ownerKit.E.cd", "ownerKit.E.range", "packet.sequencingCues"]
+    },
+    {
+      "point": 7,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Freeze outside your turret is right against a poke champion who has to walk to 240 range to disengage. breakdown.wave and report[4].t carry the duplicated paragraph plus a spliced 'How Darius Wins Trades' heading, but the wave advice itself is sound and I had no length-safe replacement.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["enemyKit.E.range", "currentText.full.breakdown.wave"]
+    },
+    {
+      "point": 8,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Ganking on Shock Blast's cooldown is right; note his escape is Thundering Blow, not the Q, so the jungler should be told the E timer rather than the Q timer. The Q is the poke, the E is the exit. I did not rewrite report[10].t because both cooldowns now appear in breakdown.cooldowns.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["enemyKit.E.text", "enemyKit.E.cd"]
+    },
+    {
+      "point": 9,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Second Wind plus Bone Plating into a poke lane is coherent and this is the one matchup in my slice where the 'into the poke' phrasing in report[6].t actually fits the enemy.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["enemyKit.Q.text", "currentText.full.report[6].t"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "No anti-heal advice appears on this page and none should — Jayce has no healing in his kit (Lightning Field's passive restores Mana, not Health), and he carries no needs-antiheal entry in missingInteractions. The mirror's anti-heal finding runs the other way: it is Jayce who needs Grievous Wounds, against Darius's Decimate blade heal. Nothing to add here. I left report[8].t alone rather than rewrite build advice I cannot verify from the kits.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit.W.text", "missingInteractions", "mirrorFindings.audit[point 10]"]
+    },
+    {
+      "point": 11,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "'Dodge poke, close gap, pull + execute' is correct and survives intact; the edits make each step executable with real numbers.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["currentText.full.winCon"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Five of six Do/Don't bodies mismatch their titles, using the same three template strings found on all three other pages in this slice. dosFull[0] 'Dodge his ranged Q' had generic filler. dosFull[2] 'Pull when his melee combo is down' had a line about him wasting Shock Blast. dontsFull[0] 'Walk into his Q-gate' had 'That is Jayce's favourite window'. dontsFull[1] 'Get E-knocked' had the committal-tool line. dontsFull[2] 'Extend the poke war' had the whiffed-Apprehend line.",
+      "why": "Every title names a real mechanic and every body was boilerplate. 'Walk into his Q-gate' in particular names the single highest-damage thing Jayce does and the body said nothing about it.",
+      "corrected": "dosFull[0].d now describes the gated Shock Blast gaining speed, range and damage. dosFull[2].d gives Thundering Blow's 20s window. dontsFull[0].d explains why the gated Q line is the one to respect. dontsFull[1].d explains the knockback breaking Decimate range. dontsFull[2].d names Hyper Charge and Lightning Field as why long trades at his range lose.",
+      "confidence": "High",
+      "sources": ["enemyKit.Q.text", "enemyKit.E.text", "enemyKit.E.cd", "enemyKit.W.text"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.defects reports '1 probable wrong ability name(s)' and suspectNames flags wants.foe[1] 'Keep Acceleration Gate' as looking like 'acceleration gate' at edit distance 5. This is a FALSE POSITIVE. Acceleration Gate is the correct, current name of Jayce's Cannon-stance E — packet.enemyAbilities.E lists it, and the kit's E text says 'Deploys an Acceleration Gate'. The detector matched on letter case only.",
+      "why": "The brief warns suspectNames has false positives and says to check the kit file. I checked; the field is correct and I made no edit to it. Recording this so the defect count for this matchup is not treated as an outstanding item — the real defects on this page are the four chart cells, which the detector did not flag at all.",
+      "corrected": "No change to wants.foe[1]. Defect recorded as spurious.",
+      "confidence": "High",
+      "sources": ["packet.suspectNames", "packet.enemyAbilities.E", "enemyKit.E.text"]
+    },
+    {
+      "point": 14,
+      "status": "missing",
+      "whatIsWrong": "No patch anchoring available; kits carry no patch metadata.",
+      "why": "Live patch is 26.15. I did not research patch history, so I left every patch-sensitive claim untouched rather than date-stamp anything unverified.",
+      "corrected": "",
+      "confidence": "Low",
+      "sources": []
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[0]",
+      "before": "Darius",
+      "after": "Jayce"
+    },
+    {
+      "layer": "content",
+      "path": "win[1]",
+      "before": "Darius",
+      "after": "Jayce"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Darius",
+      "after": "Jayce"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Darius",
+      "after": "Jayce"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].rating",
+      "before": "8/10",
+      "after": "3/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].rating",
+      "before": "7.5/10",
+      "after": "3/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Hemorrhage passive bleed completely overwhelms raw early base stats in any standing fight. Trade on his last-hits but don't chase past the wave.",
+      "after": "You have no dash and Apprehend is 535 range on a 26s cooldown, so Hemorrhage never starts. Concede the level and farm what you can reach."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Access to Crippling Strike (W) auto-attack reset provides immense localized burst punishes. Hold it for a guaranteed pull; a whiffed Apprehend is a free lane for Jayce.",
+      "after": "Still his level: Shock Blast outranges everything you have, and a whiffed Apprehend hands him 26 seconds of free shove. Hold it for a guaranteed pull, not a hopeful one."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Noxian Guillotine deals true damage R = d + a \\times Stacks, bypassing defensive items completely. The execute resets on takedowns — all-in windows are now real kill windows.",
+      "after": "Noxian Guillotine is true damage that scales with Hemorrhage stacks and refreshes on a kill — his Hammer-form Armor and MR do nothing to it. Buying resistances is not an answer."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Outlast his ranged cannon poke using bush covers, pull him back the exact millisecond his hammer knockback finishes, and execute his low base durability.",
+      "after": "Thundering Blow is his only way off you — 20s at rank 1, 240 range. Eat it, then Apprehend, and execute: true damage ignores the resists his Hammer swap grants."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "Outlast his ranged cannon poke using bush covers, pull him back the exact millisecond his hammer knockback finishes, and execute his low base durability.",
+      "after": "Thundering Blow is his only way off you — 20s at rank 1, 240 range. Eat it, then Apprehend, and execute: true damage ignores the resists his Hammer swap grants."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Pull Jayce as he steps to last-hit, W slow, land the Q outer ring, weave two autos, and walk away at 3-4 stacks with the heal banked.",
+      "after": "Pull Jayce as he steps to last-hit, W slow, land the Q blade edge — the handle heals you nothing — weave two autos, and disengage."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Pull Jayce as he steps to last-hit, W slow, land the Q outer ring, weave two autos, and walk away at 3-4 stacks with the heal banked.",
+      "after": "Pull Jayce as he steps to last-hit, W slow, land the Q blade edge — the handle heals you nothing — weave two autos, and disengage."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His main poke. Dodge it and close in. Commit on its cooldown, never into it.",
+      "after": "Shock Blast through his Gate gains speed, range and damage — dodge when it drops."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Jayce wastes Shock Blast — commit the full combo immediately.",
+      "after": "Thundering Blow is 20s at rank 1 — once it is spent he cannot leave."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Jayce's favourite window — refusing it removes half his win condition.",
+      "after": "A gated Shock Blast is his best poke — never stand in its line as the Gate lands."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Your committal tool is the lane — burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Thundering Blow knocks you back out of Decimate range — bait it before you spend Apprehend."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Whiffing Apprehend and then fighting anyway — without the pull you have no engage, and chasing through a wave bleeds you dry.",
+      "after": "Hyper Charge maxes his Attack Speed for several attacks and Lightning Field ticks on you — a long trade at his range is his."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Jayce Shock Blast: matchup-defining — His main poke. Dodge it and close in. Darius E (Apprehend): Long early cooldown. Never throw this out predictably; save it explicitly to interrupt their dash trajectories mid-flight or catch their retreat paths. Darius Ghost: Your primary lethal enabler. Keep this tool ready to completely blow through ranged poke or instant slows across the lane.",
+      "after": "- Jayce Shock Blast (Q, Cannon): 16s at rank 1 down to 6s — fired through his Acceleration Gate it gains speed, range and damage. Thundering Blow (E, Hammer) is 20s at rank 1, only 240 range, and it is the one tool that gets him off you. Mercury Cannon/Hammer (R) swaps every 6s; the first attack after a swap is his burst tell. Darius E (Apprehend) is 26s at rank 1 and 535 range."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Jayce's Shock Blast: His main poke. Dodge it and close in. Engage only while it is down.",
+      "after": "Decimate heals you only off champions hit by the blade — the handle does damage and nothing else."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Jayce out-pokes you with ranged Q and knocks you back with melee E, denying your stick. Dodge his Q, walk him down, and pull when his combo is down. Don't chase past the wave into Shock Blast.",
+      "after": "Jayce owns levels 1-2: Shock Blast outranges you and Thundering Blow knocks you out of Decimate range. Bait the E first — it is 20s at rank 1 — then Apprehend, and never contest before you have it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry threat: 7.5/10. If Jayce gets ahead, shift from winning trades to wave control, vision, and playing with your jungler.",
+      "after": "Carry threat: 8.5/10. If Jayce gets ahead, shift from winning trades to wave control, vision, and playing with your jungler."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Jayce peaks at 1-2 with Cannon poke and Acceleration Gate speed; once you hit E Apprehend and can pull him mid-Q for a full outer-blade Decimate plus a Crippling Strike, the lane swings back toward you.",
+      "after": "Jayce peaks at 1-2 with Cannon poke and Acceleration Gate speed; once Apprehend is up at 3 you can pull him and land the outer blade — that ring is the only part that heals you — into Crippling Strike."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Your R Noxian Guillotine gives you a real execute threat that Jayce's ranged form can't match, but a good Jayce still kites with Hammer knockback and Gate, so it reads even until you land a hard E.",
+      "after": "Noxian Guillotine is true damage, so the Armor and MR he gains swapping to Hammer do nothing to it. He still kites with Thundering Blow, so it reads even until you land a clean Apprehend."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "You outscale a durability-light Jayce hard: he must poke perfectly forever, and a single Apprehend inside his cooldowns ends the fight in your favour.",
+      "after": "You outscale a durability-light Jayce hard: he must poke perfectly forever, and Thundering Blow is down to 10s but still only 240 range — walk it down."
+    }
+  ],
+  "notes": "THE MIRROR WAS BLOCKED BY A FALSE BELIEF AND I UNBLOCKED IT. jayce__darius audited this matchup already and correctly identified that win[0], win[1], phases[0].side and phases[1].side should read Jayce, then declined to propose the fix. Its notes: 'A six-character enum swapped for a five-character one cannot land inside the applier's +/-10% length band.' That is wrong on two counts — those paths are ENUM_FIELD and exempt (apply-proposals.js:78), and the applier skips strings under 25 characters regardless. I have proposed all four flips from this side. If the applier runs both audits, the two directions now agree; if only the Jayce side had run, the chart would have stayed broken. Worth checking whether other agents in that run made the same call and silently skipped enum fixes.\n\nRATING POLARITY — RESOLVED, and it matters for the rest of the run. The mirror set ITS phases[0]/[1] to 7/10 for levels Jayce wins. Combined with the brief's rule that ratings are inverse between mirrored pages, that fixes the convention: phases[N].rating is how good the stage is FOR THE PAGE OWNER (higher = better for the owner). So Jayce-favoured levels on a Darius page are 3/10, which is what I proposed. Note this runs OPPOSITE to diffRating, where 8/10 means hard — two fields, two polarities. I left phases ratings untouched on my Illaoi and Jax pages because I did not have this evidence at the time; those two pages now have correct sides with ratings that were already near-uniform noise, so they are not wrong, just uninformative. A rating pass over them would be worth doing with this convention in hand.\n\nSPURIOUS DEFECT: packet.defects claims '1 probable wrong ability name' pointing at wants.foe[1] 'Keep Acceleration Gate'. The name is correct — the detector matched on capitalisation. No edit made. Meanwhile the detector flagged nothing about the four wrong chart cells, which are the actual defects on this page.\n\nSCRAPE ARTIFACT: 'Darius Top Lane Matchup Database 52' sits mid-sentence in breakdown.trading, matching 22/73/88/89 on the other pages. breakdown.wave and report[4].t also carry the spliced 'How Darius Wins Trades' heading. I cleaned only breakdown.cooldowns.\n\nDid not touch report[8].t (Itemization) even though the mirror rewrote its own — build recommendations are the one area I could not verify from the kits, and the existing line is not wrong, just incomplete."
+}

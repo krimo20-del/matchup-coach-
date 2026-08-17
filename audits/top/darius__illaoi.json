@@ -1,0 +1,316 @@
+{
+  "ownerKey": "darius",
+  "enemy": "illaoi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet reports 53.43% winRate over 2141 games (brief header says 2157 — minor header/packet drift, not surfaced in any writable text). No page text quotes a win rate, so nothing to correct.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart is internally contradictory across three sources. packet.levelChart = [Darius, Darius, Darius, Skill, Illaoi, Skill, Skill]. But content win[] and full phases[].side both read [Skill, Illaoi, Illaoi, Skill, Skill, Illaoi, Illaoi]. Worse, win[] contradicts the whys[] sitting on the same rows: whys[0] says 'your E-pull trade beats her at level 1', whys[1] 'You still control open-ground trades... at 2', whys[2] 'E Apprehend plus W slow win the clean early trade at 3' — all Darius-favoured, while win[1] and win[2] say Illaoi. whys[4] says 'Level 6 R Leap of Faith and chained slams swing the phase to her' while win[4] said Skill. whys[5] 'First item levels it' and whys[6] 'Late is a skill duel' while win[5] and win[6] said Illaoi.",
+      "why": "Three independent signals agree with each other and against win[]/phases[].side: the packet chart, the whys prose on the same rows, and the 53.43% Darius win rate with a stated 4/10 difficulty. Darius owns levels 1-3 (Hemorrhage stacking plus Apprehend before tentacle coverage exists), levels 4-5 are even, level 6 is Illaoi's window (Leap of Faith online), and both post-item stages are skill/spacing. The prose everywhere else on the page already describes exactly this shape.",
+      "corrected": "Level chart set to the packet shape on both layers: Darius / Darius / Darius / Skill / Illaoi / Skill / Skill. phases[4].why rewritten because it argued for Darius while the row now reads Illaoi. All chart flips proposed as one group. Ratings deliberately NOT touched — the polarity is ambiguous across pages, see questionsForUser.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys[0..6]", "packet.winRate"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text claims 'R Leap of Faith spawns a ring of tentacles' and that 'her W Harsh Lesson lets her leap between them'. Riot's own text for Leap of Faith is 'A Tentacle spawns for each enemy champion hit' — in a 1v1 lane that is exactly one extra tentacle, not a ring. And Harsh Lesson leaps to her target (you), not between tentacles; what it does is cause nearby Tentacles to also swing at the target.",
+      "why": "The 'ring of tentacles' framing makes a laner disengage from a survivable ult and teaches the wrong lesson about where the damage comes from. The damage in a 1v1 comes from Harsh Lesson on a flat 4-second cooldown pulling in whatever tentacles are already standing — which is a function of nearby walls, not of her R. Spikes now read: Darius levels 1-3 and Stridebreaker; Illaoi at 6 (Leap of Faith, 120/95/70) and at first item once her passive sustain is running.",
+      "corrected": "spikes[1] rewritten to state one tentacle per champion hit, the 120s rank-1 R cooldown, and that the real threat is the 4s Harsh Lesson. spikes[2] rewritten to name the first-item Grievous Wounds timing against her passive heal. spikes[3] rewritten around Test of Spirit's 12s max-rank cooldown and 900 range.",
+      "confidence": "High",
+      "sources": ["enemyKit.R.text", "enemyKit.W.text", "enemyKit.W.cd", "enemyKit.R.cd", "enemyKit.E.cd", "enemyKit.E.range"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The single most decisive mechanic in this matchup is absent from every writable field: Illaoi's passive spawns Tentacles ON NEARBY IMPASSABLE TERRAIN. The page says 'fight in open ground' eleven different ways but never says WHY, so the reader has no rule for where open ground is. Second, Test of Spirit's actual mechanic is never stated — the spirit echoes a percentage of the damage it takes back to you, and getting too far from the spirit turns you into a Vessel, so backing off is not an escape. The page implies retreating is the answer. Third, her passive heals her whenever a tentacle damages a champion, and no Grievous Wounds timing appears anywhere.",
+      "why": "Terrain-locked tentacle spawns turn a vague positioning cue into a hard rule: fight in the middle of the lane and she generates nothing. The Vessel condition being 'killed OR too far' is the reason dodging is the only clean out — running is the trap. The passive heal is why long trades inside her setup lose even when Hemorrhage is stacked. All three are in Riot's ability text and none reached the page.",
+      "corrected": "Terrain rule written into tldr, report[0].t, spikes[0], spikes[2], tradeGood, dosFull[1].d and dontsFull[0].d. The Vessel condition and damage echo written into dontsFull[1].d, spikes[3], report[5].t and dosFull[0].d. Anti-heal timing written into spikes[2].text. Real cooldowns used throughout: Test of Spirit 16s rank 1 / 12s rank 5, Harsh Lesson 4s flat, Leap of Faith 120/95/70, Apprehend 26s rank 1, Noxian Guillotine 120s rank 1.",
+      "confidence": "High",
+      "sources": ["enemyKit.P.text", "enemyKit.E.text", "enemyKit.W.cd", "enemyKit.E.cd", "ownerKit.E.cd", "ownerKit.R.cd", "missingInteractions[needs-antiheal]", "missingInteractions[autoreset-burst-tell]"]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeGood said 'Pull Illaoi as he steps to last-hit' — wrong pronoun, and it never says pull her off WHAT. dosFull[1].d carried the identical string.",
+      "why": "Apprehend's value here is specifically dragging her away from the wall her tentacles are anchored to, not just closing distance. Naming the wall makes the same-length line actionable.",
+      "corrected": "tradeGood and dosFull[1].d rewritten to 'Pull Illaoi off the wall as she steps to last-hit...' with the Q blade-edge heal named.",
+      "confidence": "High",
+      "sources": ["enemyKit.P.text", "ownerKit.E.text", "ownerKit.Q.text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no Illaoi cooldown numbers at all, duplicated a generic Apprehend/Ghost paragraph copied from the wave section, and ended in scraped junk: '• • Darius Top Lane Matchup Database 73'.",
+      "why": "This is the field a player reads to know when to fight. It shipped a page-footer artifact instead of timers. Harsh Lesson at a flat 4s is never the punishable cooldown — the punishable state is her standing away from terrain — and that distinction is what the field exists to convey.",
+      "corrected": "Rewritten with Test of Spirit 16s/12s as the matchup timer, Harsh Lesson 4s flagged as always-up, Leap of Faith 120/95/70, Apprehend 26s rank 1, and the scraped footer removed.",
+      "confidence": "High",
+      "sources": ["enemyKit.E.cd", "enemyKit.W.cd", "enemyKit.R.cd", "ownerKit.E.cd"]
+    },
+    {
+      "point": 7,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Freeze-outside-your-turret is right against a champion whose engage is a 400-range leap and whose tentacle coverage depends on walls she has to walk to. breakdown.wave carries the same duplicated Apprehend/Ghost paragraph as breakdown.cooldowns, but the wave advice itself is sound and I did not have a verified replacement that fit the band, so I left it.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["enemyKit.W.range", "currentText.full.breakdown.wave"]
+    },
+    {
+      "point": 8,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "report[10] already ties jungle timing to Test of Spirit being down, which is the correct trigger — with the E spent she has no ranged answer to a two-man collapse and Harsh Lesson only reaches 400.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["enemyKit.E.cd", "enemyKit.W.range"]
+    },
+    {
+      "point": 9,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Conqueror plus Second Wind / Bone Plating is coherent against a champion whose damage arrives as repeated tentacle instances. Nothing verifiable to change from the kit files.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["currentText.full.report[6].t"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No anti-heal timing anywhere on the page despite her passive explicitly healing her off tentacle damage to champions.",
+      "why": "This is the flagged needs-antiheal interaction and it decides extended trades from first item onward. Which specific Grievous Wounds item Darius should buy is a build question I could not verify from the kits, so I named the effect and the timing rather than an item.",
+      "corrected": "spikes[2].text now instructs buying Grievous Wounds by first item and explains that her tentacles refill her health bar during extended trades in her setup.",
+      "confidence": "High",
+      "sources": ["enemyKit.P.text", "missingInteractions[needs-antiheal]"]
+    },
+    {
+      "point": 11,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "winCon and enemyWin are already correctly framed around dodging E and fighting in open ground; the terrain rule I added to tldr supplies the missing 'why'.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["currentText.full.winCon"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Two of the three Critical Don'ts had bodies that did not match their own titles. dontsFull[1].t 'Get E'd near a vessel' was paired with a body about burning Apprehend for tiny value. dontsFull[2].t 'R into her W tentacle slam' was paired with the whiffed-Apprehend line duplicated from tradeBad. dontsFull[0].d was pure filler with a wrong pronoun.",
+      "why": "A titled Don't whose body describes a different mistake teaches nothing and costs reader trust. Each body now explains the mistake its title names.",
+      "corrected": "dontsFull[0].d now explains Harsh Lesson pulling nearby tentacles in. dontsFull[1].d now states the damage echo and the Vessel condition. dontsFull[2].d now states Noxian Guillotine's 120s rank-1 cooldown against her passive heal.",
+      "confidence": "High",
+      "sources": ["enemyKit.W.text", "enemyKit.E.text", "enemyKit.P.text", "ownerKit.R.cd"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The brief's derived flags on Leap of Faith list grounding ('shuts off enemy dashes') and untargetable ('dodges timed burst and executes'). Riot's own description of Leap of Faith is only: 'Illaoi smashes her idol into the ground, dealing physical damage to nearby enemies. A Tentacle spawns for each enemy champion hit.' No grounding, no untargetability. The flags almost certainly fired on the literal words 'into the ground'.",
+      "why": "Per the standing rule, when a derived flag contradicts Riot's description the description wins. This one matters enormously: if the page told a Darius that her ult grounds him, he would hold Noxian Guillotine and Ghost through the exact window where they still work. I asserted neither the flag nor its negation in any player-facing text — I simply did not write it, and flagged it here.",
+      "corrected": "No text asserts grounding or untargetability on Leap of Faith. Flag misfire recorded in notes.",
+      "confidence": "High",
+      "sources": ["enemyKit.R.text", "enemyKit.R.flags"]
+    },
+    {
+      "point": 14,
+      "status": "missing",
+      "whatIsWrong": "Nothing on the page dates to a patch, and I have no verified 26.15 change data for either champion.",
+      "why": "Live patch is 26.15. The kits carry no patch metadata and I did not research changes, so I left every patch-sensitive claim untouched rather than date-stamp anything I could not verify.",
+      "corrected": "",
+      "confidence": "Low",
+      "sources": []
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[0]",
+      "before": "Skill",
+      "after": "Darius"
+    },
+    {
+      "layer": "content",
+      "path": "win[1]",
+      "before": "Illaoi",
+      "after": "Darius"
+    },
+    {
+      "layer": "content",
+      "path": "win[2]",
+      "before": "Illaoi",
+      "after": "Darius"
+    },
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Skill",
+      "after": "Illaoi"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Illaoi",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[6]",
+      "before": "Illaoi",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Darius"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Illaoi",
+      "after": "Darius"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Illaoi",
+      "after": "Darius"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Illaoi"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Illaoi",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Illaoi",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry threat: 7.5/10. If Illaoi gets ahead, shift from winning trades to wave control, vision, and playing with your jungler.",
+      "after": "Carry threat: 5/10. If Illaoi gets ahead, shift from winning trades to wave control, vision, and playing with your jungler."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Hemorrhage passive bleed completely overwhelms raw early base stats in any standing fight. Trade on his last-hits but don't chase past the wave.",
+      "after": "Hemorrhage passive bleed completely overwhelms raw early base stats in any standing fight. Trade on her last-hits but don't chase past the wave."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Noxian Guillotine deals true damage R = d + a \\times Stacks, bypassing defensive items completely. The execute resets on takedowns — all-in windows are now real kill windows.",
+      "after": "Both ults land, but hers swings the phase: Leap of Faith spawns another tentacle and Harsh Lesson keeps them swinging, so only commit Noxian Guillotine clear of her walls."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Dodge her Test of Spirit (E), destroy side wall tentacles, and kite her out when she drops Leap of Faith (R).",
+      "after": "Dodge Test of Spirit (E), fight mid-lane where walls can't spawn tentacles, and pull her off them with Apprehend."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "Dodge her Test of Spirit (E), destroy side wall tentacles, and kite her out when she drops Leap of Faith (R).",
+      "after": "Dodge Test of Spirit (E), fight mid-lane where walls can't spawn tentacles, and pull her off them with Apprehend."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Pull Illaoi as he steps to last-hit, W slow, land the Q outer ring, weave two autos, and walk away at 3-4 stacks with the heal banked.",
+      "after": "Pull Illaoi off the wall as she steps to last-hit, W slow, land the Q blade edge for the heal, weave two autos, and leave at 3-4 stacks."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Pull Illaoi as he steps to last-hit, W slow, land the Q outer ring, weave two autos, and walk away at 3-4 stacks with the heal banked.",
+      "after": "Pull Illaoi off the wall as she steps to last-hit, W slow, land the Q blade edge for the heal, weave two autos, and leave at 3-4 stacks."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Dodge it or you fight a spirit + tentacles. Until it’s spent, every commit is a coin flip.",
+      "after": "Dodge it or you fight a spirit that echoes your damage back. Down 16s at rank 1 — commit there."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Illaoi's favourite window — refusing it removes half his win condition.",
+      "after": "Harsh Lesson (W) makes every nearby tentacle swing at you — trade in open ground."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Your committal tool is the lane — burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Test of Spirit echoes damage onto you, and walking away from the spirit makes you a Vessel."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Whiffing Apprehend and then fighting anyway — without the pull you have no engage, and chasing through a wave bleeds you dry.",
+      "after": "Noxian Guillotine is 120s at rank 1 — throw it into a tentacle volley and her passive heal outpaces your true damage."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Illaoi Test of Spirit: matchup-defining — Dodge it or you fight a spirit + tentacles. Darius E (Apprehend): Long early cooldown. Never throw this out predictably; save it explicitly to interrupt their dash trajectories mid-flight or catch their retreat paths. Darius Ghost: Your primary lethal enabler. Keep this tool ready to completely blow through ranged poke or instant slows across the lane. • • Darius Top Lane Matchup Database 73",
+      "after": "- Illaoi Test of Spirit (E): 16s at rank 1, 12s at rank 5 — the whole matchup lives on this timer. Dodge it, then commit inside that window. Harsh Lesson (W) is only 4s, so it is always up; the punishable part is her being away from walls, not her cooldowns. Leap of Faith (R) is 120/95/70. Darius E (Apprehend) is 26s at rank 1 — never throw it predictably; save it to drag her off her tentacles, not to poke."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Illaoi's Test of Spirit: Dodge it or you fight a spirit + tentacles. Engage only while it is down.",
+      "after": "Test of Spirit is 16s at rank 1, and running from the spirit makes you a Vessel. Engage on its cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Freeze near your tower and make Illaoi walk into Apprehend range. Every trade should bank 3-5 bleed stacks; at 5, Noxian Might + R is a kill. If behind, farm with Q and wait for his Test of Spirit mistake.",
+      "after": "Freeze near your tower and make Illaoi walk into Apprehend range. Every trade should bank 3-5 bleed stacks; at 5, Noxian Might + R is a kill. If behind, farm with Q and wait for her Test of Spirit mistake."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Early you're ahead — before her tentacles cover the lane, E Apprehend her and W Crippling Strike for a clean trade while she's slow to reposition. Never stand next to a spawned tentacle: her Q Tentacle Smash and passive slam hits stack fast, so pull her away from them and trade in open ground.",
+      "after": "Early you're ahead — tentacles only spawn on walls, so fight mid-lane where she gets none. Apprehend (E) her off the wall, Crippling Strike (W) to slow, and take the outer Q blade for the heal. Her Harsh Lesson (W) is a 4-second dash that makes every nearby tentacle swing at you: never trade hugging terrain."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "This is her spike and the danger phase: R Leap of Faith spawns a ring of tentacles and her W Harsh Lesson lets her leap between them slamming you. Do NOT fight in her R zone — if she ults, disengage or you eat five tentacle slams. If you're forced in, use your own R Guillotine to burst her before the tentacles ramp.",
+      "after": "Her spike, and the danger phase: Leap of Faith (R) is on a 120s cooldown and spawns one tentacle per champion it hits — in a 1v1 that is one extra, not a field, so the real threat is Harsh Lesson (W) every 4s making every tentacle already near you swing. Fight her away from walls and the ult is survivable."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "It levels back toward even — your Stridebreaker all-in matches her Titanic/tank line if you fight away from tentacles. The whole matchup is a positioning duel: win the tentacle-spacing and you win the trade; fight in her setup and her passive slams out-damage your bleed.",
+      "after": "It levels back toward even — your Stridebreaker all-in matches her tank line if you fight away from walls. Buy Grievous Wounds by now: her tentacles heal her every time they connect with you, so an extended trade in her setup refills her health bar faster than your bleed drains it."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Skill-dependent late: dodge her E Test of Spirit tether (getting your spirit pulled is a near-death sentence) and never teamfight in a tentacle field. In the sidelane it's a pure spacing 1v1 — bait her R, step out, and re-engage once the tentacles expire.",
+      "after": "Skill-dependent late: Test of Spirit (E) reaches 900 units on a 12s cooldown, and once it lands, running is not an escape — leaving the spirit turns you into a Vessel that spawns her tentacles. Dodge it, then use its 12s window to walk her down away from walls."
+    }
+  ],
+  "notes": "FLAG MISFIRE (do not trust): Leap of Faith (R) carries derived flags 'grounding: shuts off enemy dashes' and 'untargetable: dodges timed burst and executes'. Riot's description says only that she smashes her idol into the ground, damages nearby enemies, and spawns a Tentacle per champion hit. The flags almost certainly fired on the literal phrase 'into the ground'. I asserted neither the flag nor its negation in any player-facing text. If these flags are wrong repo-wide, every matchup that reads Illaoi's R as a grounding/untargetability tool is affected.\n\nCARRY THREAT SELF-CONTRADICTION: breakdown.carry said 'Carry threat: 7.5/10' while three other places on the same page (carryRating, breakdown.difficulty, report[14].t) all say 5/10. I aligned breakdown.carry to 5/10 — that is the dedicated field plus the majority, not a judgement call about how threatening Illaoi is. Note the identical '7.5/10' appears in breakdown.carry on the Irelia page too, where the rest of the page says 8.5/10, so 7.5 looks like a hardcoded template default across every Darius matchup.\n\nI did NOT touch phases[N].rating. On this page the ratings are near-uniform (4-5/10 on every row) and carry no signal, but on the Irelia page they correlate clearly with which side owns the row in the OPPOSITE direction to how diffRating reads. Rather than guess the polarity I left them alone — see questionsForUser.\n\nDUPLICATED BLOCK: the identical 'Key Mechanical Cooldowns Darius E (Apprehend)... Darius Ghost...' paragraph appears verbatim inside breakdown.wave, report[4].t and (before this audit) breakdown.cooldowns. I cleaned it out of breakdown.cooldowns only; breakdown.wave and report[4].t still carry it plus a stray '• •'. That looks like a scrape artifact affecting more than this matchup — worth a repo-wide grep for 'Darius Top Lane Matchup Database'.\n\nUNCHANGED CLAIM I COULD NOT VERIFY: the original tldr said 'destroy side wall tentacles'. I replaced that clause with the verified terrain-spawn rule rather than asserting the opposite, because whether champions can attack Illaoi's tentacles is not in the kit files.\n\nHeader/packet drift: brief.games = 2157, packet.games = 2141. Not surfaced in any writable text."
+}

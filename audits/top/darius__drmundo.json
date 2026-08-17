@@ -1,0 +1,268 @@
+{
+  "ownerKey": "darius",
+  "enemy": "drmundo",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart says Darius owns Level 6, first item and two-plus items. Every other field on the page says the opposite: whys[4] 'At 6 Maximum Dosage heals through your 5-stack execute for Mundo', whys[5] 'First item his HP and regen outrun your bleed DPS', whys[6] 'With two-plus items his ult and max-health cleaver make him unkillable', plus spikes[1..3], mid and late. The win rate says the same thing. Also carryRating and report[14].t say 8.5/10 while breakdown.carry says 7.5/10.",
+      "why": "Darius wins this only 47.59% over 3852 games - one of the worst numbers on his page - and the packet levelChart independently records Dr. Mundo at Level 6, first item and two-plus items. No drmundo__darius mirror file exists, so nothing on the other side pins these rows. Three separate sources agree against the chart and nothing agrees with it, so the chart is what is wrong. I am proposing the three flips as one atomic group with their ratings; I deliberately did NOT flip Level 3, where the evidence is thinner, and instead made whys[2] agree with the Skill verdict already recorded there.",
+      "corrected": "Level 6, first item and two-plus items all belong to Dr. Mundo.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/content/darius.js",
+        "tools/audit-run/packets/darius.json",
+        "champ-data/darius.full.js"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 phase why is boilerplate about Noxian Guillotine and carries an un-rendered formula, 'R = d + a \\times Stacks'. It never mentions Maximum Dosage, which is the only reason the stage moves. spikes[1].text then states that 'Your Guillotine can still reset on minions', which is not a thing the ability can do.",
+      "why": "Maximum Dosage is a flat 120 seconds and 'instantly healing a percent of his missing Health', then adds Move Speed and regeneration over a long duration. Because the heal scales off missing health, it returns more the closer you get him to dead - it is strongest at exactly the moment your execute becomes available. Noxian Guillotine 'leaps to an enemy champion' and refreshes only 'if Noxian Guillotine is a killing blow', so it cannot be cast on a minion and cannot reset off one. Grievous Wounds therefore has to be on him before he ults, not bought in reaction to it.",
+      "corrected": "Maximum Dosage is 120s and instantly heals a percent of his missing health, so it pays out most when you have him lowest.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/drmundo.json",
+        "champ-data/_kits/darius.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two hard factual errors and one large omission. (a) The page calls Infected Bonesaw 'max-health' damage in whys[6] and spikes[2].text. Riot's text says current health. (b) Heart Zapper is named as the matchup-defining cooldown in eleven fields and its actual mechanic is never stated once - the page describes it only as a 'sustain spike + reset', and dontsFull[1].t calls it a 'W-reset', which is Blunt Force Trauma's property, not Heart Zapper's. (c) Blunt Force Trauma's missing-health scaling is nowhere on the page.",
+      "why": "Infected Bonesaw (Q, 4s, 975 range) deals 'damage to the first enemy hit based on their current health' - current, not max, so it hits hardest while you are healthy and tapers as the fight goes on, which is the opposite of the instinct the page teaches. Heart Zapper (W, 17/16.5/16/15.5/15s, 325 range) 'stor[es] a portion of damage he takes. At the end of the duration or on Recast, Dr. Mundo deals a burst of damage to nearby enemies. If the burst hit an enemy, he heals a percentage of the stored damage.' The heal is conditional on the burst connecting, so stepping outside 325 units before it pops denies the entire heal - that is the single most actionable fact in this matchup and it appears nowhere. Blunt Force Trauma (E, 9/8.25/7.5/6.75/6s) deals 'additional damage based on his missing Health' and is an auto-attack reset, so a low Mundo is more dangerous than a healthy one, not less.",
+      "corrected": "Heart Zapper only heals him if its end-of-duration burst hits someone - leave the 325-unit radius before it pops. Infected Bonesaw scales off your current health. Blunt Force Trauma hits harder the lower he is.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/drmundo.json",
+        "champ-data/_kits/_missing/darius.json"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags 'NO cooldown-sequencing advice anywhere'. breakdown.cooldowns is the field that should carry it and instead gives no numbers at all, then runs into two paragraphs of leaked source prose about Apprehend and Ghost.",
+      "why": "Heart Zapper 17/16.5/16/15.5/15, Maximum Dosage a flat 120, Infected Bonesaw 4, Blunt Force Trauma 9/8.25/7.5/6.75/6, against Apprehend at 26/23.5/21/18.5/16. Heart Zapper's 17 seconds is the only window in the lane long enough to plan a commit around.",
+      "corrected": "Heart Zapper 17s at rank 1 is the window; Maximum Dosage is a flat 120s.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/drmundo.json",
+        "tools/audit-run/packets/darius.json"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "dosFull[0].t already says 'Rush a Grievous Wounds item', which is right and matches champ-data/_kits/_missing/darius.json flagging Heart Zapper and Maximum Dosage as the anti-heal targets here. What was missing was the timing: because Maximum Dosage heals off missing health, the anti-heal has to be applied before he casts it, which I put into phases[4].why and spikes[1].text.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/_missing/darius.json",
+        "champ-data/_kits/drmundo.json"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[1].why ends in the orphan word 'Mundo.' and phases[2].why ends 'Mundo has to walk into pull range' with the opening clause missing. Both look like a find-and-replace that ate the surrounding text. breakdown.wave and report[4].t also carry the same leaked source block seen on camille and chogath, including the headings 'Key Mechanical Cooldowns' and 'How Darius Wins Trades' mid-paragraph.",
+      "why": "'Access to Crippling Strike (W) auto-attack reset provides immense localized burst punishes. Mundo.' is not a sentence, and it is the level-2 advice on a page for a lane that is decided early.",
+      "corrected": "Rewritten so both phases read as complete advice.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/darius.full.js"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Skill",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Darius",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "content",
+      "path": "win[6]",
+      "before": "Darius",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].rating",
+      "before": "6/10",
+      "after": "4/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Darius",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].rating",
+      "before": "6/10",
+      "after": "3.5/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Darius",
+      "after": "Dr. Mundo"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].rating",
+      "before": "6/10",
+      "after": "3/10"
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 E pull lands cleanly before his passive can cleanse it.",
+      "after": "Level 3 both kits are full; spacing your pull decides the trade."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "With two-plus items his ult and max-health cleaver make him unkillable.",
+      "after": "Two-plus items: his ult heal and current-health cleaver make him unkillable."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Mundo's R Maximum Dosage gives a huge burst heal plus move speed and grey-health regen, which lets him tank your 5-stack execute and walk away. Your Guillotine can still reset on minions but rarely finishes him once his ult is up.",
+      "after": "Maximum Dosage is 120s: it instantly heals a percent of his missing health, so the lower you get him the more it hands back. Noxian Guillotine only targets champions and only refunds on a kill — land Grievous Wounds before you commit."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "After Mundo builds Heartsteel or Sunfire his HP and regen outrun your bleed DPS. His cleaver Q max-health damage chunks you while you struggle to burst through his ult heal — respect the all-in.",
+      "after": "After Heartsteel or Sunfire his HP and regen outrun your bleed. Infected Bonesaw is a 4s throw at 975 range and scales off your current health, so it hurts most while you are healthy — respect the all-in."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Stack HP items so max-health cleaver and ult make him unkillable",
+      "after": "Stack HP so his ult heal and Blunt Force Trauma both scale up"
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Pop spellshield canister with E, look for long-lane Ghost runs, and break through his health bar with true damage before his items arrive.",
+      "after": "Leave his Heart Zapper radius before the burst so it cannot heal him, buy Grievous Wounds early, and break his bar before his items land."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "Pop spellshield canister with E, look for long-lane Ghost runs, and break through his health bar with true damage before his items arrive.",
+      "after": "Leave his Heart Zapper radius before the burst so it cannot heal him, buy Grievous Wounds early, and break his bar before his items land."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Anti-heal and execute before his regen catches up. Track Heart Zapper before every commit and keep the wave on your side.",
+      "after": "Anti-heal and execute before his regen catches up. Heart Zapper is 17s and only heals him if its burst connects."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Access to Crippling Strike (W) auto-attack reset provides immense localized burst punishes. Mundo.",
+      "after": "Crippling Strike (W) auto-reset gives you real burst, and every cleaver he throws costs him his own health."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full basic kits unlocked on both sides; spacing out displacements determines the winner. Mundo has to walk into pull range.",
+      "after": "Full basic kits on both sides; spacing decides it. Keep the wave near your tower so Mundo has to walk into Apprehend's 535 range."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Noxian Guillotine deals true damage R = d + a \\times Stacks, bypassing defensive items completely. The execute resets on takedowns — all-in windows are now real kill windows.",
+      "after": "Maximum Dosage is 120s and instantly heals a percent of his missing health, so your 5-stack Guillotine lands and he still walks. Grievous Wounds has to be on him before 6."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Stridebreaker fixes your stickiness — the run-down you couldn't finish before is now lethal. Force fights on Heart Zapper's cooldown.",
+      "after": "Stridebreaker sticks, but Heartsteel regen outruns your bleed. Heart Zapper is 17s at rank 1 — force the fight while it is down."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "You stay a side-lane terror but fall off vs grouped teams. Look for flank pulls in fights; one reset chain can win the game.",
+      "after": "You will not solo-kill a full-build Mundo. Take the early lead to other lanes and look for flank pulls instead of the duel."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Freeze near your tower and make Dr. Mundo walk into Apprehend range. Every trade should bank 3-5 bleed stacks; at 5, Noxian Might + R is a kill. If behind, farm with Q and wait for his Heart Zapper mistake.",
+      "after": "Freeze near your tower and make Dr. Mundo walk into Apprehend's 535 range. Every trade should bank 3-5 bleed stacks; at 5, Noxian Might + R is a kill. If behind, farm with Q and wait out Heart Zapper's 17s."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Dr. Mundo Heart Zapper: matchup-defining — His sustain spike + reset. Burst when it’s down. Darius E (Apprehend): Long early cooldown. Never throw this out predictably; save it explicitly to interrupt their dash trajectories mid-flight or catch their retreat paths. Darius Ghost: Your primary lethal enabler. Keep this tool ready to completely blow through ranged poke or instant slows across the lane.",
+      "after": "- Dr. Mundo Heart Zapper: matchup-defining — 17/16.5/16/15.5/15s. It stores the damage he takes and heals him only if the end burst hits someone, so leave its 325-unit radius before it pops. - Dr. Mundo Maximum Dosage: a flat 120s that instantly heals a percent of his missing health. - Dr. Mundo Infected Bonesaw: 4s at 975 range, and it costs him health. - Dr. Mundo Blunt Force Trauma: 9s, and it hits harder the lower he is."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry threat: 7.5/10. If Dr. Mundo gets ahead, shift from winning trades to wave control, vision, and playing with your jungler.",
+      "after": "Carry threat: 8.5/10. If Dr. Mundo gets ahead, shift from winning trades to wave control, vision, and playing with your jungler."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His sustain spike + reset. Burst when it’s down. Its cooldown is the green light — wait for it.",
+      "after": "Heart Zapper is 17s at rank 1, and it heals him only if the end-of-duration burst hits someone."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].t",
+      "before": "Chase his W-reset",
+      "after": "Trade into his Heart Zapper"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Your committal tool is the lane — burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Blunt Force Trauma does more damage the lower his health is, so a low Mundo is more dangerous, not less."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Whiffing Apprehend and then fighting anyway — without the pull you have no engage, and chasing through a wave bleeds you dry.",
+      "after": "Heart Zapper banks the damage you pour into him and pays it back as a heal — leave its 325-unit radius before it bursts."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Dr. Mundo's Heart Zapper: His sustain spike + reset. Burst when it’s down. Engage only while it is down.",
+      "after": "Heart Zapper only heals him if its end-of-duration burst hits someone. Step outside 325 units before it pops."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Heart Zapper's cooldown, on your level-6 spike, and on your first-item timing. Bait the answer, then sign.",
+      "after": "Commit on Heart Zapper's 17s cooldown, on your level-6 spike, and before his first item. Bait the answer, then sign."
+    }
+  ],
+  "notes": "DELIBERATELY LEFT ALONE - this is the biggest open question on the page. Six fields state that Goes Where He Pleases blocks or 'cleanses' Apprehend: tldr ('Pop spellshield canister with E'), breakdown.early, spikes[3].text ('passive cleanses one disable every few seconds (dodging your E pull)'), the mid text, the late text, and whys[2]. Riot's text says the passive 'resists the first Immobilizing effect that hits him', while Apprehend 'sweeps up his enemies with his axe's hook and pulls them to him' - a displacement, which is not obviously an immobilizing effect. Whether a pull triggers the passive is exactly the class of thing champ-data marks unknown, and the kit file compounds it by tagging Darius's E with a 'knockup' flag his description does not support. I rewrote whys[2] and the tldr around facts I could source rather than repeating the claim, and left the other four fields untouched. If the passive does not eat Apprehend, four fields are telling the player his engage is countered when it is not, and that changes how the whole lane is played. Note also that the passive's cooldown is null in the kit, so 'every few seconds' in spikes[3].text has no source. Separately: breakdown.wave and report[4].t carry the same leaked source block found on camille and chogath."
+}

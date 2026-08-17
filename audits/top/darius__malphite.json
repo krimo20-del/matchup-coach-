@@ -1,0 +1,159 @@
+{
+  "ownerKey": "darius",
+  "enemy": "malphite",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both charts read Darius/Darius/Skill/Darius/Skill/Darius/Darius. The content whys under them read Darius x5 then Malphite twice, and the packet levelChart says the same. The chart currently hands Darius the two stages he actually loses and calls two stages he wins 'Skill'.",
+      "why": "Malphite's flip is an item timing, not a level: Ground Slam deals damage 'based on his Armor', so his first armour component makes it hit harder AND makes his own resists blunt a pure-AD Darius. Before that he owns nothing that beats a walk-up — Seismic Shard is 8s at 625 range and Granite Shield only holds 10% of his max health.",
+      "corrected": "Chart set to Darius through Level 6, Malphite at First item and Two+ items — proposed as one atomic group across both layers. Level 3 and Level 6 whys rewritten so the text stops calling them coin-flips.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/malphite.json", "tools/audit-run/packets/darius.json", "audits/top/malphite__darius.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[5].why (First item) was generic Stridebreaker boilerplate — 'Stridebreaker fixes your stickiness' — attached to the one stage where the lane turns against you. spikes[2] also credits Malphite's tankiness to 'his passive shield plus W armor'; Thunderclap grants no armour anywhere in Riot's text.",
+      "why": "Ground Slam 'deals magic damage based on his Armor', so every armour item he buys is an offensive purchase as well as a defensive one. That is the real first-item spike and it belongs to him, not to your Stridebreaker.",
+      "corrected": "First-item phase now names Ground Slam's Armor scaling as the reason the lane flips; spikes[2] swaps the invented 'W armor' for the actual Ground Slam interaction.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/malphite.json", "audits/top/malphite__darius.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The single decisive interaction in this lane appears nowhere on the Darius side: Ground Slam reduces attack speed, and Darius' whole damage curve runs through attacks.",
+      "why": "Hemorrhage stacks off 'attacks and damaging abilities' and Crippling Strike is an auto-attack reset, so cutting attack speed starves the bleed AND softens your reset in one 7s button. It is a flat 7s at every rank, which makes it the most punishable and most repeatable cooldown in the matchup. The mirror page (audits/top/malphite__darius.json) already states this from Malphite's side; this page did not state it from yours.",
+      "corrected": "Ground Slam's 7s attack-speed cut now appears in winCon, breakdown.early, breakdown.cooldowns, dosFull[0] and the Lvl 3-5 spike, with the instruction to step in on the gap after he spends it.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/malphite.json", "champ-data/_kits/darius.json", "audits/top/malphite__darius.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Thunderclap is referred to only as 'his W-empowered autos' and 'his W'. Neither the auto-attack reset nor the aftershock duration is stated.",
+      "why": "Thunderclap is 10s at rank 1 and carries the autoReset flag — his damage opens on an attack wind-up, not on a visible cast, so the tell you react to is the swing. 'For the next few seconds, his attacks create aftershocks in front of him', which is why standing in front of him after the first hit is the mistake.",
+      "corrected": "dontsFull[0] now names Thunderclap, its auto reset and the aftershock window.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/malphite.json", "champ-data/_kits/_missing/darius.json (rules: autoreset-burst-tell, onhit-itemization)"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why contains raw LaTeX leaking onto the page: 'Noxian Guillotine deals true damage R = d + a \\times Stacks, bypassing defensive items completely.'",
+      "why": "A formula fragment with a stray backslash renders as literal '\\times' in the level chart. It also buries the only thing the reader needs at 6 against a stacking-armour target.",
+      "corrected": "Replaced with plain prose stating that the armour he is about to buy does nothing to Guillotine's true damage.",
+      "confidence": "High",
+      "sources": ["champ-data/darius.full.js", "champ-data/_kits/darius.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Darius" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5.5/10", "after": "7.5/10" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Darius" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[5].side", "before": "Darius", "after": "Malphite" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].side", "before": "Darius", "after": "Malphite" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10" },
+
+    { "layer": "content", "path": "win[2]", "before": "Skill", "after": "Darius" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Darius" },
+    { "layer": "content", "path": "win[5]", "before": "Darius", "after": "Malphite" },
+    { "layer": "content", "path": "win[6]", "before": "Darius", "after": "Malphite" },
+
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Pop his stone shield early, activate Ghost to counter his speed steal projectile, and completely ignore his stacked armor using your pure true damage ultimate.",
+      "after": "Pop Granite Shield with one auto, Ghost through the Seismic Shard speed steal, and ignore all the armour he stacks — Noxian Guillotine is true damage."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Out-trade his poke; respect his armor. Track Unstoppable Force before every commit and keep the wave on your side.",
+      "after": "Out-trade him before his armour item. Ground Slam's 7s attack-speed cut is what starves Hemorrhage — fight in that gap."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full basic kits unlocked on both sides; spacing out displacements determines the winner. Keep the wave near your tower so Malphite has to walk into pull range.",
+      "after": "Full kit online and Granite Shield only holds 10% of his health — one auto pops it. Keep the wave near your tower so Malphite has to walk into pull range."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Noxian Guillotine deals true damage R = d + a \\times Stacks, bypassing defensive items completely. The execute resets on takedowns — all-in windows are now real kill windows.",
+      "after": "Noxian Guillotine is true damage, so the armour he is about to buy takes nothing off it. The execute refreshes on takedowns — all-in windows are now real kill windows."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Stridebreaker fixes your stickiness — the run-down you couldn't finish before is now lethal. Force fights on Unstoppable Force's cooldown.",
+      "after": "His first armour item is the flip — Ground Slam damages off his own Armor, so it hits harder the more he stacks. Force fights before it finishes."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "You stay a side-lane terror but fall off vs grouped teams. Look for flank pulls in fights; one reset chain can win the game.",
+      "after": "Full-armour Malphite walls your physical damage and Unstoppable Force wins fights outright. Flank for pulls and end before he groups."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Malphite stacks armor against your autos but is passive in lane. Trade between his Q, build some armor pen, and don’t waste cooldowns into his W-empowered autos. Don't chase past the wave into Unstoppable Force.",
+      "after": "Malphite stacks armor against your autos but is passive in lane. Ground Slam is a flat 7s and cuts your attack speed — that is what starves Hemorrhage, so trade in the window after he spends it, not into his Thunderclap."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Malphite Unstoppable Force: matchup-defining — Saved for fights. Lane is fine without it. Darius E (Apprehend): Long early cooldown. Never throw this out predictably; save it explicitly to interrupt their dash trajectories mid-flight or catch their retreat paths. Darius Ghost: Your primary lethal enabler. Keep this tool ready to completely blow through ranged poke or instant slows across the lane.",
+      "after": "- Ground Slam (E): a flat 7s and the real lane cooldown — it cuts your attack speed, so Hemorrhage stacks slower and Crippling Strike lands softer. Step up the second he spends it. - Seismic Shard (Q): 8s flat at 625 range, steals your move speed for 3s. - Unstoppable Force: 130s at rank 1, saved for fights. - Apprehend: 26s at rank 1, so never throw it predictably."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Pull/trade between his Q",
+      "after": "Step in right after Ground Slam"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Saved for fights. Lane is fine without it. Commit on its cooldown, never into it.",
+      "after": "Its 7s attack-speed cut is what starves Hemorrhage — trade in the gap, not into it."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Malphite's favourite window — refusing it removes half his win condition.",
+      "after": "Thunderclap opens on an auto reset and cleaves for seconds — leave the wind-up alone."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Before Malphite stacks armor and a Bramble/Sunfire he's soft: E Apprehend him, W Crippling Strike and Q the outer blade to build Hemorrhage fast, since his only trade tool is a mana-hungry Q Seismic Shard poke and passive shield you pop with one auto.",
+      "after": "Before Malphite stacks armor and a Bramble/Sunfire he's soft: E Apprehend him, W Crippling Strike and Q the outer blade to build Hemorrhage fast, stepping in on the 7s gap after Ground Slam so his attack-speed cut never lands on your rotation."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Once Malphite builds first-item armor (Sunfire/Iceborn) your physical Hemorrhage damage drops off a cliff and his passive shield plus W armor make him nearly unkillable in lane — the trade math flips to him.",
+      "after": "Once Malphite builds first-item armor (Sunfire/Iceborn) your physical Hemorrhage damage drops off a cliff, and Ground Slam damages off that same Armor while cutting your attack speed — the trade math flips to him."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Once Malphite finishes first-item armor he becomes an AD-shredding wall you can't duel, and his R Unstoppable Force flips fights; bank an early gold and turret lead, then play for objectives rather than a losing sidelane 1v1.",
+      "after": "Once Malphite finishes first-item armor he becomes an AD-shredding wall you can't duel, and Unstoppable Force at 130s still flips any fight; bank an early gold and turret lead, then play objectives rather than a losing sidelane 1v1."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "A stacked R still executes a not-yet-tanky Malphite at 6.",
+      "after": "Guillotine's true damage executes Malphite before his armour."
+    }
+  ],
+  "notes": "MIRROR: audits/top/malphite__darius.json exists and I reused its mechanical findings (Ground Slam 7s attack-speed cut vs Hemorrhage and Crippling Strike; Seismic Shard 625 range; Guillotine true damage beating stacked armour; Apprehend 26s) rather than re-deriving them, and stated them from the Darius side. The two sides now DISAGREE on the chart and the mirror is the one that is wrong: malphite__darius left phases[2] and phases[4] as 'Skill' and phases[5]/[6] as 'Darius', even though its own phases[5].why says 'Your first armour item flips it'. My side follows the packet levelChart and both sets of whys. mirror-fix.js should be run after both apply; if it resolves toward the malphite file instead, this matchup will end up wrong on both pages. Deliberately NOT written, agreeing with the mirror agent: the malphite kit derives a 'grounding' flag on both Seismic Shard and Ground Slam, but Riot's descriptions only say move-speed steal and attack-speed reduction, so no grounding claim appears on either page. Also a derived-flag misfire: _missing/darius.json lists 'resistances-invalidated (Granite Shield P)' for this matchup, but Granite Shield is a flat 10%-max-health shield and bypasses no resistances — no edit made from it. Not touched: MC_WR_TABLES."
+}

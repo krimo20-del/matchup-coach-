@@ -1,0 +1,71 @@
+{
+  "ownerKey": "garen",
+  "enemy": "zac",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 6 reads 'Skill' on both layers where the packet says Garen, and the full layer's 2+ items row uses the non-champion token 'Zac utility'.",
+      "why": "The mirror audit (zac__garen) already settled this chart — its recorded correction was 'Aligned the full layer to the content chart — Garen through first item, Zac at 2+ items'. whys[4] on this side agrees: 'R at 6 executes a committed Zac dive once his passive blobs are gone'. Packet is Garen, Garen, Garen, Garen, Garen, Garen, Zac.",
+      "corrected": "Level 6 -> Garen 6/10 on both layers; the 2+ items token normalised to 'Zac'. That leaves both directions saying Garen owns everything up to first item and Zac takes over at two items — no mirror conflict.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "mirrorFindings point 2", "currentText.content.whys[4]", "packet.winRate 53.52 / 1889 games"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two fabricated ability names, a wrong cooldown, and the decisive sustain interaction is missing. spikes[0] writes 'Stretching Strike', spikes[1] writes 'Elastic Slingshots', and report[5] gives Elastic Slingshot as 16s.",
+      "why": "The real names are Stretching Strikes (Q) and Elastic Slingshot (E). Q is 14/12.5/11/9.5/8 — 14s at rank 1. E is 21/18/15/12/9 — 21s at rank 1, not 16s, and it drops to 9s maxed, which is why the early window is so much wider than the late one. The interaction nothing on the page states: Unstable Matter (W) is a 5-second, percent-maximum-health magic hit, and Garen's Perseverance only regenerates 'if Garen has not recently been struck by damage or enemy abilities' — so Zac's W chip alone switches off Garen's sustain, and armour does nothing against it. The mirror audit reached the same conclusion from Zac's side ('the regen only ticks while untouched, so W chip shuts it down'), so both directions now say it.",
+      "corrected": "Use the real names, quote 14s / 21s, and state that W chip denies Perseverance and ignores armour.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E text, cds and flags", "ownerKit P text", "packet.enemyAbilities", "mirrorFindings point 4"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1] says the execute lands 'before he can bounce out' with no mention of the revive.",
+      "why": "Cell Division: on fatal damage Zac splits into 4 bloblets that try to recombine, and if any survive he revives with health scaled to the survivors. An execute that kills him while bloblets live does not end the fight — you have to clear them. That, not the bounce, is what a spent 120s Demacian Justice runs into.",
+      "corrected": "Name the revive condition so the player knows the execute is conditional on the bloblets.",
+      "confidence": "High",
+      "sources": ["enemyKit P text", "ownerKit R cd 120/100/80"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Garen" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Garen" },
+    { "layer": "full", "path": "phases[4].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[6].side", "before": "Zac utility", "after": "Zac" },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Zac’s Elastic Slingshot (16s): His engage. Punish the cooldown. It’s down or you don’t go.",
+      "after": "Elastic Slingshot is 21s at rank 1 and only 9s maxed — that early gap is your whole window."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Let him eat blobs. Get E-knocked-up. Extend into his Q pull. The R buys fights, not poke — spend it like the last one in stock.",
+      "after": "Let him eat blobs. Get E-knocked-up. Stack armour — Unstable Matter is percent max health magic damage, every 5 seconds."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Silence Zac as he winds up his Q (Stretching Strike) grab and spin on him — his blobs and E charge are on long cooldowns early, so he can't sustain through your Judgment before you reset the trade with Perseverance.",
+      "after": "Silence Stretching Strikes (Q) as he winds up — it is 14s at rank 1 and Elastic Slingshot is 21s, so both are dead weight early. But his W ticks every 5s, and any chip stops Perseverance regenerating."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Demacian Justice punishes a committed Zac ult or E dive: after he Elastic Slingshots in and his passive blobs are already spent, R executes the low body before he can bounce out.",
+      "after": "Demacian Justice punishes a committed dive: after Elastic Slingshot lands and Cell Division has already popped, R executes the body — but if bloblets survive he revives."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Through levels 3-6 you stay ahead — punish his Q whiffs, cleave his blobs so he can't heal, and hold R to execute a committed Elastic Slingshot dive once his blobs are spent.",
+      "after": "Through levels 3-6 you stay ahead — punish his Q whiffs and cleave his blobs so he cannot heal. Perseverance only ticks while untouched, so break off fully rather than trading chip."
+    }
+  ],
+  "notes": "MIRROR REUSED: zac__garen was already audited, so I restated its findings from Garen's side rather than re-deriving them — the level-chart alignment (Garen through first item, Zac at 2+ items) and the Perseverance-vs-W-chip interaction both come from that audit and now read identically in both directions, with inverse ratings. Both packet suspectNames were REAL errors here, not false positives: 'Stretching Strike' -> Stretching Strikes, and 'Elastic Slingshots' used as a verb -> Elastic Slingshot. DERIVED-FLAG WARNING for the user: Zac's E carries a 'grounding: shuts off enemy dashes' flag in the kit file, but Riot's own E text is just 'Zac attaches his arms to the ground and stretches back, launching himself forward' — nothing about grounding enemies. Per the calibration rule I trusted the description, asserted no grounding anywhere, and am flagging the flag as a probable tooltip-parse misfire ('attaches his arms to the ground' almost certainly triggered it). It would be worth checking whether that same false grounding flag has leaked into other Zac matchups."
+}

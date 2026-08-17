@@ -1,0 +1,28 @@
+{
+  "ownerKey": "garen",
+  "enemy": "kayle",
+  "lane": "top",
+  "audit": [
+    { "point": 2, "status": "needs-correction", "whatIsWrong": "Garen wins 46.9% over 4002 games, yet the chart hands Garen 6 of 7 stages and the rating fields call it 'Favoured matchup — difficulty 4/10, Kayle carry threat 5/10' while diff is already 'HARD'.", "why": "A losing win rate against a hypercarry cannot be a 4/10 favoured lane. The chart has to concede the item stages.", "corrected": "Flipped First item to Kayle (win[5], phases[5].side/rating/why together) and set diffRating 6/10, carryRating 9/10, plus the two difficulty summary strings.", "confidence": "High", "sources": ["packet winRate/games"] },
+    { "point": 3, "status": "needs-correction", "whatIsWrong": "report[5].t gives Divine Judgment a 100s cooldown.", "why": "Divine Judgment is 160/120/80s. At rank 1 it is a whole wave of downtime — that is the single biggest all-in window in the lane and the old number understates it.", "corrected": "Rewrote report[5].t around 160s at rank 1.", "confidence": "High", "sources": ["champ-data/_kits/kayle.json"] },
+    { "point": 4, "status": "needs-correction", "whatIsWrong": "Three fields attribute the slow to Kayle's E ('her E slow kiting', 'no escape besides E slow-poke', 'Kite with E slow').", "why": "The slow is Radiant Blast (Q), a 900-range piercing sword that also shreds resistances, 12/11/10/9/8s. Starfire Spellblade (E) is an auto-attack reset dealing missing-health damage — no slow at all. Decisive Strike breaks all slows affecting Garen, so Q purges Radiant Blast outright; and the E wind-up, not a cast, is the tell that her burst is coming.", "corrected": "Rewrote spikes[0].text, spikes[1].text, wants.you[1] and wants.foe[1] with the real names and the purge interaction.", "confidence": "High", "sources": ["champ-data/_kits/kayle.json", "_missing/garen.json rules autoreset-burst-tell + needs-antiheal"] },
+    { "point": 10, "status": "correct", "whatIsWrong": "", "why": "report[8].t already buys Executioner's Calling first back and prioritises Mortal Reminder against Celestial Blessing's 15s heal, which is what the needs-antiheal flag asks for.", "corrected": "", "confidence": "High", "sources": ["brief currentText"] }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[5]", "before": "Garen", "after": "Kayle" },
+    { "layer": "full", "path": "phases[5].side", "before": "Garen", "after": "Kayle" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[5].why", "before": "Completed baseline component combat alignment shifts.", "after": "Celestial Blessing sustain overtakes your chip damage." },
+    { "layer": "content", "path": "whys[5]", "before": "With your first item you press the lead while she's pre-11 and grounded.", "after": "Your first item lands, but Celestial Blessing's 15s heal outpaces your chip." },
+    { "layer": "full", "path": "diffRating", "before": "4/10", "after": "6/10" },
+    { "layer": "full", "path": "carryRating", "before": "5/10", "after": "9/10" },
+    { "layer": "full", "path": "breakdown.difficulty", "before": "Favoured matchup — difficulty 4/10, Kayle carry threat 5/10.", "after": "Hard matchup — difficulty 6/10, Kayle carry threat 9/10." },
+    { "layer": "full", "path": "report[14].t", "before": "Favoured matchup — difficulty 4/10, Kayle carry threat 5/10.", "after": "Hard matchup — difficulty 6/10, Kayle carry threat 9/10." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Kayle’s Divine Judgment (Invuln) (100s): Her get-out at 6. Bait it. It’s down or you don’t go.", "after": "Divine Judgment is 160s at rank 1 — a whole wave of downtime. If she burns it, all-in the next two waves." },
+    { "layer": "content", "path": "spikes[0].text", "before": "Kayle is one of the weakest early laners; Q-silence into E devastates her and you should be looking to solo-kill or force flash every wave.", "after": "Kayle is the weakest early laner in the game; her Starfire Spellblade wind-up is the tell to step in, then Q-silence into E kills her outright." },
+    { "layer": "content", "path": "spikes[1].text", "before": "You have R execute and she still has no escape besides E slow-poke; keep the all-in pressure relentless.", "after": "You have R execute and her only peel is Radiant Blast's slow, which your Q purges — keep running her down." },
+    { "layer": "content", "path": "wants.you[1]", "before": "Q-silence to stop her E slow kiting", "after": "Q-silence to deny her Radiant Blast" },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Kite with E slow and ranged autos", "after": "Kite with Radiant Blast and autos" }
+  ],
+  "notes": "Left every 'level 11 / level 16' claim untouched — the kit text lists Kayle's Divine Ascent bonuses without levels and I could not verify the live 26.15 breakpoints from the data provided. Radiant Blast also reduces resistances, which is why her chip beats your armour stacking; no in-band field existed to carry that. tldr/winCon/tradeGood carry OCR debris ('Garen Top Lane Matchup Database (1-70) 88') across this whole file."
+}

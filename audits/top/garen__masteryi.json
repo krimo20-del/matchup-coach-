@@ -1,0 +1,18 @@
+{
+  "ownerKey": "garen",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    { "point": 2, "status": "correct", "whatIsWrong": "", "why": "Content chart (Garen, Garen, Skill, Skill, Yi, Yi, Yi) matches the packet exactly and matches a 50.14% win rate over 734 games — Garen owns levels 1-2, the lane evens once Alpha Strike is online, and Yi takes everything from 6.", "corrected": "", "confidence": "High", "sources": ["packet levelChart", "packet winRate"] },
+    { "point": 3, "status": "missing", "whatIsWrong": "spikes[] has three entries and stops at 'Enemy first item' — there is no late-game entry, and no cooldown numbers anywhere (packet flags zero sequencing cues).", "why": "The stage where Highlander decides teamfights is blank, and the advice 'bait Meditate' has no timer attached to it.", "corrected": "Created spikes[3].text/.when for the late game, and put the real numbers into spikes[0] and spikes[1]: Alpha Strike 20s at rank 1, Meditate 10s, Highlander 85s.", "confidence": "High", "sources": ["champ-data/_kits/masteryi.json", "packet defects"] },
+    { "point": 4, "status": "needs-correction", "whatIsWrong": "The page says Alpha Strike 'dodges your spin' but never states that it makes him untargetable, and never says that Highlander makes him immune to slows.", "why": "Untargetable is the reason Demacian Justice can be thrown away entirely — the execute fizzles, not just the spin. And Decisive Strike's slow does nothing at all while Highlander is up, so the Q is only worth pressing for the silence in that window. Basic attacks also reduce Alpha Strike's cooldown, so the 20s figure shrinks the longer he is hitting something.", "corrected": "Wrote the untargetability into wants.foe[1] and spikes[0], the slow immunity into the new spikes[3].", "confidence": "High", "sources": ["champ-data/_kits/masteryi.json", "_missing/garen.json rules untargetable-dodges-burst, needs-antiheal"] }
+  ],
+  "edits": [
+    { "layer": "content", "path": "spikes[3].text", "before": null, "after": "Highlander is 85s and makes him immune to slows, so your Q slow is dead weight — press it for the silence, and only where your team's CC can follow." },
+    { "layer": "content", "path": "spikes[3].when", "before": null, "after": "Enemy 2+ items" },
+    { "layer": "content", "path": "spikes[0].text", "before": "Silence-into-spin beats his weak autos — this is your bully window, cash it.", "after": "Alpha Strike is 20s at rank 1 — before it, silence-into-spin bullies him." },
+    { "layer": "content", "path": "spikes[1].text", "before": "Meditate can blank Demacian Justice — stop counting on the execute to finish him.", "after": "Meditate is 10s and channels — any CC breaks it, but your R can be blanked by it." },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Alpha Strike dodges on your Judgment", "after": "Alpha Strike untargetable through your R" }
+  ],
+  "notes": "The two suspectNames hits ('Decisive Strike's', 'Alpha Strike's') are false positives — both are possessives of the correct names. Meditate heals and reduces damage on a 10s cooldown, which is the needs-antiheal case, but there is no itemization field in this matchup to buy Grievous Wounds in: the full layer for garen vs masteryi does not exist at all, so there is no report[8], no level-chart phases and no trading block on the page."
+}

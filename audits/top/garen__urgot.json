@@ -1,0 +1,91 @@
+{
+  "ownerKey": "garen",
+  "enemy": "urgot",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart is 'Urgot' in all seven rows on both layers, but the packet levelChart ends in 'Skill' at 2+ items, and whys[6] already says the lane levels to a skill matchup late. Win rate is 50.86% over 2214 games, which does not support Urgot owning every stage.",
+      "why": "The final row contradicts both the packet chart and the prose sitting next to it.",
+      "corrected": "Flip the last row (win[6] and phases[6].side) to 'Skill' so the chart matches packet and prose. Earlier rows stay Urgot: his ranged poke and shred genuinely own levels 1-6 into a melee with no gap-closer beyond a 300-range Decisive Strike.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate", "currentText.content.whys[6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spike text treats Fear Beyond Death as a flat execute with no timing detail, and gives no cooldown for it.",
+      "why": "Riot's text: R impales the first champion hit at 2500 range and only executes below a health threshold. Cooldown is 100/85/70. That number is what makes 'bait it then commit' actionable.",
+      "corrected": "State the 100s rank-1 cooldown and the fact that above the threshold it does not execute, so the all-in window is the R downtime.",
+      "confidence": "High",
+      "sources": ["enemyKit R text and cd 100/85/70"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The decisive interaction of this matchup is never stated: Urgot's Corrosive Charge and Purge both slow, and Garen's Decisive Strike breaks free of all slows affecting him on cast. Every page instead implies his slows stop the gap-close.",
+      "why": "Riot's Garen Q text: 'gains a burst of Move Speed, breaking free of all slows affecting him.' That directly answers Urgot's two slow tools. Disdain (E) is his real engage/disengage at 16s rank 1 / 14s rank 5, and it shields him.",
+      "corrected": "Q purges his slows and closes the gap regardless; the thing that actually beats you is Purge DPS plus Echoing Flames leg shots during the silence window, and Disdain hurling you back out.",
+      "confidence": "High",
+      "sources": ["ownerKit Q text/flags", "enemyKit Q/W/E text, cd 16/15.5/15/14.5/14"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "report[5] cites Disdain as '(14s)' flat.",
+      "why": "14s is rank 5 only; at rank 1 it is 16s, which is the number that matters in lane.",
+      "corrected": "Quote 16s at rank 1.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flags 'Land Corrosive Charge' as a probable wrong name. It is a false positive — Corrosive Charge is Urgot's real Q per the kit file.",
+      "corrected": "No name change needed; the line was reworded only for accuracy about the slow, not the name.",
+      "confidence": "High",
+      "sources": ["enemyKit Q name"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[6]",
+      "before": "Urgot",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Urgot",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Urgot's Corrosive Charge plus Purge shreds you the moment you Q in; his passive leg shots and W attack-speed out-DPS your silence trade even when you close the gap.",
+      "after": "Corrosive Charge slows, but Decisive Strike breaks all slows on cast, so you still reach him; what beats you is Purge and Echoing Flames leg shots out-DPSing your silence window."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Fear Beyond Death is a hard execute: below the threshold he flips you and any nearby ally can pile on, and it also negates the value of your own R.",
+      "after": "Fear Beyond Death impales at 2500 range and only executes below the threshold — it is up every 100s at rank 1, so bait it, then all-in while it is down."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land Corrosive Charge to slow your Q gap-close",
+      "after": "Land Corrosive Charge before your Q comes up"
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Urgot’s Disdain (Flip) (14s): His engage. Bait it, then spin. The whole green-light system is its cooldown.",
+      "after": "Disdain (E) is 16s at rank 1: it shields him and hurls you away. Bait it, then Q in — Q breaks his slows."
+    }
+  ],
+  "notes": "Level-chart flip proposed as one group (content win[6] + full phases[6].side) — only the last row disagrees with the packet chart. packet.suspectNames flagged 'Land Corrosive Charge' as a wrong ability name; that is a FALSE POSITIVE, Corrosive Charge is correct per the kit. Left wants.you[2] ('Use Q silence to stop his Purge mid-channel') untouched: Riot's Purge text does not say whether it is interruptible by silence, so I could not verify it — recorded in unverified. Also left the diff/diffRating (HARD, 8/10) alone despite a 50.86% win rate; that is a champion-level judgement call, see questionsForUser."
+}

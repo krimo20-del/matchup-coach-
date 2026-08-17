@@ -1,0 +1,124 @@
+{
+  "ownerKey": "garen",
+  "enemy": "zaahen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The entire full layer says 'Pending kit verification profile parameters' where the enemy's key ability should be — in tldr, focus.text, breakdown.cooldowns, tradeGood, dosFull[0].t, dosFull[2].d and report[0]. report[5] tracks an ability literally called 'Ultimate (—)' with no cooldown. Zaahen's kit is now present in the brief, so none of this needs to stay blank.",
+      "why": "Riot's text gives the whole picture. Passive: attacks and abilities on champions grant Determination stacks for bonus AD, and when filled he gains increased AD and CAN REVIVE. Q (The Darkin Glaive), 10s at rank 1: slashes twice on his next attack and heals him, recastable so the following attack knocks up — and it is an auto-attack reset, so the tell is a wind-up, not a cast. W, 14s at rank 1 at 850 range: stabs then PULLS you toward him — that is his real gap-close onto an immobile Garen. E (Aureate Rush), 10s at rank 1: a dash that slices around himself and deals percent health, so stacking armour is the wrong answer. R (Grim Deliverance), 110s at rank 1: heals for a portion of damage dealt. The revive is the single most important fact for a Garen: it is the one thing that answers a spent Demacian Justice.",
+      "corrected": "Replace the placeholders with the revive, the Q heal and reset, the W pull, and the real cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit P/Q/W/E/R text, cds and flags", "missingInteractions ability names: The Darkin Glaive (Q), Aureate Rush (E), Grim Deliverance (R)"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Content marks all of levels 1 through First item as 'Skill', and the full layer has all six existing phases as Skill 5/10. Packet is Skill, Zaahen, Zaahen, Skill, Skill, Zaahen, Zaahen. Worse, phases[6] does not exist at all — the full layer's level chart is six rows where the content layer has seven.",
+      "why": "whys[1] 'Level 2 is Zaahen's', whys[2] 'Level 3 stays his', whys[5] 'First item is Zaahen's again'. The 2+ items row exists in content (win[6] = Zaahen) but has no full-layer counterpart, so the two layers render different charts.",
+      "corrected": "Level 2, Level 3 and First item -> Zaahen 4/10 on both layers, and phases[6] is created as the missing 2+ items row so the full chart is seven rows like the content one.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys[1], whys[2], whys[5]", "currentText.full — phases[6] absent", "packet.winRate 49.91 / 2897 games"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2] says Demacian Justice means 'below threshold he cannot coin-flip you'. Against Zaahen that is not reliably true.",
+      "why": "His passive lets him revive once Determination is filled. A clean execute on a revive-ready Zaahen does not end the fight, so the level-6 spike has to be read off his stack bar, not just his health bar.",
+      "corrected": "Tie the execute to checking the Determination bar.",
+      "confidence": "High",
+      "sources": ["enemyKit P text", "ownerKit R flags execute"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "packet.defects: 'NO cooldown-sequencing advice anywhere', sequencingCues is 0. All-In Windows says 'commit on Ultimate's cooldown' with no number and no ability name.",
+      "why": "The Darkin Glaive is 10s at rank 1 and carries both his heal and his knockup recast; Grim Deliverance is 110s at rank 1. Those are the two clocks worth playing around.",
+      "corrected": "Sequence the all-in off the Q downtime and name the R's real cooldown.",
+      "confidence": "High",
+      "sources": ["enemyKit Q cd 10/9/8/7/6", "enemyKit R cd 110/95/80", "packet.defects"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "First back is Tiamat/Phage with no anti-heal anywhere in the build, in a lane whose own prose says 'he heals off every difference'.",
+      "why": "Two of his abilities heal — Q on every use at 10s, and R for a portion of damage dealt. missingInteractions flags needs-antiheal for exactly these two. Grievous Wounds is the item that makes the extended trade winnable, and it wants to land before his revive threshold matters.",
+      "corrected": "Executioner's Calling first back, Mortal Reminder third and framed against the revive timing.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/R flags heal", "missingInteractions rule needs-antiheal", "currentText.content.whys[5]"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flags \"Demacian Justice's\" in whys[4]. False positive — that is Garen's own R and the possessive is what tripped the matcher.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["ownerKit R"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[1]", "before": "Skill", "after": "Zaahen" },
+    { "layer": "content", "path": "win[2]", "before": "Skill", "after": "Zaahen" },
+    { "layer": "content", "path": "win[5]", "before": "Skill", "after": "Zaahen" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Zaahen" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Zaahen" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Zaahen" },
+    { "layer": "full", "path": "phases[5].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].label", "before": null, "after": "2+ items" },
+    { "layer": "full", "path": "phases[6].side", "before": null, "after": "Zaahen" },
+    { "layer": "full", "path": "phases[6].rating", "before": null, "after": "4/10" },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": null,
+      "after": "Side lane splitting pressure vs teamfight utility. : His Q heal every 10s and Grim Deliverance's lifesteal out-duel a no-sustain Garen, so group instead of taking the 1v1."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": ": Zaahen changes the lane by forcing Garen to respect Pending kit verification profile parameters.",
+      "after": "Zaahen fills Determination for bonus AD and a revive — anti-heal early and hold your execute for after it."
+    },
+    {
+      "layer": "full",
+      "path": "focus.text",
+      "before": "Zaahen Pending kit verification profile parameters",
+      "after": "Determination revive and The Darkin Glaive heal"
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Zaahen’s Ultimate (—): His big cooldown. Fight when it’s down. The whole green-light system is its cooldown.",
+      "after": "Grim Deliverance is 110s at rank 1 and heals him for part of its damage — Grievous Wounds first, then fight."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Ultimate’s cooldown, at your level/item spikes, and with jungle setup — bait his answer before you spend yours.",
+      "after": "Commit after The Darkin Glaive: it is 10s at rank 1, heals him, and its recast knocks you up. Open on that downtime."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Trade into his combo blind. Fight his power spike. Extend without info. And keep the ultimate holstered until a kill is actually on the table.",
+      "after": "Trade into his combo blind — The Darkin Glaive is an auto reset, so the wind-up is the tell. Stack armour: Aureate Rush hits percent health."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Blade + Health Potion. First back: Tiamat / Phage + boots (≈1300g). Core: Stridebreaker  (run-downs stop flipping at the last second) → Phantom Dancer  (spin DPS + the MS to stick); boots: Plated Steelcaps. Spike: Mortal Reminder third; your Q-MS run-down + R execute closes any HP lead you bank.",
+      "after": "Start Doran's Blade + Health Potion. First back: Executioner's Calling (≈800g) — his Q and R both heal him. Core: Stridebreaker  (run-downs stop flipping at the last second) → Phantom Dancer  (spin DPS + the MS to stick); boots: Plated Steelcaps. Spike: Mortal Reminder third, before his revive comes online."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Demacian Justice keeps him honest — below threshold he cannot coin-flip you.",
+      "after": "Justice executes — but a filled Determination bar revives him, so check it."
+    }
+  ],
+  "notes": "This matchup had the worst placeholder damage in my slice: seven separate full-layer fields read 'Pending kit verification profile parameters' and report[5] tracked an ability named 'Ultimate (—)'. The brief now carries a real Zaahen kit, so I filled the ones a single-field edit can reach (tldr, focus.text, report[5], report[9], report[11]). Still carrying the placeholder and NOT fixable inside the length band because they are long scraped blobs: breakdown.cooldowns, tradeGood, dosFull[0].t, dosFull[2].d, report[0].t, winCon, enemyWin and breakdown.trading. STRUCTURAL GAP REPAIRED: the full layer had only phases[0..5] — no 2+ items row at all, while content has win[6]. I created phases[6] (label, side, rating, why) with before:null so both layers render the same seven-row chart. Ability names come from missingInteractions headlines (The Darkin Glaive Q, Aureate Rush E, Grim Deliverance R); the W has no name in either source so I described it by effect rather than guessing one. carryRating is an empty string and breakdown.carry/late both say 'Carry threat: Unknown' — I did not invent a number; see questionsForUser."
+}

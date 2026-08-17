@@ -1,0 +1,94 @@
+{
+  "ownerKey": "garen",
+  "enemy": "volibear",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Four chart rows are wrong on both layers. Packet is Garen, Garen, Volibear, Skill, Volibear, Skill, Skill; the pages read Skill, Volibear, Volibear, Volibear, Volibear, Volibear, Skill.",
+      "why": "The whys array already tells the packet's story exactly — whys[0] 'Garen's early Q-silence trade beats a comboless Volibear', whys[1] 'you still out-trade before his Q-W-E kit is fully online', whys[3] 'skill-decided', whys[5] 'even if you time silence and R' — and the early prose says 'You own the first two levels'. Only the tokens disagree, and they cost Garen his two genuine early windows.",
+      "corrected": "Level 1 and Level 2 -> Garen 6/10; Levels 4-5 -> Skill 5/10; First item -> Skill 5/10. Level 3 and Level 6 stay Volibear, 2+ items stays Skill.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys[0..6]", "currentText.content.early", "packet.winRate 53.15 / 2553 games"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1] says Stormbringer gives him 'a tower-diving engage and a shield'. Stormbringer does not shield.",
+      "why": "Riot's R text: he leaps, slows and damages, gains bonus Health, and disables nearby enemy towers. The shield is Sky Splitter (E), and only if Volibear is inside its blast radius. Cooldown is 160/135/110 — 160s at rank 1, which makes 'he ulted, now fight' a real window.",
+      "corrected": "Attribute the shield to Sky Splitter, name the bonus health and tower disable, and give the 160s rank-1 cooldown.",
+      "confidence": "High",
+      "sources": ["enemyKit R text/cd", "enemyKit E text/flags"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two pages call Thundering Smash a 'slow-stun', and report[5] gives its cooldown as 7s.",
+      "why": "Riot's Q text: 'Volibear gains speed towards enemies, Stunning and damaging the first one he Attacks.' It is a self-speed plus a stun on his next attack, not a slow — and it carries the autoReset flag, so the tell is his attack wind-up. Real cooldown is 12/11.5/11/10.5/10, i.e. 12s at rank 1, not 7s. Frenzied Maul is a 5s ability that applies on-hit effects and heals him on the second cast against the same target, so armour alone misreads the trade and Grievous Wounds timing decides grinds.",
+      "corrected": "Fix the ability description, quote 12s at rank 1 and Frenzied Maul's 5s / second-cast heal, and add the on-hit and anti-heal note the matchup was missing.",
+      "confidence": "High",
+      "sources": ["enemyKit Q text/cd/flags", "enemyKit W text/cd/flags", "missingInteractions rules needs-antiheal and onhit-itemization"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "packet.defects: 'NO cooldown-sequencing advice anywhere' and sequencingCues is 0.",
+      "why": "Nothing on the page tells the player what to wait for before committing.",
+      "corrected": "All-In Windows now sequences off two real cooldowns: the 12s after Thundering Smash, and after his 5s Frenzied Maul second-cast heal is spent.",
+      "confidence": "High",
+      "sources": ["packet.defects", "enemyKit Q/W cd"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Garen" },
+    { "layer": "content", "path": "win[1]", "before": "Volibear", "after": "Garen" },
+    { "layer": "content", "path": "win[3]", "before": "Volibear", "after": "Skill" },
+    { "layer": "content", "path": "win[5]", "before": "Volibear", "after": "Skill" },
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Garen" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[1].side", "before": "Volibear", "after": "Garen" },
+    { "layer": "full", "path": "phases[1].rating", "before": "4/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].side", "before": "Volibear", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[5].side", "before": "Volibear", "after": "Skill" },
+    { "layer": "full", "path": "phases[5].rating", "before": "4/10", "after": "5/10" },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Volibear’s Thundering Smash (Stun) (7s): His engage. Bait it before committing. The whole green-light system is its cooldown.",
+      "after": "Thundering Smash is 12s at rank 1 and stuns on his first attack — bait it, then Q-silence and Judgment on its downtime."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Thundering Smash (Stun)’s cooldown, at your level/item spikes, and with jungle setup — bait his answer before you spend yours.",
+      "after": "Commit in the 12s after Thundering Smash, and after Frenzied Maul's second-cast heal is spent — W is only 5s, so trade in bursts, never grinds."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Fight his level-3 all-in raw. Extend into his W heal. Get tower-dove by his R. And keep the ultimate holstered until a kill is actually on the table.",
+      "after": "Fight his level-3 all-in raw. Extend into his W heal — buy Executioner's early, his W is on-hit so armour alone misreads the trade. Get dived by his R."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "At 3 Volibear's full Q-W-E kit turns trades: Q's slow-and-stun on you plus W's percent-health bite and passive attack-speed out-DPS your Q-silence, and he sustains off W.",
+      "after": "At 3 his kit turns trades: Thundering Smash speeds him at you and stuns on the attack, Frenzied Maul is a 5s on-hit bite that heals on the second cast, and his passive stacks attack speed."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Stormbringer gives him a tower-diving engage and a shield, but your Q silence can still cancel his Q stun, so the fight becomes a skill test of who lands CC first.",
+      "after": "Stormbringer is 160s at rank 1: it grants bonus health and disables your tower for the dive — the shield is Sky Splitter (E), and only if he stands in his own blast."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "From level 3 he pulls ahead: Q's slow-stun, W's percent-health bite with self-heal and his passive attack-speed win sustained trades, and level 6 Stormbringer only sharpens his engage.",
+      "after": "From level 3 he pulls ahead: Thundering Smash stuns on the attack, Frenzied Maul bites and heals on its second cast every 5s, and his passive attack speed wins any sustained trade."
+    }
+  ],
+  "notes": "Level-chart edits proposed as one atomic group (content win[0], win[1], win[3], win[5] plus full phases[0]/[1]/[3]/[5] side+rating); after the flip both layers match the packet chart row for row. Removed the 'Stormbringer shields him' error — Sky Splitter (E) is the shield and only when he is inside the blast. Left spikes[1]'s old claim that Garen's Q silence 'cancels his Q stun' out of the rewrite entirely rather than repeating it: Riot's text does not say whether a silence stops an already-cast Thundering Smash, and wants.you[1] still asserts it — recorded in unverified. The winCon and report[1] blobs still contain the old scraped chart text ('Level 1 Voli 7/10, Level 2 Voli 7/10') which now contradicts the corrected chart; they are single long strings and cannot be part-edited inside the length band — see questionsForUser."
+}

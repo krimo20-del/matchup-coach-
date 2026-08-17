@@ -1,0 +1,85 @@
+{
+  "ownerKey": "gangplank",
+  "enemy": "garen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Difficulty 6/10 with Garen owning levels 1-2 and 4-5, level 3 and 6 skill, and Gangplank taking 2+ items matches a 53.08% Gangplank win rate driven by scaling: Garen's kit peaks the moment his Q is up, Gangplank's peaks with chained kegs and item cooldowns.",
+      "corrected": "Chart left as-is; the early-Garen / late-Gangplank shape is consistent with the packet.",
+      "confidence": "Medium",
+      "sources": ["packet levelChart", "packet winRate 53.08"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[0] asserted a 1.5s silence duration that is not in Riot's text, and stated no cooldown for the ability the whole lane is timed against.",
+      "why": "Decisive Strike is on a flat 8s at every rank — that number is what makes 'poke when his Q is down' actionable, and it never shortens, so the window is the same all lane.",
+      "corrected": "spikes[0].text rebuilt on the auto-reset tell; the 8s cooldown moved into early and mid. Courage's 22/19.5/17/14.5/12 added to mid.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/garen.json (brief enemyKit)"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Two decisive interactions were absent. (1) Decisive Strike breaks every slow on Garen — your Powder Keg slow and Cannon Barrage slow do not hold him, which is the single most important fact in this lane for a champion whose whole kiting plan is slows. (2) Demacian Justice is true damage, so armour does nothing against his execute. Decisive Strike is also an auto-attack reset, so the wind-up is the tell, not the cast.",
+      "why": "Riot's Q text: he 'gains a burst of Move Speed, breaking free of all slows affecting him' and his next attack silences — that is both a slow-cleanse and an auto reset. Riot's R text plus the trueDamage/execute flags confirm the resistance bypass.",
+      "corrected": "Slow-break stated in whys[0], early, mid and spikes[0]; the true-damage execute answered in itemization with health over armour; auto-reset wind-up tell added.",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "brief missingInteractions rules resistances-invalidated / autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The tracked cooldown throughout the full layer is Courage, but the ability that actually decides every trade is Decisive Strike.",
+      "why": "Courage is a defensive soak on 17s at rank 3; Decisive Strike on a flat 8s is what silences you, closes the gap and erases your slow. The full layer's focus fields are enum-adjacent prose and heavily cross-referenced, so I corrected the content layer's timing advice rather than half-rewrite the focus chain.",
+      "corrected": "mid now times poke to Decisive Strike's 8s downtime and treats Courage as the thing you bait before chaining.",
+      "confidence": "High",
+      "sources": ["brief enemyKit"]
+    },
+    {
+      "point": 12,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The packet flags 'His Decisive Strike' as a probable wrong ability name. It is a false positive — Decisive Strike is exactly Riot's name for Garen's Q.",
+      "corrected": "No name change made.",
+      "confidence": "High",
+      "sources": ["packet suspectNames", "brief enemyKit"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Garen's Decisive Strike silences my Parrrley and slows me while his passive regen heals my poke — at level 1 with one low-HP keg I have no answer to his bonus-speed walk-up.",
+      "after": "Decisive Strike silences your Parrrley, and its move-speed burst breaks your keg slow, so at level 1, with one low-HP keg, you have no answer to his walk-up."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Garen's Decisive Strike silences you for 1.5s and runs you down with bonus move speed and a big empowered strike — with only one low-HP keg up, never trade into a fresh Q.",
+      "after": "Decisive Strike is an auto reset that silences you, and its speed burst breaks slows — the wind-up is your step-back cue. With one low-HP keg up, never trade into a fresh Q."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Garen owns these first levels, not me. His Decisive Strike silences my Parrrley for 1.5s, slows me, and lands a chunky empowered hit, and his passive regen means whatever poke I do land just heals off when he ducks into brush. My first keg has a long cooldown and low HP, so he can pre-detonate it with an auto to deny it, or just bonus-speed walk me down through the silence. Last-hit with the tip of Parrrley, never throw a keg I can't pop before he commits, and save Remove Scurvy for the silence-and-slow rather than greeding it for the heal.",
+      "after": "Garen owns these first levels. Decisive Strike silences your Parrrley, and it is an auto reset — the wind-up, not the cast, is your cue to step back. It also breaks every slow on him, so your keg slow does not hold him off once his Q is up: 8s flat, and that gap is your whole trading window. Perseverance heals off your chip whenever he ducks into brush untouched. Last-hit at the tip of Parrrley, never throw a keg you cannot pop before he commits, and save Remove Scurvy for the silence, not the heal."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "By levels 4-5 I stabilize. A second Parrrley and a second Powder Keg point let me set a barrel on his path and make him eat the AoE slow every time he steps up to Judgment-spin. He still edges the level-4 window because a fresh Decisive Strike out-trades me if I commit into it, so I only poke when his Q is on cooldown. Level 6 is a coinflip: Cannon Barrage zones him off the wave and threatens a dive, but it doesn't win the straight duel against Courage's damage reduction, so I use it for waves and skirmishes, not to fight him head-on.",
+      "after": "By levels 4-5 you stabilize. A second Parrrley and a second keg point let you set a barrel on his path so he eats the AoE slow stepping up to Judgment — but he shrugs that slow off with Decisive Strike, so poke only in its 8s downtime. Courage gives a shield, tenacity and lingering damage reduction on 17s at rank 3: it soaks one explosion, so bait it before you chain. Level 6 is a coinflip — Cannon Barrage zones him off the wave and threatens a dive, but it does not beat Courage in a straight duel, so save it for waves and skirmishes."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Blade + pot. Core: Trinity Force  (Sheen + the barrel slow), then Infinity Edge; boots Plated Steelcaps. Anti-heal (Oblivion Orb / Executioner's) early — his healing fights your pattern.",
+      "after": "Start Doran's Blade + pot. Core: Trinity Force (Sheen + the barrel slow), then Infinity Edge; boots Plated Steelcaps. Anti-heal early for Perseverance, and stack health — Demacian Justice is true damage."
+    }
+  ],
+  "notes": "The whole content layer for this matchup is written in FIRST person (\"my Parrrley\", \"I concede\") where every other champion's content is second person. I converted the fields I edited; whys[1] through whys[6], late and spikes[1]/[2]/[3] still read as first person and need a voice pass. Second item: the full layer names Courage as the tracked cooldown in focus.text, tldr, winCon, loading, breakdown.cooldowns, dosFull[0] and report[5]. The ability that actually decides the lane is Decisive Strike (flat 8s, silence, auto reset, and it breaks your slows). Retargeting the focus chain touches ~10 cross-referenced fields at once, so I left it and am flagging it rather than doing half of it."
+}

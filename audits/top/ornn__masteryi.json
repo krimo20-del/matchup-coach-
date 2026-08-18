@@ -1,0 +1,46 @@
+{
+  "ownerKey": "ornn",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "missing",
+      "whatIsWrong": "This matchup has NO full-layer entry at all — currentText.full is null, so diff, diffRating, carryRating, tone, tldr, winCon, the phases[] chart, every do/don't and the whole 15-row report do not exist on disk.",
+      "why": "One of the repo's inherited structural gaps. A create-only edit can fill a missing field, but I will not fabricate an entire CHAMP_FULL entry field-by-field: if the parent object is absent the creates land on nothing, and a half-built full layer renders worse than an absent one.",
+      "corrected": "No full-layer edits proposed. The content layer is audited and corrected; the full layer needs tools/apply-proposals.js (or a human) to scaffold the entry first.",
+      "confidence": "High",
+      "sources": ["brief currentText.full === null"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "win[3] read Ornn, and spikes[] carries only 3 entries where 4 are expected.",
+      "why": "Packet levelChart is Ornn, Ornn, Ornn, Skill, Master Yi, Master Yi, Master Yi, and the page's own whys[3] opens 'By 4-5 it turns skill-based' — the row contradicted its own text. The missing 4th spike is Highlander itself, which is the single biggest stage change in the lane.",
+      "corrected": "win[3] flipped to Skill (content-only — there is no phases[3].side to pair it with). spikes[3].text and .when created with before:null.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "packet defects", "existing whys[3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Not one cooldown appears anywhere, and the two interactions that decide the lane are absent.",
+      "why": "Highlander makes Master Yi IMMUNE TO ALL SLOWS — Volcanic Rupture's slow and Call of the Forge God's slow simply do not apply while it is up, and only the knock-ups still land. Meditate is a 10s channel that any CC cancels, so a knock-up saved for the heal is worth more than one spent on poke. Alpha Strike is 20s at rank 1 with untargetability, so damage spent into it is wasted — but once it is gone he cannot leave your E-Q for a very long window. Wuju Style is 14s of true damage that ignores everything you build.",
+      "corrected": "The slow-immunity, the Meditate cancel and the 20s / 14s / 10s / 85s numbers written into whys[1], whys[4], whys[5], early, mid and the new spikes[3].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/masteryi.json", "missingInteractions rules untargetable-dodges-burst and needs-antiheal"]
+    }
+  ],
+  "edits": [
+    {"layer":"content","path":"win[3]","before":"Ornn","after":"Skill"},
+    {"layer":"content","path":"spikes[3].text","before":null,"after":"Highlander makes him immune to every slow for 85 seconds — Volcanic Rupture and your R stop kiting him, and only the knock-ups still land."},
+    {"layer":"content","path":"spikes[3].when","before":null,"after":"Yi Lvl 6"},
+    {"layer":"content","path":"whys[1]","before":"E knock-ups and W keep the early trades yours at 2 — he cannot out-trade a combo he cannot interrupt.","after":"Alpha Strike is 20s at rank 1, so once he spends it he is stuck in your E-Q knock-up for the whole window."},
+    {"layer":"content","path":"whys[4]","before":"At 6 his true-damage all-in beats you whenever he dodges the double knock-up — the lane tips to him.","after":"Highlander is 85s and makes him slow-immune — Q's slow does nothing, and only your knock-ups still land."},
+    {"layer":"content","path":"whys[5]","before":"His first item lets Wuju out-DPS your tank scaling — you cannot win the sustained exchange anymore.","after":"Wuju Style's true damage on a 14s cooldown ignores every point of armour you bought — the grind is lost."},
+    {"layer":"content","path":"early","before":"Front-load the abuse: shield-backed Brittle trades win levels 1-3 outright and he has no interrupt for your E-Q combo. Zone him, chunk him on every wave and get your Living Forge value rolling — the lead you take right now is the buffer for a late game that will not be kind to you.","after":"Front-load the abuse: Brittle trades win levels 1-3 outright, and Alpha Strike is 20s at rank 1 — once he spends it he cannot leave your E-Q. Zone him, chunk him on every wave and get your Living Forge value rolling; the lead you take now is the buffer for a late game that will not be kind."},
+    {"layer":"content","path":"mid","before":"By 4-5 his true damage starts biting through armour, so pick your trades instead of taking them all. At 6 the flip completes: if he dodges the double knock-up, his all-in beats you, so stop soloing him — shove the wave, group early and spend your lead where true damage is not the whole story.","after":"By 4-5 Wuju Style's true damage bites through armour on a 14s cooldown, so pick your trades instead of taking them all. Meditate is a 10s channel and any knock-up cancels it outright, so save E for the heal, not the poke. At 6 the flip completes: Highlander makes him slow-immune, so stop soloing him and group."}
+  ],
+  "deferredNoData": false,
+  "notes": "Blocking issue for a human: this matchup has no full-layer entry (currentText.full is null), so the page renders with no difficulty rating, no level chart, no do/don't lists and no report at 266 games. I did not try to build one from create-only edits. Second item: missingInteractions asserts that Volcanic Rupture 'shuts off Alpha Strike', which comes from the kit's derived grounding flag — Riot's own Q description mentions only damage, a slow and the pillar, so I did not write that claim to the page. The pillar being terrain that blocks a path is separate and safe; grounding is not."
+}

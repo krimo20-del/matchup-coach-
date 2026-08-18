@@ -1,0 +1,55 @@
+{
+  "ownerKey": "ornn",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "FAV / 4/10 matches 54.66% over 805 games and the all-Ornn chart.",
+      "why": "Locke's kill script needs marks plus his blink; Ornn denies both by existing.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["packet winRate", "packet levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[] carries only 3 entries where 4 are expected — the 2+ item stage had no spike at all.",
+      "why": "Purgatory executes, and Locke's ultimate text says he gains additional power for sealing champions — so his floor rises with every seal. That is exactly the late-game spike the array was missing.",
+      "corrected": "spikes[3].text and spikes[3].when created with before:null.",
+      "confidence": "High",
+      "sources": ["packet defects", "champ-data/_kits/locke.json R text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page says 'the ten seconds' and 'his E' without ever giving a rank-1 number for anything else.",
+      "why": "Ashen Pursuit is a flat 10s at every rank — the one cooldown in the kit that never shrinks, which is why the post-blink window is reliable. Soul Ignition is 18s at rank 1 and refunds a portion of the damage he takes during it. Purgatory is 120s at rank 1. His Q is 10s at rank 1 falling to 6s.",
+      "corrected": "The flat 10s, 18s and 120s written into the phases, the do/don't lines and breakdown.mid.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/locke.json"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Itemization says 'Anti-heal is optional — his sustain is self-refund, not lifesteal.'",
+      "why": "Grievous Wounds reduces healing from any source, and Soul Ignition heals him at the end of its duration — a self-refund is still healing. Calling anti-heal optional tells the user to skip the item that shortens his sustain window.",
+      "corrected": "Replaced that clause with a line stating Grievous Wounds cuts the Soul Ignition refund.",
+      "confidence": "High",
+      "sources": ["missingInteractions rule needs-antiheal", "locke kit W text"]
+    }
+  ],
+  "edits": [
+    {"layer":"content","path":"spikes[3].text","before":null,"after":"Purgatory's floor rises with every champion he seals — at 2+ items his 120s ult ends any fight you take beneath it, so break off above the threshold."},
+    {"layer":"content","path":"spikes[3].when","before":null,"after":"2+ items"},
+    {"layer":"full","path":"phases[1].why","before":"His E is online but it’s also his only exit — any trade he takes is a one-way door you get to close.","after":"Ashen Pursuit is online but it is also his only exit, and it is a flat 10s — every trade he takes is one-way."},
+    {"layer":"full","path":"phases[3].why","before":"Levels 4-5 the nail tax ramps — drop your stacks before they hit three and punish the ten seconds after each spent blink.","after":"Levels 4-5 the nail tax ramps — drop your stacks before three, and punish the flat 10s after each spent Ashen Pursuit."},
+    {"layer":"full","path":"phases[4].why","before":"Purgatory changes the rules: fights now end at HIS floor — disengage above ~15% or leave the totem zone entirely.","after":"Purgatory is 120s and rewrites the fight: it ends at HIS floor. Disengage above the threshold or leave the zone entirely."},
+    {"layer":"full","path":"dosFull[2].d","before":"Locke wastes Ritual Nails — that is your full-commit window.","after":"Purgatory is 120s at rank 1 — spent, and the floor is gone."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Locke’s favourite window — refusing it removes half his win condition.","after":"Soul Ignition is 18s of attack speed — never trade into the burn window."},
+    {"layer":"full","path":"breakdown.mid","before":"Post-6: the totem rewrites fight math — win exchanges early, disengage above the floor, and punish the ten seconds after every spent E.","after":"Post-6 the totem rewrites fight math — win exchanges early, disengage above the floor, and bring Grievous Wounds for Soul Ignition's refund."},
+    {"layer":"full","path":"report[8].t","before":"Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Anti-heal is optional — his sustain is self-refund, not lifesteal.","after":"Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Grievous Wounds still cuts Soul Ignition's end-of-duration refund."}
+  ],
+  "notes": "Locke's kit file carries no ability names at all, so the names on this page could only be checked against the missingInteractions headlines: those confirm Silver Stake (P), Soul Ignition (W), Ashen Pursuit (E) and Purgatory (R). Nothing anywhere confirms 'Ritual Nails' for Q — Riot-style text calls the projectiles 'Soul Nails'. I left every 'Ritual Nails' reference untouched (it appears in focus.text, winCon, enemyWin, loading, dosFull, breakdown.cooldowns and report[3]/report[5]) rather than guess. The page's '125 range' figure for Locke is likewise unverifiable from the kit; left alone."
+}

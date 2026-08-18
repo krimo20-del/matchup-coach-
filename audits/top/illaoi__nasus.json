@@ -1,0 +1,120 @@
+{
+  "ownerKey": "illaoi",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "diff reads \"EVEN\" while report[14] calls it a favoured matchup and diffRating says 4/10; the mirror audit (nasus__illaoi) settled Nasus's side at 7/10 HARD, whose inverse is 3/10 FAVOURED.",
+      "why": "51.24% over 1409 games with Illaoi holding levels 1-6 is a favoured lane, and the two directions must not contradict.",
+      "corrected": "diff FAVOURED, diffRating 3/10, breakdown.difficulty and report[14] aligned to 3/10.",
+      "confidence": "High",
+      "sources": ["packet winRate/games", "mirrorFindings (nasus__illaoi)"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart disagreed with the packet chart and with its own late-game text: phases[4]/win[4] said \"Skill\" at Level 6 and phases[6]/win[6] said \"Illaoi\" at 2+ items, while whys[6], spikes[3] and late all say a stacked Nasus with Fury of the Sands out-sustains and out-damages you.",
+      "why": "Packet levelChart is Illaoi through index 5 and Nasus at index 6; the mirror also has Illaoi winning Level 6. Level 6 is Leap of Faith (120s at rank 1) inside a tentacle field against a champion with no dash — Illaoi, not a coinflip.",
+      "corrected": "Level 6 -> Illaoi (rating 7/10) in both layers; 2+ items -> Nasus (rating 4/10) in both layers, proposed as one atomic group.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText whys[6]/spikes[3]/late", "mirrorFindings"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Fury of the Sands was described only as \"lifesteal-and-armor\"; the page never says it grants bonus Armor AND Magic Resist while dealing percent-max-health damage, so stacking raw resistances is the wrong answer, nor that Grievous Wounds is the actual counter to Soul Eater lifesteal.",
+      "why": "Riot text on R: gains increased Health, Attack Range, bonus Armor and Magic Resistance, reduced Siphoning Strike cooldown; flag percentHealth. Passive Soul Eater is lifesteal. Illaoi's own passive tentacles heal her, so the trade is a healing race Grievous Wounds decides.",
+      "corrected": "late rewritten to state armour/MR/percent-health and point at Executioner's Calling against Soul Eater.",
+      "confidence": "High",
+      "sources": ["enemyKit R and P text", "missingInteractions rule resistances-invalidated"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Siphoning Strike is an auto-attack reset at 255 range and the page never gives the wind-up tell.",
+      "why": "His damage arrives on the auto animation, not the cast bar — reacting to the cast is reacting late.",
+      "corrected": "spikes[2].text now names the reset and the wind-up cue.",
+      "confidence": "High",
+      "sources": ["enemyKit Q autoReset flag", "missingInteractions rule autoreset-burst-tell"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Wither's 700 range versus Harsh Lesson's 400 range was never stated, so \"fight inside his W slow\" had no mechanical reason attached.",
+      "why": "He can Wither you from outside your leap range; your answer is Test of Spirit at 900, which out-ranges Wither.",
+      "corrected": "wants.foe[1] now states the 700-vs-400 range gap.",
+      "confidence": "High",
+      "sources": ["ownerKit W range 400 / E range 900", "enemyKit W range 700"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: no cooldown-sequencing advice anywhere. breakdown.cooldowns was generic boilerplate with no numbers.",
+      "why": "Wither is 15/14/13/12/11s, Test of Spirit 16/15/14/13/12s, Leap of Faith 120/95/70s — these turn \"bait it\" into a real timer.",
+      "corrected": "breakdown.cooldowns rewritten with rank-1 numbers; dontsFull[1].d and dosFull[2].d given matching sequencing text.",
+      "confidence": "High",
+      "sources": ["ownerKit/enemyKit cooldown fields", "packet defects"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Illaoi" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Illaoi" },
+    { "layer": "full", "path": "phases[6].side", "before": "Illaoi", "after": "Nasus" },
+    { "layer": "content", "path": "win[6]", "before": "Illaoi", "after": "Nasus" },
+    { "layer": "full", "path": "phases[4].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "diff", "before": "EVEN", "after": "FAVOURED" },
+    { "layer": "full", "path": "diffRating", "before": "4/10", "after": "3/10" },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Overall difficulty: 4/10. The lane is decided by how well you track Wither and how disciplined your pattern is.",
+      "after": "Overall difficulty: 3/10. The lane is decided by how well you track Wither and how disciplined your pattern is."
+    },
+    {
+      "layer": "full",
+      "path": "report[14].t",
+      "before": "Favoured matchup — difficulty 4/10, Nasus carry threat 10/10.",
+      "after": "Favoured matchup — difficulty 3/10, Nasus carry threat 10/10."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Nasus Wither: matchup-defining — His only kite. Bait it before committing. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Nasus Wither: 15s at rank 1, 700 range — bait it out, then run the full pattern for 15 free seconds. - Your E is 16s at rank 1: whiff it and he stacks untouched. - Leap of Faith is 120s — kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Wither is 15s: eat it, walk out, and commit when it comes back up."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Nasus wastes Wither — commit the full pattern immediately.",
+      "after": "Each slam shoving him off the wave denies a Siphoning Strike."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "The one way you lose is scaling — a fully stacked Nasus with R becomes a lifesteal-and-armor juggernaut who heals through tentacle chip and out-DPS's you, so end it before Fury of the Sands carries him.",
+      "after": "The one way you lose is scaling — Fury of the Sands hands him armour, MR and percent-health damage, so more resistances are not the answer: Executioner's Calling cuts the Soul Eater lifesteal he heals through."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "You out-slam him while he's still under-stacked; keep the wave away from his tower and starve his Q so his scaling never arrives.",
+      "after": "His combo opens with a Siphoning Strike auto reset — the wind-up is your cue, not the cast. Punish it, and keep the wave off his tower."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Use W (Wither) to slow your dash and kite the tentacles",
+      "after": "Wither you from 700 range to outrange your 400-unit leap"
+    }
+  ],
+  "notes": "Level chart flips proposed as one atomic group and paired across both layers (phases[4].side/win[4] Skill->Illaoi, phases[6].side/win[6] Illaoi->Nasus), matching the packet levelChart, the existing whys[6]/spikes[3]/late text, and the mirror. Ratings moved with them. diff EVEN->FAVOURED is an enum edit and reconciles the page with report[14] and with the mirror's 7/10 HARD on Nasus's side. Two things NOT proposed and left alone: (1) phases[4].why still says \"Reassess every all-in at 6\" which reads coinflip-ish next to an Illaoi-wins row, but rewriting it inside the length band adds no verified fact; (2) Test of Spirit tether-break rules — whether Cleanse/QSS or Fury of the Sands' unstoppable-like state affects the Vessel conversion is NOT in Riot's text, so wants.you[0]'s \"no dash or cleanse to break tether\" claim was left untouched and is recorded as unverified."
+}

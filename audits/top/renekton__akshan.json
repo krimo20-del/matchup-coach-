@@ -1,0 +1,94 @@
+{
+  "ownerKey": "renekton",
+  "enemy": "akshan",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers of the level chart match packet.levelChart [Akshan, Skill, Renekton, Renekton, Akshan, Renekton, Renekton] row for row, and the whys explain each swing. No chart edit needed.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level 2-3 spike was justified by Akshan having 'no shield', and the Fury threshold that actually drives the spike was never stated.",
+      "why": "Dirty Fighting (P) grants Akshan a shield on every third hit against a champion — he has a shield in every trade from level 1. The real spike is Renekton crossing 50 Fury: above it, Ruthless Predator destroys damage shields on the target and stuns for 1.5s instead of 0.75s.",
+      "corrected": "spikes[0].text and 'early' now state the shield exists and that a 50-Fury W removes it while doubling the stun.",
+      "confidence": "High",
+      "sources": ["enemyKit P text and shield flag", "ownerKit W text", "mirrorFindings point 4"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two decisive interactions were absent: the empowered-W shield destruction, and the fact that Heroic Swing requires terrain to anchor.",
+      "why": "Riot's E text: 'fires a grappling hook into terrain then swings around it' — in open lane with no wall in range there is nothing to hook, so where you pick the fight decides whether his escape exists. The mirror audit independently identified the shield destruction as the decisive interaction in this lane.",
+      "corrected": "spikes[0].text carries the shield destroy; wants.foe[0] now tells you to fight him away from walls. Both directions of the mirror now state the same facts.",
+      "confidence": "High",
+      "sources": ["enemyKit E text", "ownerKit W text", "mirrorFindings"]
+    },
+    {
+      "point": 8,
+      "status": "missing",
+      "whatIsWrong": "Going Rogue's camouflage was nowhere on the page, and report[10] gave generic 'ward river' advice.",
+      "why": "missingInteractions flags 'stealth-needs-vision': Going Rogue puts him in camouflage with bonus Move Speed, and nothing in Renekton's kit reveals stealth. Control Wards and a sweeper are the only answer.",
+      "corrected": "report[10].t rewritten around Going Rogue camouflage and mandatory Control Ward / sweeper.",
+      "confidence": "High",
+      "sources": ["enemyKit W stealth flag", "missingInteractions"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "dontsFull[1].d ('Burning it for tiny value leaves you naked for its full cooldown') described Renekton spending a cooldown, under a title about Akshan spending his.",
+      "why": "Heroic Swing is 18/16.5/15/13.5/12s. After it fires, that window is the lane.",
+      "corrected": "dontsFull[1].d now gives the real 18s rank-1 number and what to do with the window.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd"]
+    },
+    {
+      "point": 12,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Common mistakes are stated without elo splits and match the trade rules.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["currentText"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Your E-in, W-stun, fury-Q combo is online — Akshan has no shield and no reliable escape if your dash closes the gap before his Heroic Swing can carry him to safety.",
+      "after": "Your E-in, W-stun, fury-Q combo is online — above 50 Fury that W destroys his Dirty Fighting shield and stuns 1.5s instead of 0.75s, so bank the Fury before you slice in."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Renekton owns the first two levels hard and needs to act on it immediately. At level 1 Akshan sits at Q range and pokes safely while you farm — you have no dash and no stun yet, so don't force a trade you lose. The moment you hit level 2, E in while his fury bar is empty and his Heroic Swing is down, land W, and dump a fury-empowered Q to heal back the trade damage. Akshan has no shield and no point-and-click escape at this stage — if you catch him with W before his E fires, the trade is heavily yours. Repeat this pattern whenever his fury bar is dry and you have 50+ fury stocked.",
+      "after": "Renekton owns the first two levels hard and needs to act on it immediately. At level 1 Akshan sits at Q range and pokes safely while you farm — you have no dash and no stun yet, so don't force a trade you lose. The moment you hit level 2, E in while his Heroic Swing is down, land W, and dump a fury-empowered Q to heal back the trade damage. Dirty Fighting shields him every third hit, but a 50-Fury W destroys that shield outright and stuns him 1.5s — if you catch him before his E fires, the trade is heavily yours. Repeat it whenever you have 50+ fury stocked."
+    },
+    {
+      "layer": "full",
+      "path": "report[10].t",
+      "before": "Your engage is premium gank setup — ping your jungler when Heroic Swing is down. Ward river before extended trades.",
+      "after": "Going Rogue is camouflage and nothing in your kit reveals it — a Control Ward and a sweeper are mandatory before any extended trade."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Heroic Swing is 18s at rank 1 — once it fires, the lane is yours."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Hold E (Heroic Swing) specifically to swing out of your W stun-lock rather than burning it for poke",
+      "after": "Hold Heroic Swing to swing out of your W-stun — it needs terrain, so fight him in open lane, not by walls"
+    }
+  ],
+  "notes": "UNVERIFIED, left untouched: spikes[2].text claims a kill resets Heroic Swing 'to 0.5s' — no reset appears in Riot's E text and I could not confirm the number. whys[4] claims a stun interrupts Comeuppance's channel — the kit carries no channel flag on his R, and absence in Riot's text means unknown, not false, so the claim was neither asserted more strongly nor removed. The mirror audit flagged a matching unverified claim on its 'late' field about Comeuppance scaling with missing health; Riot's text does say the damage is based on missing health, so that direction is fine, only the '200%' figure is unsourced."
+}

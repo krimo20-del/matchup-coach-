@@ -1,0 +1,63 @@
+{
+  "ownerKey": "renekton",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "missing",
+      "whatIsWrong": "There is no full-layer entry for this matchup at all — currentText.full is null, so diff, diffRating, carryRating, tone, the breakdown fields and the whole report[] are absent from the page.",
+      "why": "45.09% over 428 games is a losing matchup with a strongly Renekton-favoured first four levels, and none of that is expressed anywhere outside the content layer. This is one of the repo's inherited structural gaps, but it is a whole entry rather than a single field: creating diff/tone/rating enums plus fifteen report sections with 'before': null would mean inventing an entire page's framing rather than filling a known gap, so I have flagged it for the user instead of fabricating it.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief currentText.full null", "packet winRate 45.09 / games 428"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "win[0..6] reads Renekton / Renekton / Renekton / Renekton / Master Yi / Master Yi / Master Yi, matching the packet chart row for row, and each why gives a real reason. There is no phases[] layer to disagree with it, and no mirror exists yet (masteryi__renekton unaudited).",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet levelChart", "brief mirrorAlreadyAudited false"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The single most decisive interaction in the matchup is absent: Meditate is a channel and Ruthless Predator cancels it. Alpha Strike is also described as something he attacks 'through' your combo with, rather than as untargetability.",
+      "why": "Riot's text: Meditate restores Health and reduces damage taken while he channels, on a flat 10s cooldown — any hard CC ends it, and Renekton's W is point-and-click, so a saved stun deletes his only sustain. Alpha Strike teleports him across the battlefield BECOMING UNTARGETABLE, 18-20s, and basic attacks reduce its cooldown, so burst spent into it is wasted and the counterplay is to hold and punish afterwards. Wuju Style grants bonus TRUE damage on basic attacks, so armour is the wrong buy against him. Highlander is 85s and makes him immune to slowing effects.",
+      "corrected": "The Meditate cancel written into whys[1], early and wants.you[1]; Alpha Strike's untargetability and 18-20s cooldown into whys[3] and spikes[3].text; Wuju Style's true damage into whys[5] and mid; Highlander's 85s and slow immunity into spikes[2].text and mid.",
+      "confidence": "High",
+      "sources": ["enemyKit P/Q/W/E/R text and cooldowns", "ownerKit W text", "missingInteractions all four rules"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags 'NO cooldown-sequencing advice anywhere' — the content layer named no cooldown for either champion.",
+      "why": "The numbers that decide this lane are Alpha Strike at 20/19.5/19/18.5/18s (shortened by his basic attacks), Meditate at a flat 10s, Wuju Style at 14s and Highlander at 85s.",
+      "corrected": "Those numbers now appear in whys[1], whys[3], spikes[2].text, spikes[3].text, early and mid.",
+      "confidence": "High",
+      "sources": ["enemyKit cooldowns", "packet defects"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Nothing on the page tells the player that stacking armour is the wrong answer.",
+      "why": "Wuju Style's bonus damage on his basic attacks is true damage, which resistances do not reduce; HP and the Meditate cancel are the answers instead.",
+      "corrected": "Stated in whys[5] and mid. No itemization field exists in the content layer to carry a build line, and there is no full layer — flagged for the user.",
+      "confidence": "High",
+      "sources": ["enemyKit E text", "missingInteractions resistances-invalidated"]
+    }
+  ],
+  "edits": [
+    {"layer":"content","path":"whys[1]","before":"Your Ruthless Predator stun comes online at 2 and locks him down for free trades.","after":"Ruthless Predator lands at 2 and cancels Meditate outright — his only sustain, flat 10s."},
+    {"layer":"content","path":"whys[3]","before":"Through 4-5 your fury sustain still out-values his Alpha Strike poke — keep chunking him.","after":"Through 4-5 Alpha Strike is an 18-20s cooldown — once it is spent he has no escape at all."},
+    {"layer":"content","path":"whys[5]","before":"With his first item he Alpha Strikes through your kit and out-DPSes you in any straight fight.","after":"With his first item Wuju Style's true damage ignores your armour and he out-DPSes any straight fight."},
+    {"layer":"content","path":"spikes[2].text","before":"Highlander plus his approaching item flips the kill pressure to him — the stomp window closes.","after":"Highlander is 85s and makes him immune to slows — the kill pressure flips and your stomp window shuts."},
+    {"layer":"content","path":"spikes[3].text","before":"He Alpha Strikes through your combo and out-DPSes you; stop taking straight duels.","after":"Alpha Strike goes untargetable through your combo — hold the burst, punish the 18s after."},
+    {"layer":"content","path":"wants.you[1]","before":"The stun timed exactly onto his commit","after":"The stun saved to cancel Meditate"},
+    {"layer":"content","path":"early","before":"You beat him outright for four levels: Q fury healing wins level 1, the W stun locks him at 2, Slice-and-Dice takes every trade at 3, and your sustain keeps out-valuing his Alpha Strike poke into 4-5. Chunk him on every wave and call your jungler — the lead has to be built right now.","after":"You beat him outright for four levels: Q fury healing wins level 1, the W stun locks him at 2 and cancels Meditate's channel outright, Slice-and-Dice takes every trade at 3, and Alpha Strike's 18-20s cooldown leaves him no out at 4-5. Chunk him every wave and call your jungler now."},
+    {"layer":"content","path":"mid","before":"The flip lands at 6: Highlander with his approaching item hands the kill pressure to him, and after his first item he simply Alpha Strikes through your combo and out-DPSes you. Spend your lead before it evaporates — shove, roam, and drag him into 2v2s where your stun still sets up kills.","after":"The flip lands at 6: Highlander is 85s and makes him slow-immune, and after his first item Wuju Style's true damage cuts straight through your armour. Spend your lead before it evaporates — shove, roam, and drag him into 2v2s where your stun still sets up kills."}
+  ],
+  "notes": "STRUCTURAL GAP: this matchup has no full-layer entry at all (currentText.full is null), so the live page carries only the content layer — no difficulty rating, no tone, no trading rules, no report sections. I did not try to create it with 'before': null, because that would mean inventing a whole page rather than filling a known field, and a fabricated framing is worse than a visible gap. It needs a decision from the user.\n\nThe most valuable correction available here is a mechanic the page never mentioned: Meditate is a channel on a flat 10s cooldown, and Renekton's point-and-click Ruthless Predator cancels it outright. That single interaction is the reason the first four levels are so lopsided, and it was nowhere in the file.\n\nAll three suspectNames hits are false positives — 'Alpha Strike' and 'Ruthless Predator' are the correct names.\n\nNo mirror exists yet (masteryi__renekton unaudited), so these findings set the reference."
+}

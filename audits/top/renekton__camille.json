@@ -1,0 +1,163 @@
+{
+  "ownerKey": "renekton",
+  "enemy": "camille",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Tactical Sweep (W) is called a 'true-damage cone' in six places. Hookshot is called a stun with invented durations ('0.75 seconds', 'a full 1-second stagger'). The Hextech Ultimatum's untargetability was never mentioned.",
+      "why": "Riot's text: Tactical Sweep deals damage in a cone, and the outer half slows, deals extra damage and heals Camille — no true damage anywhere. The true damage is on Precision Protocol (Q). Hookshot 'knocks up enemy champions upon landing' — a knockup, not a stun, and no duration is given in the file so none should be asserted. Her R carries the untargetable flag, which missingInteractions flags as 'untargetable-dodges-burst': dumping your combo into her dash wastes it.",
+      "corrected": "Every 'W true-damage cone' now reads as the healing cone it is; the invented stun durations are gone and the knockup is named; spikes[1].text now states that she goes untargetable through your commit and that the answer is to wait it out.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E/R text and flags", "missingInteractions"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Hookshot's cooldown is given as 'an 11-second cooldown' in whys[3] and 'roughly 11 seconds at no CDR' in mid.",
+      "why": "Hookshot is 16/15/14/13/12s. Eleven seconds is shorter than it ever is, so the whole trade-timing plan built on that number is too tight and gets the reader caught.",
+      "corrected": "Both now carry 16s at rank 1, and phases[3].why states it too.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The stored chart disagreed with the packet at four rows, and at two of those it contradicted the page's own whys.",
+      "why": "packet.levelChart = [Renekton, Renekton, Camille, Camille, Skill, Renekton, Camille]. whys[2] explicitly says the math tips 'in her favor from level 3 through 5' while the chart gave level 3 to Renekton and 4-5 to Skill; whys[6] hands two items to Camille while the chart said Renekton.",
+      "corrected": "phases[0], phases[2], phases[3] and phases[6] flipped with win[0], win[2], win[3] and win[6] as one atomic group, ratings adjusted, and whys[0], phases[2].why, phases[3].why and phases[6].why rewritten to match.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Itemisation recommended Plated Steelcaps with no mention that her main damage ignores armour, and the anti-heal line said 'his healing' with no ability named.",
+      "why": "missingInteractions flags both 'resistances-invalidated' (Precision Protocol deals true damage) and 'needs-antiheal' (Tactical Sweep heals her on the outer half). Raw armour is the wrong answer against a true-damage Q, and Grievous Wounds timing decides the extended trades.",
+      "corrected": "report[8].t now says armour alone will not save you against a true-damage Q, and names Tactical Sweep as the healing to cut.",
+      "confidence": "High",
+      "sources": ["enemyKit Q trueDamage flag", "enemyKit W heal flag", "missingInteractions"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "The packet flagged 'Hextech Ultimatum' in wants.foe[1] as a probable wrong name.",
+      "why": "Near-miss rather than false positive — the real name carries the article: The Hextech Ultimatum. Corrected while rewriting that line.",
+      "corrected": "wants.foe[1] now uses the full name.",
+      "confidence": "High",
+      "sources": ["packet.enemyAbilities.R"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Renekton" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Renekton" },
+    { "layer": "full", "path": "phases[2].side", "before": "Renekton", "after": "Camille" },
+    { "layer": "content", "path": "win[2]", "before": "Renekton", "after": "Camille" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Camille" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Camille" },
+    { "layer": "full", "path": "phases[6].side", "before": "Renekton", "after": "Camille" },
+    { "layer": "content", "path": "win[6]", "before": "Renekton", "after": "Camille" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "4/10" },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit online — your core pattern starts now. Keep the wave near your side so Camille must walk into your engage range.",
+      "after": "Her Tactical Sweep cone and the Hookshot knockup arrive at 3 — take the short burst trade, never the extended one."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Hookshot's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Hookshot is 16s at rank 1 and her W cone heals her every trade — commit only when the hook lands on nothing at all."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your side-lane pattern is at full power. Camille carry threat 9/10 — close before the map decides instead of you.",
+      "after": "Trinity Force and Sterak's outlast your burst in the side lane. Camille carry threat 9/10 — anchor teamfights with Dominus."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Any wall in range turns Hookshot into a knockup engage on you."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Blade + pot. Core: Eclipse  (burst + the early bully curve), then Sterak's Gage; boots Plated Steelcaps. Executioner's Calling early — his healing fights your pattern.",
+      "after": "Start Doran's Blade + pot. Core: Eclipse, then Sterak's Gage; boots Plated Steelcaps — but her Q is true damage, so armour alone will not save you. Executioner's Calling early: Tactical Sweep heals her."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Bank 50 fury on the wave, slice onto Camille when his answer is down, empowered-W stun + Q heal, and dice out clean.",
+      "after": "Bank 50 fury on the wave, slice onto Camille when her answer is down, empowered-W stun + Q heal, and dice out clean."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Bank 50 fury on the wave, slice onto Camille when his answer is down, empowered-W stun + Q heal, and dice out clean. Great trade: Camille wastes Hookshot — commit the full pattern immediately. Bad trade: Trading at zero fury or overstaying after the burst — the second dash OUT is the half of the combo people forget.",
+      "after": "Good trade: Bank 50 fury on the wave, slice onto Camille when her answer is down, empowered-W stun + Q heal, and dice out clean. Great trade: Camille wastes Hookshot on nothing — commit the full pattern immediately. Bad trade: Trading at zero fury or overstaying after the burst — the second dash OUT is the half of the combo people forget."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Bank 50 fury on the wave, slice onto Camille when his answer is down, empowered-W stun + Q heal, and dice out clean. Great trade: Camille wastes Hookshot — commit the full pattern immediately. Bad trade: Trading at zero fury or overstaying after the burst — the second dash OUT is the half of the combo people forget.",
+      "after": "Good trade: Bank 50 fury on the wave, slice onto Camille when her answer is down, empowered-W stun + Q heal, and dice out clean. Great trade: Camille wastes Hookshot on nothing — commit the full pattern immediately. Bad trade: Trading at zero fury or overstaying after the burst — the second dash OUT is the half of the combo people forget."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "At level 1 Camille's passive Adaptive Defenses absorbs your auto-focused pressure — play for CS with Q tip and don't waste E into a free shield.",
+      "after": "At level 1 melee range is yours with Fury autos — Adaptive Defenses only shields one damage type at a time, so burst her and step off rather than grinding."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Her W true-damage cone and Hookshot stagger combo come fully online and tip the burst-trade math in her favor from level 3 through 5.",
+      "after": "Tactical Sweep heals her on the outer half and Hookshot knocks you up off any wall — the burst-trade math tips to her from 3 through 5."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "With Hookshot on an 11-second cooldown and her W available every trade, she dictates exchange timing — only commit when you see Hookshot waste or misfire.",
+      "after": "With Hookshot on a 16-second cooldown at rank 1 and her W up every trade, she dictates exchange timing — only commit when you see the hook land on nothing."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Dominus is the coin-flip stage: your HP buffer and Fury regen mean you can absorb her Q true-damage proc and still finish the all-in, but her R can isolate the duel and erase your escape.",
+      "after": "Dominus is the coin-flip stage: your HP buffer and Fury regen absorb her Q true damage, but The Hextech Ultimatum goes untargetable through your commit and then anchors you — never dump the combo into her dash."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "At level 1 Camille's passive Adaptive Defenses gives her a free shield against your auto-heavy pressure, so hold back and last-hit with Q tip rather than trading into a free shield. Hit level 2 first by pushing the three melee minions — the moment you have E online walk up, watch her Hookshot animation, and if she doesn't fire it, slice in and land the empowered W two-hit stun immediately; she has no answer for a point-and-click 1.5-second stun at level 2. Dice out with the second E dash and Q-heal on the way out. At level 3 her W true-damage cone comes online, which means every extended trade now costs you real HP even through your Q heal — take the short burst trade (E in, W, Q, E out) and avoid letting her walk you into her W cone at the end of the exchange.",
+      "after": "At level 1 Adaptive Defenses shields her against one damage type per auto, so grind trades pay her back — burst and step off instead of standing in melee range. Hit level 2 first by pushing the three melee minions: the moment you have E online walk up, watch for the Hookshot, and if she does not fire it, slice in and land the empowered W immediately; she has no answer for a point-and-click 1.5-second stun at level 2. Dice out with the second E dash and Q-heal on the way. At level 3 Tactical Sweep comes online, and its outer half both hurts more and heals her — take the short burst trade (E in, W, Q, E out) and never let her finish the exchange by walking you into that cone."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 is where this lane turns. Camille's Hookshot is now fully cooldown-efficient and she actively looks to E-wall-jump in, stun you, and land a W true-damage cone before you can respond — if she hooks into you rather than the wall, she stuns you for only 0.75 seconds, but if she hits a wall and dashes to you, it's a full 1-second stagger. Track the nearest wall at all times; position center-lane so her Hookshot has to travel far or has no wall to complete on. Your trade window is strictly on Hookshot's cooldown (roughly 11 seconds at no CDR). At level 6 Dominus grants a massive HP buffer and accelerates Fury for back-to-back empowered Ws — the coin lands roughly even because she can respond with Hextech Ultimatum, which strips away your Fury-generation window from minions and forces a pure 1v1 you haven't fully spiked for yet. Go for the all-in only if she burns R defensively or mistimes her engage; otherwise pressure the wave and take plates.",
+      "after": "Levels 4-5 is where this lane turns. Hookshot is cooldown-efficient now and she looks to wall-jump in, knock you up, and land the outer half of Tactical Sweep before you can respond — the hook only knocks up when she completes it off terrain, so the wall is the tell, not the cast. Track the nearest wall at all times; position centre-lane so her Hookshot has far to travel or nothing to anchor on. Your trade window is strictly on its cooldown, 16 seconds at rank 1 and still 12 at rank 5. At level 6 Dominus grants a massive HP buffer and accelerates Fury for back-to-back empowered Ws — the coin lands roughly even because she can answer with The Hextech Ultimatum, which is untargetable on the way in and then anchors you away from the minions you generate Fury on. Go for the all-in only if she burns R defensively or mistimes the engage; otherwise pressure the wave and take plates."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land E Hookshot first to interrupt your E approach and stun you before you can empower your W",
+      "after": "Land Hookshot off a wall to knock you up before you can bank Fury and empower your W"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Use R Hextech Ultimatum to isolate you away from your tower so her W true-damage cone burns through your Dominus HP buffer",
+      "after": "Use The Hextech Ultimatum to anchor you away from your tower so her W cone heals her through your Dominus buffer"
+    }
+  ],
+  "notes": "Tactical Sweep was described as true damage in six places; the true damage is on Precision Protocol (Q), and the W is the ability that HEALS her — those two errors together inverted the itemisation advice, which is why report[8] was rebuilt. Hookshot's cooldown was stated as 11s (real: 16/15/14/13/12) and its knockup was described as a stun with two invented durations; the durations are removed rather than replaced, since the kit gives none. The level chart disagreed with the packet at four rows and with its own whys at two — flipped as an atomic group. Several untouched strings still refer to Camille as 'he'/'his' (breakdown.mid, breakdown.wave, breakdown.feeding, breakdown.late, report[4], report[12]); corrected only inside strings already being edited."
+}

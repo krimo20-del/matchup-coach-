@@ -1,0 +1,94 @@
+{
+  "ownerKey": "renekton",
+  "enemy": "akali",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The stored level chart disagreed with the packet chart at five of seven rows, and at three of those it also contradicted the page's own whys text.",
+      "why": "packet.levelChart = [Renekton, Renekton, Renekton, Skill, Akali, Akali, Skill]. whys[1] and whys[2] describe level 2 and level 3 as Renekton's strongest windows (chart said Skill/Akali); whys[3] says neither side closes a kill at 4-5 (chart said Akali); whys[4] says Perfect Execution negates the Dominus window (chart said Renekton 7/10); whys[6] says she wins the 1v1 but you win the fight (chart said Akali). The packet chart agrees with the prose everywhere.",
+      "corrected": "phases[1..4].side and phases[6].side realigned to the packet chart with win[1..4] and win[6] flipped in the same atomic group, ratings adjusted, and phases[4].why / phases[6].why rewritten so the reasoning matches the new owner.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why claimed 'Dominus stats turn even fights into wins' at the exact level where Perfect Execution comes online.",
+      "why": "Akali's R is a two-part cast — a leap, then a re-cast dash that executes — on 120/90/60s. It out-scales the level-6 Dominus window, which is why the packet gives level 6 to Akali.",
+      "corrected": "phases[4].why now names Perfect Execution, its 120s rank-1 cooldown, and the R1-bait / W-stun-the-follow-up sequence.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd and text", "ownerKit R cd"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Assassin's Mark, the auto-attack reset that opens her burst, appeared nowhere on the page.",
+      "why": "missingInteractions flags 'autoreset-burst-tell'. Riot's text: dealing spell damage to a champion creates a ring around them; exiting that ring empowers her next attack with bonus range and damage. The ring exit, not her ability cast, is the disengage cue — and the bonus range means backing up inside her ring range does not save you.",
+      "corrected": "wants.foe[1] now reads 'Leave her ring after a spell so Assassin's Mark resets her auto with bonus range'.",
+      "confidence": "High",
+      "sources": ["enemyKit P text and autoReset flag", "missingInteractions"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[3].text, whys[5] and wants.foe[2] all reference an Akali item called 'Night's Edge'.",
+      "why": "No such item appears in League; the kit files carry no item data and I could not verify it. Rather than substitute a guessed item, only the spike was rewritten around Hextech Rocketbelt, which is genuinely an Akali item, and the rest is recorded as unverified.",
+      "corrected": "spikes[3].text rebuilt on Hextech Rocketbelt plus Perfect Execution's 120s timer. whys[5] and wants.foe[2] left untouched pending a ruling.",
+      "confidence": "Medium",
+      "sources": ["currentText"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "The packet flagged 'Pop Twilight Shroud' in wants.foe[0] as a probable wrong ability name.",
+      "why": "False positive — the distance of 4 is the leading verb 'Pop'. Twilight Shroud is the real W name, and the untargetability claim in that line matches Riot's text exactly.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["packet.enemyAbilities.W", "enemyKit W text"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Renekton" },
+    { "layer": "content", "path": "win[1]", "before": "Skill", "after": "Renekton" },
+    { "layer": "full", "path": "phases[2].side", "before": "Akali", "after": "Renekton" },
+    { "layer": "content", "path": "win[2]", "before": "Akali", "after": "Renekton" },
+    { "layer": "full", "path": "phases[3].side", "before": "Akali", "after": "Skill" },
+    { "layer": "content", "path": "win[3]", "before": "Akali", "after": "Skill" },
+    { "layer": "full", "path": "phases[4].side", "before": "Renekton", "after": "Akali" },
+    { "layer": "content", "path": "win[4]", "before": "Renekton", "after": "Akali" },
+    { "layer": "full", "path": "phases[6].side", "before": "Akali", "after": "Skill" },
+    { "layer": "content", "path": "win[6]", "before": "Akali", "after": "Skill" },
+    { "layer": "full", "path": "phases[1].rating", "before": "4/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "4/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "7/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "4/10", "after": "5/10" },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Dominus stats turn even fights into wins before 25 minutes. Reassess every all-in at 6 — Akali's ultimate changes the math too.",
+      "after": "Perfect Execution is two dashes and an execute on a 120s timer — it beats Dominus, so bait R1, then W-stun the second cast."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your side-lane pattern is at full power. Akali carry threat 8.5/10 — close before the map decides instead of you.",
+      "after": "She wins the side-lane 1v1; you win the fight. Akali carry threat 8.5/10 — W-stun her off your carry instead of duelling her."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Full Hextech Rocketbelt or Night's Edge Akali bursts you through your HP bar — avoid hard commits unless you are significantly ahead and she has no R charges.",
+      "after": "Two-item Akali with Hextech Rocketbelt bursts through your HP bar — avoid hard commits unless you are well ahead and Perfect Execution is still on its 120s timer."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Kite you off your Q heal with E-shuriken poke, draining your HP before she all-ins",
+      "after": "Leave her ring after a spell so Assassin's Mark resets her auto with bonus range"
+    }
+  ],
+  "notes": "The level chart on disk disagreed with the packet chart at five rows and with the page's own prose at three — corrected as one atomic group across both layers. 'Night's Edge' is not a League item and appears in whys[5] and wants.foe[2] as well as the spike I rewrote; I could not verify what it was meant to be, so those two were left alone. Renekton's empowered W shield-destruction is a non-interaction here (Akali has no shield) — the mirror audit reached the same conclusion and neither side asserts it. Twilight Shroud makes her unselectable by spells and attacks, so a targeted W whiffs, but Slice and Dice is a direction dash and still passes through it."
+}

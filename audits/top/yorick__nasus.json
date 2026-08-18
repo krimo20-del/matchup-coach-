@@ -1,0 +1,79 @@
+{
+  "ownerKey": "yorick",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The two chart layers disagreed with each other AND with the whys prose. win[0..3] and phases[0..3].side said Yorick while whys[0..3] all say 'even', 'skill-based', 'neutral standoff'; win[4]/phases[4].side said Skill while whys[4] says level 6 tilts to you. The packet chart is Skill/Skill/Skill/Skill/Yorick/Yorick/Yorick, and the nasus__yorick mirror explicitly notes phases[0..4].side oversell Yorick.",
+      "why": "Neither champion has a kill threat before six — Nasus wants to touch minions, Yorick wants to bank graves. Yorick's real swing is Eulogy of the Isles at 6, which lets the Maiden hold the wave and starve Siphoning Strike stacks. The prose already said this; only the side fields were wrong.",
+      "corrected": "Chart set to Skill / Skill / Skill / Skill / Yorick / Yorick / Yorick across win[0..6] and phases[0..6].side as one paired group, ratings 5/5/5/5/6/7/7. whys[] needed no change — they already matched the corrected chart.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/yorick.json", "audits/top/nasus__yorick.json (mirrorFindings)"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No spike carried a cooldown number, and phases[4]/phases[6] gave no reason tied to either ultimate.",
+      "why": "Fury of the Sands is 120/100/80s and grants bonus Armor and Magic Resistance while it rages, so the fight timing is 'after it ends', not 'whenever'. Eulogy of the Isles at 160s rank 1 is the actual lane-swinging spike because the Maiden holds the wave and denies stacks even when Yorick leaves.",
+      "corrected": "phases[4], phases[5], phases[6] and breakdown.cooldowns keyed to Fury of the Sands' 120s and Wither's 15s.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json", "champ-data/_kits/yorick.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer said only 'His only kite. Bait it before committing.' — no ranges, no cooldowns, no mention that Siphoning Strike is an auto-attack reset or that Fury of the Sands is percent-health.",
+      "why": "Wither is 700 range on 15/14/13/12/11s and decays both move AND attack speed, which is what actually breaks a Yorick swing mid-trade — the standard 'it's a slow' framing understates it. Siphoning Strike is a 255-range auto reset on 7.5s falling to 3.5s, so the wind-up is the tell rather than the cast. Fury of the Sands does percent-health damage and grants him bonus Armor and Magic Resistance, so stacking raw armour is the wrong response and Grievous Wounds against Soul Eater's lifesteal is the right one. Mourning Mist reduces armour, which is the direct counter to the resistances he gains under his ultimate.",
+      "corrected": "breakdown.cooldowns, dosFull[0].d, dontsFull[0].d, dontsFull[1].d, report[5].t, phases[2].why and breakdown.late rewritten with Wither's 15s and dual slow, Siphoning Strike's reset, and Fury of the Sands' percent-health plus resistance gain.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json", "champ-data/_kits/yorick.json", "champ-data/_kits/_missing/yorick.json"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.late said 'anti-heal stays core' without saying why armour is the wrong buy.",
+      "why": "The _missing feed's resistances-invalidated rule applies: Fury of the Sands is percent-health, so armour does not scale against it, while Soul Eater is pure lifesteal that Grievous Wounds does answer.",
+      "corrected": "breakdown.late and phases[6].why now name percent health and Soul Eater explicitly.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"content","path":"win[0]","before":"Yorick","after":"Skill"},
+    {"layer":"full","path":"phases[0].side","before":"Yorick","after":"Skill"},
+    {"layer":"content","path":"win[1]","before":"Yorick","after":"Skill"},
+    {"layer":"full","path":"phases[1].side","before":"Yorick","after":"Skill"},
+    {"layer":"content","path":"win[2]","before":"Yorick","after":"Skill"},
+    {"layer":"full","path":"phases[2].side","before":"Yorick","after":"Skill"},
+    {"layer":"content","path":"win[3]","before":"Yorick","after":"Skill"},
+    {"layer":"full","path":"phases[3].side","before":"Yorick","after":"Skill"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Yorick"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Yorick"},
+    {"layer":"full","path":"phases[0].rating","before":"6/10","after":"5/10"},
+    {"layer":"full","path":"phases[1].rating","before":"7/10","after":"5/10"},
+    {"layer":"full","path":"phases[2].rating","before":"7/10","after":"5/10"},
+    {"layer":"full","path":"phases[3].rating","before":"7/10","after":"5/10"},
+    {"layer":"full","path":"phases[4].rating","before":"5/10","after":"6/10"},
+    {"layer":"full","path":"phases[5].rating","before":"6/10","after":"7/10"},
+    {"layer":"full","path":"phases[6].rating","before":"6/10","after":"7/10"},
+
+    {"layer":"full","path":"phases[0].why","before":"You have nothing yet — just bank graves off the wave. Identify how Nasus contests the first waves before you commit anything.","after":"You have nothing yet — bank graves off the wave. Nasus only wants to touch minions for stacks, so deny last hits rather than fight."},
+    {"layer":"full","path":"phases[1].why","before":"E mark plus the first ghoul wave starts real trades. Only take the trade when Nasus's Wither is down.","after":"Mourning Mist marks at 700 range on 12s and the first ghouls follow it in. Trade only while Wither is down."},
+    {"layer":"full","path":"phases[2].why","before":"Full kit online — your core pattern starts now. Keep the wave near your side so Nasus must walk into your engage range.","after":"Full kit online, but Wither is back every 15s and Siphoning Strike is an auto reset at 255 range — trade at grave range."},
+    {"layer":"full","path":"phases[3].why","before":"The lane-control window: trade around Wither's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.","after":"Every wave you deny is a Siphoning Strike stack he never gets. Trade on Wither's 15s cooldown and hold the wave near you."},
+    {"layer":"full","path":"phases[4].why","before":"Maiden turns the lane into a permanent 2v1. Reassess every all-in at 6 — Nasus's ultimate changes the math too.","after":"Eulogy of the Isles makes it a 2v1 and starves his stacks. Fury of the Sands is 120s at rank 1 — fight after it ends."},
+    {"layer":"full","path":"phases[5].why","before":"Trinity Force is your spike — force fights the moment it completes, on Wither's cooldown.","after":"Trinity Force plus Maiden shoving cuts him off CS entirely — commit the moment Wither misses."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your side-lane pattern is at full power. Nasus carry threat 10/10 — close before the map decides instead of you.","after":"Two items on and the side lane is yours. Fury of the Sands burns percent health, so buy Grievous Wounds, not raw armour."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Nasus Wither: matchup-defining — His only kite. Bait it before committing. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Nasus Wither: matchup-defining — a 700-range decaying move and attack speed slow, back every 15s. Track it before every engage. - Fury of the Sands: 120s, percent health — fight after it ends. - Eulogy: kill windows only."},
+    {"layer":"full","path":"dosFull[0].d","before":"His only kite. Bait it before committing. Only engage once it is down or baited.","after":"Wither is his only kite, 700 range on 15s — engage only once he has spent it."},
+    {"layer":"full","path":"report[5].t","before":"Track Nasus's Wither: His only kite. Bait it before committing. When it is down — Cage + swarm him.","after":"Wither slows move and attack speed on 15s — bait it, then cage and swarm. Siphoning Strike is an auto reset."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Nasus's favourite window — refuse it and half his win condition is gone.","after":"Every minion he touches is a Siphoning Strike stack — deny the last hits."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Wither decays your attack speed too — walk out before you swing."},
+    {"layer":"full","path":"breakdown.late","before":"Maiden turns the lane into a permanent 2v1 — build your teamfight around that. Nasus carry threat: 10/10 — anti-heal stays core, shift to picks and wave control if he gets ahead.","after":"Eulogy of the Isles makes every fight a 2v1 — build around it. Fury of the Sands burns percent health and Soul Eater heals him back, so Grievous Wounds stays core over raw armour."},
+    {"layer":"full","path":"report[2].t","before":"Yours from level 1. See the level-by-level chart for the swing points.","after":"Even until six, then yours. See the level-by-level chart for the swing points."}
+  ],
+  "notes": "Kit flag misfire: yorick.json tags Mourning Mist (E) with 'dash'. Riot's text is a thrown globule with no movement on Yorick — the move speed goes to his summoned units toward the mark. No dash asserted. Also note nasus.json tags Wither only 'slow' while Riot's description covers Move Speed AND Attack Speed; the attack-speed half is the part that actually breaks a Yorick trade, so it is stated explicitly."
+}

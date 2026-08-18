@@ -1,0 +1,60 @@
+{
+  "ownerKey": "yorick",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers read Skill, Skill, Skill, Skill, Skill, Locke, Skill and match the packet chart row for row, with whys that say the same thing. At 50.07% over 745 games that is the right shape, and the single Locke row (first item) is argued from his burst plus execute rather than asserted.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 50.07"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[5].why explains his first-item spike purely as an item, with no ability behind it.",
+      "why": "Soul Ignition is 18s at rank 1 and gives attack speed and move speed, then heals back a portion of the self-damage at the END of the duration — that is what makes his first-item all-in outlast yours, and it is also the window where Grievous Wounds matters.",
+      "corrected": "Rewrote phases[5].why around Soul Ignition's duration and end-of-duration heal.",
+      "confidence": "High",
+      "sources": ["enemyKit W cd 18/17/16/15/14, heal + trueDamage flags"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Flagged defect — the page tracks cooldowns by feel ('the ten seconds of nothing', 'a 10-second timer') without stating a single number from the kit, and never mentions that Purgatory grounds.",
+      "why": "Q is 10s at rank 1 (6s at rank 5), E is a flat 10s at 425 range, R is 120s at rank 1 at 1000 range and carries the grounding flag. The page's instincts were right — writing the numbers is what makes them checkable, and 'punish the ten seconds' silently becomes wrong once his Q is maxed.",
+      "corrected": "Real cooldowns and ranges into breakdown.cooldowns and dontsFull[1].d; the grounding noted in the same block.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/E/R cooldowns, ranges and flags"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Itemization says 'Anti-heal is optional — his sustain is self-refund, not lifesteal.'",
+      "why": "Grievous Wounds reduces incoming healing whatever its source, and Soul Ignition's refund is healing — Riot's text is 'Locke will heal back a portion of the damage he takes'. Calling it optional tells the reader to skip the item that answers his one sustain window, and the missing-interactions file flags needs-antiheal on exactly that ability.",
+      "corrected": "Replaced the sentence with Grievous Wounds cutting Soul Ignition's end-of-duration refund.",
+      "confidence": "High",
+      "sources": ["enemyKit W text + heal flag", "missingInteractions needs-antiheal"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[2] is headed 'Break off fights before the Purgatory floor, not at it' but its body is a leftover line about Locke wasting Ritual Nails.",
+      "why": "The heading is the single most important don't-die rule in the matchup and its body says something unrelated.",
+      "corrected": "Rewrote the body around his passive scaling with your missing health.",
+      "confidence": "High",
+      "sources": ["enemyKit P text", "enemyKit R execute flag"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Locke Ritual Nails (Marks): matchup-defining — The nail marks are his whole engine — without 2-3 stacks on you his blink-in barely dents; sidestep the recasts and punish the ten seconds of nothing. Track it before every step-up. - Locke E (Ashen Pursuit): his ONLY mobility, resets on takedowns — the post-E window is the lane. - Locke R (Purgatory): never fight at sliver HP inside the zone.","after":"- Locke Ritual Nails (Marks): matchup-defining — The nail marks are his whole engine — without 2-3 stacks on you his blink-in barely dents; sidestep the recasts and punish the 10s at rank 1 while he has nothing. - Locke E (Ashen Pursuit): a flat 10s at 425 range, his ONLY mobility — the post-E window is the lane. - Locke R (Purgatory): 120s at rank 1, and it grounds — never fight at sliver HP inside it."},
+    {"layer":"full","path":"dontsFull[1].d","before":"E is his engage AND escape — a spent blink is the lane’s biggest cooldown; don’t waste yours before it.","after":"E is his engage AND escape on a flat 10s — a spent blink is the lane's biggest window; don't waste yours first."},
+    {"layer":"full","path":"dosFull[2].d","before":"Locke wastes Ritual Nails — that is your full-commit window.","after":"His passive grows with your missing health — leave early, not low."},
+    {"layer":"full","path":"phases[5].why","before":"Lich Bane spike — his blink-bite now genuinely one-shots marked squishies. Respect the all-in until his E is down.","after":"Lich Bane spike — Soul Ignition adds 18s of attack speed and a heal at its end, so his all-in outlasts yours until E is down."},
+    {"layer":"full","path":"report[8].t","before":"Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Anti-heal is optional — his sustain is self-refund, not lifesteal.","after":"Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Grievous Wounds still cuts Soul Ignition's end-of-duration refund."}
+  ],
+  "notes": "This page is the strongest in the slice — real sequencing, real trade rules, no boilerplate — so the edits are surgical. Two things I could NOT verify and therefore left alone: (1) the Q is called 'Ritual Nails' throughout, but the kit file carries no ability names for Locke and Riot's own text calls the projectiles 'Soul Nails'; the packet's enemyAbilities is null, so nothing can confirm the display name. (2) '125 range' appears three times as his attack range and is nowhere in the kit data. Both need a Wiki check before anyone edits those strings."
+}

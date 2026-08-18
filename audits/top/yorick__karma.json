@@ -1,0 +1,81 @@
+{
+  "ownerKey": "yorick",
+  "enemy": "karma",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart disagreed with the already-audited mirror (karma__yorick) on rows 2, 3 and 6, and diffRating read 7.5/10 (hard) on a matchup Yorick wins.",
+      "why": "The mirror settled the chart as Karma, Karma, Skill, Yorick, Yorick, Yorick, Yorick and rated it 8/10 difficulty / 8/10 carry threat from Karma's side. Inverted, Yorick's side must read the same rows with inverse ratings, and a matchup that hard for Karma cannot be 7.5/10 for Yorick.",
+      "corrected": "win[1]/phases[1].side to Karma, win[2]/phases[2].side to Skill, win[4]/phases[4].side to Yorick, with ratings 3/10, 5/10, 7/10; diffRating 4/10 and carryRating 4/10, and every prose line quoting those numbers updated.",
+      "confidence": "High",
+      "sources": ["audits/top/karma__yorick.json", "packet.levelChart", "packet.winRate"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why and whys[4] claimed Karma's ultimate 'changes the math' at 6 and called level 6 skill-based, while the row said Karma.",
+      "why": "Mantra requires no skill point and is available from level 1, so Karma has no level-6 spike at all; Yorick's Eulogy of the Isles is the only power turn there. Yorick's real spikes are Mourning Mist at 3 (12s at rank 1, slow plus armour shred that his ghouls sprint toward), Maiden at 6, then first item.",
+      "corrected": "Rewrote phases[1].why, phases[2].why, phases[4].why, whys[1], whys[2], whys[4] to those spikes and to match the corrected rows.",
+      "confidence": "High",
+      "sources": ["enemyKit R text", "ownerKit E/R", "audits/top/karma__yorick.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The cooldown block gave no numbers: Focused Resolve had no cooldown or range, and Dark Procession was described only as 'your committal tool'.",
+      "why": "Focused Resolve is a flat 12s tether at 675 range that only roots if it survives, so leaving her range is the counterplay and the number tells you when stepping up is safe. Dark Procession is 20s at rank 1. Mantra-empowered Focused Resolve also heals her, which the page never mentioned.",
+      "corrected": "Real cooldowns and the 675-range tether break moved into breakdown.cooldowns and dosFull[0].d; Dark Procession's 20s into dontsFull[1].d; Grievous Wounds into the itemization line.",
+      "confidence": "High",
+      "sources": ["enemyKit W (cd 12, range 675, Mantra heal)", "ownerKit W cd 20/18/16/14/12", "missingInteractions needs-antiheal"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No anti-heal guidance despite the missing-interaction flag.",
+      "why": "Mantra-empowered Focused Resolve heals Karma, so extended trades and dives swing on Grievous Wounds timing.",
+      "corrected": "Added to report[8].t itemization.",
+      "confidence": "High",
+      "sources": ["enemyKit W Mantra Bonus text", "missingInteractions needs-antiheal"]
+    }
+  ],
+  "edits": [
+    {"layer":"content","path":"win[1]","before":"Skill","after":"Karma"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Karma"},
+    {"layer":"content","path":"win[2]","before":"Yorick","after":"Skill"},
+    {"layer":"full","path":"phases[2].side","before":"Yorick","after":"Skill"},
+    {"layer":"content","path":"win[4]","before":"Karma","after":"Yorick"},
+    {"layer":"full","path":"phases[4].side","before":"Karma","after":"Yorick"},
+
+    {"layer":"full","path":"phases[1].rating","before":"6/10","after":"3/10"},
+    {"layer":"full","path":"phases[2].rating","before":"6/10","after":"5/10"},
+    {"layer":"full","path":"phases[4].rating","before":"3/10","after":"7/10"},
+
+    {"layer":"full","path":"diffRating","before":"7.5/10","after":"4/10"},
+    {"layer":"full","path":"carryRating","before":"6/10","after":"4/10"},
+
+    {"layer":"full","path":"phases[1].why","before":"E mark plus the first ghoul wave starts real trades. Only take the trade when Karma's Focused Resolve is down.","after":"Inner Flame out-ranges you and your ghoul count is thin — farm, and step up only once Focused Resolve's 12s is spent."},
+    {"layer":"full","path":"phases[2].why","before":"Full kit online — your core pattern starts now. Keep the wave near your side so Karma must walk into your engage range.","after":"Mourning Mist at 3 evens it: 12s at rank 1, it slows and shreds armour, and your ghouls sprint at the marked target."},
+    {"layer":"full","path":"phases[4].why","before":"Maiden turns the lane into a permanent 2v1. Reassess every all-in at 6 — Karma's ultimate changes the math too.","after":"Maiden turns the lane into a permanent 2v1, and Karma gains nothing at 6 — Mantra was online from level 1."},
+    {"layer":"content","path":"whys[1]","before":"By level 2 your ghouls and E slow balance her poke, making it skill-based.","after":"At 2 she still out-ranges you — Inner Flame chips while your ghoul count is thin."},
+    {"layer":"content","path":"whys[2]","before":"Even trades continue at level 3 as her mana limits her poke spam.","after":"Mourning Mist at 3 evens it: the mark slows her and ghouls leap on it."},
+    {"layer":"content","path":"whys[4]","before":"Karma gains only a Mantra charge at 6, no ult swing, keeping it skill-based.","after":"Karma has no level-6 spike; Maiden floods a wave her single Q cannot clear."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Karma Focused Resolve: matchup-defining — Her root tether — breaks if you LoS / outrange it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Karma Focused Resolve: 12s flat — the tether only roots if it survives, so break it by leaving her 675 range. - Dark Procession: 20s at rank 1 — cage her retreat, never spend it on chip. - Eulogy of the Isles: kill windows only."},
+    {"layer":"full","path":"dosFull[0].d","before":"Her root tether — breaks if you LoS / outrange it. Only engage once it is down or baited.","after":"Her tether roots unless broken — step past 675 range, then engage into its 12s cooldown."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Dark Procession is 20s at rank 1 — save it to cut her retreat."},
+    {"layer":"full","path":"report[8].t","before":"Start Doran's Shield + pot vs the poke. Core: Trinity Force  (the all-purpose spike), then Hullbreaker; boots Mercury's Treads.","after":"Start Doran's Shield vs the poke. Core: Trinity Force, then Hullbreaker; Mercury's Treads. Mantra-W heals her — add Grievous Wounds."},
+
+    {"layer":"full","path":"breakdown.difficulty","before":"Overall difficulty: 7.5/10. The lane is decided by how well you track Focused Resolve and how disciplined your pattern is.","after":"Overall difficulty: 4/10. Levels 1-2 are hers; from Mourning Mist onward your ghouls and Maiden decide the lane."},
+    {"layer":"full","path":"report[14].t","before":"Tricky matchup — difficulty 7.5/10, Karma carry threat 6/10.","after":"Favoured matchup — difficulty 4/10, Karma carry threat 4/10."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry threat: 6/10. If Karma gets ahead, shift from winning trades to wave control, vision, and jungle play.","after":"Carry threat: 4/10. If Karma gets ahead, shift from winning trades to wave control, vision, and jungle play."},
+    {"layer":"full","path":"breakdown.late","before":"Maiden turns the lane into a permanent 2v1 — build your teamfight around that. Karma carry threat: 6/10 — shift to picks and wave control if he gets ahead.","after":"Maiden turns the lane into a permanent 2v1 — build your teamfight around that. Karma carry threat: 4/10 — shift to picks and wave control if she gets ahead."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your side-lane pattern is at full power. Karma carry threat 6/10 — close before the map decides instead of you.","after":"Two items on: your side-lane pattern is at full power. Karma carry threat 4/10 — close before the map decides instead of you."},
+
+    {"layer":"full","path":"breakdown.feeding","before":"If Karma gets a kill, stop forcing and respect Focused Resolve. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.","after":"If Karma gets a kill, stop forcing and respect Focused Resolve. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."},
+    {"layer":"full","path":"report[12].t","before":"If Karma gets a kill, stop forcing and respect Focused Resolve. Two kills: farm safe and call for jungle cover. If he snowballs, play for picks with your team — not solo redemption.","after":"If Karma gets a kill, stop forcing and respect Focused Resolve. Two kills: farm safe and call for jungle cover. If she snowballs, play for picks with your team — not solo redemption."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Karma's favourite window — refuse it and half his win condition is gone.","after":"That is Karma's favourite window — refuse it and half her win condition is gone."}
+  ],
+  "notes": "suspectNames flagged 'Bait Focused Resolve' in wants.you[0] as a probable wrong name — it is a FALSE POSITIVE; Focused Resolve is Karma's real W. Packet winRate here is 53.37% while the mirror packet reports 32.14% for Karma vs Yorick; both point the same direction but they cannot both be right — QA should reconcile the two tables. tone is '#ff8b3d' (hard/orange) on a matchup that now reads FAV 4/10; it should move to the favoured colour, but tone edits belong to whoever owns the palette."
+}

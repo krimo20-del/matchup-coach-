@@ -1,0 +1,112 @@
+{
+  "ownerKey": "yorick",
+  "enemy": "akali",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Three level-chart rows disagreed with their own why-text: win[1]/phases[1].side read 'Skill' while whys[1] says Akali takes level 2; win[2]/phases[2].side read 'Akali' while whys[2] says level 3 is even; win[4]/phases[4].side read 'Yorick' while whys[4] calls level 6 a skill window and spikes[1].text says Akali pulls ahead there.",
+      "why": "The packet levelChart (Yorick, Akali, Skill, Akali, Skill, Akali, Akali) matches the prose on every one of those rows. Twilight Shroud at 2 is what lets her farm through the trade she loses at 1; Mourning Mist at 3 restores your trade pattern; at 6 both ultimates swing it.",
+      "corrected": "Chart aligned to the packet across both layers as one atomic pair-matched group.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys", "currentText.content.spikes[1].text"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 spike named no cooldown and never mentioned the execute, so 'her all-in' read as generic burst.",
+      "why": "Perfect Execution is 120/90/60s and its recast executes below a health threshold — a 60s ultimate late is a different lane rule from a 120s one early, and the threshold is what actually kills you.",
+      "corrected": "spikes[1].text now carries the 120s rank-1 cooldown and tells you to stay above the execute number.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd 120/90/60, flags.execute", "missingInteractions[1] execute-threshold"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Both mid and spikes[0].text claimed Twilight Shroud 'breaks your ghoul vision and mist lock' / 'denies your ghoul vision and mist targeting'. Riot's text says nothing about vision denial.",
+      "why": "Twilight Shroud makes Akali invisible and unable to be selected by enemy spells and attacks. The real consequence for Yorick is unselectability: Mist Walkers and the Maiden lose their target and stand there. That is a sharper, true claim than a vision one. Confirmed from the mirror audit (akali__yorick), which cut the same vision justification.",
+      "corrected": "mid and spikes[0].text now state unselectability and what it does to your summons; Dark Procession lines now say cage her exit, since the wall is destructible and does not follow her.",
+      "confidence": "High",
+      "sources": ["enemyKit W text", "ownerKit W text/flags.terrain", "mirrorFindings.notes"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet suspectNames flags 'Perfect Execution's' in mid as a probable wrong name. It is not — Perfect Execution is Akali's real R. False positive; the possessive form is what tripped the distance check.",
+      "corrected": "No name change made. The word survives into the rewritten mid.",
+      "confidence": "High",
+      "sources": ["packet.enemyAbilities.R"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Akali"
+    },
+    {
+      "layer": "content",
+      "path": "win[1]",
+      "before": "Skill",
+      "after": "Akali"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Akali",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[2]",
+      "before": "Akali",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Yorick",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Yorick",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Through mid it swings to Akali: her Shroud breaks your ghoul vision and mist lock, and at 6 Perfect Execution's two dashes let her burst and escape your Maiden. Hold W Cage to trap her inside the Shroud or block the second R.",
+      "after": "Through mid it swings to Akali: inside Twilight Shroud (20s) she cannot be selected, so your ghouls and Maiden drop her, and at 6 Perfect Execution's dashes leave them behind. Hold Dark Procession for her exit, not her entry."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "You win level 1 — Akali's Q Five Point Strike is her only damage and she's mana-starved, so a mist-Q trade punishes her hard. But once she hits 2-3 and gets W Twilight Shroud, she can farm safely and turn her Q spam plus passive procs against you; the shroud denies your ghoul vision and mist targeting.",
+      "after": "You win level 1 — Five Point Strike is her only damage and costs 110 energy at rank 1, so a Mourning Mist into Last Rites trade punishes her hard. Once Twilight Shroud is up at 2-3 she farms safely and Assassin's Mark autos win exchanges back; unselectable inside it, she makes your ghouls drop her."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Akali pulls ahead at 6 — Perfect Execution gives her two dashes to burst you and dodge your Maiden and E. Your ult helps waveclear but doesn't save you from her all-in; save W Cage to block her second R recast.",
+      "after": "Akali pulls ahead at 6 — Perfect Execution (120s at rank 1) gives two dashes to burst you and leave your Maiden behind, and its recast executes below a health threshold. Stay above that number and hold Dark Procession for her exit."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Akali wastes Twilight Shroud — commit the full pattern immediately.",
+      "after": "Dark Procession (20s) walls her exit — cage the retreat, not the entry."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Perfect Execution's recast executes low targets — track the HP number."
+    }
+  ],
+  "notes": "The packet defect 'level chart contradicts data: Yorick wins 54.34% but the chart gives Akali 4/7 stages' is only partly resolved. Aligning to the packet's own chart brings Akali down to 3 stages with 2 skill rows, but the chart still leans Akali overall against a 54.34% Yorick win rate. I did NOT invent extra Yorick rows to close that gap — every remaining Akali row is backed by prose already on the page (first-item assassin spike, late roam pressure) and flipping them would need the whys and spikes rewritten on a claim I cannot verify. Raised in questionsForUser."
+}

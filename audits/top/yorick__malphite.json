@@ -1,0 +1,53 @@
+{
+  "ownerKey": "yorick",
+  "enemy": "malphite",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 6 read Skill while whys[4] says 'Your Level 6 Maiden overwhelms him', and 2+ items read Yorick while whys[6], spikes[3] and the late string all say full-tank Malphite's teamfight ult out-values your split.",
+      "why": "The packet chart reads Yorick at level 6 and Malphite at 2+ items, matching those whys exactly. Unstoppable Force is a 130s engage tool rather than a duel button, so 6 belongs to Yorick; at two items Malphite is a tank holding a knockup for your carries, so the last row belongs to him. NOTE: the mirror settled the opposite on rows 4, 5 and 6 — see notes.",
+      "corrected": "win[4]/phases[4].side to Yorick (7/10) and win[6]/phases[6].side to Malphite (3/10). Rows 0, 1, 2, 3 and 5 left as they are so they still agree with the mirror.",
+      "confidence": "Medium",
+      "sources": ["packet.levelChart", "currentText.content.whys", "currentText.content.late", "audits/top/malphite__yorick.json mirrorFindings"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why and phases[6].why were boilerplate with no spike behind them.",
+      "why": "Malphite's spikes are Granite Shield refreshing out of combat, Unstoppable Force at 6 (130s at rank 1) and full-tank scaling for the 5v5. Yorick's is Maiden at 6, which is permanent pressure against an ultimate saved for teamfights.",
+      "corrected": "Rewrote both to those spikes with the 130s number.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd 130/115/100", "enemyKit P text", "ownerKit R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Flagged defect — the page names only Unstoppable Force and never Granite Shield, Seismic Shard, Thunderclap or Ground Slam, and gives no cooldowns at all.",
+      "why": "Granite Shield absorbs 10% of his max health and RECHARGES if he is not hit for a few seconds, so poking him once between trades is worse than not poking at all — that is the single most-missed interaction in the matchup. Seismic Shard steals your move speed for 3 seconds at 625 range on a flat 8s. Ground Slam is a flat 7s and its damage scales with his armour, so it grows as he builds tank. Thunderclap is a 10s auto-reset, so his burst opens on an attack wind-up.",
+      "corrected": "All four named with cooldowns and the shield-recharge rule in breakdown.cooldowns, dosFull[0].d, dontsFull[0].d, dontsFull[1].d, report[5].t and the itemization line.",
+      "confidence": "High",
+      "sources": ["enemyKit P/Q/W/E/R", "packet.defects", "missingInteractions autoreset-burst-tell, resistances-invalidated, enemy-dash-deniable"]
+    }
+  ],
+  "edits": [
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Yorick"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Yorick"},
+    {"layer":"content","path":"win[6]","before":"Yorick","after":"Malphite"},
+    {"layer":"full","path":"phases[6].side","before":"Yorick","after":"Malphite"},
+    {"layer":"full","path":"phases[4].rating","before":"6/10","after":"7/10"},
+    {"layer":"full","path":"phases[6].rating","before":"5/10","after":"3/10"},
+
+    {"layer":"full","path":"phases[4].why","before":"Maiden turns the lane into a permanent 2v1. Reassess every all-in at 6 — Malphite's ultimate changes the math too.","after":"Maiden turns the lane into a permanent 2v1, and Unstoppable Force is a 130s engage tool, not a duel button."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your side-lane pattern is at full power. Malphite carry threat 7/10 — close before the map decides instead of you.","after":"Full-tank Malphite holds a 130s knockup for your carries — his 5v5 beats your split, so end it before the game groups."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Malphite Unstoppable Force: matchup-defining — Saved for fights. Lane is fine without it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Unstoppable Force: 130s at rank 1, 1000 range — hold Dark Procession for that engage, not for poke. - Granite Shield absorbs 10% of his max health and recharges out of combat: chip it off before you commit. - Ground Slam: 7s flat."},
+    {"layer":"full","path":"dosFull[0].d","before":"Saved for fights. Lane is fine without it. Only engage once it is down or baited.","after":"Unstoppable Force is 130s at rank 1 — his lane does not need it, your dive does."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Malphite's favourite window — refuse it and half his win condition is gone.","after":"Thunderclap is a 10s auto-reset — the wind-up is the tell, so step back then."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Granite Shield recharges if you stop hitting him — never poke once."},
+    {"layer":"full","path":"report[5].t","before":"Track Malphite's Unstoppable Force: Saved for fights. Lane is fine without it. When it is down — Cage + swarm him.","after":"Unstoppable Force: 130s at rank 1. Seismic Shard steals your move speed for 3s; Ground Slam cuts attack speed on 7s."},
+    {"layer":"full","path":"report[8].t","before":"Start Doran's Blade + pot. Core: Trinity Force  (the all-purpose spike), then Hullbreaker; boots Mercury's Treads.","after":"Start Doran's Blade + pot. Core: Trinity Force, then Hullbreaker; Mercury's Treads. Ground Slam scales with his armour."}
+  ],
+  "notes": "DIRECTION CONFLICT, needs a human call. The mirror (malphite__yorick) settled the chart as Skill / Yorick / Yorick / Skill / Malphite / Malphite / Yorick — i.e. Malphite wins level 6 and first item and Yorick wins 2+ items. The packet chart, this page's whys[4], whys[5], whys[6], spikes[1], spikes[2], spikes[3], mid and late all say the reverse on those three rows. I followed the packet and the prose on rows 4 and 6 rather than rewrite six verified strings to fit the mirror, and left row 5 alone. mirror-fix.js will otherwise decide this silently. I also did NOT assert that Dark Procession blocks Unstoppable Force outright — the missing-interactions file claims it and the mirror's note appears to question it, so the line says to hold the wall for his engage instead."
+}

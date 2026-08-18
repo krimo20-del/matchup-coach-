@@ -1,0 +1,94 @@
+{
+  "ownerKey": "yorick",
+  "enemy": "teemo",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "diff says FAV while diffRating is 8.5/10, tone is the red hex and report[14] says 'Hard matchup'. The packet also flags the chart: Yorick wins 54.58% of 1680 games but Teemo holds five of seven stages.",
+      "why": "The chart matches the audited mirror in champ-data/content/teemo.js row for row, and teemo__yorick.json proposed no chart edits, so flipping only this side would create a disagreement the regression check blocks on. The diff-versus-rating conflict cannot be resolved without knowing which reading the field is meant to carry — a hard lane that a scaling champion still wins, or a favoured lane outright.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["champ-data/content/teemo.js", "audits/top/teemo__yorick.json", "packet"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level 6 spike described shrooms as generic zoning with no range and no mention of the bounce.",
+      "why": "Noxious Trap is 600/750/900 range and Riot's text says a mushroom thrown onto another mushroom bounces, gaining additional range — which is how a rank-1 Teemo covers ground far beyond 600 and why a shroom line is deeper than it looks.",
+      "corrected": "Noxious Trap is 600 at rank 1 and bounces further off an existing mushroom; clear them with Mist Walkers.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/teemo.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The single interaction that defines this matchup is missing: Blinding Dart blinds the unit it hits, and Yorick's damage does not come only from his own autos. The page treats the blind as if it shuts off the whole kit, and it repeats 'engage once Blinding Dart is down' as though it were a long cooldown.",
+      "why": "Riot's Q text: 'dealing damage to the target unit and blinding it' — one target. Mist Walkers are separate summoned units and are not the target of that cast, so the pack keeps attacking while you are blind. And the cooldown is a flat 7 seconds at every rank, so waiting it out is not a plan — fighting through it with the swarm is. Toxic Shot is on-hit damage that scales with his attack speed and items, so armour reads the trade wrong.",
+      "corrected": "Blinding Dart blinds one unit for a flat 7s at every rank — the Mist Walkers keep swinging, so commit with the pack rather than waiting for the blind. Toxic Shot is on-hit: his scaling is attack speed, not raw damage you can armour through.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/teemo.json", "champ-data/_kits/_missing/yorick.json"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "wants.you[1] says to use minions to block Blinding Dart.",
+      "why": "The kit's derived flags call the Q a projectile, but Riot's description reads as a single-target cast on an enemy unit, not a skillshot. The two disagree and the description wins, so minion-blocking cannot be asserted — but neither can it be deleted without a source. Left alone.",
+      "corrected": "",
+      "confidence": "Low",
+      "sources": ["champ-data/_kits/teemo.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Level 5 skill window is even when you land E Mourning Mist to force the gap.",
+      "after": "Noxious Trap arrives at 6 and shrooms every path your pack has to walk."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "His R Noxious Trap shrooms zone your ghoul paths and split lanes, punishing your farm; ward brush and clear shrooms with ghouls rather than face-tanking them, and don't over-extend into fog.",
+      "after": "Noxious Trap reaches 600 at rank 1 and bounces further when thrown onto another mushroom, so a shroom line covers more ground than it looks. Clear them with Mist Walkers, not your face, and stay out of fog."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "With Blinding Dart plus Liandry's/Nashor's poke Teemo kites your ghouls and blinds your DPS window; you need Merc treads and to force him under tower where ghouls can trade the Q blind.",
+      "after": "Toxic Shot is on-hit, so his damage scales with attack speed and items rather than anything raw armour answers — Mercury's Treads and magic resist read this trade correctly. Force him under tower where the pack trades."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Raise 3-4 ghouls, E-mark Teemo so they leap, W-cage the retreat, and AA alongside the swarm — the ghouls out-damage you both.",
+      "after": "Raise 3-4 Mist Walkers, Mourning Mist him so they sprint in, Dark Procession his retreat, and AA alongside the swarm."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Teemo Blinding Dart: matchup-defining — Blinds your bite. Swarm when it’s down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Blinding Dart: a flat 7s at every rank, so you cannot wait it out — it blinds only the unit it hits and your Mist Walkers keep attacking. - Move Quick (14s) is his escape. - Eulogy: kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Teemo's Blinding Dart: Blinds your bite. Swarm when it’s down. When it is down — Cage + swarm him.",
+      "after": "Blinding Dart blinds one unit — the Mist Walkers it did not hit keep swinging. Toxic Shot is on-hit."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Track Teemo's Blinding Dart before you commit",
+      "after": "Let the Mist Walkers fight through his blind"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Blinds your bite. Swarm when it’s down. Only engage once it is down or baited.",
+      "after": "It is 7s flat and blinds one unit; the rest of the pack keeps attacking."
+    }
+  ],
+  "notes": "The whole matchup was written as 'wait for the blind to be down', which is not a plan against a flat 7-second cooldown. The correction is that the blind lands on one unit and Yorick's damage is a pack — that is the fix that changes how the lane is played. The chart and the diff/diffRating conflict are both escalated rather than guessed: the chart matches the mirror exactly and the mirror declined to change it."
+}

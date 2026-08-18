@@ -1,0 +1,169 @@
+{
+  "ownerKey": "gnar",
+  "enemy": "yasuo",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both charts read Skill/Yasuo/Yasuo/Skill/Skill/Yasuo/Yasuo — Yasuo winning four of seven stages. Packet says Gnar,Gnar,Gnar,Gnar,Skill,Gnar,Yasuo, the win rate is 52.75% in Gnar's favour over 1020 games, and every whys[] entry describes Gnar winning the stage it is attached to.",
+      "why": "whys[1] says the level-2 poke is one 'his crit autos can't trade back into' — the page marks that stage YASUO. whys[2] says 'his minion-dash can't catch a Mini that just holds range' — marked YASUO. whys[5] says 'Mini's ranged poke keeps the lead' — marked YASUO. This is the most severe chart inversion in the slice: the enum tells the reader they are losing a lane the prose, the packet and the win rate all say they are winning.",
+      "corrected": "Gnar / Gnar / Gnar / Gnar / Skill / Gnar / Yasuo, proposed as one atomic group across both layers.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 52.75 over 1020 games", "content whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer spikes said 'Stridebreaker'; Yasuo's actual spike structure is Wind Wall's cooldown decay and his two-item crit timing.",
+      "why": "Wind Wall starts at 25s and only reaches 17s at rank 5, so early it is a genuine 25-second window where Mini poke is free — that is why levels 1-5 belong to Gnar. His real takeover is two crit items, which the content layer already dates correctly.",
+      "corrected": "Phase whys now key to Wind Wall's cooldown and the two-item crit spike.",
+      "confidence": "High",
+      "sources": ["enemyKit W cooldowns", "content spikes[2], spikes[3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: the full layer never names Yasuo's abilities in mechanical terms and never states Wind Wall's cooldown or 4-second duration. It also never mentions Way of the Wanderer's shield, the flagged missing interaction.",
+      "why": "Wind Wall is 25s at rank 1, 17s at rank 5, and stands for only 4 seconds — those three numbers are the whole reason 'bait it and poke' works and the page states none of them. Steel Tempest is a flat 4s cooldown that only knocks up at 2 stacks, which is the actual tell for his all-in. And his passive shield builds while he MOVES, so it is always up when he walks at you — committing Mega into a full shield wastes the transform window.",
+      "corrected": "Stated Wind Wall 25s/4s and that Wallop's melee smash passes through it, Steel Tempest's 4s and 2-stack knockup, and the moving passive shield that must be chipped off before you commit.",
+      "confidence": "High",
+      "sources": ["enemyKit cooldowns/flags + Riot text", "missingInteractions rule shield-absorbs-burst"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing on the page says whether Wind Wall blocks Gnar's GNAR! (R). Every current line says only 'Wind Wall can't block Mega knockup', which is ambiguous between Wallop (W) and GNAR! (R).",
+      "why": "Gnar's R carries a derived 'projectile' flag in the kit file, but Riot's own description is 'throws everything around him in a chosen direction' — a displacement, not a projectile. Per the standing rule, when a derived flag contradicts the description I trust the description. But that still leaves the actual Wind Wall interaction unknown, and it is the single highest-value unknown in this matchup: whether you can wall-fling a Yasuo who holds W decides every level-6 commit.",
+      "corrected": "No claim written either way. I kept all edits scoped to Wallop (W), which is unambiguously a melee smash and unblockable, and removed no existing text about R.",
+      "confidence": "Low",
+      "sources": ["ownerKit R flags vs Riot text"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Gnar" },
+    { "layer": "content", "path": "win[1]", "before": "Yasuo", "after": "Gnar" },
+    { "layer": "content", "path": "win[2]", "before": "Yasuo", "after": "Gnar" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Gnar" },
+    { "layer": "content", "path": "win[5]", "before": "Yasuo", "after": "Gnar" },
+
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Gnar" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[1].side", "before": "Yasuo", "after": "Gnar" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[2].side", "before": "Yasuo", "after": "Gnar" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Gnar" },
+    { "layer": "full", "path": "phases[3].rating", "before": "4/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[5].side", "before": "Yasuo", "after": "Gnar" },
+    { "layer": "full", "path": "phases[5].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "3/10" },
+
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Boomerang + hop kite wins every melee matchup early. Identify how Yasuo contests the first waves before you commit anything.",
+      "after": "Mini's ranged autos plus a Boomerang win the first trade, and his only commit is dashing off a minion into your range."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Rage management is the champion — track your own bar. Only take the trade when Yasuo's Steel Tempest is down.",
+      "after": "A point in Hyper plus a Boomerang is a free poke-and-slow at 2 that his crit autos cannot trade back into."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit online — your core pattern starts now. Keep the wave near your side so Yasuo must walk into your range.",
+      "after": "You kite on Boomerang's slow and Hyper's speed; his minion-dash cannot catch a Mini that simply holds range."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Steel Tempest's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Rage lined up means Mega Wallop's line stun beats his dash-and-wall pattern outright — the smash is not a projectile at all."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Mega + R against a wall is the best engage top lane owns. Reassess every all-in at 6 — Yasuo's ultimate changes the math too.",
+      "after": "You gain no new spell at 6, so the all-in is even and decided purely by whether Mega is banked when he commits it."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Stridebreaker is your spike — force fights the moment it completes, on Steel Tempest's cooldown.",
+      "after": "Mini's ranged poke keeps the lead — chip him while Wind Wall is down and he cannot shove back."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your pattern is at full power. Yasuo carry threat 9/10 — close before the map decides instead of you.",
+      "after": "Full-crit Yasuo blanks your ranged form with Wind Wall, and his tornado-into-R all-in reclaims the duel here."
+    },
+
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Boomerang-poke — Wind Wall can’t block Mega knockup. Gnar wins the Steel Tempest cooldown windows.",
+      "after": "Boomerang-poke around Wind Wall (25s at rank 1) — Wallop's melee smash goes straight through it."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Bait Wind Wall, Mega-CC his all-in. Track Steel Tempest before every commit and keep the wave on your side.",
+      "after": "Bait Wind Wall empty, then Mega-CC his all-in: it is 25s at rank 1 and stands for only four seconds."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Yasuo wins by landing Steel Tempest, denying your pattern, and out-trading your engage windows.",
+      "after": "Yasuo wins by walling your poke, dashing off minions, and blanking Mini with full crit late."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "He Wind Walls your boomerang — but not Mega’s melee knockup. Only engage once it is down or baited.",
+      "after": "Wind Wall is 25s at rank 1 and eats your Boomerang, but Wallop is a melee smash and goes right through."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Yasuo wastes Steel Tempest — commit the full pattern immediately.",
+      "after": "His passive shield builds while he moves — force it out first."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Yasuo's favourite window — refuse it and half his win condition is gone.",
+      "after": "Angle it, or throw after he burns the wall dashing — it holds for four seconds."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Two Steel Tempest stacks knock you up, on a flat 4s cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Getting caught at zero rage right after Mega ends — that 15-second window is when Gnars die.",
+      "after": "Way of the Wanderer absorbs your opening burst — chip the shield off, then commit Mega."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Yasuo's Steel Tempest: He Wind Walls your boomerang — but not Mega’s melee knockup. When it is down — Boomerang-W + R him.",
+      "after": "Wind Wall (W, 25s, up 4s) eats Boomerang, not Wallop's melee smash. Steel Tempest knocks up at 2 stacks on a flat 4s."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Yasuo Steel Tempest: matchup-defining — He Wind Walls your boomerang — but not Mega’s melee knockup. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Wind Wall (W): 25s at rank 1, 17s at rank 5, up for 4 seconds — it eats Boomerang but not Wallop's melee smash. - Steel Tempest (Q): flat 4s, knocks up at 2 stacks. - Way of the Wanderer: a shield that builds while he moves, so force it out first."
+    }
+  ],
+  "notes": "Worst chart inversion found in this slice: the page told a Gnar player he loses levels 2, 3 and the first-item stage to Yasuo, while its own whys[] text, the packet chart and a 52.75% win rate over 1020 games all say Gnar wins them. Four content enums and four full-layer sides flipped as one group. Packet defect (never names Yasuo's abilities) is fixed with real numbers: Wind Wall 25s/17s and its 4-second duration, Steel Tempest's flat 4s and 2-stack knockup, and the passive shield that builds while moving. DELIBERATE OMISSION: I wrote nothing about whether Wind Wall blocks GNAR! (R). Gnar's R carries a derived 'projectile' flag, but Riot's description calls it throwing everything around him in a direction — a displacement. Per the rule that the description wins over a misfiring flag, I did not assert 'projectile', and I did not assert the opposite either. All my Wind Wall copy is scoped strictly to Wallop (W), which is unambiguously a melee smash.",
+  "questionsForUser": ["Gnar vs Yasuo, full layer, the Wind Wall lines (tldr / dosFull[0].d / report[5].t / breakdown.cooldowns): does Wind Wall block Gnar's GNAR! (R) wall-fling? The kit file flags Gnar's R as a projectile but Riot's own text describes it as a displacement, and the two answers give opposite level-6 advice. I scoped every edit to Wallop (W) only so nothing on the page currently claims either way — needs a ruling before the R interaction can be written."]
+}

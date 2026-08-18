@@ -1,0 +1,118 @@
+{
+  "ownerKey": "gragas",
+  "enemy": "urgot",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both level charts gave Urgot levels 4-5, 6 and first item, but the prose on both layers says the opposite (whys[3] 'Even trade', whys[4] 'You spike hard at 6', whys[5] 'kill him in this window') and the packet levelChart reads Skill, Urgot, Urgot, Skill, Gragas, Gragas, Urgot.",
+      "why": "Win rate is 50.56% over 269 games — an even lane with an owner-favoured 6-to-first-item window, not six straight enemy rows. The chart contradicted its own why-text.",
+      "corrected": "Chart flipped as an atomic group to Skill / Urgot / Urgot / Skill / Gragas / Gragas / Urgot on both layers, with ratings raised to match.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys[3..6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spike entries already name the right four windows: Urgot levels 2-3, Gragas level 6, Gragas first item, Urgot late. Only the level-6 spike text needed the Drunken Rage interrupt added.",
+      "corrected": "spikes[1].text now states that Disdain cuts the 1-second Drunken Rage sample, so W must be started before the dash.",
+      "confidence": "High",
+      "sources": ["ownerKit W text", "enemyKit E text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive interactions were never stated: Drunken Rage is a 1-second sample that Disdain's displacement cuts, Purge reaches 0 cooldown and 0 cost at rank 5, and Disdain is 16s at rank 1 while Body Slam is 14s at rank 1. The text instead said 'a whiffed E is 13 seconds'.",
+      "why": "Riot's own text: W 'samples his latest brew for 1 second'; Urgot E 'charges... if he catches an enemy champion, he will stop and hurl them out of his way'; Purge cd 12/9/6/3/0, cost 40/30/20/10/0; Disdain cd 16/15.5/15/14.5/14; Body Slam cd 14/13.5/13/12.5/12.",
+      "corrected": "Real cooldowns and the sample-interrupt now appear in tradeGood, tradeBad, dontsFull, report[5] and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gragas.json", "champ-data/_kits/urgot.json"]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeGood gave no ranges; Gragas Q outranges Urgot Q by 50 units (850 vs 800), which is the entire poke pattern.",
+      "why": "Kit ranges are authoritative.",
+      "corrected": "tradeGood rewritten around the 850-vs-800 range edge and Disdain's 16s.",
+      "confidence": "High",
+      "sources": ["ownerKit Q range 850", "enemyKit Q range 800"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns listed generic placeholders ('Your committal tool', 'Your ultimate').",
+      "why": "The punishable cooldowns here are Disdain (16s) and, in reverse, Purge having none at rank 5.",
+      "corrected": "Rewritten with named abilities and numbers.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/urgot.json"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing recorded that Drunken Rage's 1-second sample can be lost to displacement.",
+      "why": "Stated directly in Riot's ability text for both champions.",
+      "corrected": "Added to dontsFull[1].d and report[5].t.",
+      "confidence": "High",
+      "sources": ["Riot Data Dragon ability descriptions"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[3]", "before": "Urgot", "after": "Skill" },
+    { "layer": "content", "path": "win[4]", "before": "Urgot", "after": "Gragas" },
+    { "layer": "content", "path": "win[5]", "before": "Urgot", "after": "Gragas" },
+    { "layer": "content", "path": "win[6]", "before": "Skill", "after": "Urgot" },
+    { "layer": "full", "path": "phases[3].side", "before": "Urgot", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[4].side", "before": "Urgot", "after": "Gragas" },
+    { "layer": "full", "path": "phases[4].rating", "before": "3/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[5].side", "before": "Urgot", "after": "Gragas" },
+    { "layer": "full", "path": "phases[5].rating", "before": "4/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "4/10" },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Q-poke Urgot on cooldown from fog angles, W as he answers, and E-slam only when his key tool is down.",
+      "after": "Barrel Roll him at 850 range, outside his 800 Q, and Body Slam only once Disdain is spent — it is down 16s."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Body-slamming INTO his answer — a whiffed E is 13 seconds of being a barrel with no plan.",
+      "after": "Body-slamming into Disdain — a whiffed Body Slam is 14 seconds stood inside Purge range."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Urgot's favourite window — refuse it and half his win condition is gone.",
+      "after": "Purge costs nothing and has no cooldown at rank 5 — never idle inside its 490 range."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Disdain shields him, hurls you, and cuts Drunken Rage's 1s sample."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Urgot's Disdain (Flip): His engage. Dodge it, then burst. When it is down — E-Q burst him.",
+      "after": "Disdain (16s rank 1) shields, hurls, and cuts Drunken Rage's 1s sample. When it's down, E-W-Q him."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Urgot Disdain: matchup-defining — His engage. Dodge it, then burst. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Urgot Disdain: 16s at rank 1 — it shields him, hurls you, and cuts Drunken Rage. Bait it, then commit. - Purge: no cooldown at rank 5, so never idle in 490 range. - Explosive Cask: kill windows only."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Your window: E (Body Slam) stun into W-empowered auto and a sweetspot Q is a real all-in, and Drunken Rage's damage reduction blunts his Purge DPS while Happy Hour heals through it — get him before his R is the answer.",
+      "after": "Your window: E (Body Slam) stun into W-empowered auto and a sweetspot Q is a real all-in, and Drunken Rage's damage reduction blunts his Purge DPS — but start W before you dash, since Disdain cuts the 1s sample."
+    }
+  ],
+  "notes": "suspectNames flagged 'Drunken Rage's' in spikes[1] as a probable wrong name — FALSE POSITIVE. Drunken Rage is Gragas's real W. Every ability name in this matchup's text (Happy Hour, Barrel Roll, Drunken Rage, Body Slam, Explosive Cask, Corrosive Charge, Purge, Disdain, Fear Beyond Death, Echoing Flames) is correct. Derived-flag misfire: Urgot's Q carries a 'dash' flag, but Riot's description is 'Fires an explosive charge at the target location' — no dash. Trusting the description. Spell-shield/QSS/tenacity eligibility for Disdain and Fear Beyond Death is not in Riot's text and was not asserted."
+}

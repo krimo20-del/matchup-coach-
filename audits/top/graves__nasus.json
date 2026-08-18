@@ -1,0 +1,268 @@
+{
+  "ownerKey": "graves",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "diff reads 'EVEN' with 'Favoured matchup — difficulty 4/10, Nasus carry threat 5/10', but the packet is 41.18% and the packet levelChart hands Nasus Level 2, Levels 4-5 and the 2+ item stage. The full layer additionally gives Graves phases 0-4 at 7-8/10, contradicting both the packet chart and the content layer's own whys.",
+      "why": "A 41.18% lane where the enemy owns the scaling stage is not favoured. The content whys already read exactly like the packet chart — only the win[] enums and the full-layer sides/ratings were left on boilerplate.",
+      "corrected": "diff HARD, difficulty 6/10, Nasus carry threat 7/10; both charts set to Skill / Nasus / Graves / Nasus / Graves / Graves / Nasus.",
+      "confidence": "High",
+      "sources": ["packet.winRate 41.18 / games 34", "packet.levelChart", "content whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer spikes are generic Graves boilerplate ('Levels 1-3 and your first item'), and phases[4] describes Collateral Damage as an execute-plus-knockback rather than as the Level 6 all-in that must beat Wither to the punch.",
+      "why": "The real spike order in this lane is: Level 3 with a Quickdraw charge against a Wither-less Nasus, Level 6 with a full magazine, and the first-item spike — after which Nasus' stacks and Spirit Fire shred pass Graves permanently. Wither is 15/14/13/12/11s, so the punish windows are timed off it, not off Graves' own pattern.",
+      "corrected": "phases[2], [4], [5] and [6] rewritten to the real spike order and keyed to Wither's cooldown.",
+      "confidence": "High",
+      "sources": ["enemyKit W cd 15/14/13/12/11", "enemyKit E Spirit Fire armor reduction", "ownerKit E cd 16/15/14/13/12"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "content 'early' states: 'Smoke Screen (W) blinds his Siphoning Strike (it's an empowered auto, so the blind makes it miss)'. report[10].t and phases[6].why also call the W a blind.",
+      "why": "Riot's text for Graves' W is 'creating a cloud of smoke that reduces sight range' plus impact damage and a brief slow — it is a nearsight and a slow, with no blind component; the kit flags are projectile, slow, zone only. The mirror audit on nasus__graves flags this as the single highest-value error in the matchup. Telling a Graves player his W makes a stacked Siphoning Strike whiff will get him killed by the one ability he most needs to dodge.",
+      "corrected": "Smoke Screen reduces sight range and slows on impact; a stacked Siphoning Strike lands inside it normally. Use it to break his vision, not to make his Q miss.",
+      "confidence": "High",
+      "sources": ["ownerKit W Riot text and flags", "mirrorFindings (nasus__graves) point 4 and notes"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing states that Graves' attacks fire 4 bullets which cannot pass through units.",
+      "why": "Riot's passive text is explicit. Nasus only has to keep a minion between himself and Graves for the volley to be eaten entirely — the mirror audit records this from his side, so it must appear from Graves' side as the reason half-range trades through the wave do nothing.",
+      "corrected": "Stated in dontsFull[0].d: the four bullets cannot pass through units, so a minion in the way eats the volley.",
+      "confidence": "High",
+      "sources": ["ownerKit P Riot text", "mirrorFindings point 4"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "End of the Line's terrain behaviour is described as a 'wall-bounce return', which is not what Riot's text says.",
+      "why": "Riot: 'fires an explosive shell that detonates after 1 second, or after colliding with terrain.' Terrain makes it detonate EARLY — there is no return hit in the description. The mirror audit states the same thing from Nasus' side.",
+      "corrected": "phases[2].why now says End of the Line detonates early off a wall.",
+      "confidence": "High",
+      "sources": ["ownerKit Q Riot text", "mirrorFindings point 4"]
+    },
+    {
+      "point": 11,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "content late correctly identifies Spirit Fire's armor shred devaluing True Grit and R lifesteal out-sustaining the burst; no change needed.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit E and R Riot text"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[0]",
+      "before": "Graves",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[1]",
+      "before": "Graves",
+      "after": "Nasus"
+    },
+    {
+      "layer": "content",
+      "path": "win[3]",
+      "before": "Graves",
+      "after": "Nasus"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Skill",
+      "after": "Graves"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Graves",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Graves",
+      "after": "Nasus"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Graves",
+      "after": "Nasus"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Graves"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].rating",
+      "before": "8/10",
+      "after": "5/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].rating",
+      "before": "8/10",
+      "after": "3/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].rating",
+      "before": "8/10",
+      "after": "7/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].rating",
+      "before": "8/10",
+      "after": "4/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].rating",
+      "before": "7/10",
+      "after": "7/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].rating",
+      "before": "4/10",
+      "after": "7/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].rating",
+      "before": "5/10",
+      "after": "3/10"
+    },
+    {
+      "layer": "full",
+      "path": "diff",
+      "before": "EVEN",
+      "after": "HARD"
+    },
+    {
+      "layer": "full",
+      "path": "diffRating",
+      "before": "4/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "carryRating",
+      "before": "5/10",
+      "after": "7/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Four shells of buckshot win any level-1 face-off — trade autos point-blank where every pellet lands.",
+      "after": "Both weak at 1 — he has only Siphoning Strike, you have no Quickdraw yet. Contest last-hits, commit nothing."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "E online — dash-reload weaving starts: auto, E for the grit armor and reset, auto again. Most champs lose this flat.",
+      "after": "Wither online at 15s cripples your move and attack speed at once — your kite, reload tempo and shell DPS all die."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit: Q's wall-bounce return is your real damage — fight near terrain so both hits connect.",
+      "after": "E in on a Wither-less Nasus for the point-blank volley — End of the Line detonates early off a wall."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Trade in shell rhythm: two autos and out. Track Wither; your armor stacks from E make his short trades unprofitable.",
+      "after": "His Q stacks now outweigh your True Grit and Wither is back every 15s at rank 1 — deny last-hits rather than duel."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Collateral Damage adds an execute and a disengage knockback in one — hold it for either, never for chip.",
+      "after": "Collateral Damage with a full magazine chunks him — but only if you burst before Wither lands, never after."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "First item spike — the point-blank Q-AA-E-AA pattern now removes half bars. Force fights near walls.",
+      "after": "First item is your last edge — force the all-in on every Wither cooldown before his stacks pass you."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "You out-skirmish but the crit scalers pass you — convert to picks with smoke-screen blinds and R snipes.",
+      "after": "Spirit Fire shreds the armor True Grit gave you and R lifesteal walks through your burst — group, don't duel."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Buckshot the brawler — point-blank shells hurt more than his trades and your E resets the spacing.",
+      "after": "Deny stacks and close it early — Wither kills your kite and a stacked Siphoning Strike ends you late."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "Buckshot the brawler — point-blank shells hurt more than his trades and your E resets the spacing.",
+      "after": "Deny stacks and close it early — Wither kills your kite and a stacked Siphoning Strike ends you late."
+    },
+    {
+      "layer": "full",
+      "path": "report[10].t",
+      "before": "Your W smoke blinds tower dives and breaks gank pathing — drop it on arrival and turn their 2v1 into a coin flip you win.",
+      "after": "Your W cuts vision on a dive and slows the arrival — drop it on the jungler and turn their 2v1 into a coin flip."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].t",
+      "before": "E sideways out of Wither, never backwards",
+      "after": "Bait Wither out before you commit to a trade"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Nasus whiffs Wither and the lane briefly belongs to you.",
+      "after": "A whiffed Wither buys 15 seconds where your kite works."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Nasus’s whole plan in one window — decline politely and watch it retire.",
+      "after": "Your four bullets cannot pass through units — a minion in the way eats the volley."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Favoured matchup — difficulty 4/10, Nasus carry threat 5/10.",
+      "after": "Hard matchup — difficulty 6/10, Nasus carry threat 7/10."
+    },
+    {
+      "layer": "full",
+      "path": "report[14].t",
+      "before": "Favoured matchup — difficulty 4/10, Nasus carry threat 5/10.",
+      "after": "Hard matchup — difficulty 6/10, Nasus carry threat 7/10."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Nasus is weak and stack-hungry early, so this is your window — but respect Wither (W) the second he hits 2. Until then, Quickdraw (E) in for the point-blank 4-shell spread and drop an End of the Line (Q) cone to deny his Siphoning Strike last-hits and zone him off the wave. Do NOT linger in auto range once his W is up: Wither slows your move speed AND attack speed, which kills your kite, your reload tempo and your shell DPS at once. Smoke Screen (W) blinds his Siphoning Strike (it's an empowered auto, so the blind makes it miss) and slows him, but it does nothing to remove the Wither slow already on you.",
+      "after": "Nasus is weak and stack-hungry early, so this is your window — but respect Wither (W) the second he hits 2. Until then, Quickdraw (E) in for the point-blank 4-shell spread and drop an End of the Line (Q) cone to deny his Siphoning Strike last-hits and zone him off the wave. Do NOT linger in auto range once his W is up: Wither slows your move speed AND attack speed, which kills your kite, your reload tempo and your shell DPS at once. Smoke Screen (W) does not blind — it reduces sight range and slows on impact, so a stacked Siphoning Strike still lands inside it. Use it to break his sight of you while you reload, never as a way to make his Q miss."
+    }
+  ],
+  "notes": "Highest-value fix confirmed against the mirror (nasus__graves): content 'early' told the player Smoke Screen blinds Siphoning Strike and makes it whiff. Riot's W text is 'reduces sight range' plus a brief slow — there is no blind, and a stacked Q lands inside the smoke normally. The same false claim leaked into report[10].t ('W smoke blinds tower dives') and phases[6].why ('smoke-screen blinds'); all three are corrected here and now agree with the Nasus-side page. Level chart: the content win[] and the full-layer phases disagreed with each other AND with the packet, while the content whys matched the packet exactly — I flipped both charts to the packet order as one atomic group so the two directions and the two layers agree. Note the brief's top-level 'games: 1924' disagrees with packet.games 34; I used the packet figure and the packet win rate, which is the Emerald+ number. Nothing about tenacity, cleanse or QSS against Wither is asserted — not in Riot's text, so left unstated."
+}

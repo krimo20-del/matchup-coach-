@@ -1,0 +1,238 @@
+{
+  "ownerKey": "graves",
+  "enemy": "ornn",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Content win[] and the full-layer phases both read Graves / Skill / Ornn / Ornn / Graves / Ornn / Ornn, against a packet levelChart of Skill / Ornn / Ornn / Ornn / Graves / Graves / Ornn. Rows 0, 1 and 5 are wrong in both layers.",
+      "why": "The content whys match the packet, not the enums beside them. whys[0] ends 'so this stage is genuinely even' — that is Skill, not Graves. whys[1] describes his pillar knockup arriving and is an Ornn row. whys[5] says the first item is 'your peak duel tempo... the last stage your shell spread meaningfully hurts him' — a Graves row that was tagged Ornn.",
+      "corrected": "Both charts set to Skill / Ornn / Ornn / Ornn / Graves / Graves / Ornn, ratings 5,3,3,3,7,6,2 from the Graves side. Difficulty 7/10 and TRICKY are consistent with 44.9% over 49 games and are left alone.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 44.9 / games 49", "content whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer's phases[1] through [5] are generic Graves boilerplate that never names an Ornn ability, and phases[5] marks the first item as an Ornn stage.",
+      "why": "The real spike order is: Level 2 when Searing Charge (14/13.5/13/12.5/12s) comes online and he can knock Graves up off his own pillar; Level 6 as Graves' single nuke window; the first item as the last stage a shell spread still hurts him, since Living Forge lets him build armour in lane while Graves is still finishing item one. None of that is in the text.",
+      "corrected": "phases[1]-[6] rewritten to that order with the real cooldowns; first item flipped to Graves.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 14/13.5/13/12.5/12", "enemyKit Q cd 9/8.5/8/7.5/7", "enemyKit P Living Forge Riot text"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The single most important two-way interaction in this lane is absent: Volcanic Rupture creates a magma pillar, and that pillar is terrain.",
+      "why": "Riot's Ornn Q: 'sends out a fissure dealing damage and slowing enemies hit. After a small delay, a magma pillar forms at the end location.' Riot's Graves Q: 'fires an explosive shell that detonates after 1 second, OR AFTER COLLIDING WITH TERRAIN.' So Ornn's pillar detonates End of the Line early — the shell dies on the pillar instead of reaching him. The same pillar is what Riot's Searing Charge needs: 'If Ornn collides with terrain while charging, the impact creates a shockwave around him which deals damage and knocks up enemies.' He makes his own wall and then charges it. Nothing in the current text connects any of this.",
+      "corrected": "Stated in phases[2].why and dosFull[0].d: the pillar is terrain, it early-detonates your Q, and it is the wall his charge knocks you up against.",
+      "confidence": "High",
+      "sources": ["enemyKit Q and E Riot text", "ownerKit Q Riot text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[1] says Brittle 'stuns through your W blind'; content 'early' says 'your W (Smoke Screen) blind does nothing to stop a knockup or a stun'; report[10].t and phases[6].why also call the W a blind.",
+      "why": "Graves' W has no blind. Riot: 'creating a cloud of smoke that reduces sight range. Enemies caught in the initial impact are dealt magic damage and have their Move Speed reduced briefly.' The conclusion drawn (W will not save you from his CC) is correct, but it is justified by an ability property that does not exist, which teaches the player the wrong model of his own kit.",
+      "corrected": "Smoke Screen slows on impact and reduces sight range; it was never going to stop a knockup.",
+      "confidence": "High",
+      "sources": ["ownerKit W Riot text and flags"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Four fields tell the player to fire Collateral Damage at a wall to knock HIMSELF backwards out of pillar range: whys[4] ('or wall-knockback out'), spikes[1].text ('fire it at a wall to knock yourself out of his pillar range'), wants.you[2] ('a wall-knockback escape') and content mid ('fire it at a wall to knock yourself clear').",
+      "why": "Riot's R text describes no displacement of any kind: 'fires an explosive shell dealing heavy damage to the first champion it hits. After hitting a champion or reaching the end of its range, the shell explodes dealing damage in a cone.' The only knockback anywhere in Graves' kit is on the passive and Riot restricts it explicitly to NON-champions: 'Non-champions struck by multiple bullets are knocked back.' An escape route that does not exist is the worst class of error on a page like this — the player commits into a tank's CC believing he has an out.",
+      "corrected": "I did not assert that the mechanic is absent, since the kit file is silent rather than negative. I rewrote all four fields so none of the advice depends on it, and left the claim itself unrepeated. Flagged in unverified for a human check.",
+      "confidence": "Medium",
+      "sources": ["ownerKit R and P Riot text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Volcanic Rupture is named the matchup clock but its cooldown never appears; Searing Charge's never appears either.",
+      "why": "Q is 9/8.5/8/7.5/7 and E is 14/13.5/13/12.5/12. The E is the long one and the one that actually threatens the knockup, so 'commit while Searing Charge is on its 14-second timer' is the concrete instruction the focus line should have carried.",
+      "corrected": "Real numbers added to phases[1], phases[3] and spikes[1].",
+      "confidence": "High",
+      "sources": ["enemyKit Q and E cooldowns"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[0]",
+      "before": "Graves",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[1]",
+      "before": "Skill",
+      "after": "Ornn"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Ornn",
+      "after": "Graves"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Graves",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Ornn"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Ornn",
+      "after": "Graves"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].rating",
+      "before": "7/10",
+      "after": "5/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].rating",
+      "before": "4/10",
+      "after": "3/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].rating",
+      "before": "4/10",
+      "after": "3/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].rating",
+      "before": "4/10",
+      "after": "3/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].rating",
+      "before": "7/10",
+      "after": "7/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].rating",
+      "before": "4/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].rating",
+      "before": "4/10",
+      "after": "2/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Four shells of buckshot win any level-1 face-off — trade autos point-blank where every pellet lands.",
+      "after": "Both weak at 1 and he is immobile with no escape — neither of you can commit, so just trade last-hits."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "E online — dash-reload weaving starts: auto, E for the grit armor and reset, auto again. Most champs lose this flat.",
+      "after": "Searing Charge online at 14s — he charges into his own magma pillar and the terrain collision knocks you up."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit: Q's wall-bounce return is your real damage — fight near terrain so both hits connect.",
+      "after": "His pillar is terrain — it detonates End of the Line early and blocks the Quickdraw line you came in on."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Trade in shell rhythm: two autos and out. Track Volcanic Rupture; your armor stacks from E make his short trades unprofitable.",
+      "after": "True Grit does not save you here: his threat is lockdown rather than DPS, and Volcanic Rupture is back every 9 seconds."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Collateral Damage adds an execute and a disengage knockback in one — hold it for either, never for chip.",
+      "after": "Collateral Damage is your one nuke window — take it with his Searing Charge and Bellows Breath both down."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "First item spike — the point-blank Q-AA-E-AA pattern now removes half bars. Force fights near walls.",
+      "after": "Your first item is the last stage where your shell spread meaningfully hurts him — force it now."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "You out-skirmish but the crit scalers pass you — convert to picks with smoke-screen blinds and R snipes.",
+      "after": "He self-forges armor while your point-blank damage falls off, and the double knockup keeps you out."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Pillar + knockup setup — stay off walls and sidestep the line. Its cooldown is the green light — wait for it.",
+      "after": "The pillar is terrain — it early-detonates your Q and gives his charge something to knock you up against."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Ornn’s rehearsed moment — don’t audition for it.",
+      "after": "His forged armor swallows an entire point-blank magazine."
+    },
+    {
+      "layer": "full",
+      "path": "report[10].t",
+      "before": "Your W smoke blinds tower dives and breaks gank pathing — drop it on arrival and turn their 2v1 into a coin flip you win.",
+      "after": "Your W cuts vision on a dive and slows the arrival — drop it on the jungler and turn their 2v1 into a coin flip."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "His E pillar comes online and lets him dash-knockup the moment you step into shell range — and the Brittle his abilities apply stuns through your W blind.",
+      "after": "His E charge comes online and knocks you up off his own pillar the moment you step into shell range — and Smoke Screen slows, it never blinds."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Collateral Damage is your one nuke-and-escape window — catch his E and W on cooldown and you can finally burst him with both shells or wall-knockback out.",
+      "after": "Collateral Damage is your one nuke window — catch Searing Charge and Bellows Breath on cooldown and you can finally burst him with both shells."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Collateral Damage gives you a real two-shell burst window — your one stage to out-nuke him before he forges a single armor item, and you can fire it at a wall to knock yourself out of his pillar range.",
+      "after": "Collateral Damage gives you a real two-shell burst window — your one stage to out-nuke him before he forges a single armor item, so take it while Searing Charge is on its 14-second timer."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Use Lvl 6 Collateral Damage as your burst window or a wall-knockback escape, in the one stage you can actually threaten him before he forges armor",
+      "after": "Use Lvl 6 Collateral Damage as your burst window in the one stage you can actually threaten him, before he forges his first armor item"
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Ornn is immobile with no sustain, so on paper you should bully him — but his entire kit is point-blank CC and so is your damage, so every time you E in to land your 4-shell spread you walk into a pillar knockup. Worse, his abilities apply Brittle, and his next hit detonates it for bonus magic damage plus a brief stun — and your W (Smoke Screen) blind does nothing to stop a knockup or a stun. Last-hit with the detonation tip of your Q from range, and don't burn both E charges chasing a tank who only needs to land one ability to flip the trade.",
+      "after": "Ornn is immobile with no sustain, so on paper you should bully him — but his entire kit is point-blank CC and so is your damage, so every time you E in to land your 4-shell spread you walk into a pillar knockup. Worse, his abilities apply Brittle, and his next hit detonates it for bonus magic damage plus a brief stun — and Smoke Screen only slows and cuts sight range, so it does nothing about a knockup. Last-hit with the detonation tip of your Q from range, and don't burn both E charges chasing a tank who only needs to land one ability to flip the trade."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Through 4-5 the armor and MR your True Grit passive stacks in combat mean nothing here — Ornn's threat isn't DPS you can out-tank, it's lockdown. Level 6 is your one real window: Collateral Damage adds a burst nuke, so if you catch him with his E pillar and W both on cooldown you can chunk him with both shells, and you can fire it at a wall to knock yourself clear. But the instant he hits 6 his double-knockup R turns any trade into a dive setup, and because he self-forges his items he's already stacking armor while you finish your first. Take the R window, then back off.",
+      "after": "Through 4-5 the armor and MR your True Grit passive stacks in combat mean little here — Ornn's threat isn't DPS you can out-tank, it's lockdown. Level 6 is your one real window: Collateral Damage adds a burst nuke, so if you catch him with Searing Charge and Bellows Breath both on cooldown you can chunk him with both shells before he can answer. But the instant he hits 6 his double-knockup R turns any trade into a dive setup, and because he self-forges his items he's already stacking armor while you finish your first. Take the R window, then back off."
+    }
+  ],
+  "notes": "Best find in this matchup is a missing interaction rather than a wrong one: Ornn's Volcanic Rupture leaves a magma pillar, that pillar is TERRAIN, and Graves' End of the Line 'detonates after 1 second, or after colliding with terrain' — so his Q kills your Q early, and the same pillar is the wall Searing Charge collides with to produce the knockup ('If Ornn collides with terrain while charging, the impact creates a shockwave... and knocks up enemies'). He builds his own wall and then charges it. None of that was anywhere in the page. IMPORTANT FOR THE USER — a fabricated escape: four fields (whys[4], spikes[1].text, wants.you[2], content mid) told the player to fire Collateral Damage at a wall to knock HIMSELF out of Ornn's pillar range. Riot's R text has no displacement at all, and the only knockback in Graves' kit is the passive's, explicitly limited to non-champions. I removed the dependency from all four fields but did not write a denial, since the kit file being silent is not the same as the kit file saying no. This needs one human check — if the mechanic is real it should be restored with the correct wording; if not, the same phrasing may exist on other Graves matchups. Also unverifiable from the kits: the Brittle detonation description ('next hit detonates it for bonus magic damage plus a brief stun'). Riot's W text says only 'Enemies hit by the final gout of flame become Brittle' and never defines Brittle. I left that text untouched rather than restate or remove it. Smoke Screen was called a blind in four places; corrected. Mirror file ornn__graves did not exist at audit time."
+}

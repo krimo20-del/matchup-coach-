@@ -1,0 +1,82 @@
+{
+  "ownerKey": "maokai",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 1 is given to Maokai and 'First item' is given to Nasus in both layers, but the whys[] for those rows say 'it's a wash' and 'it's even at best', and the packet levelChart has both as Skill.",
+      "why": "At Level 1 each champion has one ability and no combo — Nasus is stacking Siphoning Strike, Maokai has no W-Q chain, so no kill pressure exists either way. At first item Maokai is durable and lane-stable but has no kill threat, while Nasus has not yet reached the stacked 2-item window; neither side owns it.",
+      "corrected": "phases[0]/win[0] and phases[5]/win[5] set to Skill in both layers, with ratings moved to 5/10 to match.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "existing whys[0] and whys[5]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Four spikes present and accurate: Lvl 2-3 root-poke window, Lvl 6 as a modest non-duel spike (Nature's Grasp is engage, Fury of the Sands is HP/resists not burst), 1st item stability, and 2+ items as his takeover.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json", "currentText.content.spikes"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing in the file states that Twisted Advance is lock-on and that Maokai is untargetable for the whole dash. The don't 'Fight inside his W slow' is described with filler text about burning an ability for tiny value.",
+      "why": "The kit file gives Twisted Advance both 'untargetable' and 'hardCC' flags with a target-locked dash. Nasus cannot dodge it, and Wither (15/14/13/12/11s) cannot be applied during the flight — it lands before the cast or after arrival. The mirror audit on nasus reached the same conclusion, so both directions now state it.",
+      "corrected": "phases[1].why and dontsFull[1].d now state the lock-on and untargetability, and dosFull[0].d carries Wither's real 15s rank-1 cooldown.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/maokai.json (W flags)", "champ-data/_kits/nasus.json (W cooldown)", "mirrorFindings from audits/top/nasus__maokai"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: 'NO cooldown-sequencing advice anywhere'. Wither is named repeatedly but never with a number.",
+      "why": "Wither is 15/14/13/12/11 seconds. A baited Wither at rank 1 is a 15-second window in which Maokai's W (14s at rank 1) is effectively back — that is what makes the sequencing concrete.",
+      "corrected": "dosFull[0].d now reads with the 15s rank-1 figure.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Maokai", "after": "Skill" },
+    { "layer": "content", "path": "win[0]", "before": "Maokai", "after": "Skill" },
+    { "layer": "full", "path": "phases[5].side", "before": "Nasus", "after": "Skill" },
+    { "layer": "content", "path": "win[5]", "before": "Nasus", "after": "Skill" },
+    { "layer": "full", "path": "phases[0].rating", "before": "7/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "4/10", "after": "5/10" },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Passive heal + AA trades carry the early waves. Identify how Nasus contests the first waves before you commit anything.",
+      "after": "One ability each and no combo — he is stacking Siphoning Strike, you are waiting on W-Q, so Level 1 is a genuine wash."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "W root is your engage AND your peel — spend it once per fight. Only take the trade when Nasus's Wither is down.",
+      "after": "Twisted Advance is lock-on and untargetable in flight — undodgeable, and Wither cannot catch you mid-dash. Trade now."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Heartsteel is your spike — force fights the moment it completes, on Wither's cooldown.",
+      "after": "Durable and lane-stable on first item, but you cannot kill him and every minute stacks his Q."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His only kite. Root through it. Only engage once it is down or baited.",
+      "after": "His only kite, 15s at rank 1. Engage the moment it is down or baited."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Wither cannot land during your W dash — you are untargetable in flight."
+    }
+  ],
+  "notes": "Mirror (nasus__maokai) already established the Twisted Advance untargetability and lock-on; restated here from Maokai's side so the two pages agree. Chart now matches the packet on rows 0 and 5 in both layers. Two rows differ from packet only where the file already agreed with itself and with the prose — none introduced."
+}

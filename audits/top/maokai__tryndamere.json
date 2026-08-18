@@ -1,0 +1,84 @@
+{
+  "ownerKey": "maokai",
+  "enemy": "tryndamere",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Row 0 reads Skill although whys[0] and the early block both say to concede the opener; rows 1, 2 and 3 read Tryndamere or Skill although whys[1], whys[2] and whys[3] all describe Maokai out-trading him pre-crit; row 5 reads Tryndamere although whys[5] and spikes[2] call first item lane-stable and even.",
+      "why": "packet.levelChart is Tryndamere / Maokai / Maokai / Maokai / Skill / Skill / Tryndamere, which matches the prose stage for stage on a 51.61% win rate.",
+      "corrected": "Row 0 to Tryndamere, rows 1-3 to Maokai, row 5 to Skill, as one atomic group with matched content pairs and ratings.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate", "brief currentText whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Four spikes present: Maokai's 2-3 pre-crit window, Undying Rage at 6, the first-item stalemate, and crit-stacked Tryndamere late. The packet's suspectName on spikes[1] ('His Undying Rage') is a false positive — that is the real R name.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief currentText spikes[0..3]", "champ-data/_kits/tryndamere.json R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Mocking Shout is described only as a 'W slow'. Its slow is conditional: it applies to enemies whose backs are turned to Tryndamere. Nothing on the page states this, and it is what makes disengaging wrongly fatal.",
+      "why": "Riot's W text: 'decreasing surrounding champions' Attack Damage. Enemies with their backs turned to Tryndamere also have their Move Speed reduced.' W is 14s, Bloodlust 12s, Spinning Slash 12s at rank 1, Undying Rage 120s at rank 1.",
+      "corrected": "Back-turned rule and real cooldowns written into tldr, dosFull[0].d, dontsFull[1].d and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tryndamere.json Q/W/E/R text"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Bloodlust heals off Fury, so the existing early-anti-heal instruction is the right call and already present in report[8].t.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tryndamere.json Q flags"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Anti-heal his crits — W-root him, out-last his R. Maokai wins the Undying Rage cooldown windows.",
+      "after": "Mocking Shout slows you only if your back is turned — face him, W-root, Q him out of spin range."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Unkillable 5s. Out-last it. Only engage once it is down or baited.",
+      "after": "Undying Rage is 120s at rank 1 — make him spend it, then fight."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Bloodlust (12s) heals off Fury — get Grievous Wounds first."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Tryndamere Undying Rage: matchup-defining — Unkillable 5s. Out-last it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Tryndamere Undying Rage (120s at rank 1): make him spend it, then take the next fight. - Mocking Shout (14s) only slows you when your back is turned — walk out facing him. - Your ultimate: kill windows only."
+    },
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[1].side", "before": "Tryndamere", "after": "Maokai" },
+    { "layer": "content", "path": "win[1]", "before": "Tryndamere", "after": "Maokai" },
+    { "layer": "full", "path": "phases[2].side", "before": "Tryndamere", "after": "Maokai" },
+    { "layer": "content", "path": "win[2]", "before": "Tryndamere", "after": "Maokai" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Maokai" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Maokai" },
+    { "layer": "full", "path": "phases[5].side", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "content", "path": "win[5]", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "4/10", "after": "7/10" }
+  ],
+  "notes": "Chart rows 0,1,2,3,5 proposed as one atomic group across both layers and now match packet.levelChart and the page's own whys. Two claims already on the page could not be verified from Riot's text and were left untouched: that Undying Rage lasts 5 seconds (the kit text gives no duration) and that Spinning Slash's cooldown is reduced by critical strikes (the kit text says only that he slices toward a target unit)."
+}

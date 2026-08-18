@@ -1,0 +1,88 @@
+{
+  "ownerKey": "maokai",
+  "enemy": "sylas",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "All seven rows read Sylas, but whys[0] says neither side wins Level 1, whys[1] and whys[2] describe Maokai out-trading him at 2-3, and whys[3] calls Levels 4-5 close.",
+      "why": "packet.levelChart is Skill / Maokai / Maokai / Skill / Sylas / Sylas / Sylas — Sylas only takes over from 6 once Hijack and his first AP item land.",
+      "corrected": "Rows 0 and 3 to Skill, rows 1 and 2 to Maokai, as one atomic group with matched content pairs and ratings.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "brief currentText whys[0..3]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Four spikes present: Maokai's 2-3 punish, Sylas's level-6 Hijack stealing Nature's Grasp, his first AP item, and late AP scaling.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief currentText spikes[0..3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page calls Abscond/Abduct a 'dash + stun' in four places (breakdown.cooldowns, dosFull[0].d, report[5].t, wants.foe[1], mid). Riot's E text has no stun. wants.foe[0] also credits Q with the drain — the healing is on W, Kingslayer.",
+      "why": "Riot's E: 'Sylas dashes to a location. Sylas can recast the ability to throw his chains out, pulling himself to an enemy he hits.' Riot's W: 'lunges at an enemy... healing himself against enemy champions.' Q, Chain Lash, only damages and slows. E is 13s at rank 1, W 12s.",
+      "corrected": "The invented stun removed and slots fixed in tldr, dosFull[0].d, breakdown.cooldowns, wants.foe[0] and wants.foe[1], with the real cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sylas.json Q/W/E text and flags"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Kingslayer heals off champions, so the existing early-anti-heal instruction in report[8].t is the right answer and is already present.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sylas.json W flags"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Bait his key tool — root him on the Abscond / Abduct cooldown and grind him with saplings. Maokai wins the Abscond / Abduct cooldown windows.",
+      "after": "Abscond is a dash he recasts as Abduct to yank himself to you — bait the recast, then W-root on its 13s and grind him with saplings."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His dash + stun (recast pull). Bait it, then commit. Only engage once it is down or baited.",
+      "after": "Abscond dashes and the Abduct recast pulls him to you — no stun in it. Commit on its 13s."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Sylas Abscond / Abduct: matchup-defining — His dash + stun (recast pull). Bait it, then commit. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Sylas Abscond (13s at rank 1): a dash, and the Abduct recast pulls him onto you — it does not stun. - Kingslayer (12s) heals him off champions, so Grievous Wounds is the answer. - Your ultimate: kill windows only."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Stack Q (Chemtech) drain and W heal to win the sustained AP trade your Sap Magic can't out-grind",
+      "after": "Chip you with Chain Lash (Q) and heal off you with Kingslayer (W) to out-grind your Sap Magic"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Hold E chain-dash to break your W approach or stun you out of an all-in",
+      "after": "Hold Abscond to dodge your W, then Abduct back onto you once your root is down"
+    },
+    { "layer": "full", "path": "phases[0].side", "before": "Sylas", "after": "Skill" },
+    { "layer": "content", "path": "win[0]", "before": "Sylas", "after": "Skill" },
+    { "layer": "full", "path": "phases[1].side", "before": "Sylas", "after": "Maokai" },
+    { "layer": "content", "path": "win[1]", "before": "Sylas", "after": "Maokai" },
+    { "layer": "full", "path": "phases[2].side", "before": "Sylas", "after": "Maokai" },
+    { "layer": "content", "path": "win[2]", "before": "Sylas", "after": "Maokai" },
+    { "layer": "full", "path": "phases[3].side", "before": "Sylas", "after": "Skill" },
+    { "layer": "content", "path": "win[3]", "before": "Sylas", "after": "Skill" },
+    { "layer": "full", "path": "phases[0].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "3/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "3/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "2/10", "after": "5/10" }
+  ],
+  "notes": "Rows 0-3 proposed as one atomic group across both layers; rows 4-6 already read Sylas and match the 46.06% win rate. The mid block still says 'Respect his E stun before you step in' — same fabricated stun, left for a pass that can rewrite the long paragraph inside the length band. Hijack stealing Nature's Grasp is already correctly stated."
+}

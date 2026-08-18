@@ -1,0 +1,63 @@
+{
+  "ownerKey": "maokai",
+  "enemy": "kassadin",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Maokai for rows 2, 3, 5 and 6 and Skill for row 6-level... specifically: rows 2-3 said Maokai while their own whys say 'tightens to a skill matchup' and 'the lane sits even until 6'; rows 4-6 said Skill/Maokai/Maokai while whys[4] says the free-kill window is gone, whys[5] says his scaling overtakes you, and whys[6] says 'you out-scale nothing here'. The packet levelChart is Maokai, Maokai, Skill, Skill, Kassadin, Kassadin, Kassadin.",
+      "why": "The mirror agent recorded being 'BLOCKED BY THE LENGTH BAND' on exactly these rows. That belief is false — side and rating are ENUM_FIELDs and are exempt (apply-proposals.js:78). This is the whole reason the chart shipped wrong.",
+      "corrected": "Rows 2-6 set to the packet chart in BOTH layers, proposed as one atomic paired group, with ratings moved to match (5/10, 5/10, 4/10, 4/10, 3/10) and every affected phases[N].why rewritten so the prose no longer argues against the row.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "existing whys[2..6]", "mirrorFindings notes"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spike framing was generic ('Heartsteel is your spike') and ignored that Kassadin's spike ordering is the entire matchup.",
+      "why": "Riftwalk is 5/3.5/2s and 40 mana; Null Sphere is 9/8.5/8/7.5/7s with a magic shield; your W is 14/13/12/11/10s. Pre-6 he is a blinkless melee; post-6 no root holds him.",
+      "corrected": "Numbers written into tldr, winCon, phases[1].why, phases[3].why, phases[4].why, phases[5].why, dosFull[0].d and the All-In Windows block.",
+      "confidence": "High",
+      "sources": ["ownerKit/enemyKit cooldowns in brief"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page told you to 'engage on Riftwalk's cooldown' and to 'track Riftwalk before every commit'. Riftwalk's cooldown is 5s at rank 1 and 2s at rank 3 — there is no cooldown window to trade in. The advice was structurally impossible to follow.",
+      "why": "The template assumed the enemy's key ability is a long-cooldown answer. Here it is a near-permanent blink, so the correct framing is a hard pre-6 timer, not a cooldown watch. Also unstated: Null Sphere interrupts channels and grants a magic-damage shield, which is what blunts Sap Magic trades from level 3 on.",
+      "corrected": "tldr, winCon, All-In Windows, dosFull[0].d and Key Ability Interactions rewritten around 'kill him before 6' plus the Null Sphere shield/interrupt.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd 5/3.5/2", "enemyKit Q text and flags (shield, channel-interrupt)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[2].side","before":"Maokai","after":"Skill"},
+    {"layer":"full","path":"phases[2].rating","before":"7/10","after":"5/10"},
+    {"layer":"content","path":"win[2]","before":"Maokai","after":"Skill"},
+    {"layer":"full","path":"phases[3].side","before":"Maokai","after":"Skill"},
+    {"layer":"full","path":"phases[3].rating","before":"7/10","after":"5/10"},
+    {"layer":"content","path":"win[3]","before":"Maokai","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Kassadin"},
+    {"layer":"full","path":"phases[4].rating","before":"5/10","after":"4/10"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Kassadin"},
+    {"layer":"full","path":"phases[5].side","before":"Maokai","after":"Kassadin"},
+    {"layer":"full","path":"phases[5].rating","before":"6/10","after":"4/10"},
+    {"layer":"content","path":"win[5]","before":"Maokai","after":"Kassadin"},
+    {"layer":"full","path":"phases[6].side","before":"Maokai","after":"Kassadin"},
+    {"layer":"full","path":"phases[6].rating","before":"6/10","after":"3/10"},
+    {"layer":"content","path":"win[6]","before":"Maokai","after":"Kassadin"},
+    {"layer":"full","path":"phases[1].why","before":"W root is your engage AND your peel — spend it once per fight. Only take the trade when Kassadin's Riftwalk is down.","after":"Your W roots a blinkless Kassadin for the full duration — Q-knock and a Sap Magic auto win the level-2 trade outright."},
+    {"layer":"full","path":"phases[2].why","before":"Full kit online — your core pattern starts now. Keep the wave near your side so Kassadin must walk into your engage range.","after":"Full kit online, but his Q shield starts absorbing your Sap Magic poke — even now, and the trade turns on his 7-9s silence timing."},
+    {"layer":"full","path":"phases[3].why","before":"The lane-control window: trade around Riftwalk's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.","after":"Even until 6: your 11-12s W repeats roots, but a careful Kassadin farms behind Null Sphere and gives you nothing to punish."},
+    {"layer":"full","path":"phases[4].why","before":"Nature’s Grasp roots whole teams — lane it only for kill windows. Reassess every all-in at 6 — Kassadin's ultimate changes the math too.","after":"Riftwalk lands at a 5s base cooldown — he blinks out of your W root and your free-kill window shuts. Nature's Grasp is now for kill setups only."},
+    {"layer":"full","path":"phases[5].why","before":"Heartsteel is your spike — force fights the moment it completes, on Riftwalk's cooldown.","after":"Tear plus Null Sphere's shield blunts Sap Magic poke — Heartsteel keeps you alive, not lethal."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your side-lane pattern is at full power. Kassadin carry threat 9.5/10 — close before the map decides instead of you.","after":"Stacked Riftwalks blink through your R wall and burst you. Carry threat 9.5/10 — you are a peeler now, so end it before this."},
+    {"layer":"full","path":"tldr","before":"Bully him early — root him on the Riftwalk cooldown and grind him with saplings. Maokai wins the Riftwalk cooldown windows.","after":"Bully him before 6 — Riftwalk's 5s base cooldown means there is no window later, so root him with W and grind him with saplings now."},
+    {"layer":"full","path":"winCon","before":"Root him on the Riftwalk cooldown and grind him with saplings. Track Riftwalk before every commit and keep the wave on your side.","after":"Kill him before 6 — Riftwalk is 5s at rank 1 and 2s at rank 3, so no root holds him afterwards. Bank the lead early and keep the wave short."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Riftwalk's cooldown, on your level-6 spike, and on your Heartsteel timing. Bait the answer, then sign.","after":"Commit before he reaches 6. After that Riftwalk resets in 5s and drops to 2s at rank 3 — no window is coming."},
+    {"layer":"full","path":"report[5].t","before":"Track Kassadin's Riftwalk: His mobility spike at 6. Kill him before it scales. When it is down — W-root + sapling chain.","after":"Null Sphere interrupts channels and shields magic damage; Riftwalk (5/3.5/2s) blinks him out of your W root from level 6 onward."},
+    {"layer":"full","path":"dosFull[0].d","before":"His mobility spike at 6. Kill him before it scales. Only engage once it is down or baited.","after":"Riftwalk is 5/3.5/2s — it never stays down long. Kill him before 6; after that he simply leaves."}
+  ],
+  "notes": "The mirror agent (kassadin__maokai) explicitly abandoned these level-chart rows believing 'Maokai' -> 'Kassadin' would blow the length band. Enum fields are exempt; that belief cost the chart. Both layers are proposed here as one atomic paired group.\n\nreport[2].t still reads 'Yours from level 1' which is now only true for rows 0-1; left alone because rewriting it inside the band would drop the chart pointer, and the phase whys now carry the truth.\n\nKit-flag defect (champion-level, same as karma): Maokai's Q carries a 'grounding' flag but Riot's description is knockback + slow only. No grounding claim written — which matters here, since a grounded Riftwalk would be a fabricated matchup-winning interaction."
+}

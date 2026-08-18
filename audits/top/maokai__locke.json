@@ -1,0 +1,56 @@
+{
+  "ownerKey": "maokai",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The level chart reads Maokai, Maokai, Maokai, Maokai, Skill, Skill, Maokai in BOTH layers and matches packet.levelChart exactly, and each row's why argues for its own side. This is the only page in my slice that arrived consistent.",
+      "corrected": "No chart edits proposed.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText full phases[] and content win[]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[] has three entries where four are expected (packet defect), and the content layer carried zero cooldown-sequencing cues (packet: sequencingCues 0) — no 'wait for X before you Y' anywhere in win/whys/spikes/early/mid/late/wants.",
+      "why": "His E is a FLAT 10s at every rank and it is his only mobility, so 'commit in the ten seconds after his E' is a real, checkable instruction. Purgatory is 120/100/80s. Those two numbers are the whole sequencing story and the content layer had neither.",
+      "corrected": "spikes[3] created with before:null (a late-game entry on his seal scaling). 10s E written into whys[5], spikes[1].text, early, mid and wants.you[1]; the 120s R written into whys[4] and phases[4].why.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 10 (flat)", "enemyKit R cd 120/100/80", "packet.defects"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "His W is described nowhere in either layer. It grants Attack Speed and Move Speed, damages HIM during the effect, and only heals back a portion of that damage AT THE END of the duration — so damage that kills or routs him before the duration expires denies the refund entirely.",
+      "why": "Riot text: 'Locke ignites his soul, gaining Attack Speed and Move Speed, and dealing damage to himself. At the end of the duration, Locke will heal back a portion of the damage he takes during the effect.' That is a genuine burst-window interaction on an 18/17/16/15/14s cooldown, and it also explains why report[8].t's note that 'his sustain is self-refund, not lifesteal' is correct.",
+      "corrected": "Written into spikes[1].text.",
+      "confidence": "High",
+      "sources": ["enemyKit W text and cd"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why asserted a specific execute threshold ('disengage above ~15%'). No threshold appears anywhere in the kit text.",
+      "why": "A precise-looking percentage a player will position around, with nothing behind it, is worse than saying 'the threshold'. Riot's text says only that Purgatory 'potentially executes enemies hit'.",
+      "corrected": "The ~15% replaced with the verified 120s cooldown and 'leave the zone rather than test it'.",
+      "confidence": "High",
+      "sources": ["enemyKit R text — no threshold given"]
+    }
+  ],
+  "edits": [
+    {"layer":"content","path":"spikes[3].text","before":null,"after":"Sealing champions grows his power — deny kills near his totem or his late execute threshold outgrows your regen."},
+    {"layer":"content","path":"spikes[3].when","before":null,"after":"Late"},
+    {"layer":"content","path":"spikes[1].text","before":"Sustain lead peaks — he cannot out-chip your passive","after":"Sustain peaks — burst him inside W to deny its refund"},
+    {"layer":"content","path":"whys[4]","before":"Level 6 evens out — his Purgatory execute threat now offsets your heal and long-range R root, so respect all-ins at low HP.","after":"Level 6 evens out — Purgatory is 120s at rank 1 and executes, so leave its zone above the threshold instead of trading through it."},
+    {"layer":"content","path":"whys[5]","before":"First item is even — his AP spike and missing-health on-hit finally trade level with your sustain.","after":"First item is even — his missing-health passive plus a 10s E blink-in finally trades level with your sustain."},
+    {"layer":"content","path":"wants.you[1]","before":"W roots on his farming windows","after":"W roots in the 10s after his E"},
+    {"layer":"content","path":"wants.you[2]","before":"Health above execute range after 6","after":"Stay above his execute floor after 6"},
+    {"layer":"content","path":"early","before":"This is your lane from minute one: Sap Magic healing and sapling poke out-trade his marks, and Q knockback breaks his trade pattern before it finishes. Trade willingly — your passive heals back whatever his chip banks — and use W's root to punish every farming auto he steps up to take.","after":"This is your lane from minute one: Sap Magic healing and sapling poke out-trade his marks, and Q knockback breaks his trade pattern before it finishes. Trade willingly — your passive heals back whatever his chip banks — and W-root him in the ten seconds after his E is spent, when he has no exit."},
+    {"layer":"content","path":"mid","before":"You keep the boot on through 4-5, but level 6 changes the math: Purgatory executes low-health targets, so stop coasting at half HP and reset before all-in windows open. After his first item his missing-health on-hit damage trades level with your sustain — keep trading, but respect the burst spike.","after":"You keep the boot on through 4-5, but level 6 changes the math: Purgatory executes low-health targets, so stop coasting at half HP and reset before all-in windows open. After his first item his missing-health on-hit damage trades level with your sustain — keep trading, but only step in once his 10s E is spent."},
+    {"layer":"full","path":"phases[4].why","before":"Purgatory changes the rules: fights now end at HIS floor — disengage above ~15% or leave the totem zone entirely.","after":"Purgatory changes the rules: fights now end at HIS floor, and it is 120s at rank 1 — leave the zone rather than test it."}
+  ],
+  "notes": "This page is the strongest in my slice — chart consistent across both layers and the packet, real voice, real interactions. My edits only close the two packet defects (missing 4th spike, zero sequencing cues in the content layer) and remove one unverifiable number.\n\nNAME I COULD NOT VERIFY — flagged rather than changed: the page calls his Q 'Ritual Nails (Marks)' throughout (focus.text, loading, breakdown.cooldowns, report[5].t), but the kit's own description says 'Locke readies a set of Soul Nails to throw'. packet.enemyAbilities is NULL for Locke, so unlike every other matchup in this slice there is no authoritative name list to check against, and 'Ritual Nails' could legitimately be the ability name with 'Soul Nails' being the projectiles. Per the do-not-speculate rule I changed nothing. If 'Soul Nails' is the ability name, this is a Brand/Pyroclasm-class error sitting on 382 games — the largest sample in my slice — and it is repeated in six strings.\n\nAlso unverified and left alone: 'E (Ashen Pursuit)' in breakdown.cooldowns, and the repeated '125 range' attack-range claim in phases[0].why, breakdown.early, breakdown.wave and report[4].t. Locke's kit lists ability ranges (Q 950, W 250, E 425, R 1000) but no basic-attack range.\n\nNote spikes[3] is appended after the '2+ items' entry, so I wrote it as a Late entry to keep the list chronological."
+}

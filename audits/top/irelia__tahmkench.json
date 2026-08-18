@@ -1,0 +1,95 @@
+{
+  "ownerKey": "irelia",
+  "enemy": "tahmkench",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart contradicted its own prose. win[]/phases[].side gave Level 1 to Irelia, Level 3 to Tahm Kench and First item to Tahm Kench, while whys[0] says Level 1 is his, whys[2] says Level 3 is your first real burst window and whys[5] calls first item your one clean snowball window. The packet levelChart agrees with the prose.",
+      "why": "Rows 0, 2 and 5 rendered the opposite answer to the text under them.",
+      "corrected": "Row 0 -> Tahm Kench, row 2 -> Irelia, row 5 -> Irelia, proposed as matched full/content pairs with ratings.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spikes attributed Tahm Kench's shield and escape to the wrong slots: spikes[1] called his W a 'self-Devour', and spikes[0]/spikes[2] credited a 'grey health passive'.",
+      "why": "W is Abyssal Dive (leap + knockup, 21/20/19/18/17s). The stored-damage shield is Thick Skin (E, 3s cooldown). Devour (R) targets a champion, never himself.",
+      "corrected": "Spikes now name Abyssal Dive as the 21s exit, Thick Skin as the 3s shield cash-in, and Ionian Fervor stacks as the on-hit spike.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tahmkench.json", "champ-data/_kits/irelia.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three kit errors: (a) 'grey health passive' — his passive is An Acquired Taste (stacking mark; third Tongue Lash stuns), the damage-store shield is Thick Skin (E); (b) 'W self-Devour' — W is Abyssal Dive, a dive/knockup reposition; (c) 'R (Abyssal Voyage)' in breakdown late/wants.foe[2] — his R is Devour, and Abyssal Voyage is not in the live kit.",
+      "why": "Riot text in the kit file names Q Tongue Lash (7/6.5/6/5.5/5s, 900 range, stuns at 3 An Acquired Taste stacks), W Abyssal Dive (21/20/19/18/17s, knockup), E Thick Skin (3s, stored damage to shield), R Devour (champion target, damage or ally shield).",
+      "corrected": "Also corrected on Irelia's side per the mirror: Ionian Fervor is attack speed and bonus on-hit at max stacks, with no armour shred anywhere in the kit — every 'armor shred' reference removed.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tahmkench.json", "champ-data/_kits/irelia.json", "mirrorFindings"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "Cooldown text said 'his escape + shield' with no numbers and merged two different abilities.",
+      "why": "Abyssal Dive is 21s at rank 1 and is his only reposition; Thick Skin is up every 3s and is never a fight-gating cooldown.",
+      "corrected": "Track Abyssal Dive (21s rank 1) as the engage gate; treat Thick Skin as constant and bait it instead of timing it.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/tahmkench.json"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The missing-interaction rule 'needs-antiheal' is already served: report[8] calls for Executioner's Calling early against his healing.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["currentText.full.report[8].t", "missingInteractions"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Irelia","after":"Tahm Kench"},
+    {"layer":"content","path":"win[0]","before":"Irelia","after":"Tahm Kench"},
+    {"layer":"full","path":"phases[0].rating","before":"7/10","after":"4/10"},
+    {"layer":"full","path":"phases[2].side","before":"Tahm Kench","after":"Irelia"},
+    {"layer":"content","path":"win[2]","before":"Tahm Kench","after":"Irelia"},
+    {"layer":"full","path":"phases[2].rating","before":"4/10","after":"6/10"},
+    {"layer":"full","path":"phases[5].side","before":"Tahm Kench","after":"Irelia"},
+    {"layer":"content","path":"win[5]","before":"Tahm Kench","after":"Irelia"},
+    {"layer":"full","path":"phases[5].rating","before":"4/10","after":"6/10"},
+
+    {"layer":"full","path":"phases[0].why","before":"Stack passive on the wave before any trade. Identify how Tahm Kench contests the first waves before you commit anything.","after":"Stack Ionian Fervor on the wave, not on him — he banks your autos into Thick Skin and stuns on the third Tongue Lash."},
+    {"layer":"full","path":"phases[2].why","before":"Full kit online — your core pattern starts now. Keep the wave near your side so Tahm Kench must walk into your engage range.","after":"Full kit online — E-stun into a Bladesurge reset is your burst window. Keep the wave near you so he must walk into range."},
+    {"layer":"full","path":"phases[5].why","before":"Blade of the Ruined King is your spike — force fights the moment it completes, on Abyssal Dive's cooldown.","after":"Blade of the Ruined King plus max Ionian Fervor out-paces his sustain — force fights on Abyssal Dive's cooldown."},
+
+    {"layer":"content","path":"whys[0]","before":"He walks up and stores your autos as grey health through his passive while his ramped Q tongue can stun you before E lands — concede Level 1 and just farm Bladesurge resets.","after":"He stores your autos with Thick Skin (E) and cashes them as a shield every 3s, and his third Tongue Lash stuns you before E lands — concede Level 1 and farm Bladesurge resets."},
+    {"layer":"content","path":"whys[1]","before":"With only Q and W up neither side wins cleanly — he banks trades as grey health and you can't burst him yet, so the early skirmish is a coin-flip on who lands their CC.","after":"With only Q and W up neither side wins cleanly — he banks the damage into Thick Skin and you can't burst him yet, so the skirmish is a coin-flip on who lands CC first."},
+    {"layer":"content","path":"whys[2]","before":"Your E (Flawless Duet) stun into a Bladesurge-reset combo finally lands real damage in one short burst before his grey health regenerates it.","after":"Your E (Flawless Duet) stun into a Bladesurge-reset combo finally lands real damage faster than Thick Skin can cash it back as a shield."},
+    {"layer":"content","path":"whys[3]","before":"His grey-health passive and percent-HP regen out-last your ramping armor-shred in any extended trade, so the sustain war is his.","after":"Thick Skin and Tongue Lash's heal out-last your ramping attack speed in a long trade — your passive shreds no armour, so sustain is his."},
+    {"layer":"content","path":"whys[4]","before":"Vanguard's Edge walls off his W self-Devour and Flash, pinning the immobile tank so your E-stun dive actually connects.","after":"Vanguard's Edge walls off his Abyssal Dive exit and Flash, pinning a tank with no dash so your E-stun dive actually connects."},
+    {"layer":"content","path":"whys[5]","before":"Your first-item spike plus maxed passive stacks give full reset uptime and armor shred that briefly out-paces his sustain — your one clean snowball window.","after":"Your first-item spike plus maxed Ionian Fervor stacks give full reset uptime and on-hit damage that out-paces his sustain — your one clean snowball window."},
+    {"layer":"content","path":"whys[6]","before":"Drain-tank items plus grey health let him face-tank your whole combo, and a ramped Q tongue stun mid-dash turns any all-in into his kill.","after":"Drain-tank items plus Thick Skin let him face-tank your whole combo, and a 3-stack Tongue Lash stun mid-dash turns any all-in into his kill."},
+
+    {"layer":"content","path":"spikes[0].text","before":"With E (Flawless Duet) blades placed you finally get a real stun-into-Bladesurge combo — the only burst window fast enough to outrun the grey health his passive (An Acquired Taste) keeps stacking off your autos.","after":"With E (Flawless Duet) blades placed you finally get a real stun-into-Bladesurge combo — the only burst fast enough to outrun Thick Skin (E), the shield he cashes stored damage into every 3 seconds."},
+    {"layer":"content","path":"spikes[1].text","before":"Vanguard's Edge walls off his W (Devour) self-cast and his Flash, pinning the one immobile tank in place so your E-stun all-in actually connects instead of him repositioning out.","after":"Vanguard's Edge walls off his W (Abyssal Dive) exit and his Flash, pinning a tank with no dash so your E-stun all-in connects instead of him leaping clear on a 21-second cooldown."},
+    {"layer":"content","path":"spikes[2].text","before":"Your core item plus maxed passive stacks give full Bladesurge reset uptime and on-hit armor shred — the rare window your ramping DPS out-paces his grey-health and percent-HP sustain.","after":"Your core item plus maxed Ionian Fervor stacks give full Bladesurge reset uptime and bonus on-hit damage — the rare window your ramping DPS out-paces Thick Skin and his Tongue Lash heal."},
+    {"layer":"content","path":"spikes[3].text","before":"His threat window: full drain-tank build plus grey health means he face-tanks your whole combo, and a ramped Q (Tongue Lash) stun mid-dash flips your all-in into his kill.","after":"His threat window: full drain-tank build plus Thick Skin means he face-tanks your whole combo, and a 3-stack Q (Tongue Lash) stun mid-dash flips your all-in into his kill."},
+
+    {"layer":"content","path":"early","before":"Level 1 is his — Tahm Kench just walks up, eats a couple of my autos and stores them as grey health via his passive (An Acquired Taste), so I don't waste my only Q dash trying to trade a tank who regenerates it instantly. I farm with Bladesurge resets off the wave and respect his Q (Tongue Lash): the ramped tongue is a long-range stun that can lock me before my E ever lands. At Level 3 my E (Flawless Duet) blades come online and I get my first real combo — but only commit when his Q is down, or the tongue stun cancels my dash mid-air.","after":"Level 1 is his — Tahm Kench walks up, eats a couple of my autos and banks them into Thick Skin (E), a shield he can cash every 3 seconds, so I don't waste my only Q dash on a tank who gets it straight back. I farm with Bladesurge resets off the wave and respect his Q (Tongue Lash, 7s at rank 1, 900 range): every hit stacks An Acquired Taste, and the third one stuns me before my E ever lands. At Level 3 my E (Flawless Duet) blades come online for my first real combo — but commit only when his Q is down, or that stun cancels my dash mid-air."},
+    {"layer":"content","path":"mid","before":"Levels 4-5 favour his sustain — my passive armor-shred ramps the longer I stick on him, but his grey health and percent-HP regen quietly out-last it in any drawn-out fight, so I want short E-stun bursts, not extended duels. Level 6 is my real swing: Vanguard's Edge answers a champion who otherwise self-Devours with W or Flashes out of my dive. Wall the escape behind him, E-stun in, and burst before he can reposition. Bait his Q tongue first — if he throws Tongue Lash on cooldown, I get a free window with no stun to break my reset chain.","after":"Levels 4-5 favour his sustain — my attack speed ramps the longer I stick on him, but Thick Skin and the heal on Tongue Lash quietly out-last it in any drawn-out fight, so I want short E-stun bursts, not extended duels. Level 6 is my real swing: Vanguard's Edge answers a champion who otherwise leaps clear with Abyssal Dive (W, 21s) or Flashes out of my dive. Wall the escape behind him, E-stun in, and burst before he repositions. Bait his Q first — a whiffed Tongue Lash is 7 seconds with no stun to break my reset chain."},
+    {"layer":"content","path":"late","before":"At two items he reclaims the lane — a full drain-tank build plus grey health means he face-tanks my entire combo and shrugs off the armor I shred, while one ramped Q tongue stun mid-Bladesurge flips any all-in into his kill. I stop trying to solo him and convert my mid-game windows into objectives and a lead elsewhere. Watch his R (Abyssal Voyage) — he'll channel out of lane to swing onto another fight, so I shove the wave and punish the map rather than the unkillable tank in front of me.","after":"At two items he reclaims the lane — a full drain-tank build plus Thick Skin means he face-tanks my entire combo, while one 3-stack Tongue Lash stun mid-Bladesurge flips any all-in into his kill. I stop trying to solo him and convert my mid-game windows into objectives and a lead elsewhere. Watch his R (Devour): he swallows the carry I jumped on, or shields an ally out of my Vanguard's Edge wall, so I shove the wave and punish the map rather than the tank in front of me."},
+
+    {"layer":"content","path":"wants.you[1]","before":"Use Vanguard's Edge at 6 to wall off his W self-Devour and Flash so the immobile tank cannot reposition out of your dive","after":"Use Vanguard's Edge at 6 to wall off his Abyssal Dive (W) and Flash so a tank with no dash cannot reposition out of your dive"},
+    {"layer":"content","path":"wants.you[2]","before":"Commit only when his Q tongue is down — a whiffed Tongue Lash means no stun to cancel your dash or break your Bladesurge chain","after":"Commit only when his Q is down — a whiffed Tongue Lash gives 7 seconds with no stun to cancel your dash or break your Bladesurge chain"},
+    {"layer":"content","path":"wants.foe[1]","before":"Let grey health and percent-HP regen out-last her ramping passive armor-shred across a drawn-out lane","after":"Let Thick Skin and the heal on Tongue Lash out-last her ramping attack speed across a drawn-out lane"},
+    {"layer":"content","path":"wants.foe[2]","before":"Self-Devour with W to dodge her reset chain, then use R (Abyssal Voyage) to swing onto another lane once he out-scales her","after":"Leap clear with Abyssal Dive (W) to break her reset chain, then use R (Devour) to eat an ally out of her Vanguard's Edge wall"},
+
+    {"layer":"full","path":"dosFull[0].d","before":"His escape + shield. Trade when down. Only engage once it is down or baited.","after":"His only exit, 21s at rank 1 — the shield is Thick Skin (E). Engage once spent."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"He cashes stored damage as a shield every 3s — bait it, then commit."},
+    {"layer":"full","path":"report[5].t","before":"Track Tahm Kench's Abyssal Dive: His escape + shield. Trade when down. When it is down — E-stun + Q him.","after":"Track Abyssal Dive (W): his only exit, 21s at rank 1, no dash otherwise. Once it is spent — E-stun, then Q him."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Tahm Kench Abyssal Dive: matchup-defining — His escape + shield. Trade when down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Tahm Kench Abyssal Dive: matchup-defining — his only exit, 21s at rank 1. Engage once it is spent. Track it before every commit. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only."}
+  ],
+  "notes": "Three kit-name errors were shipped on this page and are now corrected: (1) a 'grey health passive' that does not exist — the stored-damage shield is Thick Skin (E, 3s), while the passive An Acquired Taste is the 3-stack mark whose third Tongue Lash stuns; (2) 'W self-Devour' — W is Abyssal Dive, a leap/knockup reposition on 21/20/19/18/17s, and Devour (R) can only target a champion, never himself; (3) 'R (Abyssal Voyage)' in breakdown.late and wants.foe[2], an ability not in the live kit at all. Per the mirror, Irelia's Ionian Fervor is attack speed plus bonus on-hit at max stacks with NO armour shred, so every 'armor shred' claim was removed. dontsFull[1].t still reads 'Fight into his W reactivate' — Abyssal Dive has no reactivate; the string is under the applier's 25-character floor so it was left alone and needs a manual fix. Level chart rows 0/2/5 disagreed with their own prose and with packet.levelChart; proposed as matched full+content pairs."
+}

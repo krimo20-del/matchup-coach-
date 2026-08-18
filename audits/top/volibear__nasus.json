@@ -1,0 +1,89 @@
+{
+  "ownerKey": "volibear",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers gave Volibear all seven stages (content) or six of seven (full) in a matchup he wins 47.58% of. The packet flags it directly. The mirror audit also pins Level 3 as Skill and Levels 4-5 as Nasus.",
+      "why": "A chart that hands every stage to the losing side is the first thing a player checks and the first thing that costs trust; and it contradicts the mirror at two stages, which mirror-fix.js would overwrite anyway.",
+      "corrected": "phases[0..6].side and win[0..6] both set to Skill, Volibear, Skill, Nasus, Volibear, Nasus, Nasus with ratings 5, 6, 5, 4, 6, 4, 3. Levels 2 and 6 stay yours (Thundering Smash online, Stormbringer's tower disable); the rest tracks his stacking.",
+      "confidence": "Medium",
+      "sources": ["packet defects + winRate 47.58", "mirrorFindings point 2 (nasus__volibear)"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1] claimed Stormbringer grants 'range, tenacity, and sustain'. Riot's text grants a leap, a slow, bonus Health and a tower disable — no tenacity anywhere.",
+      "why": "A player told he gets tenacity from his ult will walk into Wither expecting the slow to be shortened. It is not.",
+      "corrected": "Stormbringer: 550-range leap, slow, bonus Health, and it disables the enemy tower where he lands — 160/135/110s. That tower disable is what makes the level-6 dive the real spike.",
+      "confidence": "High",
+      "sources": ["brief ownerKit R Riot text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page said Frenzied Maul 'shreds' and described Sky Splitter as flat 'burst'. Neither matches the kit: W applies on-hit effects and marks the target, and the SECOND cast on the same mark is what heals; E only shields if Volibear is standing inside his own blast.",
+      "why": "The mirror found the same class of error from the other side (stun attributed to the wrong slot, Q described as a dash). Getting the shield condition wrong changes whether the all-in maths works: step out of your own bolt and you get no shield at all.",
+      "corrected": "Frenzied Maul (5s) marks, applies on-hit, and heals on the re-cast into the mark. Sky Splitter (16s, 1200 range) slows and shields only inside the blast — and Wither's 700-range slow is exactly what drags you off it. Wither is 15/14/13/12/11s; Siphoning Strike is 7.5s falling to 3.5s and resets his attack.",
+      "confidence": "High",
+      "sources": ["brief ownerKit W/E", "brief enemyKit Q/W", "mirrorFindings point 4"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet: 'NO cooldown-sequencing advice anywhere'. Every reference to Wither said 'when it is down' without a number.",
+      "why": "The whole lane is timed off one 11-15s ability; without the number the advice is unfalsifiable.",
+      "corrected": "Wither's 12s window at rank 4 is now stated in dosFull[2].d, phases[3].why and spikes[0].text as the trade window.",
+      "confidence": "High",
+      "sources": ["brief enemyKit W cooldowns"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Volibear", "after": "Skill"},
+    {"layer": "content", "path": "win[0]", "before": "Volibear", "after": "Skill"},
+    {"layer": "full", "path": "phases[2].side", "before": "Volibear", "after": "Skill"},
+    {"layer": "content", "path": "win[2]", "before": "Volibear", "after": "Skill"},
+    {"layer": "full", "path": "phases[3].side", "before": "Volibear", "after": "Nasus"},
+    {"layer": "content", "path": "win[3]", "before": "Volibear", "after": "Nasus"},
+    {"layer": "full", "path": "phases[5].side", "before": "Volibear", "after": "Nasus"},
+    {"layer": "content", "path": "win[5]", "before": "Volibear", "after": "Nasus"},
+    {"layer": "full", "path": "phases[6].side", "before": "Volibear", "after": "Nasus"},
+    {"layer": "content", "path": "win[6]", "before": "Volibear", "after": "Nasus"},
+
+    {"layer": "full", "path": "phases[0].rating", "before": "6/10", "after": "5/10"},
+    {"layer": "full", "path": "phases[1].rating", "before": "7/10", "after": "6/10"},
+    {"layer": "full", "path": "phases[2].rating", "before": "8/10", "after": "5/10"},
+    {"layer": "full", "path": "phases[3].rating", "before": "7/10", "after": "4/10"},
+    {"layer": "full", "path": "phases[4].rating", "before": "8/10", "after": "6/10"},
+    {"layer": "full", "path": "phases[5].rating", "before": "7/10", "after": "4/10"},
+    {"layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10"},
+
+    {"layer": "full", "path": "phases[0].why", "before": "W start for the bite-trade, or Q into aggressive lanes. Even exchanges favour you because the passive lightning ramps as the trade extends.", "after": "W start for the bite-trade, or Q into aggressive lanes. Level 1 is even — Siphoning Strike costs him 20 mana and resets his attack."},
+
+    {"layer": "full", "path": "phases[2].why", "before": "E completes the pattern: shield yourself as you disengage or slow Nasus under the sky-splitter. This is the start of your kill window.", "after": "Sky Splitter shields you only if you stand in your own blast, and Wither's 700-range slow drags you off it — trade, don't commit."},
+    {"layer": "content", "path": "whys[2]", "before": "At level 3 your full basic kit with W shred and E burst hard-outtrades a farming Nasus.", "after": "Level 3 is even — your full kit trades hard, but Wither kites it from 700 range."},
+
+    {"layer": "full", "path": "phases[3].why", "before": "W ranks make the wounded-bite chunk hard. Run Nasus down every time Wither is on cooldown — you win the stat-check from here to 6.", "after": "Wither is back every 12s at rank 4 and Soul Eater's lifesteal refills him off the wave — take short trades and deny stacks instead."},
+    {"layer": "content", "path": "whys[3]", "before": "Levels 4-5 you keep dominating trades while Nasus can only stack and take chip.", "after": "Levels 4-5 tilt to him — Wither is back every 12s and his lifesteal holds."},
+
+    {"layer": "full", "path": "phases[5].why", "before": "Sundered Sky doubles down on the all-in: crit-heal on the first hit of every fight. Force Nasus to fight or lose the wave.", "after": "Sundered Sky heals on the first hit, but his stacks compound every wave — force the fight now or the window closes for good."},
+    {"layer": "content", "path": "whys[5]", "before": "At first item you still outdamage him outright and should be punishing every stack attempt.", "after": "At first item his stacked Siphoning Strike starts out-hitting the W heal-bite you lean on."},
+
+    {"layer": "full", "path": "phases[6].why", "before": "With two items you're a drain-tank Nasus can't burst. Only discipline beats you now — never int the Q stun into ready CC and the lane stays yours.", "after": "With two items his stacked Siphoning Strike one-shots and Wither guts the attack speed your passive builds — never duel him in the sidelane."},
+
+    {"layer": "content", "path": "spikes[0].text", "before": "With all three basics you win every trade: Q Thundering Smash to close, W Frenzied Maul to shred, E Sky Splitter for the extra burst. Nasus has only Q Siphoning Strike and E Spirit Fire and cannot fight back, so bully him off the wave and deny stacks.", "after": "With all three basics you can trade: Q Thundering Smash to close, Frenzied Maul's second bite to heal, Sky Splitter to slow. But Wither answers every 12-15s and Soul Eater refills him on the wave, so trade short, deny stacks, and never chase him through the slow."},
+
+    {"layer": "content", "path": "spikes[1].text", "before": "R Stormbringer gives you the range, tenacity, and sustain to dive Nasus under tower or all-in when he tries to farm. His ult Fury of the Sands is defensive, not a duel-winner early, so you keep the initiative through the mid game.", "after": "Stormbringer is your window: a 550-range leap that slows, grants bonus Health, and disables his tower where you land — the cleanest dive in the lane. Fury of the Sands is defensive, so take the fight before his stacks make it a duel he wins."},
+
+    {"layer": "content", "path": "spikes[2].text", "before": "A Sheen/bruiser first item keeps you ahead in raw trading, but every CS you let Nasus stack narrows the gap. Punish hard now while your kit outdamages his.", "after": "A Sundered Sky first item keeps your all-in live, but every CS he stacks narrows it — Siphoning Strike is on 3.5s at max rank. Force the fight now."},
+
+    {"layer": "content", "path": "mid", "before": "From level 3 through your first item you are firmly ahead — your three-ability rotation with W's shred and E's burst outdamages a Nasus who only wants to farm. Zone him off CS relentlessly and use R to dive or deny stacks under tower; every stack you prevent delays his power curve.", "after": "Level 3 to your first item is a fight for stacks, not a free lead — Wither answers your rotation every 12s, so trade short around it instead of committing through it. Level 6 is the real window: Stormbringer disables his tower, so dive with your jungler and deny the stacks that decide the game."},
+
+    {"layer": "content", "path": "wants.you[1]", "before": "Trade with W Frenzied Maul active to maximize your shred", "after": "Re-cast Frenzied Maul into the mark for the heal-bite"},
+
+    {"layer": "full", "path": "dosFull[2].d", "before": "Nasus wastes Wither — commit the full pattern immediately.", "after": "Wither is down 12s at rank 4 — commit the pattern then."}
+  ],
+  "notes": "The mirror (nasus__volibear) reported that it could NOT submit its own phases[2]/phases[3] side flips because the agent believed the ±10% length band applied to enum fields. It does not — ENUM_FIELD in apply-proposals.js exempts phases[N].side, win[N] and ratings. Those two rows may still be wrong on the Nasus page and should be re-run or hand-applied; I have written this side to the values that mirror asked for. Only Level 1 (Skill) came from the packet chart; Levels 2 and 6 are Volibear on real kit grounds (Thundering Smash online, Stormbringer tower disable)."
+}

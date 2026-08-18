@@ -1,0 +1,85 @@
+{
+  "ownerKey": "urgot",
+  "enemy": "zac",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers had Urgot winning all seven rows, but whys[0] says 'Level 1 is even' and whys[6], spikes[3] and late all say two-item Zac is a wall you cannot kill 1v1. Packet levelChart: Skill, Urgot x5, Zac.",
+      "why": "Urgot is 54.28% over 643 games and owns the lane proper, but Zac's level-1 blob poke trades evenly and his full-tank scaling takes the late 1v1 back.",
+      "corrected": "phases[0].side/win[0] to Skill (5/10) and phases[6].side/win[6] to Zac (3/10), with phases[6].why rewritten.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content whys[0], whys[6], spikes[3], late"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spike placement holds: Urgot from 3-5, at 6 with the execute, and at first item; Zac only at full-tank scaling. The chart now agrees.",
+      "corrected": "Spike timings unchanged; spikes[0] and spikes[1] text corrected for names and mechanics.",
+      "confidence": "High",
+      "sources": ["brief currentText.content.spikes"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two ability names were wrong — 'Let's Bounce' (real name Let's Bounce!) and 'Q Stretching Strike' (real name Stretching Strikes) — and three flagged interactions were missing entirely: Cell Division's blob healing and revive, Unstable Matter's percent-max-health damage, and the fact that raw resists are the wrong answer to both.",
+      "why": "Unstable Matter is a flat 5s cooldown dealing a percentage of maximum health as magic damage, so armour and health stacking mispriced the trade. Cell Division sheds reabsorbable chunks and revives him from bloblets on fatal damage — which is exactly what makes 'flip-execute him cleanly' an overclaim. Elastic Slingshot is 21/18/15/12/9s and Let's Bounce! is 120/105/90s, neither of which appeared as a number anywhere.",
+      "corrected": "Both names fixed; the revive stated in spikes[1]; percent-health stated in dosFull[2].d; blob healing stated in dontsFull[0].d; the 21s Slingshot window in dontsFull[1].d.",
+      "confidence": "High",
+      "sources": ["enemyKit P (heal, percentHealth, revive)", "enemyKit W (percentHealth, cd 5)", "enemyKit E cd 21/18/15/12/9", "enemyKit R cd 120/105/90", "packet.enemyAbilities", "packet.suspectNames", "missingInteractions needs-antiheal, resistances-invalidated"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Urgot", "after": "Skill" },
+    { "layer": "content", "path": "win[0]", "before": "Urgot", "after": "Skill" },
+    { "layer": "full", "path": "phases[6].side", "before": "Urgot", "after": "Zac" },
+    { "layer": "content", "path": "win[6]", "before": "Urgot", "after": "Zac" },
+    { "layer": "full", "path": "phases[0].rating", "before": "6/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10" },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Sterak's + Cleaver makes your W-trades unloseable head-on. Zac must dodge E forever or find a jungler — punish the first mistake with R.",
+      "after": "Two items in Zac becomes a full-tank wall — Unstable Matter chews max health every 5s, so cash your lead early and never duel him late."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "His R Let's Bounce is an engage/escape, not a duel tool — 1v1 it does little. Your R Fear Beyond Death flips and executes him cleanly since he has no dash mid-flip. Punish any time he Q-pulls a minion by W-draining him while his passive is on cooldown.",
+      "after": "His R Let's Bounce! is an engage tool, not a duel tool — four bounces of knock-up on a 120s cooldown. Your R Fear Beyond Death flips and executes him, but Cell Division revives him from bloblets, so make sure his bloblets die too."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Zac's poke comes from Q Stretching Strike and E-blob pickups he can't gather under your pressure. Q Corrosive Charge him, W Purge to remove his passive blobs off the ground before he heals off them, and E Disdain into a trade — he has no burst to answer a Juggernaut. Deny the blobs and he bleeds out.",
+      "after": "Zac's poke comes from Stretching Strikes and the Cell Division blobs he can't gather under your pressure. Q Corrosive Charge him, W Purge to remove the blobs off the ground before he heals off them, and E Disdain into a trade — he has no burst to answer a Juggernaut. Deny the blobs and he bleeds out."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Zac wastes Elastic Slingshot — commit the full pattern immediately.",
+      "after": "Unstable Matter hits max health every 5s — resists alone won't save you."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Zac's favourite window — refuse it and half his win condition is gone.",
+      "after": "Cell Division blobs heal him back — step on them or Purge them off the ground."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Elastic Slingshot is 21s at rank 1 — punish him hard in that long window."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "R flip-execute him — he has no dash mid-suppression",
+      "after": "R flip-execute him once Elastic Slingshot is spent"
+    }
+  ],
+  "notes": "I honoured the mirror's warning and did NOT apply the _missing-interactions claim that Elastic Slingshot grounds Urgot's Q — the mirror audit established that the 'grounding' flag in champ-data/_kits/zac.json is a tooltip-parsing artefact of the word 'ground' in Riot's text, and the kit description contains no grounding effect. Nothing I wrote references it. Also removed the unverifiable 'he has no dash mid-suppression' phrasing from wants.you[2] rather than restating it: Urgot's R impale is not described as a suppression in Riot's text, and Zac does have a dash."
+}

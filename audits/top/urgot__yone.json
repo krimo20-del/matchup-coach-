@@ -1,0 +1,73 @@
+{
+  "ownerKey": "urgot",
+  "enemy": "yone",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Row 3 (Levels 4-5) read 'Skill' while whys[3] says 'so you stay favoured', and row 5 (First item) read 'Skill' while whys[5], spikes[2] and late all say first item is Yone's strongest window. Packet levelChart: Urgot on rows 0-4 and 6, Yone on row 5.",
+      "why": "Urgot is 56.47% here and wins every stage except the crit-item window, where Shieldbow plus a rank-3 Soul Unbound lets Yone dive and snap out of the counter-trade.",
+      "corrected": "phases[3].side/win[3] to Urgot (7/10) and phases[5].side/win[5] to Yone (3/10), with phases[5].why rewritten from an Urgot-favoured Black Cleaver line to the actual Yone spike.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content whys[3], whys[5], spikes[2]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spike placement is right and unusually specific: Urgot at 3-5 and at level 6, Yone at his first crit item, Urgot again at two items. Only the chart disagreed with it.",
+      "corrected": "Spike text unchanged; the chart now matches it.",
+      "confidence": "High",
+      "sources": ["brief currentText.content.spikes"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags zero cooldown-sequencing advice in this matchup and there was none: dosFull[2].d, dontsFull[1].d and dontsFull[2].d were all generic filler carrying no ability, no number and no interaction. wants.you[1] also told the player to W 'during his Soul Unbound windup', which is not a thing in the kit — there is no windup, the spirit simply leaves the body behind.",
+      "why": "Soul Unbound (22/19/16/13/10s) leaves Yone's body behind and, when it ends, repeats a portion of the damage he dealt as a spirit — so damage he takes while the soul is out lands on the body, and the snap-back is the punish window. Spirit Cleave gives him a shield on a 14s base cooldown that scales down with attack speed, which is why chip poke beats saved burst. Urgot's E is 16s at rank 1.",
+      "corrected": "dosFull[2].d now names the Spirit Cleave shield and its 14s cadence; dontsFull[1].d carries the 16s E cooldown; dontsFull[2].d states the repeat-damage snap-back; wants.you[1] now says to hit the body while the soul is out.",
+      "confidence": "High",
+      "sources": ["enemyKit E (cd 22/19/16/13/10, leaves body, repeats damage)", "enemyKit W (shield, cd 14)", "ownerKit E cd 16/15.5/15/14.5/14", "packet.defects"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Urgot" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Yone" },
+    { "layer": "content", "path": "win[5]", "before": "Skill", "after": "Yone" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "5/10", "after": "3/10" },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Black Cleaver stacks instantly with W — your shred turns even tanky answers soft. Shove and force Yone to trade into the spike.",
+      "after": "His first crit item is the lane's worst moment for you — Soul Unbound is 16s by rank 3 and lets him dive and snap out. Don't over-commit."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Yone wastes Soul Unbound — commit the full pattern immediately.",
+      "after": "Spirit Cleave shields him every 14s — poke through it, don't burst."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Your E is 16s at rank 1 — never face his dive with your only escape on cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Standing still and face-tanking while W sprays — without rotating fresh legs or landing E, Yone simply walks through the spray and out-damages you.",
+      "after": "Soul Unbound leaves his body behind and repeats a portion of the damage he dealt when it ends — disengage before the snap-back rather than trading into it."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "W Purge him during his Soul Unbound windup",
+      "after": "W Purge his body while his soul is out"
+    }
+  ],
+  "notes": "Data discrepancy for the user: the brief's top-level games field says 1680 but packet.games says 1484 for the same matchup. I used the packet figure for confidence weighting but changed no win-rate or games field. Left unverified and unedited: spikes[1].text says your flip-execute 'ignores his mobility' — Urgot's R is a projectile and Yone's R is a blink, and nothing in either kit tells me whether the impale holds through Fate Sealed's blink, so I did not sharpen or contradict that line."
+}

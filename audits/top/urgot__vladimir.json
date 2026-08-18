@@ -1,0 +1,79 @@
+{
+  "ownerKey": "urgot",
+  "enemy": "vladimir",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Row 0 read 'Skill' although whys[0] says Urgot bullies his low level-1 health, and row 6 read 'Skill' although whys[6], spikes[3] and late all say two items flip the 1v1 to Vladimir. Packet levelChart agrees: Urgot rows 0-5, Vladimir row 6.",
+      "why": "Urgot is 52.4% over 1189 games and owns every lane stage; Vladimir's Crimson Pact health/AP scaling and bottomless Transfusion take over once he has two items.",
+      "corrected": "phases[0].side/win[0] to Urgot (rating 6/10) and phases[6].side/win[6] to Vladimir (rating 3/10), with phases[6].why rewritten from an Urgot-favoured line to the real reason he loses that stage.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content whys[0], whys[6], late", "enemyKit P Crimson Pact"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are correct: Urgot at 3-5 and at level 6 into a low health bar; Vladimir at his first AP/health item and again at two-plus items with Hemoplague.",
+      "corrected": "Left spikes[1..3] alone; spikes[0].text edited only for the ability-name error and the untargetable interaction.",
+      "confidence": "High",
+      "sources": ["brief currentText.content.spikes", "enemyKit R Hemoplague cd 120"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two real errors. (a) spikes[0].text writes 'Sanguine Pools' — the ability is Sanguine Pool. (b) breakdown/mid claims 'E-flip catches him even through Sanguine Pool if you time the recast': Sanguine Pool makes Vladimir untargetable for 2 seconds and Urgot's E has no recast, so this instructs the player to throw their engage into an untargetable window. Anti-heal is also never stated despite both his Q and R healing him.",
+      "why": "Kit text: Sanguine Pool = 'becoming untargetable for 2 seconds', cooldown 28/25/22/19/16. Transfusion (9/7.9/6.8/5.7/4.6s) steals life and Hemoplague heals him per champion hit. Urgot's E is a 16/15.5/15/14.5/14s charge with no recast.",
+      "corrected": "Ability name fixed; the untargetable window now told as 'commit after it, not into it' with the 28s rank-1 cooldown; anti-heal named against Transfusion and Hemoplague; MR-over-raw-HP stated against Crimson Pact scaling.",
+      "confidence": "High",
+      "sources": ["enemyKit W (untargetable, cd 28/25/22/19/16)", "enemyKit Q, R heal flags", "ownerKit E", "missingInteractions untargetable-dodges-burst, needs-antiheal", "packet.suspectNames"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Urgot" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Vladimir" },
+    { "layer": "content", "path": "win[6]", "before": "Skill", "after": "Vladimir" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "3/10" },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Sterak's + Cleaver makes your W-trades unloseable head-on. Vladimir must dodge E forever or find a jungler — punish the first mistake with R.",
+      "after": "Two items give him bottomless Transfusion healing and Hemoplague — you cannot duel him, so cash the early lead into objectives instead."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Vladimir is weak and mana-less-but-fragile early: Q the ground under him, W-shred through his low base health, and E-flip him when he Sanguine Pools to deny the escape. Every level before his items is a bully phase for you.",
+      "after": "Vladimir is fragile and health-costed early: Q the ground under him, W-shred through his low base health, and hold E for after Sanguine Pool — its 2s untargetable eats anything you spend into it. Every level before his items is yours."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-6 stay heavily in your favour. Q slows him, W shreds his flimsy early body, and E-flip catches him even through Sanguine Pool if you time the recast. Land your level-6 R when he's low and he simply doesn't have the CC or burst to answer it — this is your kill window.",
+      "after": "Levels 3-6 stay heavily in your favour. Q slows him, W shreds his flimsy early body, and Sanguine Pool is down 28s at rank 1 — once he burns it he has no answer for 26 more seconds. Land your level-6 R when he's low and he has no CC or burst to stop it — that is your kill window."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Dodges your shred. Bait it. Only engage once it is down or baited.",
+      "after": "Sanguine Pool is 2s untargetable on 28s — commit after it, not into it."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Vladimir wastes Sanguine Pool — commit the full pattern immediately.",
+      "after": "Transfusion and Hemoplague both heal him — Executioner's Calling early."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "His damage is magic and Crimson Pact scales it with health — buy MR, not raw HP."
+    }
+  ],
+  "notes": "The 'E-flip catches him even through Sanguine Pool if you time the recast' line in content.mid was actively wrong advice — Pool is 2s of untargetability and Urgot's E has no recast. Removed. Whether Urgot's R impale persists or is cancelled if Vladimir Pools mid-flight is not in Riot's text; I did not assert either way, so no edit claims it."
+}

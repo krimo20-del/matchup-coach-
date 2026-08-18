@@ -1,0 +1,83 @@
+{
+  "ownerKey": "urgot",
+  "enemy": "yorick",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 1 and 2 read 'Yorick' although whys[1] ('stays a skill matchup') and whys[2] (\"it's still even\") say even, and rows 3 and 4 read 'Skill' although whys[3] ('you edge ahead') and whys[4] ('you keep the pre-Maiden lead') say Urgot. Packet levelChart: Skill, Skill, Skill, Urgot, Urgot, Yorick, Yorick.",
+      "why": "At 49.89% this is a genuinely even lane whose shape is: no favourite until 4, a short pre-Maiden Urgot window, then Yorick from Eulogy of the Isles onward. The chart was describing a different lane from the text beside it.",
+      "corrected": "Rows 1 and 2 set to Skill, rows 3 and 4 set to Urgot with ratings raised from 4/10 to 6/10, in both layers. phases[1].why and phases[2].why rewritten so they stop claiming Urgot owns those stages.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content whys[1], whys[2], whys[3], whys[4]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are well-placed and specific: Urgot's window is 3-5 before the Maiden, Yorick's is level 6 Eulogy of the Isles and every item stage after. Only the chart contradicted it.",
+      "corrected": "Spike text unchanged; dontsFull[1].d now carries the 160s rank-1 R cooldown that defines the window.",
+      "confidence": "High",
+      "sources": ["brief currentText.content.spikes", "enemyKit R cd 160/130/100"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Last Rites heals Yorick on every empowered attack and is an auto-attack reset — neither is stated anywhere on the page, so there is no anti-heal call and no commit tell. dosFull[2].d, dontsFull[0].d and dontsFull[1].d were generic filler, and nothing mentions that Dark Procession's walls are destructible.",
+      "why": "Riot's own text calls Dark Procession 'a destructible wall', which changes the entire response to being caged — you break a wall instead of standing in the ghoul ball. It is a 20/18/16/14/12s cooldown. Last Rites is 6/5.5/5/4.5/4s with heal and autoReset flags, so extended trades feed him and the wind-up is the tell.",
+      "corrected": "dosFull[2].d now gives the 20s cage cooldown and its destructibility; dontsFull[0].d tells the player to break a wall; dontsFull[1].d carries the 160s Maiden cooldown; wants.you[1] now calls for Grievous Wounds against Last Rites.",
+      "confidence": "High",
+      "sources": ["enemyKit W (destructible wall, cd 20/18/16/14/12)", "enemyKit Q (heal, autoReset, cd 6/5.5/5/4.5/4)", "enemyKit R cd 160/130/100", "missingInteractions needs-antiheal, autoreset-burst-tell"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[1].side", "before": "Yorick", "after": "Skill" },
+    { "layer": "content", "path": "win[1]", "before": "Yorick", "after": "Skill" },
+    { "layer": "full", "path": "phases[2].side", "before": "Yorick", "after": "Skill" },
+    { "layer": "content", "path": "win[2]", "before": "Yorick", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Urgot" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Urgot" },
+    { "layer": "full", "path": "phases[3].rating", "before": "4/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "4/10", "after": "6/10" },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "E or W second depending on kill pressure. A landed E-flip into W spray already wins most level-2 exchanges outright.",
+      "after": "E or W second depending on kill pressure. Last Rites resets his auto and heals him, so neither of you owns level 2."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full legs rotation online — this is your lane now. Walk Yorick down with W whenever Dark Procession (Cage) is on cooldown.",
+      "after": "Full legs rotation online, but Dark Procession is up at 3 — a 20s cage inside the ghoul pack keeps this stage even."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Yorick wastes Dark Procession (Cage) — commit the full pattern immediately.",
+      "after": "Dark Procession is 20s at rank 1 and destructible — break a wall, don't panic."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Yorick's favourite window — refuse it and half his win condition is gone.",
+      "after": "The cage walls are destructible — hit one instead of eating the full ghoul pack."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Eulogy of the Isles is 160s at rank 1 — fight him while she is dead."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "W Purge through ghouls plus Yorick before Maiden",
+      "after": "Grievous Wounds early to cut Last Rites healing"
+    }
+  ],
+  "notes": "Pre-existing labelling drift the user should know about, which I did NOT try to fix because it would take rewriting all seven whys: the content whys are worded one stage behind the phase labels — whys[4] talks about 'Level 5' while phases[4].label is 'Level 6', and whys[5] talks about 'Level 6' while phases[5].label is 'First item'. I aligned sides to the packet chart, which matches the whys' described lane shape. Also unstated on the page and left alone: Mourning Mist reduces armour as well as slowing and marking — the text only calls it a slow-mark. Data note: brief games says 1429, packet.games says 1363."
+}

@@ -1,0 +1,70 @@
+{
+  "ownerKey": "urgot",
+  "enemy": "vayne",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 1-5 of the level chart read 'Skill' and row 6 read 'Vayne' in both layers, while the packet levelChart, every one of whys[1..6], phases[6].why and spikes[3] all describe Urgot winning those stages. The page answered 'who wins Level 2' one way in the chart and the opposite in the text.",
+      "why": "Urgot is at 53.26% over 1380 games and owns every stage from level 2 on: E-flip removes Vayne's Tumble spacing, W locks on, and she has no sustain or waveclear top.",
+      "corrected": "phases[1..6].side and win[1..6] all set to Urgot, ratings raised on rows 2, 4 and 6 to match. Only Level 1 stays hers.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content whys[1]-whys[6]", "currentText phases[6].why"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are right: Urgot at 3-5 with Q-W-E online, level 6 execute into a squishy health bar, Black Cleaver; Vayne only ever spikes on Final Hour and stacked items.",
+      "corrected": "Left spikes[0..3] unchanged.",
+      "confidence": "High",
+      "sources": ["brief currentText.content.spikes", "ownerKit R execute flag"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags zero cooldown-sequencing advice anywhere in this matchup, and the Tumble auto-reset tell is never stated. dosFull[0].d, dosFull[2].d and dontsFull[1].d were all vague filler with no numbers and no actual interaction.",
+      "why": "Condemn is a 20/18/16/14/12s cooldown and only stuns on terrain contact; Urgot's E is 16/15.5/15/14.5/14s, so it comes back faster than her answer at rank 1. Tumble (6/5/4/3/2s) is an auto-attack reset, so her wind-up animation — not the dash — is the commit tell.",
+      "corrected": "dosFull[0].d now carries both cooldowns and the 'fight away from walls' rule; dosFull[2].d states the Tumble reset tell; dontsFull[1].d states that Condemn only stuns on terrain contact.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 20/18/16/14/12 + terrain/knockup flags", "enemyKit Q cd 6/5/4/3/2 + autoReset flag", "ownerKit E cd 16/15.5/15/14.5/14", "missingInteractions autoreset-burst-tell", "packet.defects"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "content", "path": "win[1]", "before": "Skill", "after": "Urgot" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "content", "path": "win[2]", "before": "Skill", "after": "Urgot" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Urgot" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Urgot" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "content", "path": "win[5]", "before": "Skill", "after": "Urgot" },
+    { "layer": "full", "path": "phases[6].side", "before": "Vayne", "after": "Urgot" },
+    { "layer": "content", "path": "win[6]", "before": "Vayne", "after": "Urgot" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "3/10", "after": "6/10" },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Wall-stun. Flip her with your E first. Only engage once it is down or baited.",
+      "after": "Condemn is down 20s at rank 1 — fight away from walls; your E returns in 16s."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Vayne wastes Condemn — commit the full pattern immediately.",
+      "after": "Tumble resets her auto — the wind-up, not the cast, cues your E."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Condemn stuns only on terrain contact — hold the open lane, not the wall."
+    }
+  ],
+  "notes": "diff is 'FAV' with diffRating 7/10 and report[14] calls this a hard matchup, but the win rate is 53.26% in Urgot's favour over 1380 games and every stage of the chart now reads Urgot. I did not change diff/diffRating/report[14] because that is a champion-level tone judgement rather than a mechanical error — flagging it for the user. Whether Urgot's E-flip can interrupt or displace a mid-Tumble Vayne is not in Riot's text and I did not assert it."
+}

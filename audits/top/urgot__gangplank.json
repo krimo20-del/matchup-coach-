@@ -1,0 +1,118 @@
+{
+  "ownerKey": "urgot",
+  "enemy": "gangplank",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 1 and 2+ items read 'Skill' in both layers, disagreeing with the packet chart and with the already-audited mirror (which was set to the packet chart in both layers).",
+      "why": "Packet chart over 1735 games at 52.8% is Urgot for rows 0-5 and Gangplank at 2+ items. The page's own prose already agrees — whys[0] says 'Level 1 favours you' and whys[6] says 'At 2+ items GP flips' — so only the side tokens were stale.",
+      "corrected": "Rows 0 and 6 flipped to Urgot and Gangplank in both the full and content layers, with ratings rescaled.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirrorFindings (gangplank__urgot)", "currentText"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "sequencingCues is 0 — no cooldown numbers anywhere, and the page treats Powder Keg as if it had a cooldown to wait out.",
+      "why": "Powder Keg's cooldown field is 0 — it is a stored-charge ability, so 'engage on its cooldown' is not actionable. The cooldown that actually gates the lane is Remove Scurvy at 22/20/18/16/14s, which both heals him and cures crowd control. Cannon Barrage is 160/140/120s. On your side Purge falls from 12s to no cooldown and no cost at rank 5, Disdain is 16s at rank 1, Fear Beyond Death 100/85/70s.",
+      "corrected": "Sequencing now keys off Remove Scurvy's 22s rank-1 cooldown, and the keg line says charges rather than cooldown.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gangplank.json", "champ-data/_kits/urgot.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Two decisive interactions are absent: Remove Scurvy cleanses the slow your Corrosive Charge and Purge apply while healing him, and Cannon Barrage deals true damage.",
+      "why": "The heal-plus-cleanse is why extended chip trades leak value, which makes Grievous Wounds timing the deciding purchase rather than a footnote. Cannon Barrage's true damage means armour stacking is the wrong answer to his late game.",
+      "corrected": "Remove Scurvy named with its cooldown in tldr, breakdown.cooldowns, dosFull[0].d and report[5].t; anti-heal moved into spikes[2]; the true-damage point stated in spikes[3].",
+      "confidence": "High",
+      "sources": ["_missing/urgot.json rules needs-antiheal and resistances-invalidated", "champ-data/_kits/gangplank.json"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Itemization never mentions Grievous Wounds despite his sustain being the reason trades stall.",
+      "why": "Remove Scurvy restores health on a 22s cooldown early; chip damage without anti-heal is refunded.",
+      "corrected": "spikes[2].text now tells you to hold anti-heal before committing to long trades.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gangplank.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Urgot"
+    },
+    {
+      "layer": "content",
+      "path": "win[0]",
+      "before": "Skill",
+      "after": "Urgot"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].rating",
+      "before": "5/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Gangplank"
+    },
+    {
+      "layer": "content",
+      "path": "win[6]",
+      "before": "Skill",
+      "after": "Gangplank"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].rating",
+      "before": "5/10",
+      "after": "4/10"
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Pop his barrels — out-poke him before he scales to crit. Urgot wins by trading around Gangplank's Powder Kegs and cashing the pattern: deny barrels and out-poke him.",
+      "after": "Shoot every keg before it arms, and trade after Remove Scurvy — that heal is 22s at rank 1 and it also cures your slow, so it is the only thing saving him from a full Purge."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Gangplank Powder Kegs: matchup-defining — Pop barrels to deny poke + gold. Track it before every engage. - Gangplank Powder Keg: Places barrels that chain-explode when shot — his combo + poke. Dodge or sidestep it.",
+      "after": "- Remove Scurvy: 22/20/18/16/14s heal that also cures your slow — this is the real cooldown, so commit the moment he burns it. - Powder Keg: stored charges, not a cooldown; shoot each keg before he can chain two into your feet."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Pop barrels to deny poke + gold. Only engage once it is down or baited.",
+      "after": "Kegs are charges, not a cooldown — shoot each one before he chains it."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Gangplank's Powder Kegs: Pop barrels to deny poke + gold. When it is down — W-shred him.",
+      "after": "Remove Scurvy cures your Q and W slow and heals him — 22s at rank 1. Commit after he eats it."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "You still win the 1v1 with Bami's/Cleaver — deny his barrel setups by chunking them, and W through his W cleanse timing before his crit items snowball.",
+      "after": "You still win the 1v1 with Cleaver online, but Remove Scurvy heals him back out of chip damage — hold Grievous Wounds before you commit to any long trade."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "GP flips ahead at 2+ items: Trinity/IE crit barrels and his global R ult make him a scaling monster that out-damages your shred if the game goes long.",
+      "after": "GP flips at 2+ items: crit kegs plus Cannon Barrage, whose damage is true, so stacking armour buys you nothing — end the game before he banks that scaling."
+    }
+  ],
+  "notes": "Left unasserted, matching the mirror: whether Remove Scurvy removes the suppression component of Fear Beyond Death (Riot's text says only 'cure crowd control effects'), and whether a Powder Keg blocks Disdain's charge as a non-champion unit. Kit-flag misfire: Urgot's Corrosive Charge (Q) is tagged 'dash' but Riot's text is 'Fires an explosive charge at the target location' — no movement; Disdain (E) is his only mobility."
+}

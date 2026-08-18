@@ -1,0 +1,85 @@
+{
+  "ownerKey": "urgot",
+  "enemy": "kassadin",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 1 is rendered as an Urgot win on both layers while whys[0] says 'Level 1 is even' and the packet levelChart says Skill.",
+      "why": "Kassadin at level 1 has Null Sphere at 650 range with a magic shield; Urgot's Q is 800 but he has no follow-up until his W rank. The packet and the prose both call it even.",
+      "corrected": "phases[0].side and win[0] flipped to Skill in a matched pair, rating 6/10 -> 5/10. Rest of the chart (Urgot x5, then Skill at 2+ items) already matches the packet and the mirror.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys[0]", "mirrorFindings point 2"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1] claims Riftwalk is 'on a long early cooldown'. Riftwalk's cooldown is 5s at rank 1, dropping to 2s at rank 3.",
+      "why": "The real cost of repeat Riftwalks is mana, not cooldown — each blink in quick succession costs escalating mana on top of the base 40. Telling the player it is a long cooldown makes them wait for a window that already came back.",
+      "corrected": "Restated the spike around the 5s cooldown and the escalating mana tax, which is the actual punish window.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd: 5/3.5/2, cost 40; text: 'Multiple Riftwalks in a short period of time cost additional Mana'"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three fields say Kassadin 'silences you with Null Sphere'. Riot's current description says the orb deals damage and interrupts channels — there is no silence.",
+      "why": "The practical interaction is narrower and more useful: Null Sphere breaks your Fear Beyond Death cast, so the timing rule is fire R before he is in range to answer it, not 'avoid being silenced'. Also, per the mirror, Disdain (E, 475 range, 16s at rank 1) shields Urgot as he charges — the shield is freshest right after the flip, and Purge locks onto whoever you last hit with Q or E while slowing you, which is exactly his Riftwalk window.",
+      "corrected": "Replaced 'silences you' with 'Null Sphere interrupts your R'; added the Nether Blade auto-reset wind-up as the step-back tell.",
+      "confidence": "High",
+      "sources": ["enemyKit Q text", "enemyKit W autoReset flag", "missingInteractions: autoreset-burst-tell", "mirrorFindings points 4"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: no cooldown-sequencing advice. breakdown.cooldowns carried a generic 'mobility spike at 6' line with no numbers.",
+      "why": "The concrete numbers are Riftwalk 5s at rank 1 and Force Pulse 21s at rank 1 — Force Pulse is the punishable one, and it only fires once he has charged it off nearby spellcasts.",
+      "corrected": "breakdown.cooldowns and dosFull[0].d rewritten with the real cooldown and the Nether Blade tell.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd", "enemyKit E cd 21/20/19/18/17"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Urgot", "after": "Skill" },
+    { "layer": "content", "path": "win[0]", "before": "Urgot", "after": "Skill" },
+    { "layer": "full", "path": "phases[0].rating", "before": "6/10", "after": "5/10" },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Riftwalk (R) gives him an escape blink, but that's his only defensive answer and it's on a long early cooldown. Force him to blink away and lose farm; if he uses R aggressively, punish the landing with your Q slow and your own R execute. He can't trade you down at 6 — he can only run.",
+      "after": "Riftwalk (R) gives him an escape blink on a 5s cooldown, but each repeat blink taxes his mana harder, so a second one leaves him dry. Force him to blink away and lose farm; if he uses R aggressively, punish the landing with your Q slow and R execute. He can only run at 6."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Kassadin is a hard late-game scaler: once he has his AP core he Riftwalks in, silences you with Q, and bursts before you can channel R. Get your lead early and end fast; if it goes long, itemize MR, group with your team, and use R to catch him mid-Riftwalk rather than dueling him.",
+      "after": "Kassadin is a hard late-game scaler: once he has his AP core he Riftwalks in and Null Sphere interrupts your R the instant you start it, then he bursts. Get your lead early and end fast; if it goes long, itemize MR, group, and use R to catch him mid-Riftwalk."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "The clock is against you — a fully itemized Kassadin Riftwalks in, silences you with Q, and bursts before your R channels, so build MR, group, and use R to catch him mid-blink instead of dueling; win it early or not at all.",
+      "after": "The clock is against you — a fully itemized Kassadin Riftwalks in and Null Sphere interrupts your R cast outright, so build MR, group, and fire R before he is in orb range rather than dueling; win it early or not at all."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Silence you with Null Sphere before you channel R",
+      "after": "Interrupt your R cast with a Null Sphere orb"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Kassadin Riftwalk: matchup-defining — His mobility spike at 6. Kill him before it scales. Track it before every engage.",
+      "after": "- Kassadin Riftwalk: 5s at rank 1, so it is mana that limits it — his combo opens with a Nether Blade auto reset; that wind-up is your cue."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His mobility spike at 6. Kill him before it scales. Only engage once it is down or baited.",
+      "after": "His escape blink at 6. Kill him before he scales; his Nether Blade wind-up is your step-back cue."
+    }
+  ],
+  "notes": "Two real fabrications killed: 'long early cooldown' on Riftwalk (it is 5s at rank 1) and 'silences you with Q' (Null Sphere interrupts channels, no silence in Riot's current text). The mirror (kassadin__urgot) flagged a percent-max-health claim about Echoing Flames that it deliberately left alone; none of Urgot's Kassadin text on this side repeats it, so nothing to fix here, but it is a champion-level issue worth a sweep. Chart otherwise already agreed with the packet — only Level 1 needed the matched-pair flip."
+}

@@ -1,0 +1,80 @@
+{
+  "ownerKey": "zaahen",
+  "enemy": "mordekaiser",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The chart gave Mordekaiser 5 of 7 stages (rows 2-6) while Zaahen wins 55.91% over 1794 games — the packet flags this as a defect. The mirror audit on the Mordekaiser side already committed to Skill / Skill / Mordekaiser / Mordekaiser / Skill / Zaahen / Zaahen.",
+      "why": "Mordekaiser genuinely owns levels 3-5 (Death's Grasp pull into isolated Obliterate plus Darkness Rise ramp), but the item phases belong to Zaahen: Determination fills into bonus Attack Damage and a revive, R heals for a portion of damage dealt, and E is percent-health against an HP-stacking target.",
+      "corrected": "Rows 0, 4, 5 and 6 flipped in matched pairs to agree with the mirror: row 0 Zaahen->Skill, row 4 Mordekaiser->Skill, rows 5 and 6 Mordekaiser->Zaahen. Rows 1, 2 and 3 already agree and are untouched.",
+      "confidence": "High",
+      "sources": ["packet.defects", "mirrorFindings point 2", "champ-data/_kits zaahen.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2] and spikes[3] handed the first-item and two-item windows to Mordekaiser, and 'late' attributed the 55%+ win rate to him.",
+      "why": "55.91% is Zaahen's win rate in this matchup, not Mordekaiser's. Shipping it as his is a factual inversion on the page.",
+      "corrected": "Both late spikes rewritten as Zaahen windows around Determination, the R heal and percent-health E, with the win rate correctly attributed.",
+      "confidence": "High",
+      "sources": ["packet.winRate 55.91", "champ-data/_kits zaahen.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Zaahen's R was called 'Final Retribution' and his Q 'Darkin Glaive' — neither name exists in the kit file. Indestructible (W) was never named and its heal never stated, despite being the interaction that decides extended trades.",
+      "why": "champ-data/_kits/zaahen.json carries no ability names; the mirror audit deliberately declined to ship the unconfirmed names, so slot references are the safe form. Mordekaiser's W stores damage dealt and taken into a shield he can consume to heal, on 12s at rank 1 — Grievous Wounds is the counter and was absent from every trading line.",
+      "corrected": "Fabricated Zaahen names removed in favour of slot references; Obliterate, Death's Grasp, Darkness Rise, Indestructible and Realm of Death named with real ranges and cooldowns (E 700 range / 16s rank 1, W 12s rank 1, R 140/120/100s); anti-heal timing stated in the spike and late text.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits mordekaiser.json", "champ-data/_kits zaahen.json", "champ-data/_kits/_missing/zaahen.json rule needs-antiheal"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns listed no numbers at all.",
+      "why": "Realm of Death 140/120/100, Death's Grasp 16/14/12/10/8, Indestructible 12/11/10/9/8, Obliterate 8/7/6/5/4 — his abilities cost no mana, so cooldown is the only limiter and the only thing worth tracking.",
+      "corrected": "Real cooldowns written into breakdown.cooldowns and dontsFull[1].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits mordekaiser.json"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "report[8].t already calls for early Oblivion Orb / Executioner's against his healing, which matches the needs-antiheal finding.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/_missing/zaahen.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Zaahen","after":"Skill"},
+    {"layer":"content","path":"win[0]","before":"Zaahen","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Mordekaiser","after":"Skill"},
+    {"layer":"content","path":"win[4]","before":"Mordekaiser","after":"Skill"},
+    {"layer":"full","path":"phases[5].side","before":"Mordekaiser","after":"Zaahen"},
+    {"layer":"content","path":"win[5]","before":"Mordekaiser","after":"Zaahen"},
+    {"layer":"full","path":"phases[6].side","before":"Mordekaiser","after":"Zaahen"},
+    {"layer":"content","path":"win[6]","before":"Mordekaiser","after":"Zaahen"},
+
+    {"layer":"content","path":"whys[4]","before":"Level 6 is a skill-check hinging on whether he lands R, which strongly favors him.","after":"Level 6 is a skill-check hinging on whether Realm of Death lands on you at all."},
+    {"layer":"content","path":"whys[5]","before":"At first AP item his shield, slow, and DoT make his R a near-guaranteed kill.","after":"At first item your Determination stacking and R healing out-duel his shield."},
+    {"layer":"content","path":"whys[6]","before":"Two items in his isolation ult and sustained magic damage beat your bruiser duel profile.","after":"Two items in your Determination revive and percent-health E outlast his 100s isolation ult."},
+
+    {"layer":"content","path":"spikes[1].text","before":"Mordekaiser's R Realm of Death is the whole matchup: he yanks you into the death realm for a 1v1 where he steals your stats and has no jungler to save you. If you can't win that isolated duel — and you usually can't through his passive ramp and shield — you must have R Final Retribution or Flash ready, or avoid giving him the ult angle entirely.","after":"Mordekaiser's R Realm of Death is the whole matchup: he yanks you into the death realm for a 1v1 where he steals your stats and no jungler can save you. Death's Grasp (E) is his 700-range pull and Obliterate (Q) hits harder on an isolated target, so deny him that angle — and if you are taken, your R heals off the damage it deals. Anti-heal first."},
+    {"layer":"content","path":"spikes[2].text","before":"He spikes hard on a first AP item (Riftmaker/Rylai's): his passive shield from dealt damage and Rylai's slow make his R a near-guaranteed kill, and his DoT out-sustains your Q. This is the heart of his 55%+ win rate — respect the ult timer and don't facecheck him.","after":"First item is where you take the lane back: Determination stacks into bonus Attack Damage, your Q heals you through his chip, and your R heals for a portion of the damage it deals. Indestructible (W) is a 12s heal off stored damage, so buy Grievous Wounds before this window or his shield refunds the whole trade."},
+    {"layer":"content","path":"spikes[3].text","before":"Two items in, Morde's R remains a deadly isolation tool and his sustained magic damage beats your bruiser profile in a straight duel. Play around his ult cooldown: pressure the wave and roam when R is down, and never take a side-lane 1v1 while it's up, because the death realm removes your only edge — outside help.","after":"Two items in, Realm of Death is still the coin-flip, but on a 100s cooldown it is your window more often than his. When it is down, force the side lane: your percent-health E punishes a stacking Mordekaiser, filled Determination gives bonus Attack Damage and a revive, and Grievous Wounds keeps Indestructible from erasing the duel."},
+
+    {"layer":"content","path":"mid","before":"From level 3 Mordekaiser takes control: E Death's Grasp pulls you into an isolated empowered Q, and his Darkness Rise passive ramps magic damage the longer the trade runs, out-trading your Q chip through levels 4-5. Level 6 is a skill-check because everything hinges on his R Realm of Death — if he lands it you're in a 1v1 he's favored to win, so keep R Final Retribution or Flash ready and deny him the angle.","after":"From level 3 Mordekaiser takes control: Death's Grasp (E) pulls you into an isolated empowered Obliterate (Q), and Darkness Rise ramps magic damage the longer the trade runs, out-trading your Q chip through levels 4-5. Level 6 is a skill-check because everything hinges on Realm of Death — if he lands it you are in a 1v1 he is favoured to win, so hold Flash and your R heal and deny him the angle."},
+    {"layer":"content","path":"late","before":"Into items Morde tilts the matchup — a first AP item gives him shield sustain and Rylai's slow that make his ult a near-guaranteed pick, and his DoT out-sustains you, which is why his win rate climbs past 55% in the item phases. Play strictly around his R cooldown: pressure and roam when it's down, and never take a side-lane duel while it's up, since the death realm strips away your outside help.","after":"Into items the matchup swings back to you — the 55.91% belongs to Zaahen, not Morde. Determination fills into bonus Attack Damage and a revive, your R heals for a portion of the damage it deals, and your percent-health E punishes his HP stacking. Keep Grievous Wounds up so Indestructible cannot refund the trade, and play strictly around his 100s R: force the side lane the moment it is down."},
+
+    {"layer":"content","path":"wants.you[0]","before":"Chip with Q Darkin Glaive but avoid extended trades into his passive ramp","after":"Chip with your Q double-slash but avoid extended trades into Darkness Rise"},
+    {"layer":"content","path":"wants.you[2]","before":"Hold R Final Retribution or Flash for when he ults you into the death realm","after":"Hold your R heal and Flash for when he pulls you into the death realm"},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Mordekaiser Realm of Death: matchup-defining — His 1v1 realm. Survive it with MR. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Realm of Death: matchup-defining — 140/120/100s. Survive it or refuse the angle. - Death's Grasp (E): 16s at rank 1, his only pull. - Indestructible (W): a 12s heal — anti-heal beats it. - Your R: kill windows only."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"His 16s pull feeds an isolated Obliterate — do not stand in it."}
+  ],
+  "notes": "The kit file tags Obliterate (Q) with a 'grounding' flag, but Riot's own description for it is only 'smashes the ground... damage increased when hitting a single enemy' — no dash denial. Treated as a tooltip-parsing misfire and NOT asserted anywhere in the text; if Obliterate really does ground, the E-dash advice here is worth revisiting. Zaahen's abilities are still written by slot because champ-data/_kits/zaahen.json carries no names and packet.enemyAbilities is null for him; the mirror auditor made the same call."
+}

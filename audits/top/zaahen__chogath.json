@@ -1,0 +1,91 @@
+{
+  "ownerKey": "zaahen",
+  "enemy": "chogath",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 2 and Level 3 read Cho'Gath in both layers while whys[1] says 'You favour level 2' and whys[2] says 'Level 3 flattens to skill'. The packet levelChart and the already-audited mirror both read Skill / Zaahen / Skill / Skill / Skill / Cho'Gath / Cho'Gath.",
+      "why": "The mirror has already fixed its side to that chart, so leaving these two rows would put the two directions in direct contradiction — and mirror-fix.js would overwrite them anyway.",
+      "corrected": "Level 2 flipped to Zaahen and Level 3 to Skill as matched full+content pairs, with ratings set to the inverse of the mirror's (5,6,5,5,5,4,4).",
+      "confidence": "High",
+      "sources": ["mirrorFindings point 2", "packet.levelChart", "currentText.content.whys[1]", "currentText.content.whys[2]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The spike story is already right: level 2 edge, level 6 reset on Feast, first item where stacked Feast HP absorbs the burst, two items where he out-tanks. Feast is 80/70/60s and the 60s at rank 3 is now stated so the player can count it.",
+      "corrected": "Feast's 60s added to breakdown.cooldowns; no spike restructuring needed.",
+      "confidence": "High",
+      "sources": ["enemyKit.R cd", "currentText.content.spikes"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two things. (1) The page tells the player to build MR for Feast — tldr 'Build MR', winCon 'Build MR', report[0]/report[1], and dosFull[1].t 'Build MR for his R'. Feast is TRUE damage and percent-health; magic resist does nothing against it. The missing-interactions file flags exactly this (resistances-invalidated). (2) Rupture is described only as a knock-up telegraph — it also GROUNDS, which turns off Zaahen's E dash, the one tool he has for leaving a trade.",
+      "why": "Buying MR to survive an ultimate that ignores resistances is the worst kind of wrong: it costs gold, it feels like preparation, and the player still dies at the same health. And a player who dashes into the crater to answer the knock-up finds he cannot dash back out.",
+      "corrected": "MR re-pointed at Feral Scream (magic damage) and away from Feast in tldr and dosFull[0].d/[1].t; the grounding on Rupture written into report[5].t, breakdown.cooldowns and mid.",
+      "confidence": "High",
+      "sources": ["enemyKit.R flags trueDamage/percentHealth", "enemyKit.Q flags grounding", "ownerKit.E flags dash", "missingInteractions resistances-invalidated"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet's own defect line: 'NO cooldown-sequencing advice anywhere'. sequencingCues is 0. Nothing on the page told the player to wait for anything specific before doing anything specific.",
+      "why": "Feral Scream is 11/10.5/10/9.5/9s and it silences — that is the ability that deletes Zaahen, because silence into Feast is the kill. Rupture is a 6s cooldown, so it is never the thing to wait out; the silence is.",
+      "corrected": "'Bait Feral Scream before you E in' written into breakdown.cooldowns and mid with the 10s number, plus Rupture's 6s and Feast's 60s.",
+      "confidence": "High",
+      "sources": ["packet.defects", "enemyKit.W cd and flags", "enemyKit.Q cd", "enemyKit.R cd"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[1].side", "before": "Cho'Gath", "after": "Zaahen" },
+    { "layer": "content", "path": "win[1]", "before": "Cho'Gath", "after": "Zaahen" },
+    { "layer": "full", "path": "phases[2].side", "before": "Cho'Gath", "after": "Skill" },
+    { "layer": "content", "path": "win[2]", "before": "Cho'Gath", "after": "Skill" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "4/10" },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Build MR — dodge his Q, burst his immobile body. Zaahen wins the Feast cooldown windows.",
+      "after": "MR stops his scream, not Feast — dodge his Q and burst him. Zaahen wins the Feast windows."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].t",
+      "before": "Build MR for his R",
+      "after": "MR for his W, not his R"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "True-damage execute. Don’t sit low. Only engage once it is down or baited.",
+      "after": "True damage — MR will not save you. Only engage once it is down or baited."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Cho'Gath Feast: matchup-defining — True-damage execute. Don’t sit low. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Cho'Gath Feral Scream (10s at rank 3): wait for the silence before you E in. - Rupture (6s): it grounds as well as knocks up. - Feast (60s at rank 3): true damage, so MR does not answer it."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Cho'Gath's Feast: True-damage execute. Don’t sit low. When it is down — Combo + R him.",
+      "after": "Rupture grounds as well as knocking up — your E cannot dash out of the crater, so bait it first."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-5 you hold a real trading edge with E Golden Onslaught engage plus Q, but the moment he hits 6 and R Feast comes online the lane resets to even and skill-dependent — one silenced combo can execute you.",
+      "after": "Levels 3-5 you hold a real trading edge, but sequence it: Feral Scream is 10s and Rupture grounds you, so bait both before you E in. At 6 Feast resets the lane to even — one silenced combo can execute you."
+    }
+  ],
+  "notes": "The 'Build MR' advice against a true-damage ultimate survives in winCon, report[0].t and report[1].t, where the +/-10% band left no room to re-point it without dropping other content — worth a manual pass. Chart and ratings are reused from the already-audited mirror and belong to one atomic group."
+}

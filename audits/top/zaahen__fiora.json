@@ -1,0 +1,93 @@
+{
+  "ownerKey": "zaahen",
+  "enemy": "fiora",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 2 reads Fiora while whys[1] says 'Level 2 stays a skill lane', and Levels 4-5 reads Skill while whys[3] says 'You take levels 4-5'. The packet levelChart reads Skill / Skill / Fiora / Zaahen / Skill / Fiora / Fiora, and the already-audited mirror set win[1] to Skill and win[3] to Zaahen as one group.",
+      "why": "Three sources agree against the two badges, and the mirror has already moved — leaving these rows would put the directions in conflict.",
+      "corrected": "Level 2 flipped to Skill and Levels 4-5 to Zaahen as matched full+content pairs, with the 4-5 rating raised from 4/10 to 6/10 so it reads as a Zaahen window rather than a losing one.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "mirrorFindings point 3", "currentText.content.whys[1]", "currentText.content.whys[3]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Riposte is the tracked cooldown in roughly twenty fields and its length is never given, so 'commit when Riposte is down' is untimed advice.",
+      "why": "Riposte is 24/22/20/18/16s — 20s at rank 3, one of the longest defensive cooldowns in the lane. Lunge is 13/11.25/9.5/7.75/6s and Grand Challenge 110/90/70s.",
+      "corrected": "20s written into breakdown.cooldowns, spikes[0].text and late; Lunge's 9.5s into breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit.W cd", "enemyKit.Q cd", "enemyKit.R cd"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The Riposte stun is written as unconditional — 'Parries + stuns your combo', 'she can W your Q Darkin Glaive or E Golden Onslaught to stun you'. Riot's text is explicit: the stab SLOWS the first champion hit, and only STUNS if Fiora blocked an immobilizing effect with it. Separately, 'E true damage' appears twice; Bladework has no true damage (it is attack speed, a slow, then a crit) — the true damage belongs to her Vitals. And Lunge applying on-hit effects is never mentioned.",
+      "why": "This is the whole matchup. Zaahen's two immobilising abilities are the Q recast knock-up and the W pull — those are the only things that arm her stun. Open with plain damage and Riposte gives her a slow, not a stun; open with the knock-up and you hand her the 20-second window she wants. The current text tells the player his dash can be parried into a stun, which sends him into the wrong fear.",
+      "corrected": "The immobilise condition stated in breakdown.cooldowns, dosFull[0].d, report[5].t, spikes[0].text and wants.foe[0]; true damage re-attributed to Vitals in spikes[2].text and late; Lunge's on-hit application added to breakdown.cooldowns and spikes[2].text.",
+      "confidence": "High",
+      "sources": ["enemyKit.W text", "enemyKit.E text", "enemyKit.R flags trueDamage", "ownerKit.Q and W knockup flags", "missingInteractions onhit-itemization"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Anti-heal is already core in report[8].t and breakdown.late, correct against Duelist's Dance and Grand Challenge. The R heal also reaches her ALLIES, which is now stated in late.",
+      "corrected": "Ally heal added to late; no item change.",
+      "confidence": "High",
+      "sources": ["enemyKit.R text", "missingInteractions needs-antiheal"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[1].side", "before": "Fiora", "after": "Skill" },
+    { "layer": "content", "path": "win[1]", "before": "Fiora", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Zaahen" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Zaahen" },
+    { "layer": "full", "path": "phases[3].rating", "before": "4/10", "after": "6/10" },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Fiora Riposte: matchup-defining — Parries + stuns your combo. Bait it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Fiora Riposte (20s at rank 3): it only stuns if it blocks an immobilise, so never open with your knock-up or pull. - Lunge (9.5s): it applies on-hit items. - Your ultimate: kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Parries + stuns your combo. Bait it. Only engage once it is down or baited.",
+      "after": "It stuns only if it blocks your knock-up. Bait it before you commit."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Fiora's Riposte: Parries + stuns your combo. Bait it. When it is down — Combo + R her.",
+      "after": "Riposte only stuns when it parries an immobilise — lead with autos, never your pull."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "At level 3 Fiora's E Bladework double-attack plus W Riposte parry make her a nightmare to trade into — she can W your Q Darkin Glaive or E Golden Onslaught to stun you, so hold your key ability until her Riposte is down, then punish at levels 4-5 when your cooldowns realign.",
+      "after": "At level 3 Fiora's E Bladework double-attack plus W Riposte parry make her a nightmare to trade into — Riposte only stuns if it blocks an immobilise, so open with plain damage and keep the Q recast knock-up back until her 20-second parry is spent."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "With her first item Fiora's Q Lunge mobility and E true-damage let her chase Vitals faster than you can peel; the parry uptime and heal outscale your sustained trade.",
+      "after": "With her first item Fiora's Q Lunge carries her on-hit items and her Vitals do the true damage; the parry uptime and R heal outscale your sustained trade."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "With items Fiora takes over — her Q Lunge mobility, E true damage, and R Grand Challenge heal let her chase your Vitals and negate your engage with a well-timed parry, so only commit when her Riposte is spent.",
+      "after": "With items Fiora takes over — her Q Lunge applies on-hit items, her Vitals deal the true damage, and R Grand Challenge heals her and her allies, so only commit when her 20-second Riposte is spent."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Parry your engage ability with W Riposte for the stun",
+      "after": "Parrying your knock-up with W Riposte for the stun"
+    }
+  ],
+  "notes": "The unconditional-stun claim was the most damaging error in this matchup: it made Zaahen's dash look like the parry bait when the real trigger is his knock-up and his pull. Everything about Riposte here now follows Riot's own wording. The 'E true damage' error appeared twice and is re-attributed to her Vitals."
+}

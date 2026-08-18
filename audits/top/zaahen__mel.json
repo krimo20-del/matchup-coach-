@@ -1,0 +1,80 @@
+{
+  "ownerKey": "zaahen",
+  "enemy": "mel",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart claimed Zaahen wins every row, while the whys for rows 0, 1 and 4 describe an even farm phase and a level-6 skill-check. The packet levelChart reads Skill/Skill/Zaahen/Zaahen/Skill/Zaahen/Zaahen.",
+      "why": "Mel is a 550-range control mage with no dash; Zaahen has no gap-closer threat online until E and the Q recast at 3, and level 6 adds Solar Snare (E) root plus Rebuttal (W) damage immunity against his 110s Grim Deliverance.",
+      "corrected": "Rows 0, 1 and 4 set to Skill in both layers (phases[N].side and win[N] proposed as matched pairs).",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "champ-data/_kits mel", "existing whys text"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spike text named non-existent abilities: 'Q Darkin Glaive', 'E Golden Onslaught', 'R Final Retribution', 'passive Rebalance marks', and called Solar Snare her R.",
+      "why": "Riot kit data: Mel is Searing Brilliance (P, Overwhelm + execute), Radiant Volley (Q), Rebuttal (W), Solar Snare (E), Golden Eclipse (R). Zaahen's W is Dreaded Return and R is Grim Deliverance (confirmed via mirror audit); Q and E have no name in the kit file so they are referred to by slot.",
+      "corrected": "All four spikes plus early/mid/late rewritten on real names and real slots; Golden Eclipse identified as the global Overwhelm detonation, not a root.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits mel.json", "mirrorFindings zaahen audit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Text claimed Rebuttal 'reflects your engage damage back onto you' and warned against dashing into it. Rebuttal reflects projectiles; against Zaahen the load-bearing part is that it prevents her taking damage at all. Also the Searing Brilliance execute threshold and the ability-cast auto-attack wind-up were never mentioned.",
+      "why": "Zaahen's kit has no projectile — Q is an on-hit double slash, W a 850-range stab-and-pull, E a dash. Nothing of his gets reflected; what actually happens is his whole burst is blanked for the barrier's duration. Rebuttal is 38s at rank 1, so the window after it is spent is the real engage. Searing Brilliance executes off accumulated Overwhelm, which is an HP number the bar does not show.",
+      "corrected": "Rewrote the W lines as damage immunity, added the 38s / 11s cooldowns, added the Overwhelm execute and the extra-projectile auto wind-up as the step-back cue.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits mel.json", "champ-data/_kits/_missing/zaahen.json rules execute-threshold, autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "No cooldown numbers anywhere in the matchup.",
+      "why": "Solar Snare 11/10.5/10/9.5/9, Rebuttal 38/35/33/29/26, Radiant Volley 10/9/8/7/6, Golden Eclipse 120/100/80.",
+      "corrected": "Added 11s and 38s to breakdown.cooldowns, report[5].t, dosFull[0].d and spikes[1].text.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits mel.json"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Golden Eclipse's global reach was never stated.",
+      "why": "Golden Eclipse has 25000 range and strikes every Overwhelm-marked enemy regardless of distance — it kills a low-HP Zaahen in the side lane with Mel nowhere near.",
+      "corrected": "Stated in spikes[3].text and phases[4].why.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits mel.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Zaahen","after":"Skill"},
+    {"layer":"content","path":"win[0]","before":"Zaahen","after":"Skill"},
+    {"layer":"full","path":"phases[1].side","before":"Zaahen","after":"Skill"},
+    {"layer":"content","path":"win[1]","before":"Zaahen","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Zaahen","after":"Skill"},
+    {"layer":"content","path":"win[4]","before":"Zaahen","after":"Skill"},
+
+    {"layer":"content","path":"spikes[0].text","before":"You dominate here against a squishy control mage. Mel wants to stack her passive Rebalance marks and poke with Q Radiant Volley, but she's paper-thin and immobile, so your Q Darkin Glaive and E Golden Onslaught let you walk her down and burst her before her poke matters. Force the all-in the moment she steps up to CS.","after":"You dominate here against a squishy control mage. Mel stacks Searing Brilliance (P) Overwhelm and pokes with Radiant Volley (Q), but she is paper-thin and immobile, so your E dash closes and your Q recast knocks her up before her poke matters. Force the all-in the moment she steps up to CS."},
+    {"layer":"content","path":"spikes[1].text","before":"Mel's R Solar Snare is a wide-area root, and her W Solar Snare/Overwhelm reflect can turn a mistimed dash back on you — but she has no dash and no real escape, so if you dodge or eat the CC and commit R Final Retribution, she dies. Bait her W reflect window, then engage; don't ult her while W is active.","after":"Solar Snare (E) is her root, up every 11s at rank 1, and Rebuttal (W) makes her damage-immune while it holds — but she has no dash, so dodge the root, wait the barrier out, then commit Grim Deliverance (R). Never ult into an active Rebuttal; the gap after it is your engage."},
+    {"layer":"content","path":"spikes[3].text","before":"Even into two items Mel can't escape you in the side lane — she has no mobility and folds to your sustained damage the instant you're on top of her. Respect her R root as gank bait and her W reflect on your engage, but one-on-one you delete her every time you get in range.","after":"Even into two items Mel can't escape you in the side lane — she has no mobility and folds to your sustained damage the instant you're on top of her. Golden Eclipse (R) reaches you anywhere on the map through Overwhelm stacks, so never sit low in the side lane."},
+    {"layer":"content","path":"early","before":"Levels 1-2 are an even farm phase — Mel pokes with Q Radiant Volley and builds her passive marks, but she's too squishy and immobile to punish you hard yet, so nothing is decided. Set up your level-3 spike and don't eat free poke standing in her Q.","after":"Levels 1-2 are an even farm phase — Mel pokes with Radiant Volley (Q) and stacks Overwhelm, but she is too squishy and immobile to punish you hard yet, so nothing is decided. Every ability she casts loads projectiles onto her next auto: that wind-up is your cue to step back."},
+    {"layer":"content","path":"mid","before":"From level 3 you take over: your Q Darkin Glaive and E Golden Onslaught let you close on a mobility-less control mage and burst her before her poke ramps, and that edge carries through level 5. Level 6 is a skill-check only because her R Solar Snare and W reflect can flip a careless engage, so bait the reflect and dodge the root, then commit.","after":"From level 3 you take over: your E dash and Q knockup recast let you close on a mobility-less control mage and burst her before her poke ramps, and that edge carries through level 5. Level 6 is a skill-check because Solar Snare (E) roots on 11s and Rebuttal (W) blanks damage outright, so dodge the root, wait the 38s barrier out, then commit."},
+    {"layer":"content","path":"late","before":"Into items you keep crushing her — your durability and Q sustain shrug off her mana-hungry poke while she has no escape from your sustained damage, which is why this sits at a commanding 58% win rate. Respect her R as gank bait and don't ult into her W reflect, but any time you're in range one-on-one she dies.","after":"Into items you keep crushing her — your durability and Q sustain shrug off her mana-hungry poke while she has no escape from your sustained damage, which is why this sits at a commanding 58% win rate. Overwhelm executes off a hidden threshold, so track the HP number, not the bar, and never ult into Rebuttal."},
+    {"layer":"content","path":"whys[4]","before":"Level 6 is a skill-check because her R root and W reflect can flip a careless engage.","after":"Level 6 is a skill-check: Solar Snare (E) roots and Rebuttal (W) blanks your burst."},
+    {"layer":"content","path":"wants.you[0]","before":"Walk her down with Q Darkin Glaive and E Golden Onslaught before her poke ramps","after":"Walk her down with your E dash and Q knockup recast before her poke ramps"},
+    {"layer":"content","path":"wants.you[2]","before":"Bait her W reflect window, then commit R Final Retribution to finish","after":"Bait out Rebuttal (W), then commit Grim Deliverance (R) to finish"},
+    {"layer":"content","path":"wants.foe[0]","before":"Stack passive Rebalance marks and poke with Q Radiant Volley from range","after":"Stack Overwhelm marks and poke with Radiant Volley (Q) from range"},
+    {"layer":"content","path":"wants.foe[1]","before":"Land R Solar Snare root to set up a jungle collapse or escape","after":"Land Solar Snare (E) root to set up a jungle collapse or escape"},
+    {"layer":"content","path":"wants.foe[2]","before":"Time W to reflect your engage damage back onto you","after":"Time Rebuttal (W) to blank your engage damage entirely"},
+
+    {"layer":"full","path":"enemyWin","before":"Mel wins by landing Solar Snare, denying your pattern, and kiting you off the wave.","after":"Mel wins by landing Solar Snare, blanking your burst with Rebuttal, and kiting you off."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Mel Solar Snare: matchup-defining — Her root / slow zone — sets up her combo. Dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Solar Snare (E): matchup-defining — an 11s root and slow zone that sets up her combo. Dodge it, then engage in the gap. - Rebuttal (W): 38s at rank 1 — she takes no damage while it holds. - Grim Deliverance (R): kill windows only."},
+    {"layer":"full","path":"phases[4].why","before":"Your R is the kill window — bank it until his answer is committed. Reassess every all-in at 6 — Mel's ultimate changes the math too.","after":"Grim Deliverance (R) is the kill window — bank it until Rebuttal is spent. Golden Eclipse reaches you through Overwhelm anywhere."},
+    {"layer":"full","path":"report[5].t","before":"Track Mel's Solar Snare: Her root / slow zone — sets up her combo. Dodge it. When it is down — Combo the cooldown gap.","after":"Solar Snare (E) roots on an 11s cooldown; Rebuttal (W) stops her taking damage at all. Engage once both have been spent."},
+    {"layer":"full","path":"dosFull[0].d","before":"Her root / slow zone — sets up her combo. Dodge it. Only engage once it is down or baited.","after":"An 11s root and slow zone that sets up her combo. Engage only once it or Rebuttal is spent."}
+  ],
+  "notes": "The full layer refers to Mel as 'his'/'he' in tldr, breakdown.early, breakdown.feeding, breakdown.carry, breakdown.late, phases[0].why, dosFull[1].t and report[12].t. Mel is female. Left alone here because a pronoun swap is a sub-25-character change inside long strings and I could not fix them all inside the length band without rewriting text that is otherwise correct — worth a scripted pass. Zaahen's Q and E have no ability names in champ-data/_kits/zaahen.json, so they are written by slot; W is Dreaded Return and R is Grim Deliverance per the mirror audit."
+}

@@ -1,0 +1,64 @@
+{
+  "ownerKey": "zaahen",
+  "enemy": "renekton",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Row 1 read Renekton while its why says 'Level 2 stays even as neither of you can open a committed trade yet'. Row 3 read Skill while its why says 'your Q and E are online and you can disengage his stun, tilting it your way'. Row 6 read Renekton while its why says 'your sustain and stats catch his falloff, leveling the duel back out'.",
+      "why": "Renekton owns level 3 and the first-item window and nothing else; level 2 is pre-Fury and two items is where a falloff bully loses the duel. The packet chart reads Skill / Skill / Renekton / Zaahen / Skill / Renekton / Skill, and the mirror audit already committed to exactly those three flips.",
+      "corrected": "Row 1 to Skill, row 3 to Zaahen, row 6 to Skill, all as matched full/content pairs. Rows 2 and 5 stay Renekton.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "mirrorFindings", "existing whys text"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-3 spike said 'full fury' without the threshold or what changes at it, and the level-6 entry called Zaahen's ultimate 'R Final Retribution'.",
+      "why": "Riot's text puts the breakpoint at more than 50 Fury: below it Ruthless Predator stuns 0.75s, above it he slashes three times, stuns 1.5s and DESTROYS damage shields on the target. That is a doubled stun plus shield removal on one bar you can read. Zaahen's R has no name in the kit file; what it does have is a heal for a portion of the damage dealt on 110s.",
+      "corrected": "spikes[0] rewritten on the 50-Fury threshold with both stun durations and the shield destruction; spikes[1] rewritten on the R heal and the 16s W gap; fabricated names removed.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits renekton.json", "champ-data/_kits zaahen.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "'E Golden Onslaught' and 'R Final Retribution' are fabricated. Cull the Meek's heal was mentioned once as 'sustain' with no anti-heal instruction anywhere in the prose, and Ruthless Predator's auto-attack reset was never mentioned.",
+      "why": "Cull the Meek is a flat 7s that heals off every target hit and heals more above 50 Fury — it is the mechanic that refunds every extended trade, so Grievous Wounds timing decides them. Ruthless Predator also resets his auto, so the wind-up rather than the cast is the step-back cue. Renekton's Fury generation increases when he is LOW, so a losing Renekton is more dangerous, not less.",
+      "corrected": "Anti-heal written into spikes[3] and breakdown.cooldowns; the Fury-when-low read stated in spikes[0]; W and E cooldowns (16s at rank 1 each) added to spikes[1], mid, breakdown.cooldowns, dosFull[0].d and report[5].t; fabricated names replaced with slot references.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits renekton.json", "champ-data/_kits/_missing/zaahen.json rules needs-antiheal and autoreset-burst-tell"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "report[8].t already calls early Oblivion Orb / Executioner's, which is the right answer to Cull the Meek.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits renekton.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[1].side","before":"Renekton","after":"Skill"},
+    {"layer":"content","path":"win[1]","before":"Renekton","after":"Skill"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Zaahen"},
+    {"layer":"content","path":"win[3]","before":"Skill","after":"Zaahen"},
+    {"layer":"full","path":"phases[6].side","before":"Renekton","after":"Skill"},
+    {"layer":"content","path":"win[6]","before":"Renekton","after":"Skill"},
+
+    {"layer":"content","path":"spikes[0].text","before":"Renekton's level 3 is his hardest window — with full fury he chains Cull the Meek (Q) heal, Ruthless Predator (W) stun and a Slice-and-Dice (E) dash to burst you before your Q Darkin Glaive and E Golden Onslaught can answer, so respect his empowered W.","after":"Renekton's level 3 is his hardest window — above 50 Fury he chains the Cull the Meek (Q) heal, a Ruthless Predator (W) that stuns 1.5s instead of 0.75s and destroys shields, and the Slice and Dice (E) dash. Read his Fury bar, not his health bar."},
+    {"layer":"content","path":"spikes[1].text","before":"At 6 your R Final Retribution gives you an all-in he can't cleanly out-trade, and by 4-5 your own combo has come online — hold your E Golden Onslaught to disengage his W stun and the lane starts evening back toward you.","after":"At 6 your R gives you an all-in he cannot cleanly out-trade, and it heals you for part of the damage it deals. His W is 16s at rank 1 — hold your E to disengage that stun, then commit inside the gap it leaves."},
+    {"layer":"content","path":"spikes[3].text","before":"By two items you catch and pass him — Renekton is a falloff bully, so once your sustain and stats are up his empowered combo stops one-shotting the trade and side-lane duels go even to yours.","after":"By two items you catch and pass him — Renekton is a falloff bully. Keep Grievous Wounds up: Cull the Meek is a 7s heal that grows with Fury, and it is what refunds every extended trade he takes."},
+
+    {"layer":"content","path":"mid","before":"His level 3 with empowered Ruthless Predator (W) stun is his best moment and he wins that window; but by 4-5 your Q Darkin Glaive and E Golden Onslaught come online and at 6 your R Final Retribution lets you answer his all-in.","after":"His level 3 with an empowered Ruthless Predator is his best moment and he wins that window; by 4-5 your Q and E come online and at 6 your R answers his all-in. His W is 16s at rank 1 — that gap is where you trade."},
+    {"layer":"content","path":"wants.you[1]","before":"Save E Golden Onslaught to dodge his Slice dash-in and stun","after":"Save your E dash to dodge his Slice and Dice and the stun"},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Renekton Ruthless Predator: matchup-defining — Empowered = long stun. Dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Ruthless Predator (W): matchup-defining — 16s at rank 1; above 50 Fury it stuns 1.5s and destroys shields. - Cull the Meek (Q): a 7s heal — anti-heal beats it. - Slice and Dice (E): 16s at rank 1."},
+    {"layer":"full","path":"dosFull[0].d","before":"Empowered = long stun. Dodge it. Only engage once it is down or baited.","after":"Empowered it stuns 1.5s and eats shields — engage after its 16s."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Above 50 Fury it stuns twice as long and destroys your shields."},
+    {"layer":"full","path":"report[5].t","before":"Track Renekton's Ruthless Predator (Stun): Empowered = long stun. Dodge it. When it is down — Combo + R him.","after":"Ruthless Predator: a 0.75s stun, or 1.5s and shield-destroying at 50+ Fury. It is 16s at rank 1."}
+  ],
+  "notes": "Renekton's W destroying damage shields matters more than usual for Zaahen because Sterak's Gage is in report[8].t as a core item — an empowered W removes it outright. I did not write that into the item text because report[8].t is otherwise correct and the sentence would not fit the band; worth a hand addition. Zaahen's Q, E and R are referred to by slot, matching this matchup's mirror auditor, who explicitly declined the missing-interactions names as an unconfirmed second source."
+}

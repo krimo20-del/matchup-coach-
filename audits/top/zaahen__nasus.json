@@ -1,0 +1,72 @@
+{
+  "ownerKey": "zaahen",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Row 0 read Zaahen in both layers while its own why says 'a neutral farm start with neither champion holding a real combat edge'. Row 5 gave the first-item stage to Nasus, against the packet chart and a 50.41% even win rate.",
+      "why": "Level 1 Nasus has only a 255-range Siphoning Strike and no Wither; nothing decides. At first item Wither and tank stats are real, but so are Determination's bonus AD and the R heal — the packet reads Skill and the overall rate is 50.41% across 1216 games.",
+      "corrected": "Rows 0 and 5 set to Skill in both layers as matched pairs; whys[5] rewritten to describe the even state instead of a swing.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 50.41", "existing whys[0] text"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1] described Fury of the Sands only as 'sustain and tankiness through the roof' — it omitted the percent-health damage, the bonus Armour and Magic Resist, the Siphoning Strike cooldown reduction and the 120s cooldown.",
+      "why": "Fury of the Sands is the largest single spike in the matchup and its percent-health component is exactly why stacking health against him fails. Its 120s cooldown at rank 1 is also the longest window in the lane and never appeared anywhere.",
+      "corrected": "spikes[1] rewritten with the 120s cooldown, percent-health damage, resist gain and Q cooldown reduction, plus the note that Zaahen's own E is percent-health and is the right answer into his resists.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits nasus.json", "champ-data/_kits/_missing/zaahen.json rule resistances-invalidated"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "'E Golden Onslaught' is not an ability that exists. Siphoning Strike's auto-attack reset, its 255 range, Wither's 15s cooldown and 700 range, and Soul Eater life steal were all absent.",
+      "why": "champ-data/_kits/zaahen.json carries no ability names, so E is written by effect. On Nasus's side, the reset is the burst tell (the wind-up, not the cast, is the cue) and the 255-range Q means he must physically walk into your slash range to stack — which is the whole early lane.",
+      "corrected": "Fabricated E name removed; Q range, W cooldown/range, R cooldown and Soul Eater's life steal named in the spikes, mid, breakdown.cooldowns, dosFull[0].d, dontsFull[1].d and report[5].t.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits nasus.json", "champ-data/_kits/_missing/zaahen.json rule autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.defects: 'NO cooldown-sequencing advice anywhere'. sequencingCues was 0.",
+      "why": "Wither at 15s rank 1 is the single punishable cooldown: engaging into it strands you, engaging after it is spent is free. Fury of the Sands is 120s at rank 1.",
+      "corrected": "Added explicit wait-for-X-before-Y sequencing to breakdown.cooldowns, dosFull[0].d, dontsFull[1].d and spikes[2].text.",
+      "confidence": "High",
+      "sources": ["packet.defects", "champ-data/_kits nasus.json"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "report[8].t already calls early Oblivion Orb / Executioner's, which is the right answer to Soul Eater life steal.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits nasus.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Zaahen","after":"Skill"},
+    {"layer":"content","path":"win[0]","before":"Zaahen","after":"Skill"},
+    {"layer":"full","path":"phases[5].side","before":"Nasus","after":"Skill"},
+    {"layer":"content","path":"win[5]","before":"Nasus","after":"Skill"},
+
+    {"layer":"content","path":"whys[2]","before":"At level 3 your E Golden Onslaught and glaive spacing win every short trade against a stack-hungry Nasus.","after":"At level 3 your E dash and glaive spacing win every short trade against a stack-starved Nasus."},
+    {"layer":"content","path":"whys[5]","before":"By first item Nasus's Wither and tank buy let his extended fights start winning, tilting the lane his way.","after":"By first item it is even: Wither and tank stats blunt you, but Determination and your R heal answer."},
+
+    {"layer":"content","path":"spikes[1].text","before":"Nasus R Fury of the Sands flips his sustain and tankiness through the roof and pads his health bar, so his all-in and dueling threat spikes here even though your kill pressure is still real if you caught him low first.","after":"Fury of the Sands (R) is 120s at rank 1: it pads his health, grants bonus Armour and Magic Resist, shortens his Siphoning Strike cooldown and deals percent-health damage, so stacking raw health does not save you. Your E is percent-health too — spend it on him, not the wave."},
+    {"layer":"content","path":"spikes[2].text","before":"His Wither on your gap-close plus completed tank/Sheen item means a straight extended fight starts leaning his way; keep trades short and glaive-spaced rather than committing to a full duel.","after":"Wither is 15s at rank 1 and long enough to strand you: bait it before you commit, never after your E is spent. Keep trades short and keep Grievous Wounds up — Soul Eater refunds his long fights."},
+
+    {"layer":"content","path":"mid","before":"Levels 3-6 are your window. With E Golden Onslaught and Q up you win short trades convincingly and can zone him off Siphoning Strike stacks, building a CS and health lead before his R Fury of the Sands online changes the math.","after":"Levels 3-6 are your window. With your E dash and Q up you win short trades convincingly and can zone him off Siphoning Strike stacks — his Q is 255 range, so he has to walk inside your slash to farm it. Bank the CS and health lead before Fury of the Sands lands."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Nasus Wither: matchup-defining — His only kite. Poke before it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Wither (W): matchup-defining — 15s at rank 1, 700 range. Bait it, then commit; never engage into it. - Fury of the Sands (R): 120s, percent-health. - Siphoning Strike (Q): 255 range — stay outside it."},
+    {"layer":"full","path":"dosFull[0].d","before":"His only kite. Poke before it. Only engage once it is down or baited.","after":"His only kite, 15s at rank 1. Engage after it is spent, never before."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Withered, you cannot leave — bait the 15s slow before you dash in."},
+    {"layer":"full","path":"report[5].t","before":"Track Nasus's Wither: His only kite. Poke before it. When it is down — Combo + R him.","after":"Wither is a 15s, 700-range kite. His R deals percent health, so armour is not the answer."}
+  ],
+  "notes": "NAME CONFLICT ACROSS MIRRORS. The Nasus-side mirror audit shipped 'The Darkin Glaive (Q)', 'Dreaded Return (W)', 'Aureate Rush (E)' and 'Grim Deliverance (R)' for Zaahen; the Mordekaiser-side mirror auditor explicitly refused those names as unconfirmed and used slots. champ-data/_kits/zaahen.json has no names and packet.enemyAbilities is null for him, so there is no authority in this run. I left the existing 'Darkin Glaive' strings alone rather than churn them, and wrote E by effect ('your E dash') instead of picking a side. This needs one decision applied champion-wide."
+}

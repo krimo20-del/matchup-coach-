@@ -1,0 +1,43 @@
+{
+  "ownerKey": "nautilus",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "FAV / 4-10 with a 5/10 carry threat is backed by the largest sample in the slice — 53.37% over 2342 Emerald+ games — and by the kit: Locke's only mobility is a 10s blink and his kill script needs an execute threshold a full-tank Nautilus rarely sits under.",
+      "corrected": "No change to diff, tone, diffRating or carryRating.",
+      "confidence": "High",
+      "sources": ["packet winRate/games (2342)", "enemyKit E cd 10 flat", "enemyKit R execute flag"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer's spikes[] has three entries where four are expected, and the missing one is the Level 6 / late Purgatory threat — the single most important timing on the page. The three present spikes carry no cooldown numbers at all, which the packet flags as zero sequencing cues.",
+      "why": "spikes[] runs Lvl 1, Lvl 3, 2+ items and never mentions the ultimate. enemyKit R is a 120/100/80s execute that 'gains additional power for sealing away enemy champions', so his floor rises with every seal — that is a genuine late spike and it belongs in the chronological slot after 2+ items.",
+      "corrected": "spikes[3].text and spikes[3].when created with before:null, stating the seal-scaling execute floor and its 80s late cooldown; Purgatory's 120s cooldown added to whys[4] and Dredge Line's 14s to whys[5].",
+      "confidence": "High",
+      "sources": ["packet defects: 'spikes[] has 3 entries, expected 4' and 'NO cooldown-sequencing advice anywhere'", "enemyKit R text and cooldown"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Itemization tells the player anti-heal is optional because Locke's sustain is 'self-refund, not lifesteal'. Grievous Wounds reduces healing by source-agnostic percentage — a delayed self-refund is still healing. The page also never states that a landed Dredge Line cancels Ashen Pursuit outright.",
+      "why": "enemyKit W: 'At the end of the duration, Locke will heal back a portion of the damage he takes during the effect' — it carries the heal flag and the missingInteractions file flags needs-antiheal for this exact pairing. enemyKit E carries the dash flag on a flat 10s cooldown, and the same file flags enemy-dash-deniable: Nautilus's hook is hard CC, so it kills the blink rather than merely beating it to the punch.",
+      "corrected": "report[8].t now says Grievous Wounds cuts Soul Ignition's refund heal; report[9].t states Ashen Pursuit's flat 10s cooldown and that hard CC cancels the blink.",
+      "confidence": "High",
+      "sources": ["enemyKit W/E text, cooldowns and flags", "missingInteractions needs-antiheal + enemy-dash-deniable"]
+    }
+  ],
+  "edits": [
+    {"layer": "content", "path": "spikes[3].text", "before": null, "after": "Late, Purgatory's execute floor rises with every champion he seals — deny the seals and his 80s ultimate never threatens your full-tank health bar."},
+    {"layer": "content", "path": "spikes[3].when", "before": null, "after": "Late"},
+    {"layer": "content", "path": "whys[4]", "before": "Level 6 evens out — his Purgatory execute threatens you once W fades, so stop coasting at low HP.", "after": "Level 6 evens out — Purgatory is a 120s execute that lands once your W fades, so never coast at low HP."},
+    {"layer": "content", "path": "whys[5]", "before": "First item stays a skill window — he dodges Q and trades inside its cooldown, so hold the hook until it is guaranteed.", "after": "First item stays a skill window — Dredge Line is 14s at rank 1 and he trades inside it, so hold the hook until guaranteed."},
+    {"layer": "full", "path": "report[8].t", "before": "Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Anti-heal is optional — his sustain is self-refund, not lifesteal.", "after": "Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Grievous Wounds cuts Soul Ignition's refund heal — buy it before extended trades."},
+    {"layer": "full", "path": "report[9].t", "before": "Commit on the post-E window, on whiffed nail recasts, and with your jungler when his totem is down. Bait his answer first.", "after": "Commit on the post-E window: Ashen Pursuit is 10s flat, and hard CC from your hook cancels the blink outright. Bait it first."}
+  ],
+  "notes": "No mirror audit exists for this pair yet (locke__nautilus was not present), so nothing was reused and nothing here should be treated as pre-agreed. The level chart already matches the packet row for row in both layers — no chart edits needed. UNVERIFIED: phases[0].why, breakdown.early, breakdown.wave and report[4].t all state Locke's attack range as 125. Nothing in the kit file gives his auto range (only ability ranges: Q 950, E 425, W 250), so I left the figure alone rather than guess. Also unverified: the names 'Ritual Nails' (Q) and 'Purgatory' (R) — the kit file carries no ability names for Locke, and the missing-interactions file only confirms Silver Stake (P), Soul Ignition (W) and Ashen Pursuit (E). The Q and R names are used consistently across the page, so I did not touch them, but they are not confirmed by any authority in this repo."
+}

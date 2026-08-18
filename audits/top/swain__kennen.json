@@ -1,0 +1,124 @@
+{
+  "ownerKey": "swain",
+  "enemy": "kennen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "diff EVEN / 6/10 with carry threat 7/10 is a fair read: Kennen owns levels 2 through the first item, Swain owns the two-item duel. The 60.23% win rate comes from the late side of that curve, not from lane dominance, so I did not inflate the rating.",
+      "corrected": "No change to diff, diffRating or carryRating.",
+      "confidence": "Medium",
+      "sources": ["packet winRate 60.23", "mirrorFindings kennen__swain"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Chart on disk reads Skill/Kennen/Kennen/Skill/Skill/Kennen/Kennen, but its own whys say Kennen owns Levels 4-5 and Level 6 and that Swain wins the two-item fight. The mirror already flipped rows 3 and 4 to Kennen and row 6 to Swain.",
+      "why": "whys[3] describes Kennen owning the lane geometry; whys[4] gives him the level-6 edge; whys[6] and spikes[3] both say Swain wins the extended two-item drain fight.",
+      "corrected": "Rows 3 and 4 to Kennen, row 6 to Swain, proposed as matched full+content pairs, ratings adjusted.",
+      "confidence": "High",
+      "sources": ["mirrorFindings kennen__swain point 2", "currentText whys[3..6]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[4] and spikes[1] say Kennen 'pops R, goes untargetable' and that the stun 'fires through your Demonic Ascension channel'. Neither is supportable, and no cooldown numbers appear anywhere.",
+      "why": "Riot text: Slicing Maelstrom is a 120s, 550-range storm that strikes nearby champions — no untargetability. The untargetability in that sentence is Zhonya's stasis, a separate item. Demonic Ascension is a transformation, not a channel. What is real: the storm keeps applying Mark of the Storm, and the third Mark stuns via his passive. Lightning Rush is 10/9/8/7/6s and Electrical Surge 13/11.25/9.5/7.75/6s.",
+      "corrected": "Untargetability attributed to Zhonya's, the channel claim dropped, and the Mark-stacking mechanic plus real cooldowns written into whys[4], spikes[1], wants.foe[1], breakdown.cooldowns, report[5], dosFull[0].d and phases[3]/[4]/[6].why.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kennen.json", "champ-data/_kits/swain.json"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "The page tells you to build MR and stops there.",
+      "why": "Electrical Surge applies on-hit, so his damage scales with attack speed as well as AP — MR alone misreads the extended trade.",
+      "corrected": "Written into dosFull[1].d and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["_missing/swain.json onhit-itemization", "champ-data/_kits/kennen.json W"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both packet suspectNames ('Save Slicing Maelstrom', 'His Slicing Maelstrom') are false positives — the ability name is spelled correctly in both places; the matcher caught the leading verb.",
+      "corrected": "No name change needed. wants.foe[1] is still rewritten, but for its untargetability error, not its name.",
+      "confidence": "High",
+      "sources": ["packet suspectNames", "champ-data/_kits/kennen.json R"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Kennen" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Kennen" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Kennen" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Kennen" },
+    { "layer": "full", "path": "phases[6].side", "before": "Kennen", "after": "Swain" },
+    { "layer": "content", "path": "win[6]", "before": "Kennen", "after": "Swain" },
+
+    { "layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "6/10" },
+
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Lightning Rush's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "He owns the lane geometry: Lightning Rush is down to 7s by rank 4, so he stacks Marks and leaves before your E sweeps back."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Demonic Ascension turns his all-in into your healing — bait it, then drain. Reassess every all-in at 6 — Kennen's ultimate changes the math too.",
+      "after": "Slicing Maelstrom is 120s and its repeat hits stack Marks into a stun — do not stand in it to drain; leave the nova, re-enter after."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your pattern is at full power. Kennen carry threat 7/10 — close before the map decides instead of you.",
+      "after": "Two items on: fragment bulk plus near-permanent drain outlasts his burst — take the solo duel, refuse the grouped R."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Kennen Lightning Rush: matchup-defining — His escape. E-root when it’s down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Lightning Rush: 10s at rank 1, 6s at rank 5 — his in-and-out, so root on the way back. - Electrical Surge: 13s to 6s, applies on-hit, and it adds the Mark. - Slicing Maelstrom: 120s, same as your Demonic Ascension."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Kennen's Lightning Rush: His escape. E-root when it’s down. When it is down — E-root + R him.",
+      "after": "Lightning Rush is 10s at rank 1 and 6s at rank 5 — root him on Nevermove's return, pull, then drain."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His escape. E-root when it’s down. Only engage once it is down or baited.",
+      "after": "His in-and-out, 10s at rank 1 down to 6s. Engage once it is spent."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E-root Kennen's step-up when his answer is down, right-click to drag the soul fragment, and Q the stacked wave-trade.",
+      "after": "Merc Treads and MR blunt his Q, but Electrical Surge applies on-hit — attack speed drives his trades, not just AP."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "His Slicing Maelstrom plus Zhonya's Hourglass is a complete defensive package at level six: he pops R, goes untargetable, and the stun fires through your Demonic Ascension channel — edge stays with him.",
+      "after": "Slicing Maelstrom plus Zhonya's is a complete package at six: the storm keeps re-marking you until the third Mark stuns, and Zhonya's stasis rides out your drain — the edge stays with him."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Kennen's Slicing Maelstrom into Zhonya's Hourglass is a full reset — he pops R, goes untargetable, and you cannot pull him or land Demonflare while he is golden.",
+      "after": "Slicing Maelstrom into Zhonya's is a full reset — the storm re-marks you for the stun while stasis makes him untouchable, so you cannot pull him or land Demonflare."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Save Slicing Maelstrom (R) and Zhonya's Hourglass for the exact moment Demonic Ascension activates so the stun fires while you are untargetable",
+      "after": "Save Slicing Maelstrom (R) and Zhonya's Hourglass for the exact moment Demonic Ascension activates, so the third Mark stuns you mid-drain"
+    }
+  ],
+  "notes": "Row 6 goes to Swain, not the packet's 'Skill' — that is the mirror's resolution and it matches whys[6] and spikes[3], which both describe Swain winning the two-item extended fight. Both packet suspectNames are false positives. The claim that Kennen's R itself grants untargetability appeared twice and was Zhonya's stasis being credited to the ultimate; corrected rather than deleted."
+}

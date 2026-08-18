@@ -1,0 +1,103 @@
+{
+  "ownerKey": "swain",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "There is no full-layer entry for this matchup at all, so diff, diffRating, tone and carryRating do not exist on disk. The content layer's shape — Swain owns levels 1-2, Yi owns everything from 4 on — matches the 42.86% win rate over 182 games.",
+      "corrected": "No difficulty fields to correct. The missing full entry is reported in notes rather than fabricated.",
+      "confidence": "High",
+      "sources": ["packet winRate 42.86 / 182 games", "currentText.full is null"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "win[] reads Swain/Swain/Skill/Master Yi/Master Yi/Master Yi/Master Yi, exactly the packet chart, and each why matches its row. There is no phases[] layer to disagree with it.",
+      "corrected": "No change. Whys sharpened with real numbers instead.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText win[0..6]"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Not one cooldown or mechanic appears anywhere: Alpha Strike's untargetability is implied but never named, Meditate's channel is never flagged as interruptible, Wuju Style's true damage is called 'shred', and Highlander's slow immunity is absent entirely.",
+      "why": "Riot text: Alpha Strike is 20/19.5/19/18.5/18s, makes him untargetable, and his basic attacks reduce its cooldown. Meditate is a 10s channel that restores health and reduces damage taken — 'for each second he channels' — so Nevermove's root cancels it outright. Wuju Style grants bonus TRUE damage, which is why building MR does not answer him. Highlander is 85s and makes him immune to all slowing effects, which blanks Vision of Empire's slow and Demonflare's slow for its duration.",
+      "corrected": "Written into whys[2] through whys[5], spikes[2], early, mid and wants.you[1].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/masteryi.json", "_missing/swain.json key 57"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: 'NO cooldown-sequencing advice anywhere', and sequencingCues is 0.",
+      "why": "The two sequences that actually decide this lane are: hold Nevermove for the moment he channels Meditate (the root cancels it), and do not spend burst into Alpha Strike because he is untargetable through it and his attacks shorten its 20s.",
+      "corrected": "Both written into early, mid and wants.you[1].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/masteryi.json Q, W", "champ-data/_kits/swain.json E"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No anti-heal anywhere, and no note that MR is the wrong defensive answer.",
+      "why": "Meditate is a hard heal that Grievous Wounds cuts, and Wuju Style's bonus damage is true damage, so resistances do not reduce it.",
+      "corrected": "Anti-heal written into whys[5]; the true-damage point into whys[3] and mid.",
+      "confidence": "High",
+      "sources": ["_missing/swain.json needs-antiheal + resistances-invalidated", "champ-data/_kits/masteryi.json W, E"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 evens as Alpha Strike dodges Nevermove and his shred ramps up.",
+      "after": "Level 3 evens: Alpha Strike goes untargetable through Nevermove — 20s."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "By 4-5 his sustained DPS out-damages your mana-hungry poke — his stage.",
+      "after": "By 4-5 Wuju Style's true damage beats your poke and your MR — his stage."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "At 6 Highlander speed and Meditate let him kill you before your R snowballs.",
+      "after": "At 6 Highlander is 85s and slow-immune — your W and Demonflare stop him."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "At first item his shred out-races your tanky-mage sustain in a duel.",
+      "after": "At first item his true damage out-races your sustain — bring anti-heal."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Highlander plus Meditate let him kill you before your R snowballs — do not duel.",
+      "after": "Highlander is 85s and immune to slows, so your W and Demonflare stop nothing."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Take the first two levels for everything: Q poke and the root threat out-pressure his empty kit, and Death's Hand bolts chip him at every wave. By 3 the lane evens — Alpha Strike starts dodging Nevermove and his shred ramps — so bank your chunk damage early and stop forcing after that.",
+      "after": "Take the first two levels for everything: Q poke and the root threat out-pressure his empty kit, and Death's Hand bolts chip him at every wave. By 3 the lane evens — Alpha Strike is 20s and carries him untargetable through Nevermove, and his attacks shorten it — so bank your damage early and stop forcing."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "From 4-5 onward the lane is his: sustained DPS beats your mana-hungry poke, and at 6 Highlander plus Meditate let him kill you straight through the drain before your R snowballs. Give up the duel dream — farm with E from range, hold Nevermove for his engage, and call for jungle cover.",
+      "after": "From 4-5 onward the lane is his: Wuju Style's true damage ignores your MR, and at 6 Highlander's slow immunity blanks your W and Demonflare. Give up the duel dream — farm from range, hold Nevermove for Meditate (it is a channel, and the root cancels it), and call for jungle cover."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "The root saved for his commit in fights",
+      "after": "The root saved to cancel his Meditate"
+    }
+  ],
+  "notes": "This matchup has NO full-layer entry — currentText.full is null, so tldr, winCon, diff, tone, the phases[] chart, breakdown.* and the whole report[] are absent. That is one of the inherited structural gaps. I did not create it with before:null: building a fifteen-section report from scratch would mean writing dozens of strings the kits cannot verify, and a fabricated full entry is worse than a visible gap. Worth queueing as deliberate work. Unlike the Kassadin case, Meditate's channel flag IS supported by Riot's own text ('for each second he channels'), so the Nevermove-cancels-it line is safe to ship here."
+}

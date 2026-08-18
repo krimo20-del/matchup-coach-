@@ -1,0 +1,97 @@
+{
+  "ownerKey": "swain",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "EVEN at 5.5/10 matches a 49.2% win rate over 628 games — the largest sample in this slice and almost exactly even.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["packet winRate 49.2 / 628 games"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Chart reads Skill/Skill/Skill/Skill/Skill/Locke/Skill in both layers and matches the packet exactly. The single Locke row is his first item, which whys[5] and spikes[2] both justify with the execute-through-drain trap.",
+      "corrected": "No change. Phase whys sharpened with cooldown numbers instead.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText phases[].side vs win[]"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The content layer carries no ability names and no numbers at all — six whys, four spikes and three paragraphs that never say what any of his abilities do. His W's heal-back and his E's auto-attack reset appear nowhere in either layer.",
+      "why": "Riot text: his E teleports then dashes to attack the next target on a flat 10s — it is an auto-attack reset, so the wind-up is the tell, not the cast. His W deals damage to himself for attack speed and move speed, then heals back a portion at the end — Grievous Wounds during that window cancels the refund. His Q is 10/9/8/7/6s and marks targets he then consumes with attacks. His R is 120/100/80s.",
+      "corrected": "Cooldowns and the two mechanics written into early, mid, whys[1] through whys[5].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/locke.json", "_missing/swain.json key 55"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: 'NO cooldown-sequencing advice anywhere'. The full layer does mention the ten-second blink; the content layer has nothing.",
+      "why": "E at a flat 10s is the single most punishable cooldown in the lane, and Nevermove's 12s is the tool you spend against it — that pairing is the whole sequencing rule.",
+      "corrected": "The 10s blink against your 12s root written into whys[1], whys[2] and early; Purgatory's 120s into whys[5].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/locke.json E, R", "champ-data/_kits/swain.json E"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "report[8] says anti-heal is optional because 'his sustain is self-refund, not lifesteal'.",
+      "why": "Grievous Wounds reduces healing regardless of its source, so it does cut the Soul Ignition refund — the reasoning on the page is wrong even if the priority call is defensible.",
+      "corrected": "Grievous Wounds tied to the Soul Ignition window in mid. report[8] itself left alone — the build-priority claim is a judgement I did not want to overwrite.",
+      "confidence": "Medium",
+      "sources": ["_missing/swain.json needs-antiheal", "champ-data/_kits/locke.json W"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At 2 the lane hinges on whether your E lands, not on raw stats.",
+      "after": "At 2 it hinges on your E: 12s if you whiff, and his blink is 10s."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 stays even, revolving around your root cooldown.",
+      "after": "Level 3 stays even; your 12s root against his 10s blink."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Through 4-5 him dodging your E keeps the trades a coin-flip.",
+      "after": "Through 4-5 the nail marks decide it — drop yours below three."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "At 6 your R heal offsets his fresh ult in a drawn-out fight.",
+      "after": "At 6 your drain offsets his ult; his W refunds its self-damage."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "At his first item, Purgatory executes you through your R drain before it stabilises — his stage.",
+      "after": "At his first item Purgatory executes through your drain before it stabilises — 120s at rank 1, so track it."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "The whole laning phase is an even chess match: your Q poke trades into his on-hits and everything pivots on whether your E lands. Root his commit and you win the exchange; whiff it and he wins. Play the cooldown honestly, farm with Q, and keep the coinflip stages from becoming deficits.",
+      "after": "The whole laning phase is an even chess match: your Q poke trades into his on-hits and everything pivots on whether your E lands. His blink is a flat 10s and it opens with an auto-attack reset — step back on the wind-up, not on the cast. Root his commit and you win; whiff it and he does."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "At 6 your R heal offsets his fresh ult in any drawn-out fight — but his first item brings the matchup's one real trap: Purgatory can execute you through the opening seconds of your drain, before it stabilises. Never press R as a panic button at low HP; enter fights healthy and let it compound.",
+      "after": "At 6 your R heal offsets his fresh ult in any drawn-out fight — but his first item brings the one real trap: Purgatory can execute you through the opening seconds of your drain. Never press R at low HP, enter fights healthy, and bring Grievous Wounds so Soul Ignition cannot refund its self-damage."
+    }
+  ],
+  "notes": "Name conflict I did not resolve: the page calls his Q 'Ritual Nails' in eight fields including focus.text, but Riot's own description says 'Locke readies a set of Soul Nails to throw', and the _missing file names his W 'Soul Ignition' and his E 'Ashen Pursuit'. The kit file has no enemyAbilities block for Locke, so there is no authority to confirm the Q's name either way — I left every instance alone rather than mass-rename on a guess. Also unverified: the repeated '125-range mana champ' claim. His listed ability ranges are 950 (Q), 425 (E) and 1000 (R); nothing in the kit states an attack range, so I could not confirm 125."
+}

@@ -1,0 +1,52 @@
+{
+  "ownerKey": "wukong",
+  "enemy": "teemo",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Row 0 read Skill while whys[0] says level 1 favours Teemo; rows 5 and 6 read Teemo while whys[5] says the lane stays even and whys[6] says late favours you.",
+      "why": "packet.levelChart is [Teemo, Teemo, Teemo, Skill, Skill, Skill, Wukong] and matches the whys; only the stored sides disagreed.",
+      "corrected": "Rows 0, 5 and 6 flipped in both layers as one atomic group, with ratings moved on the two rows that change owner.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Teemo's spikes carried no numbers at all — the packet logs a single sequencing cue for the whole matchup — and the late-game row was given to him when the prose says you out-scale.",
+      "why": "Kit: Blinding Dart (Q) 7s FLAT at every rank, 680 range. Move Quick (W) 14s. Toxic Shot (E) has no cooldown — it is an on-hit passive. Noxious Trap (R) 0.25s between throws from stored mushrooms, 600/750/900 range.",
+      "corrected": "7s at every rank written into the level-1 row, the cooldown block, the report and the 3-5 spike; the two-item row rewritten around out-tanking the poison.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/teemo.json (brief enemyKit)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two things. (1) The page treats the blind as if it shut your whole kit off — 'cancels your only real damage tool'. Blinding Dart stops basic attacks; Nimbus Strike, Cyclone and every other ability land through it, which the mirror audit states from the other side. (2) Move Quick's passive move speed is lost the instant a champion or turret hits him — one connection strips his kite, and that was never on the page.",
+      "why": "Riot text — Q: 'Obscures an enemy's vision... blinding it for the duration.' W: 'passively increasing his Move Speed until he is struck by an enemy champion or turret.' Mirror: 'Nimbus Strike is target-locked at 650 range... Blind does nothing to the dash itself.'",
+      "corrected": "Blind now stated as autos-only in the cooldown block, the Do's and the interactions line; the Move Quick strip written in as the reason to land any hit at all.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/teemo.json (brief enemyKit)", "audits/top/teemo__wukong.json (mirrorFindings point 4)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Teemo"},
+    {"layer":"content","path":"win[0]","before":"Skill","after":"Teemo"},
+    {"layer":"full","path":"phases[5].side","before":"Teemo","after":"Skill"},
+    {"layer":"content","path":"win[5]","before":"Teemo","after":"Skill"},
+    {"layer":"full","path":"phases[6].side","before":"Teemo","after":"Wukong"},
+    {"layer":"content","path":"win[6]","before":"Teemo","after":"Wukong"},
+    {"layer":"full","path":"phases[0].rating","before":"5/10","after":"4/10"},
+    {"layer":"full","path":"phases[6].rating","before":"5/10","after":"6/10"},
+    {"layer":"full","path":"phases[0].why","before":"Q-AA poke wins the short exchanges. Identify how Teemo contests the first waves before you commit anything.","after":"His at 1: Blinding Dart is 7s at every rank and 680 range, so he blinds your autos from outside melee."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your side-lane pattern is at full power. Teemo carry threat 8.5/10 — close before the map decides instead of you.","after":"Two items on and you out-tank the poison: he is squishy, and one Nimbus Strike onto him ends it before Move Quick helps."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Teemo Blinding Dart: matchup-defining — Blinds your autos. Fight when down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Blinding Dart: 7s at every rank, 680 range — it stops autos, not your abilities. - Move Quick: 14s, and its passive speed drops the moment you land a hit. - Noxious Trap: he throws stored mushrooms, so sweep."},
+    {"layer":"full","path":"dosFull[0].d","before":"Blinds your autos. Fight when down. Only engage once it is down or baited.","after":"The blind stops autos only — Nimbus Strike and Cyclone still land in full."},
+    {"layer":"full","path":"report[5].t","before":"Track Teemo's Blinding Dart: Blinds your autos. Fight when down. When it is down — E-Q + R him.","after":"Blinding Dart stops autos, never your abilities. Move Quick's speed drops when you hit him — then E-Q."},
+    {"layer":"content","path":"whys[0]","before":"Level 1 favours Teemo — his blind cancels your only real damage tool, your Q.","after":"Level 1 favours Teemo — the blind lands from 680 range and kills your autos."},
+    {"layer":"content","path":"spikes[0].text","before":"Teemo's blind (Q) cancels your auto mid-Q-windup and his passive-empowered autos plus Move Quick (W) let him kite your melee range all day early. Don't walk straight in — use W-decoy to eat the blind, then E-Nimbus onto him the instant Q is on cooldown.","after":"Teemo's Blinding Dart (Q) is 7s at every rank and denies your autos, and Move Quick (W) kites your melee range. Its passive speed drops the moment you land a hit, so eat the blind with W-decoy, then E-Nimbus the instant the dart is spent."}
+  ],
+  "notes": "Blinding Dart's flat 7s at all ranks is unusual and worth keeping — it never gets shorter, so the window does not close as the game goes on. I did not touch the two claims the mirror also left alone: that the Warrior Trickster clone cannot trigger Noxious Trap, and the Trinity/Sterak's build assumption in spikes[3] and late — neither is answerable from the kit files. teemo.json flags Noxious Trap with 'knockup'; Riot's description says slow and damage over time only, so I ignored the flag."
+}

@@ -1,0 +1,52 @@
+{
+  "ownerKey": "wukong",
+  "enemy": "shen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Three rows contradicted their own whys: row 3 read Shen while whys[3] says 'Levels 4-5 flatten out', row 6 read Shen while whys[6] says 'Late game evens out', and row 4 read Wukong while whys[4] says Shen's global R blanks your all-in. The packet also logs the chart as contradicting a 52.32% Wukong win rate.",
+      "why": "packet.levelChart is [Skill, Skill, Shen, Skill, Shen, Shen, Skill]; the mirror audit states Wukong takes Level 1, so row 0 stays Wukong and the remaining rows are taken from the packet.",
+      "corrected": "Rows 3, 4 and 6 flipped in both layers as one atomic group: Skill, Shen, Skill, with ratings moved to match. Final chart Wukong / Skill / Shen / Skill / Shen / Shen / Skill.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.defects", "audits/top/shen__wukong.json (mirrorFindings point 2)"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 row was written as a Wukong spike on generic Cyclone text; Shen's spike at 6 is Stand United, and no cooldown was ever given.",
+      "why": "Kit: Stand United (R) 200/180/160s, 35000 range, flagged channel and global. Twilight Assault (Q) 8/7.25/6.5/5.75/5s, 400 range, max-health damage. Spirit's Refuge (W) 16/14.5/13/11.5/10s. Shadow Dash (E) 18/16/14/12/10s, 600 range.",
+      "corrected": "Level-6 row now names Stand United at 200s; the cooldown block carries Shadow Dash 18s, Spirit's Refuge 16s and Stand United 200s.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/shen.json (brief enemyKit)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two errors plus one missing interaction. (1) 'his shield (Q) blanks your Q trade' — Q is Twilight Assault, a max-health blade attack; the shield is the passive Ki Barrier, gained after each cast. (2) 'Fight his W block' treated Spirit's Refuge as blocking everything; Riot's text says it blocks ATTACKS, so your abilities land through it. (3) Stand United is an interruptible channel and this was never stated.",
+      "why": "Riot text — P: 'After casting a spell, Shen gets a shield.' W: 'Attacks that would hit Shen or his allies near his spirit blade are blocked.' R flagged channel: interruptible, any CC cancels it.",
+      "corrected": "Cast through Spirit's Refuge instead of walking out of it, attribute the shield to Ki Barrier, and knock him up during Stand United to cancel the teleport outright — the single highest-value use of Cyclone in this matchup.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/shen.json (brief enemyKit)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[3].side","before":"Shen","after":"Skill"},
+    {"layer":"content","path":"win[3]","before":"Shen","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Wukong","after":"Shen"},
+    {"layer":"content","path":"win[4]","before":"Wukong","after":"Shen"},
+    {"layer":"full","path":"phases[6].side","before":"Shen","after":"Skill"},
+    {"layer":"content","path":"win[6]","before":"Shen","after":"Skill"},
+    {"layer":"full","path":"phases[4].rating","before":"7/10","after":"4/10"},
+    {"layer":"full","path":"phases[4].why","before":"Cyclone’s double knockup wins every committed brawl. Reassess every all-in at 6 — Shen's ultimate changes the math too.","after":"Stand United is 200s at rank 1 and shields from anywhere — a slow all-in gets blanked, so kill him before he channels."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Shen Shadow Dash: matchup-defining — His engage CC. Decoy it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Shadow Dash: 18s at rank 1, 600 range — that is your window. - Spirit's Refuge: 16s, and it blocks attacks only, so your abilities still land. - Stand United: 200s, and a knockup cancels the channel."},
+    {"layer":"full","path":"dosFull[0].d","before":"His engage CC. Decoy it. Only engage once it is down or baited.","after":"Shadow Dash is 18s at rank 1 — those 18 seconds are your all-in."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Spirit's Refuge blocks attacks, not abilities — keep casting through it."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Burning W before the trade starts — the clone IS your defense, and committing without it means eating his full combo.","after":"Stand United is a channel on a 200s cooldown — knock him up during it and the teleport never happens, so his ally dies."},
+    {"layer":"full","path":"report[5].t","before":"Track Shen's Shadow Dash (Taunt): His engage CC. Decoy it. When it is down — E-Q + R him.","after":"Spirit's Refuge blocks autos only — abilities pass through. Shadow Dash is 18s: E-Q and R him then."},
+    {"layer":"content","path":"spikes[1].text","before":"Shen's global R lets him shield an ally and TP away, so a slow all-in is worthless — his Stand United (R) also blocks your Cyclone knockup value if he ults mid-fight. Commit only with jungle so the fight is over before he recalls the blade.","after":"Stand United (R) is 200s at rank 1: he shields an ally and teleports out, so a slow all-in is worthless. It is a channel, though — Cyclone's knockup lands during the cast and the teleport never happens, which is your best use of R at 6."},
+    {"layer":"content","path":"mid","before":"From 3 on Shen edges ahead: his taunt (E) interrupts your Cyclone and his shield (Q) blanks your Q trade, and by 6 his global R makes patient dives pointless. Only commit with a jungler.","after":"From 3 on Shen edges ahead: his taunt (E) interrupts your Cyclone and Ki Barrier shields each cast, and by 6 his global R makes patient dives pointless. Only commit with a jungler."}
+  ],
+  "notes": "Stand United's 'channel — interruptible, any CC cancels it' flag is consistent with Riot's own 'soon after teleports' wording, so I wrote the knockup-cancels-R line. I did NOT claim tenacity, QSS or spell-shield behaviour anywhere (needsResearch empty = unknown). Wukong's kit came through null again, so Cyclone/Nimbus Strike cooldowns still cannot be added on this page — same gap the mirror audit flagged."
+}

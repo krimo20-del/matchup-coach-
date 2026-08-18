@@ -1,0 +1,100 @@
+{
+  "ownerKey": "mordekaiser",
+  "enemy": "kassadin",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "52.63% over 22 games, diff FAV, difficulty 4/10 — consistent with a lane you own from 2 to 6 and lose after two AP items. The mirror audit read the same way.",
+      "corrected": "Kept FAV 4/10; the lane is decided pre-6 and by whether he gets to two items even.",
+      "confidence": "High",
+      "sources": ["packet winRate/games", "mirrorFindings"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers gave Level 1 to Mordekaiser and gave Level 6 and First item away (Skill / Kassadin), contradicting the packet chart and their own whys text.",
+      "why": "Packet chart is Skill, Mordekaiser, Mordekaiser, Mordekaiser, Mordekaiser, Mordekaiser, Kassadin. whys[0] says level 1 is a wash; whys[4] says Realm of Death deletes him; whys[5] says all-in for the kill on first item. Rows 0, 4 and 5 were wrong on both layers.",
+      "corrected": "Rows 0, 4 and 5 flipped in matched full/content pairs with ratings rescaled; row 6 stays Kassadin.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText whys[0..6]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page claims Riftwalk has a long cooldown he cannot kite with, and calls Void Stone a shield.",
+      "why": "Kit file: Riftwalk is 5/3.5/2s from rank 1 — it is never on a long cooldown. What actually limits him is the escalating mana cost on repeat casts ('Multiple Riftwalks in a short period of time cost additional Mana'). Void Stone is flat magic damage reduction plus unit-collision ignore, not a shield; the shield comes from Null Sphere. Building advice around a fake cooldown gets players killed mid-chase.",
+      "corrected": "whys[3], mid, whys[2], spikes[0].text and report[5].t now say mana cost, not cooldown, and separate Void Stone from Null Sphere's shield. Nether Blade's 7s auto reset added as the burst tell.",
+      "confidence": "High",
+      "sources": ["brief enemyKit R/P/Q/W", "missingInteractions autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "'Commit on Riftwalk's cooldown' is not a real window.",
+      "why": "At 2s late-rank there is no cooldown window. Force Pulse is his punishable spell at 21/20/19/18/17s, and your Death's Grasp is 16/14/12/10/8s.",
+      "corrected": "Covered in report[5].t and whys[3]; the real gate is his mana bar, not a timer.",
+      "confidence": "High",
+      "sources": ["brief enemyKit E/R", "brief ownerKit E"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both packet suspectNames (Null Sphere's, Death's Grasp's) are false positives — the possessive form tripped the matcher. Both are the real names in the kit files.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief ownerKit E", "brief enemyKit Q"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "content", "path": "win[0]", "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "full", "path": "phases[5].side", "before": "Kassadin", "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[5]", "before": "Kassadin", "after": "Mordekaiser" },
+    { "layer": "full", "path": "phases[0].rating", "before": "7/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "4/10", "after": "8/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "4/10", "after": "7/10" },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "With Q+W+E you yank him in with Death's Grasp and Q-smash through his weak passive shield while Darkness Rise ticks — he can't trade back from melee.",
+      "after": "With Q+W+E you yank him in on a 16s Death's Grasp and Q-smash while Darkness Rise ticks — Void Stone only cuts magic damage, it is not a shield."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Darkness Rise grinds him down in extended trades and Riftwalk's cooldown is still too long for him to kite your aura safely.",
+      "after": "Darkness Rise grinds him down: Riftwalk is 5s at rank 1, but repeat blinks cost escalating mana, so he can't kite your aura for long."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Q+W online: your Obliterate single-target smash chunks him and banks an Indestructible shield, while all Kassadin has back is one Null Sphere silence and his weak passive shield.",
+      "after": "Q+W online: your Obliterate single-target smash chunks him and banks an Indestructible shield, while all Kassadin has back is one Null Sphere on 9s and the small shield it leaves him."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "\"This is your takeover window. Through 4-5 your Darkness Rise aura grinds him down in any extended trade, and Riftwalk's cooldown is still far too long for him to reliably blink out of it. At 6, R flips the lane open: Realm of Death drags him into the 1v1 shadow realm where there's nowhere to Riftwalk to, and your E-pull plus aura burst him before he can kite. Force every all-in NOW — shove, freeze him low, and punish each time his blink is on cooldown. Every kill you land is six Riftwalk charges and a chunk of gold he never gets to scale with.\"",
+      "after": "\"This is your takeover window. Through 4-5 your Darkness Rise aura grinds him down in any extended trade, and Riftwalk's escalating mana cost stops him repeat-blinking out of it. At 6, R flips the lane open: Realm of Death drags him into the 1v1 shadow realm where there's nowhere to Riftwalk to, and your E-pull plus aura burst him before he can kite. Force every all-in NOW — shove, freeze him low, and punish him whenever his mana is spent. Every kill you land is gold and levels he never gets to scale with.\""
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Kassadin's Riftwalk: His mobility spike at 6. Kill him before it scales. When it is down — E-pull + Q, then R the 1v1.",
+      "after": "Riftwalk costs escalating mana, not cooldown. Nether Blade's 7s auto reset is his burst tell — step back on the wind-up, then E-pull."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Whiffing Q into the wave and trading with no passive stacks — un-isolated Obliterate hits soft, and without Darkness Rise you lose most even exchanges.",
+      "after": "Realm of Death is 140/120/100s — spending it early wastes your only answer to a scaled Kassadin, who blinks every 2s once Riftwalk is maxed."
+    }
+  ],
+  "notes": "The _missing file asserts 'Your Obliterate (Q) shuts off Kassadin's Riftwalk' via a grounding flag, but Riot's Obliterate text describes only a ground smash with bonus single-target damage and says nothing about grounding. Per the flag-vs-description rule I did NOT write that interaction anywhere — if Mordekaiser's Q does not ground, that headline is wrong for every Mordekaiser matchup in the _missing set, not just this one. Flagged in unverified. Both packet suspectNames are possessive-form false positives."
+}

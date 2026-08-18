@@ -1,0 +1,61 @@
+{
+  "ownerKey": "mordekaiser",
+  "enemy": "garen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The 2+ items row rendered two different answers: full-layer phases[6].side said Mordekaiser while content win[6] said Skill. The First item row also disagreed with the mirror, which has already flipped it to Mordekaiser.",
+      "why": "This is the exact two-layer split the regression check blocks on — a paying user sees one side in the chart and the other in the level list. The mirror is already committed to Mordekaiser at First item (3/10 from Garen's side), so leaving Skill here would be overwritten by mirror-fix.",
+      "corrected": "First item flipped to Mordekaiser in both layers (7/10 ours, the inverse of Garen's 3/10) and win[6] brought up to Mordekaiser to match phases[6].side. whys[5] and whys[6] rewritten so the reasons match the new sides.",
+      "confidence": "High",
+      "sources": ["mirrorFindings point 3", "brief currentText phases[6].side vs win[6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are already accurate and specific: Garen owns 1-2 on the silence and Courage, level 3 equalises on Q+W+Darkness Rise, level 6 is Realm of Death, first item is Liandry's. Only the framing of the first-item spike moved with the chart flip.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief currentText spikes[0..3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Courage was described only as 'damage reduction on cast' with no cooldown and no mention of the shield and tenacity that come first. Decisive Strike's auto-attack reset was never stated, and Demacian Justice's true damage was mentioned only in passing as 'ignores my HP stacking'.",
+      "why": "Courage is 22/19.5/17/14.5/12 and Riot's text gives shield plus tenacity first, then a longer, weaker damage reduction — the tenacity is why the pre-R lockdown feels short. Decisive Strike is flagged autoReset, so the tell is the wind-up, not the cast. Demacian Justice is true damage, which makes resistances the wrong purchase against it.",
+      "corrected": "Cooldown and the shield/tenacity/damage-cut sequence written into dosFull[0].d; the auto-reset tell into dontsFull[0].d; the true-damage point into whys[6] and dontsFull[1].d.",
+      "confidence": "High",
+      "sources": ["enemyKit Garen W 22/19.5/17/14.5/12 and text", "enemyKit Garen Q autoReset flag", "missingInteractions resistances-invalidated, autoreset-burst-tell"]
+    },
+    {
+      "point": 11,
+      "status": "needs-correction",
+      "whatIsWrong": "Perseverance was described as 'regen heals my poke when he's untargeted', which reads as passive healing he gets for free.",
+      "why": "Riot's text conditions it on not having been struck by damage or enemy abilities recently — it is a disengage-and-reset heal, and staying on him with Darkness Rise stops it starting at all.",
+      "corrected": "Stated as a heal you deny by staying on him, written into whys[5].",
+      "confidence": "High",
+      "sources": ["enemyKit Garen P text"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[5]", "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "full", "path": "phases[5].rating", "before": "5/10", "after": "7/10" },
+
+    { "layer": "content", "path": "win[6]", "before": "Skill", "after": "Mordekaiser" },
+
+    { "layer": "content", "path": "whys[5]", "before": "Back to even: Liandry's makes Darkness Rise grind through his Courage damage-cut, but his Perseverance heal and Demacian Justice execute spike just as hard, so the all-in is a wash.", "after": "Mine on first item: Liandry's grinds Darkness Rise straight through the Courage damage-cut, and Perseverance only regenerates when he is left untouched — so stay on him and the heal never starts." },
+
+    { "layer": "content", "path": "whys[6]", "before": "Even late: I delete him if I land R, but his Perseverance regen heals my poke when he's untargeted and his true-damage missing-HP execute ignores my HP stacking while he splitpushes — neither of us takes over.", "after": "Mine late: Realm of Death deletes him whenever I catch him alone, and stacked HP does nothing about Demacian Justice — it is true damage, so buy resistances for his team and just stay above the execute line." },
+
+    { "layer": "full", "path": "dosFull[0].d", "before": "Damage reduction on cast. R him once it’s down. Only engage once it is down or baited.", "after": "Courage is 22s at rank 1 — shield and tenacity first, then damage cut. R after it." },
+
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Garen's favourite window — refuse it and half his win condition is gone.", "after": "Decisive Strike is an auto reset — the wind-up, not the cast, is your cue to step out." },
+
+    { "layer": "full", "path": "dontsFull[1].d", "before": "Burning your answer for tiny value leaves you naked for its full cooldown.", "after": "Courage cuts your burst for its whole duration — 140s of R for nothing." }
+  ],
+  "notes": "No suspect names in this packet and none found. The full/content split on the 2+ items row (Mordekaiser vs Skill) was live on disk and is the kind of defect the regression check now blocks — worth noting that it existed here even though the packet chart itself was clean, so a matching packet chart is not evidence the two layers agree. The Mordekaiser kit's derived 'grounding' flag on Q is not supported by Riot's Obliterate text; I wrote nothing claiming Obliterate stops Decisive Strike's move-speed break."
+}

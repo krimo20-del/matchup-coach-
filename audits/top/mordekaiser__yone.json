@@ -1,0 +1,127 @@
+{
+  "ownerKey": "mordekaiser",
+  "enemy": "yone",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Yone/Skill/Mordekaiser/Mordekaiser/Mordekaiser/Mordekaiser/Mordekaiser against a packet levelChart of Skill/Mordekaiser/Mordekaiser/Skill/Mordekaiser/Mordekaiser/Yone. The content captions match the packet: whys[0] \"it's even\", whys[3] 'Even window', whys[6] 'He out-scales you hard'. The 2+ item row is given to Mordekaiser directly beside a caption saying Yone out-scales him.",
+      "why": "48.47% over 3297 games — the largest sample in this slice. Mordekaiser wins the middle of the lane and loses the scaling, which is exactly the packet's shape.",
+      "corrected": "Both layers set to Skill / Mordekaiser / Mordekaiser / Skill / Mordekaiser / Mordekaiser / Yone as one atomic paired group, with ratings and the two contradicting phases[N].why lines rewritten.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 48.47 / 3297 games", "currentText.content.whys[0], whys[3], whys[6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Four spikes[] present and correctly timed — the level 2-3 Q+W window, Realm of Death at 6, the first-item all-in, and Yone's 2+ item takeover.",
+      "corrected": "Only the ability naming inside spikes[1] was corrected; timings untouched.",
+      "confidence": "High",
+      "sources": ["currentText.content.spikes[0..3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two real errors plus the naming defect. (a) The page calls Fate Sealed (R) a KNOCKUP in four places — whys[4], spikes[1].text, mid, wants.you[1] ('his R-knockup'). Riot's text says he 'blinks behind the last champion in a line with a slash so powerful it PULLS all enemies hit towards him.' It is a pull, not a displacement upward, and a Mordekaiser who expects to be knocked airborne will misplay the follow-up. (b) Soul Unbound (E) does not merely let him 'snap back' — when it ends, Riot's text says he REPEATS a portion of the damage he dealt as a spirit. His burst effectively lands twice, and no line on the page tells the player this. (c) packet.defects: the content layer never uses a real ability name, writing 'W-cleave', 'Q-dash', 'E spirit-rewind', 'Q3 knockup', 'R-knockup' throughout.",
+      "why": "The damage-repeat is the single reason a trade with Yone goes worse than the health bars suggest mid-trade, and it is the thing the player most needs to plan Indestructible around. Calling the R a knockup is a plain factual error.",
+      "corrected": "Replaced 'R-knockup' with Fate Sealed's real line-pull in whys[4] and spikes[1].text, and stated the pull explicitly in tldr and report[5].t. Added the Soul Unbound damage-repeat to tldr, report[0].t, breakdown.cooldowns and dosFull[0].d. Named Mortal Steel, Spirit Cleave, Soul Unbound and Fate Sealed in the fields I touched.",
+      "confidence": "High",
+      "sources": ["enemyKit R text 'pulls all enemies hit towards him'", "enemyKit E text 'repeats a portion of the damage he dealt as a spirit', cd 22/19/16/13/10", "enemyKit W text 'value is increased by the number of champions hit'", "packet.defects", "packet.enemyAbilities"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns named Soul Unbound with no seconds — 'He snaps back when it ends. R him there.'",
+      "why": "Soul Unbound is 22s at rank 1 but only 10s maxed, so the size of the window collapses as the game goes on. That halving is the reason the lane stops being winnable, and the page never showed the number.",
+      "corrected": "breakdown.cooldowns and dosFull[0].d now carry 22s at rank 1 down to 10s, plus the damage-repeat on expiry.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 22/19/16/13/10", "enemyKit W cd 14", "enemyKit R cd 120/100/80"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "R him at his E snap-back — the realm locks him in. Mordekaiser wins by trading around Yone's Soul Unbound and cashing the pattern: r him with no escape and grind him.",
+      "after": "Fate Sealed pulls, it does not knock up — and Soul Unbound repeats his spirit damage when it snaps back, so his burst lands twice. Realm him while that 22s E is spent."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "R him at his E snap-back — the realm locks him in.",
+      "after": "Soul Unbound repeats damage — his burst hits twice."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Yone's Soul Unbound: He snaps back when it ends. R him there. When it is down — R him — no snap-back.",
+      "after": "Fate Sealed pulls you toward him, it does not knock you up — and Soul Unbound repeats his spirit damage when it ends."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Yone Soul Unbound: matchup-defining — He snaps back when it ends. R him there. Track it before every engage.",
+      "after": "- Yone Soul Unbound (E): 22s at rank 1 down to 10s — when it ends he snaps to his body and repeats part of the damage."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "He snaps back when it ends. R him there. Only engage once it is down or baited.",
+      "after": "22s at rank 1, down to 10s at rank 5 — his burst lands twice when it ends."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Whiffing Q into the wave and trading with no passive stacks — un-isolated Obliterate hits soft, and without Darkness Rise you lose most even exchanges.",
+      "after": "Fate Sealed blinks him behind the last champion in the line and pulls everyone it hits back to him — standing behind your own team is what makes it worth casting."
+    },
+
+    { "layer": "full",    "path": "phases[0].side", "before": "Yone",        "after": "Skill" },
+    { "layer": "content", "path": "win[0]",         "before": "Yone",        "after": "Skill" },
+    { "layer": "full",    "path": "phases[1].side", "before": "Skill",       "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[1]",         "before": "Skill",       "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[3].side", "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "content", "path": "win[3]",         "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "full",    "path": "phases[6].side", "before": "Mordekaiser", "after": "Yone" },
+    { "layer": "content", "path": "win[6]",         "before": "Mordekaiser", "after": "Yone" },
+
+    { "layer": "full", "path": "phases[0].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "6/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10" },
+
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Q ranks make isolated hits massive. Yone must hug minions all lane; punish every step away from the wave with the full drag combo.",
+      "after": "Even window — Darkness Rise ramps your extended trade, but Soul Unbound lets him commit and snap back out of your follow-up."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Riftmaker omnivamp turns the Realm 1v1 unloseable into most matchups. Yone's only outs are dodging Q forever or never being alone — neither survives a whole game.",
+      "after": "He out-scales you hard: Mortal Steel's dash-knockup and Soul Unbound's rewind on a 10s cooldown kite your aura and out-duel you once items land. Play the pick, not the duel."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Realm of Death isolates him with no allies, so his R-knockup and W team-amp are dead weight and there's nobody to peel — you own this duel.",
+      "after": "Realm of Death isolates him with no allies, so Fate Sealed's line-pull and Spirit Cleave's shield have nothing to feed on — you own this duel."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "He out-scales you hard: two Q-dashes, the E rewind and Q3 knockup let him kite your aura and out-duel you once items land.",
+      "after": "He out-scales you hard: Mortal Steel's dash-knockup and Soul Unbound's rewind kite your aura and out-duel you once items land."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Realm of Death is your trump card — banish Yone into the 1v1 dimension where his R-knockup and W damage amp do nothing without allies to follow up, and he can't kite you with no walls/teammates to reset around.",
+      "after": "Realm of Death is your trump card — banish Yone into the 1v1 dimension where Fate Sealed's line-pull has nobody to catch and Spirit Cleave's shield scales off one champion, and there is no team to rewind back to."
+    }
+  ],
+  "notes": "Spirit Cleave's shield scaling with the NUMBER OF CHAMPIONS HIT is the cleanest mechanical argument for why Realm of Death is strong here, and the page had it as a vague 'W team-amp'. It is in Riot's text verbatim, so I used it. One thing I did not touch: the content layer repeatedly says Yone has 'two Q-dashes' / 'double Q-dash'. Riot's Mortal Steel text describes a dash only at 2 stacks, so 'two dashes' is not supported by the kit file, but I could not confirm it is wrong either — left alone and recorded in unverified rather than rewritten on a guess."
+}

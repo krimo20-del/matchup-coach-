@@ -1,0 +1,139 @@
+{
+  "ownerKey": "mordekaiser",
+  "enemy": "yasuo",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Yasuo/Skill/Mordekaiser/Mordekaiser/Mordekaiser/Mordekaiser/Mordekaiser against a packet levelChart of Yasuo/Mordekaiser/Mordekaiser/Skill/Mordekaiser/Yasuo/Yasuo. The content captions match the packet: whys[3] 'Even window', whys[5] 'the duel begins tipping to him', whys[6] 'He out-scales hard'.",
+      "why": "51.54% over 1327 games: Mordekaiser wins 2-3 and the level-6 box, Yasuo takes it back on crit items. The chart handed Mordekaiser both item rows that its own captions give to Yasuo.",
+      "corrected": "Both layers set to Yasuo / Mordekaiser / Mordekaiser / Skill / Mordekaiser / Yasuo / Yasuo as one atomic paired group, with ratings and the three contradicting phases[N].why lines rewritten.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 51.54 / 1327 games", "currentText.content.whys[3], whys[5], whys[6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Four spikes[] present and correctly timed: Mordekaiser's level 2-3 window, the level-6 Realm, Yasuo's first crit item, and his 2+ item takeover.",
+      "corrected": "Only the ability names inside spikes[3] were fixed; timings untouched.",
+      "confidence": "High",
+      "sources": ["currentText.content.spikes[0..3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The tldr and report[0].t both say Realm of Death 'removes his team and his Wind Wall value' — and the same page's spikes[1].text, mid and wants.you[2] all correctly say the opposite, that Wind Wall still exists inside the realm and still eats your Death's Grasp pull. The page contradicts itself on the single most important interaction in the matchup, and the wrong version is the one in the TL;DR. Separately, packet.defects flags that the content layer never names Yasuo's abilities: it writes 'Windwall' (not the real 'Wind Wall'), 'double-dash', 'ranged poke' and 'his knockup R' instead of Wind Wall, Sweeping Blade, Steel Tempest and Last Breath.",
+      "why": "A player who reads the TL;DR and ults expecting Wind Wall to be neutralised loses his E pull inside the box with no way out. The rest of the page already knows better.",
+      "corrected": "Rewrote tldr and report[0].t to match the rest of the page — Wind Wall still works inside the realm, bait the 4-second wall before spending Death's Grasp — and kept the genuinely good existing point that Obliterate is a ground cone, not a projectile, so Wind Wall never blocked it. Normalised 'Windwall' to Wind Wall and replaced the paraphrases with Steel Tempest, Sweeping Blade and Last Breath.",
+      "confidence": "High",
+      "sources": ["enemyKit W text 'blocks all enemy projectiles for 4 seconds', blocksProjectiles flag", "ownerKit Q text (ground smash, no projectile flag)", "currentText.content.spikes[1].text and mid", "packet.defects", "packet.enemyAbilities"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns names Last Breath as the matchup-defining cooldown with no seconds, and describes Wind Wall as lasting 'a few seconds'. Both numbers matter and both were missing: Wind Wall is 25s at rank 1 falling to 17s and stands for exactly 4 seconds; Last Breath is 70s at rank 1 but only 30s at rank 3, so 'track his ult' stops being a plan late. And Last Breath cannot be cast at all unless you are already airborne — which for a solo Yasuo means he must first land the 2-stack Steel Tempest whirlwind.",
+      "why": "The real trackable cooldown in this lane is Wind Wall, not Last Breath, and the page framed it the other way round.",
+      "corrected": "breakdown.cooldowns rebuilt with Wind Wall first (real cooldowns + 4s duration + what it does and does not block) and Last Breath second with its real 70s/30s and the airborne prerequisite. dosFull[0].d and dontsFull[1].d now carry the same numbers and the knockup prerequisite.",
+      "confidence": "High",
+      "sources": ["enemyKit W cd 25/23/21/19/17 + 4s text", "enemyKit R cd 70/50/30 + 'Blinks to an Airborne enemy champion'", "enemyKit Q text 'At 2 stacks, Steel Tempest fires a whirlwind that knocks Airborne'", "enemyKit E cd 0.5/0.4/0.3/0.2/0.1"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "R him 1v1 — the realm removes his team and his Wind Wall value. Mordekaiser wins by trading around Yasuo's Last Breath and cashing the pattern: r him into a 1v1 and grind him down.",
+      "after": "Realm him 1v1 — it strips his team and his minions, but Wind Wall still works in there, so bait the 4-second wall before you spend Death's Grasp. Your Q cone was never blocked by it anyway."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "R him 1v1 — the realm removes his team and his Wind Wall value.",
+      "after": "Realm him 1v1 — but Wind Wall still works inside the box."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Yasuo's Last Breath: His all-in after a knockup. R him while it’s down. When it is down — R him — the realm is yours.",
+      "after": "Wind Wall blocks projectiles only — your Obliterate cone goes straight through it, your Death's Grasp pull does not. Bait the wall."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Yasuo Last Breath: matchup-defining — His all-in after a knockup. R him while it’s down. Track it before every engage. - Yasuo Wind Wall: A wall that blocks all enemy projectiles for a few seconds. Dodge or sidestep it.",
+      "after": "- Yasuo Wind Wall (W): 25s at rank 1, 17s at rank 5, and it stands for 4 seconds — it eats your E pull, never your Q cone. - Yasuo Last Breath (R): 70s at rank 1 but only 30s at rank 3, and it needs you airborne first."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His all-in after a knockup. R him while it’s down. Only engage once it is down or baited.",
+      "after": "70s at rank 1, 30s at rank 3 — and he cannot cast it unless you are already airborne."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Steel Tempest knocks up at 2 stacks — that airborne is what unlocks his R."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Whiffing Q into the wave and trading with no passive stacks — un-isolated Obliterate hits soft, and without Darkness Rise you lose most even exchanges.",
+      "after": "Sweeping Blade resets in under a second per target — commit only where the wave is thin, or he dashes straight out of your aura for the full trade."
+    },
+
+    { "layer": "full",    "path": "phases[1].side", "before": "Skill",       "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[1]",         "before": "Skill",       "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[3].side", "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "content", "path": "win[3]",         "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "full",    "path": "phases[5].side", "before": "Mordekaiser", "after": "Yasuo" },
+    { "layer": "content", "path": "win[5]",         "before": "Mordekaiser", "after": "Yasuo" },
+    { "layer": "full",    "path": "phases[6].side", "before": "Mordekaiser", "after": "Yasuo" },
+    { "layer": "content", "path": "win[6]",         "before": "Mordekaiser", "after": "Yasuo" },
+
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "6/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10" },
+
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Q ranks make isolated hits massive. Yasuo must hug minions all lane; punish every step away from the wave with the full drag combo.",
+      "after": "Even window — Darkness Rise sustains you through the grind, but his flow shield and Steel Tempest poke let him trade back safely."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Liandry's makes Darkness Rise melt through bruiser HP stacking. Extended trades are now strictly yours — force them.",
+      "after": "His first crit item plus the flow shield start kiting your aura, and Wind Wall eats your E pull every 25s."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Riftmaker omnivamp turns the Realm 1v1 unloseable into most matchups. Yasuo's only outs are dodging Q forever or never being alone — neither survives a whole game.",
+      "after": "He out-scales hard: crit damage, Wind Wall on a 17s cooldown, and Sweeping Blade resetting under a second keep him out of your aura. Play for picks on his carries."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Even window — Darkness Rise sustains you, but his flow shield and ranged poke let him trade back safely.",
+      "after": "Even window — Darkness Rise sustains you, but his flow shield and Steel Tempest poke let him trade back safely."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "He out-scales hard: crit, Windwall, and double-dash kite your aura and eat your E — play for picks on his carries, not the 1v1.",
+      "after": "He out-scales hard: crit, Wind Wall, and Sweeping Blade kite your aura and eat your E — play for picks on his carries, not the 1v1."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "At 2+ items his crit DPS, Windwall, and double-dash take over — he blocks your E pull, stays out of aura range, and his knockup R chains off any ally CC in a fight.",
+      "after": "At 2+ items his crit DPS, Wind Wall, and Sweeping Blade take over — he blocks your E pull, stays out of aura range, and Last Breath chains off any ally knockup in a fight."
+    }
+  ],
+  "notes": "This matchup's content layer is the best-written one in slice 6 — early already carries the exact Wind Wall interaction from the calibration list (Obliterate is a ground cone, not a projectile, so the wall never blocks it), which is the kind of thing most of these pages miss. The bug was that the full layer's tldr said the opposite. Worth noting the shape of the failure: the good fact lived only in the content prose, and the full layer's tldr was templated separately and never reconciled — the same split that produced the chart disagreements across this whole slice. Also unchanged: 'Windwall' spelled as one word still appears in early, mid, late and wants.foe[0]; I fixed it only where I was already editing the field, to avoid burning edits on a pure spelling pass."
+}

@@ -1,0 +1,120 @@
+{
+  "ownerKey": "mordekaiser",
+  "enemy": "wukong",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Wukong/Skill/Mordekaiser/Mordekaiser/Mordekaiser/Mordekaiser/Mordekaiser against a packet levelChart of Skill/Mordekaiser/Mordekaiser/Skill/Mordekaiser/Mordekaiser/Wukong. The content captions match the packet, not the chart: whys[0] 'Both of you are weak level 1', whys[3] 'Even window', whys[6] 'He out-scales you here'.",
+      "why": "50.57% over 471 games: an even lane Mordekaiser bends with his 2-3 and 6 spikes, and Wukong reclaims in teamfights on items. The chart gave Mordekaiser the 2+ item row that its own caption gives to Wukong.",
+      "corrected": "Both layers set to Skill / Mordekaiser / Mordekaiser / Skill / Mordekaiser / Mordekaiser / Wukong as one atomic paired group, with ratings and the two contradicting phases[N].why lines rewritten.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 50.57 / 471 games", "currentText.content.whys[0], whys[3], whys[6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Four spikes[] present and correctly timed — Mordekaiser's level 2-3 Q+W window, Realm of Death at 6, the first-item magic spike, and Wukong's late teamfight window. Only the naming inside them was wrong, not the timing.",
+      "corrected": "spikes text renamed to real abilities; timings untouched.",
+      "confidence": "High",
+      "sources": ["currentText.content.spikes[0..3]", "packet.levelChart"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.defects flags it directly: the content layer never names a single Wukong ability. Every reference is a generic paraphrase — 'his Q armor-shred', 'his W decoy', 'W clone', 'E-dash', 'R spin', 'his R knockup' — across whys[1], whys[2], whys[3], whys[6], spikes[0], spikes[1], spikes[3] and the prose. A player reading this page cannot map any of it to a cooldown bar. Separately, missingInteractions flags that Crushing Blow (Q) is an auto-attack reset and nothing on the page carries that tell.",
+      "why": "Real ability names are the difference between advice a player can act on and advice they have to translate. The full layer already uses the names — the content layer, which is what renders in the level chart and spike cards, does not.",
+      "corrected": "Replaced the paraphrases with Crushing Blow, Warrior Trickster, Nimbus Strike and Cyclone throughout whys[1..3], whys[6] and spikes[0], spikes[1], spikes[3] — all four names confirmed against packet.enemyAbilities. Added the Crushing Blow auto-reset tell to dontsFull[2].d, whose heading already read 'Trade into his Q shred' but whose body was the generic tradeBad string.",
+      "confidence": "High",
+      "sources": ["packet.defects", "packet.enemyAbilities P/Q/W/E/R", "missingInteractions rule autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "breakdown.cooldowns names Nimbus Strike and Warrior Trickster but gives no cooldown seconds for either, and I could not supply them: enemyKit is NULL in this brief, so there is no cooldown, range or cost data for Wukong at all.",
+      "why": "Point 6 needs real seconds. I will not invent them.",
+      "corrected": "No cooldown numbers added. Left the existing text alone and recorded this in unverified — this matchup needs a re-run once the Wukong kit file is present.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit === null"]
+    }
+  ],
+  "edits": [
+    { "layer": "full",    "path": "phases[0].side", "before": "Wukong",      "after": "Skill" },
+    { "layer": "content", "path": "win[0]",         "before": "Wukong",      "after": "Skill" },
+    { "layer": "full",    "path": "phases[1].side", "before": "Skill",       "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[1]",         "before": "Skill",       "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[3].side", "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "content", "path": "win[3]",         "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "full",    "path": "phases[6].side", "before": "Mordekaiser", "after": "Wukong" },
+    { "layer": "content", "path": "win[6]",         "before": "Mordekaiser", "after": "Wukong" },
+
+    { "layer": "full", "path": "phases[0].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "6/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10" },
+
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Q ranks make isolated hits massive. Wukong must hug minions all lane; punish every step away from the wave with the full drag combo.",
+      "after": "Even window — Darkness Rise rewards the extended trade, but Nimbus Strike and Warrior Trickster let him break off before you finish it."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Riftmaker omnivamp turns the Realm 1v1 unloseable into most matchups. Wukong's only outs are dodging Q forever or never being alone — neither survives a whole game.",
+      "after": "He out-scales you in teamfights: Warrior Trickster and Nimbus Strike slip your aura entirely and Cyclone peels you off the carry, while your R only banishes one target."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Whiffing Q into the wave and trading with no passive stacks — un-isolated Obliterate hits soft, and without Darkness Rise you lose most even exchanges.",
+      "after": "Crushing Blow is an auto-attack reset — his burst opens with a wind-up, not a visible cast, so step back on the animation and not on the ability."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Your Q + W spike out-trades him before his Q armor-shred and bonus-AD stacking turn on — punish that window now.",
+      "after": "Your Q + W spike out-trades him before Crushing Blow (Q) and bonus-AD stacking turn on — punish that window now."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Single-target Obliterate plus Indestructible shield beats a Wukong who hasn't stacked armor yet; trade while his W decoy is on cooldown.",
+      "after": "Single-target Obliterate plus Indestructible shield beats a Wukong who hasn't stacked armor yet; trade while Warrior Trickster is on cooldown."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Even window — Darkness Rise rewards your extended trades, but his E-dash and W clone let him break off before you grind him out.",
+      "after": "Even window — Darkness Rise rewards your extended trades, but Nimbus Strike and his clone let him break off before you grind him out."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "He out-scales you here: in teamfights his clone and E-dash slip your aura and his R can peel you, while your single-target R only catches one.",
+      "after": "He out-scales you here: in teamfights his clone and Nimbus Strike slip your aura and Cyclone can peel you, while your single-target R only catches one."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Q + W online: single-target Obliterate poke plus your Indestructible shield out-trades him before his Q armor-shred and passive bonus-AD stacking come fully online.",
+      "after": "Q + W online: single-target Obliterate poke plus your Indestructible shield out-trades him before Crushing Blow (Q) and passive bonus-AD stacking come fully online."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Realm of Death banishes the real Wukong into the 1v1 box, where his W clone, E-dash escape, and R spin all become worthless — no decoy to juke, no jungler to dash to.",
+      "after": "Realm of Death banishes the real Wukong into the 1v1 box, where Warrior Trickster, Nimbus Strike, and Cyclone all become worthless — no decoy to juke, no jungler to dash to."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "In teamfights his W clone and E-dash let him slip your aura and escape, and his R knockup can peel you off the carry you'd rather be banishing — your R only banishes one target.",
+      "after": "In teamfights Warrior Trickster and Nimbus Strike let him slip your aura and escape, and Cyclone knockup can peel you off the carry you'd rather be banishing — your R only banishes one target."
+    }
+  ],
+  "notes": "enemyKit is NULL for this matchup — the brief carries no Wukong ability text, cooldowns, ranges or flags, only the five names from packet.enemyAbilities. That means every mechanical claim already on the page (Crushing Blow shreds armour, Warrior Trickster grants invisibility, Nimbus Strike is a dash, Cyclone knocks up) is UNVERIFIED from this run's data. I did not add any new mechanical claim and I did not remove the existing ones — removing them on no evidence would be as unfounded as inventing them. I only substituted names that packet.enemyAbilities confirms. This matchup should be re-run once champ-data/_kits/wukong.json is available so point 6 can get real cooldowns; it is currently the only matchup in slice 6 with no cooldown numbers anywhere."
+}

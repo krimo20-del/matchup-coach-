@@ -1,0 +1,205 @@
+{
+  "ownerKey": "mordekaiser",
+  "enemy": "zaahen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "This is the worst chart in the slice and the packet says so itself: 'level chart contradicts data: Mordekaiser wins only 44.09% but the chart gives Mordekaiser 4/7 stages vs 0'. The live page is worse than the packet — it gives Mordekaiser 5/7 and Zaahen ZERO rows in a matchup he loses 56% of the time. Every field on the page reads as a won lane: diff 'EVEN', difficulty 6/10, and a late paragraph that says 'your isolation duel beats his bruiser kit outright'.",
+      "why": "44.09% over 1794 games is not an even lane, and a chart in which the enemy never wins a single stage cannot produce that number. Because the packet's OWN chart is flagged as contradicting the data, I did not simply copy it — I kept its rows 0-4 (which are plausible: Mordekaiser's window is the level 3-5 Darkness Rise stretch) and moved the two item rows to Zaahen, which is where the losing win rate has to come from and which the kit supports directly.",
+      "corrected": "Both layers set to Skill / Skill / Mordekaiser / Mordekaiser / Skill / Zaahen / Zaahen as one atomic paired group. Also raised diffRating to 8/10 with matching breakdown.difficulty, breakdown.carry and report[14].t so the page stops describing a losing lane as even.",
+      "confidence": "Medium",
+      "sources": ["packet.defects (explicit chart contradiction)", "packet.winRate 44.09 / 1794 games", "packet.levelChart rows 0-4", "enemyKit P (revive), Q (heal), R (heal), E (percentHealth)"]
+    },
+    {
+      "point": 3,
+      "status": "missing",
+      "whatIsWrong": "packet.defects: 'spikes[] has 3 entries, expected 4'. The three present are Lvl 3, 1st item and 2+ items — and ALL THREE are Mordekaiser spikes. There is no entry anywhere in the array for a Zaahen power spike, which is a large part of why the page reads as a free lane.",
+      "why": "This is one of the inherited structural gaps that has never been repairable with a normal edit because there is nothing on disk to match a before-string against.",
+      "corrected": "Created spikes[3] with \"before\": null, filled with Zaahen's real late spike from his own kit: Determination filling into bonus Attack Damage and a revive, plus the Q and R heals. Nothing invented — every element is in Riot's ability text.",
+      "confidence": "High",
+      "sources": ["packet.defects", "enemyKit P text 'gains increased Attack Damage and can revive'", "enemyKit Q and R heal text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer does not name or describe a single Zaahen ability. It refers to 'Ultimate' as though that were the ability's name, in fourteen separate fields, and breakdown.cooldowns ships an internal TODO to the customer: 'Zaahen Ultimate (verify): His power spike — verify the exact name + effect on the live patch.' Meanwhile the enemyKit in this brief has complete text and cooldowns for all five slots, and none of it reached the page: the passive REVIVES him, Q heals and is an auto-attack reset whose recast knocks up, W is an 850-range pull, E is a dash whose damage scales with the target's health, and R heals him for a portion of the damage dealt.",
+      "why": "A page that says 'verify this yourself' is worse than no page. And the revive is decisive here specifically: Mordekaiser's entire gameplan is a Realm of Death 1v1 kill, and this champion can stand back up from it.",
+      "corrected": "Replaced the 'Ultimate' placeholder framing with the real mechanics throughout tldr, winCon, report[0].t, report[1].t, report[5].t, breakdown.cooldowns and dosFull[0].d, using real cooldowns (R 110s/80s, W 14s at 850 range, E 8s at rank 5). Filled the three empty dontsFull bodies with the auto-reset tell, the Determination/revive spike, and the percent-health dash. Added anti-heal to report[8].t. NOTE: I used slot letters, not ability names — see notes.",
+      "confidence": "High",
+      "sources": ["enemyKit P/Q/W/E/R full text and cooldowns", "missingInteractions rules needs-antiheal / resistances-invalidated / autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no seconds and named the same placeholder twice, once flagged '(verify)'.",
+      "why": "R at 110s falling to 80s is the real window; W at a flat 14s and 850 range is the reach that starts every all-in.",
+      "corrected": "Both replaced with real cooldowns and ranges.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd 110/95/80", "enemyKit W cd 14/13.5/13/12.5/12 range 850", "enemyKit E cd 10/9.5/9/8.5/8", "enemyKit Q cd 10/9/8/7/6"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t recommends Plated Steelcaps and no anti-heal against a champion with two healing abilities and a dash that deals percent-health damage.",
+      "why": "Stacking resistances is directly punished by the E scaling, and the two heals are what win him the extended trade the rest of the page tells Mordekaiser to seek.",
+      "corrected": "report[8].t now names both heals, the resistance bypass, and puts Grievous Wounds ahead of raw armour.",
+      "confidence": "High",
+      "sources": ["enemyKit E percentHealth flag", "enemyKit Q and R heal flags", "missingInteractions rule resistances-invalidated"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "New-champ respect — bait his cooldown, then R him 1v1. Mordekaiser wins by trading around Zaahen's Ultimate and cashing the pattern: bait his key tool, then R him 1v1.",
+      "after": "Anti-heal him: his Q and his R both heal, and his passive can revive him outright, so a Realm kill is not always a kill. Your window is levels 3-5, not the late game."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Bait his key tool, then R him 1v1. Track Ultimate before every commit and keep the wave on your side.",
+      "after": "Win it at 3-5 with Grievous Wounds up — both his heals and his revive beat you in any long game."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "New-champ respect — bait his cooldown, then R him 1v1.",
+      "after": "Anti-heal him early — his passive can revive him."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Bait his key tool, then R him 1v1. Track Ultimate before every commit.",
+      "after": "Win it at 3-5 with anti-heal up — his passive can revive him outright."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Zaahen's Ultimate: His big cooldown. R him when it’s down. When it is down — R him — the realm is yours.",
+      "after": "His Q heals and his R heals — anti-heal or the extended trade is his. His passive can revive him outright."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Shield + Health Potion. Core: Liandry's Torment  (burn carries his extended trades), then Riftmaker; boots Plated Steelcaps. First back: Lost Chapter component / Bami's (≈900-1300g).",
+      "after": "Start Doran's Shield + Health Potion. Core: Liandry's Torment, then Riftmaker; boots Plated Steelcaps. His Q and R both heal and his E ignores resists, so anti-heal beats stacking armour here."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Zaahen Ultimate: matchup-defining — His big cooldown. R him when it’s down. Track it before every engage. - Zaahen Ultimate (verify): His power spike — verify the exact name + effect on the live patch. Dodge or sidestep it.",
+      "after": "- Zaahen R: 110s at rank 1, 80s at rank 3, and it heals him for part of the damage. - Zaahen W: 14s, an 850-range stab that pulls you in — it is the reach that starts every all-in, so hold your ground outside it."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His big cooldown. R him when it’s down. Only engage once it is down or baited.",
+      "after": "110s at rank 1, 80s at rank 3 — and it heals him off the damage it deals."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Zaahen's favourite window — refuse it and half his win condition is gone.",
+      "after": "His Q is an auto-attack reset — the wind-up is the tell, and the recast knocks up."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "His passive fills into bonus AD and a revive — that is his real spike."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Whiffing Q into the wave and trading with no passive stacks — un-isolated Obliterate hits soft, and without Darkness Rise you lose most even exchanges.",
+      "after": "His E is a dash on an 8-second cooldown at rank 5 and its damage scales with your health, so the tankier you build the harder it lands on you."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Overall difficulty: 6/10. The lane is decided by how well you track Ultimate and how disciplined your pattern is.",
+      "after": "Overall difficulty: 8/10. At 44% this is a losing lane — you get a window at 3-5 and very little after it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry threat: 7/10. If Zaahen gets ahead, shift from winning trades to wave control, vision, and jungle play.",
+      "after": "Carry threat: 8/10. If Zaahen gets ahead, shift from winning trades to wave control, vision, and jungle play."
+    },
+    {
+      "layer": "full",
+      "path": "report[14].t",
+      "before": "Even matchup — difficulty 6/10, Zaahen carry threat 7/10.",
+      "after": "Hard matchup — difficulty 8/10, Zaahen carry threat 8/10."
+    },
+    { "layer": "full", "path": "diff",         "before": "EVEN", "after": "HARD" },
+    { "layer": "full", "path": "diffRating",   "before": "6/10", "after": "8/10" },
+    { "layer": "full", "path": "carryRating",  "before": "7/10", "after": "8/10" },
+
+    { "layer": "full",    "path": "phases[0].side", "before": "Zaahen",      "after": "Skill" },
+    { "layer": "content", "path": "win[0]",         "before": "Zaahen",      "after": "Skill" },
+    { "layer": "full",    "path": "phases[4].side", "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "content", "path": "win[4]",         "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "full",    "path": "phases[5].side", "before": "Mordekaiser", "after": "Zaahen" },
+    { "layer": "content", "path": "win[5]",         "before": "Mordekaiser", "after": "Zaahen" },
+    { "layer": "full",    "path": "phases[6].side", "before": "Mordekaiser", "after": "Zaahen" },
+    { "layer": "content", "path": "win[6]",         "before": "Mordekaiser", "after": "Zaahen" },
+
+    { "layer": "full", "path": "phases[0].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "7/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10" },
+
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Realm of Death online — the 1v1 Zaahen cannot decline. R steals 10% of his stats; take the duel whenever Ultimate is down and the wave is shoved.",
+      "after": "Realm of Death is a skill-check here, not a free kill — his R heals him inside the box and his passive can stand him back up. Land the pull first."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Liandry's makes Darkness Rise melt through bruiser HP stacking. Extended trades are now strictly yours — force them.",
+      "after": "His Determination stacks into bonus AD while his Q and R heal through your aura — the first-item window is his."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Riftmaker omnivamp turns the Realm 1v1 unloseable into most matchups. Zaahen's only outs are dodging Q forever or never being alone — neither survives a whole game.",
+      "after": "Two items in he wins outright: percent-health damage on his dash, two heals, and a passive revive that undoes the one kill your whole gameplan is built on."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "At first AP item your shield, slow and DoT make your R a near-guaranteed kill — force it on cooldown.",
+      "after": "At first item his Determination stacks and his two heals out-last your aura — the window has already closed."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Two items in, the isolation ult plus sustained magic damage beats his bruiser duel profile — you own the sidelane.",
+      "after": "Two items in, his percent-health dash and passive revive beat the isolation duel — do not sidelane against him."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "First AP item makes your R a near-guaranteed kill — shield, slow and DoT run him down inside the realm — and by two items your isolation duel beats his bruiser kit outright. Sit in the sidelane, force the 1v1 on every ult cooldown and make him choose between dying alone or conceding the map.",
+      "after": "By first item the lane has turned: his Determination stacks into bonus AD while his Q and his R both heal through your Darkness Rise. Two items in, his dash damage scales off the health you stacked and his passive can revive him — the Realm kill your gameplan is built on does not always stick. Win on your 3-5 window."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": null,
+      "after": "Zaahen's window: Determination fills into bonus Attack Damage and a revive, so the Realm of Death kill you set up all game can simply stand back up — and his Q and his R both heal him through your Darkness Rise while it happens."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].when",
+      "before": null,
+      "after": "Late"
+    }
+  ],
+  "notes": "TWO THINGS THE USER NEEDS TO DECIDE. (1) ABILITY NAMES. packet.enemyAbilities is NULL for Zaahen, so this run has no name authority for him. The only names anywhere in the brief are inside missingInteractions headlines: 'The Darkin Glaive (Q)', 'Aureate Rush (E)', 'Grim Deliverance (R)' — W and passive are unnamed even there. I deliberately did NOT ship those three names, because a single unconfirmed source is exactly how 'Ares of Blaze' and 'Noxious Blight' got onto pages, and a wrong name on a brand-new champion is the most visible error possible. Instead I wrote slot letters ('his Q', 'his R', 'his E') with the mechanics, all of which come from enemyKit text I can verify. If the user confirms those three names are correct, this matchup is worth a fast second pass to swap them in — it would upgrade every field I touched. (2) I did NOT write the missingInteractions headline 'Your Obliterate (Q) shuts off Zaahen's Aureate Rush (E)'. It comes from the same Mordekaiser Q grounding derived-flag that misfires across this entire slice; Riot's Obliterate text describes no grounding. Same call as the Warwick matchup. Separately: the level chart here is the one place in this slice where I could not simply follow the packet, because the packet's own defects list says its chart is wrong. My replacement keeps the packet's rows 0-4 and moves only the two item rows — flagged Medium confidence for that reason."
+}

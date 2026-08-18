@@ -1,0 +1,160 @@
+{
+  "ownerKey": "mordekaiser",
+  "enemy": "zac",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Three sources disagree. The live page reads Zac/Skill/Mordekaiser/Mordekaiser/Mordekaiser/Mordekaiser/Mordekaiser. The packet reads Zac/Mordekaiser/Mordekaiser/Skill/Mordekaiser/Zac/Zac. The ALREADY-AUDITED MIRROR (audits/top/zac__mordekaiser.json) reads Mordekaiser levels 1-6, Skill at first item, Zac at 2+ items.",
+      "why": "I followed the mirror, not the packet. The mirror side has already been written and mirror-fix.js will overwrite any disagreement I introduce, so matching it here saves the correction — and the mirror's shape is defensible from the kit: Zac has no Elastic Slingshot at level 1, so he cannot pick the engage and has to walk into Obliterate's 675 range to farm, while his 2+ item front-line genuinely out-scales a flat Mordekaiser.",
+      "corrected": "Both layers set to Mordekaiser / Mordekaiser / Mordekaiser / Mordekaiser / Mordekaiser / Skill / Zac as one atomic paired group, matching the mirror exactly. Ratings and the three contradicting phases[N].why lines rewritten, plus whys[0] (which said level 1 was 'his to farm even') and whys[3] (which said 'even' beside a Mordekaiser row).",
+      "confidence": "High",
+      "sources": ["mirrorFindings point 2 from zac__mordekaiser.json", "packet.levelChart (overridden — see why)", "enemyKit E cd 21 at rank 1"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Four spikes[] present. Note spikes[2].when is 'Zac E' rather than an item or level timing — unusual, but it is a real and correctly-placed threat window (his max-range Elastic Slingshot engage) rather than a defect, so I left it.",
+      "corrected": "Only spikes[1].text was corrected, for the revive omission below.",
+      "confidence": "High",
+      "sources": ["currentText.content.spikes[0..3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The biggest omission in this matchup, and the page repeats it in the field where it matters most. Cell Division (P) does not just shed healing blobs — Riot's text says that upon taking FATAL DAMAGE Zac splits into 4 bloblets and REVIVES if any survive. spikes[1].text calls Realm of Death 'your cleanest kill window' and mid says 'the duel is clean... and it's yours', with no mention anywhere that the kill can simply be undone. Second omission: Unstable Matter (W) is never mentioned on the page at all — a 5-second cooldown dealing a percentage of your MAXIMUM HEALTH as magic damage, which directly punishes the HP that Mordekaiser stacks. Third: the page names Elastic Slingshot in fourteen fields without ever giving its cooldown.",
+      "why": "Mordekaiser's entire win condition here is a 1v1 kill inside the Realm. A revive mechanic that undoes that kill is the single most important fact in the matchup and it is absent, while a 5s percent-max-health nuke is absent too.",
+      "corrected": "Added the revive to tldr, report[0].t, report[5].t, dontsFull[0].d and spikes[1].text — with the actionable version, that the kill only sticks if the bloblets die too. Added Unstable Matter's 5s percent-max-health to breakdown.cooldowns, report[8].t and dontsFull[1].d. Added Elastic Slingshot's real 21s-to-9s to breakdown.cooldowns, dosFull[0].d and tldr, and Stretching Strikes' auto-reset plus its 800-range throw-together to dontsFull[2].d.",
+      "confidence": "High",
+      "sources": ["enemyKit P text 'Upon taking fatal damage, Zac splits into 4 bloblets... he will revive'", "enemyKit W text + percentHealth flag, cd 5", "enemyKit E cd 21/18/15/12/9", "enemyKit Q text + autoReset flag, range 800", "missingInteractions rules needs-antiheal / resistances-invalidated / autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns named Elastic Slingshot with no seconds and listed nothing else.",
+      "why": "Elastic Slingshot goes from a 21-second window at rank 1 to 9 seconds maxed — the punish window more than halves over the lane, which is exactly the kind of thing 'track his E' hides.",
+      "corrected": "Real cooldowns for E and W now on the page.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd", "enemyKit W cd 5", "enemyKit R cd 120/105/90"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Confirmed against the mirror's note: the packet's earlier \"Let's Bounce\" suspect name is a FALSE POSITIVE — the detector strips the exclamation mark before comparing and the disk text is already correct. No ability names are wrong in this matchup. Reused from the mirror rather than re-derived.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["mirrorFindings.notes", "packet.enemyAbilities R"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Step on his blobs — anti-heal and R him when his E is down. Mordekaiser wins by trading around Zac's Elastic Slingshot and cashing the pattern: deny blobs, anti-heal, R him 1v1.",
+      "after": "Step on his blobs and anti-heal — Cell Division revives him from fatal damage, so a Realm kill only sticks if the bloblets die too. His E is 21s at rank 1 but 9s maxed."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "Step on his blobs — anti-heal and R him when his E is down.",
+      "after": "Step on his blobs — Cell Division can revive him outright."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Zac's Elastic Slingshot: His engage. R him when it’s down. When it is down — R him — the realm is yours.",
+      "after": "Cell Division revives him from fatal damage — the Realm kill is not automatic. Unstable Matter hits percent max health."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Shield + Health Potion. Core: Liandry's Torment  (burn carries his extended trades), then Riftmaker; boots Plated Steelcaps. First back: Lost Chapter component / Bami's (≈900-1300g).",
+      "after": "Start Doran's Shield + Health Potion. Core: Liandry's Torment, then Riftmaker; boots Plated Steelcaps. His blobs heal and Unstable Matter deals percent max health, so anti-heal beats stacking raw HP."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Zac Elastic Slingshot: matchup-defining — His engage. R him when it’s down. Track it before every engage.",
+      "after": "- Zac Elastic Slingshot (E): 21s at rank 1, 9s at rank 5. - Zac Unstable Matter (W): 5s, percent max health."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His engage. R him when it’s down. Only engage once it is down or baited.",
+      "after": "21s at rank 1 but only 9s at rank 5 — the window shrinks fast on you."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Zac's favourite window — refuse it and half his win condition is gone.",
+      "after": "Cell Division heals him off every blob and revives him from fatal damage once."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning your answer for tiny value leaves you naked for its full cooldown.",
+      "after": "Unstable Matter is a 5s cooldown that deals percent of your max health."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Whiffing Q into the wave and trading with no passive stacks — un-isolated Obliterate hits soft, and without Darkness Rise you lose most even exchanges.",
+      "after": "Stretching Strikes is an auto-attack reset with an 800-range grab — the wind-up is the tell, and if he autos a second target he throws you both together."
+    },
+
+    { "layer": "full",    "path": "phases[0].side", "before": "Zac",         "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[0]",         "before": "Zac",         "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[1].side", "before": "Skill",       "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[1]",         "before": "Skill",       "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[5].side", "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "content", "path": "win[5]",         "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "full",    "path": "phases[6].side", "before": "Mordekaiser", "after": "Zac" },
+    { "layer": "content", "path": "win[6]",         "before": "Mordekaiser", "after": "Zac" },
+
+    { "layer": "full", "path": "phases[0].rating", "before": "4/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10" },
+
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q start, but it's slow and telegraphed — Zac dodges it on reaction at full HP. Last-hit, aim isolated Qs only when he commits to a CS.",
+      "after": "Q start beats a Zac with no E yet — he has to walk into 675 range to farm, so smash him isolated and start banking your shield."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Liandry's makes Darkness Rise melt through bruiser HP stacking. Extended trades are now strictly yours — force them.",
+      "after": "His blob regen and the 9s Elastic Slingshot keep it close — your first item is no longer the clear answer."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Riftmaker omnivamp turns the Realm 1v1 unloseable into most matchups. Zac's only outs are dodging Q forever or never being alone — neither survives a whole game.",
+      "after": "A full-build Zac front-lines through your aura, chain-grabs with Stretching Strikes, and revives out of the kill you set up. Save Realm of Death for his backline instead."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "You both lack a key ability early — he has no E knock-up yet and your aura isn't ramping, but his passive blobs out-heal your chip, so it's his to farm even.",
+      "after": "He has no Elastic Slingshot yet, so he cannot pick the engage and has to walk into your Obliterate to farm — take the free level-1 chip before his blobs matter."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Darkness Rise grinds extended fights but his Q grab and E knock-up trade you back — even unless one of you snowballs the trade.",
+      "after": "Darkness Rise grinds the extended fight harder than his blobs heal it back, so levels 4-5 stay yours as long as you bait Elastic Slingshot."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Realm of Death banishes him to the 1v1 realm away from his team — no blob pickups, no E re-engage, and you steal his tank stats; this is your cleanest kill window.",
+      "after": "Realm of Death banishes him away from his team — no blob pickups, no re-engage, and you steal his tank stats. Kill the bloblets too, or Cell Division stands him straight back up."
+    }
+  ],
+  "notes": "MIRROR REUSED. audits/top/zac__mordekaiser.json already existed, so I took its point-2 finding rather than re-deriving the chart, and its confirmation that the \"Let's Bounce\" suspect name is a detector false positive. I followed the mirror over the packet where they disagreed (packet gives Zac levels 1, first item and 2+ items; mirror gives Mordekaiser 1-6, Skill at first item, Zac at 2+). The mirror's own notes flag the same systemic full-vs-content chart disagreement I have now found in all twelve matchups of slice 6, which is worth treating as a generator bug rather than twelve separate content errors. I did NOT write the missingInteractions headline claiming Obliterate grounds Elastic Slingshot — same Mordekaiser Q derived-flag misfire as the rest of this slice; note that Zac's OWN E carries a real grounding flag in his kit, which makes the confusion in that generated headline easy to see."
+}

@@ -1,0 +1,65 @@
+{
+  "ownerKey": "mordekaiser",
+  "enemy": "illaoi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Three rows disagreed with the packet chart on both layers: Level 2 read Illaoi where whys[1] says short trades 'come out even', Level 6 read Skill where whys[4] and spikes[1] both call the Realm a 1v1 you win, and First item read Illaoi where whys[5] says you cash the isolated all-in.",
+      "why": "The packet chart is Skill / Skill / Illaoi / Skill / Mordekaiser / Skill / Illaoi over 2191 games at 55.56% — the largest sample in this slice. Giving away the level-6 row on a matchup whose entire win condition is the level-6 ultimate is the worst single row on the page.",
+      "corrected": "Rows 1, 4 and 5 set to Skill / Mordekaiser / Skill as one atomic group across both layers, with the Level 6 rating raised to 7/10, and phases[5].why rewritten to argue the Skill row through her passive healing.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.games 2191", "brief currentText whys[1], whys[4], whys[5]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are accurate and correctly ordered: level 3 when the E-pull answers her field, level 6 for the Realm, first item, then her two-item field. Left alone.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief currentText spikes[0..3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Harsh Lesson is not mentioned anywhere on this page — not in the full layer, not in the content layer, not once. Test of Spirit had no cooldown. Nothing stated that her passive heals her off tentacle hits.",
+      "why": "Harsh Lesson is a 4-second dash that is also an auto-attack reset and pulls every nearby tentacle onto its target — it is how she closes on you and how she opens every trade, and a page that tells you to 'trade on her E cooldown' while omitting a 4-second gap-closer is giving you a window that does not exist. Test of Spirit is 16/15/14/13/12, so the gap you play around is 16 seconds at rank 1. Prophet of an Elder God heals her whenever a tentacle damages a champion, which is why extended trades inside her field do not close.",
+      "corrected": "Harsh Lesson's 4s cooldown, dash and auto-reset written into breakdown.cooldowns and dontsFull[1].d; Test of Spirit's 16s into dosFull[0].d and breakdown.cooldowns; the tentacle heal and Grievous Wounds into dontsFull[0].d and phases[5].why.",
+      "confidence": "High",
+      "sources": ["enemyKit Illaoi W cd 4, dash and autoReset flags, text", "enemyKit Illaoi E cd", "enemyKit Illaoi P text", "missingInteractions needs-antiheal, autoreset-burst-tell"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "The item block builds Liandry's into Riftmaker with no anti-heal named, against a champion who heals off every tentacle swing.",
+      "why": "Grievous Wounds is the flagged requirement for this matchup and the page's whole plan is the extended aura grind — the exact fight her passive is built to win.",
+      "corrected": "Anti-heal stated as the condition, in dontsFull[0].d and phases[5].why.",
+      "confidence": "High",
+      "sources": ["missingInteractions needs-antiheal", "enemyKit Illaoi P text"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[1].side", "before": "Illaoi", "after": "Skill" },
+    { "layer": "content", "path": "win[1]", "before": "Illaoi", "after": "Skill" },
+
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "full", "path": "phases[4].rating", "before": "4/10", "after": "7/10" },
+
+    { "layer": "full", "path": "phases[5].side", "before": "Illaoi", "after": "Skill" },
+    { "layer": "content", "path": "win[5]", "before": "Illaoi", "after": "Skill" },
+
+    { "layer": "full", "path": "phases[5].why", "before": "Liandry's makes Darkness Rise melt through bruiser HP stacking. Extended trades are now strictly yours — force them.", "after": "Liandry's burns, but her passive heals her every time a tentacle lands on you — Grievous Wounds or no kill." },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Illaoi Test of Spirit: matchup-defining — Dodge it, then R her away from her field. Track it before every engage.", "after": "- Test of Spirit (E): 16s at rank 1 — the whole lane lives in that gap. - Harsh Lesson (W): 4s dash and auto reset." },
+
+    { "layer": "full", "path": "dosFull[0].d", "before": "Dodge it, then R her away from her field. Only engage once it is down or baited.", "after": "Test of Spirit is 16s at rank 1 — dodge it and the next 16 seconds are yours." },
+
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Illaoi's favourite window — refuse it and half her win condition is gone.", "after": "Tentacles heal her every time they land — Grievous Wounds before any long trade." },
+
+    { "layer": "full", "path": "dontsFull[1].d", "before": "Burning your answer for tiny value leaves you naked for its full cooldown.", "after": "Harsh Lesson is a 4s dash and an auto reset — the leap is the tell." }
+  ],
+  "notes": "MIRROR CONFLICT — read this before applying. The mirror audit (illaoi__mordekaiser) reports flipping rows 0 and 3 to Illaoi and rows 5 and 6 to Skill. My packet chart for this direction reads Skill / Skill / Illaoi / Skill / Mordekaiser / Skill / Illaoi. The two agree on rows 4 and 5 and disagree on rows 0, 3 and 6. I applied only the rows where the packet and the mirror do not conflict (1, 4, 5) and deliberately left rows 0, 3 and 6 untouched rather than pick a side and have mirror-fix overwrite it either way. This needs one human ruling; it is in questionsForUser. Both flagged suspectNames are false positives — 'Land Test of Spirit' and 'Her Test of Spirit' are the real name with a verb or pronoun in front. On the third missing-interaction (terrain-cuts-retreat): Riot's passive text says tentacles spawn ON nearby impassable terrain, it does not say she creates terrain, so I wrote nothing about her walling off your retreat — the derived flag misfires on that tooltip. Same for the kit file's 'grounding' flag on Obliterate, which Riot's Q text does not support, so I made no claim about it stopping Harsh Lesson."
+}

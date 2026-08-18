@@ -1,0 +1,163 @@
+{
+  "ownerKey": "mordekaiser",
+  "enemy": "vayne",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both level charts read Vayne/Vayne/Skill/Skill/Skill/Skill/Skill against a packet levelChart of Skill/Mordekaiser/Mordekaiser/Mordekaiser/Mordekaiser/Vayne/Vayne. The page currently tells the player Vayne wins levels 1-2 (when she has no crit item and Mordekaiser has Obliterate + Indestructible) and that Mordekaiser owns the late game (when Silver Bolts' true damage explicitly beats him — the prose two lines below says exactly that).",
+      "why": "50.1% over 1443 games with a hard scaling ADC: Mordekaiser owns the early-to-6 window and Vayne takes it back on items. The existing chart inverts both ends.",
+      "corrected": "Both layers set to Skill / Mordekaiser / Mordekaiser / Mordekaiser / Mordekaiser / Vayne / Vayne as one atomic paired group, with ratings and the two contradicting phases[N].why lines rewritten.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 50.1 / 1443 games", "currentText.content.whys[5], whys[6], late"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The content whys[] are shifted one row early against their own labels: whys[3] sits on the 'Levels 4-5' row but describes Realm of Death (level 6); whys[4] sits on the 'Level 6' row but describes the first-item spike; whys[5] sits on the 'First item' row but describes two items.",
+      "why": "The level chart renders each why beside its label, so a paying user reads 'Levels 4-5' next to a description of the level-6 ultimate. The spike timings themselves are right, they are just attached to the wrong rows.",
+      "corrected": "Rewrote whys[3] as a real Levels 4-5 entry (Q ranks, Death's Grasp on a Tumble, Darkness Rise in extended melee), moved the Realm of Death content onto whys[4] with the real 650 R range, and re-anchored whys[5] to her FIRST crit item. whys[6] already described 2+ items correctly.",
+      "confidence": "High",
+      "sources": ["currentText.content.whys[3..6] vs phases[N].label", "ownerKit R range 650"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page repeatedly tells the player to 'build resists' against Vayne. Silver Bolts (W) deals a percentage of max health as bonus TRUE damage on the third consecutive hit — armour and MR do nothing against it, and stacking HP makes it hit harder. The single most-repeated instruction in the matchup is backwards. Separately, no text anywhere uses the two ranges that decide the ultimate: Realm of Death is 650, Condemn is 550.",
+      "why": "True damage bypasses resistances by definition, and the percent-max-health scaling means the tankier Mordekaiser builds the more Silver Bolts takes off him. The 650-vs-550 gap is the concrete reason Mordekaiser can ult before he gets shoved.",
+      "corrected": "Removed the 'build resists' instruction from tldr, winCon, report[0].t and report[1].t and replaced it with the real interaction: ult from 650 to beat her 550 Condemn, and win the game before her items arrive. Added Condemn's real cooldown (20s at rank 1 to 12s at rank 5) and the terrain condition — it only stuns if a wall is behind you.",
+      "confidence": "High",
+      "sources": ["enemyKit W text + trueDamage flag", "enemyKit E cd 20/18/16/14/12, range 550, terrain flag", "ownerKit R range 650"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "missingInteractions flagged the auto-reset tell and nothing on the page carried it: Tumble (Q) is an auto-attack reset, so her burst opens with a wind-up rather than a visible cast.",
+      "why": "The player watching for 'the ability' reacts a full attack too late. The wind-up is the cue.",
+      "corrected": "Rewrote dontsFull[0].d — the entry already headed 'Chase her tumbles in the open' but carried only generic filler — to state that Tumble is an auto-attack reset and the wind-up is the cue to back off.",
+      "confidence": "High",
+      "sources": ["missingInteractions rule autoreset-burst-tell", "enemyKit Q autoReset flag"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2].text read '...plus E Death's Grasp pull and Death's Grasp's magic pen...' — the same ability named twice in one clause (this is what packet.suspectNames flagged), and the magic-penetration claim is not in Riot's description of the ability, which reads only 'Mordekaiser pulls all enemies in an area.'",
+      "why": "Per the rule, an ability property absent from the kit text is UNKNOWN, not confirmed. I removed the claim rather than asserting it.",
+      "corrected": "Rewrote spikes[2].text around the verifiable fact instead: his first magic item lands before her first crit item, and Death's Grasp (E) pulls at 700 range to glue her into Darkness Rise.",
+      "confidence": "High",
+      "sources": ["packet.suspectNames", "ownerKit E text and range 700"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Her true damage + kiting beat you — R her to lock her down. Mordekaiser wins by trading around Vayne's Condemn and cashing the pattern: r her to lock her down, build resists.",
+      "after": "Silver Bolts' true damage walks through every resist you buy — resists are not the answer. Realm of Death at 650 outranges her 550 Condemn: ult her before she can shove you off."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "R her to lock her down, build resists. Track Condemn before every commit and keep the wave on your side.",
+      "after": "Ult her from 650 before her 550 Condemn lands; win it before two items — her true damage ignores your resists."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "Her true damage + kiting beat you — R her to lock her down.",
+      "after": "Silver Bolts' true damage ignores resists — kill her early."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "R her to lock her down, build resists. Track Condemn before every commit.",
+      "after": "Ult from 650 to beat her 550 Condemn. Win it before her second item."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Vayne's Condemn: Wall-stun. R her so she can’t kite. When it is down — R her — the realm is yours.",
+      "after": "Realm of Death reaches 650, her Condemn only 550 — ult from outside her knockback, and it only stuns into a wall."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Vayne Condemn: matchup-defining — Wall-stun. R her so she can’t kite. Track it before every engage.",
+      "after": "- Vayne Condemn (E): 20s at rank 1 down to 12s — it only stuns if you hit a wall. Fight in open ground."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Wall-stun. R her so she can’t kite. Only engage once it is down or baited.",
+      "after": "20s at rank 1, 12s at rank 5, and it only stuns if a wall is behind you."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Vayne's favourite window — refuse it and half her win condition is gone.",
+      "after": "Tumble is an auto-attack reset — the wind-up is your cue to back off, not the cast."
+    },
+
+    { "layer": "full",    "path": "phases[0].side", "before": "Vayne", "after": "Skill" },
+    { "layer": "content", "path": "win[0]",         "before": "Vayne", "after": "Skill" },
+    { "layer": "full",    "path": "phases[1].side", "before": "Vayne", "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[1]",         "before": "Vayne", "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[2].side", "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[2]",         "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[3].side", "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[3]",         "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[4].side", "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[4]",         "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[5].side", "before": "Skill", "after": "Vayne" },
+    { "layer": "content", "path": "win[5]",         "before": "Skill", "after": "Vayne" },
+    { "layer": "full",    "path": "phases[6].side", "before": "Skill", "after": "Vayne" },
+    { "layer": "content", "path": "win[6]",         "before": "Skill", "after": "Vayne" },
+
+    { "layer": "full", "path": "phases[0].rating", "before": "2/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "3/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "6/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10" },
+
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Liandry's makes Darkness Rise melt through bruiser HP stacking. Extended trades are now strictly yours — force them.",
+      "after": "Her first crit item plus Silver Bolts' percent-HP true damage starts beating your shield. Force the fight before it completes."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Riftmaker omnivamp turns the Realm 1v1 unloseable into most matchups. Vayne's only outs are dodging Q forever or never being alone — neither survives a whole game.",
+      "after": "Two items in, Silver Bolts' true damage ignores everything you stack and Final Hour's invisible tumbles kite your Obliterate forever. Play the pick, never the chase."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Realm of Death drops her into a 1v1 with no wall for her Condemn and no team to peel, and you keep her stolen stats if you finish — your guaranteed kill window flips the lane.",
+      "after": "Levels 4-5 are still yours: Q ranks make isolated Obliterate huge, Death's Grasp yanks her out of a Tumble, and Darkness Rise punishes any extended fight she misjudges in melee."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Your magic first-item spike plus E pull and Death's Grasp magic pen glue her to your aura and lethal all-in before her own first crit item fully comes online.",
+      "after": "Realm of Death is the cliff: it reaches 650 so you ult from outside her 550 Condemn, there is no wall to stun you inside, no team to peel, and you keep her stats."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "She tips the lane at two items: Silver Bolts' percent-HP true damage ignores your shield and HP stacking, and tumble + invis lets her kite your slow Q while you fall behind in DPS.",
+      "after": "Her first crit item is where it turns: Silver Bolts' third-hit percent-max-HP true damage walks through your W shield and every resist you bought, and your Obliterate is too slow to answer it."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Your magic-item spike plus E Death's Grasp pull and Death's Grasp's magic pen glue her to your Darkness Rise aura before her own first crit item is fully online.",
+      "after": "Your first magic item lands before her first crit item: Death's Grasp (E) pulls her off the kite at 700 range and glues her into Darkness Rise for the full all-in."
+    }
+  ],
+  "notes": "Same derived-flag misfire as the Urgot audit: ownerKit tags Mordekaiser's Q with grounding:'shuts off enemy dashes' while Riot's description says nothing of the kind. I wrote NO claim that Obliterate denies Tumble — worth noting because that would be a very tempting and very wrong line to put in a Vayne matchup. Also note spikes[3].when is '2+ items' while every other matchup in this champion's data uses 'Late' for that slot; not edited, flagging only."
+}

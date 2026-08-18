@@ -1,0 +1,131 @@
+{
+  "ownerKey": "mordekaiser",
+  "enemy": "urgot",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer level chart (phases[N].side) and the content-layer chart (win[N]) both read Urgot/Urgot/Skill/Skill/Skill/Skill/Skill, which contradicts the packet levelChart (Skill/Mordekaiser/Mordekaiser/Skill/Mordekaiser/Urgot/Urgot) AND contradicts the whys[] prose sitting right next to it — whys[5] and whys[6] explicitly say the lane tilts to Urgot late, while the chart says Mordekaiser (Skill) wins those rows.",
+      "why": "49.67% over 1390 games is an even matchup that Mordekaiser wins early and loses late — exactly the packet shape. The existing chart says Mordekaiser owns every row from 3 onward, which no data in the brief supports.",
+      "corrected": "Both layers set to Skill / Mordekaiser / Mordekaiser / Skill / Mordekaiser / Urgot / Urgot, proposed as one atomic paired group (full phases[N].side + content win[N] together), with ratings and the two contradicting phases[N].why lines rewritten to match.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 49.67 / 1390 games", "currentText.content.whys[5], whys[6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spike structure is right and all four spikes[] entries exist: Morde's level 2-3 Obliterate+Indestructible window, Realm of Death at 6 (140/120/100s), first item, then Urgot's 2+ item takeover. Urgot's spikes are Disdain online, 6, and first item.",
+      "corrected": "No change needed to spikes[]; the level-6 and first-item spikes are already keyed to real timings.",
+      "confidence": "High",
+      "sources": ["ownerKit R cd 140/120/100", "currentText.content.spikes[0..3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "tldr, winCon, report[0].t and report[1].t all tell the player to commit 'when W is down' / 'on his W cooldown'. Purge (W) has a cooldown of 12/9/6/3/0 — at rank 5 it is a ZERO second cooldown. There is no W window to wait for once Urgot maxes it, so the matchup's single most repeated instruction is unplayable advice.",
+      "why": "The real punishable cooldown is Disdain (E) at 16/15.5/15/14.5/14s — Urgot's only gap-closer and his only self-shield in the kit. Baiting E is the whole commit trigger; Purge never goes down.",
+      "corrected": "Re-keyed every commit instruction to Disdain (E) with its real 16s/14s numbers, and stated explicitly that Purge reaches 0s cooldown so it is never a window. Also rewrote breakdown.cooldowns (which listed Disdain twice and gave no numbers) to carry both real cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit W cd 12/9/6/3/0", "enemyKit E cd 16/15.5/15/14.5/14", "enemyKit E text: charges, shields himself, flips the first champion caught"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns listed 'Urgot Disdain (Flip)' and 'Urgot Disdain' as two separate entries — the same ability duplicated — and carried no cooldown numbers at all.",
+      "why": "Point 6 is the most punishable cooldown; a duplicated entry with no seconds gives the player nothing to track.",
+      "corrected": "Replaced with Disdain (E) 16s at rank 1 / 14s at rank 5, and Purge (W) 12s falling to 0s, so the player knows which one is actually a window.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd", "enemyKit W cd"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flagged wants.you[2] 'Use Realm of Death' as a probable wrong ability name. It is a FALSE POSITIVE — Realm of Death is Mordekaiser's real R name in the kit file. No edit made.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["ownerKit R", "packet.suspectNames"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "His W shreds and his range pokes you — dodge his flip, R when W is down. Mordekaiser wins by trading around Urgot's Disdain (Flip) and cashing the pattern: dodge E and R him on his W cooldown.",
+      "after": "His Purge shreds and his range pokes — but Purge hits 0s cooldown at rank 5, so never wait it out. Morde wins by baiting Disdain (E, 16s) and cashing it: eat the flip, E-pull him back, then Realm."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Dodge E and R him on his W cooldown. Track Disdain (Flip) before every commit and keep the wave on your side.",
+      "after": "Bait Disdain, then Realm him — Purge has no cooldown at rank 5, so time your commit off his E, not his W."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "His W shreds and his range pokes you — dodge his flip, R when W is down.",
+      "after": "His Purge shreds and Corrosive Charge pokes — dodge Disdain, then Realm him."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Dodge E and R him on his W cooldown. Track Disdain (Flip) before every commit.",
+      "after": "Bait Disdain, then Realm him. Purge is a 0s cooldown at rank 5 — never wait it out."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Urgot's Disdain (Flip): His engage. Bait it, then R. When it is down — R him — the realm is yours.",
+      "after": "Disdain (E) is his one dash and his shield — eat it, then Death's Grasp him back into your aura and Realm him."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Urgot Disdain (Flip): matchup-defining — His engage. Bait it, then R. Track it before every engage. - Urgot Disdain: Charges, knocking enemies aside and flipping the first champ behind him. Dodge or sidestep it.",
+      "after": "- Urgot Disdain (E): 16s at rank 1, 14s at rank 5 — his only gap-closer and his shield. Bait it, then commit. - Urgot Purge (W): 12s at rank 1 but 0s at rank 5, so it stops being a window you can wait for."
+    },
+
+    { "layer": "full",    "path": "phases[0].side", "before": "Urgot", "after": "Skill" },
+    { "layer": "content", "path": "win[0]",         "before": "Urgot", "after": "Skill" },
+    { "layer": "full",    "path": "phases[1].side", "before": "Urgot", "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[1]",         "before": "Urgot", "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[2].side", "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[2]",         "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[4].side", "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "content", "path": "win[4]",         "before": "Skill", "after": "Mordekaiser" },
+    { "layer": "full",    "path": "phases[5].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "content", "path": "win[5]",         "before": "Skill", "after": "Urgot" },
+    { "layer": "full",    "path": "phases[6].side", "before": "Skill", "after": "Urgot" },
+    { "layer": "content", "path": "win[6]",         "before": "Skill", "after": "Urgot" },
+
+    { "layer": "full", "path": "phases[0].rating", "before": "2/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "3/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "6/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "4/10" },
+
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Q ranks make isolated hits massive. Urgot must hug minions all lane; punish every step away from the wave with the full drag combo.",
+      "after": "Q ranks hit hard isolated, but his Corrosive Charge into Purge rotation now chunks percent HP and Disdain breaks melee range — it evens out."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Liandry's makes Darkness Rise melt through bruiser HP stacking. Extended trades are now strictly yours — force them.",
+      "after": "His first item turns Purge into percent-max-HP shred that scales off the HP you stack. Trade in bursts; never grind him down."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Riftmaker omnivamp turns the Realm 1v1 unloseable into most matchups. Urgot's only outs are dodging Q forever or never being alone — neither survives a whole game.",
+      "after": "Late, Fear Beyond Death executes you under the threshold and his shotgun shots out-grind your flat W heal. Win it with Realm of Death on him full-HP and isolated."
+    }
+  ],
+  "notes": "DERIVED-FLAG MISFIRE: ownerKit lists Mordekaiser's Q (Obliterate) with flag grounding:'shuts off enemy dashes'. Riot's own description is only 'smashes the ground... damage is increased when hitting a single enemy' — no grounding. Per the rule I trusted the description and wrote NOTHING claiming Morde's Q denies Urgot's Disdain dash. Worth fixing in the kit generator; the same misfire would produce a fabricated anti-dash claim on every Mordekaiser matchup. Also: packet.suspectNames flagged 'Use Realm of Death' as a wrong name — false positive, that is the real R name."
+}

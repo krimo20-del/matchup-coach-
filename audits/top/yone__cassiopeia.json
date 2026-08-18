@@ -1,0 +1,62 @@
+{
+  "ownerKey": "yone",
+  "enemy": "cassiopeia",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "win[6]/phases[6].side read Cassiopeia while whys[6] ('your durability survives her DPS and you close'), spikes[3] ('Late finally tips to you') and late ('the lane finally swings to you') all say Yone — and the packet chart's last row is Yone. Separately, the whys are label-shifted against the phases: whys[3] talks about 'Level 4', whys[4] about 'Level 5' and whys[5] about 'At 6', while the phase labels for those rows are 'Levels 4-5', 'Level 6' and 'First item'.",
+      "why": "The last row is an outright contradiction and safe to fix. The shift is a structural offset I will not guess at — flipping rows to match mis-labelled reasons could make it worse.",
+      "corrected": "win[6]/phases[6].side = Yone. The offset is raised as a question instead.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText whys[6]/late/spikes[3]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Miasma is named on every screen with no cooldown, and Twin Fang's spam rate is never quantified.",
+      "why": "Miasma is 24/22/20/18/16s — a very long window between grounds — and Twin Fang is a 0.75s cooldown, which is why standing in poison is fatal rather than merely bad.",
+      "corrected": "Both numbers written into spikes[0], mid, breakdown.cooldowns and dosFull[0].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/cassiopeia.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two things. (a) The page says Miasma's grounding shuts off 'your Q dashes and E'. Mortal Steel's two-stack dash is flagged as a dash and is genuinely denied; Soul Unbound carries no movement flag in the kit, so whether the ground can hold the spirit's forced return is unknown and should not be asserted. (b) Petrifying Gaze's actual condition is never stated: Riot's text stuns only enemies FACING her and merely slows anyone with their back turned.",
+      "why": "The facing rule is the single most actionable thing in this matchup and it is absent. Also, Fate Sealed's 1000 range out-reaches Petrifying Gaze's 825, which the late-game plan never uses.",
+      "corrected": "Grounding claim narrowed to Mortal Steel, matching the cassiopeia__yone mirror; the facing rule written into mid, spikes[1], the cooldown block and wants.foe[2]; the range comparison into late.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/cassiopeia.json", "champ-data/_kits/yone.json", "mirrorFindings"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Twin Fang heals her for a percentage of the damage dealt, on a 0.75s cooldown, and nothing on the page mentions Grievous Wounds.",
+      "why": "Every extended trade refunds her health at that rate.",
+      "corrected": "Added to breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["_missing/yone.json needs-antiheal"]
+    }
+  ],
+  "edits": [
+    {"layer": "content", "path": "win[6]", "before": "Cassiopeia", "after": "Yone"},
+    {"layer": "full", "path": "phases[6].side", "before": "Cassiopeia", "after": "Yone"},
+
+    {"layer": "content", "path": "spikes[0].text", "before": "Cassiopeia's Q (Noxious Blast) grants her movement speed and her E (Twin Fang) spams huge single-target damage on poisoned targets. Her W (Miasma) grounds you, shutting off your Q dashes and E — that's the trap. Levels 3-5 she pokes you down; avoid the Miasma pool.", "after": "Noxious Blast (Q) grants her move speed on hit and Twin Fang (E) spams huge damage into poisoned targets on a 0.75s cooldown. Miasma (W, 24s at rank 1) grounds you, shutting off Mortal Steel's dash — that is the trap. Levels 3-5 she pokes you down."},
+
+    {"layer": "content", "path": "spikes[1].text", "before": "Cassiopeia R (Petrifying Gaze) stuns you if you face her — a full lockdown into her E spam. At 6 she out-all-ins you; don't face-check her ult and don't dive her when your E is on cooldown.", "after": "Petrifying Gaze (R, 120s at rank 1) stuns only enemies facing her — turn your back as she casts and you take a slow instead of a stun. At 6 she out-all-ins you, so never dive her with Soul Unbound down."},
+
+    {"layer": "content", "path": "mid", "before": "This is a grounding matchup at its core — her W turns off your Q dashes and E, which are exactly the tools you need to reach her. Level 3 and level 5 are close skill windows if you dodge her Q and avoid Miasma, but at 4 and 6 she re-tilts it: Petrifying Gaze stuns you face-on into a full E burst. Respect her ult, never dive with your E down, and punish the windows where her W and R are on cooldown.", "after": "This is a grounding matchup at its core — Miasma turns off Mortal Steel's two-stack dash, the tool you need to reach her, and it is 24s at rank 1. Level 3 and level 5 are close skill windows if you dodge her Q and stay out of the pool, but at 4 and 6 she re-tilts it: Petrifying Gaze stuns only enemies facing her, so turn away as she casts and take the slow. Punish the W and R gaps."},
+
+    {"layer": "content", "path": "late", "before": "By the 2+ item mark the lane finally swings to you. Your durability lets you survive her poison DPS long enough to close, and your own R can flip her Petrifying Gaze back on her in a fight. Bait out Miasma, wait for the grounding to expire, then E-gap onto her — once you're on top of a squishy mage with no escape, your mixed damage ends the trade.", "after": "By the 2+ item mark the lane finally swings to you. Your durability lets you survive her poison DPS long enough to close, and Fate Sealed reaches 1000 units where Petrifying Gaze only reaches 825. Bait out Miasma, wait for the ground to expire, then commit — on top of a mage with no escape, your mixed damage ends the trade."},
+
+    {"layer": "content", "path": "wants.foe[2]", "before": "Stun you with R Petrifying Gaze into a full combo", "after": "Catch you facing her with Petrifying Gaze for the stun"},
+
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Cassiopeia Miasma: matchup-defining — Grounds you — dashes and movement abilities are disabled inside it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.", "after": "- Miasma: 24s at rank 1 — grounded, Mortal Steel's dash will not fire, so leave the pool before you commit. - Twin Fang: 0.75s, and it heals her, so Grievous Wounds decides long trades. - Petrifying Gaze: 120s, and it stuns only if you face her."},
+
+    {"layer": "full", "path": "dosFull[0].d", "before": "Grounds you — dashes and movement abilities are disabled inside it. Only engage once it is down or baited.", "after": "24s at rank 1 — grounded, Mortal Steel's dash dies. Engage once the pool is spent or expired."}
+  ],
+  "notes": "Best entry in my slice mechanically — Miasma's grounding was already the centrepiece and correctly named. Two gaps closed: Petrifying Gaze only stuns enemies FACING her (turning away downgrades it to a slow), and Fate Sealed's 1000 range beats her ult's 825. Per the cassiopeia__yone mirror I narrowed the grounding claim to Mortal Steel's dash only — Soul Unbound carries no movement flag in the kit, so whether the ground can delay the spirit's forced return is unknown and I did not assert it either way. Also removed 'your own R can flip her Petrifying Gaze back on her', which is not a thing Fate Sealed does."
+}

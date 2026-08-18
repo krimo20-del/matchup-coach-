@@ -1,0 +1,179 @@
+{
+  "ownerKey": "yone",
+  "enemy": "kled",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 2, 3, 4-5, 6 and First item all contradicted their own why-strings: the chart gave Yone Levels 2 and 3 while whys[1] and whys[2] read \"stays Kled's\" and \"remains Kled's\", gave Skill at 4-5 and 6 while whys[3] and whys[4] say mounted Kled out-trades you, and gave Yone First item while whys[5] says \"skill-decided\".",
+      "why": "The packet chart reads Kled on rows 1-5 and the mirror audit flipped the same rows on Kled's side. Mounted Kled with courage genuinely out-trades a pre-item Yone.",
+      "corrected": "Flipped rows 1-4 to Kled and row 5 to Skill on BOTH layers as one atomic group, and rewrote the five phase whys under them.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirror audit kled__yone", "existing whys[1..5]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldown appeared anywhere; phases[4].why said \"Kled's ultimate changes the math too\" without saying how.",
+      "why": "Chaaaaaaaarge!!! is 140/125/110s with a shield and 3500-4500 range, against Fate Sealed's 120/100/80s. Bear Trap is 11/10/9/8/7s and Jousting 13/12/11/10/9s — those are the two windows a trade actually turns on.",
+      "corrected": "Wrote the real numbers into phases[3].why, phases[4].why, breakdown.cooldowns and dosFull[0].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kled.json (Q, E, R)", "champ-data/_kits/yone.json (R)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "report[5].t was a placeholder (\"His engage hook. Dodge it\"), the displacement duel that decides every trade was never mentioned, and Jousting's re-cast was absent entirely.",
+      "why": "Both champions carry displacement — Bear Trap yanks the target toward Kled, Mortal Steel's third cast knocks airborne — so the trade belongs to whoever lands first. Jousting can be re-cast to dash back through the initial target, which is why disengaging after his first dash does not work.",
+      "corrected": "Rewrote report[5].t around the displacement race and put the Jousting re-cast into breakdown.cooldowns and the trade lines.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kled.json (Q, E)", "champ-data/_kits/yone.json (Q)", "_missing/yone.json rule knockup-enabler"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t recommends \"Executioner's Calling early — his healing fights your pattern\" and breakdown.late says \"anti-heal stays core\".",
+      "why": "Kled has no healing ability. His passive restores Skaarl's courage and remounts him \"with a portion of\" Skaarl's health — that is a remount, not a heal, and the kit carries no heal flag. Recommending an anti-heal item as core here spends 800 gold on nothing.",
+      "corrected": "Replaced the anti-heal line with Plated Steelcaps against Violent Tendencies' four fast attacks, and dropped the anti-heal clause from breakdown.late.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kled.json (P, W — no heal flag)", "mirror audit kled__yone found the same leaked line"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing warned that Violent Tendencies is an auto-attack reset.",
+      "why": "His burst opens on an attack wind-up, not a visible cast — the fourth attack of the four is the big one, so the time to leave is before the first, not after the cast.",
+      "corrected": "Added the tell to breakdown.early.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kled.json (W autoReset)", "_missing/yone.json rule autoreset-burst-tell"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[1].side", "before": "Yone", "after": "Kled" },
+    { "layer": "content", "path": "win[1]", "before": "Yone", "after": "Kled" },
+    { "layer": "full", "path": "phases[2].side", "before": "Yone", "after": "Kled" },
+    { "layer": "content", "path": "win[2]", "before": "Yone", "after": "Kled" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Kled" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Kled" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Kled" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Kled" },
+    { "layer": "full", "path": "phases[5].side", "before": "Yone", "after": "Skill" },
+    { "layer": "content", "path": "win[5]", "before": "Yone", "after": "Skill" },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "W shield-grit covers every exchange you start. Only take the trade when Kled's Bear Trap on a Rope is down.",
+      "after": "Courage stacks fuel his all-in and Bear Trap is 11s at rank 1. Your W shield covers one exchange, not the chain."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit online — your core pattern starts now. Keep the wave near your side so Kled must walk into your engage range.",
+      "after": "Full kit online, but his pull-into-Skaarl pattern still beats yours. Hold Q3 for his Jousting dash, not for the wave."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Bear Trap on a Rope's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Mounted Kled out-trades your burst here. Bait Bear Trap, dodge it, and take the exchange in the 11s before it comes back."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Fate Sealed sets up team knockups nothing can dodge. Reassess every all-in at 6 — Kled's ultimate changes the math too.",
+      "after": "Fate Sealed pulls him back in on 120s, but Chaaaaaaaarge!!! is a 140s shielded engage — mounted Kled wins that trade."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Blade of the Ruined King is your spike — force fights the moment it completes, on Bear Trap on a Rope's cooldown.",
+      "after": "Blade of the Ruined King lands, but mounted Kled still out-damages it — this row turns on catching him dismounted."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Kled Bear Trap on a Rope: matchup-defining — His engage hook. Dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Kled Bear Trap on a Rope: 11s at rank 1 — dodge the trap and the yank never comes. - Jousting: 13s, and he re-casts it back through you. - Your ultimate: the win condition — kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His engage hook. Dodge it. Only engage once it is down or baited.",
+      "after": "11s at rank 1 — dodge the trap and the yank never lands at all."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Kled's Bear Trap on a Rope: His engage hook. Dodge it. When it is down — Q3-R him.",
+      "after": "You both carry displacement — his trap yank against your Q3 knockup. Whoever lands first owns it."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Stack to Q3, soul-E in when Kled's answer is down, dump Q3-W-AA, and snap back before he can re-engage.",
+      "after": "Stack to Q3, E in once Bear Trap is spent, dump Q3-W-AA, and snap back before Jousting carries him back."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Stack to Q3, soul-E in when Kled's answer is down, dump Q3-W-AA, and snap back before he can re-engage.",
+      "after": "Stack to Q3, E in once Bear Trap is spent, dump Q3-W-AA, and snap back before Jousting carries him back."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "E-ing in while his answer is up or overstaying the soul timer — the snap-back position is where Yones die.",
+      "after": "E-ing in through Violent Tendencies, or overstaying Soul Unbound — the snap-back spot is where Yones die."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "E-ing in while his answer is up or overstaying the soul timer — the snap-back position is where Yones die.",
+      "after": "E-ing in through Violent Tendencies, or overstaying Soul Unbound — the snap-back spot is where Yones die."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Courage restores Skaarl — kill him inside the dismounted window."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Stack to Q3, soul-E in when Kled's answer is down, dump Q3-W-AA, and snap back before he can re-engage. Great trade: Kled wastes Bear Trap on a Rope — commit the full pattern immediately. Bad trade: E-ing in while his answer is up or overstaying the soul timer — the snap-back position is where Yones die.",
+      "after": "Good trade: Stack to Q3, E in once Bear Trap is spent, dump Q3-W-AA, and snap back before Jousting carries him back. Great trade: Kled throws Bear Trap into a minion — commit the full pattern immediately. Bad trade: E-ing in through Violent Tendencies, or overstaying Soul Unbound — the snap-back spot is where Yones die."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Q stacking and passive crits win the short trades. Respect Kled's Bear Trap on a Rope completely — the first levels are about banking small advantages, not proving a point.",
+      "after": "The first levels are his, so bank small advantages instead of proving a point. Violent Tendencies is an auto reset: leave on the attack wind-up, not after you see the cast."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Blade + pot. Core: Blade of the Ruined King  (mixed-damage spike), then Infinity Edge; boots Plated Steelcaps. Executioner's Calling early — his healing fights your pattern.",
+      "after": "Start Doran's Blade + pot. Core: Blade of the Ruined King  (mixed-damage spike), then Infinity Edge; boots Plated Steelcaps early — Violent Tendencies is four fast attacks and all of it is physical."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "Fate Sealed sets up team knockups nothing can dodge — build your teamfight around that. Kled carry threat: 7/10 — anti-heal stays core, shift to picks and wave control if he gets ahead.",
+      "after": "Fate Sealed pulls the line together on a 120/100/80s cooldown — build your teamfight around it. Kled carry threat: 7/10 — shift to picks and wave control if he gets ahead."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "By 2+ items you finally win — your mobility dodges his Q pull, Cleave sustain outheals his chip, and you can burst him during his dismounted window before he stacks courage back. Duel him only when he's off Skaarl.",
+      "after": "By 2+ items you finally win — your mobility dodges his Q pull, Spirit Cleave's shield absorbs his chip on a 14s cycle, and you burst him in the dismounted window before courage returns. Duel him only when he's off Skaarl."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "First item is skill-based on whether you can catch his dismounted window, and by 2+ items the matchup flips to you: your mobility dodges his Q, Cleave outheals his chip, and you burst him before he restacks courage. Force sidelane duels and punish every remount cooldown.",
+      "after": "First item is skill-based on whether you can catch his dismounted window, and by 2+ items the matchup flips to you: your mobility dodges his Q, Spirit Cleave's shield eats his chip, and you burst him before he restacks courage. Force sidelane duels and punish every remount."
+    }
+  ],
+  "notes": "Kled has no heal in his kit — the page was recommending Executioner's Calling as core and calling the remount 'healing' in three places. The remount restores Skaarl, and whether Grievous Wounds interacts with it is NOT in Riot's text, so I removed the claim rather than reverse it. Yone's W is a shield, not sustain: two content fields said 'outheals' and are corrected. MIRROR CONFLICT: kled__yone sets Level 1 to Yone and First item to Kled; the packet chart and this page's own whys[0]/whys[5] say Kled and Skill. I left Level 1 alone and used Skill at First item."
+}

@@ -1,0 +1,78 @@
+{
+  "ownerKey": "riven",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "56.47% over 1013 games and a 4/10 FAV rating hold up. Locke's kit is a 950-range mark-and-consume pattern with one 10s mobility spell; Riven has three dashes and a stun and beats him in every window where Ashen Pursuit is on cooldown.",
+      "corrected": "No change to diff, diffRating or carryRating.",
+      "confidence": "High",
+      "sources": ["packet winRate/games", "enemyKit Locke Q/E"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers read Riven on all seven rows and packet.levelChart agrees on all seven. A clean sweep is unusual but it is what the data says, and the ratings already taper sensibly (8/8/8/8/7/6/7) rather than claiming the lead is flat.",
+      "corrected": "No chart edits. The dip at First item is right — that is his Lich Bane window — and the recovery at 2+ items is right because his execute stops outscaling her build.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText both layers"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The most dangerous error I found in this slice. whys[4], spikes[3].text and mid all tell the player she can dash out of Purgatory — 'your R and Q mobility let you dash clean out of Purgatory's radius', 'you can literally dash out of Purgatory's radius when he commits it'. Purgatory carries a grounding effect, and Riot's own text calls it a binding artifact. Grounding shuts off dashes. Separately, the page calls Locke 'a 125-range mana champ' in phases[0].why, breakdown.early, breakdown.wave and report[4]; his Q is 950 range, his E 425, his R 1000.",
+      "why": "This is not a cosmetic naming slip. The page's stated escape plan from an execute ultimate is the one movement type the ultimate disables — a player who trusts it walks into the zone at low HP believing she has an out, presses Broken Wings, does not move, and dies to the execute. That is the worst possible failure for a live page: confident, specific, and lethal. The 125-range claim compounds it by describing a short-range champion the player can walk down, when he pokes from 950.",
+      "corrected": "whys[4], spikes[3].text and mid rewritten so Purgatory grounds and the exit is on foot and above the execute floor. wants.foe[1] restated the same way. The 950 range and 10s Q cooldown replace '125 range' in phases[0].why and breakdown.early.",
+      "confidence": "Medium",
+      "sources": ["enemyKit Locke R grounding+execute flags", "enemyKit Locke R text 'binding artifact'", "enemyKit Locke Q range 950"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.defects: 'NO cooldown-sequencing advice anywhere — needs concrete wait for X before you Y lines', and sequencingCues is 0. The page says 'punish the ten seconds of nothing' without ever tying ten seconds to a named ability.",
+      "why": "Every trade in this lane is decided by two timers the page never printed: Ashen Pursuit is a flat 10s and is his only exit, and Soul Ignition is 18/17/16/15/14s and is the window during which he has attack speed, move speed and a pending self-heal. Fighting during Soul Ignition and fighting after it are opposite decisions.",
+      "corrected": "report[5].t rewritten as three explicit wait-for-X lines with the real numbers: Ashen Pursuit 10s flat, Soul Ignition 18s at rank 1, and the Purgatory grounding rule.",
+      "confidence": "High",
+      "sources": ["packet.defects", "enemyKit Locke E cd 10", "enemyKit Locke W cd 18/17/16/15/14"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t states 'Anti-heal is optional — his sustain is self-refund, not lifesteal', and describes his damage flatly as AP.",
+      "why": "missingInteractions flags needs-antiheal on Soul Ignition, which heals back a portion of the damage he takes during the effect. A heal is a heal — Grievous Wounds reduces it regardless of whether it came from lifesteal or a self-refund, so telling the player to skip anti-heal gives away the single item that beats his sustain window. The same entry flags onhit-itemization on Silver Stake (magic on-hit scaling with missing health) and resistances-invalidated on Soul Ignition's true damage, neither of which reached the page.",
+      "corrected": "report[8].t now names Silver Stake's on-hit and calls for Grievous Wounds against Soul Ignition's refund, keeping the Zhonya's-beats-the-execute advice which is the best line on the page.",
+      "confidence": "High",
+      "sources": ["missingInteractions key 48", "enemyKit Locke P onHit / W heal+trueDamage flags"]
+    },
+    {
+      "point": 12,
+      "status": "missing",
+      "whatIsWrong": "No burst tell anywhere.",
+      "why": "missingInteractions flags autoreset-burst-tell on Ashen Pursuit — it teleports then dashes into an attack, so the damage arrives on the attack wind-up rather than on a visible cast. Watching for the cast means reacting one attack late.",
+      "corrected": "The wind-up tell written into mid alongside the 10s cooldown, and wants.foe[0] re-pointed at Silver Stake's on-hit rather than a generic 'single-target burst'.",
+      "confidence": "High",
+      "sources": ["missingInteractions key 48 autoreset-burst-tell", "enemyKit Locke E autoReset flag"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "whys[4]", "before": "At 6 your R and Q mobility let you dash clean out of Purgatory's radius — his ult threat is muted.", "after": "At 6 Purgatory grounds you — dashes are off, so leave the zone on foot or above its execute floor." },
+    { "layer": "content", "path": "spikes[3].text", "before": "Your R and Q mobility let you dash straight out of Purgatory's radius — his ult barely lands.", "after": "Purgatory grounds and slows inside 1000 units — walk out early; Broken Wings will not carry you." },
+    { "layer": "content", "path": "mid", "before": "Nothing changes at 6 or first item: your shield eats his burst, your dashes deny every all-in, and you can literally dash out of Purgatory's radius when he commits it. His shield-broken setup window never gets to finish against a Riven who staggers her dashes — keep the pressure rolling and take plates.", "after": "Nothing changes at 6 or first item: your shield eats his burst and your dashes deny every all-in — but Purgatory grounds, so when he commits it you walk out of the zone rather than dashing. Watch the Ashen Pursuit wind-up, not the cast; it is a 10s auto reset, and the ten seconds after it are yours." },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Purgatory landed after you burn your dashes", "after": "Purgatory landed — it grounds your dashes" },
+    { "layer": "content", "path": "wants.foe[0]", "before": "A stationary target for his single-target burst", "after": "A stationary target for Silver Stake's on-hit" },
+    { "layer": "full", "path": "phases[0].why", "before": "Level 1 he’s a 125-range mana champ throwing nails — step off the recast lines and take what the range difference offers.", "after": "Level 1 he throws Soul Nails from 950 range on a 10s cooldown — sidestep the line, then close while it is spent." },
+    { "layer": "full", "path": "breakdown.early", "before": "Levels 1-3: he pays for every CS at 125 range — tax him, but step off the Q recast lines; the mark stacks are the only currency he trades in.", "after": "Levels 1-3: he pays 70 mana per Soul Nails cast — tax him, step off the recast lines, and never let the marks reach three before you commit." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Locke’s Ritual Nails (Marks): The nail marks are his whole engine — without 2-3 stacks on you his blink-in barely dents; sidestep the recasts and punish the ten seconds of nothing. Commit only while it is down.", "after": "Wait for Ashen Pursuit before you commit: it is a flat 10s and it is his only exit. Soul Ignition is 18s at rank 1 — fight after it expires, not during. Purgatory grounds, so break the zone on foot." },
+    { "layer": "full", "path": "report[8].t", "before": "Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Anti-heal is optional — his sustain is self-refund, not lifesteal.", "after": "Early HP and MR blunt the nail chip and Silver Stake's on-hit. A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Buy Grievous Wounds — Soul Ignition refunds a share of the damage he takes." }
+  ],
+  "unverified": [
+    "Whether Purgatory's grounding applies for the ability's whole duration or only on the initial hit — the derived flag says grounding and Riot's text calls it a binding artifact, but no duration is given anywhere in the kit file. The rewrite is worded so it is correct either way (leave the zone on foot), but a human should confirm before this is treated as settled.",
+    "Locke's Q ability name. The page calls it 'Ritual Nails' and the kit text calls the projectiles 'Soul Nails'. packet.enemyAbilities is null for this champion so there is no authoritative slot-name list, and missingInteractions only names Silver Stake (P), Soul Ignition (W) and Ashen Pursuit (E). I used 'Soul Nails' where I wrote new text because that is the only spelling that appears in Riot's description, and left every existing 'Ritual Nails' reference untouched.",
+    "The claim in report[8].t that his damage is AP — I removed it rather than restate it. Silver Stake is magic on-hit and Soul Ignition carries a true-damage flag, so 'his damage is AP' is at best incomplete."
+  ],
+  "notes": "The '125 range' claim still survives in breakdown.wave and report[4].t ('a slow-push he must clear at 125 range'). Both are long strings whose surrounding wave advice is good, and swapping the number alone would leave the sentence arguing that a 950-range poke champion struggles to clear a slow push — which is the opposite of true. Those two need a real rewrite of the wave plan, not a number swap, and that is a bigger call than I should make unilaterally on a page that is otherwise strong. No mirror existed for this matchup, so nothing here was cross-checked against a locke__riven audit."
+}

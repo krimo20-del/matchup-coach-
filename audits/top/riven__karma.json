@@ -1,0 +1,64 @@
+{
+  "ownerKey": "riven",
+  "enemy": "karma",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Ranged mage vs melee: Karma owns Level 1 with Inner Flame at 950 range against Riven's 275-range Q, Riven owns Levels 2-5 once Ki Burst is up, and Mantra swings Level 6. Difficulty 7.5/10 matches a 53.12% Riven win rate over 3236 games.",
+      "corrected": "No change needed.",
+      "confidence": "High",
+      "sources": ["brief kit ranges", "packet winRate/games"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 2 was listed as 'Skill' in both layers while the packet levelChart says Riven, and the mirror (karma vs riven) already resolved that row to Riven.",
+      "why": "Karma has no dash and no escape; Riven's W Ki Burst comes online at 2 with an 11s rank-1 cooldown and hard CC. The row is not a coin flip.",
+      "corrected": "phases[1].side and win[1] both flipped Skill -> Riven as a matched pair, rating raised to 7/10. All other six rows already agree with the packet and the mirror.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "mirrorFindings", "riven kit W"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page repeatedly claims Mantra empowers Karma's Q into 'a root-plus-tether' (whys[4], spikes[2].text, wants.foe[1]). Riot's own text puts the root on Focused Resolve (W); the Mantra bonus on W extends the root AND heals Karma. The Mantra bonus on Q is a delayed cataclysm, no root at all.",
+      "why": "Advising the player to fear a root from Mantra-Q sends them dodging the wrong spell and eating the real one. Focused Resolve is 675 range on a flat 12s cooldown and 'if the tether is not broken, the enemy will be rooted' — Riven's Q dashes and E are exactly the break tool, which the page never states.",
+      "corrected": "Root and heal attributed to Focused Resolve / Mantra-W; Mantra-Q named as the delayed cataclysm; the tether-break with a Q dash stated explicitly; 675 range and the flat 12s cooldown added where advice keys to it.",
+      "confidence": "High",
+      "sources": ["enemyKit Karma W/Q/R text", "ownerKit Riven Q/E dash flags"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No anti-heal anywhere, despite Mantra-W healing Karma mid-trade.",
+      "why": "Flagged by missingInteractions rule needs-antiheal. Extended trades are decided by whether the heal lands.",
+      "corrected": "Grievous Wounds (Executioner's Calling) written into wants.you[1], replacing an invented 'Inspire signals Mantra is spent' tell that is not in the kit.",
+      "confidence": "High",
+      "sources": ["missingInteractions key 17", "enemyKit Karma W Mantra bonus"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flags 'Focused Resolve's' in whys[1] as a probable wrong name. It is a false positive — Focused Resolve is Karma's real W in the kit file.",
+      "corrected": "No change; recorded so the defect is not chased again.",
+      "confidence": "High",
+      "sources": ["enemyKit Karma W"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Riven" },
+    { "layer": "content", "path": "win[1]", "before": "Skill", "after": "Riven" },
+    { "layer": "full", "path": "phases[1].rating", "before": "6/10", "after": "7/10" },
+    { "layer": "content", "path": "whys[4]", "before": "Mantra turns her RQ into a root-plus-tether that can lock you mid-combo and delete you — read the golden halo and never engage into it.", "after": "Mantra-W extends her Focused Resolve root and heals her; Mantra-Q is a delayed cataclysm — read the golden halo and never dash in blind." },
+    { "layer": "content", "path": "spikes[2].text", "before": "Mantra empowers Karma's RQ into a root-plus-tether trap that can delete you mid-combo — read the Mantra proc and E-shield the RQ before going in.", "after": "Mantra-W extends the Focused Resolve root and heals her through your burst — break the tether with a Q dash, and save E for the Mantra-Q cataclysm." },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Spend Mantra on RQ to burst your HP low enough that Wind Slash is too risky to cast in melee range", "after": "Spend Mantra on Focused Resolve to extend the root and heal back the damage your combo just did" },
+    { "layer": "content", "path": "wants.you[1]", "before": "Use E shield reactively when she casts Inspire on herself as a poke signal — it tells you her Mantra charge is spent and you can all-in safely", "after": "Buy Executioner's Calling before extended trades — Mantra-W heals her back through your chip, and Inspire's shield and move speed stall the rest" },
+    { "layer": "full", "path": "dosFull[0].d", "before": "Her root tether â€” breaks if you LoS / outrange it. Only engage once it is down or baited.", "after": "Her tether roots only if unbroken â€” 675 range, 12s cooldown. Dash out or engage when it is down." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Karma's Focused Resolve: Her root tether â€” breaks if you LoS / outrange it. When it is down â€” Q3-knockup + W-stun burst.", "after": "Track Focused Resolve: 675-range tether, 12s cooldown, roots unless you break it â€” Q dash out. When down â€” Q3-knockup + W-stun burst." }
+  ],
+  "notes": "The full layer calls Karma 'him/he' throughout (tldr, winCon, tradeGood, breakdown.*, report[*]); she is female. Left alone this pass because the pronoun swap is cosmetic and would touch a dozen fields, but it is worth a global fix. Also unverified and untouched: the description of Wind Slash as an 'execute' — Riot's text only calls it a powerful ranged attack usable once."
+}

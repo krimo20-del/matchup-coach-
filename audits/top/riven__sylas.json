@@ -1,0 +1,102 @@
+{
+  "ownerKey": "riven",
+  "enemy": "sylas",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "52.82% over 3374 games — the largest sample in my slice — at EVEN 6/10 with carry threat 8.5/10. Correct: Riven wins the lane, Sylas wins the game if the lane does not close it.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["packet winRate/games"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Two level-chart rows disagree with the packet chart, both contradicting their own why-text. Packet is [Skill, Riven, Riven, Riven, Skill, Riven, Skill]; both layers hold [Skill, Riven, Riven, Skill, Skill, Riven, Riven].",
+      "why": "whys[3] says short trades stay 'in your favour' under win[3]=Skill, and win[6]=Riven sits over a whys[6] that says Demonic Embrace and Riftmaker make Kingslayer 'genuinely dangerous' and tells you to close the game before it happens.",
+      "corrected": "Row 3 -> Riven (6/10 -> 7/10), row 6 -> Skill, in both layers, with phases[6].why rewritten.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "existing whys[3], whys[6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[3] tells the player 'Your Q cooldown reduction from levels keeps short-trades in your favour'. Broken Wings has a FLAT 13-second cooldown at every rank in the kit file — there is no rank scaling on her Q at all.",
+      "why": "The scaling that actually exists is on the other two: Ki Burst 11/10/9/8/7 and Valor 10/9/8/7/6. The advice is right for the wrong reason, which means a player who ranks Q chasing a cooldown that never shrinks gets the opposite of what the page promised.",
+      "corrected": "whys[3] restated on the abilities that really scale.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/riven.json Q cd '13', W cd 11/10/9/8/7, E cd 10/9/8/7/6"]
+    },
+    {
+      "point": 4,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The core read is right and rare: W stun interrupting Abscond strands a champion whose whole kit is re-positioning. Chain Lash at 775 range with a delayed detonation at the intersection, Kingslayer as a 400-range healing lunge, and Abscond's recast pulling HIM to you are all represented accurately in the content layer.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sylas.json Q/W/E text and ranges"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The whole page is built on 'track Abscond / Abduct' and 'track his E cooldown' without ever printing a number, and the level-6 section discusses trading ultimates without either ultimate's cooldown.",
+      "why": "Abscond is 13/12/11/10/9s — at rank 1 it is longer than your Ki Burst, which is what makes the level-2 and level-3 all-ins real. And Hijack is 80/55/30 against your Blade of the Exile at 120/90/60: he gets his ultimate back FIRST, every time, at every rank. The page's advice to bait the steal and re-engage is correct, but a player who thinks ultimates trade one-for-one here will bait it a second time and find he already has another.",
+      "corrected": "Abscond's 13s added to whys[0]; the 80-vs-120 gap written into content.mid.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sylas.json E cd 13/12/11/10/9, R cd 80/55/30", "champ-data/_kits/riven.json R cd 120/90/60"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "The flagged needs-antiheal interaction never reaches the content layer. Kingslayer heals him against champions on a cooldown that drops to 6 seconds, and Grievous Wounds appears only in one encoding-damaged report line.",
+      "why": "whys[3], whys[6], spikes[0] and late all describe his healing as the thing that beats you, and none of them names the item that answers it.",
+      "corrected": "Grievous Wounds written into content.mid alongside the W cooldown.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/_missing/riven.json key 36", "champ-data/_kits/sylas.json W heal flag, cd 12/10.5/9/7.5/6"]
+    },
+    {
+      "point": 12,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The packet suspectName on wants.you[2] ('Use Blade') is a FALSE POSITIVE — the string is 'Use Blade of the Exile R1 early', Riven's real R. No rename made.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/riven.json R"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Riven" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Riven" },
+    { "layer": "full", "path": "phases[3].rating", "before": "6/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[6].side", "before": "Riven", "after": "Skill" },
+    { "layer": "content", "path": "win[6]", "before": "Riven", "after": "Skill" },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your side-lane pattern is at full power. Sylas carry threat 8.5/10 â€” close before the map decides instead of you.",
+      "after": "Two items on: Riftmaker turns Kingslayer into real sustain and Hijack is back every 30 seconds. Short fights only, and close the game."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Sylas has no dash at level 1 — he can only poke with Chain Lash outer ring. Farm safely and track his E cooldown before stepping up.",
+      "after": "Sylas has no dash at level 1 — only Chain Lash's outer ring pokes. Abscond arrives at 2 on a 13-second cooldown; start counting it from there."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Your Q cooldown reduction from levels keeps short-trades in your favour — poke him down between W cooldowns and never let Kingslayer top him back up.",
+      "after": "Broken Wings stays 13 seconds at every rank, but Ki Burst falls to 7 and Valor to 6 — rank those and short trades tilt further your way each level."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 remain your window — keep wave pressure and force short trades where your Q resets proc Runic Blade autos faster than his sustain can undo them. At level 6 the dynamic shifts: Sylas steals Wind Slash with his R and it is genuinely dangerous, so never throw your second-cast execute as the opener. Instead, pop Blade of the Exile R1 to trigger the steal window, let him waste the stolen slash or let it expire, then re-engage — his stolen R has a short use-window and he will often panic-cast it early. Once the stolen slash is gone you have your full damage advantage back and he has nothing. Force the all-in in that gap.",
+      "after": "Levels 4-5 remain your window — force short trades where your Q resets proc Runic Blade autos faster than Kingslayer can undo them, and buy Grievous Wounds, because that heal comes back every 12 seconds and eventually every 6. At level 6 the dynamic shifts: Hijack is 80 seconds at rank 1 against your 120, so he gets his ultimate back first and you never trade them evenly. Never open with your second-cast execute. Pop Blade of the Exile R1 to trigger the steal, let him waste or expire the stolen slash, then re-engage — once it is gone your damage advantage is back and he has nothing. Force the all-in in that gap."
+    }
+  ],
+  "notes": "One thing I could not settle from the kits: the page calls Abscond / Abduct a 'dash + stun (recast pull)' in breakdown.cooldowns, dosFull[0].d and report[5].t. Riot's E text here says only 'Sylas dashes to a location. Sylas can recast the ability to throw his chains out, pulling himself to an enemy he hits' — no stun, and the kit carries no hardCC flag on E. Per the rule that an empty flag means UNKNOWN rather than 'no', I did NOT remove the stun claim, but the player is being told to fear a stun the data does not confirm and the recast pulls HIM to her, not her to him. Recorded in unverified — a wiki check would settle it and it affects three strings."
+}

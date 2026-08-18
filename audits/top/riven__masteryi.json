@@ -1,0 +1,67 @@
+{
+  "ownerKey": "riven",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "52.28% over 285 games — the thinnest sample in this slice, so I treated the summary as unmovable and only fixed mechanics. Riven owns the whole laning phase against a champion whose first two levels are an 18-to-20 second dash and a stationary channel; the flip at two items is real.",
+      "corrected": "No change. There is no full layer on this matchup, so diff, diffRating, carryRating and tone do not exist to correct.",
+      "confidence": "Medium",
+      "sources": ["packet winRate/games", "currentText.full is null"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "win[] reads Riven x5, Skill, Master Yi and packet.levelChart matches row for row. The spikes array already keys to the right moments: Level 1, Level 2, Level 6, and Yi at two items.",
+      "corrected": "No chart edits. There are no phases[N].side values to pair with, because the full-layer entry for this matchup does not exist — so the usual two-layer pairing does not apply here.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The single most decisive interaction in this matchup is absent from every field: Meditate is a channel, and Riven's Ki Burst cancels it outright. The page mentions the stun four times and never once connects it to his heal.",
+      "why": "Meditate is a flat 10-second cooldown that restores health AND reduces damage taken AND stacks Double Strike AND pauses the duration on Wuju Style and Highlander. It is the reason a losing Yi survives a lost lane. A Riven who holds Ki Burst for the moment he starts channelling deletes all four of those benefits with one button — and a Riven who spends the stun on the approach watches him heal back everything she just did. That is the difference between a won lane and a stalled one, and it was nowhere on the page.",
+      "corrected": "Written into whys[1], spikes[1].text, wants.you[1] and early: hold the stun for the channel, not for the approach.",
+      "confidence": "High",
+      "sources": ["missingInteractions key 50 channel-interruptible", "enemyKit Master Yi W channel flag and text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.defects: 'NO cooldown-sequencing advice anywhere — needs concrete wait for X before you Y lines', and sequencingCues is 0. Not one cooldown number appears anywhere in the content layer.",
+      "why": "Alpha Strike is the cooldown this lane runs on and it behaves unusually: 20/19.5/19/18.5/18 seconds, but 'basic attacks reduce Alpha Strike's cooldown', so the real timer moves with how much he is hitting. It also makes him untargetable in flight, which means burst spent into it is thrown away — missingInteractions flags exactly this as untargetable-dodges-burst. A player told only 'he can Alpha through your combo' has no idea whether that is available now.",
+      "corrected": "mid rewritten as an explicit wait-for-X line: 20s at rank 1, untargetable mid-flight, and count his autos because they shave the cooldown. Wuju Style's 14s and Highlander's 85s added to whys[3] and whys[5], and wants.foe[1] tightened to name the untargetable dodge.",
+      "confidence": "High",
+      "sources": ["packet.defects", "enemyKit Master Yi Q cd/text", "missingInteractions key 50 untargetable-dodges-burst"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No anti-heal anywhere, and no acknowledgement that part of his damage ignores resistances.",
+      "why": "missingInteractions flags both. Meditate heals on a 10s cooldown, so Grievous Wounds is not a luxury in a long game — it is what stops him resetting a fight he already lost. And Wuju Style grants true damage on his basic attacks for 14s, which means stacking armour reads the trade wrong: the answer is to end the exchange inside a stun window, not to survive it.",
+      "corrected": "Grievous Wounds named against Meditate in late; Wuju Style's true damage and 14s cooldown in whys[3] and early, with the explicit instruction to keep trades short.",
+      "confidence": "High",
+      "sources": ["missingInteractions key 50 needs-antiheal + resistances-invalidated", "enemyKit Master Yi W/E flags"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "whys[1]", "before": "Your Ki Burst stun arrives at 2 and guarantees winning trades he cannot answer.", "after": "Ki Burst at 2 cancels Meditate outright — his channel heal dies to your stun." },
+    { "layer": "content", "path": "whys[3]", "before": "Through 4-5 your shielded burst still overwhelms his poke — keep forcing exchanges.", "after": "Through 4-5 Wuju Style adds true damage on 14s — trade in bursts, never long." },
+    { "layer": "content", "path": "whys[5]", "before": "His first item plus Highlander makes it a genuine skill duel — respect the flip point.", "after": "Highlander is 85s and makes him slow-immune — your Q3 knockback still lands on him." },
+    { "layer": "content", "path": "spikes[1].text", "before": "The Ki Burst stun guarantees trades he cannot answer or escape.", "after": "Ki Burst interrupts Meditate — he loses the heal and the channel." },
+    { "layer": "content", "path": "wants.you[1]", "before": "The stun held for the moment he commits", "after": "The stun saved for his Meditate cast" },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Your stun baited with Alpha Strike", "after": "Alpha Strike through your burst" },
+    { "layer": "content", "path": "early", "before": "You beat him at every stage of laning: level-1 Q mobility and stats win outright, the level-2 Ki Burst stun guarantees trades, and the full level-3 combo turns any all-in your way. Through 4-5 your shielded burst overwhelms his poke — chunk him relentlessly and build the lead this matchup demands.", "after": "You beat him at every stage of laning: level-1 Q mobility and stats win outright, and from level 2 Ki Burst does double duty — it is a stun and it cancels Meditate, so his 10s channel heal never completes if you save the stun for it. Through 4-5 keep the trades short: Wuju Style puts true damage on his autos every 14s." },
+    { "layer": "content", "path": "mid", "before": "At 6 your Blade of the Exile spike keeps the kill pressure yours — force fights before his economy catches up. Once his first item lands it becomes a skill duel: he can Alpha through your combo, you can burst him inside a stun window. Snowball plates and roams now, because parity is approaching fast.", "after": "At 6 your Blade of the Exile spike keeps the kill pressure yours — force fights before his economy catches up. Wait for Alpha Strike before you commit: it is 20s at rank 1, it makes him untargetable mid-flight, and his basic attacks shave it down, so count his autos as well as the clock. Snowball plates and roams now." },
+    { "layer": "content", "path": "late", "before": "Late game his sustained DPS and R resets out-scale you and he deletes squishy targets on contact. Do not duel him at full build; group, land the stun the instant he commits, and burst him inside the CC chain with your team. Your job late is starting fights clean, not hero-dueling a fed Yi.", "after": "Late game his sustained DPS and Highlander out-scale you — a kill or assist extends it and refunds his other cooldowns. Do not duel him at full build; carry Grievous Wounds for Meditate, group, land the stun the instant he commits, and burst him inside the CC chain. Your job is starting fights clean." }
+  ],
+  "questionsForUser": [
+    "Riven vs Master Yi (top), the entire full layer: CHAMP_FULL['riven']['masteryi'] does not exist — currentText.full is null, so tldr, winCon, enemyWin, diff, tone, diffRating, carryRating, tradeGood, tradeBad, ahead, loading, focus, all seven phases, every breakdown key, dosFull, dontsFull and all fifteen report entries are absent. This is one of the ~92 matchups with no full-layer entry. Creating them individually with 'before': null is possible, but a half-built entry (a tldr and no level chart, say) could render worse on the page than no entry at all, and I have no way to see how the site handles a partial object. Should a future pass create the full layer for this matchup wholesale, and if so is there a template entry it should be cloned from?"
+  ],
+  "notes": "No mirror existed for this matchup, so nothing here was cross-checked against a masteryi__riven audit. Content-layer edits only, for the reason in questionsForUser. Left unverified and untouched: whether Alpha Strike's untargetable window dodges Wind Slash specifically (the kit says untargetable, but Wind Slash's own behaviour on an untargetable enemy is not in Riot's text), and whether Highlander's slow immunity affects Riven's knockback — it does not, per Riot's text, which is why whys[5] now says the Q3 knockback still lands, but the wider question of whether Highlander grants any displacement resistance is not answerable from the kit file."
+}

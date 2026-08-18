@@ -1,0 +1,76 @@
+{
+  "ownerKey": "riven",
+  "enemy": "lucian",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The diff enum says FAV while every other signal on the page says the opposite: diffRating 8.5/10, tone #ff5d6c (red), report[14].t 'Hard matchup', report[2].t 'His early — survive to your spikes', and a chart that hands Lucian five of seven rows.",
+      "why": "diff is the badge a player reads first. A green FAV badge over a page that spends fifteen fields explaining how he kites her is a straight contradiction, and it is the one word that tells a player whether to pick into this. The 52.67% win rate does not make the lane favoured to play — it reflects Riven closing games after a lane she survives.",
+      "corrected": "diff -> HARD. Enum field, exempt from the length band, so a four-character value applies cleanly. diffRating and carryRating left at 8.5/10, which already agree with the mirror.",
+      "confidence": "High",
+      "sources": ["currentText.full diffRating/tone/report[14].t", "packet winRate/games"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Four rows disagreed with the packet and with the already-audited mirror. The page read Lucian / Lucian / Lucian / Skill / Lucian / Skill / Lucian against a resolved chart of Skill / Lucian / Lucian / Lucian / Lucian / Lucian / Riven.",
+      "why": "Level 1 is genuinely even — Relentless Pursuit is not up, so his kiting engine does not exist yet and whys[0] already calls it a coin flip. Levels 4-5 and First item are his, not a coin flip: Broken Wings is a single 13-second cooldown covering all three casts, so once she spends the chain she has only Valor for the better part of ten seconds, and that is precisely the window Ardent Blaze's move speed exists to exploit. Two items is hers, which whys[6] and spikes[3].text already argue in detail while the side said Lucian.",
+      "corrected": "Proposed as one atomic chart group in matched full/content pairs: row 0 -> Skill, rows 3 and 5 -> Lucian, row 6 -> Riven, with ratings 5/10, 2/10, 3/10, 7/10. Rows 1, 2 and 4 already agreed.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "mirrorFindings point 2", "mirrorFindings notes on the 13s chain"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.defects: 'never names any of Lucian's abilities'. The content layer talks about 'his E dash', 'double-shot', 'Q poke' and 'his passive' for seven whys, four spikes and three prose blocks without once writing Lightslinger, Piercing Light, Ardent Blaze or Relentless Pursuit. Worse, the page's central instruction — engage when his E is down — omits the one line in Riot's text that governs it: 'Lightslinger attacks reduce Relentless Pursuit's cooldown.'",
+      "why": "That sentence is the matchup. Relentless Pursuit reads as a 16-second cooldown, which sounds like a window a Riven can wait out; in practice he refunds it with every double-shot he lands on the wave, so the dash is available far more often than the number suggests. A player timing a 16-second window walks into a dash that came back in half that. Naming the abilities also lets the player actually identify what hit them — 'double-shot' is not a thing they can look up.",
+      "corrected": "Lightslinger, Piercing Light, Ardent Blaze and Relentless Pursuit written into whys[1], whys[2], whys[3], spikes[0].text, wants.foe[0], wants.foe[1], dosFull[0].d and report[5].t, each with its real range and cooldown, and with the Lightslinger cooldown refund stated three times where the player is deciding whether to commit.",
+      "confidence": "High",
+      "sources": ["packet.defects", "packet.enemyAbilities", "enemyKit Lucian P/Q/W/E text"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "missingInteractions flags needs-antiheal on Lightslinger, and the kit file carries a heal flag on his passive. Riot's text does not support it: the passive says 'When Lucian is healed or shielded by an ally' — that is a trigger condition for bonus magic damage, not healing Lucian does. This is a tooltip-parsing misfire, and per the calibration rule the description wins over the flag.",
+      "corrected": "No anti-heal added. Deliberately recorded rather than silently skipped, so the next agent does not add a Grievous Wounds line against a champion who does not heal.",
+      "confidence": "High",
+      "sources": ["missingInteractions key 23", "enemyKit Lucian P text vs heal flag"]
+    },
+    {
+      "point": 8,
+      "status": "missing",
+      "whatIsWrong": "Nothing on the page warns that a gank makes his passive hit harder.",
+      "why": "Lightslinger's second clause: when a nearby enemy champion is immobilized, his next two basic attacks deal bonus magic damage. In a 1v1 that clause almost never fires, but the moment his jungler lands any CC on Riven, Lucian's follow-up is materially bigger than the lane trades have taught her to expect. That is a real and checkable interaction and it belongs in report[10] (Jungle Interaction).",
+      "corrected": "Not written — report[10].t is 118 characters of jungle advice and I could not add the clause inside a ±10% band without deleting the warding line, which is also correct. Flagged here for a human.",
+      "confidence": "High",
+      "sources": ["enemyKit Lucian P text"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "diff", "before": "FAV", "after": "HARD" },
+    { "layer": "full", "path": "phases[0].side", "before": "Lucian", "after": "Skill" },
+    { "layer": "content", "path": "win[0]", "before": "Lucian", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Lucian" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Lucian" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Lucian" },
+    { "layer": "content", "path": "win[5]", "before": "Skill", "after": "Lucian" },
+    { "layer": "full", "path": "phases[6].side", "before": "Lucian", "after": "Riven" },
+    { "layer": "content", "path": "win[6]", "before": "Lucian", "after": "Riven" },
+    { "layer": "full", "path": "phases[0].rating", "before": "2/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "2/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "5/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "2/10", "after": "7/10" },
+    { "layer": "content", "path": "whys[1]", "before": "His E dash comes online and he can dodge your W stun by dashing through the cast; he dictates the trade tempo and you cannot win a straight exchange.", "after": "Relentless Pursuit comes online — 445 units, and every Lightslinger double-shot cuts its 16s cooldown, so he dashes out of Ki Burst and resets it." },
+    { "layer": "content", "path": "whys[2]", "before": "His double-shot and Q poke combo outranges your full Q-W-E rotation and he dashes out of your stun radius — wait for his E to be burned before you commit.", "after": "Piercing Light at 500 range plus Lightslinger outranges your 275-unit Broken Wings — wait until Relentless Pursuit is spent before you commit any of it." },
+    { "layer": "content", "path": "whys[3]", "before": "He kites freely between your Q dashes with his E and passive double-shot; force wave pressure toward his tower to restrict his movement rather than chasing him in open lane.", "after": "Broken Wings is one 13s cooldown for all three casts — spend the chain and you have nothing but Valor for ten seconds, which is exactly the window Ardent Blaze kites." },
+    { "layer": "content", "path": "spikes[0].text", "before": "Lucian's passive double-shot and E-cancel resets let him burst your shield and poke you off wave before your W lands.", "after": "Lightslinger double-shots after every cast and each one shaves Relentless Pursuit's 16s — he pokes and still keeps the dash." },
+    { "layer": "content", "path": "wants.foe[0]", "before": "Use his E dash to dodge your Q direction and reposition your W out of range before it stuns", "after": "Dash Relentless Pursuit through your Ki Burst cast, then refund it with Lightslinger hits" },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Stack double-shot passive charges off his Q and W poke to chunk you down before you can close distance", "after": "Mark you with Ardent Blaze from 900 range, then take the free move speed for attacking a marked target" },
+    { "layer": "full", "path": "dosFull[0].d", "before": "His dash + reset. Engage when it's down. Only engage once it is down or baited.", "after": "445-unit dash, 16s at rank 1 â€” but Lightslinger hits refund it. Engage on it." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Lucian's Relentless Pursuit: His dash + reset. Engage when it's down. When it is down â€” Q3-knockup + W-stun burst.", "after": "Relentless Pursuit: 445 range, 16-to-14s, refunded by Lightslinger. Piercing Light pierces through at 500 range, 9-to-5s." }
+  ],
+  "notes": "The mirror agent raised a naming point worth carrying: this page says 'Q3 knockup' in tradeGood, dontsFull[0].t and three report strings, while Riot's text for Broken Wings says the third hit knocks BACK. The kit's derived flag says knockup. Riot's description wins under the calibration rule, but the phrase is templated across every Riven matchup in the repo, so it is a champion-wide sweep rather than something to change on one page. Left unverified and untouched: the claim in early that he can 'dash sideways through your W so the stun misses' — plausible from the ranges but I have no source for the cast-time interaction, and the claim that Wind Slash's 'execute range is enormous when he is below 50% HP', since Riot's text calls Wind Slash a powerful ranged attack and gives no threshold."
+}

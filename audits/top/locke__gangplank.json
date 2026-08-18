@@ -1,0 +1,121 @@
+{
+  "ownerKey": "locke",
+  "enemy": "gangplank",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "50.54% over 1286 games with a Skill-flat early chart matches the written 'even, skill-based lane' framing.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/locke.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart disagreed across layers and with the packet: win[4]/win[5] and phases[4..5].side said Locke while whys[4]/whys[5] both said even, and win[6]/phases[6].side said Skill while whys[6] says the stage favours Gangplank.",
+      "why": "packet.levelChart = [Skill x6, Gangplank]. The mirror audit (gangplank__locke) was already brought onto that chart, so leaving these rows would put the two directions in direct conflict.",
+      "corrected": "Rows 5, 6 and 7 set to Skill/Skill/Gangplank in both layers with matching ratings, as one atomic group.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/locke.json", "mirror audit gangplank__locke"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two places claim Powder Keg knocks up ('chain two into a knockup', 'Chain barrels for AoE knockup'). Powder Keg does not displace — it spreads the attack's damage and slows.",
+      "why": "Riot text: 'If he attacks it, it explodes, spreading the attack's damage to enemies in the area, slowing them.' No knockup flag on the ability.",
+      "corrected": "Both rewritten to slow-and-spread damage.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gangplank.json"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The page repeatedly tells you to commit 'on Powder Kegs' cooldown'. Powder Keg has no cooldown to track — it runs on stored charges, so there is no down-window to wait for.",
+      "why": "Kit lists Powder Keg cd 0, cost 0, range 1000.",
+      "corrected": "report[5] rewritten to the real tell: kill the keg, and step in after a detonation rather than before one.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gangplank.json"]
+    },
+    {
+      "point": 4,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Remove Scurvy 'cures crowd control effects' — the existing claim that it cleanses your Q slow is right, and 22/20/18/16/14s makes it a real punish window.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gangplank.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Locke",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Locke",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[5]",
+      "before": "Locke",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Locke",
+      "after": "Skill"
+    },
+    {
+      "layer": "content",
+      "path": "win[6]",
+      "before": "Skill",
+      "after": "Gangplank"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Gangplank"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].rating",
+      "before": "6/10",
+      "after": "5/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].rating",
+      "before": "6/10",
+      "after": "5/10"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Chain barrels for AoE knockup and burst",
+      "after": "Chain barrels for AoE slow and burst"
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Levels 1-5 are an even, skill-based lane. Your Q Ritual Nails and P Silver Stake missing-HP on-hit out-trade Gangplank's early Q Parrrley pokes, so pressure him whenever his barrels aren't set. The key skill test is his kegs — shoot or dodge the barrel before it detonates, and don't sit in a spot where he can chain two into a knockup during your walk-up.",
+      "after": "Levels 1-5 are an even, skill-based lane. Your Q Ritual Nails and P Silver Stake missing-HP on-hit out-trade Gangplank's early Q Parrrley pokes, so pressure him whenever his barrels aren't set. The key skill test is his kegs — kill or dodge the barrel before it detonates, and never stand where he can chain two of them to slow you through your walk-up."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Gangplank’s Powder Kegs (Barrels): Barrel chains chunk half your HP — kill kegs on sight. Commit only while it is down.",
+      "after": "Track his kegs: Powder Keg has no cooldown, only stored charges — kill the keg on sight and step in after a detonation, never before one."
+    }
+  ],
+  "notes": "Powder Keg knockup was fabricated in two places and is now removed. Also note the page tells you to engage 'on Powder Kegs' cooldown' in loading, focus.text, breakdown.cooldowns, dosFull[2], report[9] and breakdown.feeding — that advice is structurally wrong because the ability has no cooldown, but those strings are templated across every Locke matchup, so rewriting them one matchup at a time would desync the template. Flagged rather than half-fixed."
+}

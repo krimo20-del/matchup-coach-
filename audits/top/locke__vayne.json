@@ -1,0 +1,91 @@
+{
+  "ownerKey": "locke",
+  "enemy": "vayne",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer's 'diff' enum reads EVEN while diffRating, breakdown.difficulty and report[14].t all say 8/10 / 'Hard matchup'. The page renders two different difficulty verdicts.",
+      "why": "Three of the four difficulty fields say hard; only the enum disagrees, so aligning the enum is the minimal consistent fix. Enum fields are length-exempt. The level chart itself needs no change: packet.levelChart is Vayne on all seven rows and full phases[].side and content win[] already agree row for row.",
+      "corrected": "diff EVEN -> HARD. Chart untouched.",
+      "confidence": "Medium",
+      "sources": ["currentText.full.diffRating", "currentText.full.breakdown.difficulty", "packet.levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spike windows check out: Condemn is 20/18/16/14/12s, Final Hour is 100/85/70s, and Vayne's real power is the W percent-max-HP true damage ramping with attack speed items. spikes[] has 4 entries with correct 'when' values.",
+      "corrected": "Timings kept; spike prose corrected for the Purgatory interaction (point 4).",
+      "confidence": "High",
+      "sources": ["enemyKit E/R cooldowns", "enemyKit W text"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The decisive interaction is absent and the page states its opposite. whys[4], spikes[1], 'mid', 'late' and wants.foe[2] all claim Final Hour's Tumble stealth lets her dodge or beat Purgatory. Locke's R carries a grounding flag — grounding shuts off dashes, and Tumble is a dash. Inside the zone she cannot Tumble at all, which removes the stealth reposition and the kiting her level 6 is built on.",
+      "why": "This is the single mechanic that gives Locke a lane answer against Vayne, and the page currently tells the player the reverse. Stealth on Tumble is real (Riot's R text), but it only exists if she can cast Tumble.",
+      "corrected": "Purgatory grounds Tumble. Drop the zone under her feet, not where she is running to, and Final Hour becomes an AD steroid with no repositioning attached.",
+      "confidence": "High",
+      "sources": ["ownerKit R flags: grounding 'shuts off enemy dashes'", "enemyKit Q flags: autoReset/dash reposition", "enemyKit R text"]
+    },
+    {
+      "point": 6,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Condemn at 20s rank 1 down to 12s at rank 5 is her only defensive answer to Locke's E, and the page already names it as the tracked cooldown in breakdown.cooldowns and focus.text.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 20/18/16/14/12"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "The full layer refers to Vayne as 'he/his' throughout (tradeGood, enemyWin, dontsFull, breakdown.wave). Templated text, not a mechanical error.",
+      "why": "Cosmetic but visible on a paid page. Not proposed as edits here because they are boilerplate strings shared across many matchups and a per-matchup pronoun edit risks fighting the template regeneration.",
+      "corrected": "Flagged in notes for a template-level fix rather than per-matchup edits.",
+      "confidence": "High",
+      "sources": ["currentText.full"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "diff",
+      "before": "EVEN",
+      "after": "HARD"
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Final Hour stealth dodges your Purgatory commit at 6.",
+      "after": "Purgatory grounds Tumble — she cannot dash out of it."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Final Hour (R) gives her stealth on Tumble and a huge AD steroid, so even your Purgatory setup gets kited; she invisibly repositions the instant you commit and her W true damage races your execute threshold.",
+      "after": "Final Hour (R) gives her stealth on Tumble and a huge AD steroid, so she repositions mid-combo — but Purgatory grounds Tumble, and a Vayne stuck inside the zone loses the kiting her entire level 6 depends on."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-6 she only pulls further ahead as her W true damage scales. Level 6 Final Hour is the killer: the Tumble stealth lets her dodge your Purgatory commit and reposition mid-combo, while the AD steroid lets her shred you before your burst lands. Hold E defensively for her all-ins, stay away from walls, and look to roam or trade with jungle help rather than solo her.",
+      "after": "Levels 4-6 she only pulls further ahead as her W true damage scales, and Final Hour's AD steroid plus Tumble stealth lets her reposition mid-combo before your burst lands. Your one real answer is Purgatory's grounding: dropped under her feet it locks Tumble off entirely. Hold E defensively, stay away from walls, and trade with jungle help rather than soloing her."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Late Vayne is a hard loss for you. Percent-max-HP true damage ignores everything you build, her R stealth beats your totem timing, and Condemn punishes the E blink that is your only gap-close. Buy armor and HP to survive a single rotation, but accept you cannot duel her; play with a frontline that can wall her off and force Condemn before you ever commit.",
+      "after": "Late Vayne is a hard loss for you. Percent-max-HP true damage ignores everything you build, and Condemn punishes the E blink that is your only gap-close. Buy armor and HP to survive a rotation, but accept you cannot duel her; play with a frontline that forces Condemn first, and land Purgatory on her feet — grounded, she cannot Tumble clear of it."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Pop Final Hour (R) stealth to dodge your Purgatory commit",
+      "after": "Fight outside your Purgatory so Tumble (Q) stays available"
+    }
+  ],
+  "notes": "QUESTION-ADJACENT: winRate is 49.31% over 1156 games, which reads EVEN, yet diffRating/breakdown/report all say 8/10 hard. I aligned the enum to the majority (HARD) rather than rewriting three prose fields; if the 49.31% figure should govern, the ratings need lowering instead. Also: the full layer calls Vayne 'he' throughout — template boilerplate, worth a template-level fix, not proposed per-matchup."
+}

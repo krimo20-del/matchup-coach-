@@ -1,0 +1,70 @@
+{
+  "ownerKey": "masteryi",
+  "enemy": "garen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Garen owns 1-2, 3 and 4-5 are skill windows, Yi takes 6 through 2+ items. Full phases[].side and content win[] already agree row-for-row and match the packet chart.",
+      "corrected": "Chart untouched; the level 6 and first-item rows already name the correct causes (Highlander slow immunity, on-hit plus Wuju true damage).",
+      "confidence": "High",
+      "sources": ["packet levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Four spikes present and correctly placed: 3-5, level 6, first item, late. Garen's own spikes (level 6 execute, Courage windows) are recorded in breakdown.spikes.",
+      "corrected": "Decisive Strike's 8s cooldown added to dosFull[1] so 'bait the Q' has a countable window.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/garen.json via brief"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two places tell the player to escape the silence with Alpha Strike: spikes[1] says 'Alpha Strike out of the spin when silenced' and late says 'just Alpha Strike out whenever he silences you'. A silence denies ability casts — Alpha Strike is exactly what you cannot do while silenced. This is the worst kind of error here because the rest of the entry correctly identifies the silence as the thing that cancels the combo, and then hands the player an escape that does not exist.",
+      "why": "Decisive Strike is a silence on Garen's empowered next attack, and it is also an auto-attack reset — so the wind-up, not a cast animation, is the tell. Alpha Strike must be spent before the empowered auto connects, not after.",
+      "corrected": "spikes[1] and late rewritten: the silence locks Alpha Strike out entirely, so leap before the empowered auto lands. dosFull[1] now names the auto reset and its 8s cooldown as the trigger.",
+      "confidence": "High",
+      "sources": ["brief enemyKit Q text and silence/autoReset flags", "missingInteractions: autoreset-burst-tell"]
+    },
+    {
+      "point": 1,
+      "status": "needs-correction",
+      "whatIsWrong": "report[14] states 'FAVOURED 53.31%'; the packet reports 49.86% over 734 games.",
+      "why": "One number, taken from the packet.",
+      "corrected": "49.86% written in, with the gap between the record and the FAVOURED rating explained by early-game behaviour rather than left as a contradiction.",
+      "confidence": "High",
+      "sources": ["packet"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "His Decisive Strike silence is the only thing that cancels your combo — make him use it on a minion or a feint, then engage with Highlander up while it's on cooldown.",
+      "after": "Decisive Strike is an 8s auto reset, so the wind-up is the tell, not the cast — bait it onto a minion, then engage with Highlander up during those 8 seconds."
+    },
+    {
+      "layer": "full",
+      "path": "report[14].t",
+      "before": "FAVOURED 53.31% — a steep-curve scaling lane: survive his silence-and-execute early game and your on-hit DPS out-grinds his single disengage from your first item on.",
+      "after": "FAVOURED 49.86% — a steep-curve scaling lane: the sub-50 record belongs to the players who fought before Wuju Style, not to the itemized duel you reliably win."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Level 6 favours you: Demacian Justice is a true-damage execute, but your Highlander burst plus Meditate lets you kill or survive first, and his silence on Decisive Strike is your real worry — Alpha Strike out of the spin when silenced.",
+      "after": "Level 6 favours you: Demacian Justice is a true-damage execute, but Highlander plus Meditate lets you kill or survive first. Decisive Strike's silence is the real worry — it locks Alpha Strike out entirely, so leap before the empowered auto lands, never after."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "With items you take over: Wuju Style true damage ignores the passive regen, W shield, and stacked resistances that define Garen, so your attack-speed DPS kills him before Demacian Justice ever executes you — just Alpha Strike out whenever he silences you.",
+      "after": "With items you take over: Wuju Style true damage ignores the passive regen, W shield, and stacked resistances that define Garen, so your attack-speed DPS kills him before Demacian Justice ever executes you — but the silence blocks Alpha Strike, so leave before it lands."
+    }
+  ],
+  "notes": "The packet's suspectNames hit ('Alpha Strike's' in mid) is a false positive — it is the possessive of the correct name, matching what the mirror found. The real defect was mechanical, not nominal: two fields instructed the player to cast Alpha Strike while silenced. Level chart untouched and already consistent across both layers."
+}

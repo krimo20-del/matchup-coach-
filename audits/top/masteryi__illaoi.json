@@ -1,0 +1,82 @@
+{
+  "ownerKey": "masteryi",
+  "enemy": "illaoi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags it directly: Master Yi wins 55.56% over 171 games, but the level chart hands Illaoi six of seven stages. Both layers agree with each other (full phases[].side and content win[] are identical row-for-row) — they just both disagree with the record. Two fields also print a '43% lane' that exists nowhere in the data.",
+      "why": "A chart flip is an atomic group and I will not guess which rows move: the entry's mechanical case for Illaoi owning the early lane is sound and matches her kit, so the disagreement may be a genuine 'loses lane, wins game' pattern (Yi scaling, roaming, her immobility to jungle pressure) rather than a wrong chart. Guessing rows here would be inventing a power shift a player would trust. The mirror side reached the same conclusion and recorded a question rather than editing.",
+      "corrected": "No chart edits proposed. The invented 43% is corrected to 55.56% in both places it appears, and the difficulty block now explains the gap as games won after lane rather than in it. Question recorded for the user.",
+      "confidence": "Medium",
+      "sources": ["packet defects", "packet winRate/games", "mirrorFindings"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Four spikes placed at 3-5, level 6, first item and late; breakdown.spikes correctly identifies her E availability, level 6 and first tank item against Yi's level 6 and second on-hit item.",
+      "corrected": "Test of Spirit 16s/12s and Harsh Lesson 4s added so the step-up window is countable.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/illaoi.json via brief"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Test of Spirit is labelled (W) in spikes[0] and (W/E) in wants.foe[0]; it is E, and W is Harsh Lesson. whys[2] says the spirit 'multiplies damage on your Alpha Strike', which garbles the mechanic — the spirit echoes a percentage of the damage IT takes back to you, so the danger is your own damage returning, not a multiplier on your ability. Nothing states that Harsh Lesson is an auto reset, so the player has no tell for her burst.",
+      "why": "Harsh Lesson is a 4s leap with an attack reset: the leap, not a cast animation, is the cue to step back, and it also drags her tentacles into swinging at you. Prophet of an Elder God heals her whenever tentacles hit a champion, which is why report[8]'s early Executioner's is correct and worth keeping.",
+      "corrected": "Slots fixed in spikes[0] and wants.foe[0]; whys[2] restated as the echo; the auto-reset tell written into spikes[0]; Harsh Lesson's 4s cooldown added to breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["brief enemyKit E, W and P text", "packet suspectNames", "missingInteractions: needs-antiheal, autoreset-burst-tell"]
+    },
+    {
+      "point": 1,
+      "status": "needs-correction",
+      "whatIsWrong": "report[14] and breakdown.difficulty both cite a 43% lane; the packet reports 55.56% over 171 games.",
+      "why": "One number, taken from the packet.",
+      "corrected": "55.56% written into both.",
+      "confidence": "High",
+      "sources": ["packet"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "Track Test of Spirit (E) above all — it's a long cooldown (~16-12s) and is the only thing that turns the lane from 'lose' to 'unplayable.' When her E is down she has no way to rip your spirit, so that's your only window to step up or shove.",
+      "after": "Track Test of Spirit (E, 16s at rank 1, 12s maxed) above all — it is the only thing that turns the lane from 'lose' to 'unplayable'. With E down she cannot rip your spirit, so that is your window to step up or shove; her Harsh Lesson leap is only 4s."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "It's 8/10 because every tool she has answers your kit: her field out-damages your early autos, her self-heal undoes your sustain, her slams ignore Alpha Strike's untargetability, and she's an AOE monster you can't burst before two items — a 43% win rate that reflects how rarely you get a clean window.",
+      "after": "It's 8/10 because every tool she has answers your kit: her field out-damages your early autos, her self-heal undoes your sustain, her slams ignore Alpha Strike's untargetability, and she's an AOE monster you can't burst before two items — yet the record is 55.56%, because Yi wins these games after lane rather than in it."
+    },
+    {
+      "layer": "full",
+      "path": "report[14].t",
+      "before": "HARD 8/10 — a 43% lane where her field out-damages, out-heals, and out-ranges your early kit, and even your untargetability can't save you; survive, scale, and win it off her tentacles or off the map.",
+      "after": "HARD 8/10 in lane, yet a 55.56% record over 171 games — her field out-damages and out-heals your early kit, but the games are won later on, off her tentacles or off the map entirely."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "At level 3 a landed spirit test multiplies damage on your Alpha Strike.",
+      "after": "At level 3 the spirit echoes your damage taken straight back onto you."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Illaoi crushes you: her Tentacle slams plus Test of Spirit (W) rip huge chunks, and if she lands Test of Spirit and you Alpha Strike (Q) into the tentacle field you take multiplied damage. Never fight in her tentacles.",
+      "after": "Illaoi crushes you: Tentacle Smash (Q) plus Test of Spirit (E, 16s) rip huge chunks, and Harsh Lesson (W) is a 4s auto reset — the leap is the tell. With a spirit out, everything you take echoes back. Never fight in her tentacles."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land Test of Spirit (W/E) then slam you in the tentacle zone",
+      "after": "Land Test of Spirit (E) then slam you in the tentacle zone"
+    }
+  ],
+  "notes": "The level chart is the open item here and I deliberately did not touch it — see questionsForUser. Both layers already agree with each other, so nothing is half-updated; they simply both disagree with a 55.56% record. Left alone: the claim that Alpha Strike's untargetability does not cleanse Test of Spirit. It is stated forcefully in four fields and I could not verify it from Riot's text, which says nothing about untargetability and vessels — it is not contradicted either, so I left the text as written rather than weaken advice that may well be right."
+}

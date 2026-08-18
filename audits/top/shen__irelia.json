@@ -1,0 +1,66 @@
+{
+  "ownerKey": "shen",
+  "enemy": "irelia",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Chart read Irelia, Skill, Shen, Shen, Irelia, Shen, Shen — disagreeing with the packet chart and with the mirror record set by irelia__shen.",
+      "why": "The two directions must state the same rows; the whys themselves describe Irelia owning levels 2-3 and the first-item window.",
+      "corrected": "Rows 0-5 flipped to Skill, Irelia, Irelia, Skill, Skill, Irelia; row 6 stays Shen. Every phases[N].side proposed paired with its win[N] as one atomic group.",
+      "confidence": "High",
+      "sources": ["mirrorFindings (irelia__shen)", "packet.levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The first-item spike claimed Sunfire lets Shen trade evenly, ignoring that Bladesurge heals on every reset.",
+      "why": "Without Grievous Wounds the extended side-lane fight is unwinnable regardless of the immolate damage.",
+      "corrected": "spikes[2].text now ties the first-item window to anti-heal timing; the level-6 spike names Vanguard's Edge's real effect (Mark plus a damaging, slowing wall) instead of a root.",
+      "confidence": "High",
+      "sources": ["enemyKit Q heal flag", "enemyKit R text", "missingInteractions rule needs-antiheal"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Nothing on the page said Flawless Duet's stun cancels the Stand United channel; Vanguard's Edge was described as a root; Spirit's Refuge was implied to stop her stun; dosFull[2].d and dontsFull[1].d carried text unrelated to their own titles.",
+      "why": "Shen's R is a channel and any hard CC cancels it — that is the single most punishing interaction in the lane. Spirit's Refuge blocks attacks only, so it never stops the blades. Bladesurge refreshes on Marked or dying targets, which is why minions matter.",
+      "corrected": "phases[4].why and spikes[1].text state the R cancel; dontsFull[0].d states the attacks-only limit of Spirit's Refuge; dosFull[2].d states the Bladesurge refresh condition; dontsFull[1].d states minions are free resets; phases[1].why and tradeGood corrected with the 16s rank-1 Flawless Duet cooldown.",
+      "confidence": "High",
+      "sources": ["ownerKit R channel flag", "ownerKit W text", "enemyKit E cd 16/14.5/13/11.5/10", "enemyKit Q text"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "suspectNames flagged 'Stand United's' and 'Flawless Duet's' as probable wrong names.",
+      "why": "Both are false positives — the possessive apostrophe accounts for the edit distance; the kit confirms both names.",
+      "corrected": "No change made.",
+      "confidence": "High",
+      "sources": ["ownerKit R name", "packet.enemyAbilities.E"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Irelia","after":"Skill"},
+    {"layer":"content","path":"win[0]","before":"Irelia","after":"Skill"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Irelia"},
+    {"layer":"content","path":"win[1]","before":"Skill","after":"Irelia"},
+    {"layer":"full","path":"phases[2].side","before":"Shen","after":"Irelia"},
+    {"layer":"content","path":"win[2]","before":"Shen","after":"Irelia"},
+    {"layer":"full","path":"phases[3].side","before":"Shen","after":"Skill"},
+    {"layer":"content","path":"win[3]","before":"Shen","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Irelia","after":"Skill"},
+    {"layer":"content","path":"win[4]","before":"Irelia","after":"Skill"},
+    {"layer":"full","path":"phases[5].side","before":"Shen","after":"Irelia"},
+    {"layer":"content","path":"win[5]","before":"Shen","after":"Irelia"},
+    {"layer":"full","path":"phases[1].why","before":"W spirit zone blanks his auto window. Only take the trade when Irelia's Flawless Duet is down.","after":"Spirit's Refuge blanks her auto chain, not her stun — trade only when Flawless Duet is down."},
+    {"layer":"full","path":"phases[4].why","before":"Stand United makes your lane a 1v2 for the enemy MAP — track every low ally. Reassess every all-in at 6 — Irelia's ultimate changes the math too.","after":"Stand United makes your lane a 1v2 for the enemy MAP — but Flawless Duet's stun cancels the channel, so step off the wave before you ever cast it."},
+    {"layer":"full","path":"tradeGood","before":"Pull the blade through Irelia, E-taunt when his answer is down, and weave the empowered autos — then shove and watch the map.","after":"Pull the blade through Irelia, E-taunt when Flawless Duet is down (16s rank 1), and weave the empowered autos — then shove."},
+    {"layer":"full","path":"dosFull[2].d","before":"Irelia wastes Flawless Duet (Stun) — commit the full pattern immediately.","after":"Bladesurge refreshes on Marked or dying targets — deny the low minions."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Irelia's favourite window — refuse it and half his win condition is gone.","after":"Spirit's Refuge blocks attacks, never Flawless Duet — sidestep the blades."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Every minion is a Bladesurge reset — she closes the gap for free."},
+    {"layer":"content","path":"spikes[1].text","before":"Irelia's R Vanguard's Edge creates a blade-ring that roots you in place if you E through it carelessly — she can combo you while you're locked before you ever land the taunt.","after":"Vanguard's Edge Marks you and leaves a wall that damages and slows whoever crosses it — she fights on her side of it, and Flawless Duet's stun cancels your Stand United channel."},
+    {"layer":"content","path":"spikes[2].text","before":"Your Sunfire Aegis spike lets you absorb her reset-Q pattern and trade evenly through the immolate damage; force fights when Flawless Duet is on cooldown.","after":"Your Sunfire spike absorbs her Bladesurge pattern, but she heals off every reset — bring Grievous Wounds before you try to win an extended side-lane fight."}
+  ],
+  "notes": "Phase ratings left untouched: the rating convention could not be determined from the brief and guessing risks a fresh mirror disagreement — the mirror moved its own ratings, so a rating pass may be needed. suspectNames entries for 'Stand United's' and 'Flawless Duet's' are false positives (possessive apostrophe). The late-game prose still does not mention the Stand United channel cancel; it is stated in phases[4].why and spikes[1].text instead, because no length-legal edit to 'late' was available without dropping better content."
+}

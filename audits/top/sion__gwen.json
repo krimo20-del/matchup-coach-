@@ -1,0 +1,94 @@
+{
+  "ownerKey": "sion",
+  "enemy": "gwen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers read Skill/Gwen/Gwen/Skill/Gwen/Gwen/Gwen, matching the packet and the mirror (which set Level 1 to Skill and first item to Gwen). 49.86% over 2948 games with a hard scaling loss late is consistent with the shape.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirror audit gwen__sion"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[2].why, phases[5].why and phases[6].why all describe Sion-owned windows sitting under Gwen-owned rows — phases[5] literally says 'Heartsteel is your spike, force fights the moment it completes' on the row where the content layer says Riftmaker flips the lane against you.",
+      "why": "Stacking HP into percent-max-HP true damage makes you a bigger target; first item is her spike, not yours.",
+      "corrected": "Three phase whys rewritten to argue their own side, with Riftmaker's effect named.",
+      "confidence": "High",
+      "sources": ["existing content late/spikes[3]", "champ-data/_kits/gwen.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Hallowed Mist is described five times as 'blocking your charged Q stun', full stop — as if it were an immunity. It is a stationary zone that only makes her untargetable to enemies OUTSIDE it, and no field tells the player the counterplay: walk in.",
+      "why": "Riot's text: 'Gwen summons mist that protects her from enemies outside of it. She can only be targeted by enemies who enter the mist.' Standing inside the mist restores your ability to hit her — for a melee champion whose whole pattern is a charged swing, that is the single most useful sentence in the matchup, and it was missing. The mist is also 22/21/20/19/18, never quoted. Skip 'n Slash is 13s at rank 1 with a partial refund when it connects, and applies on-hit effects. A Thousand Cuts heals her off every auto, so Grievous Wounds — mentioned only as a generic line in the itemization report — belongs in the wants.",
+      "corrected": "wants.you[0] rewritten to 'step inside the mist'; wants.foe[0] and whys[2] given the 22s and the outside-only condition; wants.you[2] made the anti-heal line; Skip 'n Slash's refund and Needlework's 120s added.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gwen.json", "_missing/sion.json (untargetable-dodges-burst, needs-antiheal, onhit-itemization)"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit online â€” your core pattern starts now. Keep the wave near your side so Gwen must walk into your engage range.",
+      "after": "Her mist blanks your engage from outside it. Keep the wave near you and swing only once you are standing inside."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Heartsteel is your spike â€” force fights the moment it completes, on Hallowed Mist's cooldown.",
+      "after": "Riftmaker turns your own HP against you - the bigger you get, the more each proc takes."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your side-lane pattern is at full power. Gwen carry threat 9.5/10 â€” close before the map decides instead of you.",
+      "after": "Two items on, her scissors erase your HP investment. Gwen carry threat 9.5/10 - close the game before this stage."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "With Hallowed Mist available, your charged Q knockup is neutralized in any straight trade; she can scissors freely inside it while you have no reliable way in.",
+      "after": "Hallowed Mist is 22s at rank 1 and she is untargetable to you only from outside it — the way in is to walk into the mist yourself and swing from inside."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Gwen's scissors (Q) start stacking percent-max-HP true damage and she gets her dash — she out-trades you consistently here and her W Hallowed Mist blocks your charged Q stun from inside.",
+      "after": "Snip Snip!'s centre is true damage and Skip 'n Slash (13s, partly refunded when it connects) arrives — she out-trades you here, and from outside her mist you cannot target her at all."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Her Needlework (R) adds ranged poke and %-HP damage from distance; your Unstoppable Onslaught can catch her but she can sidestep with E dash if she reads the angle.",
+      "after": "Needlework (120s at rank 1) fires up to three times for ranged poke; Unstoppable Onslaught still catches her, but Skip 'n Slash sidesteps it if she reads the angle."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Land a fully charged Q knockup when she is outside Hallowed Mist to force the brawl on your terms",
+      "after": "Step inside Hallowed Mist — from within it she is targetable again and your charged Q lands"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "W-shield her scissors burst and look for a window when Hallowed Mist is on cooldown to all-in",
+      "after": "Buy Grievous Wounds — A Thousand Cuts heals her off every auto, straight through your HP pool"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Pop Hallowed Mist to block your charged Q stun whenever she reads the charge",
+      "after": "Pop Hallowed Mist (22s) so your Q cannot touch her while you stand outside it"
+    }
+  ],
+  "notes": "The packet's suspectName 'Pop Hallowed Mist' is a FALSE POSITIVE — Hallowed Mist is the real name; the flag fired on the leading verb. Carried from the mirror as a repo-wide correction: Roar of the Slayer reduces ARMOR, not magic resist; the Gwen page had it as MR twice. Nothing in Sion's fields here states the wrong resistance, but 'Build MR' in dosFull[1] is aimed at her magic damage and is fine — note that Snip Snip!'s centre is true damage, so MR does not cover the part of her kit the tldr calls '%HP shreds you'. Whether Hallowed Mist's untargetability also drops an already-released Decimating Smash swing (as opposed to preventing a new one) is not answerable from the kit text — not asserted. Full-layer mojibake em dashes copied exactly in 'before', plain hyphens in 'after'.",
+  "questionsForUser": [
+    "sion vs gwen, full layer: diff reads 'EVEN' while tone is #ff5d6c (the red/hard colour), diffRating is 8.5/10 and report[14].t says 'Hard matchup — difficulty 8.5/10'. Four of the five agree this is hard; only the diff token says EVEN. Should diff become the hard token? I did not guess the enum vocabulary, and diff is short enough that the applier exempts it from the length band either way."
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "ownerKey": "sion",
+  "enemy": "teemo",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "56.44% over 3864 games, and the shape is right: Teemo owns levels 1-3 while you cannot reach him, 4-5 are a lull, and level 6 hands you a gap-closer he has no answer to.",
+      "corrected": "No difficulty-shape change proposed; the chart already matches its whys and the win rate.",
+      "confidence": "High",
+      "sources": ["packet winRate 56.44, games 3864", "packet levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The late spike is justified with 'your zombie passive alone threatens Teemo's 800 HP' — a made-up number that is also wrong for the phase it describes.",
+      "why": "The real late-game qualifier is the one the mirror audit found from Teemo's side: Glory in Death is pure auto-attacks, so a held Blinding Dart removes both the healing and the max-health damage from the entire zombie window. That is what decides whether the spike exists.",
+      "corrected": "Rewrote spikes[3].text around the blind gating the zombie window, stated from your side.",
+      "confidence": "High",
+      "sources": ["mirrorFindings point 4", "champ-data/_kits/sion.json passive text", "champ-data/_kits/teemo.json Q"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Guerrilla Warfare appears nowhere on the page, and wants.foe[2] describes Noxious Trap as 'percent-HP poison'.",
+      "why": "Teemo holds invisibility while moving through brush, which is the single mechanic that turns a lane you are winning at 6 into a lost fight — and Sion has no stealth reveal in his kit. Noxious Trap's text is a poison cloud that slows and damages over time; there is no percent max health component and the kit carries no percentHealth flag.",
+      "corrected": "Added the brush stealth to mid and late; rewrote wants.foe[2] without the invented percent-HP scaling. Also added the 800-versus-680 range edge from Roar of the Slayer to whys[0].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/teemo.json passive, R text and flags", "mirrorFindings point 4 (800 vs 680)"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Every itemisation cue on the page is health and shielding; nothing mentions that his damage is magic and on-hit.",
+      "why": "The _missing rule is onhit-itemization: Toxic Shot applies on-hit and scales with attack speed, so armour and Plated Steelcaps read this trade wrong. Magic resist and health together are the answer.",
+      "corrected": "Rewrote wants.you[1] and worked it into late.",
+      "confidence": "High",
+      "sources": ["_missing/sion.json rule onhit-itemization", "champ-data/_kits/teemo.json E onHit flag"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags no cooldown-sequencing advice anywhere in this matchup.",
+      "why": "Blinding Dart is a flat 7 seconds at every rank — the cleanest countable window in the lane, and the page mentions the number twice without ever converting it into a 'wait for X then Y' instruction.",
+      "corrected": "whys[0] now tells you to poke with the longer-ranged E and hold the charge for his step-up, and spikes[3].text tells you to bait the dart before you die.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/teemo.json Q cd 7", "packet defects"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Teemo blinds your autos on a 7-second cooldown the instant you step up — farm at long range and only throw a charged Q when he steps in to last-hit.",
+      "after": "Teemo blinds your autos every 7 seconds, but Roar of the Slayer reaches 800 to his 680 — poke from outside his range and save the charge for his last-hit step."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "At 2+ items your zombie passive alone threatens Teemo's 800 HP — he cannot trade into you at any range where your charged Q can fire.",
+      "after": "At 2+ items Glory in Death alone threatens him — but zombie Sion is pure autos, so an unspent Blinding Dart shuts that whole window off. Bait it first."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Stack Heartsteel and let the HP passive compound until your W-shield absorbs his whole poke combo",
+      "after": "Stack Heartsteel, but note Toxic Shot is on-hit magic damage — armour reads that trade wrong"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Stack shrooms on choke points and jungle entrances to zone you off objectives with percent-HP poison",
+      "after": "Stack Noxious Traps on chokes and jungle entrances to zone you off objectives with slow and poison"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Level 6 changes everything. Unstoppable Onslaught crosses the full lane gap before his Move Quick passive can escape it — flash and dash are your counters to Teemo, and he has neither. Bait him into over-extending by standing at the edge of his poke range, then R directly through him the moment he commits to a Q-poke step; the knockup into charged Q-stun into E armor-shred is lethal at this HP total. In between all-ins, keep charging Q from max range — even if he dodges, the threat forces him to back off his mushroom placement and stops him from freely trading. Your W-shield now absorbs a meaningful fraction of his burst combo; pop it proactively as you close, then detonate into him.",
+      "after": "Level 6 changes everything. Unstoppable Onslaught crosses the full lane gap before Move Quick can escape it — dashes and blinks are what beat your R, and he has neither. Bait him into over-extending by standing at the edge of his poke range, then charge through him the moment he commits to a Q step; knockup into charged Q into E shred is lethal at this HP total. Between all-ins keep charging Q from max range — even a dodged charge pushes him off his mushroom placement. And do not facecheck for him: Guerrilla Warfare holds his invisibility while he moves through brush, so an unwarded bush is a free opening combo and your R cannot be steered onto something you cannot see."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "At two items your max-HP total is enormous enough that his shroom ticks are a minor annoyance rather than a kill threat, and your zombie passive is a genuine deterrent — Teemo cannot stand near a dying 3000-HP undead Sion to collect shroom procs without taking massive damage. The lane danger shifts from surviving his poke to navigating mushroom walls on chokes: buy Control Wards, clear shrooms before you walk through river, and ping incoming roams so your team respects them. In a straight 1v1 at this point you win decisively — R in, charged Q stun, E armor-shred, and his HP cannot survive your HP-scaled trades.",
+      "after": "At two items your max-HP total makes shroom ticks an annoyance rather than a kill threat, and Glory in Death is a real deterrent — Teemo cannot stand near a dying undead Sion to collect procs. Two things still catch you. Toxic Shot is on-hit magic damage that scales with his attack speed, so armour and Steelcaps read the trade wrong and magic resist alongside the health is what actually helps. And Guerrilla Warfare lets him keep invisibility while moving through brush, so every unwarded bush is his opener. Buy Control Wards, clear traps before river, and in a straight 1v1 you still win: R in, charged Q, E shred."
+    }
+  ],
+  "notes": "suspectNames flagged wants.you[2] 'Use Unstoppable Onslaught' as a probable wrong ability name — false positive, that is Sion's own R and the kit confirms the name. The mirror audit noted that its two errors ('E strips shields' and a phantom 'your W shield' on Teemo's side) looked templated and were worth grepping across other Teemo entries and other owners facing Sion; that sweep is outside this file but the note is worth carrying forward. Nothing here required an unverifiable claim: every correction comes from Riot's own text in the two kit files."
+}

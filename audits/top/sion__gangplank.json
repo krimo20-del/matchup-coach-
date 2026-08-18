@@ -1,0 +1,68 @@
+{
+  "ownerKey": "sion",
+  "enemy": "gangplank",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both level charts disagree with the packet chart AND with their own why-text. Chart says Gangplank/Skill/Sion/Sion/Gangplank/Sion/Sion; packet and the mirror audit both say Sion/Sion/Sion/Skill/Gangplank/Gangplank/Sion.",
+      "why": "whys[0] and whys[1] already argue Sion wins levels 1-2 ('walk up, take a hit on the shield'), whys[3] argues Skill at 4-5, and whys[5] argues Gangplank at first item. The chart rows were simply out of order relative to the prose.",
+      "corrected": "Chart flipped to Sion/Sion/Sion/Skill/Gangplank/Gangplank/Sion in both layers, ratings following.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirror audit gangplank__sion", "existing whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[5].why calls first item 'your spike - force fights the moment it completes', while content spikes[2] says first item tips fights to Gangplank. Two layers, opposite claims.",
+      "why": "Gangplank's first crit item raises barrel damage past what a single Soul Furnace shield absorbs; Sion's Heartsteel pays off at two items, not one.",
+      "corrected": "phases[5].why rewritten to match the Gangplank-favoured first-item row.",
+      "confidence": "Medium",
+      "sources": ["existing content spikes[2]", "packet chart"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Remove Scurvy is described only as a slow-cleanse/'escape button'. It is a heal on a 22/20/18/16/14s cooldown, and nothing in the matchup mentions Grievous Wounds.",
+      "why": "Riot text: 'Eats citrus to cure crowd control effects and restore Health.' It has no movement component, so calling it an escape is wrong; the heal is what undoes your won trades, which makes anti-heal timing the decisive item choice.",
+      "corrected": "wants.you[1] now buys Grievous Wounds against the 14-22s heal; wants.you[0] no longer calls W an escape.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gangplank.json", "_missing/sion.json (needs-antiheal)"]
+    }
+  ],
+  "edits": [
+    { "layer": "full",    "path": "phases[0].side", "before": "Gangplank", "after": "Sion" },
+    { "layer": "content", "path": "win[0]",         "before": "Gangplank", "after": "Sion" },
+    { "layer": "full",    "path": "phases[1].side", "before": "Skill",     "after": "Sion" },
+    { "layer": "content", "path": "win[1]",         "before": "Skill",     "after": "Sion" },
+    { "layer": "full",    "path": "phases[3].side", "before": "Sion",      "after": "Skill" },
+    { "layer": "content", "path": "win[3]",         "before": "Sion",      "after": "Skill" },
+    { "layer": "full",    "path": "phases[5].side", "before": "Sion",      "after": "Gangplank" },
+    { "layer": "content", "path": "win[5]",         "before": "Sion",      "after": "Gangplank" },
+    { "layer": "full",    "path": "phases[0].rating", "before": "3/10", "after": "6/10" },
+    { "layer": "full",    "path": "phases[5].rating", "before": "6/10", "after": "3/10" },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Heartsteel is your spike â€” force fights the moment it completes, on Powder Kegs's cooldown.",
+      "after": "His first crit item outpaces yours - barrels hurt through the shield now, so farm and wait."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Land a fully charged Q knockup when his W (Remove Scurvy) is on cooldown — it's his only CC-cleanse and escape button",
+      "after": "Land a fully charged Q knockup while Remove Scurvy (W) is down — it is his only cleanse, and at rank 1 it is gone for 22s"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Pop your W-shield to eat his barrel-chain poke, then walk in and trade with E armor-shred into charged Q",
+      "after": "Buy Grievous Wounds early — Remove Scurvy heals back every trade you win, and it is up every 14-22s"
+    }
+  ],
+  "notes": "phases[5].rating 6/10 is not unique in the file (rows 1,2,3,5,6 all read 6/10) — if the applier matches by value alone this edit may be ambiguous; it is path-addressed, so it should be fine, but worth a check. The full-layer strings on disk carry mojibake em dashes (\"â€”\") from an earlier encoding pass; I copied them character-exact in 'before' and used plain hyphens in 'after' rather than propagating the corruption. That mojibake is champion-wide in sion.full.js and deserves a separate cleanup pass. Gangplank's Powder Keg cooldown reads 0 in the kit (charge-based) so no number was asserted for it.",
+  "questionsForUser": [
+    "sion vs gangplank, full layer, fields diff / tone / diffRating / breakdown.difficulty / report[14].t: the page rates this TRICKY 7.5/10 for Sion, but Sion wins 53.59% over 4284 games and the mirror (gangplank__sion) rated it TRICKY 7/10 from Gangplank's side. Inverted, Sion's difficulty should be roughly 3-4/10 and 'TRICKY' should become an easier token. I did not guess the allowed diff vocabulary. Which token should diff hold, and should diffRating/breakdown.difficulty/report[14].t all move to that number together?"
+  ]
+}

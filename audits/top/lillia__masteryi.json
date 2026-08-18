@@ -1,0 +1,82 @@
+{
+  "ownerKey": "lillia",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "win[0..6] reads Lillia/Lillia/Skill/Skill/Skill/Master Yi/Master Yi, which matches packet.levelChart exactly, and each why supports its row — early kite, a skill window from 3 once Alpha Strike exists, and his takeover from the first attack-speed item.",
+      "corrected": "No chart change. NOTE: this matchup has no full-layer entry at all (currentText.full is null), so phases[] does not exist to disagree with win[] — see notes.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "brief currentText.content win[]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Not one cooldown appears anywhere on the page. Alpha Strike is the ability the whole mid-lane section pivots on (20/19.5/19/18.5/18s, shortened further by his basic attacks) and Highlander is the ability the late game pivots on (85s flat), and neither is numbered.",
+      "why": "\"Poke only with an exit planned\" is advice; \"his dash is 20s and his autos are cutting it down\" is a plan.",
+      "corrected": "20s at rank 1 written into whys[2] and spikes[1].text; 85s into whys[6].",
+      "confidence": "High",
+      "sources": ["enemyKit Q cd \"20/19.5/19/18.5/18\", text \"Basic attacks reduce Alpha Strike's cooldown\"", "enemyKit R cd \"85\""]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive late-game interaction is missing: Highlander makes Master Yi immune to ALL slowing effects. Swirlseed's slow is Lillia's only tool for holding a melee champion off her, and for the duration of his ultimate it does nothing at all. The page describes him as sticking to you \"through your mobility\" without ever naming the mechanic that lets him. Alpha Strike's untargetable frames are also never mentioned, so nothing warns the player that damage timed onto his engage misses outright.",
+      "why": "It changes the instruction from \"kite harder\" to \"your kite tool is switched off for the duration — leave, or have peel\".",
+      "corrected": "Slow immunity written into whys[6], spikes[3].text, content.late and wants.foe[2]; the untargetable frames into whys[2] and spikes[1].text.",
+      "confidence": "High",
+      "sources": ["enemyKit R text \"making him immune to all slowing effects\"", "enemyKit Q text \"simultaneously becoming untargetable\"", "ownerKit E flag slow"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Meditate is a heal on a flat 10s that also reduces damage taken, and it is an interruptible channel. The page never mentions it, so it never says to buy Grievous Wounds and never says that any CC — including a wake-up from your own kit — cuts it short.",
+      "why": "It is his entire lane sustain and the reason a poke war can stall out.",
+      "corrected": "Not written this pass — there is no itemization or cooldown field on the content layer to put it in, and this matchup has no full layer where report[8].t would normally carry it. Flagged in notes instead.",
+      "confidence": "High",
+      "sources": ["enemyKit W cd \"10\", flags heal and channel"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 turns skill-based — his Alpha Strike engages can punish you if you overextend.",
+      "after": "Level 3 gives him Alpha Strike — untargetable mid-dash, and his own autos shorten its 20s."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Late, Highlander resets and attack speed let him stick through your mobility and out-scale you.",
+      "after": "Late, Highlander is 85s and makes him immune to slows — your Swirlseed stops holding him off at all."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Alpha Strike gives him a punish — the free lane ends; poke only with an exit planned.",
+      "after": "Alpha Strike is 20s at rank 1 and untargetable — poke only with an exit already planned."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "He catches and deletes you the moment the kiting slips — his stretch of the game begins.",
+      "after": "He catches and deletes you the moment the kiting slips, and Highlander ignores your slow."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Stick to you with Highlander late",
+      "after": "Ignore your slow under Highlander"
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "From his first item onward he deletes you whenever the kite stumbles, and Highlander plus resets eventually stick through all your speed. Fight only with peel around you, sleep him as he enters the fight — never after he is already on you — and accept that late duels are his, not yours.",
+      "after": "From his first item onward he deletes you whenever the kite stumbles, and Highlander's slow immunity plus its resets stick through all your speed. Fight only with peel around you, sleep him as he enters the fight — never after he is already on you — and accept that late duels are his, not yours."
+    }
+  ],
+  "notes": "STRUCTURAL GAP: this matchup has no full-layer entry — currentText.full is null, so CHAMP_FULL['lillia']['masteryi'] does not exist and the page has no tldr, winCon, level chart rows, trading rules, runes, itemization or report sections. That is one of the ~92 known missing full entries and it is too large to build field-by-field with before:null proposals from an audit file; it needs the generator to emit a full entry for this pairing, after which the phases[] rows must be created to match win[]: Lillia, Lillia, Skill, Skill, Skill, Master Yi, Master Yi. Both packet.suspectNames entries are false positives — \"Your Blooming Blows\" and \"Land Lullaby\" both reference real abilities (Watch Out! Eep! and Lilting Lullaby are also correct where they appear). \"Lullaby\" as a short form for Lilting Lullaby is used consistently across spikes[2], mid and wants.you[1]; I left it rather than expand one instance and leave the others. Not written for lack of a field to hold it: Meditate (W, flat 10s) is a heal plus damage reduction on an interruptible channel — Grievous Wounds belongs in this matchup's itemization the moment a full layer exists."
+}

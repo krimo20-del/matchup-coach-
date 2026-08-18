@@ -1,0 +1,54 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "swain",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Stored rows read Skill, Vladimir, Vladimir, Skill, Skill, Vladimir, Vladimir. The early paragraph states 'Swain wins levels 1-4 outright' and whys[0] through whys[3] each hand those stages to Swain; whys[5] calls the first-item stage even while the row says Vladimir.",
+      "why": "The packet levelChart (Swain, Swain, Swain, Swain, Skill, Skill, Vladimir) agrees with all seven whys[] lines and the early paragraph. Five stored rows contradict their own explanation text.",
+      "corrected": "Rows 0-3 become Swain; row 5 becomes Skill. Rows 4 and 6 are already correct.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText early", "currentText whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The page tells the player to commit 'when Demonic Ascension is down' without any number, and treats it as an ability that expires.",
+      "why": "Demonic Ascension is 120s, but Riot's text says the form is indefinite as long as Swain keeps draining enemy champions — so 'wait for it to end' is not a plan while he is still hitting you. Death's Hand is 7s at rank 1 falling to 3s, Nevermove 12s to 10s, Vision of Empire 22s to 18s.",
+      "corrected": "Death's Hand at 3s by rank 5 is his real poke cadence; the ult ends when you disengage, not on a timer.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/swain.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two errors. (1) Slots are swapped throughout: the page writes 'Nevermove (W)' and 'Vision of Empire (E)'. Nevermove is E, Vision of Empire is W. This appears in spikes[0].text, wants.you[0] and wants.foe[0]. (2) Nevermove roots on the RETURN pass, not on the outgoing throw — nothing on the page says this, and it is the entire dodge.",
+      "why": "Wrong slot letters make the advice unusable, and 'dodge his root' is meaningless without knowing which half of the projectile roots.",
+      "corrected": "Nevermove (E, 850 range, 12s at rank 1) launches forward harmlessly and roots on the way back; sidestep the return, then he cannot recast to pull. Vision of Empire (W) is the delayed eye that reveals you and feeds him a Soul Fragment. Ravenous Flock heals him and permanently grows his max Health, so Grievous Wounds timing decides extended trades. Tides of Blood is blocked by enemy units — charge it behind your wave.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/swain.json", "_missing needs-antiheal", "_missing resistances-invalidated"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Swain"},
+    {"layer":"content","path":"win[0]","before":"Skill","after":"Swain"},
+    {"layer":"full","path":"phases[1].side","before":"Vladimir","after":"Swain"},
+    {"layer":"content","path":"win[1]","before":"Vladimir","after":"Swain"},
+    {"layer":"full","path":"phases[2].side","before":"Vladimir","after":"Swain"},
+    {"layer":"content","path":"win[2]","before":"Vladimir","after":"Swain"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Swain"},
+    {"layer":"content","path":"win[3]","before":"Skill","after":"Swain"},
+    {"layer":"full","path":"phases[5].side","before":"Vladimir","after":"Skill"},
+    {"layer":"content","path":"win[5]","before":"Vladimir","after":"Skill"},
+    {"layer":"content","path":"spikes[0].text","before":"Swain owns this phase — his Death's Hand (Q) bolts and Nevermove (W) root out-range and out-poke you, and if his root lands he can Vision of Empire (E) pull and chunk you before you can Sanguine Pool out.","after":"Swain owns this phase — Death's Hand (Q) is 750 range on 7s and Nevermove (E) roots on the RETURN pass, not the way out; if it lands he recasts to pull you and chunks you before the pool."},
+    {"layer":"content","path":"wants.you[0]","before":"Dodge Nevermove (W) roots so his combo never connects","after":"Dodge Nevermove (E) on its return pass, not the throw"},
+    {"layer":"content","path":"wants.foe[0]","before":"Land Nevermove (W) root to lock you for the Q-E burst","after":"Land Nevermove (E) root, then recast to pull you in"},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Swain Demonic Ascension: matchup-defining — His drain. Poke when it’s down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Nevermove: 12s at rank 1, and it roots on the RETURN pass — sidestep the way back, not the throw. - Death's Hand: 7s at rank 1, 3s at rank 5. - Demonic Ascension: 120s, and the form lasts as long as he keeps draining champions."},
+    {"layer":"full","path":"dosFull[0].d","before":"His drain. Poke when it’s down. Only engage once it is down or baited.","after":"Demonic Ascension is 120s but stays up while he drains champions."},
+    {"layer":"full","path":"report[5].t","before":"Track Swain's Demonic Ascension: His drain. Poke when it’s down. When it is down — Q-E + R him.","after":"Nevermove roots on the return pass and Ravenous Flock heals him — bring anti-heal early."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Nevermove roots on its way back to him — sidestep the return."}
+  ],
+  "notes": "The mirror (swain side) reported flipping its rows 1, 2 and 5 to match the same packet chart, so both directions should now agree. Vision of Empire's range is 5500 at rank 1 rising to 7500 — it is effectively a global-range zone, and no field on either page mentions that he can cast it into other lanes; worth a champion-level note rather than a matchup edit. Also unverified: whether Sanguine Pool's 2s untargetability breaks an already-applied Nevermove root is not in Riot's text, so I framed all pool advice as pre-emptive."
+}

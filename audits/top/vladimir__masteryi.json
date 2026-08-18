@@ -1,0 +1,62 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "win[0..6] reads Vladimir/Vladimir/Vladimir/Vladimir/Master Yi/Master Yi/Vladimir, which matches the packet chart exactly and matches all seven why-strings. There is no full layer on disk for this matchup, so there is no second copy to disagree with it.",
+      "corrected": "No chart edits.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText content win[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldown appears anywhere on the page, and the level-6 spike is described only as 'Highlander flips the lane'.",
+      "why": "Highlander is 85s — considerably shorter than Hemoplague's 120s — and Riot's text adds that champion kills or assists extend its duration and passively reduce the cooldown of his other abilities. That is why one won fight snowballs into the next, and it is the real content of his spike. Alpha Strike is 20s at rank 1, dropping only to 18s, which is what makes the early lane free.",
+      "corrected": "85s and the kill-refresh written into mid; 20s Alpha Strike written into spikes[0].text and early.",
+      "confidence": "High",
+      "sources": ["enemyKit R/Q cooldowns and text", "ownerKit R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two decisive interactions are absent. Highlander makes Master Yi immune to all slowing effects, and the page never mentions it — while Vladimir's kiting is built entirely on the slows attached to Tides of Blood and Sanguine Pool. And Meditate is a channel, which the page treats as a heal to out-damage.",
+      "why": "During Highlander every slow in your kit does nothing, so 'kite him' is the wrong plan for exactly the window the page calls his era; Pool has to be spent on the commit itself. Meditate being a channel means CC interrupts it — but Vladimir has no hard CC at all, so the answer is Grievous Wounds rather than an interrupt a Vladimir player will never have.",
+      "corrected": "Slow immunity written into spikes[1].text and wants.foe[1]; the un-interruptible-for-you channel and the Grievous Wounds conclusion written into early and mid.",
+      "confidence": "High",
+      "sources": ["enemyKit R text and slow flag", "enemyKit W channel flag", "ownerKit W/E slow flags", "missingInteractions rule needs-antiheal"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2] attributes his first-item power to a generic 'item-plus-R combo' and offers no itemisation response.",
+      "why": "Wuju Style grants bonus true damage on basic attacks, so armour and MR are the wrong buy — health and healing are what actually survive him. That inverts the instinct against an AD duelist.",
+      "corrected": "True damage and the stack-health conclusion written into spikes[2].text.",
+      "confidence": "High",
+      "sources": ["missingInteractions rule resistances-invalidated", "enemyKit E text and trueDamage flag"]
+    },
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "suspectNames flagged 'Alpha Strikes' in spikes[3] at distance 1. The ability is Alpha Strike; the page had simply pluralised it. Not a fabricated name.",
+      "corrected": "Rewritten to the singular in passing.",
+      "confidence": "High",
+      "sources": ["packet enemyAbilities", "enemyKit Q"]
+    }
+  ],
+  "edits": [
+    {"layer": "content", "path": "spikes[0].text", "before": "You farm him for breakfast: Transfusion pokes and heals on one button, and Sanguine Pool deletes the Alpha Strike engage that is his entire early game.", "after": "You farm him for breakfast: Transfusion pokes and heals on one button, and Alpha Strike is 20s at rank 1 — his only engage, and Pool answers it."},
+    {"layer": "content", "path": "spikes[1].text", "before": "Highlander flips the lane - he can now dive through your poke and out-burst your Q healing, so respect the window and keep Pool for his commit, not his approach.", "after": "Highlander is 85s and makes him immune to slows, so Tides of Blood and Pool's slow do nothing to stop him - keep Pool for the commit itself, not his approach."},
+    {"layer": "content", "path": "spikes[2].text", "before": "His item-plus-R combo drops you faster than Transfusion channels - play far back, let waves come to you, and never show without Pool available.", "after": "Wuju Style adds true damage to every attack, so armour and MR buy you nothing here - play far back, stack health, and never show without Pool available."},
+    {"layer": "content", "path": "spikes[3].text", "before": "Your healing balloons past his DPS: pooled Alpha Strikes, Hemoplague burst-heals, and drain sustain make you the duelist he can no longer race.", "after": "Your healing balloons past his DPS: a pooled Alpha Strike, Hemoplague's burst heal, and drain sustain make you the duelist he can no longer race."},
+    {"layer": "content", "path": "early", "before": "Levels 1-4 are free: Transfusion out-trades and out-sustains anything Meditate gives back, he has no gap-closer that survives Sanguine Pool, and every wave he contests costs him health - poke him off CS relentlessly and build the lead your mid-game will need to survive his spike.", "after": "Levels 1-4 are free: Transfusion out-trades anything Meditate gives back, and you cannot interrupt that channel, so Grievous Wounds is the answer rather than CC. Alpha Strike is 20s at rank 1 - poke him off CS between them and build the lead your mid-game needs."},
+    {"layer": "content", "path": "mid", "before": "At 6 he finally has teeth: Highlander lets him dive you and his burst now outpaces your Q healing, and with his first item the combo genuinely kills you through a mistimed Pool. This is his era - concede space, hold Pool strictly for the moment he commits, and let Hemoplague make his dives unprofitable.", "after": "At 6 he finally has teeth: Highlander is 85s, makes him slow-immune, and refreshes his cooldowns on a kill, so one won fight rolls straight into the next. This is his era - concede space, hold Pool strictly for the moment he commits, and buy Grievous Wounds before Meditate does the work."},
+    {"layer": "content", "path": "wants.foe[1]", "before": "Highlander dives while your Pool is down", "after": "Highlander dives, immune to all your slows"}
+  ],
+  "notes": "STRUCTURAL GAP: this matchup has no full-layer entry at all — currentText.full is null, so every full path (tldr, winCon, diff, phases[0..6], breakdown.*, dosFull, dontsFull, report) is missing. That is one of the ~92 known missing full entries. I did not try to create it with before:null edits, because building an entire entry from nothing means creating the parent object and roughly forty fields in one go, and a partial success would leave a half-rendered page — worse than the clean gap that exists now. Worth a dedicated pass with a scaffolding tool rather than an auditor. Both remaining suspect items were false positives. One thing I could not verify and left out: whether Sanguine Pool's untargetability actually causes an in-flight Alpha Strike to whiff, since Master Yi is himself untargetable during it — the page has asserted that for a while and I kept the claim rather than remove advice I cannot disprove, but it is worth confirming."
+}

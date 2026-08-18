@@ -1,0 +1,49 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "sion",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 2, 4 and 5 are stored as Sion while the paragraphs beneath them say the opposite: whys[2] 'keep trades even', whys[4] 'still even — Sion has no kill pressure', whys[5] 'At 6 Hemoplague and a pooled-Q trade let you start winning, favouring you'. whys[4] also mislabels its own row as 'Level 5' when the row label is Level 6.",
+      "why": "The packet levelChart is Skill, Skill, Skill, Skill, Skill, Vladimir, Vladimir and matches every whys[] line. Three stored rows disagree with their own explanation text.",
+      "corrected": "Rows 2 and 4 become Skill; row 5 becomes Vladimir. Rows 0, 1, 3 and 6 are already correct.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText whys[0..6]", "currentText mid"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldown numbers anywhere, and Unstoppable Onslaught is treated as a single fixed threat.",
+      "why": "Decimating Smash is 10s at rank 1 falling to 6s; Soul Furnace is 15s to 11s and re-arms 3 seconds after the shield; Roar of the Slayer is 12s to 8s at 800 range; Unstoppable Onslaught drops from 140s at rank 1 to 60s at rank 3 — it more than doubles in frequency, which is the real late-game spike and the page never says so.",
+      "corrected": "R is 140s at rank 1 but 60s at rank 3; Sanguine Pool is 28s at rank 1 and 16s at rank 5, so the pool covers his ult only once it is maxed.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sion.json", "champ-data/_kits/vladimir.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Roar of the Slayer (E) is never mentioned in any field despite being his lane poke. Decimating Smash is described as 'Charged = knockup' without stating that a partially charged Q has no CC at all. spikes[2] tells the player to 'deny his shield value by not feeding it free stacks' — Soul Furnace gains max Health when Sion KILLS units, not from damage you take.",
+      "why": "The E is his highest-uptime damage and it knocks a minion backwards through your position, so it hits twice; the charge threshold is what makes the Q dodgeable; and the shield-stacking line tells the player to change a behaviour that does nothing.",
+      "corrected": "Only a fully charged Decimating Smash knocks up and stuns — a tapped Q is damage only. Roar of the Slayer knocks a struck minion back through you for a second hit, so do not stand in line behind your own wave. His max-Health stacks come from last-hitting, so contest CS rather than withholding damage. Glory in Death heals him on every attack after he dies, so anti-heal matters into the reanimation, and Unstoppable Onslaught's terrain can cut your retreat when you have no dash.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sion.json", "_missing needs-antiheal", "_missing terrain-cuts-retreat"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[2].side","before":"Sion","after":"Skill"},
+    {"layer":"content","path":"win[2]","before":"Sion","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Sion","after":"Skill"},
+    {"layer":"content","path":"win[4]","before":"Sion","after":"Skill"},
+    {"layer":"full","path":"phases[5].side","before":"Sion","after":"Vladimir"},
+    {"layer":"content","path":"win[5]","before":"Sion","after":"Vladimir"},
+    {"layer":"content","path":"whys[4]","before":"Level 5 still even — Sion has no kill pressure into your sustain.","after":"Level 6 stays even — Sion has no kill pressure into your sustain."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Sion Decimating Smash: matchup-defining — Charged = knockup. Dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Decimating Smash: 10s at rank 1, 6s at rank 5 — only a FULL charge knocks up and stuns; a tapped Q is damage only. - Soul Furnace: 15s shield, re-arms after 3s. - Unstoppable Onslaught: 140s at rank 1, 60s at rank 3."},
+    {"layer":"full","path":"dosFull[0].d","before":"Charged = knockup. Dodge it. Only engage once it is down or baited.","after":"Only a fully charged Q knocks up — a tapped Q is damage, no stun."},
+    {"layer":"full","path":"report[5].t","before":"Track Sion's Decimating Smash (Stun): Charged = knockup. Dodge it. When it is down — Q-E + R him.","after":"Roar of the Slayer knocks a minion back through you — the E is a second poke, not just a slow."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Soul Furnace re-arms after 3s for magic damage — step out first."},
+    {"layer":"content","path":"spikes[2].text","before":"Your first AP item makes charged E poke and Q burst outpace Sion's tanky scaling; keep chipping him and deny his shield value by not feeding it free stacks.","after":"Your first AP item makes charged E poke and Q burst outpace Sion's tanky scaling; his max-HP stacks come from killing units, so deny the last hits, not the shield."}
+  ],
+  "notes": "The sion-side mirror audit recorded that currentText.full was null for sion vs vladimir — that direction is one of the ~92 matchups with no full-layer entry. This direction (vladimir vs sion) has a complete full layer, so the two pages are not symmetrical in structure and mirror-fix.js has nothing to compare on the full side. Worth checking whether the missing sion__vladimir full entry needs scaffolding before the next mirror pass. Separately, whys[] on this page are shifted one stage relative to their row labels (whys[4] said 'Level 5' on the Level 6 row, whys[5] discusses level 6 on the First item row); I fixed the whys[4] label but the drift continues into whys[5] and would need a coordinated rewrite of three strings inside the length band."
+}

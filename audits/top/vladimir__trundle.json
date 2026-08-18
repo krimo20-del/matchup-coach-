@@ -1,0 +1,46 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "trundle",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The rows and the text beneath them disagree at three stages. win[1]/phases[1] read Trundle while whys[1] says 'Neither champ has a clean level-2 spike, so it comes down to who lands their trade'; win[2] reads Trundle while whys[2] literally ends '— skill'; win[5] reads Skill while whys[5] says 'your burst beats his sustain cleanly'.",
+      "why": "The trundle-side mirror audit states it deliberately set rows 1-3 to Trundle and rows 4 (level 6) and 5 (first item) to Skill, and the current disk state matches that. The packet chart disagrees (Skill, Skill for rows 1-2 and Vladimir for row 5), but the mirror has already landed, so flipping the rows here would just be reverted by mirror-fix.js.",
+      "corrected": "Keep the rows as the mirror set them and fix the three whys[] strings so the explanation matches the row it sits under. No chart edits proposed.",
+      "confidence": "Medium",
+      "sources": ["mirror audits/top/trundle__vladimir.json", "packet levelChart", "currentText whys[1,2,5]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Subjugate is described only as 'steals your stats' with no cooldown, no list of which stats, and no mention of the doubling window. Chomp and Frozen Domain have no numbers anywhere.",
+      "why": "Subjugate is 120s at rank 1 but 80s at rank 3 — it nearly halves, which changes how often you can bait it. It steals Health, Armor AND Magic Resist, and Riot's text says the stolen amount is DOUBLED over the following 4 seconds. Chomp is 3.5s at 300 range for 20 mana; Frozen Domain is 18s to 14s at 750 range.",
+      "corrected": "Subjugate: 120/100/80s, one cast, steal doubles over 4s. Chomp: 3.5s. Frozen Domain: 18s at rank 1.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/trundle.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Three interactions are absent. (1) Chomp is an auto-attack reset — his combo opens with the reset, so the wind-up is the tell, not the cast. (2) Frozen Domain grants increased healing from ALL sources on the zone; the page says 'don't duel his W' without ever saying why. (3) Subjugate steals Magic Resist, so the standard Vladimir answer of stacking MR partly feeds it.",
+      "why": "Each one changes a decision the page already asks the player to make: when to step back, why the W zone matters, and what to buy.",
+      "corrected": "Chomp (Q, 3.5s) resets his auto — read the wind-up. Frozen Domain boosts every heal he receives, including King's Tribute off dying minions, so anti-heal timing decides extended trades and you never brawl on the zone. Subjugate takes Health, Armor and Magic Resist, so raw resistances are the wrong answer. Pillar of Ice (E, 1000 range, 21s at rank 1) creates impassable terrain and you have no dash — hold Flash for the wall. Tides of Blood is blocked by enemy units, so charge it inside your own wave.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/trundle.json", "_missing needs-antiheal", "_missing resistances-invalidated", "_missing autoreset-burst-tell"]
+    }
+  ],
+  "edits": [
+    {"layer":"content","path":"whys[1]","before":"Neither champ has a clean level-2 spike, so it comes down to who lands their trade.","after":"Chomp is a 3.5s auto reset with an AD sap, so he still wins the level-2 walk-up."},
+    {"layer":"content","path":"whys[2]","before":"Trundle can bite in for a favourable melee exchange but your poke starts catching up — skill.","after":"Frozen Domain gives him attack speed and boosted healing — do not brawl on it at level 3."},
+    {"layer":"content","path":"whys[5]","before":"With Hemoplague and item scaling your burst beats his sustain cleanly.","after":"Hemoplague amps your burst, but Subjugate steals resistances back — even."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Trundle Subjugate: matchup-defining — Steals your stats. Avoid the brawl. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Subjugate: 120s at rank 1, 80s at rank 3 — it steals Health, Armor AND Magic Resist on impact and doubles over 4 seconds. - Chomp: 3.5s auto reset. - Frozen Domain: 18s, and it boosts every heal he gets."},
+    {"layer":"full","path":"dosFull[0].d","before":"Steals your stats. Avoid the brawl. Only engage once it is down or baited.","after":"It steals Health, Armor and MR, doubling over 4s — stacking MR feeds it."},
+    {"layer":"full","path":"dosFull[2].d","before":"Trundle wastes Subjugate — commit the full pattern immediately.","after":"His combo opens with a Chomp auto reset — that wind-up is the tell."},
+    {"layer":"full","path":"report[5].t","before":"Track Trundle's Subjugate: Steals your stats. Avoid the brawl. When it is down — Q-E + R him.","after":"Frozen Domain boosts his healing from all sources — never brawl on it, and bring anti-heal."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Trundle's favourite window — refuse it and half his win condition is gone.","after":"Frozen Domain gives attack speed, move speed and increased healing on the zone."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Subjugate is one cast — the steal doubles over the next 4 seconds."}
+  ],
+  "notes": "MIRROR vs PACKET, unresolved by design: the trundle-side audit set rows 1-3 to Trundle and rows 4-5 to Skill; the packet chart says Skill, Skill for rows 1-2 and Vladimir for row 5. I deferred to the mirror because it is already on disk and mirror-fix.js would overwrite anything else, and instead repaired the three whys[] strings that contradicted their own rows. If the packet chart is meant to win these disputes, this matchup needs the rows flipped and those same three strings rewritten again — worth deciding once at the run level rather than per matchup. Separately, the mirror reports a fabricated 'Subjugate second cast' appearing five times on the trundle side; nothing on this side repeats it, but it is worth grepping the whole repo for 'second cast' near Subjugate."
+}

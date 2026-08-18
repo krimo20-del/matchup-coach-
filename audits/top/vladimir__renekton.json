@@ -1,0 +1,41 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "renekton",
+  "lane": "top",
+  "audit": [
+    { "point": 2, "status": "needs-correction",
+      "whatIsWrong": "Row 0 read Renekton under a why saying 'Level 1 is even', and row 6 read Renekton under a why saying '2+ item scaling and pool disengage flip it to Vladimir'. The packet flags the chart as contradicting a 53.23% win rate.",
+      "why": "At level 1 Renekton has no Fury and one ability, and the two-item window is where Riftmaker plus Crimson Pact beats a champion whose kit is flat Fury-gated burst. The packet chart gives Skill at level 1 and Vladimir at two items, which matches both whys.",
+      "corrected": "Rows 0 and 6 flipped in phases[N].side and win[N] as one paired atomic group, with ratings adjusted. Rows 1-5 already agreed everywhere and were left alone — the mirror's 'no chart edits' note holds for those five rows only.",
+      "confidence": "High", "sources": ["packet levelChart and defects", "existing whys"] },
+    { "point": 3, "status": "correct",
+      "whatIsWrong": "", "why": "Renekton spikes at Fury plus level 6 and first item; Vladimir's is two items. Spike timings already right.",
+      "corrected": "", "confidence": "High", "sources": [] },
+    { "point": 4, "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text attributes armour shred to Dominus, and neither spikes[0] nor the don'ts state the stun duration, the auto reset, or the anti-heal requirement.",
+      "why": "Riot's text gives Dominus bonus Health, damage around him and periodic Fury — the armour reduction belongs to an empowered Slice and Dice, not to his ult. Ruthless Predator is 16s at rank 1 and stuns 0.75s, or 1.5s and three slashes above 50 Fury, and it resets his auto — the missing-interactions file flags that wind-up as the real tell. Cull the Meek heals him off every trade on a flat 7s, which is why Grievous Wounds decides extended fights.",
+      "corrected": "spikes[0].text now names the Fury threshold, the 1.5s stun, the auto reset and the anti-heal rule; spikes[1].text now states what Dominus actually gives him; dontsFull[1].d now describes the wind-up.",
+      "confidence": "High", "sources": ["brief enemyKit Q/W/E/R text", "missingInteractions"] },
+    { "point": 6, "status": "correct",
+      "whatIsWrong": "", "why": "Ruthless Predator at 16s rank 1 is correctly the tracked cooldown throughout.",
+      "corrected": "", "confidence": "High", "sources": ["brief enemyKit"] }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Renekton", "after": "Skill" },
+    { "layer": "content", "path": "win[0]", "before": "Renekton", "after": "Skill" },
+    { "layer": "full", "path": "phases[6].side", "before": "Renekton", "after": "Vladimir" },
+    { "layer": "content", "path": "win[6]", "before": "Renekton", "after": "Vladimir" },
+    { "layer": "full", "path": "phases[0].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "4/10", "after": "6/10" },
+    { "layer": "content", "path": "spikes[0].text",
+      "before": "Renekton with Fury and both Cull the Meek (Q) plus Ruthless Predator (W) stun will chunk half your bar in one all-in you cannot answer.",
+      "after": "Renekton on 50+ Fury chains Cull the Meek's heal into a 1.5s W stun that also resets his auto — Grievous Wounds before you ever trade long." },
+    { "layer": "content", "path": "spikes[1].text",
+      "before": "Even with Hemoplague (R) up, his Dominus (R) shred and W stun let him burst you before your ult ticks — pool the stun or you die.",
+      "after": "Even with Hemoplague up, Dominus gives him bonus health and free Fury, and empowered Ruthless Predator stuns 1.5s — pool the stun or you die." },
+    { "layer": "full", "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Empowered W is a 1.5s stun and an auto reset — step back on wind-up." }
+  ],
+  "notes": "The mirror's note that 'level chart agrees across full, content and packet' is true for rows 1-5 only; rows 0 and 6 differed from the packet in both layers, which is what the packet defect line was reporting. Renekton's empowered W destroys damage shields — irrelevant here since Vladimir has no shield in his kit, so nothing was written about it."
+}

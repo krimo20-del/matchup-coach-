@@ -1,0 +1,58 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "urgot",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 1 and 2+ items were both 'Skill' in both layers, against a packet chart of Urgot rows 0-5 / Vladimir row 6 and against the already-applied mirror.",
+      "why": "Urgot's passive leg blasts and 800-range Q beat a 600-range Transfusion at level 1; at two items Vladimir's burst plus Crimson Pact HP outscales him. The mirror set row 0 to Urgot (6/10 their side) and row 6 to Vladimir (3/10 their side).",
+      "corrected": "phases[0].side/win[0] to Urgot with rating 4/10 from your side; phases[6].side/win[6] to Vladimir with rating 7/10.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirror audit urgot__vladimir"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spike timings already match the mirror: his W uptime and first bruiser item, his level 6 execute, your Riftmaker and 2-item window.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief currentText", "mirror audit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text claimed 'he can just re-fear after' your Sanguine Pool. Fear Beyond Death is 100/85/70s — there is no re-cast and no second fear inside a pool. Nothing anywhere gave a real cooldown or range number, which is the packet's recorded defect (0 sequencing cues).",
+      "why": "Kit file: Q Corrosive Charge 800 range / 10-8s, W Purge 490 range / 12-0s, E Disdain 475 range / 16-14s hard CC + shield, R 2500 range / 100-85-70s execute. Vladimir Q is 600 range, W Sanguine Pool 2s untargetable on 28/25/22/19/16s.",
+      "corrected": "Removed the invented re-fear, and wrote the 490 vs 600 range gap, Disdain's 16s and Pool's 28s into the do's and don'ts as concrete sequencing.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/urgot.json", "champ-data/_kits/vladimir.json"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "No line stated the punishable cooldown window in numbers.",
+      "why": "Disdain at 16s rank 1 is the only window where stepping into his 490-range Purge is survivable.",
+      "corrected": "dosFull[0].d now names the 16s and ties the step-up to it.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/urgot.json"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Urgot"},
+    {"layer": "content", "path": "win[0]", "before": "Skill", "after": "Urgot"},
+    {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Vladimir"},
+    {"layer": "content", "path": "win[6]", "before": "Skill", "after": "Vladimir"},
+    {"layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10"},
+    {"layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "7/10"},
+    {"layer": "full", "path": "dosFull[0].d", "before": "His engage. Pool/dodge it. Only engage once it is down or baited.", "after": "Disdain is 16s at rank 1 — step up only after he throws it."},
+    {"layer": "full", "path": "dosFull[1].d", "before": "Transfusion Urgot on cooldown, E-charge behind the wave, and pool the one ability his kill plan needs.", "after": "Transfusion reaches 600 and Purge only 490 — poke from outside it and walk back before he closes."},
+    {"layer": "full", "path": "dosFull[2].d", "before": "Urgot wastes Disdain (Flip) — commit the full pattern immediately.", "after": "Sanguine Pool's 2s untargetable dodges the flip; it is 28s at rank 1."},
+    {"layer": "full", "path": "dontsFull[0].d", "before": "That is Urgot's favourite window — refuse it and half his win condition is gone.", "after": "Purge is 490 range and reaches zero cooldown at rank 5 — never trade inside it."},
+    {"layer": "full", "path": "dontsFull[2].d", "before": "Pooling to dodge poke — the pool is your KA answer and your only escape; spending it on chip is fatal.", "after": "Fear Beyond Death executes below a health threshold from 2500 range — top up before you dip, not after."},
+    {"layer": "content", "path": "spikes[1].text", "before": "His R Fear Beyond Death executes you below a health threshold — never fight at low HP, and don't rely on Sanguine Pool to save you since he can just re-fear after.", "after": "His R Fear Beyond Death executes you below a health threshold from 2500 range — never fight at low HP, and if he burns it on nothing you have 100 seconds at rank 1 to work in."}
+  ],
+  "notes": "Removed the 're-fear after your pool' claim in spikes[1].text — Fear Beyond Death is 100/85/70s with no recast. Whether the impale persists through Sanguine Pool's untargetability is not in Riot's text and no edit asserts it (same call the mirror made)."
+}

@@ -1,0 +1,62 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers read Skill for rows 0-5 and Vladimir for row 6, which matches the packet chart exactly and matches all seven why-strings. 54.52% over 1117 games with the win arriving late is consistent with a skill lane that Vladimir outscales.",
+      "corrected": "No chart edits needed — the only matchup in my slice where the two layers and the packet already agreed.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText win[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer's level-6 spike gave no cooldown for Purgatory and described it only as cancelling out against Pool.",
+      "why": "Purgatory is 120/100/80s and is an execute — it does not 'cancel out' with anything, it changes the health threshold at which a fight is already lost. Pool's 2 seconds of untargetability are a specific answer to it, not a symmetrical trade.",
+      "corrected": "spikes[1].text now carries the 120s cooldown, the execute floor, and Pool's 2 seconds as the concrete answer.",
+      "confidence": "High",
+      "sources": ["enemyKit R cooldown and flags", "ownerKit W text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer is built on a mechanic Locke does not have. It says 'Sanguine Pool dodges his W Soul Ignition burst', 'his W burst plus totem math', and 'he wants to bait Sanguine Pool then land W Soul Ignition into R Purgatory'. Soul Ignition is a self-buff: he gains attack speed and move speed, damages himself, and heals a portion of that back at the end. There is nothing to dodge.",
+      "why": "A reader holding Pool for a W that never arrives spends the lane waiting for the wrong button. His actual kill script is the one the full layer already describes correctly and the content layer never mentions: Q marks on you, Ashen Pursuit blinking in on a 10s cooldown to cash them with attacks, Purgatory to execute the remainder. His passive scales with your missing health, which is why the floor matters.",
+      "corrected": "Soul Ignition removed as an incoming burst throughout the content layer and replaced with the mark-then-blink script, the 10s Ashen Pursuit window, and Soul Ignition recast as the moment Grievous Wounds is worth having.",
+      "confidence": "High",
+      "sources": ["enemyKit W/E/Q/P/R text and cooldowns", "currentText full breakdown.cooldowns"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t states 'Anti-heal is optional — his sustain is self-refund, not lifesteal.'",
+      "why": "Grievous Wounds reduces healing from any source, so a self-refund is exactly as reducible as lifesteal — and Soul Ignition's refund lands at the end of a fixed window, which makes the timing readable rather than optional.",
+      "corrected": "The line replaced with the refund being cut, and the timing tied to the Soul Ignition window in mid.",
+      "confidence": "Medium",
+      "sources": ["missingInteractions rule needs-antiheal", "enemyKit W text"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing said his engage opens on an auto-attack reset.",
+      "why": "Ashen Pursuit teleports then dashes to attack the next target — the attack wind-up on arrival is the tell, and it is his only mobility, on 10s flat at every rank.",
+      "corrected": "Written into spikes[0].text and mid.",
+      "confidence": "High",
+      "sources": ["missingInteractions rule autoreset-burst-tell", "enemyKit E"]
+    }
+  ],
+  "edits": [
+    {"layer": "content", "path": "spikes[0].text", "before": "The whole lane is a cooldown chess match: Transfusion heals his Q Ritual Nails chip, Sanguine Pool dodges his W Soul Ignition burst - whoever baits the other's key button wins each trade.", "after": "The whole lane is a cooldown chess match: Transfusion heals his nail chip, and Ashen Pursuit is his only mobility on a 10s timer - the ten seconds after he spends it is the window you fight in."},
+    {"layer": "content", "path": "spikes[1].text", "before": "His R Purgatory execute and your untargetable Pool cancel out; hold Pool for the totem window and his all-in becomes a wasted ultimate.", "after": "Purgatory is 120s at rank 1 and executes below a threshold - stay above the floor, or spend Pool's 2 untargetable seconds inside the zone."},
+    {"layer": "content", "path": "early", "before": "Levels 1-3 are an honest skill lane: his burst threat and your escape tools cancel out, so it becomes a dance of cooldowns - weave Transfusion on his Q Ritual Nails whiffs, never Pool for harassment you can heal back, and keep your HP above the range where his W burst plus totem math gets interesting.", "after": "Levels 1-3 are an honest skill lane: his burst threat and your escape tools cancel out, so it becomes a dance of cooldowns - weave Transfusion on his nail whiffs, never Pool for harassment you can heal back, and drop your mark stacks before three, because his attacks cash them in for bonus damage."},
+    {"layer": "content", "path": "mid", "before": "Nothing separates you through 4-6 unless someone blinks: he wants to bait Sanguine Pool then land W Soul Ignition into R Purgatory, while you want to hold Pool precisely for that window and heal everything else. If you dodge one full combo, the lane resets and he has burned his only kill script.", "after": "Nothing separates you through 4-6 unless someone blinks: he wants marks on you, then Ashen Pursuit in for the bite, with Purgatory to execute what is left. Hold Sanguine Pool's 2 seconds for exactly that arrival, heal everything else, and Soul Ignition's self-damage window is where Grievous Wounds pays."},
+    {"layer": "content", "path": "wants.you[0]", "before": "Pool saved for his W-into-R kill windows", "after": "Pool saved for his blink-in and the execute"},
+    {"layer": "content", "path": "wants.foe[0]", "before": "Baiting Pool before committing W Soul Ignition", "after": "Baiting Pool, then Ashen Pursuit onto a marked you"},
+    {"layer": "full", "path": "report[8].t", "before": "Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Anti-heal is optional — his sustain is self-refund, not lifesteal.", "after": "Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Grievous Wounds still cuts the Soul Ignition refund."}
+  ],
+  "notes": "This matchup has two layers written by different hands. The full layer is the best-written page in my slice — mark chain, E-as-only-mobility, execute floor, all correct against the kit. The content layer describes a different champion: it treats Soul Ignition as an incoming burst to dodge three separate times when Riot's text makes it a self-buff with a self-damage refund. All my content edits pull it into line with the full layer rather than inventing anything. Two things I did not assert: the trueDamage flag on Soul Ignition most likely refers to the damage he deals himself, so I did not write a 'resistances are the wrong answer' line off it; and his R carries a grounding flag, which may or may not stop Sanguine Pool — grounding-versus-untargetability is not resolvable from the kit data, and it would be a valuable line if the user can confirm it. Q is called 'Ritual Nails' consistently across both layers while the kit text says 'Soul Nails'; with enemyAbilities null in the packet I had no authority to correct it either way."
+}

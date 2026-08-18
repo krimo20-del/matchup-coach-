@@ -1,0 +1,50 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "sylas",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 1 and 2 are stored as Vladimir while whys[1] says 'neither champion threatens a kill, keeping it a skill matchup' and whys[2] says trades 'stay balanced'. Row 4 is stored as Skill while whys[4] says 'At 6 Sylas spikes hard — Hijack steals Hemoplague and his all-in can burst you, favouring him', and the mid paragraph calls level 6 'Sylas's window'.",
+      "why": "The packet levelChart (Skill, Skill, Skill, Skill, Sylas, Vladimir, Vladimir) agrees with all seven whys[] lines and with the mid paragraph. Three stored rows contradict their own text.",
+      "corrected": "Rows 1 and 2 become Skill; row 4 becomes Sylas. Rows 0, 3, 5, 6 are already correct.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText whys[1..4]", "currentText mid"]
+    },
+    {
+      "point": 3,
+      "status": "missing",
+      "whatIsWrong": "Hijack is treated as a single level-6 event with no cooldown given, and Vladimir's own ult cooldown is never compared to it.",
+      "why": "Hijack is 80s at rank 1 but only 30s at rank 3, while Hemoplague is a flat 120s at every rank. By late game Sylas can cast a stolen Hemoplague roughly four times for each one you get, and the page never tells the player that the ult war gets worse, not better.",
+      "corrected": "Hijack: 80/55/30s against your flat 120s. Chain Lash is 10s to 6s, Kingslayer 12s to 6s, Abscond/Abduct 13s to 9s.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sylas.json", "champ-data/_kits/vladimir.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two errors. (1) Chain Lash is written as '(E2)' in spikes[0].text, wants.you[0] and wants.foe[1], and the early paragraph calls it his 'second-cast E line'. Chain Lash is Q; E is Abscond/Abduct. (2) Abduct is described as 'His dash + stun (recast pull)' in breakdown.cooldowns, dosFull[0].d and report[5].t — Riot's text says the recast pulls him to an enemy he hits. There is no stun anywhere in Sylas's kit.",
+      "why": "A phantom stun makes the player hold Sanguine Pool for CC that does not exist, and the wrong slot letter sends them to the wrong key.",
+      "corrected": "Chain Lash (Q, 775 range) is a cross that detonates at the intersection after a delay — step off the crossing point. Abscond/Abduct (E) is a dash whose recast pulls Sylas to you; it does not stun. Kingslayer (W) heals him off you, so Grievous Wounds timing decides extended trades. Tides of Blood is blocked by enemy units, so charge it behind your own wave.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sylas.json", "_missing needs-antiheal", "mirror audits/top/sylas__vladimir.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[1].side","before":"Vladimir","after":"Skill"},
+    {"layer":"content","path":"win[1]","before":"Vladimir","after":"Skill"},
+    {"layer":"full","path":"phases[2].side","before":"Vladimir","after":"Skill"},
+    {"layer":"content","path":"win[2]","before":"Vladimir","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Sylas"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Sylas"},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Sylas Abscond / Abduct: matchup-defining — His dash + stun (recast pull). Bait it, then commit. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Abscond / Abduct: 13s at rank 1, 9s at rank 5 — the recast PULLS him to you, it does not stun. - Kingslayer: 12s at rank 1, 6s at rank 5, and it heals him. - Hijack: 80s at rank 1 but 30s at rank 3, against your flat 120s Hemoplague."},
+    {"layer":"full","path":"dosFull[0].d","before":"His dash + stun (recast pull). Bait it, then commit. Only engage once it is down or baited.","after":"Abduct pulls him to you, it does not stun — 13s at rank 1, so bait the dash and then commit."},
+    {"layer":"full","path":"report[5].t","before":"Track Sylas's Abscond / Abduct: His dash + stun (recast pull). Bait it, then commit. When it is down — Q-drain, pool his answer.","after":"Abduct pulls, never stuns. Hijack is 30s at rank 3 against your 120s Hemoplague — he casts your ult four times per one of yours."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Kingslayer heals him off you — bring Grievous Wounds early."},
+    {"layer":"content","path":"spikes[0].text","before":"Even and skill-based early — Sylas pokes with Chain Lash (E2) and heals off Kingslayer (W), you sustain with Transfusion (Q); both of you farm and trade poke without a clean kill, so dodge his double-Q (Chain Lash) line.","after":"Even and skill-based early — Sylas pokes with Chain Lash (Q), a 775-range cross that detonates after a delay, and heals off Kingslayer (W); sustain with Transfusion and step off the intersection point."},
+    {"layer":"content","path":"wants.you[0]","before":"Farm the even early game and dodge his Chain Lash (E2) poke line","after":"Farm even early and step off the Chain Lash (Q) intersection"},
+    {"layer":"content","path":"wants.foe[1]","before":"Land Chain Lash (E2) into Kingslayer (W) for a healthy trade","after":"Land Chain Lash (Q) into Kingslayer (W) for a healthy trade"}
+  ],
+  "notes": "The early paragraph still says 'Dodge his second-cast E line' meaning Chain Lash, which is Q — I could not fix it inside the length band without rewriting the whole paragraph, so it is flagged rather than edited. Also worth a champion-level look: this page's whole framing is 'track Abscond / Abduct', but the ability that actually decides the matchup is Hijack, because it takes YOUR ultimate. Every 'Track: Sylas Abscond / Abduct' string (tldr, winCon, enemyWin, loading, focus, breakdown.mid, report[9], report[10], report[13]) points the reader at the wrong button."
+}

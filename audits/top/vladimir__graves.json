@@ -1,0 +1,77 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "graves",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 0 to 3 gave levels 1-5 to you or to skill while every matching why says Graves is in front ('out-damage your level 1', 'win the level 2 trade', 'let him reset trades ahead', 'keeps him in front').",
+      "why": "The packet chart is Graves for the first four stages then Vladimir from level 6, which fits 50.42% over 1769 games and matches the prose exactly. The mirror audit on graves__vladimir also set its rows 1 and 2 to Graves.",
+      "corrected": "Rows 0-3 flipped to Graves as matched win[N] + phases[N].side pairs with ratings rescaled. Row 4 left alone — see questionsForUser.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirrorFindings point 2"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Quickdraw was tracked as the defining cooldown with no number, and the page never said it refreshes.",
+      "why": "Quickdraw is 16/15/14/13/12, but hitting enemies with basic attacks lowers its cooldown and refreshes the resistance boost — so 'wait out his dash' is wrong if he is auto-attacking. Smoke Screen is 26s at rank 1, his real punishable cooldown.",
+      "corrected": "Written into report[5].t and spikes[0].text.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits graves.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "'Buckshot' is not a Graves ability — his Q is End of the Line. 'True Grit (P)' is wrong too: the passive is New Destiny; True Grit is the resistance stack granted by Quickdraw (E). spikes[0].text also carried garbled slot text: 'End of the Line (Q... QuickDraw dash W)'. Three real interactions were missing: his bullets cannot pass through units, End of the Line detonates on terrain and can cut your retreat while you have no dash, and Smoke Screen denies sight rather than blocking your targeted Transfusion.",
+      "why": "Riot's own kit text names every ability and states the bullet behaviour, the 1-second/terrain detonation and the sight reduction. A fabricated ability name is the exact failure this audit exists to remove, and the minion-block line changes how you stand in every early trade.",
+      "corrected": "Names fixed in spikes[0].text, early and wants.foe[1]; interactions written into early, report[5].t and dontsFull[1].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits graves.json", "_kits/_missing/vladimir.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Graves" },
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Graves" },
+    { "layer": "content", "path": "win[1]", "before": "Vladimir", "after": "Graves" },
+    { "layer": "full", "path": "phases[1].side", "before": "Vladimir", "after": "Graves" },
+    { "layer": "content", "path": "win[2]", "before": "Vladimir", "after": "Graves" },
+    { "layer": "full", "path": "phases[2].side", "before": "Vladimir", "after": "Graves" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Graves" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Graves" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "6/10", "after": "4/10" },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Graves shreds you with his double-shell autos plus Buckshot (Q) and the True Grit (P) armor stacks, and his End of the Line (Q... QuickDraw dash W) mobility lets him dodge your Transfusion and reset trades in his favor.",
+      "after": "Graves shreds you with New Destiny (P) shotgun autos and End of the Line (Q), which detonates after 1s or on terrain. Quickdraw (E) dashes him into True Grit resistances, and landing autos on you refreshes them and cuts its cooldown."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Graves is brutal early — his shotgun autos, Buckshot (Q), and True Grit (P) armor stacking let him out-trade you repeatedly, while Quickdraw (E) dashes dodge your Transfusion (Q) and keep him at his ideal range.",
+      "after": "Graves is brutal early — shotgun autos and End of the Line (Q) out-trade you, and Quickdraw (E) stacks True Grit resistances. His bullets cannot pass through units, so keep a minion between you and most of the volley never lands."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Stack True Grit armor and burst you with Buckshot autos",
+      "after": "Stack True Grit resists and burst you with shotgun autos"
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Graves's Quickdraw: His dash + armor stacks. Engage when it's down. When it is down — Q-drain, pool his answer.",
+      "after": "Quickdraw (E) is 16s at rank 1 but his autos cut it. Smoke Screen (W) denies your sight, not your targeted Q — keep draining inside it."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "You have no dash — hold Flash for his Q wall, not for the damage."
+    }
+  ],
+  "notes": "'Buckshot' and 'True Grit (P)' were fabricated/misattributed names that the packet's suspectNames check did not catch — worth checking other champions' Graves pages for the same two strings. Row 4 (Level 6) left untouched: the mirror says Graves, the packet says Vladimir, and every piece of prose on this page says you spike at 6. I did not guess."
+}

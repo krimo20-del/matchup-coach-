@@ -1,0 +1,88 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "garen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Four rows disagreed with both the packet chart and the mirror: levels 1 and 2 were given to Garen while the whys call them even, and level 6 and first item sat on 'Skill' while the whys say both flip to you.",
+      "why": "Packet chart is Skill, Skill, Skill, Garen, Vladimir, Vladimir, Vladimir at 52% — Garen owns the 4-5 window when Demacian Justice lands, you own everything from 6. The mirror audit on garen__vladimir already set both its layers to that same shape, so this side must match.",
+      "corrected": "Rows 0, 1, 4 and 5 flipped as matched win[N] + phases[N].side pairs, with the ratings rescaled in the same group.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirrorFindings point 2"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 spike text never gave a number for the ability that answers it.",
+      "why": "Sanguine Pool is 28s at rank 1 falling to 16s, and it is untargetable for 2 seconds — that is exactly the window Demacian Justice needs. Garen's Courage is 22s down to 12s and Judgment 9s down to 6s.",
+      "corrected": "The 2s untargetable and the 28s cost written into spikes[1].text; Courage's real effect written into dontsFull[1].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits vladimir.json", "champ-data/_kits garen.json", "mirrorFindings point 3"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Three interactions were absent: Demacian Justice deals true damage so MR is worthless against it, Sanguine Pool's untargetability eats the execute outright, and Decisive Strike is an auto-attack reset so the tell is the auto wind-up rather than the cast.",
+      "why": "Riot's kit flags Demacian Justice as trueDamage + execute and Decisive Strike as autoReset; Sanguine Pool is 'untargetable for 2 seconds'. The mirror audit records the same pool-eats-R interaction from Garen's side.",
+      "corrected": "Written into spikes[0].text, spikes[1].text, whys[4] and dosFull[2].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits garen.json", "_kits/_missing/vladimir.json", "mirrorFindings point 4"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Anti-heal is already core in report[8].t and breakdown.late, correct against Perseverance's out-of-combat regen. Stacking MR is the wrong answer to his R and is not recommended anywhere.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits garen.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[0]", "before": "Garen", "after": "Skill" },
+    { "layer": "full", "path": "phases[0].side", "before": "Garen", "after": "Skill" },
+    { "layer": "content", "path": "win[1]", "before": "Garen", "after": "Skill" },
+    { "layer": "full", "path": "phases[1].side", "before": "Garen", "after": "Skill" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Vladimir" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Vladimir" },
+    { "layer": "content", "path": "win[5]", "before": "Skill", "after": "Vladimir" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Vladimir" },
+    { "layer": "full", "path": "phases[0].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "5/10", "after": "6/10" },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Level 5 flips to you as first-item power lets pool beat his engage.",
+      "after": "Level 6 is yours — pool's untargetable eats Demacian Justice whole."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Garen's Decisive Strike (Q) silence into Judgment (E) spin is his whole all-in, and the silence stops you casting Sanguine Pool if you eat it. Early it's skill: don't stand in E-spin range, poke with Transfusion (Q) and Tides (E) at range, and pool before the silence lands, not after.",
+      "after": "Garen's Decisive Strike (Q) is an auto-attack reset, so his next auto's wind-up is the tell, not the cast — and its silence stops you casting Sanguine Pool if you eat it. Stay out of Judgment (E) range, poke with Transfusion and Tides, and pool before the silence lands, not after."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Demacian Justice (R) is a %-missing-HP execute, so at level 4-6 a Q-silence-into-E-into-R can delete you if you're low. Keep your HP topped with Transfusion and never let him walk up with R available while you're chunked.",
+      "after": "Demacian Justice (R) is a missing-HP execute dealing true damage, so MR does nothing. Sanguine Pool's 2 seconds of untargetable eats it outright — hold that 28s pool for his R, keep your bar topped with Transfusion, and never sit low while it is up."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Garen wastes Courage — commit the full pattern immediately.",
+      "after": "Pool the Q silence and E spin: 2s untargetable, then punish."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Courage is damage reduction plus tenacity — wait it out, then poke."
+    }
+  ],
+  "notes": "Packet reports games 3143 at the top of the brief but 1073 inside the packet; the win rate 52% is tied to the packet figure. Chart edits proposed as one atomic group of matched full+content pairs, landing on the packet shape the mirror already uses."
+}

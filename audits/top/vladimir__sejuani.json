@@ -1,0 +1,51 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "sejuani",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 0-3 are stored as Vladimir in both layers, but whys[0..3] all say 'even' / 'skill-based', the early paragraph opens 'Levels 1 through 5 are skill-based', and the packet levelChart gives Skill for rows 0-4.",
+      "why": "Three sources agree the early lane is even; only the stored rows disagree. Sejuani has no early damage, but Vladimir also has no kill pressure through Fury of the North's free Armor/MR.",
+      "corrected": "Rows 0-3 become Skill. Row 4 is already Skill; rows 5-6 stay Vladimir.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText whys[0..3]", "currentText early"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldown numbers appear anywhere on the page (packet flags zero sequencing cues), and Permafrost is named as the tracked cooldown throughout.",
+      "why": "Permafrost is a 1.5-second, 20-mana cast — it is never on cooldown and cannot be a window. Her real spike-and-punish cooldown is Arctic Assault (Q): 18s at rank 1 falling to 12s at rank 5, her only gap-closer. Glacial Prison is 120/105/90s.",
+      "corrected": "Track Arctic Assault, not Permafrost. Sanguine Pool at 28s rank 1 / 16s rank 5 is the answer to that engage.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sejuani.json", "champ-data/_kits/vladimir.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The page calls Permafrost a slow and treats it as a standalone stun on a cooldown. Riot's text: Permafrost stuns only an enemy champion who already has MAXIMUM Frost stacks, which Winter's Wrath (W, 9s to 5s) applies. Fury of the North also grants slow immunity out of combat, which no field mentions.",
+      "why": "The stun is conditional and the condition is dodgeable — this is the decisive interaction and it is absent. Slow immunity also means your Tides of Blood slow does nothing on her first step-up.",
+      "corrected": "Deny Frost stacks: dodge Winter's Wrath and Permafrost never fires. Out of combat Fury of the North makes her immune to your slow, so the first step-up is hers — pool the Arctic Assault, then trade once Frost Armor has broken.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sejuani.json", "mirror audits/top/sejuani__vladimir.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Vladimir","after":"Skill"},
+    {"layer":"content","path":"win[0]","before":"Vladimir","after":"Skill"},
+    {"layer":"full","path":"phases[1].side","before":"Vladimir","after":"Skill"},
+    {"layer":"content","path":"win[1]","before":"Vladimir","after":"Skill"},
+    {"layer":"full","path":"phases[2].side","before":"Vladimir","after":"Skill"},
+    {"layer":"content","path":"win[2]","before":"Vladimir","after":"Skill"},
+    {"layer":"full","path":"phases[3].side","before":"Vladimir","after":"Skill"},
+    {"layer":"content","path":"win[3]","before":"Vladimir","after":"Skill"},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Sejuani Permafrost: matchup-defining — Her stun after Frost stacks. Don't get stacked + stunned. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Arctic Assault: her only gap-closer, 18s at rank 1 and 12s at rank 5 — that is the window, not Permafrost. - Permafrost: 1.5s, but it only stuns at max Frost stacks, so deny the Winter's Wrath stacking. - Hemoplague: 120s, kill windows only."},
+    {"layer":"full","path":"dosFull[0].d","before":"Her stun after Frost stacks. Don't get stacked + stunned. Only engage once it is down or baited.","after":"Permafrost is 1.5s and only stuns at max Frost stacks — dodge Winter's Wrath and it never fires."},
+    {"layer":"full","path":"report[5].t","before":"Track Sejuani's Permafrost: Her stun after Frost stacks. Don't get stacked + stunned. When it is down — Q-drain, pool his answer.","after":"Permafrost stuns only at max Frost stacks, so dodge Winter's Wrath. Fury of the North makes her slow-immune out of combat."},
+    {"layer":"full","path":"tradeGood","before":"Transfusion Sejuani on cooldown, E-charge behind the wave, and pool the one ability his kill plan needs.","after":"Transfusion Sejuani on cooldown, E-charge behind the wave, and save the pool for her Arctic Assault engage."},
+    {"layer":"full","path":"focus.text","before":"Sejuani Permafrost","after":"Sejuani Arctic Assault"},
+    {"layer":"content","path":"spikes[0].text","before":"Sejuani is a tank with no lane kill pressure; her Arctic Assault (Q) and Permafrost slow are engage, not burst, so trade Transfusion freely.","after":"Sejuani has no lane kill pressure; Arctic Assault (Q) is 18s at rank 1 and is her only gap-closer — step up on it and trade Transfusion freely."}
+  ],
+  "notes": "Sejuani is female and roughly a dozen inherited strings call her 'he'/'his' (enemyWin, ahead, breakdown.feeding, breakdown.carry, dosFull[1].d, dontsFull[0].d, report[12].t and the trading block). I fixed tradeGood; the rest is a template-level find-and-replace better done in one pass than as twelve length-banded edits. Also: spikes[3] and the late paragraph claim Tides of Blood does percent-max-HP damage — no percentHealth flag appears on Vladimir's E in the kit and Riot's text does not say it. Left alone, logged unverified."
+}

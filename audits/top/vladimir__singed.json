@@ -1,0 +1,57 @@
+{
+  "ownerKey": "vladimir",
+  "enemy": "singed",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Stored rows read Skill, Singed, Singed, Skill, Skill, Singed, Singed, but every whys[] line on the same page gives those stages to Vladimir: whys[1] 'your poke starts winning', whys[2] 'favouring you', whys[3] 'fully control the lane in your favour', whys[4] 'the window stays yours', whys[6] 'in your favour'. Only whys[5] says even, and row 5 is stored as Singed.",
+      "why": "The packet levelChart (Skill, Vladimir, Vladimir, Vladimir, Vladimir, Skill, Vladimir) matches all seven whys[] lines. The stored rows contradict six of them, so the page currently prints Singed's name over a paragraph explaining why Vladimir wins that stage.",
+      "corrected": "Rows 1-4 become Vladimir, row 5 becomes Skill, row 6 becomes Vladimir. Row 0 stays Skill.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags zero sequencing cues: not one cooldown number appears anywhere, and the whole page keys its trading to 'Fling's cooldown' without ever saying what it is.",
+      "why": "Fling is 10s at rank 1 down to 8s at 125 range; Mega Adhesive is 17s down to 13s at 1000 range; Insanity Potion is a flat 100s; Poison Trail has no cooldown at all, only a 13 mana drip. Sanguine Pool is 28s at rank 1, so at level 2 his Fling comes back nearly three times per pool.",
+      "corrected": "Insanity Potion at 100s is the real spike to time around, not Fling. Poison Trail is permanently available and cannot be waited out.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/singed.json", "champ-data/_kits/vladimir.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two errors. (1) Fling is repeatedly labelled (W) — in spikes[0].text and wants.foe[1]. Fling is E; W is Mega Adhesive. (2) Insanity Potion makes Poison Trail apply Grievous Wounds, and no field on the page mentions it, even though the entire Vladimir plan is Transfusion and Hemoplague healing.",
+      "why": "A wrong slot letter makes the advice unusable on the keyboard, and unannounced anti-heal makes the stated win condition quietly stop working from level 6 onward.",
+      "corrected": "Fling is E. The root only happens in sequence: Mega Adhesive on the ground first, then Fling into it — break that order and it is a knockup with no root. While Insanity Potion is up his poison applies Grievous Wounds, cutting both Transfusion and Hemoplague healing, so take your extended trade before he drinks. Tides of Blood is blocked by enemy units, so charge it behind your own wave.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/singed.json", "_missing their-antiheal-blunts-you", "mirror audits/top/singed__vladimir.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[1].side","before":"Singed","after":"Vladimir"},
+    {"layer":"content","path":"win[1]","before":"Singed","after":"Vladimir"},
+    {"layer":"full","path":"phases[2].side","before":"Singed","after":"Vladimir"},
+    {"layer":"content","path":"win[2]","before":"Singed","after":"Vladimir"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Vladimir"},
+    {"layer":"content","path":"win[3]","before":"Skill","after":"Vladimir"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Vladimir"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Vladimir"},
+    {"layer":"full","path":"phases[5].side","before":"Singed","after":"Skill"},
+    {"layer":"content","path":"win[5]","before":"Singed","after":"Skill"},
+    {"layer":"full","path":"phases[6].side","before":"Singed","after":"Vladimir"},
+    {"layer":"content","path":"win[6]","before":"Singed","after":"Vladimir"},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Singed Fling: matchup-defining — His flip. Pool/dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Insanity Potion: 100s, and it makes Poison Trail apply Grievous Wounds — your healing is cut while it is up, so trade before he drinks. - Fling: 10s at rank 1, 125 range. - Hemoplague: 120s."},
+    {"layer":"full","path":"dosFull[0].d","before":"His flip. Pool/dodge it. Only engage once it is down or baited.","after":"Fling is E on 10s, 125 range — it is Mega Adhesive (W) that roots."},
+    {"layer":"full","path":"report[5].t","before":"Track Singed's Fling: His flip. Pool/dodge it. When it is down — Q-E + R him.","after":"Fling only roots if he laid Mega Adhesive (W) first — break that order."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Singed's favourite window — refuse it and half his win condition is gone.","after":"While Insanity Potion is up, his poison applies Grievous Wounds to your heals."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Goo down first, then the flip — landing in Mega Adhesive roots you."},
+    {"layer":"full","path":"focus.text","before":"Singed Fling","after":"Singed Insanity Potion"},
+    {"layer":"content","path":"spikes[0].text","before":"This is your zone: Singed has to walk into you to fling (W) and his Poison Trail (Q) does little to your Transfusion (Q) sustain, so charge Tides of Blood (E) and poke him off the wave every time he steps up to farm.","after":"This is your zone: Fling (E) is 125 range and 10s at rank 1, and Poison Trail (Q) does little against Transfusion — charge Tides of Blood (E) behind your minions and poke him off the wave every time he steps up."},
+    {"layer":"content","path":"wants.foe[1]","before":"Land his fling (W) to flip you into his poison and tower","after":"Goo first, then Fling (E) — landing in it roots you"}
+  ],
+  "notes": "The 'level chart contradicts win rate' defect is arguably intentional here: the mid paragraph explicitly says 'the sub-50 win rate reflects Singed's macro escape hatch, not lane losses'. I aligned the rows to the packet chart and the whys[], which say the same thing, but a reader still sees 46.49% over a chart Vladimir wins 5-0. If you want the rows to track the win rate instead, that is a deliberate editorial call, not a data fix. Also left alone: Mega Adhesive grounds, and whether grounding prevents Sanguine Pool is not in Riot's text — I did not assert either way."
+}

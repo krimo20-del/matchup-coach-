@@ -1,0 +1,106 @@
+{
+  "ownerKey": "heimerdinger",
+  "enemy": "mordekaiser",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart said Mordekaiser wins levels 1, 2, 3, 4-5 and 2+ items, in a 56.65% FAV matchup whose own whys text describes Heimerdinger winning those stages.",
+      "why": "The packet levelChart is [Heimerdinger, Heimerdinger, Skill, Heimerdinger, Mordekaiser, Skill, Heimerdinger] and whys[0..3] already read as Heimerdinger-favoured (\"Morde has no dash and no early burst\", \"his E-pull-into-Q-slam all-in suicidal\"). Both layers contradicted the data and each other's prose.",
+      "corrected": "Rows 0,1,3,6 flipped to Heimerdinger, row 2 to Skill, ratings raised accordingly; Level 6 stays Mordekaiser (Realm of Death), first item stays Skill. Proposed as one atomic group across phases[N].side/.rating and win[N].",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 56.65 / 263 games", "currentText.content.whys"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are accurate: Heimerdinger at 4-5 (full nest + grenade stun), Mordekaiser at 6 (Realm of Death), Liandry's/Rylai's first item, late scaling. Four spike entries present.",
+      "corrected": "Kept; added Realm of Death's real 140/120/100s cooldown so the 'survive it' advice has a number attached.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd 140/120/100", "currentText.content.spikes"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "dontsFull[1] is titled 'Stand in his E' but its body ('Burning it for tiny value leaves you naked for its full cooldown') describes spending one of YOUR spells — it says nothing about Death's Grasp. No cooldown numbers anywhere on Morde's kit.",
+      "why": "Death's Grasp (E, 16/14/12/10/8s, 700 range) is his only way to move you, and Obliterate (Q, 8/7/6/5/4s, 675 range) explicitly deals increased damage when it hits a single enemy — so the pull is what turns a nest fight into his fight. Realm of Death is 140s at rank 1, the longest punishable cooldown in the lane.",
+      "corrected": "dontsFull[1].d now states the pull-into-lone-target-Obliterate chain; breakdown.cooldowns now carries 140/120/100s for R, 16s for E, and 11s flat for your grenade.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/E/R cooldowns and text", "ownerKit E cd 11"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Grievous Wounds was mentioned only in report[8]; the actionable lines (dosFull, wants.you) never told you to buy it or when.",
+      "why": "Indestructible (W) stores damage he deals and takes into a shield he can consume to heal — turret chip and rocket poke feed it, so extended trades flip without anti-heal. This is the flagged missing interaction for this matchup.",
+      "corrected": "wants.you[1] and dosFull[1].d now name Oblivion Orb / Mercury's Treads against Indestructible.",
+      "confidence": "High",
+      "sources": ["enemyKit W text and flags", "missingInteractions rule needs-antiheal"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet flagged wants.foe[2] 'Land Realm of Death' as a probable wrong ability name. It is Mordekaiser's actual R name in the kit file — a false positive.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["enemyKit R name", "packet.suspectNames"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Mordekaiser", "after": "Heimerdinger" },
+    { "layer": "content", "path": "win[0]", "before": "Mordekaiser", "after": "Heimerdinger" },
+    { "layer": "full", "path": "phases[1].side", "before": "Mordekaiser", "after": "Heimerdinger" },
+    { "layer": "content", "path": "win[1]", "before": "Mordekaiser", "after": "Heimerdinger" },
+    { "layer": "full", "path": "phases[2].side", "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "content", "path": "win[2]", "before": "Mordekaiser", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Heimerdinger" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Heimerdinger" },
+    { "layer": "full", "path": "phases[6].side", "before": "Mordekaiser", "after": "Heimerdinger" },
+    { "layer": "content", "path": "win[6]", "before": "Mordekaiser", "after": "Heimerdinger" },
+    { "layer": "full", "path": "phases[0].rating", "before": "2/10", "after": "8/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "2/10", "after": "8/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "2/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "8/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "2/10", "after": "8/10" },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "His R isolates you — build MR, turret-poke pre-6. Heimerdinger wins the Realm of Death cooldown windows.",
+      "after": "Realm of Death isolates you off your nest, but it's 140s at rank 1 — survive it once and you own the whole gap."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Build MR and turret-poke early. Track Realm of Death before every commit and keep the wave on your side.",
+      "after": "Build MR, nest up, count his 140s Realm of Death. Obliterate hits hardest on a lone target — stay in your turrets."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Death's Grasp drags you off the nest into a lone-target Obliterate."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Keep Mordekaiser farming inside turret range, W-poke his step-ups, and E-stun the moment he commits into the nest.",
+      "after": "Mercury's Treads plus an early Oblivion Orb — his Indestructible shield-heal is what wins him extended trades."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Mordekaiser Realm of Death: matchup-defining — His 1v1 realm — no turrets follow. Survive it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Realm of Death: 140/120/100s — no turrets follow you in. Survive it and the next two minutes are yours. - Death's Grasp: 16s at rank 1 — his only way onto you. - Your grenade stun: 11s flat — hold it for his step-up."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Poke his W shield down with Micro-Rockets, then commit your grenade-stun all-in only while his Realm of Death is on cooldown",
+      "after": "Rush Oblivion Orb — Indestructible heals off your chip; then commit the grenade-stun all-in only while Realm of Death is on cooldown"
+    }
+  ],
+  "notes": "Packet defect 'wrong ability name at wants.foe[2] — Land Realm of Death' is a FALSE POSITIVE: Realm of Death is Mordekaiser's real R. Level chart was inverted on 5 of 7 rows against a 56.65%/263-game FAV matchup; both layers proposed as one atomic group. Not asserted (kit is silent): whether Mordekaiser's Realm of Death can be Cleansed/QSS'd, and whether Heimerdinger's turrets persist through the realm's duration — both left out of the text rather than guessed."
+}

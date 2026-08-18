@@ -1,0 +1,58 @@
+{
+  "ownerKey": "irelia",
+  "enemy": "gangplank",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Six of seven chart rows contradicted both the packet and the page's own why text: level 1 was given to Gangplank though whys[0] says 'the early edge is yours'; levels 3 and 4-5 were given to Irelia though whys[3] calls it a coin-flip; first item was Irelia though whys[5] says he controls the lane; 2+ items was Irelia though whys[6] says it is even at best.",
+      "why": "The mirror audit (gangplank__irelia) already resolved this chart to Irelia, Irelia, Skill, Skill, Gangplank, Gangplank, Skill, which is exactly the packet levelChart. Restating the same result from Irelia's side.",
+      "corrected": "Rows 0,1,2,3,5,6 flipped in both layers as one atomic group with matching ratings; row 4 (Level 6, Gangplank) already correct.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "audits/top/gangplank__irelia.json", "existing whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes already name Vanguard's Edge at 6, Sheen/Spellblade Parrrley at one item and Trinity-plus-crit at two, and the spikes array has all four entries.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gangplank.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The cooldown block and Key Ability Interactions told you to track Powder Keg's cooldown, but Powder Keg has no cooldown at all (cd 0) — the real timer to track is Remove Scurvy, which cleanses your E-stun and heals him. Grievous Wounds was never mentioned, and the itemization block recommends Plated Steelcaps without noting Cannon Barrage deals true damage.",
+      "why": "Riot's kit gives Powder Keg a 0s cooldown and 1000 range; Remove Scurvy is 22/20/18/16/14s and is a cleanse plus heal, which is the one timer that decides whether your Flawless Duet stun sticks. Cannon Barrage is flagged trueDamage, so stacking resistances is the wrong answer to it.",
+      "corrected": "Cooldown block now names Remove Scurvy's 14s rank-5 timer and states Powder Keg has no cooldown; Key Ability Interactions says bait the cleanse before you stun; itemization now routes to Executioner's Calling for the heal.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gangplank.json", "_missing/irelia.json rules needs-antiheal and resistances-invalidated"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Gangplank","after":"Irelia"},
+    {"layer":"content","path":"win[0]","before":"Gangplank","after":"Irelia"},
+    {"layer":"full","path":"phases[0].rating","before":"3/10","after":"6/10"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Irelia"},
+    {"layer":"content","path":"win[1]","before":"Skill","after":"Irelia"},
+    {"layer":"full","path":"phases[2].side","before":"Irelia","after":"Skill"},
+    {"layer":"content","path":"win[2]","before":"Irelia","after":"Skill"},
+    {"layer":"full","path":"phases[2].rating","before":"6/10","after":"5/10"},
+    {"layer":"full","path":"phases[3].side","before":"Irelia","after":"Skill"},
+    {"layer":"content","path":"win[3]","before":"Irelia","after":"Skill"},
+    {"layer":"full","path":"phases[3].rating","before":"6/10","after":"5/10"},
+    {"layer":"full","path":"phases[5].side","before":"Irelia","after":"Gangplank"},
+    {"layer":"content","path":"win[5]","before":"Irelia","after":"Gangplank"},
+    {"layer":"full","path":"phases[5].rating","before":"6/10","after":"3/10"},
+    {"layer":"full","path":"phases[6].side","before":"Irelia","after":"Skill"},
+    {"layer":"content","path":"win[6]","before":"Irelia","after":"Skill"},
+    {"layer":"full","path":"phases[6].rating","before":"6/10","after":"5/10"},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Gangplank Powder Kegs: matchup-defining — Pop barrels to deny poke + gold. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Gangplank Remove Scurvy: matchup-defining — it cleanses your E-stun and heals him; 14s at rank 5, so bait it before you commit. - Powder Kegs has no cooldown: only three stored barrels limit him. - Your ultimate: kill windows."},
+    {"layer":"full","path":"report[5].t","before":"Track Gangplank's Powder Kegs: Pop barrels to deny poke + gold. When it is down — E-stun + Q him.","after":"Remove Scurvy cleanses your E-stun and heals — bait it, then stun; barrels have no cooldown to track."},
+    {"layer":"full","path":"report[8].t","before":"Start Doran's Shield + pot vs the poke. Core: Blade of the Ruined King  (%HP + the duel spike), then Wit's End / Sterak's Gage; boots Plated Steelcaps.","after":"Start Doran's Shield + pot vs the poke. Core: Blade of the Ruined King, then Executioner's Calling — Remove Scurvy heals back your chip; boots Plated Steelcaps."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"His crit keg chain and global R out-scale your reset uptime."}
+  ],
+  "notes": "Powder Keg genuinely has no cooldown in Riot's data (cd 0), so every 'track his Powder Kegs cooldown' string on this page was advice that cannot be followed; focus.text and loading still say 'Gangplank Powder Kegs' but those are short/enum-adjacent and left alone. Chart restated to match the already-audited mirror."
+}

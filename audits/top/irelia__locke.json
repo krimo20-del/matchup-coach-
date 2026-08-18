@@ -1,0 +1,94 @@
+{
+  "ownerKey": "irelia",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers give all seven rows to Irelia and the packet chart agrees row for row, which fits a 56.45% win rate over 1286 Emerald+ games. No flips proposed.",
+      "corrected": "No change to the chart.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 56.45 / 1286 games", "currentText win[0..6] and phases[0..6].side"]
+    },
+    {
+      "point": 3,
+      "status": "missing",
+      "whatIsWrong": "The content layer had only three spikes where four are expected, so the 2+ items stage had no entry at all, and the packet flags zero sequencing cues on the page — not one cooldown number anywhere.",
+      "why": "Ashen Pursuit is a flat 10 seconds and is both his engage and his only escape, Soul Ignition is 18s at rank 1, and Purgatory is 120/100/80. Those three numbers are the whole rhythm of the lane and none were on the page.",
+      "corrected": "spikes[3] created with before:null covering the 2+ items stage and Purgatory's 80s rank-3 cooldown; the 10s Ashen Pursuit window written into spikes[0] and mid; Soul Ignition's 18s into spikes[2].",
+      "confidence": "High",
+      "sources": ["_kits/locke.json E cd 10", "_kits/locke.json W cd 18/17/16/15/14", "_kits/locke.json R cd 120/100/80", "packet.defects"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[2] and early both credit Defiant Dance (W) with absorbing his damage. Riot's text says Defiant Dance reduces PHYSICAL damage; Locke's kit is magic on-hit through his passive, damage on his nails, and true damage on Soul Ignition. Soul Ignition also refunds a portion of the damage he takes at the end of the effect and the page never mentions it, while report[8] actively tells the reader anti-heal is optional. Ashen Pursuit's auto-attack reset is never given as the burst tell.",
+      "why": "'Anti-heal is optional' is the single most costly line here: Soul Ignition is exactly the mechanic Grievous Wounds is for, and the page steers the player away from it. Meanwhile the true-damage component means stacking resistances reads the trade wrong.",
+      "corrected": "Defiant Dance claims removed from whys[2] and early; Grievous Wounds made the first-item priority in whys[5] and spikes[2]; the true-damage note added to early.",
+      "confidence": "High",
+      "sources": ["_kits/irelia.json W text", "_kits/locke.json P/W text and flags", "missingInteractions: needs-antiheal, resistances-invalidated, autoreset-burst-tell, onhit-itemization"]
+    },
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The packet flagged 'Flawless Duet's' in whys[3] as a probable wrong name. It is a false positive — Flawless Duet is Irelia's own E and is spelled correctly.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["_kits/irelia.json E", "packet.suspectNames"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 is Irelia: Defiant Dance shields out the damage he does manage to land.",
+      "after": "Level 3 is Irelia: E-stun him mid-blink; Defiant Dance won't blunt magic."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "First item keeps you ahead — your sustain beats his one-combo burst pattern.",
+      "after": "First item keeps you ahead — Grievous Wounds voids the heal Soul Ignition refunds."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Stacked Bladesurge trades plus W mitigation — snowball every exchange.",
+      "after": "Step in when Ashen Pursuit (E) is spent — his only exit, 10s flat."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Your sustain beats his one-rotation burst — all-in on every cooldown cycle.",
+      "after": "Buy anti-heal: Soul Ignition refunds the damage he takes, every 18s."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": null,
+      "after": "Purgatory executes below a health threshold and runs 80 seconds at rank 3 — never take a sliver-HP fight inside the zone. Step out, top up, and force the duel once it is spent."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].when",
+      "before": null,
+      "after": "2+ items"
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "You out-trade him at literally every stage, starting level 1: Bladesurge resets through the wave keep you stuck to him, stacked trades snowball on his health bar, and Defiant Dance eats the damage he answers with. Force an exchange every time your passive is stacked — his kit wants clean burst windows, and you never have to give him one.",
+      "after": "You out-trade him at every stage, starting level 1: Bladesurge resets through the wave keep you stuck to him, and his nails cost 70 mana a throw, so he pays for every poke. Don't count on Defiant Dance — his damage is magic and true, not physical. Force an exchange every time your passive is stacked; his kit wants clean burst windows and you never give him one."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Six through first item just adds locks to the cage — Vanguard's Edge walls off his execute angles, Flawless Duet stuns his engage, and your sustain outlasts his one-combo pattern. All-in on every cooldown rotation, dive with your jungler freely, and stack a lead in plates and kills that decides the game before he is ever relevant.",
+      "after": "Six through first item just adds locks to the cage — Vanguard's Edge cuts his angles and Flawless Duet stuns the engage. Ashen Pursuit is a flat 10 seconds and it is his engage AND his escape, so the window right after he spends it is the lane: dive it with your jungler. Buy Grievous Wounds before he refunds a lost trade through Soul Ignition."
+    }
+  ],
+  "notes": "The full layer calls his Q 'Ritual Nails' but Riot's own description of that ability names the projectiles 'Soul Nails' — I could not resolve which is the ability's real name from the kit file, so I renamed nothing and wrote around it. See questionsForUser. report[8] currently tells the reader anti-heal is optional against Locke; Soul Ignition explicitly heals back a portion of damage taken, so that line is wrong — I corrected the prose that carries the same advice but left report[8] itself for a decision, since it also makes a Zhonya's claim about Purgatory I cannot verify from the kits. The content layer only had three spikes; spikes[3] is created here with before:null."
+}

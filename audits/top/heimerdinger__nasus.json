@@ -1,0 +1,114 @@
+{
+  "ownerKey": "heimerdinger",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "diff read 'HARD' while diffRating was 4/10, tone was the favoured green, and report[14] called it a 'Favoured matchup' — four fields, three different answers. The mirror (nasus__heimerdinger) already settled this lane as EVEN 5/10.",
+      "why": "Win rate 51.32% over 228 games is an even lane, and the mirror audit set diff EVEN / diffRating 5/10 from Nasus's side. Leaving HARD here would have the two pages disagree and mirror-fix.js would overwrite it anyway.",
+      "corrected": "diff HARD -> EVEN, diffRating 4/10 -> 5/10, with breakdown.difficulty and report[14].t brought in line.",
+      "confidence": "High",
+      "sources": ["packet.winRate 51.32 / 228 games", "mirrorFindings point 2"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart said Heimerdinger wins Level 1 and Level 2 and 'Skill' at first item, while the content prose on the very same page says level 1 is his ('you have one turret charge and no grenade') and that first item swings to Nasus.",
+      "why": "The packet chart is [Nasus, Skill, Heimerdinger, Heimerdinger, Heimerdinger, Nasus, Nasus] and whys[0], whys[1] and whys[5] already read that way. Only the enum rows were stale.",
+      "corrected": "Rows 0 -> Nasus, 1 -> Skill, 5 -> Nasus in both layers, with ratings and the three phase whys matched to them. Rows 2, 3, 4 and 6 were already correct.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys[0], whys[1], whys[5]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Four spikes present and accurate: his Level 1 stacking window, your 4-5 nest peak, his Level 6 R, his 2+ item takeover.",
+      "corrected": "No change to spikes; phases[5].why reworded so the first-item row credits Fury of the Sands rather than implying Liandry's decides it.",
+      "confidence": "High",
+      "sources": ["currentText.content.spikes", "enemyKit R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "dontsFull[1].d under 'Fight inside his W slow' described spending one of YOUR spells, not Wither. dosFull[2].d under 'Deny his Q stacks' repeated the trade line instead of saying anything about Siphoning Strike.",
+      "why": "Wither is 15/14/13/12/11s — the single number that decides when you may step up. Siphoning Strike carries an auto-attack reset, so the tell is the attack wind-up, not the cast (flagged missing interaction).",
+      "corrected": "dontsFull[1].d now gives Wither's 15s rank-1 cooldown; dosFull[2].d now names the auto-reset wind-up as the step-back cue.",
+      "confidence": "High",
+      "sources": ["enemyKit W cd 15/14/13/12/11", "enemyKit Q flags autoReset", "missingInteractions rule autoreset-burst-tell"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Nothing in the text warned that flat resistances are the wrong purchase into Fury of the Sands.",
+      "why": "Fury of the Sands is flagged percentHealth — it batters nearby enemies for a share of health while giving him bonus Armor and Magic Resistance, so stacking raw MR does not scale against it (flagged missing interaction).",
+      "corrected": "breakdown.late now states percent-HP damage beats flat MR and points at anti-heal plus range instead.",
+      "confidence": "High",
+      "sources": ["enemyKit R text and percentHealth flag", "missingInteractions rule resistances-invalidated"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Heimerdinger", "after": "Nasus" },
+    { "layer": "content", "path": "win[0]", "before": "Heimerdinger", "after": "Nasus" },
+    { "layer": "full", "path": "phases[1].side", "before": "Heimerdinger", "after": "Skill" },
+    { "layer": "content", "path": "win[1]", "before": "Heimerdinger", "after": "Skill" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Nasus" },
+    { "layer": "content", "path": "win[5]", "before": "Skill", "after": "Nasus" },
+    { "layer": "full", "path": "phases[0].rating", "before": "8/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "8/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "4/10", "after": "3/10" },
+    { "layer": "full", "path": "diff", "before": "HARD", "after": "EVEN" },
+    { "layer": "full", "path": "diffRating", "before": "4/10", "after": "5/10" },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "One turret + AA wins level 1 against almost everyone. Identify how Nasus contests the first waves before you commit anything.",
+      "after": "One charge, no grenade — concede the contact window and stand on his casters so he eats beam damage to start stacking Q."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Three turrets make your half of lane a no-entry zone. Only take the trade when Nasus's Wither is down.",
+      "after": "Charges bank and the beams slow, but he still gets his last-hits — even until Wither comes online at 15s."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Liandry's Torment is your spike — force fights the moment it completes, on Wither's cooldown.",
+      "after": "Liandry's helps, but R lifesteal and stacks facetank a nest — fight only while Wither is down."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Wither is 15s at rank 1 — never trade until you have seen it spent."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Nasus wastes Wither — commit the full pattern immediately.",
+      "after": "His Q is an auto-reset — the wind-up is the cue to step back."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Overall difficulty: 4/10. The lane is decided by how well you track Wither and how disciplined your pattern is.",
+      "after": "Overall difficulty: 5/10. Even lane — decided by whether you deny stacks before his infinite-Q late arrives."
+    },
+    {
+      "layer": "full",
+      "path": "report[14].t",
+      "before": "Favoured matchup — difficulty 4/10, Nasus carry threat 10/10.",
+      "after": "Even matchup — difficulty 5/10, Nasus carry threat 10/10."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "Upgraded E or W deletes his all-in — build your teamfight around that. Nasus carry threat: 10/10 — anti-heal stays core, shift to picks and wave control if he gets ahead.",
+      "after": "Fury of the Sands burns percent HP, so stacking flat MR will not save you — buy anti-heal and range instead. Nasus carry threat: 10/10 — shift to picks and siege if he gets ahead."
+    }
+  ],
+  "notes": "tone is still #3ddc97 (the favoured green) while diff is now EVEN — I did not touch it because I could not confirm from the data which colour token EVEN uses on this site, and a wrong colour is worse than a stale one. Flagging for the user. Also carried over the mirror's open item: I found nothing in the kit confirming whether Heimerdinger's turrets take reduced damage from area effects, so no text here claims Spirit Fire does or does not clear the nest."
+}

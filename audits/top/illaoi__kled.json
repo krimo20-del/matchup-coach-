@@ -1,0 +1,59 @@
+{
+  "ownerKey": "illaoi",
+  "enemy": "kled",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 1 was 'Skill' while whys[0] and early both say Kled out-trades you there; Levels 4-5 and Level 6 were 'Skill' while whys[3] says your sustain outlasts his mounted health bar and whys[4] says a landed E kills the dismounted Kled.",
+      "why": "Packet chart is Kled at Level 1 then Illaoi for every later stage, and 51.6% over 531 games is a lane Illaoi wins after the first level.",
+      "corrected": "Level 1 -> Kled, Levels 4-5 -> Illaoi, Level 6 -> Illaoi, in both layers.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.sequencingCues is 0 — Bear Trap was only 'his engage hook, dodge it', with no cooldown and no timing.",
+      "why": "Bear Trap on a Rope is 11/10/9/8/7s and the yank only lands after the shackle has held for a short duration, so the hook itself is the cue to move. Jousting is 13/12/11/10/9s and is his real disengage from your tentacle swing. Violent Tendencies is 13/12/11/10/9s.",
+      "corrected": "Bear Trap's 11s and the delayed yank written into the do's; Jousting's 13s written into what Kled wants.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Violent Tendencies' auto-attack reset was never named, and itemization told the reader to buy Executioner's Calling because 'his healing fights your pattern' — Kled has no healing ability.",
+      "why": "Violent Tendencies grants massive attack speed for four attacks with a bigger fourth hit, and carries the autoReset flag, so his burst starts on an auto wind-up. Nothing in Kled's kit heals; Skaarl's courage bar restores mount health on remount, which Grievous Wounds does not touch. Recommending anti-heal here wastes a component slot in a lane where armour into a four-attack frenzy is the real buy.",
+      "corrected": "Reset tell written into key interactions and the don'ts; the anti-heal line replaced with armour.",
+      "confidence": "High",
+      "sources": ["enemyKit P/W", "missingInteractions autoreset-burst-tell"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Kled"},
+    {"layer": "content", "path": "win[0]", "before": "Skill", "after": "Kled"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Illaoi"},
+    {"layer": "content", "path": "win[3]", "before": "Skill", "after": "Illaoi"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Illaoi"},
+    {"layer": "content", "path": "win[4]", "before": "Skill", "after": "Illaoi"},
+    {"layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10"},
+    {"layer": "full", "path": "dosFull[0].d",
+     "before": "His engage hook. Dodge it. Only engage once it is down or baited.",
+     "after": "Bear Trap is 11s at rank 1; the yank lands a beat after the hook."},
+    {"layer": "full", "path": "dontsFull[1].d",
+     "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+     "after": "His four-attack Violent Tendencies frenzy rebuilds Skaarl's courage."},
+    {"layer": "full", "path": "report[5].t",
+     "before": "Track Kled's Bear Trap on a Rope: His engage hook. Dodge it. When it is down — Slam him in your field.",
+     "after": "Violent Tendencies opens his burst on an auto reset — step on the wind-up, not the cast, then commit after it."},
+    {"layer": "full", "path": "report[8].t",
+     "before": "Start Doran's Shield + pot. Core: Iceborn Gauntlet  (the slow makes tentacles land), then Sterak's Gage; boots Plated Steelcaps. Executioner's Calling early — his healing fights your pattern.",
+     "after": "Start Doran's Shield + pot. Core: Iceborn Gauntlet  (the slow makes tentacles land), then Sterak's Gage; boots Plated Steelcaps. Skip anti-heal — Kled has no healing; armour beats his frenzy."},
+    {"layer": "content", "path": "wants.foe[1]",
+     "before": "Use his level-1 Q ranged poke to win the early short trades",
+     "after": "Joust in and out on its 13s cooldown to dodge the tentacle swing"}
+  ],
+  "notes": "missingInteractions claims Leap of Faith 'shuts off Kled's Jousting and Chaaaaaaaarge!!!'. That comes from a 'grounding' derived flag on Illaoi's R, but Riot's Leap of Faith text describes only damage and a tentacle per champion hit — no grounding. Per the description-over-flag rule I wrote NO grounding claim. The same bad flag is on Illaoi's kit file and will keep generating this suggestion for every matchup; worth fixing at source. wants.foe[0] and wants.foe[1] were near-duplicates (both the level-1 Q poke); [1] repurposed to Jousting."
+}

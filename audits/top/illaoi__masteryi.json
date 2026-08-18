@@ -1,0 +1,52 @@
+{
+  "ownerKey": "illaoi",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags 'level chart contradicts data: Illaoi wins only 44.44% but the chart gives Illaoi 6/7 stages vs 1'. The content layer and the packet chart agree with each other (Illaoi x6, then Master Yi), so nothing on the page is internally inconsistent — but both disagree with the win rate. There is also no full layer for this matchup at all (currentText.full is null), so phases[0..6] and every full-layer string are missing.",
+      "why": "171 games is a thin sample and Master Yi top is off-meta, so the win rate and the stage chart may both be true of different populations. Flipping six stages on a 44% figure alone would be guessing, and the instruction is not to guess. Left the chart alone and raised it as a question.",
+      "corrected": "No chart edits proposed. Question recorded for the user.",
+      "confidence": "Low",
+      "sources": ["packet.levelChart", "packet.winRate", "packet.defects"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[] holds 3 entries where 4 are expected, and packet.sequencingCues is 0 — not one cooldown number appears anywhere on the page.",
+      "why": "Meditate is a flat 10s and both heals him and reduces the damage he takes; Alpha Strike is 20/19.5/19/18.5/18s but his basic attacks shorten it; Wuju Style is 14s; Highlander is 85s. The first-item window is exactly where Meditate starts undoing tentacle chip, and it was the missing spike.",
+      "corrected": "Fourth spike created at before:null covering Meditate's 10s heal-and-mitigate window and the Grievous Wounds timing it forces.",
+      "confidence": "High",
+      "sources": ["enemyKit", "packet.defects", "missingInteractions needs-antiheal"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three interactions absent. Highlander makes him immune to all slowing effects — the page recommends nothing about it while Illaoi's whole hold-him-in-the-field pattern runs on slows. Wuju Style grants true damage, so armour does not answer him. Alpha Strike makes him untargetable, and his own basic attacks pull its cooldown down from 20s.",
+      "why": "Riot's Highlander text: 'making him immune to all slowing effects'. That is the single reason 2+ item Yi escapes the tentacle field, and it is more specific and more actionable than 'full crit out-scales'. Riot's Alpha Strike text: 'Basic attacks reduce Alpha Strike's cooldown', so the 20s number is a ceiling, not a timer.",
+      "corrected": "Slow immunity written into the 2+ item why; Alpha Strike's untargetable window written into what Yi wants; Meditate's heal into the new spike and the mid block.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/E/R", "missingInteractions resistances-invalidated"]
+    }
+  ],
+  "edits": [
+    {"layer": "content", "path": "spikes[3].text", "before": null,
+     "after": "Meditate is a flat 10s: it heals him AND cuts the damage he takes while it channels, so tentacle chip alone stops closing him out. Have Grievous Wounds by your first item or every extended trade resets for free."},
+    {"layer": "content", "path": "spikes[3].when", "before": null, "after": "1st item"},
+    {"layer": "content", "path": "whys[6]",
+     "before": "2+ items goes to Master Yi — full crit plus Highlander finally out-scales the tentacle field, so group before it arrives.",
+     "after": "2+ items goes to Master Yi — Highlander makes him immune to slows, so Iceborn Gauntlet stops holding him in the field."},
+    {"layer": "content", "path": "mid",
+     "before": "Level 6 escalates the beating — Leap of Faith walls him inside a tentacle storm, and most dives he attempts simply kill him. First item changes nothing: your zone and E pull keep him behind. Convert the strangle into map pressure — take plates, shadow his jungler with your lane frozen, and roam to skirmishes where your ult wins everything it touches.",
+     "after": "Level 6 escalates the beating — Leap of Faith walls him inside a tentacle storm, and most dives he attempts simply kill him. First item is when Meditate matters: Grievous Wounds, or his 10s channel refunds your chip. Convert the strangle into map pressure — take plates, shadow his jungler with your lane frozen, and roam to skirmishes where your ult wins everything it touches."},
+    {"layer": "content", "path": "wants.foe[1]",
+     "before": "Reaching full crit alive",
+     "after": "Wuju Style true damage on crit"},
+    {"layer": "content", "path": "wants.foe[2]",
+     "before": "Tentacle dodges while splitting late",
+     "after": "Alpha Strike's untargetable window"}
+  ],
+  "notes": "This matchup has NO full-layer entry (currentText.full is null) — one of the inherited structural gaps. I did not attempt to create phases/tldr/report from before:null, because that is a whole missing object rather than a missing field and a half-built full layer would render worse than none. It needs the full entry scaffolded by the tooling first. Also unverified: whether Illaoi can interrupt Meditate. It is flagged as a channel and channels break to CC, but Illaoi's only listed control is a slow, and the kit's needsResearch block is empty, so I asserted nothing about interrupting it."
+}

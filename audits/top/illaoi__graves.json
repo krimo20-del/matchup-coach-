@@ -1,0 +1,94 @@
+{
+  "ownerKey": "illaoi",
+  "enemy": "graves",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Two rows contradicted their own whys and the packet: level 6 was given to Graves at 3/10 while whys[4] read 'Illaoi-favoured', and 2+ items was given to Illaoi at 6/10 while whys[6] read 'Graves-favoured'.",
+      "why": "Packet chart and the audited mirror both read Skill at level 6 and Graves at 2+ items.",
+      "corrected": "Level 6 -> Skill 5/10, 2+ items -> Graves 3/10 (inverse of the mirror's 7/10), proposed as one atomic group across both layers, with whys[4] and both phase reasons rewritten to match.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "audits/top/graves__illaoi.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 and 2+ item phases carried the generic boilerplate with no timing.",
+      "why": "Leap of Faith is 120s at rank 1 and spawns one tentacle per champion hit; Collateral Damage is 100s at 1000 range, which is exactly why 6 is even rather than Illaoi's.",
+      "corrected": "phases[4].why and phases[6].why now name both ultimates' cooldowns and the real 2+ item takeover.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/illaoi.json", "champ-data/_kits/graves.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Every line said 'engage when Quickdraw is down' as if it were a fixed window. It is not: hitting enemies with basic attacks lowers Quickdraw's cooldown and refreshes the resistance boost, so against a farming Graves it is rarely fully down.",
+      "why": "Riot's own text on Quickdraw. Also: dashing toward a champion grants two stacks of True Grit instead of one, so his armour is highest exactly when he engages you.",
+      "corrected": "Cooldown block, dosFull[0].d and report[5].t now state the 16s base, the auto-attack refund and the double True Grit stacks.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/graves.json"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.foe[2] said Smoke Screen 'blinds' you.",
+      "why": "Riot's text says it reduces sight range and briefly slows on impact — there is no blind. The mirror removed the same claim from its own page.",
+      "corrected": "Replaced with the vision cut and the slow.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/graves.json", "audits/top/graves__illaoi.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[4]", "before": "Graves", "after": "Skill" },
+    { "layer": "full", "path": "phases[4].side", "before": "Graves", "after": "Skill" },
+    { "layer": "full", "path": "phases[4].rating", "before": "3/10", "after": "5/10" },
+    { "layer": "content", "path": "win[6]", "before": "Illaoi", "after": "Graves" },
+    { "layer": "full", "path": "phases[6].side", "before": "Illaoi", "after": "Graves" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10" },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Leap of Faith inside your tentacle field is a 1v3 button. Reassess every all-in at 6 — Graves's ultimate changes the math too.",
+      "after": "Even at 6: Leap of Faith is 120s and spawns a tentacle per champion hit, but Collateral Damage at 100s answers it from 1000 range."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your side-lane pattern is at full power. Graves carry threat 8/10 — close before the map decides instead of you.",
+      "after": "Two items and it is his: Quickdraw's cooldown drops on every auto, so he kites clear of the tentacles and shoots from outside."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Graves Quickdraw: matchup-defining — His dash + armor stacks. Engage when it's down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Quickdraw (E): 16s at rank 1, but every auto he lands cuts it — it is rarely fully down, so trade when he has just used it. - Smoke Screen (W): 26s. - Harsh Lesson (W): flat 4s. - Leap of Faith: 120s, kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His dash + armor stacks. Engage when it's down. Only engage once it is down or baited.",
+      "after": "Quickdraw is 16s but autos refund it, and dashing at you gives him two True Grit stacks."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Graves's Quickdraw: His dash + armor stacks. Engage when it's down. When it is down — Land E, slam the spirit.",
+      "after": "Quickdraw refunds cooldown on every auto he lands, so it is rarely truly down — commit the moment he spends it."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Illaoi-favoured: R Leap of Faith forces him to trade inside the ring where slams win.",
+      "after": "Skill: level 6 is even — your tentacle ring versus his 100s Collateral Damage."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "W Smoke Screen to blind and disengage your all-in",
+      "after": "W Smoke Screen cuts your vision and slows you"
+    }
+  ],
+  "notes": "The page's central instruction — 'engage when Quickdraw is down' — was misleading: Quickdraw's cooldown is refunded by his basic attacks, so a farming Graves almost never has it fully down. Retargeted onto the moment he spends it. Also removed the Smoke Screen blind claim (Riot's text says sight reduction plus a brief slow), matching the mirror. Per the mirror's flag, nothing here asserts that Leap of Faith grounds Quickdraw — the kit file's derived grounding flag is not supported by Riot's R description."
+}

@@ -1,0 +1,65 @@
+{
+  "ownerKey": "illaoi",
+  "enemy": "kayle",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Chart gave Illaoi 5 of 7 stages including both item stages, while the packet flags 'level chart contradicts data: Illaoi wins only 47.64%' and every prose string (whys[5], whys[6], late, spikes[2]) says Kayle takes over from her first item. diffRating 4/10 also contradicts diff HARD and a 47.64% win rate.",
+      "why": "Packet levelChart is Illaoi x5 then Kayle, Kayle. 47.64% over 827 games is a losing matchup overall.",
+      "corrected": "Level 6 -> Illaoi, First item -> Kayle, 2+ items -> Kayle, in both layers, with ratings moved. diffRating 4/10 -> 6/10 and the difficulty prose rewritten to match.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.defects", "packet.winRate"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.sequencingCues is 0 — no 'wait for X before you Y' line anywhere, and no real cooldown numbers.",
+      "why": "Radiant Blast is 12/11/10/9/8s, Divine Judgment 160/120/80s, Celestial Blessing a flat 15s. Those numbers are the whole trade clock in a lane decided before her first item.",
+      "corrected": "Radiant Blast's 12s written into the good trade, Divine Judgment's 160s into the do's, Celestial Blessing's 15s into itemization.",
+      "confidence": "High",
+      "sources": ["enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "No mention of Starfire Spellblade being an auto-attack reset, and Celestial Blessing's healing was only referenced as 'his healing' with no timing.",
+      "why": "Starfire Spellblade carries the autoReset flag — her damage arrives on the auto wind-up, not on the cast, so the visual tell to back off comes one beat earlier than players expect. Celestial Blessing is a 15s heal, which is what Grievous Wounds is bought against.",
+      "corrected": "Reset tell named in the don'ts; anti-heal tied to Celestial Blessing's 15s in itemization.",
+      "confidence": "High",
+      "sources": ["enemyKit E/W", "missingInteractions needs-antiheal, autoreset-burst-tell"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Illaoi"},
+    {"layer": "content", "path": "win[4]", "before": "Skill", "after": "Illaoi"},
+    {"layer": "full", "path": "phases[5].side", "before": "Illaoi", "after": "Kayle"},
+    {"layer": "content", "path": "win[5]", "before": "Illaoi", "after": "Kayle"},
+    {"layer": "full", "path": "phases[6].side", "before": "Illaoi", "after": "Kayle"},
+    {"layer": "content", "path": "win[6]", "before": "Illaoi", "after": "Kayle"},
+    {"layer": "full", "path": "phases[4].rating", "before": "5/10", "after": "6/10"},
+    {"layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10"},
+    {"layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10"},
+    {"layer": "full", "path": "diffRating", "before": "4/10", "after": "6/10"},
+    {"layer": "full", "path": "tradeGood",
+     "before": "Land E on Kayle as he steps to farm, W-slam the spirit with every tentacle, and zone him off the wave while it ticks.",
+     "after": "Land E once Radiant Blast is spent — 12s at rank 1 — then W-slam the spirit with every tentacle and zone her off the wave."},
+    {"layer": "full", "path": "dosFull[0].d",
+     "before": "Her get-out at 6. Bait it. Only engage once it is down or baited.",
+     "after": "Divine Judgment is 160s at rank 1 — bait it, then commit inside it."},
+    {"layer": "full", "path": "dontsFull[1].d",
+     "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+     "after": "Her burst opens on a Starfire Spellblade reset — step on the wind-up."},
+    {"layer": "full", "path": "report[8].t",
+     "before": "Start Doran's Shield + pot vs the poke. Core: Iceborn Gauntlet  (the slow makes tentacles land), then Sterak's Gage; boots Mercury's Treads. Executioner's Calling early — his healing fights your pattern.",
+     "after": "Start Doran's Shield + pot vs the poke. Core: Iceborn Gauntlet  (the slow makes tentacles land), then Sterak's Gage; boots Mercury's Treads. Executioner's Calling early — Celestial Blessing heals her every 15s."},
+    {"layer": "full", "path": "breakdown.difficulty",
+     "before": "Overall difficulty: 4/10. The lane is decided by how well you track Divine Judgment and how disciplined your pattern is.",
+     "after": "Overall difficulty: 6/10. Kayle loses every stage to level 5 and wins from her first item on — your whole lane is beating that clock."},
+    {"layer": "full", "path": "report[14].t",
+     "before": "Favoured matchup — difficulty 4/10, Kayle carry threat 9.5/10.",
+     "after": "Even early, lost late — difficulty 6/10, carry threat 9.5/10."}
+  ],
+  "notes": "Chart rows proposed as matched full/content pairs. No mirror audit existed for kayle__illaoi; if it is written later, Kayle must own First item and 2+ items with inverse ratings. Several full-layer strings still call Kayle 'he/him' (breakdown.feeding, breakdown.mid, dontsFull[0].d, report[12].t) — left alone here to keep the edit set to verified mechanics, flagged for a pronoun sweep."
+}

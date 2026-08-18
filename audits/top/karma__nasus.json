@@ -1,0 +1,55 @@
+{
+  "ownerKey": "karma",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "52.78% win rate with diff EVEN and difficulty 4/10 is consistent: Karma dominates the early lane at 950 range against a 255-range stacker, and the page already says the lane is lost at 2+ items.",
+      "corrected": "No change needed.",
+      "confidence": "High",
+      "sources": ["packet winRate", "currentText diff/diffRating"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers already read Karma, Karma, Karma, Karma, Skill, Karma, Nasus and match the packet levelChart exactly. Level 6 as Skill is right — Fury of the Sands is a real spike but only lands behind Wither.",
+      "corrected": "No change needed; phases[N].side and win[N] agree row for row.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText win[0..6] / phases[0..6].side"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two applicable interactions were absent: Fury of the Sands deals percent-max-HP damage (stacking resistances is the wrong answer), and Siphoning Strike is an auto-attack reset, so the wind-up — not the cast — is the tell.",
+      "why": "Karma has no dash; once Wither (15/14/13/12/11s) lands she cannot walk out of the Q reset, and buying armour against a percent-HP storm wastes the gold that should go to haste and range.",
+      "corrected": "dosFull[0].d now carries Wither's real cooldown; dontsFull[0].d states the auto-reset tell; spikes[3].text states the percent-max-HP/resistance point.",
+      "confidence": "High",
+      "sources": ["missingInteractions key 32", "kit: Siphoning Strike autoReset flag", "kit: Fury of the Sands percentHealth flag"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet flagged 'Focused Resolve's' as a suspect name; it is Karma's own W and correct as written. False positive, no edit made.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["ownerKit W", "packet suspectNames"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "dosFull[0].d",
+      "before": "His only answer to kiting — bait it before you commit. Until it’s spent, every commit is a coin flip.",
+      "after": "Wither is 15/14/13/12/11s and his only answer to kiting — bait it, then commit on the downtime." },
+    { "layer": "full", "path": "dontsFull[0].d",
+      "before": "That is Nasus’s whole plan in one window — decline politely and watch it retire.",
+      "after": "Withered, you cannot walk out of the Siphoning Strike auto-reset — the wind-up is the cue." },
+    { "layer": "content", "path": "spikes[3].text",
+      "before": "Once Nasus ults Fury of the Sands and stacks a few hundred Q, Wither's slow kills your kiting and his bonus-HP drain eats your poke; you have no answering spike, so the lead must already be banked.",
+      "after": "Once Nasus ults Fury of the Sands, Wither kills your kiting and the storm's percent-max-HP damage burns through stacked resistances — armour is the wrong buy and you have no answering spike, so bank the lead early." }
+  ],
+  "notes": "Mirror (nasus__karma) already audited and agrees: Karma early, Nasus at 2+ items. Level chart matched the packet in both layers, so no chart edits were needed. The two missing interactions — percent-max-HP ult and the Siphoning Strike auto-reset tell — are now on the page."
+}

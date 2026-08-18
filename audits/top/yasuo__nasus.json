@@ -1,0 +1,94 @@
+{
+  "ownerKey": "yasuo",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "diff reads 'HARD' while diffRating is 4/10, tone is green (#3ddc97) and report[14] calls it a favoured matchup. Separately, packet.defects flags the chart giving Yasuo 6/7 stages against a 45.81% win rate.",
+      "why": "The lane story on this page is coherent — Yasuo bullies a gapless melee farmer early and loses to full stacks — and the mirror (nasus__yasuo) was audited without touching the chart, so flipping rows here would introduce the disagreement mirror-fix.js exists to prevent. The diff token is the only piece that contradicts its own page, but I cannot tell whether the intended token is the lane read (favoured) or the game read (45.81%), so I left it and raised the question.",
+      "corrected": "No chart or diff edit. Question recorded naming diff, diffRating, tone and report[14].",
+      "confidence": "Medium",
+      "sources": ["packet.winRate 45.81 / defects", "audits/top/nasus__yasuo.json mirrorFindings"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The four spikes already map to the real curve: Yasuo owns levels 3-5 against a stat-check farmer, level 6 is a kill threat before Wither matters, first item keeps the duel, and 2+ items flips on stacks plus Fury of the Sands. Only the mechanical detail inside spikes[1] and spikes[3] was wrong, not the timings.",
+      "corrected": "Timings untouched; spikes[1].text and spikes[3].text corrected on mechanics only.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json R", "champ-data/_kits/yasuo.json R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[3] told the player to 'catch him with Wind Wall on his approach', and report[5] never says the wall is useless here. spikes[1] and whys[6] both call Wither a '90% slow'.",
+      "why": "Nasus has no projectile in his kit — Siphoning Strike is a melee auto-reset at 255 range, Wither is a targeted debuff, Spirit Fire is a ground zone, Fury of the Sands is a self-buff aura. Wind Wall interacts with none of it, which is exactly the error the mirror audit found written six times on the Nasus page in the opposite direction. And the 90% figure is not in Riot's text, which says only that Wither decelerates Move Speed and Attack Speed over time — an unverifiable number replaced with the verified 700 range and 15/14/13/12/11s cooldown.",
+      "corrected": "Rewrote spikes[3].text (no Wind Wall claim, plus Fury of the Sands' percent-health damage), spikes[1].text and whys[6] (no 90% figure, real range and cooldown), report[5].t (states the wall is dead in this lane), dontsFull[1].d and dosFull[2].d, and put Spirit Fire's 12s armor shred into breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json P/Q/W/E/R", "champ-data/_kits/yasuo.json W", "audits/top/nasus__yasuo.json mirrorFindings point 4"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Two hidden mechanics were absent: Fury of the Sands deals percent-health damage, and Siphoning Strike is an auto-attack reset.",
+      "why": "Percent health means armour and HP stacking is the wrong answer to a late Nasus, which changes the itemisation read. The auto-reset means the wind-up is the tell to step back — not the cast.",
+      "corrected": "Percent health written into spikes[3].text; the auto-reset written into wants.foe[1] and dosFull[2].d (255 range).",
+      "confidence": "High",
+      "sources": ["_missing/yasuo.json resistances-invalidated, autoreset-burst-tell", "champ-data/_kits/nasus.json Q/R flags"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Last Breath is a clean kill threat before he has Wither online — but respect that his Wither (W) is a 90% slow that turns off your Sweeping Blade kiting and lets his ramping Siphoning Strike land. Bait or dodge Wither before you commit to R, because once you're slowed you can't reposition out of his Q.",
+      "after": "Last Breath is a clean kill threat before he has Wither online — but Wither (W) is a 700-range move and attack speed decay, 15s at rank 1, that turns off your Sweeping Blade kiting and lets his ramping Siphoning Strike land. Bait or dodge it before you commit to R, because slowed you cannot reposition."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "This flips hard to Nasus. A fully-stacked Siphoning Strike plus Fury of the Sands (R) armor/HP makes him near-unkillable in a sidelane, and Wither shuts your whole kit off. Never 1v1 late-game Nasus — group, catch him with Wind Wall on his approach, and let your team peel.",
+      "after": "This flips hard to Nasus. A fully-stacked Siphoning Strike plus Fury of the Sands (R) armor and HP makes him near-unkillable in a sidelane, and that R burns percent health, so stacking tank stats is no answer. Never 1v1 him late — group and let your team peel."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "2+ items flips to Nasus: full stacks, Fury of the Sands and 90% Wither make him unkillable.",
+      "after": "2+ items flips to Nasus: full stacks, Fury of the Sands and Wither make him unkillable."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Land Wither to lock your Sweeping Blade kiting and land his Q",
+      "after": "Wither you, then land the Siphoning Strike auto-reset behind it"
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Nasus's Wither: His only kite. Bait it before all-in. When it is down — EQ-R him.",
+      "after": "Nothing in his kit is a projectile — Wind Wall is dead here. Bait Wither, then EQ-R him."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Nasus Wither: matchup-defining — His only kite. Bait it before all-in. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Nasus Wither: matchup-defining — 15s at rank 1, 700 range. Bait it before every all-in. - Spirit Fire: 12s, shreds your armor — step off the zone. - Your ultimate: the win condition — kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Nasus wastes Wither — commit the full pattern immediately.",
+      "after": "Zone him off caster minions; Siphoning Strike is 255 range."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Withered, your Sweeping Blade kiting dies and his Q lands free."
+    }
+  ],
+  "notes": "Level chart left exactly as-is on purpose: packet.defects flags it against the 45.81% win rate, but the mirror audit on nasus__yasuo did not change it, and a one-sided flip is precisely what mirror-fix.js overwrites. The '90% slow' figure for Wither was removed rather than corrected — Riot's text gives no percentage and I would not assert one. Note also that Yasuo's W carries a 'terrain / blocks paths and dashes' derived flag while Riot's description says only 'blocks all enemy projectiles'; I wrote to the description, which matters here because Nasus has nothing to block."
+}

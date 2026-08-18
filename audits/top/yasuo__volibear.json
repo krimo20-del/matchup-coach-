@@ -1,0 +1,91 @@
+{
+  "ownerKey": "yasuo",
+  "enemy": "volibear",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Row 0 read \"Skill\" while whys[0] says Volibear wins level 1 outright; rows 5 and 6 gave Volibear/Skill while whys[5], whys[6], spikes[2], spikes[3] and late all describe Yasuo flipping the lane on his first crit item.",
+      "why": "The mirror (volibear__yasuo) realigned exactly these three rows to the packet sides at 7/10, 4/10 and 3/10 — inverted, that is 3/10, 6/10, 7/10 here.",
+      "corrected": "Rows 0, 5 and 6 flipped in BOTH layers as one atomic group with matching ratings, and phases[5].why rewritten to name the spike.",
+      "confidence": "High",
+      "sources": ["mirrorFindings point 2", "packet.levelChart", "currentText.content.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[5].why pointed at a generic item spike without saying what changes, and no spike text carried Thundering Smash's cooldown.",
+      "why": "Thundering Smash is 12/11.5/11/10.5/10s and Stormbringer 160/135/110s — the first crit item plus the passive shield is the point the trade maths invert.",
+      "corrected": "phases[5].why now names the crit item and the shield against Thundering Smash's 12s; spikes[0].text carries the cooldown too.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/R", "ownerKit P"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.foe[1] and spikes[0].text say Frenzied Maul \"shreds armor\" — Riot's text says it applies on-hit effects, marks the target, and the second cast on a marked target deals bonus damage and heals him. No armour shred anywhere. Three do/don't bodies were generic boilerplate that did not match their titles, and nothing recorded that Thundering Smash is an auto-attack reset.",
+      "why": "missingInteractions flags all three: needs-antiheal (Frenzied Maul, a 5s cooldown), autoreset-burst-tell (Thundering Smash), and onhit-itemization (his damage rides attack speed via the passive, so armour alone misreads the trade).",
+      "corrected": "The armour-shred claim replaced with the real second-bite heal; dosFull[1].d gives the reset tell and the 12s stun, dosFull[2].d gives the 5s Frenzied Maul cooldown and Executioner's Calling, dontsFull[1].d explains the long trade.",
+      "confidence": "High",
+      "sources": ["enemyKit P/Q/W", "missingInteractions", "mirrorFindings point 4"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "packet.suspectNames flags \"Use Sweeping Blade\" in wants.you[2] as a probable wrong ability name.",
+      "why": "False positive — Sweeping Blade is Yasuo's real E name and the kit file confirms it. No edit made.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["ownerKit E", "packet.suspectNames"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Volibear" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Volibear" },
+    { "layer": "full", "path": "phases[5].side", "before": "Volibear", "after": "Yasuo" },
+    { "layer": "content", "path": "win[5]", "before": "Volibear", "after": "Yasuo" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Yasuo" },
+    { "layer": "content", "path": "win[6]", "before": "Skill", "after": "Yasuo" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "4/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "7/10" },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Blade of the Ruined King is your spike — force fights the moment it completes, on Thundering Smash's cooldown.",
+      "after": "Your first crit item plus the passive shield flips it — force fights while Thundering Smash sits on its 12 seconds."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Volibear's Thundering Smash (Q) gives him a movespeed charge and a stun when he catches you, and his Frenzied Maul (W) heals and shreds; his early tankiness and sustain out-trade your Steel Tempest pokes.",
+      "after": "Volibear's Thundering Smash (Q, 12s) charges him at you for a stun, and the second Frenzied Maul on a marked target heals him and applies on-hit; his early bulk out-trades your Steel Tempest pokes."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Heal and shred armor with Frenzied Maul (W)",
+      "after": "Bite twice with Frenzied Maul (W) to heal up"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Dash through the wave stacking Q, tag Volibear with Q2, and only commit the EQ3 knockup when his answer is down.",
+      "after": "Thundering Smash is a 12s stun and an auto reset — the wind-up, not the cast, is your cue to step back."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Volibear wastes Thundering Smash (Stun) — commit the full pattern immediately.",
+      "after": "Frenzied Maul is a 5-second cooldown — Executioner's Calling before you extend."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Every second bite heals him back — 5s cooldown, he wins long."
+    }
+  ],
+  "notes": "Rows 0/5/6 proposed as one atomic paired group per the mirror. The 'Wind Wall blocks Sky Splitter' claim in spikes[2] and wants.you[1] left untouched — the kit flags E as a projectile but Riot's text describes a summoned bolt at a location; the mirror flagged the same doubt and neither of us asserted it either way."
+}

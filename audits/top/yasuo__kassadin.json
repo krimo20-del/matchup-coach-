@@ -1,0 +1,58 @@
+{
+  "ownerKey": "yasuo",
+  "enemy": "kassadin",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[2] told the user to 'Windwall his Riftwalk', and nothing said which of Kassadin's spells Wind Wall actually stops.",
+      "why": "Riftwalk is a self-targeted teleport (kit flag: dash) with no projectile — Wind Wall cannot touch it. Only Null Sphere (Q) carries the projectile flag. Force Pulse (E) is a cone in front of him and passes straight through the wall, and Nether Blade (W) is an empowered auto. The mirror audit on Kassadin's page states the same.",
+      "corrected": "Wind Wall eats Null Sphere (Q) only. Force Pulse (E) is a cone that goes through it, Riftwalk is a blink, Nether Blade is an auto.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kassadin.json (via brief enemyKit)", "champ-data/_kits/yasuo.json (via brief ownerKit)", "mirrorFindings: kassadin__yasuo audit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The whole page was built around 'track Riftwalk', and packet.defects flags zero cooldown-sequencing advice.",
+      "why": "Riftwalk is 5/3.5/2 seconds — it is never 'down' in any useful sense, so tracking it is not actionable. Force Pulse at 21/20/19/18/17s is the punishable cooldown, and Null Sphere is 9s down to 7s. Last Breath is 70s at rank 1 and can only blink to an airborne target.",
+      "corrected": "Refocused the cooldown lines on Force Pulse (21s at rank 1) and Null Sphere, and stated Riftwalk's true 5s rank-1 cadence in the level-6 prose.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kassadin.json (via brief enemyKit)"]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Chart gives Yasuo every row but level 6 (Skill), which matches a melee dive lane against a pre-6 Kassadin with no waveclear. The mirror recorded no chart changes, so I left the rows untouched rather than introduce a disagreement — but see notes on row 7.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["packet.levelChart", "mirrorFindings"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "No mention of Kassadin's auto-attack reset tell.",
+      "why": "Nether Blade (W) carries the autoReset flag — his damage spike is an auto wind-up, so the visual cue to disengage is the attack animation, not a spell cast.",
+      "corrected": "Added the Nether Blade wind-up tell to spikes[0].",
+      "confidence": "High",
+      "sources": ["missingInteractions: autoreset-burst-tell", "champ-data/_kits/kassadin.json"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "focus.text", "before": "Kassadin Riftwalk", "after": "Kassadin Force Pulse"},
+    {"layer": "full", "path": "dosFull[0].t", "before": "Track Kassadin's Riftwalk before you commit", "after": "Track Kassadin's Force Pulse before you commit"},
+    {"layer": "full", "path": "dosFull[0].d", "before": "His mobility spike at 6. Kill him before it scales. Only engage once it is down or baited.", "after": "A cone slow charged by spells near him; Wind Wall does not stop it. Engage after he spends it."},
+    {"layer": "full", "path": "dosFull[2].t", "before": "Windwall his Riftwalk", "after": "Wind Wall his Null Sphere"},
+    {"layer": "full", "path": "dosFull[2].d", "before": "Kassadin wastes Riftwalk — commit the full pattern immediately.", "after": "Null Sphere (Q) is his only projectile; Force Pulse's cone is not."},
+    {"layer": "full", "path": "dontsFull[0].t", "before": "Dash into his Riftwalk", "after": "Dash in with Force Pulse up"},
+    {"layer": "full", "path": "dontsFull[0].d", "before": "That is Kassadin's favourite window — refuse it and half his win condition is gone.", "after": "It charges off spells cast near him and the cone slow goes straight through Wind Wall."},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Kassadin Riftwalk: matchup-defining — His mobility spike at 6. Kill him before it scales. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.", "after": "- Kassadin Force Pulse: 21s at rank 1 and a cone Wind Wall cannot block — the real punish window, since Riftwalk is only a 5s blink. - Your committal tool: never spend it on chip. - Your ultimate: kill windows only."},
+    {"layer": "full", "path": "report[5].t", "before": "Track Kassadin's Riftwalk: His mobility spike at 6. Kill him before it scales. When it is down — Dash-Q stack into EQ-knockup.", "after": "Wind Wall eats Null Sphere (Q); Force Pulse (E) is a cone and goes through it. Riftwalk is a blink at 5s — no wall stops it."},
+    {"layer": "content", "path": "spikes[0].text", "before": "Kassadin is helpless pre-6: his Q Null Sphere shield is his only defense and your Sweeping Blade closes on him instantly — E in, weave Qs, and he can't trade back melee at all.", "after": "Kassadin is helpless pre-6: Null Sphere's shield is his only defense and Sweeping Blade closes instantly. His burst tell is the Nether Blade (W) auto wind-up — step back on it, not the cast."},
+    {"layer": "content", "path": "mid", "before": "Through 3-6 you keep the boot on his throat. His Q shield and Null Sphere silence are minor; your dash-in beats anything he does before ult. At 6 he can Riftwalk away, but commit your knockup and R before he chains blinks and he still dies. Wind Wall his Q to strip his only poke and mana source. Do not let this lane go even.", "after": "Through 3-6 you keep the boot on his throat. Null Sphere interrupts channels rather than silencing, and Wind Wall eats it — but Force Pulse (E) is a cone that goes straight through the wall, so respect its 17-21s cooldown. At 6 he Riftwalks every 5s at rank 1; commit your knockup and R before he chains blinks and he still dies."},
+    {"layer": "content", "path": "wants.you[1]", "before": "Wind Wall his Q Null Sphere to deny his poke and mana", "after": "Wind Wall Null Sphere (Q); Force Pulse's cone ignores it"}
+  ],
+  "notes": "packet.defects was right: the page had no real sequencing because it tracked Riftwalk, a 5s blink. Moved the tracking onto Force Pulse (21s rank 1). Left the level chart alone — the mirror recorded no chart change — but flagging that phases[6]/win[6] give the 2+ item row to Yasuo while spikes[3].text and late both call late game Kassadin's; those two layers disagree in tone and someone should decide which is right."
+}

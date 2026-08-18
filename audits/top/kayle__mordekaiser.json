@@ -1,0 +1,88 @@
+{
+  "ownerKey": "kayle",
+  "enemy": "mordekaiser",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart contradicts itself and the data: Kayle wins 54.83% over 518 games, yet the chart hands Mordekaiser Level 1 (where whys[0] itself says the lane is even) and the 2+ item stage (where whys[6] says Kayle shreds him from range).",
+      "why": "Packet levelChart reads Skill / Mordekaiser / Mordekaiser / Mordekaiser / Mordekaiser / Skill / Kayle, which matches the written whys. Levels 4-5 belong to Mordekaiser (whys[3] says concede the window), not Skill.",
+      "corrected": "Row 0 -> Skill, rows 1-4 Mordekaiser, row 3 Mordekaiser, row 5 Skill, row 6 Kayle. Both layers flipped in matched pairs.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "packet defects", "currentText whys[0], whys[3], whys[6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are accurately placed: Mordekaiser at levels 2-3 and 6 (Realm of Death, 140/120/100s), Kayle at 6 (ranged Divine Ascent) and 2+ items (Nashor's-fed ranged autos). All four spikes[] entries exist.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit R cd 140/120/100", "ownerKit passive text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Mordekaiser's Q is called 'Mace of Spades' in spikes[0].text and early. Riot's current name is Obliterate. Cooldowns are never stated: Obliterate 8/7/6/5/4s, Indestructible 12/11/10/9/8s, Death's Grasp 16/14/12/10/8s at 700 range.",
+      "why": "champ-data/_kits authority lists Q = Obliterate. Naming the real ability and its cooldown makes the spacing advice concrete: outside 700 range he has no dash and cannot reach you.",
+      "corrected": "Use Obliterate (Q) and Indestructible (W); state Death's Grasp's 700 range as the line Kayle must stay outside once ranged.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/mordekaiser.json"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Indestructible converts stored damage into a heal every 8-12s, and the anti-heal requirement is only mentioned in passing.",
+      "why": "missingInteractions rule needs-antiheal: Grievous Wounds timing decides extended trades against his W sustain.",
+      "corrected": "Executioner's Calling / Oblivion Orb before extended trades; stated in spikes[0] and mid.",
+      "confidence": "High",
+      "sources": ["missingInteractions key 30", "enemyKit W flags"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Divine Judgment invulnerability does not remove Kayle from Realm of Death — the existing text already states this correctly and it is the decisive interaction at 6.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["enemyKit R text", "currentText mid"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Mordekaiser", "after": "Skill"},
+    {"layer": "content", "path": "win[0]", "before": "Mordekaiser", "after": "Skill"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Mordekaiser"},
+    {"layer": "content", "path": "win[3]", "before": "Skill", "after": "Mordekaiser"},
+    {"layer": "full", "path": "phases[6].side", "before": "Mordekaiser", "after": "Kayle"},
+    {"layer": "content", "path": "win[6]", "before": "Mordekaiser", "after": "Kayle"},
+    {"layer": "full", "path": "phases[0].rating", "before": "2/10", "after": "5/10"},
+    {"layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "3/10"},
+    {"layer": "full", "path": "phases[6].rating", "before": "2/10", "after": "8/10"},
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "You are the weakest level 1 in the game — pay rent quietly. Identify how Mordekaiser contests the first waves before you commit anything.",
+      "after": "Level 1 you both own nothing — he has no dash and your autos are melee, so last-hit even and stay outside Obliterate's 675 range on the wave."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Realm of Death's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Indestructible eats your Radiant Blast poke and every extended trade refills it — farm at max range, concede CS to Obliterate, wait for 6."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your pattern is at full power. Mordekaiser carry threat 8.5/10 — close before the map decides instead of you.",
+      "after": "Ranged autos plus E missing-health on-hit shred him from outside Death's Grasp's 700 range — no dash, so he never closes on you."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "His window: with Q (Mace of Spades) hitting bonus on an isolated target plus W shield-heal, he can walk you down in an extended trade your single W heal and short melee autos cannot answer.",
+      "after": "His window: Obliterate (Q) hits bonus damage on an isolated target and Indestructible (W) turns the stored damage into a heal every 8-12s, so an extended trade beats your one 15s W — buy Executioner's."
+    }
+  ],
+  "notes": "Kit-derived 'grounding' flag on Mordekaiser's Q contradicts Riot's description (damage only, bonus when isolated) — treated as a tooltip-parse misfire and not asserted. diffRating/carryRating both read 8.5/10 and the report calls this a 'Hard matchup' while diff is FAV at 54.83% over 518 games; left alone this pass, but the rating text and the win rate disagree and a human should settle it."
+}

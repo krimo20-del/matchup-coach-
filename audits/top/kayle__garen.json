@@ -1,0 +1,86 @@
+{
+  "ownerKey": "kayle",
+  "enemy": "garen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags it: Kayle wins 56.48% over 2222 games but the chart gave Garen 6 of 7 stages. The First-item row was still Garen even though the already-audited Garen-side page flipped that row to Kayle.",
+      "why": "By first item Kayle has ranged AoE autos and Q resistance shred, and Garen's only way to reach her is Decisive Strike (Q, 8s flat). The two directions must agree.",
+      "corrected": "First item flipped to Kayle in both layers with the rating and both why-lines rewritten. Levels 1-5 stay Garen and level 6 stays Skill, matching the mirror. diffRating and the two difficulty summaries moved off 8.5/10, which described a losing lane rather than a 56% one.",
+      "confidence": "High",
+      "sources": ["packet defects", "mirrorFindings point 2", "enemyKit Q cd 8"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The first-item phase pointed the reader at 'Courage's cooldown' as the fight trigger.",
+      "why": "Courage is a 22s rank-1 damage-reduction shield, not his engage. Decisive Strike (Q) is the 8s flat cooldown that decides whether he can reach her at all — that is the window a ranged Kayle fights on.",
+      "corrected": "phases[5].why and breakdown.cooldowns now name Decisive Strike's 8s and Courage's 22s separately.",
+      "confidence": "High",
+      "sources": ["enemyKit Q cd 8, W cd 22/19.5/17/14.5/12"]
+    },
+    {
+      "point": 4,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The decisive interactions are already on the page and correct: Decisive Strike silences and cancels her cast, Courage soaks Q chip, and Demacian Justice is true damage that Divine Judgment's invulnerability blanks (spikes[1].text, wants.foe[2]). That covers the resistances-invalidated item from _missing.",
+      "corrected": "No change needed; the first-item lines were rewritten only to stop contradicting the flipped chart row.",
+      "confidence": "High",
+      "sources": ["enemyKit R flags trueDamage/execute", "ownerKit R flags untargetable", "missingInteractions resistances-invalidated"]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flagged 'Land Decisive Strike' in wants.foe[0]; Decisive Strike is Garen's real Q name, so it is a false positive and the line was left alone.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits garen.json slot Q"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[5].side", "before": "Garen", "after": "Kayle"},
+    {"layer": "content", "path": "win[5]", "before": "Garen", "after": "Kayle"},
+    {"layer": "full", "path": "phases[5].rating", "before": "4/10", "after": "6/10"},
+    {"layer": "full", "path": "diffRating", "before": "8.5/10", "after": "5.5/10"},
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Nashor's Tooth is your spike — force fights the moment it completes, on Courage's cooldown.",
+      "after": "Nashor's Tooth plus ranged autos out-poke him — fight when Decisive Strike (8s) is down."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "Your first item tilts the poke, but E isn't fully evolved and an even Garen still wins the melee commit — respect his Q rush until your second item lands.",
+      "after": "Nashor's Tooth plus ranged AoE autos out-poke a Garen whose only way in is Decisive Strike (Q, 8s) — chip him every time that Q is down and hold your range."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Nashor's + Berserker's online: ranged DPS plus Q armor/MR shred on him start to out-poke a Garen who must spend Q to even reach you — but E isn't fully evolved yet, so chip, don't expect to delete him.",
+      "after": "Nashor's + Berserker's online: ranged DPS plus Q armor/MR shred out-poke a Garen who must spend Decisive Strike (8s) to even reach you — chip him on that cooldown, but E isn't fully evolved, so don't expect to delete him."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Garen Courage: matchup-defining — Damage reduction. Fight when down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Garen Courage: matchup-defining — Courage (W) 22s; his reach is Decisive Strike (Q, 8s). Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.difficulty",
+      "before": "Overall difficulty: 8.5/10. The lane is decided by how well you track Courage and how disciplined your pattern is.",
+      "after": "Overall difficulty: 5.5/10. The lane is decided by how well you dodge Decisive Strike and how long you survive to items."
+    },
+    {
+      "layer": "full",
+      "path": "report[14].t",
+      "before": "Hard matchup — difficulty 8.5/10, Garen carry threat 8.5/10.",
+      "after": "Even matchup — difficulty 5.5/10, Garen carry threat 8.5/10."
+    }
+  ],
+  "notes": "First-item row flipped to Kayle in both layers to match the Garen-side audit and the 56.48% win rate; both why-lines and the first-item spike were rewritten in the same pass so no text contradicts the new row. carryRating 8.5/10 left alone — Garen's snowball threat is real and I had no data to move it. The 'diff': 'FAV' enum was left alone; it already reads as favoured for Kayle, which the win rate supports. focus.text still says 'Garen Courage' while the page's real tracked cooldown is Decisive Strike (8s) — it is under 25 characters so the applier skips it; a maintainer would need to change it by hand."
+}

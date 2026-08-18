@@ -1,0 +1,56 @@
+{
+  "ownerKey": "kayle",
+  "enemy": "aatrox",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart gave Aatrox 5 of 7 stages while Kayle wins 56.53%, and Level 1 was marked Aatrox even though whys[0] calls it a coin-flip skill check. win[5] (Aatrox) also disagreed with phases[5].side (Skill).",
+      "why": "Level 1 Aatrox has one Q swing with no rotation stacked and Kayle can trade Q shred; first item is Kayle's Nashor's timing against his still-strong drain, so both rows read Skill.",
+      "corrected": "Row 0 and row 5 set to Skill in both layers, phases[0].rating raised to 5/10.",
+      "confidence": "High",
+      "sources": ["packet levelChart/defects", "kit: The Darkin Blade 14/12/10/8/6"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Cooldown breakdown carried no numbers.",
+      "why": "The Darkin Blade is 14s at rank 1 and 6s at rank 5; Umbral Dash 9/8/7/6/5; Divine Judgment 160/120/80. Concrete numbers make the engage window actionable.",
+      "corrected": "breakdown.cooldowns, dosFull[0].d and dontsFull[1].d now carry real cooldowns.",
+      "confidence": "High",
+      "sources": ["kit file cooldowns"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "No mention that Grievous Wounds is mandatory even though Deathbringer Stance, Umbral Dash and World Ender all heal.",
+      "why": "Three separate healing sources means chip damage without anti-heal never converts; this is the decisive interaction with Kayle's ramping DPS.",
+      "corrected": "dosFull[2] rewritten to name all three healing sources and give the Oblivion Orb timing.",
+      "confidence": "High",
+      "sources": ["kit flags P/E/R heal", "_missing: needs-antiheal"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Aatrox W (Infernal Chains) carries a derived grounding flag that Riot's description does not support; no grounding claim made, matching the mirror audit.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["mirrorFindings notes"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Aatrox", "after": "Skill" },
+    { "layer": "content", "path": "win[0]", "before": "Aatrox", "after": "Skill" },
+    { "layer": "full", "path": "phases[0].rating", "before": "4/10", "after": "5/10" },
+    { "layer": "content", "path": "win[5]", "before": "Aatrox", "after": "Skill" },
+    { "layer": "content", "path": "whys[5]", "before": "Through level 10 he keeps out-trading you in melee — his Deathbringer drain on a full Q rotation beats your pre-ranged form, so survive rather than fight.", "after": "Nashor's lands before ranged form does — his Deathbringer drain on a full Q rotation still heals through your melee autos, so buy Executioner's and farm." },
+    { "layer": "full", "path": "dosFull[0].d", "before": "Sweetspots knock up. Sidestep them. Only engage once it is down or baited.", "after": "Q3 knocks up and it is 14s at rank 1, 6s at rank 5 — step out of the arc." },
+    { "layer": "full", "path": "dosFull[2].t", "before": "Dodge his Q sweetspots", "after": "Buy anti-heal before his R" },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Aatrox wastes The Darkin Blade — commit the full pattern immediately.", "after": "Stance, Umbral Dash and World Ender all heal — Oblivion Orb by 6." },
+    { "layer": "full", "path": "dontsFull[1].d", "before": "Burning it for tiny value leaves you naked for its full cooldown.", "after": "The third swing knocks up, and his Q is only 6s at rank 5." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Aatrox The Darkin Blade: matchup-defining — Sweetspots knock up. Sidestep them. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.", "after": "- The Darkin Blade: 14s at rank 1 down to 6s at rank 5 — the third swing knocks up, so step out of the arc. - Umbral Dash: 9s at rank 1, his only way out. - Divine Judgment: 160s at rank 1 — kill windows only." }
+  ],
+  "notes": "suspectNames flagged 'World Ender's' in wants.foe[2] — false positive, that is the real ability name in possessive form; left alone. Aatrox W grounding flag is a tooltip-parsing misfire and was not used."
+}

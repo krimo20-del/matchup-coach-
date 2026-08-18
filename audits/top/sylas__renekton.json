@@ -1,0 +1,103 @@
+{
+  "ownerKey": "sylas",
+  "enemy": "renekton",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 6 read 'Skill' while its own why says Hijack gives Sylas a decisive all-in, and both item rows read Renekton while their whys describe his damage fading and Sylas's sustain taking over.",
+      "why": "The packet chart reads Skill / Renekton / Renekton / Skill / Sylas / Skill / Skill, and the mirror renekton__sylas already flipped level 6 to Sylas and 2+ items to Skill. Renekton owns levels 2-3; level 6 is Sylas's first genuine window because Hijack returns faster than Dominus does.",
+      "corrected": "Level 6 to Sylas, first item and 2+ items to Skill, all in matched phases[].side + win[] pairs.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirror audit renekton__sylas", "brief ownerKit R", "brief enemyKit R"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2] sells Dominus purely as 'a massive AoE HP buff' and never mentions the cooldown asymmetry that actually makes the steal a spike.",
+      "why": "Hijack is 80/55/30s; Dominus is 120/100/80s. Sylas gets more casts of Renekton's ultimate than Renekton does, at every rank — that is the reason level 6 flips, not the health bar alone.",
+      "corrected": "spikes[2].text rewritten around the 80s-against-120s comparison.",
+      "confidence": "High",
+      "sources": ["brief ownerKit R", "brief enemyKit R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "mid gives Ruthless Predator's cooldown as 'roughly 13 seconds base'. Four fields say Abduct stuns. Nothing mentions that the empowered W destroys shields.",
+      "why": "Ruthless Predator is 16/14/12/10/8s — 16 at rank 1, so a player counting 13 steps back in three seconds early. Above 50 Fury it slashes three times, stuns for 1.5s instead of 0.75s, and destroys damage shields on the target, which matters because Sylas's whole trade pattern starts behind a shield. Abduct is a chain pull with no stun.",
+      "corrected": "Real cooldown range used, shield destruction stated where it changes the plan, stun claims removed.",
+      "confidence": "High",
+      "sources": ["brief enemyKit W", "brief ownerKit E", "mirror audit renekton__sylas"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "The content layer never schedules Grievous Wounds, even though report[8] tells the reader to buy it.",
+      "why": "The missingInteractions entry flags Cull the Meek: a free, 7-second, no-cost AoE that heals him off every target hit. In a lane decided by extended trades that heal is the resource being contested, and anti-heal timing decides it.",
+      "corrected": "Anti-heal moved into wants.you[2] and the heal named in wants.foe[1].",
+      "confidence": "High",
+      "sources": ["brief missingInteractions key 30", "brief enemyKit Q"]
+    },
+    {
+      "point": 12,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The packet's suspect name 'Land Ruthless Predator' is a false positive — that is the correct name of Renekton's W and it is used in the right slot throughout.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["brief enemyKit W", "packet suspectNames"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Sylas"},
+    {"layer": "content", "path": "win[4]", "before": "Skill", "after": "Sylas"},
+    {"layer": "full", "path": "phases[5].side", "before": "Renekton", "after": "Skill"},
+    {"layer": "content", "path": "win[5]", "before": "Renekton", "after": "Skill"},
+    {"layer": "full", "path": "phases[6].side", "before": "Renekton", "after": "Skill"},
+    {"layer": "content", "path": "win[6]", "before": "Renekton", "after": "Skill"},
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Renekton whiffs Ruthless Predator (Stun) and the lane briefly belongs to you.",
+      "after": "Renekton whiffs Ruthless Predator — that is 8-16 seconds of freedom."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Engaging with both E charges spent — no shield, no stun, and you're a melee mage standing in the open.",
+      "after": "Engaging with both E charges spent — Abduct only pulls you in, and a melee mage has no exit without it."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Engaging with both E charges spent — no shield, no stun, and you're a melee mage standing in the open.",
+      "after": "Above 50 Fury his W destroys shields outright — the thing you were relying on is the thing it removes."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Hijack gives you Dominus — a massive AoE HP buff that turns the next all-in your direction and opens your first real kill window.",
+      "after": "Hijack gives you Dominus on an 80s timer against his 120s — you get more casts of his own ultimate than he does, so all-in on his downtime."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Farm safely through the early levels and build Riftmaker so your W sustain outpaces his fading damage in extended trades",
+      "after": "Farm safely early, then build Riftmaker with Grievous Wounds — Cull the Meek heals him through every extended trade"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Rage-stack with Cull the Meek (Q) in every trade to keep his fury bar full for empowered combos",
+      "after": "Spam Cull the Meek (Q) in every trade — it heals him off each hit and keeps the fury bar full"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-5 are where Renekton is most oppressive — his full combo with fury-empowered W shaves chunks you cannot instantly recover through W alone. The key is sequencing: E hook him only when his W is visibly on cooldown (roughly 13 seconds base), then chain Q into W into passive auto. If he burns W to stun a minion for fury, that is your window. His R at level 6 gives him a big HP surge, but the moment he pops Dominus you should Hijack it — his ultimate on YOUR scaling still gives you the AoE HP and the all-in math swings. This is the first realistic kill window; play for it.",
+      "after": "Levels 3-5 are where Renekton is most oppressive — his fury-empowered W stuns for 1.5 seconds instead of 0.75 and destroys shields on the way through, so the buffer you planned to trade behind is simply deleted. The key is sequencing: chain onto him only when W is visibly down (16 seconds at rank 1, 8 at rank 5), then Q into Kingslayer into passive autos. If he burns W on a minion for fury, that is your window. At level 6 he gains health and Fury from Dominus, but Hijack returns in 80 seconds against his 120 — so you can spend his own ultimate more often than he can. This is the first realistic kill window; play for it."
+    }
+  ],
+  "notes": "Left alone: the claim in whys[2] and spikes[1] that his combo removes '40-50% of your HP'. Nothing in the kits gives damage numbers and I would not ship a figure I cannot source. Also note phases[5].why and phases[6].why still read as Sylas-favoured while both rows are now Skill; the sides now match across layers, but if you want those two whys reworded to a contested tone that is a small follow-up."
+}

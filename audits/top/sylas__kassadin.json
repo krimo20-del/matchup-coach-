@@ -1,0 +1,70 @@
+{
+  "ownerKey": "sylas",
+  "enemy": "kassadin",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "52.1% over 453 games; EVEN at 5.5/10 is consistent with the mirror, which left difficulty untouched.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["packet", "mirror: kassadin__sylas"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers already read Skill/Sylas/Sylas/Skill/Skill/Skill/Skill, matching packet.levelChart exactly and the mirror's corrected rows (Level 2 Sylas, Level 6 Skill, 2+ Skill).",
+      "corrected": "Chart verified against packet and mirror; full and content agree row for row.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "mirror: kassadin__sylas"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The whole page treats Riftwalk as a cooldown you wait out — 'commit on Riftwalk's cooldown', 'it governs your forward steps'. Riftwalk is 5/3.5/2 seconds. It is never meaningfully down.",
+      "why": "Kit: R cd 5/3.5/2, cost 40 with escalating mana per repeat blink. Mana, not cooldown, is what limits him. Two further interactions were absent: Null Sphere grants a shield that absorbs magic damage (all of Sylas's damage is magic, and Void Stone reduces it further), and Force Pulse charges off spells cast in his vicinity — Sylas's fast casting rate fuels it.",
+      "corrected": "breakdown.cooldowns and report[5] now key off his mana and the Null Sphere shield; wants.foe[0] states that your own casts charge Force Pulse.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kassadin.json", "champ-data/_kits/sylas.json"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "No mention that Kassadin's burst opens with an auto-attack reset.",
+      "why": "missingInteractions rule autoreset-burst-tell: Nether Blade (W, 7s) is an auto reset, so the visible cue is the attack wind-up, not a spell cast.",
+      "corrected": "dontsFull[0].d now names the Nether Blade wind-up as the step-back cue.",
+      "confidence": "High",
+      "sources": ["_missing/sylas.json", "champ-data/_kits/kassadin.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Kassadin Riftwalk: matchup-defining — His mobility spike — the lane is decided before it scales. It governs your forward steps. - E1 shield spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- Kassadin Riftwalk: matchup-defining — only 5/3.5/2s, so mana is the real gate, not cooldown; each repeat blink costs more. - E1 shield spent on poke is a death you scheduled. - Hold the R for the fight that decides something."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Kassadin’s Riftwalk: His mobility spike — the lane is decided before it scales. Forward steps wait for its downtime.",
+      "after": "Track Kassadin’s mana, not Riftwalk — the blink is 5/3.5/2s. Null Sphere shields magic, so bait it before your chain."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That’s Kassadin’s bread-and-butter play — deny it and they run out of answers.",
+      "after": "His Nether Blade wind-up is the tell — step back on the animation, not the cast."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Q harass you down through the wave to deny your E2 engage pattern",
+      "after": "Charge Force Pulse off your casts, then cone-slow you out of the trade"
+    }
+  ],
+  "notes": "Level chart verified correct in both layers — no edit needed. The page's 'commit on Riftwalk's cooldown' framing appears in report[9], dosFull[0].t/.d and tldr as well; those were left alone because rewriting them inside the ±10% band would have cost the concrete detail, but they carry the same false premise and are worth a second pass."
+}

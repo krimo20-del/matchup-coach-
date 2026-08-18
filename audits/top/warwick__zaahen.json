@@ -1,0 +1,47 @@
+{
+  "ownerKey": "warwick",
+  "enemy": "zaahen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The 2-item row said Warwick in both layers while whys[6] directly beneath it said 'Two items in it settles even', and the packet chart says Skill.",
+      "why": "By two items his Q double-slash reset and knock-up recast trade evenly with Warwick's sustain; nothing in either kit gives one side the side-lane duel outright.",
+      "corrected": "phases[6].side and win[6] set to Skill as a matched pair, with phases[6].why rewritten to say what the even duel actually hinges on.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText whys[6]", "champ-data/_kits/zaahen.json"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Four spikes with real timings (Lvl 2-3, Lvl 4-5, Lvl 6, 1st item) that match the chart's swing points. His R is 110/95/80 and Warwick's is 110/90/70, which is why level 6 genuinely reads as a coin-flip.",
+      "corrected": "Left the timings; corrected only the false description of his R inside spikes[2].text.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zaahen.json", "champ-data/_kits/warwick.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three places described his ultimate as a 'stat-steal all-in'. The kit says nothing of the kind. Separately, the passive's revive and the W pull were absent from the whole page, and the packet flags this matchup as having NO cooldown-sequencing advice anywhere.",
+      "why": "His R (110/95/80, 600 range) rises and stabs downward, damaging enemies and healing him for a portion of the damage dealt — it is a heal, not a stat steal, and a player expecting to be drained will misjudge the trade. His passive, Determination, stacks from attacks and abilities against champions for bonus attack damage, and when filled he gains increased AD AND CAN REVIVE — the single biggest reason not to commit a 110s Infinite Duress into a full bar. His Q recast knocks up, and a knock-up cuts Warwick's channelled R. His W (14/13.5/13/12.5/12s, 850 range) stabs and then PULLS, so the danger line is much longer than his dash range suggests.",
+      "corrected": "spikes[2].text, whys[4] and mid now describe the R as healing for a portion of damage dealt; dosFull[0].d carries its 110s rank-1 cooldown; dontsFull[0].d states the Q recast knock-up cutting your R; dontsFull[1].d states the Determination revive; dosFull[1].d gives the W's 850 range and 14s cooldown as the concrete 'wait for X before you Y' the packet says is missing.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zaahen.json", "champ-data/_kits/warwick.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[6].side", "before": "Warwick", "after": "Skill" },
+    { "layer": "content", "path": "win[6]", "before": "Warwick", "after": "Skill" },
+    { "layer": "full", "path": "phases[6].why", "before": "Two items on: your side-lane pattern is at full power. Zaahen carry threat 8/10 — close before the map decides instead of you.", "after": "Two items in it is a skill duel: his Q resets and knock-up recast against your suppress — carry threat 8/10, so fight on your cooldowns." },
+    { "layer": "full", "path": "dosFull[0].d", "before": "His big cooldown. R-lock him around it. Only engage once it is down or baited.", "after": "His R is 110s at rank 1 and heals him for the damage it deals. Wait it out." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q-bite Zaahen as he steps up (hold Q to follow his dash), weave autos, and let the passive out-heal his return damage.", "after": "His W stabs and pulls from 850 units on a 14s cooldown — stand off that line, then Q-bite him once it has been spent." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Zaahen's favourite window — refuse it and half his win condition is gone.", "after": "His Q recast knocks you airborne, and any knock-up cuts your R channel short." },
+    { "layer": "full", "path": "dontsFull[1].d", "before": "Burning it for tiny value leaves you naked for its full cooldown.", "after": "A full Determination bar gives him bonus AD and lets him revive." },
+    { "layer": "content", "path": "whys[4]", "before": "Level 6 is a coin-flip: your Infinite Duress suppress against his R stat-steal all-in.", "after": "Level 6 is a coin-flip: your suppress against an R that heals him as it damages." },
+    { "layer": "content", "path": "spikes[2].text", "before": "Coin-flip ultimates: your Infinite Duress suppress against his R stat-steal all-in - whoever lands their R on their own terms wins the exchange outright.", "after": "Coin-flip ultimates: your 1.5s Infinite Duress suppress against his R, which heals him for a portion of the damage it deals - whoever lands theirs first wins." },
+    { "layer": "content", "path": "mid", "before": "Levels 4-5 even out because his Q Darkin Glaive poke and E Golden Onslaught burst hit before your sustain ramps, so trade in short bites with E Primal Howl ready. Level 6 is a true coin-flip: a landed Infinite Duress wins you the fight on the spot, but his R stat-steal flips any all-in he starts first.", "after": "Levels 4-5 even out because his Q poke and E dash-burst hit before your sustain ramps, so trade in short bites with E Primal Howl ready. Level 6 is a true coin-flip: a landed Infinite Duress wins you the fight on the spot, but his R heals him for the damage it deals and flips any all-in he starts first." }
+  ],
+  "notes": "packet suspectName \"Blood Hunt's\" in early is a FALSE POSITIVE — Blood Hunt is Warwick's real W; left unchanged. Two problems I could NOT fix from the data: (1) the whole page tracks his ultimate under the literal word 'Ultimate' (focus.text is 'Zaahen Ultimate', and it appears in loading, winCon, breakdown.cooldowns and eight report/breakdown strings) because the packet's enemyAbilities is null and the kit file carries no ability names for Zaahen — I will not invent one. (2) The content layer calls his Q 'Darkin Glaive' and his E 'Golden Onslaught'; neither name appears anywhere in the kit, and I could not verify or refute them, so I left both alone except where I had to touch the surrounding sentence, and dropped the names only in the one string I rewrote for the R error. Both are recorded as questions."
+}

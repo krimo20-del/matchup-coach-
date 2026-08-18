@@ -1,0 +1,115 @@
+{
+  "ownerKey": "warwick",
+  "enemy": "karma",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart disagreed with itself and with the packet: row 0 said Karma while whys[0] said the lane favours you, and row 4 said Karma while the mirror audit (karma__warwick) flipped row 4 to Warwick on both layers.",
+      "why": "Packet levelChart is [Warwick, Skill, Warwick, Skill, Warwick, Warwick, Warwick] at 56.5% over 1023 games; the mirror explicitly records row 4 as Warwick.",
+      "corrected": "Rows 0 and 4 flipped to Warwick on both layers as one atomic group, with ratings raised to match. Row 3 left alone: the mirror did not flag it and I will not introduce an unmirrored flip.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "mirrorFindings", "currentText"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are keyed correctly: levels 3-5 pattern, level 6 Infinite Duress, Blade of the Ruined King first item, two-item side lane. Only the level 6 spike's mechanical description was wrong, corrected under point 4.",
+      "corrected": "Spike timings left as-is; spikes[1].text rewritten for accuracy.",
+      "confidence": "High",
+      "sources": ["ownerKit", "currentText.content.spikes"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Infinite Duress described as a 'point-and-click fight starter' in phases[4].why, breakdown.late and whys[4], and spikes[1].text claimed it 'locks her out of casting' Mantra.",
+      "why": "Riot's text: Warwick leaps in a direction and suppresses the FIRST champion he collides with for 1.5s, and the kit flags R as a channel — interruptible, any CC cancels it. So it can miss, and Karma's Focused Resolve root or Mantra-empowered root can cut it short.",
+      "corrected": "Restated as a directional leap onto the first champion collided with, 1.5s suppression, cancellable by CC — so commit after she has spent Focused Resolve (12s cooldown at every rank), not before.",
+      "confidence": "High",
+      "sources": ["ownerKit R text/flags", "enemyKit W (12s flat cd)", "mirrorFindings point 4"]
+    },
+    {
+      "point": 6,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Focused Resolve is a flat 12s at all ranks, so the punish window is fixed and does not shrink with rank — the existing 'engage on its cooldown' framing holds.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit W"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "Packet flagged 'E's Primal Howl' in spikes[3].text as a probable wrong ability name.",
+      "why": "False positive — Primal Howl IS Warwick's E. The fear displacement genuinely can pull you out of Focused Resolve's tether range.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["ownerKit E text", "packet.suspectNames"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Karma",
+      "after": "Warwick"
+    },
+    {
+      "layer": "content",
+      "path": "win[0]",
+      "before": "Karma",
+      "after": "Warwick"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].rating",
+      "before": "3/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Karma",
+      "after": "Warwick"
+    },
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Karma",
+      "after": "Warwick"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].rating",
+      "before": "3/10",
+      "after": "7/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Infinite Duress is a point-and-click fight starter that locks his carry tool. Reassess every all-in at 6 — Karma's ultimate changes the math too.",
+      "after": "Infinite Duress leaps and suppresses the first champion it collides with for 1.5s — it can miss, and her root cancels the channel. Bait it out, then commit."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "Infinite Duress is a point-and-click fight starter that locks his carry tool — build your teamfight around that. Karma carry threat: 6/10 — shift to picks and wave control if he gets ahead.",
+      "after": "Infinite Duress leaps onto the first champion it collides with for a 1.5s suppress — pick your line, because CC cancels the channel. Karma carry threat: 6/10 — shift to picks if she gets ahead."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Your R suppress locks her out of casting the RW mantra root, and since she has no dash you can flat run her down the moment she uses her shield defensively.",
+      "after": "Your R leaps onto the first champion it hits and suppresses 1.5s — it can miss, and CC cancels the channel, so fire it after she has spent Focused Resolve, not into it."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "At 6 your R suppress denies her mantra root and kills her.",
+      "after": "At 6 your R leap suppresses 1.5s if it lands — bait her root."
+    }
+  ],
+  "notes": "Row 3 (Levels 4-5) disagrees with the packet chart (packet says Skill, both layers say Warwick) but the mirror audit did not flag it, so I left the pair untouched rather than introduce an unmirrored flip. Focused Resolve is a flat 12s cooldown at every rank — worth using that number in future rewrites. Text throughout this matchup refers to Karma as 'he'; I corrected pronouns only inside strings I was already editing, since a pronoun-only edit is under the 25-char skip threshold in some fields and would burn edits elsewhere."
+}

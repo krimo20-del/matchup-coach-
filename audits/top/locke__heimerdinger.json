@@ -1,0 +1,100 @@
+{
+  "ownerKey": "locke",
+  "enemy": "heimerdinger",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The Level 6 row credited Locke in both layers while the packet chart and the mirror audit both call it even.",
+      "why": "packet.levelChart index 4 = Skill; the mirror audit (heimerdinger__locke) already flipped that row to Skill at 5/10 in both of its layers, so leaving Locke here would put the two directions in direct conflict.",
+      "corrected": "win[4] and phases[4].side set to Skill with rating 5/10, as a matched pair.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/locke.json", "mirror audit heimerdinger__locke"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[4] and whys[5] sit one row out of place, and no spike carried a cooldown number — the reader is told to commit 'while it is down' with nothing to count.",
+      "why": "Rows are Level 1, 2, 3, 4-5, Level 6, First item, 2+ items. Heimer cooldowns: Q 1s, W 11/10/9/8/7s, E 11s flat, R 100/85/70s.",
+      "corrected": "Rows relabelled; the 1s turret drop, the 11s grenade and the W range written into spikes[0], spikes[1] and report[5].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/heimerdinger.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Micro-Rockets are described as a poke tool with no range, leaving the actual lane problem unstated: W reaches 1325 against Ritual Nails' 950, so he wins the standing poke war outright and you have to close.",
+      "why": "Kit ranges: Heimer W 1325, E 970, Q 350; Locke Q 950.",
+      "corrected": "Both numbers stated in spikes[0].text.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/heimerdinger.json", "champ-data/_kits/locke.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The grenade is treated as a single stun effect, and UPGRADE!!! is described as producing 'R turrets' as if the ult were a turret ability.",
+      "why": "Riot text: the grenade stuns 'anyone directly hit' and slows surrounding units — a graze is only a slow, which changes whether you can still dash out. UPGRADE!!! 'causes his next spell to have increased effects' — it is a buff on whichever spell he casts next, not a turret.",
+      "corrected": "report[5].t now separates the direct hit from the splash; wants.foe[2] renames the ult correctly.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/heimerdinger.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Locke",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Locke",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].rating",
+      "before": "6/10",
+      "after": "5/10"
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Level 5 is even until your ult comes online.",
+      "after": "Level 6 is even — the E stun answers a dive."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "At 6 you're favoured — Purgatory (R) executes the immobile Heimer.",
+      "after": "First item favours you — Purgatory executes the immobile Heimer."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Heimerdinger walls you off with H-28G Turrets (Q) and pokes with Hextech Micro-Rockets (W), so clear a turret before you commit and don't E Ashen Pursuit into a full turret nest.",
+      "after": "Heimerdinger walls you off with H-28G Turrets (Q, 1s to drop) and pokes at 1325 with Micro-Rockets (W) against your 950, so clear a turret first and never E Ashen Pursuit into a full nest."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Purgatory (R) is your kill window — Heimer is immobile and squishy, so E through his turret line, W Soul Ignition, and execute him under the threshold before he CH-2 Grenades (E) you.",
+      "after": "Purgatory (R) is your kill window — Heimer is immobile and squishy, so E through the turret line, W Soul Ignition, and execute under the threshold while his grenade (E, 11s flat) is spent."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Poke with W rockets and zone with R turrets",
+      "after": "Poke with W rockets, UPGRADE!!! the next spell"
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Heimerdinger’s CH-2 Grenade (Stun): The stun makes his turret nest lethal — dodge it before diving. Commit only while it is down.",
+      "after": "CH-2 Grenade is 11s flat at every rank: a direct hit stuns, the splash only slows. Dive on the miss, and clear a turret before you step in."
+    }
+  ],
+  "notes": "The decisive number nobody had written down: Micro-Rockets reach 1325 against your 950, so the standing poke war is unwinnable and the whole lane is about closing on a spent grenade. UPGRADE!!! buffs whichever spell he casts next — an upgraded grenade is a wider, longer stun, which is the version that actually kills a diving Locke; the page treated the ult as a turret ability."
+}

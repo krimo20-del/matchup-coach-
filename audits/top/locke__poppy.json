@@ -1,0 +1,76 @@
+{
+  "ownerKey": "locke",
+  "enemy": "poppy",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Exactly 50.0% over 456 games, diff EVEN, and the chart (Poppy 1-5, Skill at 6 and first item, Poppy late) matches the packet in both layers. Ratings 3-4/10 early rising to 6/10 at the ult reflect the swing correctly.",
+      "corrected": "No chart change.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText both layers"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The late-game spike claims Steadfast Presence 'permanently' disables your dash resets.",
+      "why": "It is 20/18/16/14/12s — 12s at max rank against your flat 10s blink. That is most of your resets covered, not all of them, and the difference is exactly where your kill window lives. 'Permanently' tells the player to stop looking for the window.",
+      "corrected": "late now states the 12s at max rank instead of 'permanently'.",
+      "confidence": "High",
+      "sources": ["enemyKit W 20/18/16/14/12", "ownerKit E flat 10s"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[0].text says Steadfast Presence 'passively negates your dash while active', which garbles Riot's text. The passive half is only bonus Armor and MR (increasing as she drops low); the dash-stop exists only while she has ACTIVATED it, and when it stops a dash the victim is slowed AND grounded. whys[0] also credits W at level 1, where she cannot have it.",
+      "why": "This is the whole matchup. If the dash-stop were passive, Ashen Pursuit would never be usable; because it is an activated 20s button, the correct play is to force it out and blink on the empty window. The grounding afterwards is the part that kills you — it is not just that the dash fails, it is that you then cannot leave.",
+      "corrected": "spikes[0].text, whys[0], report[5].t and dosFull[0].d now separate the passive resistances from the activated dash-stop, give the 20s at rank 1 and 400 range, and state the grounding that follows a stopped dash.",
+      "confidence": "High",
+      "sources": ["enemyKit W text: 'passively gains Armor and Magic Resist... can activate... If a dash is stopped, the enemy is slowed and grounded'", "enemyKit W 400 range, 20/18/16/14/12"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The matchup-defining button had no duration.",
+      "why": "20s at rank 1 is the longest punish window in this lane and it shrinks to 12s — the advice changes as she ranks it.",
+      "corrected": "Numbers now in report[5].t, dosFull[0].d, spikes[0].text and late.",
+      "confidence": "High",
+      "sources": ["enemyKit W"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Poppy's Hammer Shock (Q) chunks and Steadfast Presence (W) passively negates your Ashen Pursuit (E) dash while active, and Heroic Charge (E) into a wall stuns you; her anti-dash kit directly counters your mobility.",
+      "after": "Poppy's Hammer Shock (Q) chunks, and Steadfast Presence (W) only stops dashes while she has it active — 20s at rank 1, and it grounds you if it catches Ashen Pursuit; Heroic Charge into a wall stuns."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Level 1 Poppy's Q and W dash-negation win the trade, favouring her.",
+      "after": "Level 1 Hammer Shock out-trades your poke; her W isn't up yet."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "By 2+ items Poppy tilts it back in her favour: a tanky Steadfast Presence (W) permanently disables your dash resets and her E-wall stun plus Keeper's Verdict (R) lock down the reset chains your kit relies on.",
+      "after": "By 2+ items Poppy tilts it back: Steadfast Presence is 12s at max rank, so it covers most of your dash resets, and her E-wall stun plus Keeper's Verdict lock down the chains your kit relies on."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Poppy’s Steadfast Presence: Stops every dash near her — mobility dies inside the zone. Commit only while it is down.",
+      "after": "Steadfast Presence stops dashes only while she holds it active — 20s at rank 1, 400 range — and grounds you if it eats your blink."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Stops every dash near her — mobility dies inside the zone. Only commit once it is down or baited.",
+      "after": "It only stops dashes while active, 20s at rank 1 — bait it, then blink in on the empty window."
+    }
+  ],
+  "notes": "packet.defects flagged wants.you[0] 'Bait Steadfast Presence before using your E dash' as a probable wrong name — FALSE POSITIVE, that is the exact name of her W and the advice is now the correct advice given the ability is activated rather than passive. I did not touch Keeper's Verdict: the flags list both 'channel' and 'untargetable' for it, which cannot both be acted on from Riot's one-line description, and Locke has no hard CC to interrupt a channel with anyway. Her Q carries a 'grounding' flag that Riot's description does not support (it says slow and delayed explosion only) — per the rule I trusted the description and made no grounding claim for Hammer Shock."
+}

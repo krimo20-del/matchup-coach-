@@ -1,0 +1,100 @@
+{
+  "ownerKey": "locke",
+  "enemy": "jax",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "45.2% over 1303 games; packet chart is Jax on all seven rows and both layers agree. The mirror audit confirmed the uniform chart is genuine.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/locke.json", "mirror audit jax__locke"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 spike names the ult wrongly and gives no cooldown, so there is nothing to time the stage against.",
+      "why": "Jax R is Grandmaster-at-Arms, 110/100/90s: every third consecutive attack deals bonus magic damage, and the active grants Armor and Magic Resist.",
+      "corrected": "spikes[1].text and late renamed with the 110s rank-1 number and the third-hit mechanic.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/locke.json", "champ-data/_kits/jax.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The ult is called 'Grandmaster's Might' in two places; it is Grandmaster-at-Arms. Empower is written as 'W-Empowered Strikes'.",
+      "why": "packet.enemyAbilities lists R: Grandmaster-at-Arms, W: Empower — this is Riot's own name list, and it is the calibration case the brief warns about.",
+      "corrected": "Corrected in spikes[0].text, spikes[1].text, late and wants.foe[1].",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/locke.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two places say Jax 'out-heals' or 'out-sustains' you. Nothing in his kit heals — his R grants resists and bonus magic damage, and the passive is attack speed. The page also implies Counter Strike blanks your whole combo when it only dodges basic attacks.",
+      "why": "Riot text: 'dodge all incoming attacks for a short duration and then quickly counterattack, stunning all surrounding enemies.' Your Soul Nails and the Purgatory totem still land through it.",
+      "corrected": "Sustain claims replaced with resist stacking in spikes[1], late and whys[6]; the basics-only limitation stated in spikes[0].text and report[5].t.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/jax.json"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Counter Strike is the tracked cooldown on every panel but its duration never appears — and it is the one number that decides when you may step up.",
+      "why": "Kit: E 17/15/13/11/9s, 300 range. That 17s at rank 1 is an enormous punish window; at rank 5 it is only 9s.",
+      "corrected": "Stated in report[5].t.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/jax.json"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flagged 'Land Counter Strike' in wants.foe[0] — a false positive; the name is right.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/locke.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Jax's E Counter Strike stun is the whole matchup: if you commit Q Ritual Nails and E Ashen Pursuit into an active Counter Strike, he eats all your basics, stuns you, and W-Empowered Strikes you to death. Never dash in while E is up.",
+      "after": "Jax's E Counter Strike stun is the whole matchup: dash in on an active Counter Strike and he dodges your autos, stuns you, and Empower (W) finishes it. It only blocks basic attacks though — your nails still land, so poke it out from range."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Jax's R Grandmaster's Might flips his resists and adds on-hit magic burst; even landing your R Purgatory totem, his sustained trades out-heal your grey-health W window and he wins the extended all-in.",
+      "after": "Jax's R Grandmaster-at-Arms (110s at rank 1) adds armour, MR and magic damage on every third attack, so even with the Purgatory totem down his resists carry him past the threshold and he wins the extended all-in."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Post-6 R Grandmaster's Might gives Jax the resists and on-hit burst to survive your R Purgatory threshold and out-sustain your self-damaging W; you scale worse than him into items, so farm safe and win the map, not the 1v1.",
+      "after": "Post-6 Grandmaster-at-Arms gives Jax the resists and third-hit magic damage to survive your Purgatory threshold and out-trade your self-damaging W; you scale worse than him into items, so farm safe and win the map, not the 1v1."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Jax out-sustains your R and self-damage W in every extended late fight.",
+      "after": "Jax out-stats your R and self-damage W in every extended late fight."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Hit level 6 R to flip resists mid-trade",
+      "after": "Flip resists mid-trade with his level 6 R"
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Jax’s Counter Strike: Dodges every auto and stuns — hold your damage until it ends. Commit only while it is down.",
+      "after": "Counter Strike (17s at rank 1) dodges basic attacks only — your nails still land. Hold autos through it, then trade in the window after."
+    }
+  ],
+  "notes": "Two corrections worth flagging: the ult was named 'Grandmaster's Might' (it is Grandmaster-at-Arms, exactly the calibration case in the brief), and Jax was described twice as out-healing you when nothing in his kit heals — his edge is resists and attack speed. Counter Strike blocking basic attacks only is the actionable detail the page never gave: you can keep chipping with nails through it."
+}

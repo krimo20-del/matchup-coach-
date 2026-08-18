@@ -1,0 +1,73 @@
+{
+  "ownerKey": "neeko",
+  "enemy": "karma",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The page rates the lane EVEN 5.5/10 while this packet reports a 33.33% Neeko win rate over 33 games, and the already-audited mirror (karma__neeko) rates the same lane HARD for Karma off a 37.04% Karma win rate.",
+      "why": "Both packets show the same lane as losing for their own side, so the two data sources disagree and I cannot verify which is right. Mechanically Tangle-Barbs (E, 1000) out-ranges Karma's only lockdown, Focused Resolve (W, 675), and Karma has no dash — that supports the mirror's Neeko-favoured reading, but not against a 33% sample.",
+      "corrected": "Left diff, diffRating and carryRating untouched and raised the contradiction in questionsForUser rather than assert a direction I cannot verify.",
+      "confidence": "Low",
+      "sources": ["packet winRate 33.33 / games 33", "audits/top/karma__neeko.json winRate 37.04", "kit ranges: Neeko E 1000 vs Karma W 675"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart read Skill at levels 1, 2, 3, 4-5, first item and 2+ items, disagreeing with the packet chart and with the mirror page, which already ships Karma at level 2 and Neeko at 3, 4-5, first item and 2+.",
+      "why": "The mirror is on disk and mirror-fix.js overwrites any disagreement, so the two directions must state the same rows. Level 2 is Karma's: Inner Flame (Q, 950) plus Gathering Fire's Mantra refunds chip faster than one Blooming Burst. From 3 onward Tangle-Barbs decides trades, and Pop Blossom at 6 makes the chain lethal.",
+      "corrected": "win[1]/phases[1].side to Karma; win[2], win[3], win[5], win[6] and their phases[N].side to Neeko, proposed as matched pairs, with ratings rescaled inverse to the mirror's.",
+      "confidence": "Medium",
+      "sources": ["packet levelChart", "audits/top/karma__neeko.json edits", "currentText whys[1..6]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer calls Karma's threat 'RQ (empowered Tangle root + tether)' and 'RQ (empowered Q root + tether)'. Mantra-Q (Inner Flame) is a delayed cataclysm with no root; the root and the heal are on Mantra-W, Focused Resolve.",
+      "why": "Riot's own text: Focused Resolve tethers, reveals and roots, and its Mantra bonus heals Karma and extends the root. Inner Flame's Mantra bonus only adds a delayed detonation. Naming the wrong spell sends the player dodging the wrong cast.",
+      "corrected": "spikes[3].text and wants.foe[1] now name Focused Resolve (W) at 675 range as her only lockdown, and state the Mantra-W heal.",
+      "confidence": "High",
+      "sources": ["kit: Karma W text and range 675", "kit: Karma Q text", "packet defects: never names Karma's abilities"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Nothing in the itemization mentions Grievous Wounds, despite Mantra-Focused Resolve healing her through exactly the chip damage Neeko deals.",
+      "why": "missingInteractions flags needs-antiheal for this matchup: her sustain comes off Mantra-W, so anti-heal timing decides extended trades.",
+      "corrected": "report[8].t now buys Oblivion Orb early and says why.",
+      "confidence": "High",
+      "sources": ["missingInteractions rule needs-antiheal", "kit: Karma W Mantra bonus heals herself"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Karma" },
+    { "layer": "content", "path": "win[1]", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Neeko" },
+    { "layer": "content", "path": "win[2]", "before": "Skill", "after": "Neeko" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Neeko" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Neeko" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Neeko" },
+    { "layer": "content", "path": "win[5]", "before": "Skill", "after": "Neeko" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Neeko" },
+    { "layer": "content", "path": "win[6]", "before": "Skill", "after": "Neeko" },
+
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "7/10" },
+
+    { "layer": "content", "path": "spikes[3].text",
+      "before": "Her threat: RQ (empowered Tangle root + tether) the instant your W invis or shield drops chunks you out of lane for free.",
+      "after": "Her threat: Mantra-Focused Resolve (RW) tethers you at 675, extends the root and heals her — her only lockdown, so bait it." },
+
+    { "layer": "content", "path": "wants.foe[1]",
+      "before": "RQ (empowered Q root + tether) you the moment your W or shield is down, then kite with E move speed",
+      "after": "Tether you with Focused Resolve (W) the second you step in, then kite out on Inspire's move speed shield" },
+
+    { "layer": "full", "path": "report[8].t",
+      "before": "Start Doran's Ring + 2 pots. First: Stormsurge into Sorcerer's Shoes; then Shadowflame and Zhonya's into dive.",
+      "after": "Start Doran's Ring + 2 pots. First: Stormsurge into Sorcerer's Shoes; Oblivion Orb early — Mantra-W heals her." }
+  ],
+  "notes": "The two packets disagree about who loses this lane (Neeko 33.33% here, Karma 37.04% on the mirror page). I followed the mirror for the level chart because mirror-fix.js enforces it, but left diff/diffRating/carryRating alone rather than assert EASY against a 33% win rate. The full layer calls Karma 'he/his' throughout (enemyWin, ahead, tradeGood, breakdown.wave, report[3].t) while the content layer says 'she' — a template-wide pronoun issue, not a matchup fact, so I left it rather than half-fix it. Also worth knowing: Tangle-Barbs grows larger, faster and roots longer after passing a champion, so Karma standing behind her wave does not shrink it."
+}

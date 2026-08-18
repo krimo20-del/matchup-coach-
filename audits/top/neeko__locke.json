@@ -1,0 +1,79 @@
+{
+  "ownerKey": "neeko",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[4] and content.mid say Purgatory 'can execute you through the Pop Blossom channel'. The kit supports a different and more actionable interaction: Purgatory carries the grounding flag, and Pop Blossom is Neeko's only dash. Grounding denies the leap itself.",
+      "why": "missingInteractions flags dash-denied for exactly this pair. 'It executes through your channel' tells a player to fear the damage; 'it grounds you so the leap never happens' tells them what actually goes wrong and when. The execute is real too — Riot's text says the artifact potentially executes enemies hit — but the denial is what kills the ult.",
+      "corrected": "whys[4], content.mid and wants.foe[0] now state the grounding and the 120s clock.",
+      "confidence": "High",
+      "sources": ["missingInteractions rule dash-denied", "kit: Locke R grounding and execute flags, cd 120/100/80", "kit: Neeko R dash flag"]
+    },
+    {
+      "point": 3,
+      "status": "missing",
+      "whatIsWrong": "spikes[] has three entries where the schema expects four (packet defect), so the page publishes no first-item spike at all — even though phases[5] sides Locke at exactly that stage and calls it his one winning row.",
+      "why": "The chart says first item is his and the spikes list skips straight from level 6 to two items, so the reader never learns what changes. Purgatory is the answer: 120s at rank 1, it executes, and Riot's text says he gains additional power for sealing away enemy champions — his floor rises with every one.",
+      "corrected": "Created spikes[3].text and spikes[3].when with before:null.",
+      "confidence": "High",
+      "sources": ["packet defects: spikes[] has 3 entries, expected 4", "kit: Locke R text and cd", "currentText phases[5].side"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t says 'Anti-heal is optional — his sustain is self-refund, not lifesteal.'",
+      "why": "missingInteractions flags needs-antiheal here. Soul Ignition heals back a portion of the damage he takes during the effect, on an 18s cooldown at rank 1 — that is healing, and Grievous Wounds cuts it whatever its source. Calling it optional talks the player out of the item that decides extended trades.",
+      "corrected": "report[8].t now recommends Grievous Wounds and names the ability it cuts.",
+      "confidence": "High",
+      "sources": ["missingInteractions rule needs-antiheal", "kit: Locke W text, heal flag, cd 18/17/16/15/14"]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "EVEN at 5.5/10 matches a 51.82% win rate over 413 games — the largest sample in this slice — and the chart's six Skill rows against one Locke row is consistent with it.",
+      "corrected": "Left diff, diffRating, carryRating and every chart row untouched.",
+      "confidence": "High",
+      "sources": ["packet winRate 51.82 / games 413", "packet levelChart"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page calls Locke's Q 'Ritual Nails' in fourteen fields. Riot's text in the kit file reads 'Locke readies a set of Soul Nails to throw', and the other three named abilities in missingInteractions are Silver Stake (P), Soul Ignition (W), Ashen Pursuit (E) and Purgatory (R) — no Ritual Nails anywhere.",
+      "why": "This looks like the Brand 'Ares of Blaze' class of error, but the packet's enemyAbilities is null for Locke, so I have no authoritative name list to confirm 'Soul Nails' is the ability's title rather than the projectile's. I did not rename it on a guess — a wrong correction is worse than the flagged original.",
+      "corrected": "Not changed. Raised in questionsForUser; it is champion-wide, not per-matchup.",
+      "confidence": "Low",
+      "sources": ["kit: Locke Q text", "missingInteractions headlines", "packet enemyAbilities: null"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "whys[4]",
+      "before": "Level 6 is a knife-edge that stays even only with discipline — his Purgatory can execute you through the Pop Blossom channel, so commit R strictly when his ult is down.",
+      "after": "Level 6 is a knife-edge that stays even only with discipline — Purgatory grounds, so it denies the Pop Blossom leap outright; commit R strictly while his 120s ult is down." },
+
+    { "layer": "content", "path": "mid",
+      "before": "Levels 4-5 stay a pre-ult trading match, and 6 is a knife-edge you must respect: Purgatory can execute you straight through your Pop Blossom channel, so never channel R while his ult is up. His first item is his best window all game — a single pick can snowball, so trade only with escape room.",
+      "after": "Levels 4-5 stay a pre-ult trading match, and 6 is a knife-edge you must respect: Purgatory grounds you, so it denies the Pop Blossom leap before the knock-up exists, and it executes below its threshold. Never commit R inside a live 120s ult. His first item is his best window all game — trade only with escape room." },
+
+    { "layer": "content", "path": "wants.foe[0]",
+      "before": "Executing you through your R channel",
+      "after": "Grounding your R leap, then executing" },
+
+    { "layer": "content", "path": "spikes[3].text",
+      "before": null,
+      "after": "Purgatory is his best window all game: 120s at rank 1, it executes below its threshold, and every champion he seals raises his floor permanently — leave the zone above it." },
+
+    { "layer": "content", "path": "spikes[3].when",
+      "before": null,
+      "after": "1st item" },
+
+    { "layer": "full", "path": "report[8].t",
+      "before": "Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Anti-heal is optional — his sustain is self-refund, not lifesteal.",
+      "after": "Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Bring Grievous Wounds anyway — Soul Ignition refunds a share of the damage he takes." }
+  ],
+  "notes": "No mirror existed for this pair (locke__neeko not on disk), so nothing here was constrained by an opposing page — the chart matches the packet already and I left it alone. Two flagged interactions I could not place in a length-safe field: Ashen Pursuit (E) is an auto-attack reset, so the burst tell is the early attack rather than a cast, and Silver Stake (P) applies on-hit magic damage scaled by missing health, which means armour alone misreads the trade. Also note the kit's resistances-invalidated flag points at Soul Ignition's trueDamage, but Riot's text says that damage is dealt to Locke himself — the flag appears to be a tooltip-parsing misfire and I did not write it into the page.",
+  "questionsForUser": "Neeko vs Locke (and every other Locke matchup), full-layer and content fields naming his Q: the pages call it 'Ritual Nails (Marks)' in fourteen places, but the kit file's Riot text says 'a set of Soul Nails' and the packet has no enemyAbilities list to confirm the real title. What is Locke's Q actually called, so it can be corrected champion-wide in one sweep rather than matchup by matchup?"
+}

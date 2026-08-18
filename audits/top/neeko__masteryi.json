@@ -1,0 +1,67 @@
+{
+  "ownerKey": "neeko",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Neither Meditate nor Alpha Strike's untargetability appears anywhere on the page. Meditate is called nothing at all, and the only mention of Alpha Strike is 'Dodging Tangle-Barbs with Alpha timing'.",
+      "why": "Two flagged interactions decide this lane and both are actionable. Meditate is a channel that restores health and reduces damage taken — Tangle-Barbs or Pop Blossom cancels it outright, which is the difference between a poke lead that sticks and one he heals back every 10 seconds. Alpha Strike makes him untargetable mid-dash on a 20s cooldown that his basic attacks shorten, so a rotation spent into it lands on nothing.",
+      "corrected": "content.early now cancels Meditate with the root, and a new spikes[3] states the Alpha Strike untargetable window and its cooldown behaviour.",
+      "confidence": "High",
+      "sources": ["missingInteractions rules channel-interruptible and untargetable-dodges-burst", "kit: Master Yi W text, channel and heal flags, cd 10", "kit: Master Yi Q text, untargetable flag, cd 20/19.5/19/18.5/18"]
+    },
+    {
+      "point": 3,
+      "status": "missing",
+      "whatIsWrong": "spikes[] has three entries where four are expected (packet defect), so the page publishes no spike for the stage where the lane actually changes hands.",
+      "why": "The first-item row is exactly where whys[5] says 'the duel evens out', and nothing on the page explains why. Alpha Strike is the reason: untargetable on the way in, and its 20s cooldown falls with every basic attack he lands, so it stops being a once-a-fight escape.",
+      "corrected": "Created spikes[3].text and spikes[3].when with before:null.",
+      "confidence": "High",
+      "sources": ["packet defects: spikes[] has 3 entries, expected 4", "kit: Master Yi Q text and cd", "currentText whys[5]"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The chart gives Neeko six of seven stages against a 47.18% win rate over 142 games — the packet chart instead reads Skill at first item, which is also what whys[5] on the same page says ('the duel evens out, so trade carefully').",
+      "why": "The first-item row contradicts its own why text, and 142 games is a large enough sample to take the packet chart seriously. The remaining rows are consistent: Neeko genuinely dominates a dashless melee pre-6, and Master Yi genuinely out-scales her.",
+      "corrected": "win[5] flipped to Skill.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "packet winRate 47.18 / games 142", "currentText whys[5]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[6] and content.late treat Highlander as an unanswerable dive button. Riot's text says it grants move and attack speed and makes him immune to all SLOWING effects — nothing more.",
+      "why": "Slow immunity is not CC immunity. Tangle-Barbs is a root and Pop Blossom is a knock-up-and-stun, and neither is a slow, so both still stop a Highlandered Master Yi cold. That converts the late game from 'never fight him' into a clear job: hold the root for the dive.",
+      "corrected": "whys[6] and content.late now state that Highlander only blanks slows, so the root still lands.",
+      "confidence": "High",
+      "sources": ["kit: Master Yi R text, slow flag, cd 85", "kit: Neeko E and R hardCC flags"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "win[5]", "before": "Neeko", "after": "Skill" },
+
+    { "layer": "content", "path": "spikes[3].text",
+      "before": null,
+      "after": "Alpha Strike flips the duel: he goes untargetable for the dash, so a rotation spent into it hits nothing, and its 20s cooldown falls with every basic attack he lands." },
+
+    { "layer": "content", "path": "spikes[3].when",
+      "before": null,
+      "after": "1st item" },
+
+    { "layer": "content", "path": "whys[6]",
+      "before": "Late his Highlander and true damage dive and out-scale your squishy burst kit — peel from the backline instead of dueling.",
+      "after": "Late Highlander and Wuju Style's true damage out-scale you — but Highlander only blanks slows, so your root still stops him dead." },
+
+    { "layer": "content", "path": "early",
+      "before": "Abuse him from the first wave: your ranged poke and root outclass a melee with no dash yet, and Blooming Burst chunks him every time he steps to a minion. Zone him, shove when he backs off and stack a lead — every CS you deny now delays the item spikes that eventually make him a problem.",
+      "after": "Abuse him from the first wave: your ranged poke and root outclass a melee with no dash yet, and Blooming Burst chunks him every time he steps to a minion. If he Meditates to heal it back, Tangle-Barbs cancels the channel outright — every CS and every heal you deny delays the spikes that make him a problem." },
+
+    { "layer": "content", "path": "late",
+      "before": "Once he is at his items the duel is a coin-flip and then worse, so shift jobs: you are the anti-dive mage now. Hold Tangle-Barbs for the moment he Highlanders into your team, drop Pop Blossom on the fight he commits to and let your carries erase him mid-stun — never sidelane against him again.",
+      "after": "Once he is at his items the duel is a coin-flip and then worse, so shift jobs: you are the anti-dive mage now. Highlander only makes him immune to slows, so your root still stops him dead — hold Tangle-Barbs for the dive, drop Pop Blossom on the fight he commits to, and never sidelane against him again." }
+  ],
+  "notes": "This matchup has NO full-layer entry at all (currentText.full is null), so every edit here is content-only and the usual full/content chart pairing does not apply — win[5] has no phases[5].side to match. That is one of the inherited structural gaps; the whole full entry for neeko/masteryi is absent and cannot be built from a before:null on individual paths. The third flagged interaction I could not place in a length-safe field: Meditate also heals, so Grievous Wounds matters here, but there is no itemization field in the content layer and no full layer to put it in."
+}

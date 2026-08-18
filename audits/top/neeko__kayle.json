@@ -1,0 +1,84 @@
+{
+  "ownerKey": "neeko",
+  "enemy": "kayle",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart reads Skill, Kayle, Kayle, Skill, Skill, Kayle, Kayle while the packet chart and the already-applied mirror both read Skill, Skill, Neeko, Kayle, Kayle, Kayle, Kayle — and the page's own whys agree with the packet, not with the sides ('even trade' on row 2, 'the one window your melee range out-trades her' on row 3, 'the lane tips to her' on row 4).",
+      "why": "Rows 2-5 are sided against the text printed next to them. The mirror (kayle__neeko) has already flipped rows 1, 2, 3 and 4 to the packet values, so my side must state the same rows or mirror-fix will overwrite them.",
+      "corrected": "win[1]/phases[1].side to Skill, win[2]/phases[2].side to Neeko, win[3] and win[4] with their phases to Kayle, all as matched pairs, plus phases[2].rating rescaled to 6/10.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "audits/top/kayle__neeko.json", "currentText whys[1..4]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags that none of Kayle's abilities are ever named. The full-layer phase rows are pure boilerplate ('Trade Q on his CS timings', 'Stormsurge spike') and say nothing about what Kayle actually does on those levels.",
+      "why": "The decisive interactions are Radiant Blast at 900 range slowing and shredding resistances, Divine Judgment making her untargetable through Pop Blossom's damage, and her passive range growth kiting Tangle-Barbs' 1000. Naming them is what turns the rows into advice.",
+      "corrected": "phases[3].why, phases[4].why and phases[5].why now name Radiant Blast, Divine Judgment and the Nashor's range spike.",
+      "confidence": "High",
+      "sources": ["packet defects", "kit: Kayle P/Q/R text and ranges", "kit: Neeko E range 1000"]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "EVEN at 5.5/10 is defensible: the packet records only 8 games at 37.5%, far too thin to move a rating on, and the mechanical read is genuinely split — Neeko owns level 3 outright and loses everything from her first item.",
+      "corrected": "Left diff, diffRating and carryRating untouched.",
+      "confidence": "Medium",
+      "sources": ["packet games 8", "packet levelChart"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No mention of Grievous Wounds anywhere, though Celestial Blessing heals her on a flat 15s cooldown.",
+      "why": "missingInteractions flags needs-antiheal here: Neeko's damage is chip-and-burst and her W heals straight through the chip half, so anti-heal timing decides every extended trade.",
+      "corrected": "report[8].t now buys Oblivion Orb and names the ability being cut.",
+      "confidence": "High",
+      "sources": ["missingInteractions rule needs-antiheal", "kit: Kayle W text, cd 15"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing tells the player that Starfire Spellblade is an auto-attack reset, so the burst tell is the wind-up rather than a spell cast.",
+      "why": "missingInteractions flags autoreset-burst-tell. A player watching for an ability animation sees nothing and eats the missing-health damage; the readable cue is the attack that comes early.",
+      "corrected": "breakdown.cooldowns now carries the reset and its 8s cooldown alongside Divine Judgment's 160s.",
+      "confidence": "High",
+      "sources": ["missingInteractions rule autoreset-burst-tell", "kit: Kayle E autoReset flag, cd 8/7.5/7/6.5/6", "kit: Kayle R cd 160/120/80"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[1].side", "before": "Kayle", "after": "Skill" },
+    { "layer": "content", "path": "win[1]", "before": "Kayle", "after": "Skill" },
+    { "layer": "full", "path": "phases[2].side", "before": "Kayle", "after": "Neeko" },
+    { "layer": "content", "path": "win[2]", "before": "Kayle", "after": "Neeko" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Kayle" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Kayle" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Kayle" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Kayle" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+
+    { "layer": "full", "path": "phases[3].why",
+      "before": "Trade Q on his CS timings and hold E for the step-up. The disguise resets every bad position you take.",
+      "after": "Radiant Blast slows and shreds your resistances from 900 — hold Tangle-Barbs for her step-up, not for the wave." },
+
+    { "layer": "full", "path": "phases[4].why",
+      "before": "Pop Blossom online — your all-in is a setup puzzle: E root, walk in as a clone or minion, R the panic.",
+      "after": "Pop Blossom is online, but Divine Judgment blanks it — kill her before she reaches 6, or bait the ult first." },
+
+    { "layer": "full", "path": "phases[5].why",
+      "before": "Stormsurge spike — a rooted target now loses half their HP to one rotation.",
+      "after": "Nashor's turns her ranged form on and she kites your 1000-range Tangle-Barbs." },
+
+    { "layer": "full", "path": "breakdown.cooldowns",
+      "before": "- Kayle Divine Judgment (Invuln): matchup-defining — Invulnerability denies your execute — bait it, then kill. Check it before every step-up. - W clone + disguise is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+      "after": "- Kayle Divine Judgment: matchup-defining — 160s at rank 1; invulnerability blanks your Pop Blossom burst, so bait it before you commit. - Starfire Spellblade is an auto reset on 8s at rank 1 — the wind-up is your cue to step back, not the cast." },
+
+    { "layer": "full", "path": "report[8].t",
+      "before": "Start Doran's Ring + 2 pots. First: Stormsurge into Sorcerer's Shoes; then Shadowflame and Zhonya's into dive.",
+      "after": "Start Doran's Ring + 2 pots. First: Stormsurge into Sorcerer's Shoes; Oblivion Orb — Celestial Blessing heals her." }
+  ],
+  "notes": "The mirror's author flagged that the content whys array sits one row out of step with the phase labels (whys[3] is under 'Levels 4-5' but reads like level 6). I followed the same choice: sides flipped to the packet chart, why text left alone, because shifting the whys down a row is a seven-row rewrite that a human should sign off on. Note also that the full layer calls Kayle 'he/his' throughout (enemyWin, tradeGood, breakdown.wave, dosFull, report[3].t) while the content layer says 'she' — template-wide, not a matchup fact, so untouched."
+}

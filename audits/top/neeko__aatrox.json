@@ -1,0 +1,104 @@
+{
+  "ownerKey": "neeko",
+  "enemy": "aatrox",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer calls this a 'Favoured matchup — difficulty 4/10' and gives Neeko every row of the level chart, while the packet reports a 25% win rate and a chart of Skill/Skill/Aatrox/Aatrox/Aatrox/Aatrox/Skill. The content layer's whys already describe an Aatrox-favoured lane.",
+      "why": "Two layers rendering opposite verdicts on the same page. The content whys and the packet agree; the full layer is the outlier.",
+      "corrected": "diff set to HARD, diffRating 7/10, carryRating 7/10, and every phases[N].side/rating realigned to the packet chart in matched pairs with win[N].",
+      "confidence": "High",
+      "sources": ["packet.winRate", "packet.levelChart", "currentText.content.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Full layer treats Level 6 and first item as Neeko spikes; in reality World Ender (R, 120/100/80s) is the lane's biggest spike and his first-item sustain out-heals a single E-Q rotation.",
+      "why": "Aatrox's R gives attack damage, increased healing and move speed and extends on takedown — it beats a one-rotation burst pattern.",
+      "corrected": "phases[4].why and phases[5].why rewritten to name World Ender and his healing; dosFull[2] now gives the real 120s number instead of a fabricated 'fifteen-second' window.",
+      "confidence": "High",
+      "sources": ["enemyKit R", "enemyKit P/E heal flags"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer never names a single Aatrox ability except World Ender, and report[5] 'Key Ability Interactions' contains no interaction at all. wants.you[1] and mid both claim 'Shapesplitter (W) invisibility', which Riot's description of Neeko's W does not contain — it sends a clone and can be recast to redirect it.",
+      "why": "Advice built on an ability effect that is not in the kit text is unsafe; the actual decisive interaction is Infernal Chains (W) dragging you back to its centre to set up the sweetspot Darkin Blade (Q) knockup.",
+      "corrected": "report[5] now states the Chains-into-sweetspot-Q sequence; wants.you[1] and mid switched from invisibility to the clone as a bait tool; Deathbringer Stance (P) and Umbral Dash (E) healing flagged as the Grievous Wounds target (already carried in report[8]).",
+      "confidence": "High",
+      "sources": ["enemyKit W/Q/P/E text", "ownerKit W text", "missingInteractions needs-antiheal"]
+    },
+    {
+      "point": 6,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "World Ender at 120s rank 1 is correctly identified as the punishable cooldown; only the fabricated duration was fixed.",
+      "corrected": "dosFull[2].d now uses 120s.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[2].t said 'Save E to interrupt World Ender'. Nothing in Riot's description makes World Ender a channel or interruptible.",
+      "why": "Telling a player to hold their only CC for an interrupt that does not exist loses them the trade.",
+      "corrected": "Retitled to 'Punish World Ender's downtime'.",
+      "confidence": "High",
+      "sources": ["enemyKit R text"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"diff","before":"EVEN","after":"HARD"},
+    {"layer":"full","path":"diffRating","before":"4/10","after":"7/10"},
+    {"layer":"full","path":"carryRating","before":"5/10","after":"7/10"},
+
+    {"layer":"full","path":"phases[0].side","before":"Neeko","after":"Skill"},
+    {"layer":"content","path":"win[0]","before":"Neeko","after":"Skill"},
+    {"layer":"full","path":"phases[1].side","before":"Neeko","after":"Skill"},
+    {"layer":"content","path":"win[1]","before":"Neeko","after":"Skill"},
+    {"layer":"full","path":"phases[2].side","before":"Neeko","after":"Aatrox"},
+    {"layer":"content","path":"win[2]","before":"Neeko","after":"Aatrox"},
+    {"layer":"full","path":"phases[3].side","before":"Neeko","after":"Aatrox"},
+    {"layer":"full","path":"phases[4].side","before":"Neeko","after":"Aatrox"},
+    {"layer":"content","path":"win[4]","before":"Neeko","after":"Aatrox"},
+    {"layer":"full","path":"phases[5].side","before":"Neeko","after":"Aatrox"},
+    {"layer":"content","path":"win[5]","before":"Neeko","after":"Aatrox"},
+    {"layer":"full","path":"phases[6].side","before":"Neeko","after":"Skill"},
+
+    {"layer":"full","path":"phases[0].rating","before":"7/10","after":"5/10"},
+    {"layer":"full","path":"phases[1].rating","before":"7/10","after":"5/10"},
+    {"layer":"full","path":"phases[2].rating","before":"7/10","after":"4/10"},
+    {"layer":"full","path":"phases[3].rating","before":"8/10","after":"3/10"},
+    {"layer":"full","path":"phases[4].rating","before":"7/10","after":"3/10"},
+    {"layer":"full","path":"phases[5].rating","before":"7/10","after":"4/10"},
+    {"layer":"full","path":"phases[6].rating","before":"7/10","after":"5/10"},
+
+    {"layer":"full","path":"phases[0].why","before":"Open disguised as something harmless — the first Q trade lands while Aatrox is still reading the wave.","after":"Aatrox has no chain-pull yet and you have no combo — trade Blooming Burst pokes and call level 1 even."},
+    {"layer":"full","path":"phases[1].why","before":"W clone sells fake recalls and fake engages — send it at him and take the real trade from the other angle.","after":"Your second Q pokes and Infernal Chains is a 20s single threat — neither of you can commit, so it stays even."},
+    {"layer":"full","path":"phases[2].why","before":"Full kit: E root through a minion into double-bloom Q is your core chunk. The root stretches longer through targets.","after":"Full kit, but Infernal Chains (W) lands at 3 too — his pull plus Deathbringer Stance wins the extended trade."},
+    {"layer":"full","path":"phases[3].why","before":"Trade Q on his CS timings and hold E for the step-up. The disguise resets every bad position you take.","after":"The Darkin Blade hits 8s and he out-sustains your Q chip — poke only, and hold E to break his step-up."},
+    {"layer":"full","path":"phases[4].why","before":"Pop Blossom online — your all-in is a setup puzzle: E root, walk in as a clone or minion, R the panic.","after":"Pop Blossom online, but World Ender's stats and heal beat your channel — ult unseen to roam, not to duel."},
+    {"layer":"full","path":"phases[5].why","before":"Stormsurge spike — a rooted target now loses half their HP to one rotation.","after":"Stormsurge spike, but his first item out-heals a single E-Q rotation."},
+    {"layer":"full","path":"phases[6].why","before":"You're the teamfight flank now: disguise, walk into the clump, and R three people. Lane leads become fight wins.","after":"You're the teamfight flank who roots his carries while he stays a single-target diver — the duel stops deciding it."},
+
+    {"layer":"full","path":"tldr","before":"He has to wade through roots and blooms to farm — chunk every step-up and never get touched.","after":"He drains back everything you chip — poke from range and never let Infernal Chains start the trade."},
+    {"layer":"full","path":"report[0].t","before":"He has to wade through roots and blooms to farm — chunk every step-up and never get touched.","after":"He drains back everything you chip — poke from range and never let Infernal Chains start the trade."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"His drain-tank mode — never take a long fight into it. Its cooldown is the green light — wait for it.","after":"Root through the minion he last-hits so Blooming Burst re-blooms, then back off before his passive heals."},
+    {"layer":"full","path":"dosFull[2].t","before":"Save E to interrupt World Ender","after":"Punish World Ender's downtime"},
+    {"layer":"full","path":"dosFull[2].d","before":"Aatrox burns World Ender on nothing — take the fifteen-second invitation.","after":"World Ender is 120s at rank 1 — if he wastes it, that window is yours."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That’s Aatrox’s bread-and-butter play — deny it and they run out of answers.","after":"Without E you cannot root him off you, and World Ender out-heals your rotation."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Throwing E at a mobile champion in the open and walking forward anyway — you've spent your only CC and the all-in math just flipped.","after":"Pop Blossom is 120s and Aatrox heals through it — spend it on a multi-man flank, never on a drain tank you can't finish alone."},
+    {"layer":"full","path":"report[5].t","before":"Track Aatrox’s World Ender: His drain-tank mode — never take a long fight into it. It’s down or you don’t go.","after":"Infernal Chains (W) drags you to its centre to set up a sweetspot Darkin Blade knockup — leave the zone instantly."},
+    {"layer":"full","path":"breakdown.difficulty","before":"Favoured matchup — difficulty 4/10, Aatrox carry threat 5/10.","after":"Hard matchup — difficulty 7/10, Aatrox carry threat 7/10."},
+    {"layer":"full","path":"report[14].t","before":"Favoured matchup — difficulty 4/10, Aatrox carry threat 5/10.","after":"Hard matchup — difficulty 7/10, Aatrox carry threat 7/10."},
+
+    {"layer":"content","path":"wants.you[1]","before":"Use Shapesplitter (W) invisibility to dodge his sweetspot Q knockup and break his chain-pull line","after":"Send the Shapesplitter (W) clone to bait his Darkin Blade and break the Infernal Chains line"},
+    {"layer":"content","path":"spikes[2].text","before":"His biggest threat — Aatrox R gives combat stats and a healing spike, and if his W chain pulls you into a sweetspot Q he can all-in through your shields.","after":"His biggest threat — World Ender (R) gives combat stats and a healing spike, and if Infernal Chains (W) drags you into a sweetspot Q he all-ins through your root."},
+    {"layer":"content","path":"mid","before":"Once he hits his Q-W-E combo and his passive heal-on-hit is rolling, extended trades are a trap — every auto he lands heals him and my single Q-E rotation doesn't out-damage that. I use Shapesplitter (W) invisibility purely to dodge his sweetspot Q and slip his chain-pull line, not to fight. At 6 his R is the scariest window in the lane: combat stats plus a heal spike means if his W drags me into the knockup he kills me before my Pop Blossom (R) channel even lands. I'd rather ult unseen for a roam than duel him.","after":"Once The Darkin Blade (Q) chains all three swings and Deathbringer Stance (P) is rolling, extended trades are a trap — every hit heals him and my single Q-E rotation doesn't out-damage that. I use the Shapesplitter (W) clone purely to bait his sweetspot Q and slip the Infernal Chains (W) line, not to fight. At 6 World Ender (R) is the scariest window in the lane: combat stats plus a heal spike means if his W drags me into the knockup he kills me before Pop Blossom (R) lands. I'd rather ult unseen for a roam than duel him."}
+  ],
+  "notes": "Level chart was contradictory across layers (full said Neeko 7/7, content said Aatrox at Levels 4-5 and Skill late) against a 25% win rate; all seven rows now proposed as matched full/content pairs following the packet chart, which the existing whys[] already match. packet.suspectNames flags 'Use Shapesplitter' as a probable wrong name — FALSE POSITIVE, Shapesplitter is Neeko's real W. The real error there was the claim of W *invisibility*, which Riot's description does not support (clone + recast redirect only); corrected in wants.you[1] and mid. Per the mirror's note, Aatrox's Infernal Chains carries a derived 'grounding' flag Riot's text does not support (drag + slow only), so no grounding/dash-denial claim was made and the missingInteractions 'dash-denied' item was NOT written to the page. win[3] and win[6] already matched the packet, so no pair was needed for those rows.",
+  "layerPairsNote": "phases[3].side and phases[6].side changed with no win[] partner because win[3]='Aatrox' and win[6]='Skill' already hold the target value on disk."
+}

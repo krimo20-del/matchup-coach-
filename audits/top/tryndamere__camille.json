@@ -1,0 +1,82 @@
+{
+  "ownerKey": "tryndamere",
+  "enemy": "camille",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Six of seven chart rows disagreed with the packet, and every one of them also disagreed with the whys[] line printed beside it.",
+      "why": "packet.levelChart reads Tryndamere/Skill/Skill/Tryndamere/Tryndamere/Tryndamere/Skill, and whys[0] 'Level 1 is yours', whys[1] and whys[2] 'skill-based', whys[3] and whys[4] 'yours', whys[6] 'skill-based' match it exactly. The stored sides were simply offset.",
+      "corrected": "Rows 0, 1, 2, 3, 4 and 6 realigned in both layers as matched pairs.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldown appeared anywhere, including for the ultimate the entire page is keyed to.",
+      "why": "The Hextech Ultimatum is 140/115/90s and Hookshot is 16/15/14/13/12s — both far longer than your Spinning Slash at 12s, which is what makes 'fight on her cooldown' a real plan rather than a slogan.",
+      "corrected": "dosFull[0].d and spikes[1].text carry the 140s ultimate; spikes[0].text and dontsFull[1].d carry Hookshot's 16s.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd 140/115/90", "enemyKit E cd 16/15/14/13/12", "ownerKit E cd 12/11/10/9/8"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text said 'her E and W shield are spent'. Camille's shield is Adaptive Defenses, her passive, procced by attacking a champion — Tactical Sweep (W) is a cone that slows and HEALS her on the outer half.",
+      "why": "Waiting for a 'W shield' to be on cooldown is waiting for something that has no cooldown to wait out; the real reads are the passive proc and the W heal, which is what Grievous Wounds is for.",
+      "corrected": "spikes[1].text names Adaptive Defenses as the shield; spikes[0].text states Tactical Sweep's outer-half heal.",
+      "confidence": "High",
+      "sources": ["enemyKit P text and shield flag", "enemyKit W text and heal flag", "missingInteractions: needs-antiheal"]
+    },
+    {
+      "point": 4,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Precision Protocol's recast true damage is already stated in spikes[2] and wants.foe[0], matching the mirror's finding that the true damage sits on Q and not on Tactical Sweep. Hookshot's wall requirement is correctly reflected in wants.you[2]. The Hextech Ultimatum anchors rather than silences — 'isolation' is accurate.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit Q flags trueDamage", "enemyKit E text", "mirrorFindings"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[1].side", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "content", "path": "win[1]", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "full", "path": "phases[2].side", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "content", "path": "win[2]", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[6].side", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "content", "path": "win[6]", "before": "Tryndamere", "after": "Skill" },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Skill-based mid-window: Camille's Q Precision Protocol double-hit and E Hookshot wall-dash let her burst-trade and disengage. Punish her when E is down, and don't stand next to walls where her Hookshot stun lands cleanly.",
+      "after": "Skill-based mid-window: Precision Protocol's delayed recast hits for true damage, and Hookshot is a 16s wall-dash knock-up. Punish while it is down, stay off walls, and remember Tactical Sweep's outer half heals her."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Your R Undying Rage beats her R Hextech Ultimatum isolation. When she ults to lock you 1v1, pop Undying Rage, ride out her Q burst, and crit-Q back up while her E and W shield are spent.",
+      "after": "Undying Rage beats The Hextech Ultimatum's anchor, and hers is 140s at rank 1. Pop R, ride out the Q true damage, and crit-Q back up — the shield refilling her is Adaptive Defenses, not her W."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Her 1v1 isolation. R survives it; out-crit. Only engage once it is down or baited.",
+      "after": "The Hextech Ultimatum is 140s at rank 1 — your R survives it, so out-crit her inside."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Hookshot needs a wall — in open lane her 16s engage is dead."
+    }
+  ],
+  "notes": "packet.suspectNames flagged 'Hextech Ultimatum' against 'the hextech ultimatum' — a false positive on the leading article, not a wrong name. dosFull[2].t reads 'W to cut her AD' but its description is the generic ultimate line; the pairing is wrong across all three dosFull/dontsFull entries here and would be worth a structural pass rather than per-matchup patching."
+}

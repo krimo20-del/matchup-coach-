@@ -1,0 +1,30 @@
+{
+  "ownerKey": "tryndamere",
+  "enemy": "wukong",
+  "lane": "top",
+  "audit": [
+    { "point": 2, "status": "needs-correction", "whatIsWrong": "Five chart rows disagreed with their own whys: level 1 was 'Skill' under 'your level-1 base damage and autos out-trade Wukong', levels 2-3 were 'Tryndamere' under whys calling them even, levels 4-5 were 'Skill' under a why saying they favour Wukong, and level 6 was 'Skill' under a why saying it flips to you.", "why": "packet.levelChart is [Tryndamere, Skill, Skill, Wukong, Tryndamere, Tryndamere, Tryndamere] and every whys[] string matches it; Tryndamere wins 53.56% over 1912 games.", "corrected": "Rows 0-4 realigned in both layers with ratings, and phases[3].why rewritten so the Wukong-sided stage states why he owns it.", "confidence": "High", "sources": ["packet.levelChart", "currentText.content.whys[0-4]"] },
+    { "point": 3, "status": "correct", "whatIsWrong": "", "why": "Spikes read correctly: Wukong at 3-5 on clone plus gap-close, Tryndamere at 6 and from his first crit item onward.", "corrected": "", "confidence": "Medium", "sources": ["currentText.content.spikes[]", "packet.levelChart"] },
+    { "point": 4, "status": "needs-correction", "whatIsWrong": "Crushing Blow's auto-attack reset was absent, and both W entries ('Wait for his W decoy', 'Crit the clone') carried boilerplate descriptions that never explained what the decoy actually does.", "why": "His combo opens with an attack wind-up rather than a visible cast, so the wind-up is the cue to step out. Warrior Trickster leaves a decoy behind and stealths the real body, which is exactly why a loaded crit spent on the cast is wasted.", "corrected": "Rewrote dosFull[1].d and dontsFull[0].d around the decoy/stealth behaviour and dontsFull[1].d around the Q reset tell.", "confidence": "Medium", "sources": ["missingInteractions rule autoreset-burst-tell", "currentText.content.spikes[0]"] },
+    { "point": 13, "status": "missing", "whatIsWrong": "No cooldown numbers anywhere for Nimbus Strike, Warrior Trickster or Cyclone.", "why": "enemyKit is null in this brief — Wukong's kit data was not supplied, so no per-rank cooldowns could be verified. Nothing numeric was invented.", "corrected": "Left cooldown-free; flagged for a re-run once the Wukong kit is available.", "confidence": "High", "sources": ["brief enemyKit: null"] }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[1].side", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "content", "path": "win[1]", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "full", "path": "phases[2].side", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "content", "path": "win[2]", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Wukong" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Wukong" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[3].why", "before": "The lane-control window: trade around Nimbus Strike's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.", "after": "His clone bait and gap-close own this window — trade only around Nimbus Strike's cooldown. If behind, farm safe and hold your E." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Build 100 fury on the wave, E-spin onto Wukong with a crit loaded, AA-W slow, and spin out before the answer.", "after": "Warrior Trickster leaves a decoy and stealths him — wait for the stealth to end, then spend your crit on the real body." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Wukong's favourite window — refuse it and half his win condition is gone.", "after": "His W leaves a decoy and stealths the real body — hold your crit until he reappears." },
+    { "layer": "full", "path": "dontsFull[1].d", "before": "Burning it for tiny value leaves you naked for its full cooldown.", "after": "Crushing Blow is an auto reset — the wind-up is the tell, not the cast." }
+  ],
+  "notes": "enemyKit was null in this brief, so no Wukong cooldowns could be verified and none were written — worth a re-run when the kit is present. packet suspectName 'Pop Undying Rage' in wants.you[1] is a FALSE POSITIVE (Tryndamere's real R name); left unchanged."
+}

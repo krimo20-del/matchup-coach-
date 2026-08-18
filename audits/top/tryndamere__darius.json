@@ -1,0 +1,92 @@
+{
+  "ownerKey": "tryndamere",
+  "enemy": "darius",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Five chart rows were wrong: Levels 2 and 3 read Tryndamere, Levels 4-5 and Level 6 read Skill, and Level 1 read Skill.",
+      "why": "The mirror audit already fixed this chart to Darius / Darius / Darius / Tryndamere / Tryndamere / Tryndamere / Tryndamere in both layers. packet.levelChart agrees on rows 2-6 and differs only on rows 0-1, where it says Skill; the two directions must not disagree, so the mirror's version is adopted and the two whys[] lines that said 'even' and 'skill-based' are rewritten to match.",
+      "corrected": "Rows 0-4 realigned to the mirror in both layers, with whys[0] and whys[1] restated as Darius's.",
+      "confidence": "Medium",
+      "sources": ["mirrorFindings point 2", "packet.levelChart", "enemyKit Q heal"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Apprehend is the cooldown the whole page is keyed to and its 26/23.5/21/18.5/16s duration was never stated, nor its passive armour penetration.",
+      "why": "26s at rank 1 is more than double your Spinning Slash at 12s, which is what makes 'trade only when his E is down' a genuinely repeatable pattern rather than a hope. The passive armour shred also means stacking armour into him pays less than the page implies.",
+      "corrected": "dosFull[0].d and mid now carry the 26s rank-1 cooldown and the armour shred.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 26/23.5/21/18.5/16", "enemyKit E text", "ownerKit E cd 12/11/10/9/8"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text says Undying Rage 'completely negates' Noxian Guillotine, and the page never states that the Guillotine is true damage.",
+      "why": "Undying Rage prevents death for its window; it does not negate the ability, and once the window ends the damage still happened. The true damage also matters for itemisation — the page tells you to buy Plated Steelcaps and armour, which does nothing against the execute.",
+      "corrected": "mid restated as refusing to die through the Guillotine; wants.foe[2] states the true damage.",
+      "confidence": "High",
+      "sources": ["ownerKit R text", "enemyKit R text and trueDamage flag", "missingInteractions: resistances-invalidated"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Decimate's heal was implied ('anti-heal his bleed') but never attributed: it heals him only off the blade, not the handle.",
+      "why": "The blade/handle split is the reason to stand close rather than back off — and it is what Grievous Wounds is bought against.",
+      "corrected": "dontsFull[1].d now names Decimate's blade heal against its own 'Forget anti-heal' title.",
+      "confidence": "High",
+      "sources": ["enemyKit Q text and heal flag", "missingInteractions: needs-antiheal"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Darius" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Darius" },
+    { "layer": "full", "path": "phases[1].side", "before": "Tryndamere", "after": "Darius" },
+    { "layer": "content", "path": "win[1]", "before": "Tryndamere", "after": "Darius" },
+    { "layer": "full", "path": "phases[2].side", "before": "Tryndamere", "after": "Darius" },
+    { "layer": "content", "path": "win[2]", "before": "Tryndamere", "after": "Darius" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Tryndamere" },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Level 1 is even, just farming and respecting Q range.",
+      "after": "Level 1 is his: Decimate's blade heals him off you."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Level 2 stays skill-based with no full combo online for either.",
+      "after": "Level 2 stays his: Crippling Strike slows you out of the trade."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Level 3 is Darius's window once E, W and Q are all up and he can pull-combo you for stacks. Play around his Apprehend cooldown through 4-5 and only commit when it's down. The moment you hit 6, Undying Rage negates his Guillotine execute and the all-in swings to you.",
+      "after": "Level 3 is Darius's window once E, W and Q are all up and he can pull-combo you for stacks. Apprehend is 26s at rank 1, so through 4-5 that spent window is your entire trading pattern. From 6, Undying Rage refuses to die through the Guillotine and the all-in swings to you."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His all-in starts on the pull. Bait it. Only engage once it is down or baited.",
+      "after": "Apprehend is 26s at rank 1 and passively cuts your armour — fight once spent."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Decimate's blade heals him — Executioner's before long trades."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Hit 5 stacks and reset with Noxian Guillotine",
+      "after": "Stack bleed: Guillotine lands as true damage"
+    }
+  ],
+  "notes": "Chart rows 0 and 1 are the one place I followed the mirror over the packet: the mirror gives Levels 1 and 2 to Darius, packet.levelChart says Skill. I took the mirror because the two directions must agree and mirror-fix.js would overwrite the other way, and I rewrote whys[0] and whys[1] in the same proposal so the text no longer says 'even' beside a row that says Darius. Flagged for the user in case the packet is the intended source of truth. Carried the mirror's caveat that Undying Rage's '5 seconds' is not in Riot's text — I used the 120s cooldown instead wherever I needed a number."
+}

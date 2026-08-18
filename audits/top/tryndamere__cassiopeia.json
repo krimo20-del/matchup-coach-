@@ -1,0 +1,107 @@
+{
+  "ownerKey": "tryndamere",
+  "enemy": "cassiopeia",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Levels 4-5 read Skill while the whys[] line beside it says 'Level 4 is Cassiopeia's'.",
+      "why": "The mirror audit fixed this chart to Tryndamere / Skill / Cassiopeia / Cassiopeia / Skill / Cassiopeia / Tryndamere, and packet.levelChart also gives Levels 4-5 to Cassiopeia. Six of seven rows already agree; only row 3 was out of step and safe to move.",
+      "corrected": "Levels 4-5 set to Cassiopeia in both layers.",
+      "confidence": "High",
+      "sources": [
+        "mirrorFindings point 2",
+        "packet.levelChart",
+        "currentText.content.whys[3]"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldown numbers, so 'engage when Miasma is down' had no timeframe attached.",
+      "why": "Miasma is 24/22/20/18/16s — by far the longest cooldown in her lane kit — while Noxious Blast is 3.5s and Twin Fang 0.75s. That contrast is the whole shape of the matchup: two abilities that never go down and one that does.",
+      "corrected": "dosFull[0].d, spikes[0].text and mid now carry the 24s Miasma window and the 3.5s / 0.75s rotation.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit W cd 24/22/20/18/16",
+        "enemyKit Q cd 3.5",
+        "enemyKit E cd 0.75"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Petrifying Gaze was described as something to bait or side-angle, without stating the condition Riot actually gives: it stuns enemies facing her and only slows those with their back turned.",
+      "why": "This is the decisive interaction at level 6 and it is a directly playable instruction — turning away converts a stun into a slow — and it mirrors exactly how the opponent's page states Mocking Shout's own facing condition.",
+      "corrected": "spikes[1].text, mid, wants.you[1] and wants.foe[2] now state the facing condition.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit R text"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Twin Fang's heal was never mentioned, so Grievous Wounds never appeared in the plan.",
+      "why": "Twin Fang heals her for a percentage of damage dealt and fires on a 0.75s cooldown into poisoned targets, which is how she wins an extended trade she should lose.",
+      "corrected": "spikes[0].text and mid state the heal and put Grievous Wounds before the commit.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit E text and heal flag",
+        "missingInteractions: needs-antiheal"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Cassiopeia"
+    },
+    {
+      "layer": "content",
+      "path": "win[3]",
+      "before": "Skill",
+      "after": "Cassiopeia"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Cassiopeia's lane: her Q Noxious Blast and W Miasma poison zone chip you constantly and her E Twin Fang resets on poisoned targets for heavy sustained DPS. Don't walk through her W puddle to engage, and time your all-in for when W is on cooldown.",
+      "after": "Cassiopeia's lane: Noxious Blast chips every 3.5s and Twin Fang fires on a 0.75s cooldown into poisoned targets, healing her as it goes. Miasma is the one long cooldown at 24s — that spent window is your engage, so never walk into the puddle."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Skill-based at 6 but tense: her R Petrifying Gaze faces you down, so approach from an angle or bait it, and if she lands it you can pop Undying Rage to survive the follow-up E poison DPS.",
+      "after": "Skill-based at 6 but tense: Petrifying Gaze only stuns enemies facing her — turn away as she casts and you take a slow instead. If it does land, Undying Rage covers the Twin Fang follow-up."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Level 4 is Cassiopeia's clear spot as her full poison rotation and W puddle deny your approach, and at level 6 her R Petrifying Gaze can lock you for a poison burst; keep it skill-based by angling around her ult and Undying Rage covers the follow-up if she lands it.",
+      "after": "Level 4 is Cassiopeia's clear spot as her full poison rotation and the 24s Miasma deny your approach, and Twin Fang heals her off every poisoned tick, so land Grievous Wounds before you commit; at 6 Petrifying Gaze stuns you only while you face her."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Grounds you — dashes and movement abilities are disabled inside it. Only engage once it is down or baited.",
+      "after": "Miasma grounds you for its whole duration and it is 24s at rank 1 — engage once she has spent it."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Bait or side-angle her R Petrifying Gaze",
+      "after": "Turn your back as Petrifying Gaze lands"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Face-check you with R Petrifying Gaze then poison-DPS",
+      "after": "Catch you facing her with Petrifying Gaze, then poison"
+    }
+  ],
+  "notes": "First item row NOT changed: the mirror's chart gives it to Cassiopeia, but packet.levelChart, whys[5], spikes[2].text and content.late all give it to Tryndamere. Flagging rather than guessing — see questionsForUser. Carried the mirror's caveat: champ-data/_kits/tryndamere.json has no dash flag on Spinning Slash, so 'Miasma grounds your E' is inference from Riot's 'slices toward a target unit' wording, not a confirmed flag; I kept the existing claim rather than strengthening it. Separately, this entry refers to Cassiopeia as 'he'/'his' in breakdown.feeding, breakdown.late, dontsFull[1].t and several report entries."
+}

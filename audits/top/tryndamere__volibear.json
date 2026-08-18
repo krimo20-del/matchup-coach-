@@ -1,0 +1,26 @@
+{
+  "ownerKey": "tryndamere",
+  "enemy": "volibear",
+  "lane": "top",
+  "audit": [
+    { "point": 2, "status": "needs-correction", "whatIsWrong": "Level 1 was marked 'Skill' under a why that says Volibear's Q stun and attack speed win it, and the First-item and 2+ item rows were 'Volibear'/'Skill' under whys saying the first crit item flips the lane and you overwhelm him with two.", "why": "packet.levelChart is [Volibear x5, Tryndamere, Tryndamere] and every whys[] string agrees; phases[5].why already reads 'Stridebreaker is your spike' while the row credited Volibear.", "corrected": "Rows 0, 5 and 6 realigned in both layers with matching ratings.", "confidence": "High", "sources": ["packet.levelChart", "currentText.content.whys[0], whys[5], whys[6]"] },
+    { "point": 3, "status": "correct", "whatIsWrong": "", "why": "Volibear's spikes (early levels, Stormbringer at 6) and yours (first crit item, 2 items) are correctly placed.", "corrected": "", "confidence": "High", "sources": ["champ-data/_kits/volibear.json"] },
+    { "point": 4, "status": "needs-correction", "whatIsWrong": "spikes[1].text says Stormbringer gives him a 'huge shielded all-in'. It does not — Stormbringer grants bonus Health. The shield in his kit is Sky Splitter (E), and only if he stands in his own blast radius. Thundering Smash's auto-attack reset and Frenzied Maul's heal cadence were also absent.", "why": "Riot text for R: 'leaps to a target location, Slowing and damaging enemies beneath him while gaining bonus Health' with towers disabled — no shield. Riot text for E: 'granting Volibear a Shield if he's inside the blast radius'. Q is 12/11.5/11/10.5/10s and carries the autoReset flag, so his engage starts with an attack wind-up. W is a flat 5s heal, which is what makes Grievous Wounds decide long trades.", "corrected": "Rewrote spikes[1].text to say bonus health and give the 160s rank-1 cooldown; put the Q reset tell into dosFull[0].d and dontsFull[0].d, and the W heal cadence into dontsFull[1].d.", "confidence": "High", "sources": ["champ-data/_kits/volibear.json", "missingInteractions rules needs-antiheal and autoreset-burst-tell"] }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Volibear" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Volibear" },
+    { "layer": "full", "path": "phases[5].side", "before": "Volibear", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[5]", "before": "Volibear", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[6]", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "4/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "dosFull[0].d", "before": "His engage. Bait it before committing. Only engage once it is down or baited.", "after": "Thundering Smash is a 12s stun and an auto reset — the wind-up is the tell." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Volibear's favourite window — refuse it and half his win condition is gone.", "after": "His Q stuns only the first enemy he attacks, and it is down 12s — step back." },
+    { "layer": "full", "path": "dontsFull[1].d", "before": "Burning it for tiny value leaves you naked for its full cooldown.", "after": "Frenzied Maul heals him every 5s — bring Grievous Wounds early." },
+    { "layer": "content", "path": "spikes[1].text", "before": "Volibear's Stormbringer (R) leap disables your turret and gives him a huge shielded all-in — even Undying Rage can be timed around, so respect his level-6 dive threat and don't fight when he has R up and you're low.", "after": "Volibear's Stormbringer (R) leap disables your turret and gives him a bonus-health all-in on a 160s cooldown at rank 1 — bait it out and the next stretch of lane belongs to you, so trade freely once it is spent." }
+  ],
+  "notes": "Both packet suspectNames are FALSE POSITIVES — Thundering Smash and Stormbringer are Volibear's real Q and R per the kit file; wants.foe[0] and wants.foe[2] left unchanged. Shield attribution error corrected: R gives bonus health, E gives the shield."
+}

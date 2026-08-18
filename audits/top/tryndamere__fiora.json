@@ -1,0 +1,88 @@
+{
+  "ownerKey": "tryndamere",
+  "enemy": "fiora",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Levels 4-5 read Skill, and First item and 2+ items both read Tryndamere while whys[5] says the lane 'levels to skill' and whys[6] says 'she's favored'.",
+      "why": "packet.levelChart gives Levels 4-5 to Tryndamere, First item to Skill and 2+ items to Fiora, and the mirror audit also moved Levels 4-5 to Tryndamere. spikes[2].text and content.late already describe exactly that inversion.",
+      "corrected": "Levels 4-5 to Tryndamere, First item to Skill, 2+ items to Fiora, in both layers as pairs.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "mirrorFindings point 3", "currentText.content.whys[5]/[6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Riposte is the tracked cooldown on every screen of this entry and its 24/22/20/18/16s duration was never given.",
+      "why": "24s at rank 1 against your 12s Spinning Slash is a two-for-one window — the reason the early trading pattern works at all. Grand Challenge is also 110s at rank 1 against your 120s Undying Rage, so she gets hers back first.",
+      "corrected": "dosFull[0].d, breakdown.cooldowns, spikes[0].text and early carry the 24s; spikes[1].text carries the 110s-versus-120s comparison.",
+      "confidence": "High",
+      "sources": ["enemyKit W cd 24/22/20/18/16", "enemyKit R cd 110/90/70", "ownerKit E and R cooldowns"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Four places said Riposte 'parries + stuns your auto' or 'will stun you if you commit a crit into it'. Riot's text: the stab slows the first champion hit, and stuns ONLY if Fiora blocked an immobilizing effect with it.",
+      "why": "Tryndamere's kit contains no immobilizing effect — Bloodlust, Mocking Shout and Spinning Slash are a heal, an AD cut with a conditional slow, and a targeted slice. So Riposte can never stun you in this matchup, which turns 'never commit into it' into 'eat it and keep hitting'. The mirror audit reached the same conclusion from Fiora's side.",
+      "corrected": "dosFull[0].d, breakdown.cooldowns, spikes[0].text and early now state the block-and-slow behaviour and the immobilise condition.",
+      "confidence": "High",
+      "sources": ["enemyKit W text", "ownerKit Q/W/E text", "mirrorFindings notes"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text said 'she can't finish you through ghost form'. Tryndamere has no ghost form, and Grand Challenge is not an execute — it reveals all four Vitals and HEALS her and nearby allies if she hits all four or the target dies.",
+      "why": "Naming a form that does not exist hides the real mechanic, and the healing is what Grievous Wounds is for — Duelist's Dance already heals her on every Vital hit.",
+      "corrected": "spikes[1].text rewritten; dontsFull[1].d now names the Grand Challenge heal as the anti-heal target.",
+      "confidence": "High",
+      "sources": ["ownerKit R text", "enemyKit R text and heal flag", "enemyKit P text", "missingInteractions: needs-antiheal"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[5].side", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "content", "path": "win[5]", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "full", "path": "phases[6].side", "before": "Tryndamere", "after": "Fiora" },
+    { "layer": "content", "path": "win[6]", "before": "Tryndamere", "after": "Fiora" },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "You out-trade Fiora early: with Fury and Bloodlust you win the raw stat exchange before her Riposte (W) window matters. E in, Q crit, and W to slow her Lunge (Q) reposition. Just respect her Riposte — bait it out or trade after it's down, because it parries and stuns your committed hit.",
+      "after": "You out-trade Fiora early: with Fury and Bloodlust you win the raw stat exchange. E in, Q crit, W to slow her Lunge reposition. Riposte only stuns if it parries an immobilise and nothing in your kit gives her one — against you it blocks the hit and slows, so bait the 24s and trade after."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Your Undying Rage beats her Grand Challenge (R) execute — she can't finish you through ghost form and Bloodlust heals her passive vitals damage. At 6 you hold the all-in edge: force fights while her W is on cooldown and burst her before she cycles vital procs.",
+      "after": "Undying Rage beats Grand Challenge: she cannot finish you while it holds, and Bloodlust heals the Vital damage off. Hers is 110s at rank 1 against your 120s, so she gets it back first. Force the fight while Riposte is down and burst her before she cycles the Vitals."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Level 1 is yours — raw Fury stats beat her before any Riposte matters. Level 2 evens out as she gets her Lunge-vital pattern going, so trade carefully and always respect her W parry, which will stun you if you commit a crit into it.",
+      "after": "Level 1 is yours — raw Fury stats beat her before any Riposte matters. Level 2 evens out as her Lunge-vital pattern comes online, so trade around the 24s Riposte: it blocks your crit and slows you, but it cannot stun you."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Parries + stuns your auto. Bait it. Only engage once it is down or baited.",
+      "after": "Riposte is 24s and only stuns if it blocks a stun — on you it slows. Bait it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Fiora Riposte: matchup-defining — Parries + stuns your auto. Bait it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Fiora Riposte: matchup-defining — 24s at rank 1, blocks the damage and slows; it stuns only if it parries an immobilise, which you do not have. - Your ultimate: the win condition — kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Grand Challenge heals her when the Vitals land — anti-heal it."
+    }
+  ],
+  "notes": "Chart rows 0, 1 and 4 left untouched because packet and mirror disagree outright: packet.levelChart says Level 1 Tryndamere, Level 2 Skill, Level 6 Tryndamere, while the mirror audit moved Levels 1, 2 and 6 to Fiora. Only the three rows where they agree (or where the mirror is silent and the page's own text confirms the packet) were moved — see questionsForUser. Also worth a champion-level pass: Lunge applies on-hit effects, so her damage scales with on-hit items rather than raw AD, which the itemisation line does not account for."
+}

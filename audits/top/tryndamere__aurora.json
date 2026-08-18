@@ -1,0 +1,92 @@
+{
+  "ownerKey": "tryndamere",
+  "enemy": "aurora",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Five chart rows disagreed with the packet and with the page's own whys[]: Level 1 read Aurora, Level 2 Skill, Level 3 and 4-5 Tryndamere, Level 6 Aurora.",
+      "why": "packet.levelChart reads Skill/Tryndamere/Skill/Skill/Skill/Tryndamere/Tryndamere; whys[0] says Level 1 is even, whys[1] says Level 2 is yours, whys[2]/[3]/[4] all say skill-based.",
+      "corrected": "Rows 0-4 realigned in both layers as matched pairs.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The escape the whole page is keyed to had no cooldown number anywhere.",
+      "why": "Across the Veil is 22/21/20/19/18s — the longest cooldown in her kit and by far the biggest window in the lane. Twofold Hex is only 9s at rank 1, so keying your commits to the Q is keying them to nothing.",
+      "corrected": "dosFull[0] and spikes[0].text now state the 22s rank-1 W window and point the commit at it instead of the Q.",
+      "confidence": "High",
+      "sources": ["enemyKit W cd 22/21/20/19/18", "enemyKit Q cd 9/8.5/8/7.5/7"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "'W Spirit Abjuration blink' — Spirit Abjuration is Aurora's PASSIVE, a heal from exorcised spirits. Her W is Across the Veil. The wrong name appeared in spikes[0].text, mid, wants.you[0] and wants.foe[1].",
+      "why": "Naming the passive as the blink hides two separate facts: the blink is Across the Veil on a 22s cooldown, and the passive is a heal that Grievous Wounds should be timed against.",
+      "corrected": "All four fields renamed; mid now also states the passive heal and the anti-heal timing.",
+      "confidence": "High",
+      "sources": ["enemyKit P text and heal flag", "enemyKit W text", "packet.enemyAbilities", "missingInteractions: needs-antiheal"]
+    },
+    {
+      "point": 4,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Across the Veil also turns her invisible on landing, which the page implied only as 'dodge your commits'; spikes[0].text now says invisible outright. Between Worlds is correctly described as a zoning ult rather than burst — Riot's text is a shockwave, a slow field and a teleport across it.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit W text", "enemyKit R text"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Aurora", "after": "Skill" },
+    { "layer": "content", "path": "win[0]", "before": "Aurora", "after": "Skill" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "content", "path": "win[1]", "before": "Skill", "after": "Tryndamere" },
+    { "layer": "full", "path": "phases[2].side", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "content", "path": "win[2]", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].side", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "content", "path": "win[3]", "before": "Tryndamere", "after": "Skill" },
+    { "layer": "full", "path": "phases[4].side", "before": "Aurora", "after": "Skill" },
+    { "layer": "content", "path": "win[4]", "before": "Aurora", "after": "Skill" },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Skill-based poke phase: Aurora's Q Twofold Hex and W Spirit Abjuration blink let her chip you and dodge your commit. Punish the moment her W is on cooldown, and don't eat free Q double-hits while walking up to farm.",
+      "after": "Skill-based poke phase: Twofold Hex curses you and recasts to drag the curse back, and Across the Veil blinks her out invisible on a 22s cooldown. Punish that window, and don't eat free double-hits walking up to farm."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-6 are skill-based. Aurora's Q double-hit poke and W Spirit Abjuration blink let her chip you and dodge your commits, so trades hinge on catching her without W; her R Between Worlds zones rather than bursts, and Undying Rage plus E out of the wall keeps you safe when she commits.",
+      "after": "Levels 3-6 are skill-based. Twofold Hex's recast double-hit chips you and Across the Veil blinks her out invisible, so trades hinge on catching her without W; Spirit Abjuration is her passive heal, so land Grievous Wounds before the long trade, not during it. Between Worlds zones rather than bursts."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Bait out W Spirit Abjuration, then commit",
+      "after": "Bait out W Across the Veil, then commit"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Blink your commit away with W Abjuration",
+      "after": "Blink your commit away with Across the Veil"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Track Aurora's Twofold Hex before you commit",
+      "after": "Track Aurora's Across the Veil before commit"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Her escape. Crit when it’s down. Only engage once it is down or baited.",
+      "after": "Across the Veil is her 22s escape — engage once it is down or baited."
+    }
+  ],
+  "notes": "packet.suspectNames flagged 'Twofold Hunt' in spikes[0].text, but the string on disk already reads 'Twofold Hex' — false positive, no action. The page keys focus.text, loading, breakdown.* and most of report[] to Twofold Hex as the tracked cooldown; the ability that actually decides the lane is Across the Veil at 22s. That re-keying is bigger than this pass could fit inside the length band and wants a champion-level sweep."
+}

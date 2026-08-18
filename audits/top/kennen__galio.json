@@ -1,0 +1,85 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "galio",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart disagreed with itself and with the packet: content win[] read Skill/Kennen/Kennen/Skill/Skill/Kennen/Kennen while every whys[] entry describes Galio owning levels 2 through the first item, and the packet chart reads Kennen, Galio, Galio, Galio, Galio, Galio, Skill.",
+      "why": "Kennen only owns Level 1, where Thundering Shuriken (950 range) out-ranges Winds of War (825) and Galio has no MR. From Shield of Durand onward the taunt reduces incoming damage and punishes the E step-in, so Galio owns 2 through first item; late is even.",
+      "corrected": "All seven rows proposed as matched full/content pairs to Kennen, Galio, Galio, Galio, Galio, Galio, Skill.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "champ-data/_kits/galio.json", "existing whys[] text"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 6 was written as an even reassessment with no numbers.",
+      "why": "Hero's Entrance is 180/160/140s at 4000/4750/5500 range and shields allies on landing; Slicing Maelstrom is a flat 120s over a 550 radius around Kennen. Galio's spike leaves the lane, Kennen's does not.",
+      "corrected": "phases[4].why now states the 180s global shield-knockup against the 120s / 550-radius local aura.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/galio.json", "champ-data/_kits/kennen.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer named Justice Punch as the matchup-defining tool everywhere. The decisive ability is Shield of Durand (W): it taunts and carries damage reduction, which is what breaks the three-mark stun pattern.",
+      "why": "Marks of the Storm need three applications to stun; the taunt lands during that stacking window and reduces the burst that follows. Shield of Durand is 18/17/16/15/14s — the longest punishable cooldown in the lane, far longer than Justice Punch's 11/10/9/8/7s.",
+      "corrected": "tldr, phases[1]/[3].why and the cooldown block now name Shield of Durand with its 18s rank-1 cooldown and keep Justice Punch as the secondary dash-knockup.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/galio.json", "_missing/kennen.json rule shield-absorbs-burst"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "No cooldown number appeared anywhere.",
+      "why": "18s W at rank 1 is the whole trading clock.",
+      "corrected": "Stated in breakdown.cooldowns and phases[3].why.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/galio.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[0]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[1].side","before":"Kennen","after":"Galio"},
+    {"layer":"content","path":"win[1]","before":"Kennen","after":"Galio"},
+    {"layer":"full","path":"phases[2].side","before":"Kennen","after":"Galio"},
+    {"layer":"content","path":"win[2]","before":"Kennen","after":"Galio"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Galio"},
+    {"layer":"content","path":"win[3]","before":"Skill","after":"Galio"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Galio"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Galio"},
+    {"layer":"full","path":"phases[5].side","before":"Kennen","after":"Galio"},
+    {"layer":"content","path":"win[5]","before":"Kennen","after":"Galio"},
+    {"layer":"full","path":"phases[6].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[6]","before":"Kennen","after":"Skill"},
+    {
+      "layer":"full","path":"tldr",
+      "before":"Bait his key tool — poke stun-stacks and R his Justice Punch commit. Kennen wins the Justice Punch cooldown windows.",
+      "after":"Bait Shield of Durand — the taunt eats your stun-stack burst. Commit on that 18s window, not on Justice Punch's cooldown."
+    },
+    {
+      "layer":"full","path":"phases[1].why",
+      "before":"Mark management: third proc stuns — count to three. Only take the trade when Galio's Justice Punch is down.",
+      "after":"Shield of Durand lands: he taunts mid-stack, takes reduced damage, and your third-mark stun never arrives. Give ground."
+    },
+    {
+      "layer":"full","path":"phases[3].why",
+      "before":"The lane-control window: trade around Justice Punch's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after":"He concedes nothing: every E step-in to stack marks gets taunted back. Trade only inside the 18-second Shield of Durand window, else farm."
+    },
+    {
+      "layer":"full","path":"phases[4].why",
+      "before":"Slicing Maelstrom + Zhonya wins any grouped fight top-side. Reassess every all-in at 6 — Galio's ultimate changes the math too.",
+      "after":"Hero's Entrance is a 180s global shield-and-knockup; Slicing Maelstrom is 120s and only strikes the 550 around you. He wins the map at 6."
+    },
+    {
+      "layer":"full","path":"breakdown.cooldowns",
+      "before":"- Galio Justice Punch: matchup-defining — His dash + knockup engage. Punish him when it's down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after":"- Galio Shield of Durand: matchup-defining — an 18s taunt that reduces your damage and reflects your mark-stack combo. Engage only while it is down. - Justice Punch (11s at rank 1): his dash knockup. - Your R: flat 120s, kill windows only."
+    }
+  ],
+  "notes": "Ratings left untouched; only sides flipped, as matched full/content pairs. The full layer for this matchup is template-generated around Justice Punch — the taunt, not the dash, is the decisive ability, and several remaining full-layer strings (winCon, loading, focus.text, report[5].t) still lead with Justice Punch. They were left alone rather than partially rewritten out of band."
+}

@@ -1,0 +1,74 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "maokai",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Skill, Kennen, Kennen, Skill, Skill, Kennen, Kennen. Levels 4-5 and 6 sat on Skill under whys reading 'You keep a clean poke edge' and 'this is your hardest all-in and a free top-side dive', while 2+ items sat on Kennen under a why that says he survives into a teamfight tank.",
+      "why": "Packet levelChart is Skill, Kennen, Kennen, Kennen, Kennen, Kennen, Skill on 155 games at 56.13%.",
+      "corrected": "Rows 3 and 4 to Kennen, row 6 to Skill, as matched pairs in both layers.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/kennen.json", "champ-data/_kits/maokai.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Twisted Advance is named as the thing to track in fourteen places with no cooldown or range attached, and Nature's Grasp is never given a timer.",
+      "why": "W is 14/13/12/11/10s at 525 range; R is 130/110/90s. Those numbers are what make 'engage on its cooldown' a countable instruction rather than a mood.",
+      "corrected": "Written into breakdown.cooldowns, dosFull[0].d, phases[4].why and phases[6].why.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/maokai.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two mechanical errors and one missing mechanic. (a) spikes[3], wants.foe[0], mid and late all say a Twisted Advance root 'cancels your R channel'. Slicing Maelstrom is not a channel — Riot's text summons a storm that strikes nearby champions, and the ability carries no channel flag. Being rooted inside a fight is bad, but it does not cancel the storm. (b) whys[4] calls Maokai 'dashless'; W is explicitly a dash. (c) Nothing anywhere mentions that he is UNTARGETABLE during that dash.",
+      "why": "Riot: 'Maokai contorts into a mass of moving roots, becoming untargetable and dashing to the target.' That is the single most important thing for a burst champion to know here — a mark chain or a spent Q aimed into the dash simply does not land, so the correct play is to wait it out and burst on arrival.",
+      "corrected": "The channel claim removed rather than reworded; 'dashless' dropped; untargetability written into phases[4].why, whys[4], spikes[3].text, dosFull[0].d and the cooldown block.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/maokai.json (W)", "champ-data/_kits/kennen.json (R, no channel flag)"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "report[8].t prescribes early anti-heal but nothing explains the trigger, and the page tells you to poke him constantly — which is exactly what feeds the heal.",
+      "why": "Sap Magic: 'Each time Maokai casts a spell OR IS STRUCK BY AN ENEMY'S SPELL, this cooldown is reduced.' Every Thundering Shuriken you land brings his healing attack back sooner. A poke champion needs to know that his poke is partly paying for the sustain it is trying to beat.",
+      "corrected": "Written into phases[3].why, dontsFull[0].d and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/maokai.json (P)"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The _missing feed proposes 'hold Flash for the wall' off Nature's Grasp's terrain flag.",
+      "why": "Riot's text is 'a colossal wall of brambles and thorns that slowly advances forwards, damaging and rooting any enemies in the path'. It roots through a moving wall; it does not build standing terrain that seals a retreat the way a Trundle or Anivia wall does. I wrote the root and the 130s timer instead and left the terrain claim out.",
+      "corrected": "Nature's Grasp described as an advancing root wall on 130s at rank 1.",
+      "confidence": "Medium",
+      "sources": ["champ-data/_kits/maokai.json (R text vs terrain flag)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[3]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[6].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[6]","before":"Kennen","after":"Skill"},
+
+    {"layer":"full","path":"phases[3].why","before":"The lane-control window: trade around Twisted Advance's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.","after":"You keep the poke edge, but every spell that strikes him refreshes Sap Magic, so his heal returns faster the more you poke."},
+    {"layer":"full","path":"phases[4].why","before":"Slicing Maelstrom + Zhonya wins any grouped fight top-side. Reassess every all-in at 6 — Maokai's ultimate changes the math too.","after":"Slicing Maelstrom plus an E-in stun-locks an itemless Maokai, but Twisted Advance goes untargetable — wait it out, then burst."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your pattern is at full power. Maokai carry threat 7/10 — close before the map decides instead of you.","after":"He survives into a teamfight tank with a 90-second Nature's Grasp wall. Close on your spikes and fight grouped."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Maokai Twisted Advance: matchup-defining — His lock-on root. Dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Maokai Twisted Advance: matchup-defining — 14s at rank 1, 525 range, and he is untargetable through the dash. - Sap Magic: every spell that strikes him shortens his healing attack. - Nature's Grasp: 130s at rank 1."},
+    {"layer":"full","path":"dosFull[0].d","before":"His lock-on root. Dodge it. Only engage once it is down or baited.","after":"A 14s dash-root at 525 range — and he is untargetable mid-dash."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Maokai's favourite window — refuse it and half his win condition is gone.","after":"Every spell that strikes him refreshes Sap Magic and speeds up his heal."},
+
+    {"layer":"content","path":"whys[4]","before":"Slicing Maelstrom plus E-in stun-locks an itemless, dashless Maokai — this is your hardest all-in and a free top-side dive.","after":"Slicing Maelstrom plus E-in stun-locks an itemless Maokai — but Twisted Advance is untargetable, so burst after it, not into it."},
+    {"layer":"content","path":"spikes[3].text","before":"His threat: a hidden W root (dash + immobilize) onto you mid-channel cancels your R and lets his jungler collapse — never facecheck for it.","after":"His threat: a hidden Twisted Advance out of fog roots you for his jungler to collapse, and he is untargetable for the whole dash in."},
+    {"layer":"content","path":"wants.foe[0]","before":"Land W (dash root) to cancel your R channel or lock you for his jungler to collapse","after":"Land Twisted Advance to root you and hold you there for his jungler to collapse"},
+    {"layer":"content","path":"mid","before":"This is your lane to take over. Your Q cooldown drops, and by stacking Mark of the Storm with Q-W you can stun-lock him while his armor stacking does literally nothing against your all-magic damage. At 6, Slicing Maelstrom plus an E-in (or Flash) blows up an itemless tank or wins any 2v2 dive top-side — just make sure his W is already used or you save E to dodge it, since a root mid-channel is the only thing that turns the all-in around.","after":"This is your lane to take over. Your Q cooldown drops toward 4 seconds, and stacking Mark of the Storm with Q-W stun-locks him while his armour stacking does nothing against your all-magic damage. At 6, Slicing Maelstrom plus an E-in blows up an itemless tank or wins a 2v2 dive top-side — but hold your burst until Twisted Advance is spent, because he is untargetable through the dash and everything aimed into it is wasted."},
+    {"layer":"content","path":"late","before":"You own the lane outright, but Maokai's whole job is to survive yours and become a teamfight tank — saplings, sustain, and a long-range W engage for his team. Cash your 6-and-first-item spike into a lead and a tower so his scaling never matters. Late, respect that a single hidden W root cancels your R and feeds you to a collapse, so play your AoE R from range as a teamfight engager rather than diving him 1v1 after his peel comes online.","after":"You own the lane outright, but Maokai's whole job is to survive yours and become a teamfight tank — saplings, Sap Magic sustain, and a 525-range dash-root engage for his team. Cash your 6-and-first-item spike into a lead and a tower so his scaling never matters. Late, one hidden Twisted Advance out of fog pins you for a collapse, so start fights with your AoE R from range rather than diving him 1v1 once his peel is online."}
+  ],
+  "notes": "Packet defect 'never names any of Maokai's abilities' is now partly answered — Twisted Advance was already named, and Sap Magic and Nature's Grasp now appear with their timers. The big find is Sap Magic: its cooldown drops each time he is STRUCK BY a spell, so a poke gameplan actively accelerates his sustain, which is why the anti-heal buy is early rather than situational. No mirror yet (maokai__kennen unaudited); the chart asserted here is Skill, Kennen, Kennen, Kennen, Kennen, Kennen, Skill. Not changed: tldr and report[0] still say 'E-dash his root setup' — Lightning Rush is not a dash, but tldr is 90 characters of mostly-correct advice and the phrase sits inside report[0].t at 41 characters, under the applier's skip threshold; flagging rather than padding a rewrite around it."
+}

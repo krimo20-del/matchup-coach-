@@ -1,0 +1,62 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "lucian",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Skill, Kennen, Kennen, Skill, Skill, Kennen, Kennen. Levels 4-5 and 6 were marked Skill under whys reading 'You keep the poke edge' and 'Slicing Maelstrom is your single biggest spike', while 2+ items was marked Kennen under a why that says he out-scales the duel.",
+      "why": "Packet levelChart is Skill, Kennen, Kennen, Kennen, Kennen, Kennen, Skill on 692 games at 54.34% — the largest sample in this slice, and it matches the prose already on the page.",
+      "corrected": "Rows 3 and 4 to Kennen, row 6 to Skill, as matched pairs in both layers.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/kennen.json", "champ-data/_kits/lucian.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Relentless Pursuit is tracked in fourteen places without ever stating its cooldown, and the file never mentions that Lightslinger attacks shorten it.",
+      "why": "E is 16/15.5/15/14.5/14 seconds — by far the longest relevant cooldown in the lane, which is what makes 'engage when it's down' actionable. But Riot's text adds 'Lightslinger attacks reduce Relentless Pursuit's cooldown', so a Lucian who keeps double-shotting the wave gets it back well before 16 seconds. A player timing the raw number walks into a dash that is already up.",
+      "corrected": "The 16s and the Lightslinger reduction written into phases[3].why, breakdown.cooldowns and dosFull[0].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/lucian.json (E cd 16/15.5/15/14.5/14, text)"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "THE DECISIVE INTERACTION IS ABSENT. Nothing in either layer says that immobilising Lucian empowers him. Kennen's entire pattern is built on landing the three-mark stun, and the stun itself arms Lightslinger.",
+      "why": "Riot's Lightslinger text: 'When Lucian is healed or shielded by an ally, or when a nearby enemy Champion is immobilized, his next 2 basic attacks will deal bonus magic damage.' Kennen's passive stuns on the third Mark of the Storm — so every time the win condition fires, Lucian's next two shots hit harder. That changes the advice from 'stun and stay on him' to 'stun, burst, and be gone before the two empowered attacks land'.",
+      "corrected": "Written into phases[4].why, whys[4], dontsFull[0].d and the cooldown block.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/lucian.json (P)", "champ-data/_kits/kennen.json (P)"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The _missing feed proposes a Grievous Wounds line off the heal/shield flags on Lightslinger. Those flags describe Lucian being healed or shielded BY AN ALLY as a trigger condition — the ability does no healing of its own, and in a solo top lane there is no ally to trigger it.",
+      "corrected": "No anti-heal line written. Recorded here instead.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/lucian.json (P text vs heal/shield flags)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[3]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[6].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[6]","before":"Kennen","after":"Skill"},
+
+    {"layer":"full","path":"phases[3].why","before":"The lane-control window: trade around Relentless Pursuit's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.","after":"Relentless Pursuit is 16 seconds at rank 1, the longest cooldown in this lane — once he spends the dash, the wave is yours."},
+    {"layer":"full","path":"phases[4].why","before":"Slicing Maelstrom + Zhonya wins any grouped fight top-side. Reassess every all-in at 6 — Lucian's ultimate changes the math too.","after":"Slicing Maelstrom is your biggest spike, but the stun itself arms two empowered Lightslinger shots — burst him, don't linger."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your pattern is at full power. Lucian carry threat 8.5/10 — close before the map decides instead of you.","after":"Two items of attack speed and he kites your 170-range E and double-shots you down. Close before that, or play the fight."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Lucian Relentless Pursuit: matchup-defining — His dash + reset. Engage when it's down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Lucian Relentless Pursuit: matchup-defining — 16s at rank 1, but every Lightslinger double-shot shortens it, so it returns sooner than the timer suggests. - Lightslinger: your stun empowers his next two attacks. - Your R: a flat 120s."},
+    {"layer":"full","path":"dosFull[0].d","before":"His dash + reset. Engage when it's down. Only engage once it is down or baited.","after":"A 16s dash at rank 1, but his Lightslinger double-shots keep shortening it."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Lucian's favourite window — refuse it and half his win condition is gone.","after":"Your stun feeds Lightslinger: two empowered shots come straight back at you."},
+
+    {"layer":"content","path":"whys[4]","before":"Slicing Maelstrom is your single biggest spike — Q-W-E-Flash-R stun-locks his low-HP body and burns it down before Culling can fire.","after":"Slicing Maelstrom is my biggest spike — the stun-lock burns his low-HP body down, though every immobilise arms two Lightslinger shots."},
+    {"layer":"content","path":"wants.foe[0]","before":"Hold his E dash to dodge your Q poke and break your mark chain mid-combo","after":"Bank Lightslinger double-shots to shorten Relentless Pursuit before I commit"}
+  ],
+  "notes": "The find here is Lightslinger: 'when a nearby enemy Champion is immobilized, his next 2 basic attacks will deal bonus magic damage'. Kennen's whole win condition is an immobilise, and neither layer mentioned that landing it powers up the return trade — that is a page telling a player to walk into the punish. No mirror yet (lucian__kennen unaudited); the chart asserted here is Skill, Kennen, Kennen, Kennen, Kennen, Kennen, Skill. Left alone: whys[5] and mid both assert 'he carries no MR', and wants.you[2] names 'Galeforce/zhonyas-less mid game' — item claims I cannot verify from the kits, so I did not touch or repeat them."
+}

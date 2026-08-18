@@ -1,0 +1,54 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The content layer reads Kennen, Kennen, Kennen, Kennen, Master Yi, Skill, Master Yi, which matches the packet levelChart exactly and matches a 40.57% win rate over 106 games — an early lane Kennen owns that inverts the moment Highlander lands. There is no full layer to disagree with it.",
+      "corrected": "No chart change. The whys were rewritten to say WHY each row turns rather than restating the row.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/kennen.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet counts zero sequencing cues and flags 'NO cooldown-sequencing advice anywhere'. Not one number appeared in the matchup.",
+      "why": "The spikes here are all timers: Wuju Style at 14s adds true damage from level 2 onward, Highlander is 85s of slow-immunity and attack speed, Alpha Strike is 20s at rank 1 but shortened by his basic attacks, and Meditate is a 10-second heal.",
+      "corrected": "Wuju Style's 14s written into whys[3], Highlander's 85s into whys[4] and spikes[1], Meditate's 10s into whys[2], and Alpha Strike's 20s into early and mid.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/masteryi.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The two interactions that decide this lane were both absent. (a) Meditate is a CHANNEL — your Mark of the Storm stun cancels it outright, and it is his only way to heal your poke off. (b) Alpha Strike makes him UNTARGETABLE, so burst spent into it is thrown away.",
+      "why": "Riot: Meditate 'rejuvenates his body by focus of mind, restoring Health and taking reduced damage' with the channel flag; Alpha Strike 'teleports across the battlefield... while simultaneously becoming untargetable'. For a champion whose whole plan is a three-mark stun, 'the stun deletes his sustain' and 'do not spend the stun into the untargetable window' are the two lines that change how the lane is played.",
+      "corrected": "Meditate-cancel written into whys[2], spikes[0].text, early and wants.you[1]; the Alpha Strike untargetable window written into early and mid.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/masteryi.json (Q, W)", "champ-data/_kits/kennen.json (P)"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No Grievous Wounds guidance, and this is a matchup where it matters.",
+      "why": "Meditate on a 10-second cooldown is a real heal that resets the poke war you are trying to win. Cancelling it with the stun is the free answer; Grievous Wounds is the answer when you cannot land the stun.",
+      "corrected": "Folded into early, which is where the poke-war advice lives.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/masteryi.json (W heal)"]
+    }
+  ],
+  "edits": [
+    {"layer":"content","path":"whys[2]","before":"Your level-3 poke and stun threat beat anything he can force.","after":"Your third Mark stuns him out of Meditate — his only heal, on 10s."},
+    {"layer":"content","path":"whys[3]","before":"Through 4-5 your kiting and poke still control the lane — just do not feed the Wuju spike that is building.","after":"Poke still controls 4-5, but Wuju Style puts true damage on his autos every 14s — armour will not answer it."},
+    {"layer":"content","path":"whys[4]","before":"At 6 his stacked Wuju spike and Highlander flip the isolated duel — he runs you down.","after":"At 6 Highlander gives 85 seconds of slow-immunity and attack speed — he runs an isolated Kennen down."},
+    {"layer":"content","path":"spikes[0].text","before":"Poke, marks, stun threat: this whole stretch is yours — chunk him off CS and build the lead the mid game will spend.","after":"Poke, marks, stun threat: this stretch is yours — and the third Mark cancels Meditate, his one way to heal the chip off."},
+    {"layer":"content","path":"spikes[1].text","before":"Highlander plus stacked Wuju flips the 1v1 — stop taking isolated duels immediately.","after":"Highlander on 85s makes him slow-immune while Wuju Style adds true damage — stop duelling him."},
+    {"layer":"content","path":"wants.you[1]","before":"Stun-lock him whenever he commits","after":"Cancel his Meditate with a Mark stun"},
+    {"layer":"content","path":"early","before":"This is your stretch of the game and it is a wide one: shuriken poke, mark-stacking, and stun threat control levels 1 through 4-5, so chunk him relentlessly and deny CS. Bank the advantage now — every point of pressure here buys you safety against what is coming later.","after":"This is your stretch and it is a wide one: shuriken poke, mark-stacking and stun threat own levels 1 through 4-5, so chunk him and deny CS. Meditate is a channel on 10 seconds — the third Mark of the Storm cancels it outright, so hold a mark for the moment he sits down to heal, and buy Grievous Wounds if you keep missing it."},
+    {"layer":"content","path":"mid","before":"The lane flips at his 6: Highlander plus stacked Wuju runs down an isolated Kennen, so stop dueling the moment he hits it. Around first items your R is the equalizer — a fight where your stun-lock lands stays skill-based — but pick those fights near allies, never alone in a side lane.","after":"The lane flips at his 6: Highlander is 85 seconds of slow-immunity and attack speed, so stop duelling the moment he hits it. Around first items your R is the equalizer — but never spend it into Alpha Strike, which makes him untargetable for the whole dash. Wait the 20-second blink out, then stun-lock him, and take those fights near allies."}
+  ],
+  "notes": "THIS MATCHUP HAS NO FULL-LAYER ENTRY AT ALL — currentText.full is null, so CHAMP_FULL['kennen']['masteryi'] does not exist and the detailed page has nothing to render. I did not try to build it with before:null creates. Filling roughly thirty fields blind would either half-build an entry (worse than none, because a half-page ships) or duplicate whatever generator produced the other matchups' full layers with different phrasing conventions. This is one of the ~92 known structural gaps and it needs a decision from you, not a guess from me — see questionsForUser. Everything above is content-layer only. No mirror yet (masteryi__kennen unaudited); the chart stands as Kennen, Kennen, Kennen, Kennen, Master Yi, Skill, Master Yi."
+}

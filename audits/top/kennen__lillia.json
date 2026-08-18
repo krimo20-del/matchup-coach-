@@ -1,0 +1,63 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "lillia",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Skill, Kennen, Kennen, Skill, Skill, Kennen, Kennen. Levels 4-5 and 6 were marked Skill under whys that say 'You keep the poke edge' and 'your biggest spike', and 2+ items was marked Kennen under a why that says she out-sustains and runs from your stun chain.",
+      "why": "Packet levelChart is Skill, Kennen, Kennen, Kennen, Kennen, Kennen, Skill on 178 games at 56.18% — Kennen owns everything from level 2 until her AP items land.",
+      "corrected": "Rows 3 and 4 to Kennen, row 6 to Skill, as matched pairs in both layers.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/kennen.json", "champ-data/_kits/lillia.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet counted one sequencing cue in the whole matchup; the spike rows were the stock 'Liandry's Torment is your spike' template with no numbers.",
+      "why": "The timers that decide this lane are Slicing Maelstrom's flat 120s against Lilting Lullaby's 150/130/110s, plus Blooming Blows on 6s at rank 1 and Swirlseed on a flat 12s.",
+      "corrected": "Written into phases[4].why, breakdown.cooldowns and dosFull[0].d so the all-in is keyed to real numbers.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/lillia.json", "champ-data/_kits/kennen.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three errors. (a) mid and wants.foe[1] treat Slicing Maelstrom as a channel Lilting Lullaby can 'break'. (b) The move speed is credited to her W in wants.foe[0] and mid ('kite with W speed'); it is Blooming Blows (Q) that grants stacking Move Speed. (c) Blooming Blows' true damage on the edge is never mentioned, so the player thinks MR answers her.",
+      "why": "Riot's text: Kennen's R 'summons a storm that strikes at nearby enemy champions' — no channel flag on the ability. Lillia Q: 'Passively, Lillia gains stacking Move Speed when hitting enemies with spells... dealing extra true damage on the edge.' W is a flat area slam with no speed component.",
+      "corrected": "The channel claim removed rather than reworded — sleep on you mid-fight is still bad, but it does not interrupt anything. Move speed re-attributed to Blooming Blows, and its true-damage edge stated in three places.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/lillia.json", "champ-data/_kits/kennen.json"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The _missing feed proposes a 'Swirlseed cuts your retreat, hold Flash for the wall' line. I did not write it.",
+      "why": "The terrain flag on Swirlseed contradicts Riot's own description, which says the seed 'will continue rolling until it hits a wall or target' — it interacts with walls, it does not create them. Per the kit rules the description wins and the flag is a tooltip-parsing misfire.",
+      "corrected": "Swirlseed written up as what it is: a flat 12-second, 700-range slow. No terrain claim.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/lillia.json (E text vs terrain flag)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[3]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[6].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[6]","before":"Kennen","after":"Skill"},
+
+    {"layer":"full","path":"phases[3].why","before":"The lane-control window: trade around Blooming Blows's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.","after":"You keep the poke edge at 950 range, but the edge of Blooming Blows is true damage — MR will not soften it, so never stand in it."},
+    {"layer":"full","path":"phases[4].why","before":"Slicing Maelstrom + Zhonya wins any grouped fight top-side. Reassess every all-in at 6 — Lillia's ultimate changes the math too.","after":"Slicing Maelstrom is the matchup: pre-stack marks, E-in for the stun, and spend the flat 120s before Lilting Lullaby lands."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your pattern is at full power. Lillia carry threat 8/10 — close before the map decides instead of you.","after":"Her passive DOT and the Swirlseed slow kite your stun chain once her AP lands — take teamfights, not sidelane duels."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Lillia Blooming Blows: matchup-defining — Her kite + move speed stacks. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Lillia Blooming Blows: matchup-defining — 6s at rank 1, stacks her Move Speed, and the outer edge deals true damage. - Swirlseed: a flat 12s slow at 700 range. - Lilting Lullaby: 150s at rank 1 — bait it before you E-in."},
+    {"layer":"full","path":"dosFull[0].d","before":"Her kite + move speed stacks. Only engage once it is down or baited.","after":"A 6s cooldown, stacking Move Speed, and true damage on the edge."},
+
+    {"layer":"content","path":"whys[3]","before":"You keep the poke edge with Q range while she lacks the move speed to fully kite a marked target — chip her down and respect her W slam.","after":"You keep the poke edge at 950, but Blooming Blows stacks her Move Speed and its edge deals true damage — resistances don't answer it."},
+    {"layer":"content","path":"wants.foe[0]","before":"Kite your melee range with W's move speed and E bounce so you never land the third mark","after":"Kite your 170-range E with Blooming Blows' stacking Move Speed and a Swirlseed slow"},
+    {"layer":"content","path":"wants.foe[1]","before":"Land her R sleep on you to break your R channel or your E-in commit","after":"Land Lilting Lullaby's sleep on you the moment you E-in to commit"},
+    {"layer":"content","path":"mid","before":"This is your lane. Through levels 4-6 you out-poke her squishy body and at 6 your Slicing Maelstrom is the whole matchup: Q-W to pre-stack marks, E-in to stun, R to lock her and chunk before her R sleep can flip the trade. The key is forcing the all-in while her W/E are on cooldown — she has no hard escape, only move speed, so a clean E-Flash gap-close catches her. Bait her R sleep before you commit your channel; if she lands it on you mid-R the trade dies.","after":"This is your lane. Through levels 4-6 you out-poke her squishy body and at 6 your Slicing Maelstrom is the whole matchup: Q-W to pre-stack marks, E-in to stun, R to lock her and chunk before Lilting Lullaby flips the trade. Force the all-in while Watch Out! Eep! and Swirlseed are down — she has no dash, only the Move Speed off Blooming Blows, so a clean E-Flash catches her. Her sleep does not interrupt the storm, but eating it mid-fight still hands her the trade."}
+  ],
+  "notes": "Packet defect 'never names any of Lillia's abilities' is now partly fixed — Blooming Blows was already named, and Swirlseed, Watch Out! Eep! and Lilting Lullaby are now named in the rewritten rows. The Swirlseed 'terrain' flag in the kit file is a parsing misfire: Riot's text has the seed rolling UNTIL it hits a wall, not creating one. I did not write the _missing feed's 'hold Flash for the wall' line because it rests on that flag. No mirror yet (lillia__kennen unaudited); the chart asserted here is Skill, Kennen, Kennen, Kennen, Kennen, Kennen, Skill."
+}

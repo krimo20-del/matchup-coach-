@@ -1,0 +1,94 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "gnar",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Chart read Skill/Kennen/Kennen/Skill/Skill/Kennen/Kennen against a packet of Skill, Gnar, Gnar, Skill, Skill, Gnar, Gnar — and every corresponding whys[] entry already says Gnar owns those levels.",
+      "why": "Levels 2-3 are Hyper on-hit poke against a fragile Kennen; first item and beyond is a Mega frontline. Level 1, 4-5 and 6 are genuinely coinflips (rage state decides). The mirror flipped exactly these four rows on Gnar's side.",
+      "corrected": "Rows 1, 2, 5, 6 flipped to Gnar as matched full/content pairs.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirror audit gnar__kennen", "existing whys[]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldowns anywhere; the level-6 comparison was written with no numbers.",
+      "why": "GNAR! is 90/60/30s and only exists while the rage bar is full; Wallop is a flat 7s in Mega form; Slicing Maelstrom is a flat 120s over a 550 radius. That asymmetry — a 7s recurring stun against your 120s ultimate — is the actual spike story.",
+      "corrected": "breakdown.cooldowns now carries GNAR!'s 90s rank-1, Wallop's 7s and the flat 120s R.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gnar.json", "champ-data/_kits/kennen.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two errors repeated across six fields. (1) Slicing Maelstrom is called a channel that Gnar's stun 'interrupts'. (2) GNAR! is labelled '(W)'.",
+      "why": "Riot's text for Slicing Maelstrom is 'Kennen summons a storm that strikes at nearby enemy champions' — the kit file carries only a zone flag, no channel flag. Kennen moves and fights while it ticks; being stunned does not end it, it only strands him. GNAR! is Mega Gnar's R (590 range, wall-slam stun); Mega Gnar's W is Wallop, the 7s smash-down stun.",
+      "corrected": "whys[5], spikes[1].text, spikes[2].text, mid, late, wants.you[2] and wants.foe[1] rewritten: Wallop and GNAR! stun you inside or out of the 550 storm radius rather than interrupting a non-existent channel, and the slot letters are corrected.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gnar.json", "champ-data/_kits/kennen.json"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing about GNAR! creating a wall-slam and cutting retreat.",
+      "why": "GNAR! carries terrain and knockup flags — 'Any enemy that hits a wall is stunned' — and Kennen's only mobility is Lightning Rush at 170 range on a 10/9/8/7/6s cooldown.",
+      "corrected": "Named in spikes[2].text and late; Flash is for the wall, not the damage.",
+      "confidence": "High",
+      "sources": ["_missing/kennen.json rule terrain-cuts-retreat", "champ-data/_kits/gnar.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[1].side","before":"Kennen","after":"Gnar"},
+    {"layer":"content","path":"win[1]","before":"Kennen","after":"Gnar"},
+    {"layer":"full","path":"phases[2].side","before":"Kennen","after":"Gnar"},
+    {"layer":"content","path":"win[2]","before":"Kennen","after":"Gnar"},
+    {"layer":"full","path":"phases[5].side","before":"Kennen","after":"Gnar"},
+    {"layer":"content","path":"win[5]","before":"Kennen","after":"Gnar"},
+    {"layer":"full","path":"phases[6].side","before":"Kennen","after":"Gnar"},
+    {"layer":"content","path":"win[6]","before":"Kennen","after":"Gnar"},
+    {
+      "layer":"content","path":"whys[5]",
+      "before":"Your first-item burst wants to cash in, but the moment his rage bar fills GNAR!'s AoE stun interrupts your R channel and flips the fight to him.",
+      "after":"Your first-item burst wants to cash in, but once his rage bar fills, Wallop and GNAR! stun you and drag you off the 550 storm radius, flipping it."
+    },
+    {
+      "layer":"content","path":"spikes[1].text",
+      "before":"Slicing Maelstrom flips the all-in: E onto him, channel R, and the storm restacks Mark of the Storm to stun-lock him out of mini form.",
+      "after":"Slicing Maelstrom flips the all-in: E onto him, cast R, and the storm restacks Mark of the Storm to stun-lock him out of mini form."
+    },
+    {
+      "layer":"content","path":"spikes[2].text",
+      "before":"Mega Gnar's GNAR! (W) AoE stun and bonus tankiness — if he transforms mid-trade he eats your R channel and stuns your E-in flat.",
+      "after":"Mega Gnar's Wallop (W) stun and GNAR! (R) wall-slam, plus the bonus tankiness — transform mid-trade and he stuns your E-in flat."
+    },
+    {
+      "layer":"content","path":"wants.you[2]",
+      "before":"Force your level 6 all-in on a marked Gnar before Mega form's GNAR! stun can interrupt your R channel",
+      "after":"Force your level 6 all-in on a marked Gnar before Mega form's Wallop stun can drag you off your 550 storm"
+    },
+    {
+      "layer":"content","path":"wants.foe[1]",
+      "before":"Bank rage so Mega Gnar's GNAR! (W) AoE stun lands the moment you E-in to all-in",
+      "after":"Bank rage so Mega Gnar's Wallop (W) stun lands the moment you E-in to all-in"
+    },
+    {
+      "layer":"content","path":"mid",
+      "before":"This is where you claw it back. At 6 your Slicing Maelstrom turns a marked Gnar into a stun-lock kill: E-in to apply a mark, channel R to restack Mark of the Storm fast, and burst him before he can boomerang away — but ONLY when his rage bar is empty and he's stuck in mini form. The whole mid game hinges on the rage bar: if it's full, his GNAR! (W) AoE stun will interrupt your R channel and flip the all-in, so wait it out and force the fight on his small, squishy form.",
+      "after":"This is where you claw it back. At 6 your Slicing Maelstrom turns a marked Gnar into a stun-lock kill: E-in to apply a mark, cast R to restack Mark of the Storm fast, and burst him before he can boomerang away — but ONLY when his rage bar is empty and he's stuck in mini form. The whole mid game hinges on the rage bar: if it's full, Wallop's 7s stun and the GNAR! wall-slam pin you while the storm burns down, so wait it out and fight his small, squishy form."
+    },
+    {
+      "layer":"content","path":"late",
+      "before":"You need to have closed it. Once Gnar hits two items he's a Mega-form frontline who survives your R window and CCs your team while staying out of E range in mini form. Your squishy caster body can be focus-killed the moment R is down, and his GNAR! stun is a free interrupt on every engage you try. Pivot to teamfight engager — flank and R the backline rather than dueling a transformed Gnar in the sidelane, because he reclaims the straight 1v1 here.",
+      "after":"You need to have closed it. Once Gnar hits two items he's a Mega-form frontline who survives your R window and CCs your team while staying out of E range in mini form. Your squishy caster body can be focus-killed the moment R is down, and GNAR! slams you into a wall to cut the retreat you have no dash for. Pivot to teamfight engager — flank and R the backline rather than dueling a transformed Gnar in the sidelane, because he reclaims the straight 1v1 here."
+    },
+    {
+      "layer":"full","path":"breakdown.cooldowns",
+      "before":"- Gnar GNAR!: matchup-defining — His Mega all-in. E-dash it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after":"- Gnar GNAR!: matchup-defining — 90s at rank 1, his Mega wall-slam all-in. Fight while the rage bar is empty. - Wallop (flat 7s): Mega's stun. - Your R: flat 120s, kill windows only."
+    }
+  ],
+  "notes": "The 'R channel' framing was in six places on this page and is not a real mechanic — Slicing Maelstrom cannot be interrupted, so a Gnar stun strands Kennen rather than cancelling the storm. GNAR! was also labelled (W) in three places; Mega Gnar's W is Wallop. focus.text and the loading line still track 'Gnar GNAR!' when the recurring 7s Wallop is the more relevant cooldown, but those strings are short and were left alone."
+}

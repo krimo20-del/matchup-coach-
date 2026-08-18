@@ -1,0 +1,75 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "ksante",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Skill, Kennen, Kennen, Skill, Skill, Kennen, Kennen — Levels 4-5 and 6 marked Skill while the whys under them say you keep the poke edge and that your mark chain 'wins this pre-item all-in outright', and 2+ items marked Kennen while whys[6] says K'Sante out-scales hard.",
+      "why": "Packet levelChart is Skill, Kennen, Kennen, Kennen, Kennen, Kennen, K'Sante on 331 games at 54.38% — a lane Kennen owns until K'Sante's resist stacking and All Out arrive with items.",
+      "corrected": "Rows 3 and 4 to Kennen and row 6 to K'Sante, as matched pairs in both layers.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/kennen.json", "champ-data/_kits/ksante.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The spike rows carried the generic template and never named a cooldown, despite the packet counting seven sequencing cues elsewhere in the file.",
+      "why": "The lane's spikes are Kennen's Slicing Maelstrom at 6 (flat 120s) and K'Sante's All Out (120/100/80s), which heals him and transforms his kit; Path Maker is 14s at rank 1 and Footwork 10/9.5/9/8.5/8s.",
+      "corrected": "120s written into the Level 6 and All Out rows, Path Maker's 14s and Footwork's 8-10s into the cooldown block, and the first-item spike re-pointed at baiting the shield.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ksante.json", "champ-data/_kits/kennen.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three wrong mechanics. (a) whys[0], early and spikes[2] credit K'Sante with a 'percent-HP passive' that blunts magic — Dauntless Instinct does no such thing; it marks targets to take more damage on his next attack. (b) early calls W 'the Ntofo Strikes block', conflating Q with W. (c) tldr and dosFull[2] tell you to 'E-dash his Q'; Lightning Rush is not a dash.",
+      "why": "Riot's text: P 'marks targets to take more damage on his next Attack'; Q Ntofo Strikes is the 450-range line that pulls at 2 stacks; W Path Maker is the 600-range charge-dash that knocks back and stuns and deals true damage; Kennen's E has no dash flag.",
+      "corrected": "The invented passive removed in all three places and replaced with what actually matters — Path Maker's true damage (armour and MR do not answer it) and Footwork's shield eating your burst window. The E-dash phrasing dropped from tldr.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ksante.json", "champ-data/_kits/kennen.json"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "report[8].t prescribes anti-heal but nothing says why or when — the healing is on All Out specifically.",
+      "why": "All Out grants 'increased damage, healing, and transformed abilities'. Grievous Wounds before you contest it, not after.",
+      "corrected": "Written into breakdown.cooldowns and dontsFull[1].d as the reason to hold Oblivion Orb before the ult fight.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ksante.json (R heal flag)"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Dauntless Instinct's attack reset is never mentioned, and neither is Footwork's shield.",
+      "why": "His abilities mark you and the follow-up attack is the payload, so the attack wind-up is the tell; Footwork is a 8-10s dash-plus-shield that absorbs the burst you were counting on.",
+      "corrected": "Footwork added to the cooldown block and to spikes[2].text as the thing to bait before committing.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ksante.json (P autoReset, E shield)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[3]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[6].side","before":"Kennen","after":"K'Sante"},
+    {"layer":"content","path":"win[6]","before":"Kennen","after":"K'Sante"},
+
+    {"layer":"full","path":"phases[0].why","before":"Q-poke from range wins every melee matchup early. Identify how K'Sante contests the first waves before you commit anything.","after":"You are both fragile at level 1 and Ntofo Strikes only reaches 450 — last-hit from 950 range and commit to nothing."},
+    {"layer":"full","path":"phases[3].why","before":"The lane-control window: trade around All Out's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.","after":"You hold the poke edge, but Path Maker is a 600-range dash that stuns and deals true damage — never stand in melee for it."},
+    {"layer":"full","path":"phases[4].why","before":"Slicing Maelstrom + Zhonya wins any grouped fight top-side. Reassess every all-in at 6 — K'Sante's ultimate changes the math too.","after":"Slicing Maelstrom plus an E-in stun-locks him before All Out can isolate you — your hardest all-in of the lane, on a flat 120s."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your pattern is at full power. K'Sante carry threat 7/10 — close before the map decides instead of you.","after":"All Out strips his own resists, dashes onto you and isolates you — a duel your body loses. Group and peel instead."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- K'Sante All Out: matchup-defining — His duelist mode. Poke when it’s down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- K'Sante All Out: matchup-defining — 120s at rank 1, and it heals him; hold Oblivion Orb before you contest it. - Path Maker: 14s, true damage, so armour and MR do not answer it. - Footwork: an 8-10s shield — bait it first."},
+    {"layer":"full","path":"dosFull[0].d","before":"His duelist mode. Poke when it’s down. Only engage once it is down or baited.","after":"A 120-second duelist mode that also heals him. Engage while it is down."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"All Out heals him — get Grievous Wounds before you fight it."},
+    {"layer":"full","path":"tldr","before":"Poke his early — E-dash his Q, avoid his R form. Kennen wins the All Out cooldown windows.","after":"Poke him from 950, bait his Footwork shield, and burst before All Out comes online."},
+
+    {"layer":"content","path":"whys[0]","before":"You're both fragile at level 1, but his percent-HP passive blunts your single Q — last-hit at Q range and don't commit.","after":"You're both fragile at level 1, but Ntofo Strikes reaches only 450 on a 3.5s cooldown — last-hit from 950 and don't commit."},
+    {"layer":"content","path":"whys[3]","before":"You keep the poke edge but respect his level-3 W-dash Q-knockup combo — chip and don't stand in melee.","after":"You keep the poke edge, but Path Maker is a 600-range dash that stuns for true damage — never stand in melee."},
+    {"layer":"content","path":"spikes[2].text","before":"Hextech Alternator / Liandry's cashes your R combo into real kill pressure — his percent-HP passive doesn't save him from full burst.","after":"Hextech Alternator / Liandry's cashes your R combo into real kill pressure — but Footwork shields him on an 8-10 second cooldown, so bait it first."},
+    {"layer":"content","path":"early","before":"Level 1 is even — one Q and your Electrical Surge autos chip, but you're squishy and he has a percent-HP passive that softens your magic, so don't overcommit. The real opener is levels 2-3: a second Q point plus W on-hit lets you build Mark of the Storm and land hard poke while his W (the Ntofo Strikes block / dash) is on cooldown. Bait his W block — once it's down, your Q poke and mark stack land clean. Don't auto into his W ready or he'll block the mark and dash on you.","after":"Level 1 is even — one Q and your Electrical Surge autos chip, but you're squishy and Ntofo Strikes slows you at 450 range every 3.5 seconds, so don't overcommit. The real opener is levels 2-3: a second Q point plus W on-hit lets you build Mark of the Storm and land hard poke while Path Maker, his 14-second charge-dash, is down. Bait it — it stuns and the damage is true, so armour and MR are no answer. Never stand in melee with Path Maker up."}
+  ],
+  "notes": "dosFull[2].t 'E-dash out of his Q' is still on disk and still wrong (Lightning Rush is not a dash), but it is 19 characters — under the applier's 25-character skip threshold — so I could not propose it. Worth a manual fix, along with report[1].t 'Poke his early and dash his Q' and winCon, which repeat the same phrasing at lengths that would have forced a padded rewrite. No mirror yet (ksante__kennen unaudited); the chart asserted here is Skill, Kennen, Kennen, Kennen, Kennen, Kennen, K'Sante."
+}

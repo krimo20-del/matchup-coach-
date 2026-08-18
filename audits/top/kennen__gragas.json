@@ -1,0 +1,86 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "gragas",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Chart read Skill/Kennen/Kennen/Skill/Skill/Kennen/Kennen; the packet and the mirror both read Kennen, Skill, Skill, Skill, Gragas, Gragas, Kennen, which is also what the whys[] text says.",
+      "why": "Level 1 is Kennen's (950 Q against no Body Slam yet). Levels 2 through 5 are coinflips because Body Slam displaces the third-mark step-up. Level 6 and first item belong to Gragas — Explosive Cask plus Drunken Rage's reduction. Two items swings back to Kennen.",
+      "corrected": "Rows 0, 1, 2, 4 and 5 flipped as matched full/content pairs; rows 3 and 6 already agreed.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirror audit gragas__kennen", "existing whys[]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The spikes were right in shape but carried no cooldowns, so 'commit when his dash is down' had no clock attached.",
+      "why": "Body Slam is 14/13.5/13/12.5/12s — barely any rank scaling, so a 14s window is the whole lane rhythm. Explosive Cask is 100/85/70s at 1000 range; Slicing Maelstrom is a flat 120s over 550.",
+      "corrected": "Numbers written into breakdown.cooldowns and wants.you[2].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/gragas.json", "champ-data/_kits/kennen.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Five fields describe Slicing Maelstrom as a channel that Explosive Cask 'interrupts' or launches you 'out of'.",
+      "why": "Slicing Maelstrom is not a channel — Riot's text is 'Kennen summons a storm that strikes at nearby enemy champions', and the kit file carries only a zone flag. The storm keeps ticking after a knockback; what Cask actually does is displace Kennen out of the 550 radius so the storm stops hitting Gragas. That changes the advice from 'don't get interrupted' to 'don't let him move you off him'.",
+      "corrected": "whys[4], spikes[2].text, mid, wants.you[2] and wants.foe[2] now state the displacement-off-the-radius interaction instead of an interrupt.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kennen.json", "champ-data/_kits/gragas.json"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Happy Hour heals on every skill use, so the needs-antiheal flag applies — and report[8].t already names Oblivion Orb / Executioner's early.",
+      "corrected": "No change needed.",
+      "confidence": "High",
+      "sources": ["_missing/kennen.json rule needs-antiheal"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[0]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[1].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[1]","before":"Kennen","after":"Skill"},
+    {"layer":"full","path":"phases[2].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[2]","before":"Kennen","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Gragas"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Gragas"},
+    {"layer":"full","path":"phases[5].side","before":"Kennen","after":"Gragas"},
+    {"layer":"content","path":"win[5]","before":"Kennen","after":"Gragas"},
+    {
+      "layer":"content","path":"whys[4]",
+      "before":"At 6 his Explosive Cask knocks you out of your Slicing Maelstrom channel and Drunken Rage's damage reduction lets him eat the storm — he owns this all-in.",
+      "after":"At 6 his Explosive Cask blasts you clean out of your own 550 storm radius and Drunken Rage's reduction eats the ticks — he owns this all-in."
+    },
+    {
+      "layer":"content","path":"spikes[2].text",
+      "before":"Gragas's biggest threat: Explosive Cask can knock you out of your Slicing Maelstrom channel, and his W damage reduction lets him eat the storm and walk you under tower.",
+      "after":"Gragas's biggest threat: Explosive Cask blasts you out of your own 550 storm radius, and his W damage reduction lets him eat the ticks and walk you under tower."
+    },
+    {
+      "layer":"content","path":"wants.you[2]",
+      "before":"Hold Slicing Maelstrom until his Explosive Cask is spent so it cannot knock you out of the channel",
+      "after":"Hold Slicing Maelstrom until his 100s Explosive Cask is spent, so it cannot blast you off your own storm"
+    },
+    {
+      "layer":"content","path":"wants.foe[2]",
+      "before":"Save Explosive Cask to interrupt your R channel or knock you off him mid-stun-lock",
+      "after":"Save Explosive Cask to blast you out of your own storm or off him mid-stun-lock"
+    },
+    {
+      "layer":"content","path":"mid",
+      "before":"Levels 4-5 stay a chip-and-respect stretch — you keep the poke edge but his level-3 Body Slam-into-Q combo punishes any step-up, so pile Marks of the Storm from distance and refuse the all-in until his dash is on cooldown. At 6 the window flips to him: your Slicing Maelstrom is a channel, and Explosive Cask can launch you straight out of it, while Drunken Rage's damage reduction lets him stand in the storm and walk you to tower. Only ult after you've baited his Cask.",
+      "after":"Levels 4-5 stay a chip-and-respect stretch — you keep the poke edge but his level-3 Body Slam-into-Q combo punishes any step-up, so pile Marks of the Storm from distance and refuse the all-in until that 14s dash is on cooldown. At 6 the window flips to him: Slicing Maelstrom only strikes the 550 around you, and Explosive Cask launches you straight out of that, while Drunken Rage's reduction lets him stand in it and walk you to tower. Only ult after you've baited his Cask."
+    },
+    {
+      "layer":"full","path":"breakdown.cooldowns",
+      "before":"- Gragas Body Slam: matchup-defining — His engage. E-dash after it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after":"- Gragas Body Slam: matchup-defining — 14s at rank 1 and barely scaling, his dash-stun engage. Step up once it is spent. - Explosive Cask (100s): blasts you off your own storm. - Your R: flat 120s, kill windows only."
+    }
+  ],
+  "notes": "The packet flagged six suspectNames here; all six are false positives — Thundering Shuriken, Electrical Surge, Slicing Maelstrom, Explosive Cask and Drunken Rage are all correct per the kit files, and the flags fired on the surrounding verb ('Land', 'Hold', 'Save'). The genuine defect on this page was the 'R channel' framing in five fields, now corrected."
+}

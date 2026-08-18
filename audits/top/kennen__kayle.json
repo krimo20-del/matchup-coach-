@@ -1,0 +1,79 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "kayle",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Kennen, Skill, Kayle, Kayle, Kennen, Kayle, Kayle — Kayle winning Levels 3 and 4-5 while the whys underneath them say Kennen bursts her at three marks and that 4-5 are even.",
+      "why": "Kayle is melee with no dash until her level-11 ranged form; the packet levelChart and the audited mirror (kayle__kennen) both give Kennen rows 1-2 and Skill on rows 3-5, with Kayle owning only 2+ items.",
+      "corrected": "Rows 1-5 flipped as matched pairs to Kennen, Kennen, Skill, Skill, Skill in both layers. Row 0 (Kennen) and row 6 (Kayle) already agreed.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/kennen.json", "audits/top/kayle__kennen.json", "champ-data/_kits/kayle.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[4] said 'Without your R yet this is a chip-and-respect window' on the Level 6 row — Slicing Maelstrom is exactly what you get at 6. No cooldown numbers appeared anywhere (packet: zero sequencing cues).",
+      "why": "Kennen R is a flat 120s at 550 range; Kayle R is 160/120/80s at 900 range. At 6 the pair is 120s of AoE stun against 160s of invulnerability, which is why the row is Skill and not a free kill.",
+      "corrected": "Level 6 rows rewritten with both cooldowns; 160s and 120s written into phases[4].why, whys[4], breakdown.cooldowns and spikes[3].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kennen.json", "champ-data/_kits/kayle.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "late and wants.foe[2] claim Divine Judgment 'eats your entire stun-lock' / 'negates' it, and late calls Slicing Maelstrom a channel Kayle can press R on.",
+      "why": "Riot's text: 'Kayle makes an ally invulnerable' — that is damage invulnerability. It does not remove Mark of the Storm or the stun, and Kennen's R carries no channel flag. What actually happens is that the storm keeps ticking on a target taking zero.",
+      "corrected": "Both claims restated as: she takes zero from the storm while it runs, so bait the 160s ult before you spend the 120s one. The CC claim is removed, not reversed.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kayle.json (R text)", "champ-data/_kits/kennen.json (R has no channel flag)"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Starfire Spellblade's auto-attack reset is never mentioned.",
+      "why": "It is a 8/7.5/7/6.5/6-second auto reset, so her burst opens with an attack wind-up rather than a visible cast.",
+      "corrected": "Written into breakdown.cooldowns as the burst tell.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kayle.json (E autoReset)"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Celestial Blessing (15s flat) heals her through chip, and report[8].t already prescribes Oblivion Orb / Executioner's early.",
+      "corrected": "No change needed; the anti-heal line is present and correctly timed. Added a nod to the 15s heal in the Levels 4-5 row so the player knows why the chip vanishes.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kayle.json (W cd 15, heal)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[1]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[2].side","before":"Kayle","after":"Kennen"},
+    {"layer":"content","path":"win[2]","before":"Kayle","after":"Kennen"},
+    {"layer":"full","path":"phases[3].side","before":"Kayle","after":"Skill"},
+    {"layer":"content","path":"win[3]","before":"Kayle","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[4]","before":"Kennen","after":"Skill"},
+    {"layer":"full","path":"phases[5].side","before":"Kayle","after":"Skill"},
+    {"layer":"content","path":"win[5]","before":"Kayle","after":"Skill"},
+
+    {"layer":"full","path":"phases[0].why","before":"Q-poke from range wins every melee matchup early. Identify how Kayle contests the first waves before you commit anything.","after":"Kayle is melee until her level-11 ranged form and has no escape — Thundering Shuriken chips her free from 950 range."},
+    {"layer":"full","path":"phases[1].why","before":"Mark management: third proc stuns — count to three. Only take the trade when Kayle's Divine Judgment is down.","after":"Every ability adds a Mark of the Storm and the third stuns — she has no dash, so two marks means she is caught."},
+    {"layer":"full","path":"phases[2].why","before":"Full kit online — your core pattern starts now. Keep the wave near your side so Kayle must walk into your range.","after":"Full kit: Q-W-E is three marks and a stun on a Kayle who can only farm with Starfire Spellblade. Deny her the CS."},
+    {"layer":"full","path":"phases[3].why","before":"The lane-control window: trade around Divine Judgment's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.","after":"She farms under tower with Starfire Spellblade and soaks XP, and a 15-second Celestial Blessing heals your chip back. Deny the plates."},
+    {"layer":"full","path":"phases[4].why","before":"Slicing Maelstrom + Zhonya wins any grouped fight top-side. Reassess every all-in at 6 — Kayle's ultimate changes the math too.","after":"Slicing Maelstrom is a 120-second all-in; Divine Judgment is 160 seconds of invulnerability that takes zero from it. Bait it first."},
+    {"layer":"full","path":"phases[5].why","before":"Liandry's Torment is your spike — force fights the moment it completes, on Divine Judgment's cooldown.","after":"Your Liandry's burst can still kill her, but her first item and her ult are up — commit only once R is spent."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your pattern is at full power. Kayle carry threat 9.5/10 — close before the map decides instead of you.","after":"Her level-11 ranged form autos you from outside Q range and Divine Judgment blanks your burst. Stop duelling, group."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Kayle Divine Judgment: matchup-defining — Her get-out at 6. Bait it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Kayle Divine Judgment: 160s at rank 1 — invulnerability, not CC immunity, so the storm keeps running on a target taking zero. - Starfire Spellblade: a 6-8s auto-attack reset; the wind-up is her burst tell. - Your R: a flat 120s."},
+
+    {"layer":"content","path":"whys[4]","before":"Without your R yet this is a chip-and-respect window, and she is just grinding toward her two-item ranged power, so trades stay neutral.","after":"At 6 we both spike — my Slicing Maelstrom on 120s against Divine Judgment on 160s, an invulnerability that eats the whole storm."},
+    {"layer":"content","path":"spikes[3].text","before":"Kayle's level-11 ranged-form upgrade plus her R invuln turns the duel — she kites your short body and presses R through your stun window.","after":"Kayle's level-11 ranged form plus a 120-second Divine Judgment turns the duel — she kites you out of Q range and your burst lands for zero."},
+    {"layer":"content","path":"wants.foe[2]","before":"Save her R invulnerability to negate your Slicing Maelstrom stun-lock and all-in","after":"Save Divine Judgment so your Slicing Maelstrom burst lands on an invulnerable target"},
+    {"layer":"content","path":"late","before":"Once Kayle hits two items and her level-11 ranged-form upgrade, the lane flips hard. She auto-attacks you from outside Q range, her E gives ranged waveclear, and her R invulnerability eats your entire stun-lock if she presses it on your R channel. Your squishy caster body can't duel a fed scaler — so close the game on your 6/first-item spike, pivot to teamfighting where your AoE R peels and engages, and let your team handle her side lane. Do not 1v1 her after she scales.","after":"Once Kayle hits two items and her level-11 ranged-form upgrade, the lane flips hard. She auto-attacks you from outside Q range, Starfire Spellblade gives ranged waveclear, and Divine Judgment makes her invulnerable for the whole storm, so your 120-second ult lands for zero. Your squishy caster body can't duel a fed scaler — close on your 6/first-item spike, pivot to teamfights where your AoE peels and engages, and let your team handle her side lane. Do not 1v1 her after she scales."}
+  ],
+  "notes": "Packet defect 'never names any of Kayle's abilities' is now partly fixed: Starfire Spellblade and Celestial Blessing are named in the rewritten rows, Divine Judgment was already named throughout. Packet also reported zero sequencing cues — the 160s-vs-120s ult trade is now stated in three places. Level 6 is Skill, not Kennen, per the mirror: Kennen gets the AoE stun but Kayle gets an invulnerability with a longer cooldown, and the row must not contradict kayle__kennen. Ratings left alone (mirror did not report its rating row)."
+}

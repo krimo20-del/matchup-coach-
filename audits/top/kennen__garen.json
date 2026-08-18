@@ -1,0 +1,76 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "garen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Chart read Kennen/Kennen/Skill/Kennen/Kennen/Skill/Skill while the packet reads Kennen, Skill, Garen, Garen, Skill, Garen, Skill — and the prose already concedes 3, 4-5 and first item to Garen.",
+      "why": "Level 1-2 is Kennen's range advantage; Judgment at 3 plus the Decisive Strike silence flips the short trade; 4-5 is conceded outright with no R; level 6 is the coin-flip equalizer; first item (Stridebreaker / Sundered Sky) is his; late evens out as a teamfight question. The mirror already realigned Garen's side to the packet.",
+      "corrected": "Rows 1-6 flipped as matched full/content pairs to Skill, Garen, Garen, Skill, Garen, Skill. Level 1 stays Kennen.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirror audit garen__kennen", "existing whys[]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are Lvl 1 / Lvl 3 (Judgment) / Lvl 6 (Slicing Maelstrom, flat 120s) / 1st item, which matches both kits: Garen's R is 120/100/80 and executes, Kennen's is a flat 120s aura.",
+      "corrected": "No change; chart rows realigned to these spikes.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/garen.json", "champ-data/_kits/kennen.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.foe[0] said Garen's Q silence 'cancels your R channel mid-cast'. Slicing Maelstrom is not a channel — Riot's text is 'Kennen summons a storm that strikes at nearby enemy champions', and the kit file carries only a zone flag on it.",
+      "why": "A silence blocks casting; it does not remove an already-active storm. Written as a cancel, a player will hold R for a silence window that does not exist. Decisive Strike is a flat 8s auto-reset silence at 300 range — the real thing to respect is that it locks the cast out beforehand.",
+      "corrected": "wants.foe[0] now states the silence prevents casting Q, W, E and R rather than cancelling anything, and the cooldown block names Decisive Strike's 8s with the auto-reset wind-up as the tell.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/garen.json", "champ-data/_kits/kennen.json", "_missing/kennen.json rule autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The cooldown block named Courage with no number and called it the matchup-defining tool.",
+      "why": "Courage is 22/19.5/17/14.5/12s and is a shield plus brief tenacity, but the ability that decides trades is the 8s Decisive Strike silence.",
+      "corrected": "breakdown.cooldowns rebuilt around the 8s silence with Courage's 22s rank-1 number kept as secondary.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/garen.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[1].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[1]","before":"Kennen","after":"Skill"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Garen"},
+    {"layer":"content","path":"win[2]","before":"Skill","after":"Garen"},
+    {"layer":"full","path":"phases[3].side","before":"Kennen","after":"Garen"},
+    {"layer":"content","path":"win[3]","before":"Kennen","after":"Garen"},
+    {"layer":"full","path":"phases[4].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[4]","before":"Kennen","after":"Skill"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Garen"},
+    {"layer":"content","path":"win[5]","before":"Skill","after":"Garen"},
+    {
+      "layer":"content","path":"wants.foe[0]",
+      "before":"Walk you down with passive regen up, then Q-silence to cancel your R channel mid-cast and lock you out of the stun",
+      "after":"Walk you down with passive regen up, then land the Decisive Strike silence so you cannot cast Q, W, E or R at all"
+    },
+    {
+      "layer":"full","path":"breakdown.cooldowns",
+      "before":"- Garen Courage: matchup-defining — Damage reduction. Trade when down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after":"- Garen Decisive Strike: matchup-defining — a flat 8s silence on an auto reset that locks your whole kit out. Step back on the wind-up. - Courage (22s at rank 1): shield and tenacity. - Your R: flat 120s, kill windows only."
+    },
+    {
+      "layer":"full","path":"phases[2].why",
+      "before":"Full kit online — your core pattern starts now. Keep the wave near your side so Garen must walk into your range.",
+      "after":"Judgment lands at 3: his 8s Decisive Strike silence into the spin beats you, and silenced you never reach the third mark."
+    },
+    {
+      "layer":"full","path":"phases[3].why",
+      "before":"The lane-control window: trade around Courage's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after":"No R yet, so you concede his commit window: chip from 950 range and never stand inside the 325 spin radius while his Q is up."
+    }
+  ],
+  "notes": "Ratings left untouched — only sides moved, in matched pairs. The full layer's diff reads 'HARD' while tone is the green #3ddc97, diffRating is 4/10 and report[14] says 'Favoured matchup', so three fields disagree about who is favoured on a 49.04% win rate; see questionsForUser."
+}

@@ -1,0 +1,64 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Row 4 (Level 6) reads Locke in both layers, but whys[4] under it says 'At 6 the raw stats are even; the all-in tools tilt on execution, so skill decides the first real fight'. The chart and its own explanation disagreed.",
+      "why": "The packet levelChart is Skill, Skill, Skill, Skill, Skill, Locke, Skill on 342 games at 48.83% — Locke owns the first-item row only. Kennen also gets Slicing Maelstrom at 6, so the level itself is not a one-sided flip.",
+      "corrected": "Row 4 set to Skill in both layers; phases[4].why rewritten to keep the execute warning without claiming he owns the level.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/kennen.json", "champ-data/_kits/locke.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[] has three entries where the schema expects four — the late-game row was simply absent, so the page showed nothing after 'your two-plus items'.",
+      "why": "There is a real fourth spike to name: Purgatory drops from 120s at rank 1 to 80s at rank 3, which is when his pick threat stops being a once-a-fight event.",
+      "corrected": "spikes[3] created with before:null — the R cooldown ramp and what it means for grouping.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/locke.json (R cd 120/100/80)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Ashen Pursuit is described only as mobility. It is also an auto-attack reset, so his burst opens with an attack wind-up and not a visible cast, and its cooldown is a flat 10 seconds at every rank.",
+      "why": "Kit: E, cd '10' flat, range 425, flags dash + autoReset. That flat cooldown is what makes 'the post-E window is the lane' a countable thing rather than a feeling.",
+      "corrected": "The flat 10s, the 425 range and the reset tell written into breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/locke.json (E)"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t says 'Anti-heal is optional — his sustain is self-refund, not lifesteal.'",
+      "why": "Grievous Wounds reduces healing by source-agnostic percentage; W ends by healing him back a portion of the self-damage, and that heal is reduced like any other. Calling it optional because it is not lifesteal is a mechanical error.",
+      "corrected": "Restated: Grievous Wounds still cuts the W refund, so Oblivion Orb is worth it for extended trades. The Zhonya's-beats-the-execute point is kept — it is the better answer and it is correct.",
+      "confidence": "Medium",
+      "sources": ["champ-data/_kits/locke.json (W heal flag: 'heal back a portion of the damage he takes')"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The _missing feed proposes a 'Locke bypasses stacking resistances (Soul Ignition W)' line. I did not write it.",
+      "why": "The trueDamage flag sits on W, whose only damage in Riot's text is dealt TO HIMSELF ('dealing damage to himself'). Nothing in the description says he deals true damage to you, so the flag is a parsing misfire and the headline inverts what the ability does.",
+      "corrected": "No resistance-bypass claim written. Recorded here instead.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/locke.json (W text vs trueDamage flag)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[4].side","before":"Locke","after":"Skill"},
+    {"layer":"content","path":"win[4]","before":"Locke","after":"Skill"},
+
+    {"layer":"full","path":"phases[4].why","before":"Purgatory changes the rules: fights now end at HIS floor — disengage above ~15% or leave the totem zone entirely.","after":"You get Slicing Maelstrom at 6 as well — an even window, but end every fight above his execute floor or leave the zone."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Locke Ritual Nails (Marks): matchup-defining — The nail marks are his whole engine — without 2-3 stacks on you his blink-in barely dents; sidestep the recasts and punish the ten seconds of nothing. Track it before every step-up. - Locke E (Ashen Pursuit): his ONLY mobility, resets on takedowns — the post-E window is the lane. - Locke R (Purgatory): never fight at sliver HP inside the zone.","after":"- Locke Ritual Nails (Marks): matchup-defining — The nail marks are his whole engine — without 2-3 stacks on you his blink-in barely dents; sidestep the recasts and punish the ten seconds of nothing. Track it before every step-up. - Locke E (Ashen Pursuit): a flat 10s at 425 range and an auto-attack reset — the wind-up is the tell, not the cast. It is his only exit, so the post-E window is the lane. - Locke R (Purgatory): 120s at rank 1; never fight at sliver HP inside the zone."},
+    {"layer":"full","path":"report[8].t","before":"Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Anti-heal is optional — his sustain is self-refund, not lifesteal.","after":"Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory: untargetable at the floor means the execute is denied. Grievous Wounds still cuts his W refund — Oblivion Orb pays off in long trades."},
+
+    {"layer":"content","path":"spikes[3].text","before":null,"after":"Purgatory falls from 120 seconds at rank 1 to 80 at rank 3 — his pick is no longer a once-a-fight event, so stop walking side lanes alone and take fights grouped, where your R answers his."},
+    {"layer":"content","path":"spikes[3].when","before":null,"after":"R rank 3"}
+  ],
+  "notes": "TWO THINGS I DID NOT CHANGE, BOTH FLAGGED. (1) The Q is called 'Ritual Nails' in eleven places including focus.text and loading, but Riot's description for that slot says 'Locke readies a set of Soul Nails to throw'. The kit file for Locke carries no ability names at all, and the _missing feed names only P (Silver Stake), W (Soul Ignition) and E (Ashen Pursuit) — never Q or R. So I have a strong hint the name is wrong and no authority for the right one; renaming eleven fields on a guess is exactly the failure mode this run exists to fix. See questionsForUser. (2) 'a 125-range mana champ' appears in tldr, phases[0].why, breakdown.early and breakdown.wave. Nothing in the kit gives Locke's attack range, and his Q reaches 950 while his R reaches 1000, so 125 reads like template text carried over from a melee champion. Left alone, flagged as unverified. Locke's R grounds dashes — omitted deliberately under the relevance rule, since Kennen has no dash for it to shut off (Lightning Rush is a form change with Move Speed, not a dash)."
+}

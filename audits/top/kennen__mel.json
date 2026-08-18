@@ -1,0 +1,66 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "mel",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Skill, Kennen, Kennen, Skill, Skill, Kennen, Kennen. Levels 4-5 and 6 sat on Skill under whys saying 'You keep a poke edge' and 'your biggest spike', and 2+ items sat on Kennen under a why telling you to close before her range decides it.",
+      "why": "Packet levelChart is Skill, Kennen, Kennen, Kennen, Kennen, Kennen, Skill on 238 games at 55.46%, and the mirror (mel__kennen) rates the lane HARD from Mel's side — consistent with Kennen owning levels 2 through first item.",
+      "corrected": "Rows 3 and 4 to Kennen, row 6 to Skill, as matched pairs in both layers.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/kennen.json", "audits/top/mel__kennen.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Not one cooldown appeared, including on Rebuttal — which is the single most punishable ability in the matchup.",
+      "why": "Rebuttal is 38/35/33/29/26 seconds. At rank 1 that is nearly forty seconds of nothing after she spends it, far longer than any window either champion has. Solar Snare is 11s at 1000 range and Golden Eclipse 120s at rank 1, global.",
+      "corrected": "The 38s written into phases[3].why, breakdown.cooldowns, wants.foe[1] and wants.you[1]; Solar Snare's 11s/1000 into the cooldown block and dosFull[0].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/mel.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three errors, all repeated. (a) 'she has no hard CC' appears in early and whys[4] — Solar Snare is a root at 1000 range, which is precisely the hard CC that beats a 170-range E-in. (b) spikes[3], late and wants.foe[1] say Rebuttal reflects your Q AND your R. (c) Slicing Maelstrom is called a channel in five places.",
+      "why": "Riot: Solar Snare 'fires a radiant orb forward, rooting those at its center' with the hardCC flag. Rebuttal 'reflects enemy projectiles' — of Kennen's kit only Thundering Shuriken is a projectile; Lightning Rush is a morph and Electrical Surge is on-hit, and Slicing Maelstrom is an untargeted storm with no projectile and no channel flag. Telling a player Mel has no hard CC and can reflect his ult inverts both halves of the all-in decision.",
+      "corrected": "Solar Snare named as the root to bait; the reflect narrowed to Thundering Shuriken only, matching the mirror's finding; the channel language dropped.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/mel.json (E, W)", "champ-data/_kits/kennen.json (Q projectile; E, R neither projectile nor channel)", "audits/top/mel__kennen.json"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The _missing feed proposes 'Mel can cut your retreat with Rebuttal (W) — hold Flash for the wall'. I did not write it.",
+      "why": "The terrain flag on Rebuttal is a parsing misfire: Riot's text is 'a barrier around herself that reflects enemy projectiles... prevents her from taking damage, and grants her movement speed'. It is a self-barrier, not placed terrain, and it blocks nobody's path.",
+      "corrected": "Rebuttal written up as reflect plus damage immunity on a 38-second cooldown. No terrain claim.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/mel.json (W text vs terrain flag)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[3]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[6].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[6]","before":"Kennen","after":"Skill"},
+
+    {"layer":"full","path":"phases[3].why","before":"The lane-control window: trade around Solar Snare's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.","after":"Rebuttal is 38 seconds at rank 1, the longest cooldown in this lane — once she has spent it, your whole rotation lands."},
+    {"layer":"full","path":"phases[4].why","before":"Slicing Maelstrom + Zhonya wins any grouped fight top-side. Reassess every all-in at 6 — Mel's ultimate changes the math too.","after":"Slicing Maelstrom stun-locks her since she has no dash — but Solar Snare roots from 1000 range, so bait that first."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your pattern is at full power. Mel carry threat 8/10 — close before the map decides instead of you.","after":"Golden Eclipse executes Overwhelm stacks from anywhere on the map — stay above the threshold and end fights fast."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Mel Solar Snare: matchup-defining — Her root / slow zone — sets up her combo. Dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Mel Solar Snare: matchup-defining — an 11s root at 1000 range that starts her combo. - Rebuttal: 38s at rank 1; it reflects Thundering Shuriken, but not Lightning Rush or Electrical Surge. - Golden Eclipse: 120s, and global."},
+    {"layer":"full","path":"dosFull[0].d","before":"Her root / slow zone — sets up her combo. Dodge it. Only engage once it is down or baited.","after":"An 11s root at 1000 range that starts her combo — commit only once she has spent it."},
+
+    {"layer":"content","path":"whys[4]","before":"Slicing Maelstrom into E-in stun-locks her with no escape and no hard CC to break the channel — your biggest spike.","after":"Slicing Maelstrom plus E-in stun-locks a Mel with no dash — but Solar Snare roots from 1000 range, so bait it first."},
+    {"layer":"content","path":"spikes[1].text","before":"Slicing Maelstrom into E-in is your hardest all-in: stun-lock channel through her with no dash to escape and no hard CC to break R.","after":"Slicing Maelstrom plus E-in is your hardest all-in — she has no dash to leave with, and the storm is no projectile for Rebuttal to reflect."},
+    {"layer":"content","path":"spikes[3].text","before":"Her Rebuttal reflects your Q and R back at you — never throw a shuriken or channel maelstrom into the reflect; bait it first.","after":"Rebuttal reflects Thundering Shuriken straight back into your fragile body, but not Lightning Rush or Electrical Surge — bait it, then go."},
+    {"layer":"content","path":"wants.foe[1]","before":"Hold Rebuttal to reflect your Q-shuriken and Maelstrom channel back into you","after":"Hold Rebuttal's 38 seconds to reflect a Thundering Shuriken back at you"},
+    {"layer":"content","path":"wants.you[1]","before":"Bait out Mel's Rebuttal reflect, then E-in and channel Slicing Maelstrom for the stun-lock all-in","after":"Bait Rebuttal's 38-second cooldown, then E-in and drop Slicing Maelstrom for the stun-lock all-in"},
+    {"layer":"content","path":"early","before":"Two ranged AP mages, but you out-trade her up close — she has no escape and no hard CC, and your Mark of the Storm stun is the only lockdown in this lane. At level 1 just trade Q for Q and respect her range. From 2 onward, a second Q point plus Electrical Surge on-hit lets you stack three marks for a stun the moment she oversteps to poke; punish her immobile body before her W/E zoning is fully online. The one rule: do not throw Q into her Rebuttal — that reflect sends it back at your squishy frame.","after":"Two ranged AP mages, but you out-trade her up close — she has no dash, and once Solar Snare is spent nothing stops your walk-up. At level 1 trade Q for Q and respect her 950 range. From 2 onward, a second Q point plus Electrical Surge on-hit stacks three marks for a stun the moment she oversteps; punish her immobile body before her zoning is online. Two rules: never throw Q into Rebuttal, which reflects it back at your squishy frame, and never step in with her 11-second root up."},
+    {"layer":"content","path":"late","before":"You own the duel all game — she can never survive your stun-lock once you reach her — but she's a newer artillery mage who scales into hard execute zoning and reflect peel for her team. Win lane on your 6/first-item spike so her range never gets to matter, and in teamfights time your R channel and E-in around her Rebuttal so your burst isn't thrown back. Don't dive into the reflect when she's full HP.","after":"You own the duel all game — she cannot survive your stun-lock once you reach her — but she scales into execute zoning and reflect peel for her team. Win lane on your 6/first-item spike so her range never matters, and in fights hold Thundering Shuriken until Rebuttal's 38 seconds are spent; Lightning Rush and the storm pass through it untouched. Never let Overwhelm stacks sit on you at low HP."}
+  ],
+  "notes": "The mirror (mel__kennen) already established that Rebuttal reflects Thundering Shuriken only — Lightning Rush and Electrical Surge pass through — so this file states the same fact from Kennen's side and the two directions now agree. Two further claims corrected here that the mirror did not have to touch: 'she has no hard CC' (Solar Snare is a 1000-range root) and Slicing Maelstrom being called a channel. Carrying the mirror's packet warning forward: tools/audit-run/packets/mel.json reports games:null for kennen where champ-data/content/mel.js MC_REAL_GAMES.mel has 238. The kennen packet has the right number (238), so this matchup was not at risk, but the mel packet builder is still wrong."
+}

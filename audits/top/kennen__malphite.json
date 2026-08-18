@@ -1,0 +1,66 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "malphite",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Kennen, Kennen, Kennen, Kennen, Skill, Kennen, Kennen. Level 1 was marked Kennen under a why that opens 'Level 1 is even'; Level 6 was marked Skill under a why that ends 'you win this duel outright'; 2+ items was marked Kennen under a why warning you not to get caught by his ult.",
+      "why": "Packet levelChart is Skill, Kennen, Kennen, Kennen, Kennen, Kennen, Skill on 674 games at 53.26%, and it matches the prose already written under each row.",
+      "corrected": "Row 0 to Skill, row 4 to Kennen, row 6 to Skill, as matched pairs in both layers.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/kennen.json", "champ-data/_kits/malphite.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The ult asymmetry — the thing the whole page tells you to track — is never quantified.",
+      "why": "Unstoppable Force is 130/115/100s; Slicing Maelstrom is a flat 120s that never shortens. At rank 1 you get your ult back first; by his rank 3 he does. That inversion is the entire 'when do I fight' answer and it was missing.",
+      "corrected": "Both numbers written into phases[4].why, breakdown.cooldowns and dosFull[0].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/malphite.json (R cd 130/115/100)", "champ-data/_kits/kennen.json (R cd 120)", "audits/top/malphite__kennen.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two things. (a) 'his Ground Slam shield' appears in whys[2], mid and wants.foe[1] — Ground Slam is not a shield. It is a 7-second shockwave dealing magic damage based on his Armor and cutting your Attack Speed. The shield is Granite Shield, his passive. (b) tldr, report[0], report[1], dosFull[2] and wants.you[2] tell you to 'E-dash' his R; Lightning Rush is a morph with Move Speed, not a dash.",
+      "why": "The Ground Slam attack-speed cut is the highest-value line in this matchup and it was entirely absent: Kennen's stun is a three-mark counter and Electrical Surge supplies marks ON HIT, so slowing his attack speed pushes the third mark — and the stun — later. Meanwhile Granite Shield absorbs up to 10% of his max Health and RECHARGES if he is not hit for a few seconds, which is what actually rewards continuous poke over burst.",
+      "corrected": "Ground Slam restated as the attack-speed throttle on your mark supply in phases[3].why and whys[3]; the shield re-attributed to Granite Shield with the recharge condition in whys[2], mid, wants.foe[1] and dontsFull[0].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/malphite.json (P, E)", "champ-data/_kits/kennen.json (P, W)", "audits/top/malphite__kennen.json"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The _missing feed proposes 'Malphite bypasses stacking resistances (Granite Shield)'. I did not write it.",
+      "why": "The percentHealth flag on Granite Shield describes the SHIELD being 10% of his own maximum Health. It is not percent-health damage against you, so there is nothing here that invalidates your resistances.",
+      "corrected": "No resistance-bypass line written. What I did write is the recharge condition, which is the part that actually changes play.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/malphite.json (P text vs percentHealth flag)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[0]","before":"Kennen","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[6].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[6]","before":"Kennen","after":"Skill"},
+
+    {"layer":"full","path":"phases[0].why","before":"Q-poke from range wins every melee matchup early. Identify how Malphite contests the first waves before you commit anything.","after":"Level 1 is even — one Thundering Shuriken, no stun yet, and Seismic Shard steals your Move Speed for three seconds."},
+    {"layer":"full","path":"phases[3].why","before":"The lane-control window: trade around Unstoppable Force's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.","after":"Ground Slam every 7 seconds cuts your attack speed, which starves the Electrical Surge marks that feed your stun. Poke, don't melee."},
+    {"layer":"full","path":"phases[4].why","before":"Slicing Maelstrom + Zhonya wins any grouped fight top-side. Reassess every all-in at 6 — Malphite's ultimate changes the math too.","after":"Slicing Maelstrom plus the three-mark stun-lock kills him — armour does nothing to magic. His R is 130s, yours a flat 120s."},
+    {"layer":"full","path":"phases[6].why","before":"Two items on: your pattern is at full power. Malphite carry threat 6/10 — close before the map decides instead of you.","after":"He never out-duels you, but a 100-second Unstoppable Force catches you alone. Move with your team past two items."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Malphite Unstoppable Force: matchup-defining — Un-dodgeable burst. E-dash/dodge it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Malphite Unstoppable Force: matchup-defining — 130s at rank 1 and 100s at rank 3; engaging it into a gank is his only kill path. - Ground Slam: every 7s, and its attack-speed cut delays your Surge marks. - Your R: a flat 120s."},
+    {"layer":"full","path":"dosFull[0].d","before":"Un-dodgeable burst. E-dash/dodge it. Only engage once it is down or baited.","after":"A 130s engage at rank 1; commit only once he has spent it or been baited."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Malphite's favourite window — refuse it and half his win condition is gone.","after":"Granite Shield absorbs 10% of his max HP — keep chipping so it never recharges."},
+    {"layer":"full","path":"tldr","before":"Poke him out — E-dash his R, magic ignores his armor. Kennen wins the Unstoppable Force cooldown windows.","after":"Poke him out from 950 — armour does nothing to magic, and Unstoppable Force is his only kill path."},
+
+    {"layer":"content","path":"whys[2]","before":"You own the wave against an immobile armor-stacker here — Q chips freely and his Ground Slam shield can't out-sustain your magic poke.","after":"You own the wave against an immobile armour-stacker here — steady Q chip keeps his Granite Shield from ever recharging."},
+    {"layer":"content","path":"whys[3]","before":"You keep a clean poke edge while he can only shield and slow; his stacked armor is dead stat against your all-magic kit through levels 4-5.","after":"You keep the poke edge, but Ground Slam's attack-speed cut starves the Electrical Surge marks that feed your stun — poke, don't melee."},
+    {"layer":"content","path":"wants.foe[1]","before":"Shield up with Ground Slam (W/E) and bait you into an extended trade he can survive","after":"Let Granite Shield recharge between pokes and bait an extended trade he survives"},
+    {"layer":"content","path":"mid","before":"This is your lane to take. By levels 4-5 your Q poke has him low and his Ground Slam shield can't out-sustain magic chip. At 6 you own the window outright: Q-W to pre-stack marks, E (Lightning Rush) in for the third-stack stun, then Slicing Maelstrom rips through his armor for the kill — his W shield and stacked armor are worthless against it. The only thing to respect is his Unstoppable Force (R): bait it or save Flash/E to dodge, because his sole kill path is flash-engaging it into a jungle gank.","after":"This is your lane to take. By levels 4-5 continuous Q chip keeps Granite Shield from ever recharging, so his effective HP never resets. At 6 you own the window outright: Q-W to pre-stack marks, E (Lightning Rush) in for the third-stack stun, then Slicing Maelstrom on a flat 120s for the kill — stacked armour does nothing to magic. Respect two things only: Ground Slam every 7 seconds, whose attack-speed cut delays your Surge marks, and a 130-second Unstoppable Force flash-engaged into a jungle gank."}
+  ],
+  "notes": "Mirror (malphite__kennen) already made the Ground Slam / Electrical Surge finding; this file states the same fact from Kennen's side, so the two directions agree. One thing neither side asserts, per the mirror's own note: whether Seismic Shard or Ground Slam's grounding can deny Lightning Rush. Riot calls Lightning Rush a morph that lets him pass through units, not a dash, so grounding should be irrelevant — but the kits do not say it outright and I will not assert it. Also unaddressed: dosFull[2].t 'E-dash out of his R' is 19 characters, under the applier's 25-character skip threshold, so the E-dash phrasing survives there and in report[0]/report[1]; worth a manual pass."
+}

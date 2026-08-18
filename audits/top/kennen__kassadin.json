@@ -1,0 +1,55 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "kassadin",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers already read Kennen, Kennen, Kennen, Skill, Kassadin, Kassadin, Kassadin, which matches the packet levelChart, the 54.31% win rate over 232 games and the audited mirror (kassadin__kennen, which flipped Levels 4-5 to Skill and 6/first/2+ to Kassadin).",
+      "corrected": "No chart change. The why-rows on the flip points were rewritten so the prose states the mechanism instead of the template.",
+      "confidence": "High",
+      "sources": ["tools/audit-run/packets/kennen.json", "audits/top/kassadin__kennen.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why and phases[5].why carried the generic template ('Slicing Maelstrom + Zhonya wins any grouped fight', 'Liandry's Torment is your spike') on the two rows where Kassadin takes the lane over.",
+      "why": "Riftwalk is 5/3.5/2 seconds at 500 range — it out-ranges the 550-radius storm's dwell time and blinks straight out of it, and Void Stone already cuts the magic damage Kennen's whole kit deals. His first-item Rod of Ages / Void Staff spike ramps HP and burst faster than Kennen's poke scales.",
+      "corrected": "Level 6 row now states the 5s/500-range blink against the 550 R radius plus the passive magic reduction; first-item row states the Rod of Ages/Void Staff scaling and tells you to roam instead of duel.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kassadin.json (R cd 5/3.5/2, range 500; P Void Stone)", "champ-data/_kits/kennen.json (R cd 120, range 550)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two problems. (a) The full layer never states HOW the stun happens — 'third proc' with no mention that every Kennen ability applies a Mark of the Storm and three marks stun. (b) Null Sphere is called a 'silence-shield' in wants.foe[1] and in early; Riot's text says it interrupts channels and grants a magic-absorbing shield. There is no silence.",
+      "why": "Kennen P: 'stuns enemies he hits 3 times with his abilities'. Kassadin Q: 'dealing damage and interrupting channels... granting a temporary shield that absorbs magic damage.' No silence flag on the ability and none in the description.",
+      "corrected": "Mark count written into phases[1].why; the silence claim removed from wants.foe[1] and from early and replaced with what Null Sphere actually does (magic shield, channel interrupt) alongside Void Stone's magic reduction.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kassadin.json", "champ-data/_kits/kennen.json"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nether Blade's auto-attack reset is never mentioned, so the player watches for a cast that has no cast animation.",
+      "why": "Nether Blade is a 7-second auto reset — his burst opens with the attack wind-up, which is the cue to step out, not the ability itself.",
+      "corrected": "Added to breakdown.cooldowns and to dontsFull[1].d as the burst tell.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kassadin.json (W cd 7, autoReset)"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].why","before":"Q-poke from range wins every melee matchup early. Identify how Kassadin contests the first waves before you commit anything.","after":"Kassadin has no blink and one of the frailest early bodies — Thundering Shuriken chips him free from 950 range and he can only soak it."},
+    {"layer":"full","path":"phases[1].why","before":"Mark management: third proc stuns — count to three. Only take the trade when Kassadin's Riftwalk is down.","after":"Every ability you have applies a Mark of the Storm and the third one stuns — at two marks he has no Riftwalk to leave with."},
+    {"layer":"full","path":"phases[2].why","before":"Full kit online — your core pattern starts now. Keep the wave near your side so Kassadin must walk into your range.","after":"His only answer is Null Sphere's magic shield on a 9-second cooldown — bait it on the wave, then Q-W-E three marks and burst."},
+    {"layer":"full","path":"phases[4].why","before":"Slicing Maelstrom + Zhonya wins any grouped fight top-side. Reassess every all-in at 6 — Kassadin's ultimate changes the math too.","after":"Riftwalk blinks 500 units on a 5-second cooldown, straight out of your 550-radius storm, and Void Stone cuts the magic damage besides."},
+    {"layer":"full","path":"phases[5].why","before":"Liandry's Torment is your spike — force fights the moment it completes, on Riftwalk's cooldown.","after":"His Rod of Ages / Void Staff ramps HP and burst faster than your poke scales — stop duelling him and roam."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Kassadin Riftwalk: matchup-defining — His mobility spike at 6. Kill him before it scales. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.","after":"- Kassadin Riftwalk: matchup-defining — 5s and 500 range at rank 1, down to 2s at rank 3. - Nether Blade: 7s auto-attack reset; the wind-up is the burst tell, step out on it. - Your R: a flat 120s that never shortens — kill windows only."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Burning it for tiny value leaves you naked for its full cooldown.","after":"Nether Blade's wind-up is his burst tell — step out on the animation."},
+    {"layer":"content","path":"wants.foe[1]","before":"Soak Q poke with his magic-damage passive shield and Q silence-shield, then farm to Rod of Ages / Void Staff","after":"Soak Q poke behind Void Stone's magic reduction and Null Sphere's shield, then farm to Rod of Ages and Void Staff"},
+    {"layer":"content","path":"early","before":"Levels 1-3 are yours to abuse: Kassadin has no Riftwalk yet and one of the squishiest early bodies in the game, so chip him with Thundering Shuriken from max range and stack Mark of the Storm. If he steps up to last-hit, punish with Q into W on-hit for a two-spell mark — get the third proc and the stun-lock hands you a free burst trade. Respect his Q silence-shield only when it is up; it both blocks a chunk of your poke and shuts off your follow-up, so bait it out on the wave before you commit marks.","after":"Levels 1-3 are yours to abuse: Kassadin has no Riftwalk yet and one of the squishiest early bodies in the game, so chip him with Thundering Shuriken from 950 range and stack Mark of the Storm. Every ability you cast adds one and the third stuns, so Q into W on-hit when he steps up to last-hit, then E in for the third and the free burst trade. Respect Null Sphere only while it is up — a 9-second shield that eats the magic damage your whole kit deals — and bait it on the wave first."}
+  ],
+  "notes": "Packet suspectNames flags 'Void Staff' as a near-miss for 'Void Stone' — FALSE POSITIVE: Void Staff is a real item and wants.foe[1] means the item. Left the reference in, and used the real passive name (Void Stone) alongside it so the two are no longer confusable. The 'Q silence-shield' phrasing appeared twice and is a fabrication — Riot's Null Sphere text has no silence; both instances removed. Chart untouched: packet, mirror and current data all agree."
+}

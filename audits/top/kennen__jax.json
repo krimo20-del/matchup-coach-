@@ -1,0 +1,66 @@
+{
+  "ownerKey": "kennen",
+  "enemy": "jax",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 1 was given to Jax while whys[0] says he has no Counter Strike yet and you chip him free; Level 3 was given to Kennen while whys[2] says the window is his; 4-5 and first item were both marked Kennen against 'coinflip' and 'skill matchup' text.",
+      "why": "Packet reads Kennen, Skill, Jax, Skill, Jax, Skill, Kennen, and the mirror flipped exactly rows 0, 2, 3 and 5 on Jax's side.",
+      "corrected": "Rows 0, 2, 3 and 5 flipped as matched full/content pairs, with phases[0].rating raised from 3/10 to 7/10 to match.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirror audit jax__kennen", "existing whys[]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Jax's ultimate is called 'Grandmaster's Might' in three fields and is credited with a third-hit AoE stun.",
+      "why": "The ability is Grandmaster-at-Arms, and Riot's text is 'Every third consecutive attack deals additional Magic Damage. Additionally, Jax can activate this ability to deal damage around himself and strengthen his resolve, increasing his Armor and Magic Resist' — there is no stun anywhere in it, and the kit file carries no hardCC flag on R. Jax's only stun is Counter Strike. A player told to fear a second stun will misplay the whole level-6 fight.",
+      "corrected": "whys[4], spikes[2].text and mid now use the real name and state resists plus third-hit magic damage.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/jax.json", "packet enemyAbilities"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The cooldown block described Counter Strike as 'dodges autos + stuns' with no number and nothing on what it does not dodge.",
+      "why": "Counter Strike is 17/15/13/11/9s — a 17-second window at rank 1 — and Riot's text is 'dodge all incoming attacks', i.e. basic attacks. Thundering Shuriken is an ability and lands through it, which is exactly why the poke plan works. Leap Strike is 8/7.5/7/6.5/6s and Grandmaster-at-Arms 110/100/90s against your flat 120s R.",
+      "corrected": "breakdown.cooldowns rebuilt with the 17s E, the 8s leap and the note that Q still lands through the dodge.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/jax.json", "champ-data/_kits/kennen.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Jax","after":"Kennen"},
+    {"layer":"content","path":"win[0]","before":"Jax","after":"Kennen"},
+    {"layer":"full","path":"phases[0].rating","before":"3/10","after":"7/10"},
+    {"layer":"full","path":"phases[2].side","before":"Kennen","after":"Jax"},
+    {"layer":"content","path":"win[2]","before":"Kennen","after":"Jax"},
+    {"layer":"full","path":"phases[3].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[3]","before":"Kennen","after":"Skill"},
+    {"layer":"full","path":"phases[5].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[5]","before":"Kennen","after":"Skill"},
+    {
+      "layer":"content","path":"whys[4]",
+      "before":"Grandmaster's Might (R) gives huge resists plus a third-hit AoE stun, beating your pre-item all-in in straight melee — his window.",
+      "after":"Grandmaster-at-Arms (R) gives huge resists and third-hit magic damage, beating your pre-item all-in in straight melee — his window."
+    },
+    {
+      "layer":"content","path":"spikes[2].text",
+      "before":"Jax's R Grandmaster's Might gives huge resists and a third-hit AoE stun — his all-in window beats yours in raw melee if his E blocks your stun chain.",
+      "after":"Jax's R Grandmaster-at-Arms gives huge resists and third-hit magic damage — his all-in beats yours in raw melee if Counter Strike eats the autos you need."
+    },
+    {
+      "layer":"content","path":"mid",
+      "before":"This is the respect stretch — Jax's level-3 combo (Q-leap, E stun, W on-hit) out-trades your fragile body if he catches you, and at 6 his Grandmaster's Might (R) hands him resists plus a third-hit AoE stun that beats your all-in in straight melee. Don't try to win a toe-to-toe here. Keep chipping with Thundering Shuriken from range, hold your E Lightning Rush as an escape rather than an engage, and bait his Counter Strike before you ever throw the autos that build your stun.",
+      "after":"This is the respect stretch — Jax's level-3 combo (Q-leap, E stun, W on-hit) out-trades your fragile body if he catches you, and at 6 his Grandmaster-at-Arms (R) hands him resists and third-hit magic damage that beat your all-in in straight melee. Don't try to win a toe-to-toe here. Keep chipping with Thundering Shuriken from range — it lands through Counter Strike, which only dodges attacks — and hold Lightning Rush as an escape, not an engage."
+    },
+    {
+      "layer":"full","path":"breakdown.cooldowns",
+      "before":"- Jax Counter Strike: matchup-defining — Dodges autos + stuns. Bait it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after":"- Jax Counter Strike: matchup-defining — 17s at rank 1; it dodges attacks, not abilities, so Q still lands. - Leap Strike (8s): his gap-close onto your step-up. - Your R: flat 120s, kill windows only."
+    }
+  ],
+  "notes": "Jax's ultimate was named 'Grandmaster's Might' in three fields — the real name is Grandmaster-at-Arms — and was credited with a third-hit AoE stun that does not exist in Riot's text or the kit flags. Counter Strike is his only stun. Chart rows and the level-1 rating were proposed as one group."
+}

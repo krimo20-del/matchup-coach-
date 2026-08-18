@@ -1,0 +1,90 @@
+{
+  "ownerKey": "quinn",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "47.32% over 112 games with Quinn owning levels 1-3 and losing from Yi's first item onward is exactly what the content layer describes. There is no full-layer entry for this matchup, so diff / diffRating / carryRating do not exist to check.",
+      "corrected": "No ratings edits possible — currentText.full is null. Flagged in notes as a structural gap.",
+      "confidence": "High",
+      "sources": ["packet winRate/games", "brief currentText.full null"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "win[0..6] read Quinn, Quinn, Quinn, Skill, Skill, Master Yi, Master Yi — identical to the packet chart, and each why matches its side. There is no phases[] layer to pair with, so no matched-pair edits are needed or possible.",
+      "corrected": "No chart edits. Spikes are correctly pinned (level 1, level 3, Yi 6 + first item, Yi two items).",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Vault is credited with a knockback in three places ('the Vault knockback', 'Vault knocks him straight off you') — it does not displace him, it leaps Quinn away. And three decisive interactions are absent: Highlander makes Yi immune to slows so Vault's slow stops working, Meditate is a channel Vault's brief interrupt cancels outright, and Wuju Style is true damage.",
+      "why": "Riot's text: Vault 'leaps off the target… and lands near her maximum Attack Range away from the target', briefly interrupting it. Highlander 'making him immune to all slowing effects', 85s. Meditate flagged channel and heal, flat 10s. Wuju Style flagged trueDamage, 14s. Both anti-heal and resistances-invalidated are listed in missingInteractions.",
+      "corrected": "whys[0], whys[3], whys[5], spikes[0].text, early, late and wants.foe[1] rewritten to state what Vault actually does, the Meditate interrupt, the slow immunity, the true damage and the Grievous Wounds requirement.",
+      "confidence": "High",
+      "sources": ["ownerKit E text", "enemyKit W/E/R", "missingInteractions rules needs-antiheal, resistances-invalidated"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: no cooldown-sequencing advice, sequencingCues 0.",
+      "why": "Vault 12s at rank 1, Alpha Strike 20s at rank 1 (shortened by his autos), Meditate a flat 10s, Wuju Style a flat 14s, Highlander 85s.",
+      "corrected": "Vault's 12s and Highlander's 85s written into early and whys[5]; the rest could not be placed without exceeding the length band on the short content strings.",
+      "confidence": "High",
+      "sources": ["packet.defects", "enemyKit cooldowns", "ownerKit E"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flagged 'Your Blinding Assault' in whys[0] at distance 5 — this is a FALSE POSITIVE. Blinding Assault is the correct name for Quinn's Q; the flag is triggered by the leading possessive.",
+      "corrected": "No name change made on that basis. The genuine error in the same sentence was the Vault knockback, which is corrected.",
+      "confidence": "High",
+      "sources": ["packet.suspectNames", "ownerKit Q"]
+    }
+  ],
+  "edits": [
+    {
+      "layer":"content","path":"whys[0]",
+      "before":"Your Blinding Assault blind plus the Vault knockback dominate level 1 completely.",
+      "after":"Blinding Assault erases his autos and Vault leaps you clear — level 1 is yours."
+    },
+    {
+      "layer":"content","path":"whys[3]",
+      "before":"Levels 4-5 hinge on your Q blind and Vault timing — clean usage keeps it even, wasted cooldowns lose it.",
+      "after":"Wuju Style adds true damage, so armour will not save a fumbled Vault — clean cooldown usage is the stage."
+    },
+    {
+      "layer":"content","path":"whys[5]",
+      "before":"His first item plus Highlander lets him finally stick to you — the kill pressure is his now.",
+      "after":"Highlander on 85s makes him immune to slows, so your Vault slow no longer holds him off."
+    },
+    {
+      "layer":"content","path":"spikes[0].text",
+      "before":"Q blind plus the Vault knockback dominate the opening — he has no answer this early.",
+      "after":"Blinding Assault erases his autos and Vault leaps you to max range — he has no answer yet."
+    },
+    {
+      "layer":"content","path":"early",
+      "before":"You own the first three levels outright: Q blind erases his autos, Vault knocks him straight off you, and your poke controls every inch of spacing. Chunk him at each last hit and call jungle pressure — the lead you build in this window is the only currency that matters against a scaling Yi.",
+      "after":"You own the first three levels outright: Blinding Assault erases his autos, Vault leaps you clear on 12s, and Meditate is a channel your Vault interrupt cancels outright. Chunk him at each last hit and call jungle pressure — the lead you build here is the only currency that matters against a scaling Yi."
+    },
+    {
+      "layer":"content","path":"late",
+      "before":"From his first item onward, Highlander lets him stick to you and you are exactly the squishy target he hunts. Never sidelane alone, hold the blind for the moment he commits, and Vault away while your team peels — you win by making every fight team-sized instead of Yi-sized.",
+      "after":"From his first item onward, Highlander's slow immunity lets him stick to you and you are the squishy target he hunts. Never sidelane alone, hold the blind for his commit, and bring Grievous Wounds for Meditate — you win by making every fight team-sized instead of Yi-sized."
+    },
+    {
+      "layer":"content","path":"wants.foe[1]",
+      "before":"Highlander flanks you cannot kite",
+      "after":"Slow immunity you cannot kite"
+    }
+  ],
+  "notes": "STRUCTURAL GAP: quinn vs masteryi has NO full-layer entry at all — currentText.full is null, so tldr, winCon, diff, tone, diffRating, carryRating, the phases[] chart, breakdown.*, dosFull, dontsFull and the 15 report rows do not exist on disk. This is one of the 92 known missing full-layer matchups. I did not attempt to build the whole entry with before:null edits: creating ~50 fields from scratch is a generation job, not an audit correction, and a half-built full layer whose phases[] disagreed with the existing win[] is exactly the two-layer failure the run is guarding against. Flagging it for a dedicated generation pass. Also note Alpha Strike is untargetable for its duration and its 20s cooldown is shortened by his basic attacks, so it dodges timed burst — worth a line if the full layer is ever built."
+}

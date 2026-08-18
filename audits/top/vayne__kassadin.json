@@ -1,0 +1,62 @@
+{
+  "ownerKey": "vayne",
+  "enemy": "kassadin",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].side and win[4] both said 'Skill' at level 6, while whys[4] in the same file says 'Level 6 favours you' and the packet levelChart is Vayne on all seven rows.",
+      "why": "Riftwalk is 500 range on a 5/3.5/2s cooldown — mobility and a mana-hungry reset, not a burst combo. Vayne's own 6 (Final Hour, 100s at rank 1) is the stronger spike, and the mirror audit settled the chart as Vayne throughout.",
+      "corrected": "phases[4].side and win[4] set to Vayne as a matched pair; rating raised to 6/10 to match the neighbouring rows.",
+      "confidence": "High",
+      "sources": ["_kits/kassadin.json", "packet levelChart", "mirror audit kassadin__vayne"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 and pre-6 spike text described Riftwalk vaguely and never gave a number.",
+      "why": "Real cooldowns make the advice concrete: Riftwalk 5s at rank 1 falling to 2s at rank 3, Nether Blade a 7s auto reset, Condemn 20s at rank 1 to 12s at rank 5, Final Hour 100s at rank 1.",
+      "corrected": "spikes[0].text, spikes[1].text, phases[4].why and breakdown.cooldowns now carry the real numbers.",
+      "confidence": "High",
+      "sources": ["_kits/kassadin.json", "_kits/vayne.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "early said 'his only defense is the Q magic shield, so bait it before you commit' and wants.foe[1] said 'Use the Q shield to block your poke'. Null Sphere's shield absorbs MAGIC damage only.",
+      "why": "Vayne's autos are physical and Silver Bolts is true damage, so the Null Sphere shield blocks none of her damage — there is nothing to bait. Void Stone's magic reduction is equally irrelevant to her. The real unstated interaction is Nether Blade (W): an auto-attack reset on a flat 7s, so the wind-up is the step-back cue, not the cast.",
+      "corrected": "Rewrote early and spikes[0] around the magic-only shield and the Nether Blade reset tell; wants.foe[1] changed to the Riftwalk-into-Force-Pulse pattern he actually wants.",
+      "confidence": "High",
+      "sources": ["_kits/kassadin.json", "_missing/vayne.json"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Mirror finding reused: Silver Bolts stacks off abilities as well as autos, so Condemn counts toward the third hit — a wall-stun plus two autos is a full proc.",
+      "corrected": "Put it into wants.you[2], which previously only said to Condemn his Riftwalk.",
+      "confidence": "High",
+      "sources": ["_kits/vayne.json", "mirror audit kassadin__vayne"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Vayne" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Vayne" },
+    { "layer": "full", "path": "phases[4].rating", "before": "5/10", "after": "6/10" },
+
+    { "layer": "full", "path": "phases[4].why", "before": "Final Hour stealth-tumbles break every engage pattern onto you. Reassess every all-in at 6 — Kassadin's ultimate changes the math too.", "after": "Final Hour hides your Tumble and shortens it, while Riftwalk is 500 range of mobility with no burst attached. Your 6 is the bigger spike." },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Kassadin is helpless pre-6: his Q shield and Null Sphere poke are weak melee-range tools you kite for free with Condemn.", "after": "Kassadin is helpless pre-6: Null Sphere is 650 range and its shield absorbs magic only, so it blocks nothing you deal." },
+
+    { "layer": "content", "path": "spikes[1].text", "before": "Even with Riftwalk, top-lane Kassadin cannot burst you; you keep walking him down and stacking Silver Bolts each wave.", "after": "Riftwalk is 500 range on a 5s cooldown at rank 1 — mobility, not burst. Condemn him out of it and keep stacking bolts." },
+
+    { "layer": "content", "path": "early", "before": "Kassadin is one of the weakest early laners in the game and you punish him for free: his Null Sphere (Q) is short-ranged, his Nether Blade and E slow do not out-trade your DPS, and he has no way to stop you walking up. Stack Silver Bolts every time he steps to farm and zone him off the wave. His only defense is the Q magic shield, so bait it before you commit. Freeze low and deny CS relentlessly.", "after": "Kassadin is one of the weakest early laners in the game and you punish him for free: Null Sphere (Q) reaches only 650, and its shield absorbs magic damage — it stops nothing you deal, since your autos are physical and Silver Bolts is true. Watch Nether Blade (W) instead: a 7s auto-attack reset, so the wind-up is your cue to step back, not the cast. Freeze low and deny CS relentlessly." },
+
+    { "layer": "content", "path": "wants.you[2]", "before": "Condemn him when he Riftwalks in", "after": "Condemn stacks Silver Bolts too" },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Use the Q shield to block your poke", "after": "Riftwalk on top of you for Force Pulse" },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Kassadin Riftwalk: matchup-defining — His mobility spike at 6. Kill him before it scales. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.", "after": "- Kassadin Riftwalk: matchup-defining — 500 range, 5s at rank 1 falling to 2s at rank 3; mobility, not burst. - Nether Blade: 7s auto reset — the wind-up is the tell. - Condemn: 20s at rank 1, 12s at rank 5. - Final Hour: 100s." }
+  ],
+  "notes": "DATA DEFECT in _missing-interactions: the entry 'Kassadin's Null Sphere (Q) is a channel — your Condemn (E) cancels it outright' is wrong and I did not write it. Riot's text says Null Sphere INTERRUPTS channels; it is not itself a channel. The kit's 'channel' flag is a tooltip-parse misfire on the word 'channels' and should be cleared, or the channel-interruptible rule will keep emitting this for every Kassadin matchup across every owner. Also: the full layer's boilerplate calls Vayne 'he/him' (tldr, tradeGood, tradeBad, ahead, dontsFull, report[3]) — same champion-wide defect the mirror agent flagged. dontsFull[1].d and dontsFull[2].d are swapped relative to their titles here as well."
+}

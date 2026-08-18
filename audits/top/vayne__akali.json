@@ -1,0 +1,106 @@
+{
+  "ownerKey": "vayne",
+  "enemy": "akali",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Row 4 (Level 6) reads Vayne in both layers while whys[4] and spikes[1] both say Perfect Execution's two casts let Akali all-in you, and the packet chart reads Akali. Row 6 (2+ items) reads Akali in both layers while whys[6], late and spikes[3] all say Blade of the Ruined King plus Final Hour outscales her, and the packet chart reads Vayne.",
+      "why": "50.51% over 1776 games with a chart that should read Vayne / Skill / Akali / Akali / Akali / Akali / Vayne. Two rows contradicted their own prose.",
+      "corrected": "phases[4].side and win[4] = Akali at 4/10; phases[6].side and win[6] = Vayne at 7/10. Rows 0-3 and 5 already agree with the packet chart and are left alone.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "brief currentText content whys[4], whys[6], late"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1] labelled Shuriken Flip as \"R1\" and Perfect Execution as \"R2\". Shuriken Flip is Akali's E; Perfect Execution is the R with two casts. The level-6 spike text also never states that the R recast is an execute.",
+      "why": "Riot Data Dragon: E = Shuriken Flip (16/14.5/13/11.5/10s), R = Perfect Execution (120/90/60s), recast executes enemies struck. The slot mislabel makes the cooldown advice unusable.",
+      "corrected": "Shuriken Flip (E) plus Perfect Execution (R); R recast executes low targets, so track the HP number. Twilight Shroud is 20/19/18/17/16s.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akali.json via brief enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Four places state that Akali's Five Point Strike heals her (whys[1], spikes[0], mid, wants.foe[0]). Riot's description for Q is damage plus a slow — no healing component. Also missing: the execute threshold on Perfect Execution's recast, and the Assassin's Mark auto-reset being the wind-up tell for her burst.",
+      "why": "A phantom heal makes players avoid trades they actually win. Her limiter is energy (110/100/90/80/70 per Q), not lifesteal — after two Qs she is out and cannot follow up.",
+      "corrected": "Q slows and costs 110 energy at rank 1 with no heal; after two Qs she is dry. R recast executes — stay above the threshold. Step back on the Assassin's Mark wind-up, not the cast.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/akali.json via brief enemyKit", "brief missingInteractions"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet suspectNames flags wants.you[1] \"Bait Twilight Shroud\" — FALSE POSITIVE. Twilight Shroud is the correct Riot name for Akali's W; the matcher is scoring the leading verb. No edit made. The akali-side mirror's finding that Perfect Execution grants no untargetability is respected here — no text on this side claims it.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "mirrorFindings"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[4].side", "before": "Vayne", "after": "Akali" },
+    { "layer": "content", "path": "win[4]", "before": "Vayne", "after": "Akali" },
+    { "layer": "full", "path": "phases[6].side", "before": "Akali", "after": "Vayne" },
+    { "layer": "content", "path": "win[6]", "before": "Akali", "after": "Vayne" },
+    { "layer": "full", "path": "phases[4].rating", "before": "7/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "4/10", "after": "7/10" },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Final Hour stealth-tumbles break every engage pattern onto you. Reassess every all-in at 6 — Akali's ultimate changes the math too.",
+      "after": "Perfect Execution's two casts gap-close and then execute, so Final Hour's stealth-tumbles do not save you below the threshold at 6."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At 2 her Q slow-and-heal out-trades itemless Vayne.",
+      "after": "At 2 her Q slows and chunks itemless Vayne first."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Once Akali has Q (Five Point Strike) plus her passive she out-trades you: Q slows and heals her, and she can proc her ring twice to burst you before Silver Bolts even stacks. Respect her energy — after two Qs she's out and you can walk up.",
+      "after": "Once Akali has Q (Five Point Strike) plus her passive she out-trades you: Q slows and costs 110 energy at rank 1, and she can proc her ring twice to burst you before Silver Bolts even stacks. Respect her energy — after two Qs she's out and you can walk up."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Shuriken Flip (R1) plus Perfect Execution (R2) gives her two dashes to gap-close and reset; she can all-in you through Final Hour if you're low. Save Condemn (E) for her R2 recast to interrupt the second dash.",
+      "after": "Shuriken Flip (E) plus Perfect Execution (R) gives her two dashes to gap-close and reset; the R recast executes, so track the number, not the bar. Save Condemn (E) for that recast and knock her out of the kill."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "From 2 through her ult she takes over: Q slows and heals, her shroud drops your aggro and cancels Silver Bolts, and at 6 double R dashes let her all-in you. Farm at range and don't chase into smoke.",
+      "after": "From 2 through her ult she takes over: Q slows for 110 energy, her shroud drops your aggro and cancels Silver Bolts, and at 6 Perfect Execution's two casts all-in you. Farm at range, don't chase into smoke."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Q-poke and heal through the mid-game",
+      "after": "Q-poke you off the wave mid-game"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Akali wastes Twilight Shroud — commit the full pattern immediately.",
+      "after": "Merc's plus MR blunts her burst; Perfect Execution executes low."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Akali's favourite window — refuse it and half his win condition is gone.",
+      "after": "Her Assassin's Mark auto-reset is the tell — step back on the wind-up, not the cast."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Shroud is 20s at rank 1 — walk out and re-set, don't follow in."
+    }
+  ],
+  "notes": "Biggest fix here is the phantom heal on Five Point Strike, repeated in four fields — Riot's Q text is damage plus slow only, and her real limiter is energy. Also corrected spikes[1] calling Shuriken Flip 'R1'. Chart rows 4 and 6 flipped in matched full/content pairs to match the packet chart and the surrounding prose. Several full-layer strings on this matchup still refer to Akali as 'he' (tradeGood, tradeBad, dontsFull[2].d, breakdown.feeding) — left alone this pass because they are boilerplate shared across the champion's matchups; worth a champion-level sweep."
+}

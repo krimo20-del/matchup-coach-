@@ -1,0 +1,129 @@
+{
+  "ownerKey": "vayne",
+  "enemy": "fiora",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The already-audited Fiora side flipped rows 0-2 to Fiora and row 5 to Skill as one atomic group. This side still reads Skill / Vayne / Vayne for rows 0-2 and Vayne for row 5, so the two pages would answer 'who wins Level 1' differently. Row 6 also contradicts its own text: it reads Vayne while whys[6], spikes[3] and late all say a fed Fiora out-duels you.",
+      "why": "48.97% over 872 games is a slight Vayne loss, and the shape both sides now describe is Fiora early, even through the middle, Fiora late. Mirror-fix.js would overwrite any disagreement I left in rows 0-2 and 5 anyway.",
+      "corrected": "phases[0..2].side and win[0..2] = Fiora (4/10); phases[5].side and win[5] = Skill (5/10); phases[6].side and win[6] = Fiora (3/10). Rows 3 and 4 stay Skill at 6/10.",
+      "confidence": "High",
+      "sources": ["mirrorFindings point 3", "brief currentText content whys[6]", "packet.levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "packet defect: \"NO cooldown-sequencing advice anywhere\" — sequencingCues is 0. Eight fields tell you to track Lunge and none give a number, and the ability that actually gates your commit is Riposte, which is never timed either.",
+      "why": "Lunge is 13/11.25/9.5/7.75/6s — long at rank 1, short by rank 5, which is exactly why the lane drifts to her. Riposte is 24/22/20/18/16s and Grand Challenge 110/90/70s. Vayne's Condemn is 20s at rank 1 and Final Hour 100s.",
+      "corrected": "Lunge 13s at rank 1 stated in phases[2].why and spikes[0]; Riposte 24s at rank 1 stated in phases[5].why, early and dontsFull[1].d as the gate on committing.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits via brief ownerKit/enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two applicable interactions were absent. Lunge applies on-hit effects, so her damage scales with attack speed and item procs rather than raw AD — armour alone reads the trade wrong. Duelist's Dance vitals and Grand Challenge both heal her, and the page never times Grievous Wounds against them despite report[8] listing Executioner's. dosFull[2].d and dontsFull[1].d also carried text unrelated to their own titles.",
+      "why": "The healing is why she wins extended trades and the on-hit is why her early Lunge hurts more than its AD suggests. Riposte parrying Condemn into a stun is already stated correctly across three fields and the Fiora side verified it, so I left that wording alone and only added its cooldown.",
+      "corrected": "Lunge (Q) applies on-hit; Duelist's Dance and Grand Challenge heal her, so Executioner's Calling comes early; Riposte (W) parries Condemn and returns a stun on a 24s rank-1 cooldown.",
+      "confidence": "High",
+      "sources": ["brief missingInteractions", "champ-data/_kits/fiora.json via brief enemyKit", "mirrorFindings notes"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Fiora" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Fiora" },
+    { "layer": "full", "path": "phases[1].side", "before": "Vayne", "after": "Fiora" },
+    { "layer": "content", "path": "win[1]", "before": "Vayne", "after": "Fiora" },
+    { "layer": "full", "path": "phases[2].side", "before": "Vayne", "after": "Fiora" },
+    { "layer": "content", "path": "win[2]", "before": "Vayne", "after": "Fiora" },
+    { "layer": "full", "path": "phases[5].side", "before": "Vayne", "after": "Skill" },
+    { "layer": "content", "path": "win[5]", "before": "Vayne", "after": "Skill" },
+    { "layer": "full", "path": "phases[6].side", "before": "Vayne", "after": "Fiora" },
+    { "layer": "content", "path": "win[6]", "before": "Vayne", "after": "Fiora" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "3/10" },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Kite with autos and never let him touch you. Identify how Fiora contests the first waves before you commit anything.",
+      "after": "Her Lunge applies on-hit and vitals heal her off every trade — don't contest, last-hit and give the first waves."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Q tumble resets make your spacing untouchable. Only take the trade when Fiora's Lunge is down.",
+      "after": "At 2 her Q on-hit and vital healing win short trades — Tumble off the vital she is walking toward."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit online — your core pattern starts now. Keep the wave near your side so Fiora must walk into your engage range.",
+      "after": "Lunge is 13s at rank 1 but resets on vitals, so she sticks through Tumble. Never commit while Riposte is up."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Blade of the Ruined King is your spike — force fights the moment it completes, on Lunge's cooldown.",
+      "after": "Even here: your Bork duel against her reset-and-parry. Commit once Riposte's 24s is spent."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your side-lane pattern is at full power. Fiora carry threat 10/10 — close before the map decides instead of you.",
+      "after": "Two items on, her vital true damage and stick power beat a straight fight — play flanks and Condemn her onto walls."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "You out-space Fiora's short Lunge with Tumble at level 1.",
+      "after": "Fiora's on-hit Lunge and vital heals beat you at level 1."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At 2 your Silver Bolts chip her before she can safely commit.",
+      "after": "At 2 her Q on-hit plus vital heals win the short trades."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 you kite her Lunge and disengage her all-in.",
+      "after": "Level 3 her Lunge resets stick to you through Tumble."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "First item lets her Q-reset and parry to out-duel you.",
+      "after": "First item evens it: her reset duel against your Bork."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "You control the early game: Fiora's Q Lunge is short, and your Q Tumble plus Silver Bolts let you proc true damage and disengage before she can W parry your commit.",
+      "after": "Fiora controls this window: Lunge is 13s at rank 1 but applies on-hit, and her vitals heal her through your chip. Tumble off the vital she walks at, and never feed Riposte."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "You hold the early lane: Fiora's only engage is a short Q Lunge and her W Riposte is a hard cooldown, so you Tumble around her, chip with Silver Bolts, and never feed the parry.",
+      "after": "Fiora holds the early lane: Lunge applies on-hit and her vitals heal her off every trade, while Riposte parries Condemn into a stun. Space her and chip only once Riposte's 24s is spent."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Fiora wastes Lunge — commit the full pattern immediately.",
+      "after": "Vitals and Grand Challenge heal her — Executioner's early."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Riposte parries Condemn and returns a stun — 24s at rank 1."
+    }
+  ],
+  "notes": "Chart aligned to the already-audited Fiora side (rows 0-2 Fiora, row 5 Skill) plus row 6 to Fiora, which its own whys[6] and spikes[3] already described — all in matched full/content pairs. Note rows 0-2 DISAGREE with packet.levelChart, which reads Vayne there; I followed the mirror as instructed, and the on-hit Lunge plus vital healing supports it. Filled the packet's zero-sequencing hole with Lunge 13s and Riposte 24s at rank 1, and added the two missing interactions (on-hit scaling and the passive/ult healing). Left Riposte-parries-Condemn wording alone as the mirror verified it."
+}

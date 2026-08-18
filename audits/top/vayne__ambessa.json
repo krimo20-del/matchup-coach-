@@ -1,0 +1,151 @@
+{
+  "ownerKey": "vayne",
+  "enemy": "ambessa",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "packet defect: \"level chart contradicts data: Vayne wins 56.26% but the chart gives Ambessa 5/7 stages vs 1\". Four rows also contradict their own why-text: row 0 reads Ambessa while whys[0] says level 1 is even; row 3 reads Skill while whys[3] says her mobility zones you off CS; row 5 reads Skill while whys[5] says her first-item spike still out-trades you; row 6 reads Ambessa while whys[6], spikes[3] and late all say Vayne outscales with 2+ items.",
+      "why": "56.26% over 967 games is a Vayne-favoured matchup that is won late, not early. The packet chart — Skill / Ambessa x5 / Vayne — matches every line of prose on the page and gives Vayne the row her win rate comes from.",
+      "corrected": "phases[0].side and win[0] = Skill (5/10); phases[3].side and win[3] = Ambessa (3/10); phases[5].side and win[5] = Ambessa (3/10); phases[6].side and win[6] = Vayne (8/10). Rows 1, 2 and 4 already read Ambessa and are left alone.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.defects", "brief currentText content whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Every spike and cooldown line pointed at \"Repeating Dashes\", an ability that does not exist, and gave no numbers. sequencingCues was 1 for the whole matchup.",
+      "why": "The real timers are Public Execution 130/115/100s, Lacerate 13/12/11/10/9s, Cunning Sweep 14/13/12/11/10s and Repudiation 18/17/16/15/14s. Against a 130s ultimate the whole lane is 'is her R up', and that is the number the page never printed.",
+      "corrected": "Public Execution 130s at rank 1 named as the tracked cooldown in winCon, dosFull[0], breakdown.cooldowns and report[5]; Lacerate 13s at rank 1 used for the step-up window in phases[3], phases[5] and dontsFull[1].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ambessa.json via brief enemyKit", "mirrorFindings point 4"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "\"Repeating Dashes\" is a fabricated ability name repeated across roughly fifteen fields. spikes[0].text also mislabels the kit: it calls Sundering Slam the Q and Cunning Sweep the W. Cunning Sweep IS the Q, Sundering Slam is the transformed second cast of that same Q, and W is Repudiation. Three real interactions were absent: Repudiation shields her through your burst window, Drakehound's Step is an auto-reset that tells you the combo is starting, and Public Execution carries healing so Grievous Wounds timing matters.",
+      "why": "A player tracking a non-existent cooldown tracks nothing. Naming Repudiation matters because it is a braced shield that gets bigger if you hit it — dumping Silver Bolts into the brace is exactly the mistake.",
+      "corrected": "Cunning Sweep (Q) transforms into Sundering Slam; Repudiation (W) shields and punishes damage taken during the brace; Lacerate (E) is the slow-and-dash; Public Execution (R) is a 1250-range blink that suppresses, slams and stuns. Step back on the Drakehound's Step wind-up, not the cast.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ambessa.json via brief enemyKit", "brief missingInteractions"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Ambessa", "after": "Skill" },
+    { "layer": "content", "path": "win[0]", "before": "Ambessa", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Ambessa" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Ambessa" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ambessa" },
+    { "layer": "content", "path": "win[5]", "before": "Skill", "after": "Ambessa" },
+    { "layer": "full", "path": "phases[6].side", "before": "Ambessa", "after": "Vayne" },
+    { "layer": "content", "path": "win[6]", "before": "Ambessa", "after": "Vayne" },
+    { "layer": "full", "path": "phases[0].rating", "before": "2/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "5/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "2/10", "after": "8/10" },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Kite with autos and never let him touch you. Identify how Ambessa contests the first waves before you commit anything.",
+      "after": "Even before her combo exists — trade autos and stack Silver Bolts while she has one ability, then step back out."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Repeating Dashes's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Her mobility zones you off CS repeatedly: Lacerate is 13s at rank 1 and Cunning Sweep 14s. Give up caster minions rather than die."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Blade of the Ruined King is your spike — force fights the moment it completes, on Repeating Dashes's cooldown.",
+      "after": "Her first-item spike still out-trades an unfinished Bork — stack Silver Bolts only once Lacerate is spent."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your side-lane pattern is at full power. Ambessa carry threat 8.5/10 — close before the map decides instead of you.",
+      "after": "Two items on: %HP shred and true damage melt her, and Condemn plus spacing defang the multi-dash all-in. Close it out here."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "She dives with dashes — condemn her, play safe. Vayne wins by trading around Ambessa's Repeating Dashes and cashing the pattern: condemn her dive and scale safely.",
+      "after": "She dives with dashes — condemn her, play safe. Vayne wins by trading around Ambessa's Drakehound's Step engage and cashing the pattern: condemn her dive and scale safely."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Condemn her dive and scale safely. Track Repeating Dashes before every commit and keep the wave on your side.",
+      "after": "Condemn her dive and scale safely. Track Public Execution — 130s at rank 1 — and hold Condemn for that blink."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Ambessa wins by landing Repeating Dashes, denying your pattern, and out-trading your engage windows.",
+      "after": "Ambessa wins by landing Public Execution, denying your pattern, and out-trading your engage windows."
+    },
+    {
+      "layer": "full",
+      "path": "focus.text",
+      "before": "Ambessa Repeating Dashes",
+      "after": "Ambessa Public Execution"
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Vayne vs Ambessa - Track: Ambessa Repeating Dashes. - Keep the wave on your side. - Engage only on Repeating Dashes's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+      "after": "- Vayne vs Ambessa - Track: Ambessa Public Execution. - Keep the wave on your side. - Engage only once her Lacerate is spent. - Don't chase past the wave. - Ultimate = kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Track Ambessa's Repeating Dashes before you commit",
+      "after": "Track Ambessa's Public Execution before you commit"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Her mobility. Condemn the follow-up. Only engage once it is down or baited.",
+      "after": "Her lock-on all-in, 130s at rank 1. Only engage once it is down."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Ambessa wastes Repeating Dashes — commit the full pattern immediately.",
+      "after": "Repudiation shields her burst window — bait that W before you commit."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Ambessa's favourite window — refuse it and half his win condition is gone.",
+      "after": "Drakehound's Step resets her auto — step back on the wind-up, not the cast."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Lacerate is 13s at rank 1 — walk up only after she spends it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ambessa Repeating Dashes: matchup-defining — Her mobility. Condemn the follow-up. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Ambessa Public Execution: matchup-defining — a 130s lock-on suppress and stun. Track it before every engage. - Lacerate 13s: her step-up dash, walk up after it. - Your ultimate: the win condition — kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Ambessa's Repeating Dashes: Her mobility. Condemn the follow-up. When it is down — W-shred + kite her.",
+      "after": "Track Ambessa's Public Execution: a 130s lock-on suppress and stun. When it is down — W-shred + kite her."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Ambessa owns this window: her Sundering Slam (Q) and Cunning Sweep (W) chain into a dash-heavy combo that closes on you fast, and her passive gives repeated engage. Hold Condemn (E) for her dash, not for poke — if you burn it early she walks you down.",
+      "after": "Ambessa owns this window: Cunning Sweep (Q) transforms into Sundering Slam and Drakehound's Step chains it into you fast, with Lacerate (E) slowing on top. Hold Condemn (E) for her step-up, not for poke — burn it early and she walks you down."
+    }
+  ],
+  "notes": "\"Repeating Dashes\" is a fabricated ability name and it was the tracked cooldown in this entire entry — replaced with the real kit throughout the fields I could reach inside the length band. spikes[0] also had Cunning Sweep filed as the W; it is the Q's first cast. Chart rows 0, 3, 5 and 6 flipped in matched pairs to match the packet chart and the prose. NOT CHANGED, needs a decision: diff reads FAV while diffRating is 8.5/10, tone is the red #ff5d6c and report[14] says \"Hard matchup\" — at 56.26% for Vayne those four disagree with each other."
+}

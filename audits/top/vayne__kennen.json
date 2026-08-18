@@ -1,0 +1,57 @@
+{
+  "ownerKey": "vayne",
+  "enemy": "kennen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Four chart rows said 'Skill' while the whys[] text on the very same rows named a winner: whys[0], whys[3] and whys[4] all say 'favours Kennen', whys[6] says 'favour Vayne'.",
+      "why": "Packet levelChart is Kennen on rows 0-5 and Vayne on row 6, the prose already reads that way, and the mirror audit (kennen__vayne) settled rows 3, 4 and 6 the same direction. Kennen out-ranges Vayne at every early level (950 Q vs 550/600 auto range) and only loses the two-item row once her on-hit scaling passes his burst.",
+      "corrected": "phases[0].side and win[0], phases[3]/win[3], phases[4]/win[4] all set to Kennen; phases[6]/win[6] set to Vayne. Proposed as one atomic group of matched full/content pairs.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirror audit kennen__vayne", "_kits/kennen.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 spike and mid text described Slicing Maelstrom with no cooldown, so 'track his ult' had nothing concrete behind it.",
+      "why": "Slicing Maelstrom is a flat 120s at every rank with 550 range — it does not get shorter as he levels it, which is exactly why baiting it is a whole-wave decision rather than a per-trade one. Thundering Shuriken is 7s falling to 4s, Electrical Surge 13s falling to 6s, Lightning Rush 10s falling to 6s.",
+      "corrected": "Real numbers now in spikes[0], spikes[1], mid, early, breakdown.cooldowns and dosFull[0].d.",
+      "confidence": "High",
+      "sources": ["_kits/kennen.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "mid said 'the moment he dashes in with Lightning Rush', and dosFull[0].d called it 'his engage/escape'. Lightning Rush is not a dash.",
+      "why": "Riot's text: Kennen morphs into a lightning form that lets him pass through units, gaining move speed entering and attack speed leaving. The kit carries no dash flag. It matters because unit collision and minion-blocking do not stop him the way they stop a real dash, and the decisive mechanic is the passive instead: Mark of the Storm stuns on the third application, and Slicing Maelstrom re-applies Marks, which is how he stuns you a second time mid-ult.",
+      "corrected": "Rewrote mid and dosFull[0].d around the lightning form and Mark counting; spikes[1] now states the ult re-stuns through Mark of the Storm.",
+      "confidence": "High",
+      "sources": ["_kits/kennen.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Kennen" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Kennen" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Kennen" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Kennen" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Kennen" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Kennen" },
+    { "layer": "full", "path": "phases[6].side", "before": "Kennen", "after": "Vayne" },
+    { "layer": "content", "path": "win[6]", "before": "Kennen", "after": "Vayne" },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Kennen's ranged Q Thundering Shuriken and W energy poke out-range you, and stacking Mark of the Storm stuns lock you out of trades.", "after": "Thundering Shuriken reaches 950 on a 7s cooldown and Electrical Surge marks from 725 — three Marks of the Storm and you are stunned." },
+
+    { "layer": "content", "path": "spikes[1].text", "before": "Slicing Maelstrom lets Kennen all-in with a Lightning Rush stun chain; his ult combo can flat-out kill you.", "after": "Slicing Maelstrom is a flat 120s at every rank: it re-stuns through Mark of the Storm and can flat-out kill you." },
+
+    { "layer": "content", "path": "early", "before": "Kennen out-ranges and out-pokes you at every early level: Thundering Shuriken (Q) chunks your walk-ups and his W applies Mark of the Storm from afar. The real danger is the stun: three Marks means you are locked out of a trade, so never let him stack them freely. Play from max range, dodge his Q, and farm what you safely can. Do not contest melee-range on his terms.", "after": "Kennen out-ranges and out-pokes you at every early level: Thundering Shuriken (Q) reaches 950 on a 7s cooldown and Electrical Surge (W) marks you from 725. The real danger is the stun: three Marks of the Storm locks you out of a trade, so never let him stack them freely. Play from max range, dodge his Q, and farm what you safely can." },
+
+    { "layer": "content", "path": "mid", "before": "Level 6 is his kill window: Slicing Maelstrom plus Lightning Rush chains stuns and burst that can delete you outright, especially with jungle help. Track his ult and never fight when it is up without an escape. Save Condemn for the moment he dashes in with Lightning Rush and hold Tumble to break line of sight. Give ground rather than eat the full combo.", "after": "Level 6 is his kill window: Slicing Maelstrom is a flat 120s and re-applies Mark of the Storm, so it stuns you again mid-burst — with jungle help that is lethal. Never fight while it is up. Lightning Rush is a 10s lightning form, not a dash: he passes through minions with it, so Condemn him as he arrives. Give ground rather than eat the combo." },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Kennen Lightning Rush: matchup-defining — His engage/escape. Condemn the follow-up. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.", "after": "- Kennen Slicing Maelstrom: matchup-defining — a flat 120s at every rank, 550 range; do not fight while it is up. - Mark of the Storm: the third Mark stuns, so count them. - Lightning Rush: 10s at rank 1. - Condemn: 20s at rank 1." },
+
+    { "layer": "full", "path": "dosFull[0].d", "before": "His engage/escape. Condemn the follow-up. Only engage once it is down or baited.", "after": "A 10s lightning form, not a dash — count his Marks instead: the third one stuns." }
+  ],
+  "notes": "Packet suspectName 'Lightning Rushes' in wants.you[2] is a FALSE POSITIVE — Lightning Rush is Kennen's real E and the line is fine; left alone. Row 0 caveat: the mirror agent's summary lists only rows 3, 4 and 6 as flipped, so their row 0 may still read 'Skill'. I flipped mine to Kennen because the packet chart, whys[0] and Kennen's 950 vs 550 range all say Kennen — if mirror-fix.js reverts it, the fix belongs on the kennen side, not here. Full-layer boilerplate calls Vayne 'he/him' (tradeGood, tradeBad, ahead, dontsFull, report[3]); champion-wide defect. dontsFull[1].d and dontsFull[2].d are mismatched to their titles as on every other vayne matchup I have seen."
+}

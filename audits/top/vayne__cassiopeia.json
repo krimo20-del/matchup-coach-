@@ -1,0 +1,88 @@
+{
+  "ownerKey": "vayne",
+  "enemy": "cassiopeia",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers already read Cassiopeia / Skill / Vayne / Vayne / Cassiopeia / Vayne / Vayne, which matches the packet levelChart exactly and matches whys[0..6]. No side or rating changed. The mirror agent's note describes a conflict with the full-layer sides on their copy; on this side the two layers agree row for row, so nothing needed flipping.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "brief currentText full phases[].side and content win[]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Every phase why-text pointed at Miasma without giving its cooldown, and sequencingCues was 1 for the whole matchup.",
+      "why": "Miasma is 24/22/20/18/16s and it is the only thing in her kit that stops Vayne — it grounds, so Tumble is disabled inside it. The 24 seconds after she spends it is literally the whole all-in window, and the page never printed the number.",
+      "corrected": "Miasma 24s at rank 1 stated in phases[3].why, dontsFull[1].d and spikes[0]. Noxious Blast is 3.5s flat, Twin Fang 0.75s, Petrifying Gaze 120/100/80s. Vayne's spikes stay Tumble at 2-3, Bork first item, Final Hour and two items late.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/cassiopeia.json via brief enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[0] and mid both say to walk her down \"between Twin Fang (Q) casts\". Twin Fang is her E, not her Q, and at 0.75s it has no gap to walk between — the Q is Noxious Blast at 3.5s. The applicable anti-heal interaction was also absent: Twin Fang heals her for a percentage of damage dealt whenever she hits a poisoned target.",
+      "why": "This is the same class of error the run's calibration notes flag on Cassiopeia. Telling a player to time their walk-up against a 0.75s ability is advice they cannot act on, and it hides the real rhythm, which is her poison application. The healing is what makes her win extended exchanges and it decides when Executioner's Calling is bought.",
+      "corrected": "Walk her down between Noxious Blast (Q) casts; Twin Fang (E) is the 0.75s follow-up that only ramps on poisoned targets and heals her off it. Miasma (W) grounds — no Tumble inside it. Petrifying Gaze (R) stuns only enemies facing her; anyone with their back turned is slowed instead, so turn away on the cast.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/cassiopeia.json via brief enemyKit", "brief missingInteractions"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet suspectNames flags wants.foe[1] \"Land Petrifying Gaze\" — FALSE POSITIVE, the matcher is scoring the leading verb. Petrifying Gaze is the correct Riot name for her R. No edit made.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet.enemyAbilities"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "After a rough level 1, this window swings to you: Cassiopeia has no dash, so once you have Tumble (Q) and a bit of AS you can walk her down between Twin Fang (Q) casts. Sidestep her Miasma (W) puddle — if you eat the grounding you can't Tumble out and her poke chunks you.",
+      "after": "After a rough level 1, this window swings to you: Cassiopeia has no dash, so once you have Tumble (Q) and a bit of AS you can walk her down between Noxious Blast (Q) casts. Sidestep her Miasma (W), 24s at rank 1 — eat the grounding and you cannot Tumble out while Twin Fang chunks you."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-5 favour you — she has no dash, so once you have AS you walk her down between Twin Fang casts; just sidestep Miasma to keep your Tumble. At 6 her Petrifying Gaze stun is her big swing, so turn away the instant she ults.",
+      "after": "Levels 3-5 favour you — she has no dash, so once you have AS you walk her down between Noxious Blast casts; sidestep Miasma to keep your Tumble, and buy Executioner's because Twin Fang heals her off poison. At 6, turn away the instant she ults."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit online — your core pattern starts now. Keep the wave near your side so Cassiopeia must walk into your engage range.",
+      "after": "She has no dash — with Tumble up you walk her down between Noxious Blast casts, as long as you stay out of Miasma."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Miasma's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Your attack speed and Night Hunter speed keep you on top of her; her only answer is Miasma's grounding, 24s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Final Hour stealth-tumbles break every engage pattern onto you. Reassess every all-in at 6 — Cassiopeia's ultimate changes the math too.",
+      "after": "Petrifying Gaze stuns only enemies facing her — turn away the instant she ults and you take a slow instead of a full stun."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Cassiopeia wastes Miasma — commit the full pattern immediately.",
+      "after": "Twin Fang heals off her poison — Executioner's blunts it."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Miasma is 24s at rank 1 — walk up once that puddle is spent."
+    }
+  ],
+  "notes": "Same Cassiopeia slot error the run's calibration notes call out: the page told you to walk her down 'between Twin Fang (Q) casts'. Twin Fang is the E and it is 0.75s — there is no gap. The Q is Noxious Blast at 3.5s, and that is the rhythm to play against. Added the missing anti-heal (Twin Fang heals off poisoned targets) and the Miasma 24s number. Level chart on this side needed no change: both layers already match the packet chart. NOT WRITTEN, unverified: whether Petrifying Gaze's stun can be avoided by turning during the cast animation rather than before it — Riot's text gives the facing rule but not the timing, so the copy says 'the instant she ults' and no more."
+}

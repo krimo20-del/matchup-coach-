@@ -1,0 +1,116 @@
+{
+  "ownerKey": "vayne",
+  "enemy": "darius",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "packet defect: \"level chart contradicts data\". Six of seven rows read Skill or Vayne in both layers while every single why-text hands the stage to Darius: whys[0] Q heal and bleed, whys[1] W auto punishing walk-ups, whys[2] the Apprehend combo, whys[3] pinned under tower, whys[4] the Guillotine execute, whys[5] cannot facetank the pull chain. Only whys[6] gives Vayne the lane.",
+      "why": "The already-audited Darius side set the chart to Darius for Level 1 through First item and Vayne at Two+ items, and the packet chart says the same. Vayne's 55.5% over 2789 games comes entirely from the two-item window.",
+      "corrected": "phases[0..5].side and win[0..5] = Darius at 3/10; phases[6].side and win[6] = Vayne at 7/10.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.defects", "mirrorFindings point 2", "brief currentText content whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "packet defect: \"NO cooldown-sequencing advice anywhere\" — sequencingCues is 0. Ten fields say to track Apprehend and not one gives its cooldown.",
+      "why": "Apprehend is 26/23.5/21/18.5/16s. Twenty-six seconds at rank 1 is an enormous window and it is the entire reason Vayne can farm this lane at all; without the number the advice 'engage when it's down' is unusable. Decimate is 9s at rank 1, Crippling Strike 5s, Noxian Guillotine 120/100/80s.",
+      "corrected": "Apprehend 26s at rank 1 written into phases[2].why, phases[5].why and dosFull[0].d as the walk-up window; Vayne's spikes stay Bork first item and the two-item Final Hour window.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits via brief ownerKit/enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three applicable interactions were absent and one piece of advice actively works against them. Condemn displaces Darius out of the Noxian Guillotine leap — the page never says so, and dosFull[2].d instead carried unrelated text. Decimate's blade heals him, so Grievous Wounds timing decides every extended trade. And report[8] recommends Plated Steelcaps as the boot, while Guillotine is true damage that scales with Hemorrhage stacks and ignores it entirely.",
+      "why": "Against a champion whose kill pattern is pull into stacked execute, the two things that matter are denying the leap and denying the heal. Both were missing while the page spent ten fields repeating 'track Apprehend'.",
+      "corrected": "Condemn (E, 550 range) knocks him out of the Guillotine leap — hold it for the engage, not the poke. Decimate heals off the blade portion, so Executioner's Calling comes early. Noxian Guillotine is true damage grown by each Hemorrhage stack: armour does not answer it, staying unstacked does.",
+      "confidence": "High",
+      "sources": ["brief missingInteractions", "champ-data/_kits/darius.json via brief enemyKit"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Darius" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Darius" },
+    { "layer": "full", "path": "phases[1].side", "before": "Vayne", "after": "Darius" },
+    { "layer": "content", "path": "win[1]", "before": "Vayne", "after": "Darius" },
+    { "layer": "full", "path": "phases[2].side", "before": "Vayne", "after": "Darius" },
+    { "layer": "content", "path": "win[2]", "before": "Vayne", "after": "Darius" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Darius" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Darius" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Darius" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Darius" },
+    { "layer": "full", "path": "phases[5].side", "before": "Vayne", "after": "Darius" },
+    { "layer": "content", "path": "win[5]", "before": "Vayne", "after": "Darius" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "6/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "5/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "7/10" },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Kite with autos and never let him touch you. Identify how Darius contests the first waves before you commit anything.",
+      "after": "He out-trades you at 1: the blade of Decimate heals him and every auto adds a Hemorrhage stack. Last-hit at range."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Q tumble resets make your spacing untouchable. Only take the trade when Darius's Apprehend is down.",
+      "after": "At 2 his W-empowered auto and bleed stacks punish any walk-up — take the CS you can reach and nothing more."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit online — your core pattern starts now. Keep the wave near your side so Darius must walk into your engage range.",
+      "after": "Apprehend at 3 chains into the full combo, but it is 26s at rank 1 — that gap is your window to walk up and trade."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Apprehend's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "His bleed and Decimate healing pin you under tower through 4-5. Buy Executioner's early or his Q undoes every trade."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Final Hour stealth-tumbles break every engage pattern onto you. Reassess every all-in at 6 — Darius's ultimate changes the math too.",
+      "after": "Noxian Guillotine is true damage grown by each Hemorrhage stack — Steelcaps do not stop it, only staying unstacked does."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Blade of the Ruined King is your spike — force fights the moment it completes, on Apprehend's cooldown.",
+      "after": "Bork alone cannot facetank the pull chain — Tumble and Condemn to hold his 26s Apprehend at range."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your side-lane pattern is at full power. Darius carry threat 9/10 — close before the map decides instead of you.",
+      "after": "Two items on: kite behind minions, Condemn his Guillotine leap out of range, and shred him before the reset lands."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His all-in starts on the pull. Condemn after it. Only engage once it is down or baited.",
+      "after": "His all-in starts on the pull — 26s at rank 1. Only engage once he has spent it."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Darius wastes Apprehend (Pull) — commit the full pattern immediately.",
+      "after": "Condemn knocks him out of the Guillotine leap — save it for that."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Decimate's blade heals him — Executioner's early or you lose it."
+    }
+  ],
+  "notes": "Chart rebuilt in matched full/content pairs to Darius for rows 0-5 and Vayne at two items, matching both the packet chart and the already-audited Darius side. Filled the sequencing hole the packet flagged by writing Apprehend's 26s rank-1 cooldown into three fields. Added the three missing interactions: Condemn denies the Guillotine leap, Decimate heals off the blade, and Guillotine's true damage makes Plated Steelcaps the wrong boot to lean on. NOT FIXED, flagged by the mirror too: report[8].t still recommends Plated Steelcaps as the boot on a page whose kill threat is true damage — that is a build call, not a fact correction, so it needs the user's decision."
+}

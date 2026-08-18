@@ -1,0 +1,97 @@
+{
+  "ownerKey": "vayne",
+  "enemy": "vladimir",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 3 and 5 read 'Skill' and row 6 reads 'Vladimir', while the packet chart is Vladimir on rows 0-5 and Vayne on row 6 — and the prose (whys[6], spikes[3].text, late) already says two items is Vayne's window.",
+      "why": "45.62% over 1234 games is a losing lane that only flips at full items; the chart contradicted its own explanations.",
+      "corrected": "phases[3]/win[3] and phases[5]/win[5] set to Vladimir, phases[6]/win[6] to Vayne, ratings moved with them.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText whys[6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[5].why called Blade of the Ruined King 'your spike — force fights', on a stage that is Vladimir's, and phases[6].why gave a generic side-lane line instead of the actual two-item flip.",
+      "why": "Crimson Pact turns his AP into health, so a raw-damage item does not out-race Transfusion; percent-max-health true damage plus Grievous Wounds is what does.",
+      "corrected": "Both stage explanations rewritten around the health-stacking and the Silver Bolts flip.",
+      "confidence": "High",
+      "sources": ["enemyKit P", "ownerKit W trueDamage flag"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[0].d, dosFull[2].d, dontsFull[0].d and dontsFull[1].d carried no cooldowns and never stated the two interactions that decide the lane: Sanguine Pool's untargetability voiding the third Silver Bolt, and Tides of Blood being blocked by units.",
+      "why": "Sanguine Pool is 2s untargetable on 28/25/22/19/16s; Riot's own text for Tides of Blood says it 'can be blocked by enemy units'; Transfusion heals on 9s down to 4.6s.",
+      "corrected": "All four rewritten with the cooldowns, the minion-block on E, and the hold-the-proc rule.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E text and cooldowns", "missingInteractions: untargetable-dodges-burst, needs-antiheal"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Executioner's Calling early and Mercury's Treads are already in report[8].t, matching the needs-antiheal finding.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["currentText.full report[8].t"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Vladimir" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Vladimir" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "2/10" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Vladimir" },
+    { "layer": "content", "path": "win[5]", "before": "Skill", "after": "Vladimir" },
+    { "layer": "full", "path": "phases[5].rating", "before": "5/10", "after": "2/10" },
+    { "layer": "full", "path": "phases[6].side", "before": "Vladimir", "after": "Vayne" },
+    { "layer": "content", "path": "win[6]", "before": "Vladimir", "after": "Vayne" },
+    { "layer": "full", "path": "phases[6].rating", "before": "2/10", "after": "7/10" },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Sanguine Pool's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Still his: Transfusion heals every 5.7s at rank 4 and Sanguine Pool eats any commit. Farm at range and buy Executioner's Calling early."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Blade of the Ruined King is your spike — force fights the moment it completes, on Sanguine Pool's cooldown.",
+      "after": "Blade of the Ruined King is not enough yet — the health Crimson Pact stacks out-heals it until Grievous Wounds lands."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your side-lane pattern is at full power. Vladimir carry threat 8.5/10 — close before the map decides instead of you.",
+      "after": "Two items on and Silver Bolts' true damage finally beats the health he stacked — fight him only while Sanguine Pool sits on its 16s."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Dodges your burst. Bait it. Only engage once it is down or baited.",
+      "after": "Sanguine Pool (W) is 2s untargetable on 28s at rank 1 — commit after it."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Vladimir wastes Sanguine Pool — commit the full pattern immediately.",
+      "after": "Tides of Blood (E) is 600 range and blocked by units — keep minions between you."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Vladimir's favourite window — refuse it and half his win condition is gone.",
+      "after": "He pools mid-combo to void your third Silver Bolt — hold the proc until W is spent."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Without Executioner's Calling, Transfusion refunds every trade you win."
+    }
+  ],
+  "notes": "Riot's text explicitly states Tides of Blood 'can be blocked by enemy units', so the minion-block line is from the kit rather than inferred. Sanguine Pool's untargetability during Condemn's travel (whether an in-flight bolt still lands) is not answerable from the kits — left unstated."
+}

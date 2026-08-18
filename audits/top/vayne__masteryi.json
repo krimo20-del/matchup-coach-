@@ -1,0 +1,51 @@
+{
+  "ownerKey": "vayne",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "win[0..6] reads Vayne, Vayne, Vayne, Vayne, Master Yi, Master Yi, Vayne, which matches the packet levelChart exactly (480 games, 48.75%) and matches every whys[] string on the page. No cross-layer disagreement is possible here because there is no full-layer entry for this matchup at all — see notes.",
+      "corrected": "No chart edit needed.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText.content"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 and first-item spikes described Highlander only as letting him 'stick through Tumble', with no cooldown, and Wuju Style was never mentioned at all.",
+      "why": "Highlander is a flat 85s at every rank, makes him immune to slowing effects, is extended by champion kills and assists, and passively cuts the cooldowns of his other abilities on a kill or assist — so a single kill compounds. Wuju Style is 14s and adds true damage to his basic attacks, which is why armour alone misreads the trade. Alpha Strike is 20s at rank 1 and shortened by his basic attacks.",
+      "corrected": "Numbers and the kill-extension mechanic written into spikes[1], spikes[2], mid and early.",
+      "confidence": "High",
+      "sources": ["_kits/masteryi.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three strings say Condemn 'hard-cancels' or 'flatly denies' the Alpha Strike engage — spikes[0].text, early, and whys[1] by implication. Nothing on the page mentions Meditate.",
+      "why": "Riot's text says Master Yi becomes untargetable while Alpha Strike is travelling. Condemn is a targeted ability; it cannot be spent into an untargetable champion, so telling the player it denies the engage sends them to press E into nothing and then be caught with a 20s cooldown down. The correct instruction is the opposite: wait it out and Condemn the landing. Meanwhile the interaction that genuinely is decisive is missing entirely — Meditate is a 10s heal channel and Riot's text marks it interruptible, so Condemn's knockback cancels it outright and its healing is also the reason Grievous Wounds matters here.",
+      "corrected": "spikes[0], early, whys[1], mid, wants.you[0] and wants.foe[2] rewritten around the untargetable window and the Meditate cancel.",
+      "confidence": "High",
+      "sources": ["_kits/masteryi.json", "_missing/vayne.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "content", "path": "whys[1]", "before": "At 2 Condemn's knockback denies any Alpha Strike engage.", "after": "At 2 Condemn cancels Meditate — a 10s heal channel." },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Tumble kiting and true-damage bolts beat his itemless melee kit, and Condemn hard-cancels any Alpha Strike engage - bully him off every wave.", "after": "Tumble kiting beats his itemless melee kit. He is untargetable during Alpha Strike, so hold Condemn for the landing — or for Meditate." },
+
+    { "layer": "content", "path": "spikes[1].text", "before": "Danger flips on: Highlander lets him stick through Tumble, so stop free-trading, hug walls for Condemn stuns, and track his jungler before stepping up.", "after": "Danger flips on: Highlander is 85s, immune to slows, and kills extend it while cutting his other cooldowns. Hug walls and hold Condemn for his landing." },
+
+    { "layer": "content", "path": "spikes[2].text", "before": "His item-plus-R burst can delete you before your third bolt lands - play behind the wave, Condemn on cooldown means death, so hold it for his dive.", "after": "His item-plus-R burst can delete you before the third bolt lands. Wuju Style adds true damage on a 14s, so armour alone does not read the trade right." },
+
+    { "layer": "content", "path": "early", "before": "Levels 1-4 you own him: Tumble keeps you outside his melee reach, Silver Bolts' true damage ignores whatever he builds, and Condemn's knockback flatly denies the Alpha Strike engage that is his only trade pattern - kite him off the wave and make his pre-item levels miserable.", "after": "Levels 1-4 you own him: Tumble keeps you outside his melee reach and Silver Bolts' true damage ignores whatever he builds. Alpha Strike is 20s at rank 1 and he is untargetable during it, so do not spend Condemn into the dash — spend it on the landing, or to cancel Meditate's 10s heal channel." },
+
+    { "layer": "content", "path": "mid", "before": "At 6 the lane inverts hard: Highlander's speed lets him stick to you through Tumble, and once his first item lands his R-fueled burst can kill you before three bolts stack - this is his golden stretch, so give up CS, hold Condemn exclusively for his commit, and buy time for your own spikes.", "after": "At 6 the lane inverts hard: Highlander is a flat 85s that makes him immune to slows and is extended by every kill, and once his first item lands his burst can kill you before three bolts stack. Give up CS, hold Condemn exclusively for his commit or for Meditate, and buy time for your own spikes." },
+
+    { "layer": "content", "path": "wants.you[0]", "before": "Wall pins with Condemn on his every engage", "after": "Condemn used to cancel his Meditate channel" },
+    { "layer": "content", "path": "wants.foe[2]", "before": "Alpha Strike resets that dodge your third bolt", "after": "Alpha Strike's untargetable window to dodge burst" }
+  ],
+  "notes": "STRUCTURAL GAP: currentText.full is null for this matchup — vayne vs masteryi has no CHAMP_FULL entry at all, so tldr, winCon, the phases[] chart, breakdown.* and the whole report[] array are absent and the page renders content-layer only. I did not fabricate one: creating 40-plus fields from scratch would mean inventing rune pages, item orders and summoner spells that no source in the brief supports, and a wrong full entry is worse than a visible gap. This is one of the 92 known missing full entries and needs a generation pass, not a per-matchup patch. Packet suspectName 'Final Hour's' in late is a FALSE POSITIVE — Final Hour is Vayne's real R and the invisibility claim is directly supported by Riot's text ('Invisibility during Tumble'). No mirror existed (mirrorAlreadyAudited false), so nothing was reused."
+}

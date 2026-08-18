@@ -1,0 +1,68 @@
+{
+  "ownerKey": "vayne",
+  "enemy": "ksante",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[0]/win[0], phases[3]/win[3] and phases[4]/win[4] all say 'Skill', while every whys[] string on this page argues Vayne wins that row and the packet levelChart is Vayne on all seven.",
+      "why": "This packet reports 57.67% over 2502 games with an all-Vayne chart, and the mechanism holds up: Silver Bolts' percent-max-HP true damage ignores exactly the resistances K'Sante stacks. The mirror audit (ksante__vayne) set a conflicting chart (Skill / K'Sante x4 / Skill / Vayne) on the basis of a 49.95% figure over 935 games — a different sample from a different page. I went with this packet plus the page's own prose; the conflict is escalated in questionsForUser.",
+      "corrected": "phases[0].side/win[0], phases[3].side/win[3] and phases[4].side/win[4] set to Vayne as matched pairs, proposed as one atomic group.",
+      "confidence": "Medium",
+      "sources": ["packet levelChart (2502 games, 57.67%)", "mirror audit ksante__vayne", "_kits/ksante.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flagged zero cooldown-sequencing advice: nothing on the page carried a single number.",
+      "why": "Ntofo Strikes is a flat 3.5s at 450 range — it is not 'slow' or a rare window, so telling the player to kite 'his slow Q cooldown' misleads. The real windows are Path Maker at 14s falling to 10s, Footwork at 10s falling to 8s, and All Out at 120s falling to 80s.",
+      "corrected": "Numbers added to early, spikes[0], mid, whys[3] and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["_kits/ksante.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page attributes the knock-up/wall effect to Ntofo Strikes ('Dodge his Q wall-knockups', 'Get walled by his Q'), says he has 'no gap-closer', and claims his base form 'has no tenacity to escape your Condemn'.",
+      "why": "Three separate errors. (1) Q's second stack fires a shockwave that PULLS enemies in; the knock-back and stun are Path Maker (W). (2) He has two dashes — Path Maker at 600 and Footwork at 525 — so 'no gap-closer' is plainly false. (3) Tenacity is not in Riot's text for either champion and must not be asserted. The genuinely decisive and unstated interaction: while All Out, Path Maker no longer knocks back or stuns, so his ult form trades away his only hard CC on you — that is why baiting All Out is right.",
+      "corrected": "spikes[0], spikes[3], mid, whys[3], early, wants.foe[0], dosFull[2].t and breakdown.cooldowns rewritten around Path Maker as the stun, the Q pull, both dashes, and the All Out CC loss. The tenacity claim is removed rather than reversed.",
+      "confidence": "High",
+      "sources": ["_kits/ksante.json", "mirror audit ksante__vayne", "_missing/vayne.json"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "All Out grants healing, so Grievous Wounds timing decides the extended trade. report[8].t already prescribes Executioner's Calling early; breakdown.cooldowns now says why.",
+      "corrected": "Anti-heal reason stated alongside All Out's 120s cooldown.",
+      "confidence": "High",
+      "sources": ["_kits/ksante.json", "_missing/vayne.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Vayne" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Vayne" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Vayne" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Vayne" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Vayne" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Vayne" },
+
+    { "layer": "content", "path": "whys[3]", "before": "No gap-closer lets him punish your Tumble kiting through this window.", "after": "Both his dashes are short: Footwork's 525 cannot catch your Tumble here." },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Once Silver Bolts is online you shred K'Sante's early HP bricks in three procs, and his base form has no tenacity to escape your Condemn against the wall. Tumble the extra auto-reset windows to keep bolts stacking while you kite his slow Ntofo Strikes (Q) cooldown.", "after": "Once Silver Bolts is online you shred K'Sante's HP bricks in three procs. His stun is Path Maker (W) on 14s, not his Q — the Q's second stack pulls you in instead. Dodge the W charge-up and keep tumbling for auto resets while his 3.5s Ntofo Strikes chips." },
+
+    { "layer": "content", "path": "spikes[3].text", "before": "Every K'Sante All Out is a coin flip he loses: kite the initial dash with Q, Condemn him mid-animation, and your %HP true damage outraces his heal. Buy QSS if he pairs with hard CC.", "after": "Every All Out is a coin flip he loses: while All Out, Path Maker no longer knocks back or stuns, so his charge is just damage — kite it, Condemn him, and %HP true damage outraces his heal." },
+
+    { "layer": "content", "path": "early", "before": "You out-trade K'Sante at every point of the game. His base-form abilities have no true-damage answer to Silver Bolts, and his early Ntofo Strikes (Q) is a slow, telegraphed poke you sidestep with Tumble while stacking bolts.", "after": "You out-trade K'Sante at every point of the game. Ntofo Strikes (Q) is a 3.5s poke at only 450 range: the danger is its second stack, which fires a shockwave that pulls you in, so step out and break the stack timer." },
+
+    { "layer": "content", "path": "mid", "before": "Silver Bolts' third-hit true damage cuts straight through the resistances K'Sante stacks, so his tankiness works against him. Save Condemn for his All Out (R) dash and he has no gap-closer to punish your kiting.", "after": "Silver Bolts' third-hit true damage cuts through the resistances K'Sante stacks, so his tankiness works against him. He has two dashes though — Path Maker at 600 and Footwork at 525 — so keep Condemn for whichever one arrives." },
+
+    { "layer": "content", "path": "wants.foe[0]", "before": "Landing All Out (R) knockback into a wall", "after": "Landing Path Maker's stun before you kite" },
+
+    { "layer": "full", "path": "dosFull[2].t", "before": "Dodge his Q wall-knockups", "after": "Dodge Path Maker, not his Q" },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- K'Sante All Out: matchup-defining — His duelist mode. Kite it; W-shred him. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.", "after": "- K'Sante All Out: matchup-defining — 120s at rank 1, and it heals him, so keep Grievous Wounds. - Path Maker: 14s charge-up dash, knock-back and stun; that is the one to dodge. - Footwork: 10s shield dash. - Condemn: 20s." }
+  ],
+  "notes": "dontsFull[0].t still reads 'Get walled by his Q' — same Q-vs-Path-Maker error, but the string is 19 characters and apply-proposals.js skips anything under 25, so I did not propose it. It needs fixing by whatever regenerates the short don't-titles. Also left alone: report[9] and dosFull[0] still frame All Out as the thing to wait out; that is fine, but the more actionable tracker in this lane is Path Maker's 14s. Full-layer boilerplate calls Vayne 'he/him' (tradeGood, tradeBad, ahead, dontsFull, report[3]) and dontsFull[1].d / dontsFull[2].d are mismatched to their titles — champion-wide defects, not patched per matchup."
+}

@@ -1,0 +1,112 @@
+{
+  "ownerKey": "kled",
+  "enemy": "graves",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Quickdraw was tracked as a flat cooldown to wait out. Its real behaviour — 16/15/14/13/12s base, but 'hitting enemies with basic attacks lowers the cooldown of this skill and refreshes the resistance boost' — means it is almost never actually down while he is auto-attacking, which is why every window in this lane is 'right after he spends it', not 'when it is down'.",
+      "why": "Riot's E text states the auto-attack cooldown refund and the resistance refresh explicitly.",
+      "corrected": "The refund written into breakdown.cooldowns, dosFull[0] and report[5], and the advice reframed to engaging immediately after he burns the dash.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/graves.json", "brief enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Five chart rows disagreed with the packet while this page's own whys already backed the packet — whys[0] calls Level 1 'a wash', whys[1] 'he out-trades you', whys[2] 'he pelts you back out', whys[3] 'keeping you on the back foot', whys[5] 'out-kites your Eclipse all-in', all against Kled or Skill rows.",
+      "why": "Packet levelChart is Skill / Graves / Graves / Graves / Graves / Graves / Kled and the mirror audit says both charts were flipped to that as one atomic group.",
+      "corrected": "Rows 0, 1, 2, 3 and 5 flipped in matched full/content pairs to Skill / Graves / Graves / Graves / Graves, ratings moved with them, and the two phases whys that contradicted the new sides rewritten.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirror audit graves__kled", "currentText.content.whys"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two fabricated mechanics ran through the whole content layer: Smoke Screen was called a blind that 'turns off your autos', and Graves was given 'R + E true damage'. Neither exists. The full layer also wrote 'beartrap' instead of Bear Trap on a Rope.",
+      "why": "Riot's W text: the canister 'creates a cloud of smoke that reduces sight range' and slows on impact — no blind, so your autos and Violent Tendencies shots still land on a target you can see. Riot's R text is an explosive shell that hits the first champion then explodes in a cone; nothing in his kit carries the trueDamage flag. Riot's E grants Armor and Magic Resist, not damage.",
+      "corrected": "Blind replaced with the sight cut and slow in whys[4], spikes[1], spikes[2], mid, early and wants.foe[1]; the true-damage claim replaced with Collateral Damage's real 100s cone burst in whys[4], spikes[1] and wants.foe[2]; ability name fixed in the full layer.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/graves.json", "champ-data/_kits/kled.json", "mirror audit graves__kled"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Graves","after":"Skill"},
+    {"layer":"content","path":"win[0]","before":"Graves","after":"Skill"},
+    {"layer":"full","path":"phases[0].rating","before":"3/10","after":"5/10"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Graves"},
+    {"layer":"content","path":"win[1]","before":"Skill","after":"Graves"},
+    {"layer":"full","path":"phases[1].rating","before":"6/10","after":"3/10"},
+    {"layer":"full","path":"phases[2].side","before":"Kled","after":"Graves"},
+    {"layer":"content","path":"win[2]","before":"Kled","after":"Graves"},
+    {"layer":"full","path":"phases[2].rating","before":"6/10","after":"3/10"},
+    {"layer":"full","path":"phases[3].side","before":"Kled","after":"Graves"},
+    {"layer":"content","path":"win[3]","before":"Kled","after":"Graves"},
+    {"layer":"full","path":"phases[3].rating","before":"6/10","after":"3/10"},
+    {"layer":"full","path":"phases[5].side","before":"Kled","after":"Graves"},
+    {"layer":"content","path":"win[5]","before":"Kled","after":"Graves"},
+    {"layer":"full","path":"phases[5].rating","before":"6/10","after":"3/10"},
+
+    {"layer":"full","path":"phases[1].why",
+     "before":"Q beartrap is the kill switch — land it and rip the combo. Only take the trade when Graves's Quickdraw is down.",
+     "after":"Bear Trap on a Rope is your kill switch — but at 2 he kites it with Quickdraw and pelts you as you walk in."},
+
+    {"layer":"full","path":"phases[2].why",
+     "before":"Full kit online — your core pattern starts now. Keep the wave near your side so Graves must walk into your engage range.",
+     "after":"Your re-E is online, but Quickdraw (16s) refunds off his autos and the smoke cuts your sight — he escapes the all-in."},
+
+    {"layer":"full","path":"phases[5].why",
+     "before":"Eclipse is your spike — force fights the moment it completes, on Quickdraw's cooldown.",
+     "after":"His first item out-kites yours — fight only with Quickdraw (16s) already spent."},
+
+    {"layer":"full","path":"tradeGood",
+     "before":"Beartrap Graves when his answer is down, rip the full mounted combo, and if dismounted, kite for courage and remount mid-fight.",
+     "after":"Bear Trap on a Rope Graves once Quickdraw is spent, rip the full mounted combo, and if dismounted, kite for courage."},
+
+    {"layer":"full","path":"dosFull[0].d",
+     "before":"His dash + armor stacks. Engage when it's down. Only engage once it is down or baited.",
+     "after":"Quickdraw is 16s but refunds cooldown on every auto — engage right after he spends it."},
+
+    {"layer":"full","path":"dosFull[1].t",
+     "before":"Land the Q beartrap when Quickdraw is down",
+     "after":"Land Bear Trap on a Rope with Quickdraw spent"},
+
+    {"layer":"full","path":"breakdown.cooldowns",
+     "before":"- Graves Quickdraw: matchup-defining — His dash + armor stacks. Engage when it's down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+     "after":"- Graves Quickdraw: matchup-defining — a 16s dash whose cooldown falls with every auto he lands, refreshing his resistances. Engage right after he spends it. - Smoke Screen: 26s, cuts sight. - Your ultimate: kill windows only."},
+
+    {"layer":"full","path":"report[5].t",
+     "before":"Track Graves's Quickdraw: His dash + armor stacks. Engage when it's down. When it is down — Q-trap + courage all-in.",
+     "after":"Quickdraw (16s) refunds cooldown on his autos and stacks resistances; Smoke Screen (26s) cuts your sight, not your autos."},
+
+    {"layer":"content","path":"whys[4]",
+     "before":"His R + E true damage plus the W blind delete dismounted-Skaarl Kled before you remount — this is his hardest kill window.",
+     "after":"Collateral Damage (100s) plus his shotgun burst deletes dismounted Kled before you remount — his hardest kill window."},
+
+    {"layer":"content","path":"spikes[1].text",
+     "before":"Graves R + E true-damage burst plus his blind smoke shut your remount window — he can delete dismounted-Skaarl Kled in one combo here.",
+     "after":"Collateral Damage (100s) plus his shotgun burst shuts your remount window — he can delete dismounted Kled in one combo here."},
+
+    {"layer":"content","path":"spikes[2].text",
+     "before":"His Eclipse/Youmuu's tank-ADC spike with E reset dashing kites your Eclipse all-in; respect the smoke blind on every engage.",
+     "after":"His Eclipse/Youmuu's spike with Quickdraw refunding off autos kites your all-in; his smoke cuts sight, so fight outside it."},
+
+    {"layer":"content","path":"early",
+     "before":"Graves concedes nothing at Level 1 the way a melee would — his burst shotgun autos chip Skaarl's mount health while you have no answer, so don't walk up for a trade you can't win. The moment your W (Violent Tendencies) and Q (Bear Trap) come online, you get a real window: land the Q slow, yank yourself in, and force the W on-hit shots before he can E-dash away. The problem is his E dash and smoke blind reset the kite every time, so if you whiff the Q he just pelts you and walks off with the trade.",
+     "after":"Graves concedes nothing at Level 1 the way a melee would — his burst shotgun autos chip Skaarl's mount health while you have no answer, so don't walk up for a trade you can't win. The moment your W (Violent Tendencies) and Q (Bear Trap on a Rope) come online you get a real window: land the Q slow, yank yourself in, and force the W on-hit shots before he can Quickdraw away. The problem is Quickdraw refunds off his autos, so if you whiff the Q he just pelts you and walks off with the trade."},
+
+    {"layer":"content","path":"mid",
+     "before":"This is where Graves edges ahead. At 6 his R + E true-damage burst, layered with the W smoke blind that turns off your autos, can blow up dismounted-Skaarl Kled before you rebuild Courage to remount — that's his kill window, not yours. Don't dive him on cooldown; the smoke blind alone can blank your whole W shotgun rotation. Save your R to pin him against terrain instead of using it to chase, because a free-form chase just feeds his E-reset kite.",
+     "after":"This is where Graves edges ahead. At 6 his Collateral Damage (100s) cone burst, layered with a Smoke Screen that cuts your sight and slows you, can blow up dismounted Kled before you rebuild Courage to remount — that's his kill window, not yours. Don't dive him on cooldown; inside the smoke you cannot see the target your W shots need. Save your R to pin him against terrain instead of using it to chase, because a free-form chase just feeds his Quickdraw kite."},
+
+    {"layer":"content","path":"wants.foe[1]",
+     "before":"Drop W smoke to blind your autos and W shots during your all-in window",
+     "after":"Drop Smoke Screen to cut your sight and slow you in your all-in window"},
+
+    {"layer":"content","path":"wants.foe[2]",
+     "before":"Hit his R + E true-damage burst on dismounted-Skaarl Kled before you can rebuild Courage",
+     "after":"Hit Collateral Damage's cone burst on dismounted Kled before you can rebuild Courage"}
+  ],
+  "notes": "Two invented mechanics were live on this page and are the reason for most of the edits: Smoke Screen does not blind (Riot: it reduces sight range and slows on impact), and Graves has no true damage anywhere in his kit. Both claims would have made a paying user play the lane wrong in the direction of losing it. Graves' Q also carries a 'creates terrain' derived flag, which contradicts Riot's own Q text — the shell detonates on colliding with terrain, it does not create any; the flag is a tooltip-parse misfire and I did not write terrain creation anywhere. dosFull[2].t 'All-in with courage high' and several full-layer strings still say 'engage on Quickdraw's cooldown', which the refund makes misleading; they did not fit the length band."
+}

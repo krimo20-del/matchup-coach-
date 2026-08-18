@@ -1,0 +1,112 @@
+{
+  "ownerKey": "kled",
+  "enemy": "camille",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers read Skill,Kled,Kled,Skill,Skill,Kled,Kled and agree with each other. Packet levelChart differs at Level 2 and Level 6 (Camille) but the page's own whys[1] already concedes Level 2 to her in text while the side says Kled — see below. 57.2% over 271 games supports a Kled-favoured lane overall.",
+      "corrected": "Left the chart alone: the only row whose why disagrees with its side is Level 2, and the mirror is already audited on Camille's side, so a unilateral flip risks introducing a mirror contradiction. Flagged in questionsForUser instead.",
+      "confidence": "Medium",
+      "sources": ["packet.levelChart", "brief currentText"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Camille's Level 6 spike was described with no cooldown, and her early spike had no numbers either.",
+      "why": "The Hextech Ultimatum is 140/115/90s — an enormous window at rank 1 — and Hookshot is 16/15/14/13/12s, Tactical Sweep 15s, Precision Protocol 9s.",
+      "corrected": "spikes[1].text now states the 140s; Hookshot's 16s and Tactical Sweep's 15s are in dosFull[0].d and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two mechanical errors repeated across the page. First, Hookshot was called a stun in six places — Riot's text says 'leaping off and knocking up enemy champions upon landing', a knock-up. Second, the true damage was attributed to Tactical Sweep ('W true-damage cone', 'her W true damage'); the trueDamage flag is on Precision Protocol (Q), and W is a cone whose outer half slows and HEALS Camille.",
+      "why": "The distinction matters in both directions: a knock-up and a stun behave differently against tenacity, and putting the heal on the right ability is what tells the reader to buy Grievous Wounds and to stand in the inner half of the cone rather than the outer. The mirror audit made the same knock-up correction on Camille's side, so the two pages now agree.",
+      "corrected": "Every edited field says knock-up, not stun; the heal is on Tactical Sweep's outer half and the true damage on Precision Protocol; dontsFull[2].d ties Grievous Wounds to Tactical Sweep and tells you to stand in the inner cone.",
+      "confidence": "High",
+      "sources": ["enemyKit", "mirrorFindings point 4", "missingInteractions: needs-antiheal, autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "'Her engage/stun. Q-pull the follow-up.' gave no duration and no terrain requirement.",
+      "why": "Hookshot needs a wall to pull to — in open lane she cannot use it at all, which is the single most exploitable fact in the matchup.",
+      "corrected": "The wall requirement and the 16s cooldown are now in dosFull[0].d, dontsFull[0].d, dontsFull[1].d, report[5].t and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Her engage/stun. Q-pull the follow-up. Only engage once it is down or baited.",
+      "after": "Hookshot knocks up, it does not stun, and it is 16s — bait it into a wall."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Camille's favourite window — refuse it and half his win condition is gone.",
+      "after": "Hookshot's landing knocks you up — it needs a wall, so fight in open lane."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Every wall is a Hookshot ramp and a re-entry into the fight."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Giving away the dismount for free — mounted HP is a resource; spending it on poke instead of all-ins loses the lane.",
+      "after": "Tactical Sweep's outer half heals her and slows you — bring Grievous Wounds and stand in the inner cone instead."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Camille Hookshot: matchup-defining — Her engage/stun. Q-pull the follow-up. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Camille Hookshot: matchup-defining — 16s, needs a wall, and it knocks up rather than stuns. Track it before every engage. - Tactical Sweep: 15s, the outer half slows and heals her. - Your ultimate: kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Camille's Hookshot: Her engage/stun. Q-pull the follow-up. When it is down — Q-pull + W her.",
+      "after": "Track Hookshot: 16s, wall-dependent, knocks up not stuns. When it is down — Q-pull + W her."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Her E hookshot stun, W true-damage cone, and Q proc give her a clean burst trade before your full re-E combo stabilizes — she edges this stage.",
+      "after": "Hookshot knocks you up, Tactical Sweep's outer half heals her, and Precision Protocol resets her auto — she edges this stage before your re-E."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Her R cage walls you into a 1v1 where her true-damage W heal and Q proc grind through Skaarl faster than you rebuild Courage — respect the ult.",
+      "after": "The Hextech Ultimatum anchors you into a 1v1 where her W heal and Precision Protocol's true damage grind Skaarl faster than Courage rebuilds."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Her R cage drops, walling you into a 1v1 where her true-damage W and Q proc out-trade your remount — respect this window.",
+      "after": "The Hextech Ultimatum lands at 140s, anchoring you into a 1v1 where her Q's true damage out-trades your remount window."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land E hookshot stun into her W true-damage cone and Q proc to win the extended trade",
+      "after": "Land Hookshot's knock-up into Tactical Sweep's outer half to win the extended trade"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Use E wall-dash to dodge your Q-rope yank and escape your dismounted form",
+      "after": "Use Hookshot off a wall to dodge your Q yank and escape your dismount"
+    }
+  ],
+  "notes": "Camille's R is a 475-range dash to a target with a channel flag; Riot's text describes an anchoring zone and bonus magic damage on her autos, with no untargetability despite the derived 'untargetable' flag — no untargetable claim was written. Several fields not edited here (early, mid, late, spikes[3], whys[2..3], wants.you[0..2]) still say 'hookshot stun' or 'wall-dash'; the stun wording in those is the same error and should be swept in a follow-up pass, but rewriting all of them inside the length band was not possible in this run without churning correct advice."
+}

@@ -1,0 +1,100 @@
+{
+  "ownerKey": "kled",
+  "enemy": "mordekaiser",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart on disk gave Level 6 to 'Skill' while whys[4] and spikes[1] both state Mordekaiser wins the level-6 1v1 outright via Realm of Death.",
+      "why": "Realm of Death (650 range, 140/120/100s) is a forced isolated duel that also steals stats; Kled's Skaarl health bar is not a second life inside it. The stage owner must be Mordekaiser.",
+      "corrected": "phases[4].side and win[4] set to Mordekaiser; phases[4].why rewritten to state the 650 range and the stat steal.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/mordekaiser.json (R text, cd 140/120/100, range 650)", "brief currentText whys[4], spikes[1]"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[1] and whys[2] awarded Levels 2 and 3 to Mordekaiser in prose while win[1]/win[2] and phases[1]/phases[2] say Kled. Two answers to the same question.",
+      "why": "Kled's Q Beartrap is 800 range against Obliterate's 675 and Death's Grasp's 700, and his W four-attack burst plus double E resolves faster than Indestructible can stack. The side fields are right; the prose was wrong.",
+      "corrected": "whys[1] and whys[2] rewritten to explain Kled winning those stages with real ranges/cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/kled.json (Q 800 range, W autoReset, E 550 double-cast)", "champ-data/_kits/mordekaiser.json (Q 675/8s, E 700/16s)"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes already read Lvl 2-3 (Kled burst), Lvl 6 (Realm of Death), 1st item, Late — all four present and matching the kits.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief currentText spikes[0..3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Nothing on the page states the anti-heal interaction: Indestructible (W) converts damage Mordekaiser deals AND takes into a shield he can consume as a heal, so Kled's chip feeds it.",
+      "why": "Kled's damage pattern is repeated chip (W four attacks, double E), which is exactly the input Indestructible stores. Grievous Wounds timing decides every extended trade.",
+      "corrected": "wants.you[1] rewritten to buy Executioner's Calling early against Indestructible.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/mordekaiser.json (W: 'stores damage he deals and takes to create a shield. He may consume the shield to heal')", "_missing/kled.json rule needs-antiheal"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The kit file tags Mordekaiser's Q (Obliterate) with a 'grounding' flag, but Riot's own description is only 'smashes the ground with his mace dealing damage'. No grounding is described.",
+      "why": "Derived flags occasionally misfire on tooltip parsing. Asserting that Obliterate grounds Kled's E would be a fabricated mechanic on a live page.",
+      "corrected": "No claim written either way. Recorded in notes and unverified.",
+      "confidence": "Medium",
+      "sources": ["champ-data/_kits/mordekaiser.json (Q text vs flags.grounding)"]
+    },
+    {
+      "point": 6,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Realm of Death at 140/120/100s is correctly identified across tldr, winCon and breakdown.cooldowns as the tracked cooldown.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/mordekaiser.json (R cd)"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Mordekaiser"
+    },
+    {
+      "layer": "content",
+      "path": "win[4]",
+      "before": "Skill",
+      "after": "Mordekaiser"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "CHAAAARGE turns any side wave into a cross-map gank. Reassess every all-in at 6 — Mordekaiser's ultimate changes the math too.",
+      "after": "Realm of Death is a 650-range forced duel that steals your stats, and Skaarl is no second life inside it. At 6, fight only with help."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "His Q-slam already lands the isolated bonus and his W shield blunts your single shotgun volley before your re-E is online.",
+      "after": "Beartrap reaches 800 to his 675 Obliterate, and W's four fast attacks land before Indestructible has stored enough damage to matter."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "With E pull plus a ramped W shield he wins the drawn-out trade your level-3 combo can't finish, and his sustain heals your poke.",
+      "after": "E in, W's four attacks, re-E back out beats him: Death's Grasp is a 16s cooldown at rank 1, so once his pull is spent he cannot hold you."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Bait his E pull and W shield, then remount with Skaarl's free health and re-engage",
+      "after": "Buy Executioner's early — Indestructible heals off your chip unless Grievous cuts it"
+    }
+  ],
+  "notes": "Mordekaiser's Q (Obliterate) carries a derived 'grounding' flag in the kit file that Riot's own description does not support — no grounding text at all. I did not write any claim about Obliterate stopping Kled's E dash; flagged as unverified. Also note the packet levelChart (Skill/Morde/Morde/Skill/Morde/Morde/Kled) disagrees with what is actually on disk (Skill/Kled/Kled/Skill/Skill/Kled/Kled); I trusted the disk chart plus the 55.02% win rate and changed only Level 6, which the existing prose already conceded to Mordekaiser."
+}

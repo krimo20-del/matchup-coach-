@@ -1,0 +1,88 @@
+{
+  "ownerKey": "kled",
+  "enemy": "vayne",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart gave Vayne Levels 2, 3, 4-5 and 6 even though the page's own why-strings say Kled's W comes online at 2, his E-W-E combo owns 3, he out-trades a pre-two-item Vayne at 4-5, and 6 is a coinflip.",
+      "why": "Packet levelChart is Vayne/Kled/Kled/Kled/Skill/Skill/Vayne and the win rate is an even 50.23% over 438 games — Kled owns the mid-early window, Vayne owns level 1 and two-plus items.",
+      "corrected": "Rows 2-4 flipped to Kled, Level 6 flipped to Skill, in both layers.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "whys[1..5]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Kled spikes levels 2-3 (W four attacks, E re-cast) and on first item; Vayne spikes at level 1 with Silver Bolts percent-max-HP true damage and again at two-plus items where that true damage ignores every point of Skaarl's bonus health. Final Hour is 100/85/70s.",
+      "corrected": "Spike text kept; no fabricated additions.",
+      "confidence": "High",
+      "sources": ["ownerKit", "enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Condemn is treated as something to 'track' with no cooldown, and Tumble's auto-attack-reset tell — the actual cue for when her burst starts — is absent everywhere on the page.",
+      "why": "Condemn is 20/18/16/14/12s, by far the longest gap in her kit and the whole window Kled needs; it is a projectile and creates the wall-stun only on terrain collision. Tumble is an auto-attack reset (6/5/4/3/2s), so her damage starts on the attack wind-up, not the dash — and under Final Hour Tumble grants invisibility, which is what breaks Kled's E target lock.",
+      "corrected": "Condemn's 12-20s cooldown and the Tumble reset tell written into the interaction and cooldown fields.",
+      "confidence": "High",
+      "sources": ["enemyKit", "missingInteractions: autoreset-burst-tell"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing warned that her combo opens on an auto-reset.",
+      "why": "The visible cue is the attack wind-up during Tumble, not the dash itself.",
+      "corrected": "Added to report[5].t.",
+      "confidence": "High",
+      "sources": ["missingInteractions"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[1].side", "before": "Vayne", "after": "Kled"},
+    {"layer": "full", "path": "phases[2].side", "before": "Vayne", "after": "Kled"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Kled"},
+    {"layer": "full", "path": "phases[4].side", "before": "Vayne", "after": "Skill"},
+    {"layer": "content", "path": "win[1]", "before": "Vayne", "after": "Kled"},
+    {"layer": "content", "path": "win[2]", "before": "Vayne", "after": "Kled"},
+    {"layer": "content", "path": "win[3]", "before": "Skill", "after": "Kled"},
+    {"layer": "content", "path": "win[4]", "before": "Vayne", "after": "Skill"},
+    {"layer": "full", "path": "phases[1].rating", "before": "2/10", "after": "7/10"},
+    {"layer": "full", "path": "phases[2].rating", "before": "2/10", "after": "7/10"},
+    {"layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "7/10"},
+    {"layer": "full", "path": "phases[4].rating", "before": "2/10", "after": "5/10"},
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Vayne Condemn: matchup-defining — Wall-stun. Q-pull so she can’t kite. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Condemn (E), 12-20s: her only escape, and it stuns only if you hit terrain. Bait it, then commit. - Tumble (Q) is a 2-6s auto reset — her burst starts on the attack wind-up. - Your R (140/125/110s): kill windows only, never chip."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Vayne's Condemn: Wall-stun. Q-pull so she can’t kite. When it is down — Q-pull + W her.",
+      "after": "Condemn (E) is 12-20s and only stuns on terrain — fight in open ground and bait it, then Q-yank and unload W. Her burst opens on Tumble's auto reset: step back on the wind-up."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Wall-stun. Q-pull so she can’t kite. Only engage once it is down or baited.",
+      "after": "Condemn is 12-20s and stuns only into terrain. Bait it in open ground, then Q-yank."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Terrain collision is what turns her knockback into a stun — fight away from walls."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "She kites your dismount — Q-pull to stick, all-in early. Kled wins by trading around Vayne's Condemn and cashing the pattern: q-pull to stick and all-in her early.",
+      "after": "She kites your dismount — Beartrap to stick, all-in at 2-3. Kled wins by baiting Condemn (12-20s) in open ground, then E in, W's four attacks, re-E out before Silver Bolts stack three."
+    }
+  ],
+  "notes": "Chart disagreed with the packet and with the page's own why-strings; flipped as matched pairs. Tumble's auto-reset tell (the one missing interaction for this matchup) is now on the page. Whether Condemn's knockback can be QSS'd or whether tenacity shortens the wall-stun is not in the kit data, so it is not asserted."
+}

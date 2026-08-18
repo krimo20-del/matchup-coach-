@@ -1,0 +1,107 @@
+{
+  "ownerKey": "kled",
+  "enemy": "renekton",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The disk chart disagreed with its own prose at five of seven rows: whys[0] says Renekton owns level 1 (chart said Skill), whys[2] says level 3 is 'even, but only if his fury bar is empty' (chart said Renekton), whys[3] says he 'reclaims levels 4-5' (chart said Skill), whys[4] calls level 6 'your cleanest kill window' (chart said Skill), whys[5] says first item 'trades evenly' (chart said Renekton).",
+      "why": "The packet chart (Renekton/Renekton/Skill/Renekton/Kled/Skill/Renekton) matches the prose row for row and matches the 47.61% win rate — this is a losing lane with exactly one clean Kled window at 6.",
+      "corrected": "Rows 0, 2, 3, 4 and 5 flipped in both layers as one group; rows 1 and 6 already read Renekton.",
+      "confidence": "High",
+      "sources": ["brief packet levelChart", "brief currentText whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[0].why said 'Mounted stats bully every level-1 exchange' on a row Renekton owns, and phases[3].why was generic template text about 'banking small leads'.",
+      "why": "Level 1 is his because Ruthless Predator is point-click and stuns for 0.75s, which cancels the auto sequence Violent Tendencies needs. Levels 4-5 are his because above 50 Fury that stun becomes 1.5s while Cull the Meek heals the trade back.",
+      "corrected": "Both rewritten to the actual mechanics and durations.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json (P Reign of Anger, Q Cull the Meek, W Ruthless Predator)"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nowhere on the page does it say that empowered Ruthless Predator DESTROYS damage shields on the target.",
+      "why": "This is the decisive interaction of the matchup and the page recommends walking straight into it. Chaaaaaaaaarge!!! grants Kled a shield, and mid tells you to 'R-in' at level 6 — into an ability that deletes that shield and stuns you for 1.5s instead of 0.75s. Sterak's Gage, listed as a core item, is eaten the same way.",
+      "corrected": "mid, dontsFull[1].d and wants.foe[0] rewritten to the shield destruction, with the R commit gated on his W being spent.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json (W: 'If Renekton has more than 50 Fury, he slashes his target three times, destroying damage shields on the target... stunning them for 1.5 seconds')", "champ-data/_kits/kled.json (R shield)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The stun durations were never given — 'Empowered = long stun' was the whole description.",
+      "why": "0.75s versus 1.5s is the difference between surviving a bait and losing the mount. Both numbers are in Riot's text.",
+      "corrected": "spikes[0].text now carries both durations and the point-click property.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json (W, cd 16/14/12/10/8)"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "The content layer never mentions Grievous Wounds, even though Cull the Meek heals off every swing and is on a flat 7s.",
+      "why": "The full layer's itemization line already calls for Executioner's Calling, but the win-condition bullets a player actually reads do not. _missing/kled.json flags exactly this.",
+      "corrected": "wants.you[1] rewritten to buy Executioner's Calling early.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/renekton.json (Q Cull the Meek, cd 7)", "champ-data/_kits/_missing/kled.json key 32"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Renekton"},
+    {"layer": "content", "path": "win[0]", "before": "Skill", "after": "Renekton"},
+    {"layer": "full", "path": "phases[2].side", "before": "Renekton", "after": "Skill"},
+    {"layer": "content", "path": "win[2]", "before": "Renekton", "after": "Skill"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Renekton"},
+    {"layer": "content", "path": "win[3]", "before": "Skill", "after": "Renekton"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Kled"},
+    {"layer": "content", "path": "win[4]", "before": "Skill", "after": "Kled"},
+    {"layer": "full", "path": "phases[5].side", "before": "Renekton", "after": "Skill"},
+    {"layer": "content", "path": "win[5]", "before": "Renekton", "after": "Skill"},
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Mounted stats bully every level-1 exchange. Identify how Renekton contests the first waves before you commit anything.",
+      "after": "Ruthless Predator is point-click and stuns 0.75s, cancelling your W shots before they land — do not contest level 1."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Ruthless Predator's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Above 50 Fury his W stuns for 1.5s and destroys damage shields, while Cull the Meek heals it back — never trade into a full bar."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Burning it for tiny value leaves you naked for its full cooldown.",
+      "after": "Empowered, it stuns 1.5s and strips your R shield outright."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Renekton's W stun lands point-click during your W (Violent Tendencies) windup and cancels your damage — his biggest window, avoid the level-2 all-in.",
+      "after": "Ruthless Predator is point-click: 0.75s base, 1.5s above 50 Fury, and it cancels your W shots mid-swing — avoid the level-2 all-in entirely."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land empowered W stun to interrupt your W shots and re-E dash mid-combo",
+      "after": "Land empowered W to destroy your shield, stun 1.5s and cancel the combo"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Use Skaarl's remount sustain to recover the chip from his point-click Q and reach Level 6",
+      "after": "Buy Executioner's Calling early — Cull the Meek heals him through all your chip damage"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 still tilt his way — a fury-stacked Renekton W-stuns into his slice-and-dice combo and heals the damage back, so don't trade into a full bar. Your turn comes at 6: Chaaaaaaaaarge!!! gives you an engage and a knockback into terrain that his kit simply can't answer, plus the gank-extension and roam he lacks. Bait his W stun out, let it whiff, then R-in, E-W-E, and Q-yank — that's your one clean window to flip the lane and snowball before his fury rhythm takes over again.",
+      "after": "Levels 4-5 still tilt his way — a fury-stacked Renekton W-stuns into Slice and Dice and heals the damage back, so don't trade into a full bar. Your turn comes at 6: Chaaaaaaaaarge!!! gives you an engage and a knockback into terrain his kit can't answer. Spend it only once his W is gone, though: above 50 Fury, Ruthless Predator destroys damage shields on you — including the one your charge just granted — and stuns for 1.5 seconds instead of 0.75, which is long enough for him to finish the trade on his terms."
+    }
+  ],
+  "notes": "The shield-destruction clause on empowered Ruthless Predator also applies to Sterak's Gage, which report[8] lists as a core second item for this matchup. Worth the user deciding whether Sterak's is still the right buy here or whether the recommendation should change — I did not touch the itemization line, because that is a build call rather than a mechanics correction. Packet reports games as 418 while the brief header says 865."
+}

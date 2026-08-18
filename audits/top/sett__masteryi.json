@@ -1,0 +1,88 @@
+{
+  "ownerKey": "sett",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "57% over 393 games — the largest Sett favour in this slice. Yi has no lane tools: Alpha Strike is 20s at rank 1, Meditate is a channel any CC cancels, and he has no way to disengage a Facebreaker. Only his full build flips it. Note the sample is small (393 games) and there is no full layer for this matchup, so no difficulty rating exists to check.",
+      "corrected": "Heavily Sett-favoured lane; Yi only wins by surviving to two-plus items.",
+      "confidence": "High",
+      "sources": ["packet winRate 57 / 393 games", "champ-data/_kits/masteryi.json"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Content reads Sett for rows 0-5 and Master Yi at two-plus items, identical to the packet levelChart, and each why names the same owner. There is no full layer for this matchup at all, so there is no second copy of the chart to disagree with — the mismatch risk here is zero and the gap is structural, not a data error.",
+      "corrected": "Chart left unchanged. The FULL-layer entry for sett vs masteryi does not exist and should be created by whoever owns that repair.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText.full is null"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet's own defect list is right: the page names none of Yi's abilities and gives no cooldowns. Three decisive interactions were missing — Meditate is a channel Facebreaker cancels, Alpha Strike makes him untargetable so a combo spent into it is wasted, and Highlander makes him immune to slows, which is what actually turns off Knuckle Down and the Show Stopper slow late.",
+      "why": "Riot's text: W 'restoring Health and taking reduced damage' with 'for each second he channels' — a flat 10s channel. Q 'simultaneously becoming untargetable', 20s at rank 1 at 600 range, and his basic attacks reduce its cooldown. E Wuju Style is a flat 14s granting TRUE damage on his autos, so armour is not the answer. R Highlander is 85s and grants immunity to all slowing effects.",
+      "corrected": "Facebreaker cancels Meditate (flat 10s). Alpha Strike: 20s at rank 1, untargetable through the dash — wait it out. Wuju Style: flat 14s, true damage on autos. Highlander: 85s and slow-immune.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/masteryi.json", "missingInteractions rules channel-interruptible / untargetable-dodges-burst"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "No sequencing anywhere — the packet flags 'NO cooldown-sequencing advice'.",
+      "why": "Alpha Strike's 20s at rank 1 is the longest cooldown in his lane kit and his only escape, which makes 'commit after the dash' the whole lane plan.",
+      "corrected": "Wait out Alpha Strike's untargetable window, then commit into the 20s gap.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/masteryi.json Q"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "At 3 Facebreaker sets up combos he simply has no answer to.",
+      "after": "At 3 Facebreaker cancels Meditate and starts your full combo."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Through 4-5 your HP and shielded true damage keep out-trading him.",
+      "after": "Through 4-5 you out-trade him; Wuju Style is 14s and true damage."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Late his on-hit and true damage finally out-scale your HP bar — close the game before then.",
+      "after": "Late his true damage and Highlander's slow immunity beat your HP bar — end it first."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Facebreaker stun sets up combos he has no answer to — kill pressure is real.",
+      "after": "Facebreaker cancels Meditate outright — his only sustain, on a flat 10s."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "His on-hit and true damage finally out-scale your HP bar — end before it matters.",
+      "after": "Wuju Style's true damage and Highlander's slow immunity beat your HP — end it."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "You beat him at literally every stage of the lane: passive fists win level 1, the shielded Haymaker keeps you ahead at 2, and Facebreaker from 3 onward sets up full combos he cannot answer. His only plan is surviving to late game — deny farm, call dives, and make the lane a nightmare.",
+      "after": "You beat him at every stage of the lane: passive fists win level 1, the shielded Haymaker keeps you ahead at 2, and Facebreaker from 3 onward both starts your combo and cancels Meditate, his only sustain, on its flat 10s. His plan is surviving to late — deny farm, call dives, make the lane a nightmare."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Through 5 your HP and shielded true damage out-trade him, and at 6 The Show Stopper suppress can simply kill him outright. This is your window to snowball the whole map: force the all-in, take his tower, and roam with your lead. Every minute the game shortens is a minute he never scales.",
+      "after": "Through 5 your HP and shielded true damage out-trade him, and at 6 The Show Stopper takes him out of the fight entirely. Alpha Strike is 20s at rank 1 and he is untargetable through the dash, so wait it out rather than spending your combo into it. Then snowball: all-in, tower, roam."
+    }
+  ],
+  "notes": "STRUCTURAL GAP: there is no FULL-layer entry for sett vs masteryi at all (currentText.full is null), so this matchup renders with no tldr, win condition, trading rules, runes, items, or level-chart whys. That is one of the repo's 92 missing full entries and it needs a create-only pass rather than field edits. Left alone: whys[5], spikes[2] and late call The Show Stopper a 'suppress'; Riot's text says only that Sett carries and slams the target with a slow on landing, so 'suppress' is unverified — I removed it only from the one field I was already rewriting. Grievous Wounds is worth naming somewhere for Meditate's heal, but every content field is already at its length limit and there is no full layer to put it in."
+}

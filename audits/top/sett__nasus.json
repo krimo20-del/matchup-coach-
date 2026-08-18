@@ -1,0 +1,70 @@
+{
+  "ownerKey": "sett",
+  "enemy": "nasus",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Chart read Skill/Skill/Skill/Nasus/Skill/Nasus/Nasus while every early 'why' line said Sett wins outright.",
+      "why": "The mirror (nasus__sett) settled a monotonic chart: Sett owns levels 1-5, level 6 is Skill, first item onward is Nasus. That matches a 49.69% overall win rate carried by an early lead that decays.",
+      "corrected": "Rows 0-3 flipped to Sett with ratings; row 4 stays Skill at 5/10; rows 5-6 already read Nasus.",
+      "confidence": "High",
+      "sources": ["mirrorFindings (nasus__sett)", "packet.levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "First-item spike claimed Sett wins every extended trade, contradicting the chart and the mirror.",
+      "why": "Soul Eater is flat lifesteal and Siphoning Strike (Q) grows permanently — the longer the trade the more it favours him. First item is his catch-up point, not yours.",
+      "corrected": "spikes[2] and whys[5] now hand first item to Nasus and cap you to one Q window.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json", "mirrorFindings"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The Show Stopper described as a suppression that 'cancels' his all-in; Facebreaker described as a free stun into a wall.",
+      "why": "Riot's text: R carries an enemy through the air and slams them, slowing nearby enemies — a displacement, not a suppression. Facebreaker pulls enemies on OPPOSITE sides and only stuns then; a lone target is slowed.",
+      "corrected": "spikes[1] restates R as a carry-and-slam displacement with its 400 range and 120s rank-1 cooldown; mid now states the both-sides stun condition and the Siphoning Strike auto-reset tell.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/sett.json", "champ-data/_kits/nasus.json", "_missing: autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet flagged zero cooldown-sequencing advice; Wither had no numbers.",
+      "why": "Wither is 700 range on 15/14/13/12/11s — a concrete window is what turns 'bait it' into a plan.",
+      "corrected": "breakdown.cooldowns now carries range and cooldown.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/nasus.json", "packet.defects"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Sett" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Sett" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Sett" },
+    { "layer": "content", "path": "win[1]", "before": "Skill", "after": "Sett" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Sett" },
+    { "layer": "content", "path": "win[2]", "before": "Skill", "after": "Sett" },
+    { "layer": "full", "path": "phases[3].side", "before": "Nasus", "after": "Sett" },
+    { "layer": "content", "path": "win[3]", "before": "Nasus", "after": "Sett" },
+
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "3/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "5/10" },
+
+    { "layer": "content", "path": "whys[4]", "before": "Sett wins Level 6 because R can cancel any Wither-committed all-in and Nasus has no dash to escape.", "after": "Level 6 is skill: The Show Stopper drags him off the wave, but Fury of the Sands flips a long duel." },
+    { "layer": "content", "path": "whys[5]", "before": "Sett is favoured at first item as Haymaker's true damage and Grit outheal a burst-less Nasus.", "after": "Nasus tips it at first item: stacked Q plus Soul Eater lifesteal outlast your Grit." },
+
+    { "layer": "content", "path": "spikes[1].text", "before": "R The Show Stopper lets you slam him out of position and cancel a wither-committed all-in; hold it as a peel/kill tool because Nasus has no dash to escape the suppression.", "after": "The Show Stopper (R, 400 range, 120s at rank 1) carries and slams him — a displacement, not a suppression. Use it to drag him off the wave he is stacking, or out of his own R." },
+    { "layer": "content", "path": "spikes[2].text", "before": "After your first bruiser item you win every extended trade because Haymaker's true-damage tail and Grit healing outrace a Nasus who only has his Q stacks and no burst.", "after": "First item is where he catches up — Soul Eater lifesteal and a fattening Siphoning Strike outlast Grit, so cap each trade at one Q window and leave before he heals through it." },
+
+    { "layer": "content", "path": "mid", "before": "Through levels 3-6 you own the lane. E into the wall stuns him for a free Q Knuckle Down and Haymaker, and his only answer, W Wither, is a defensive slow that doesn't stop the burst once you're already on top of him. Use R to punish any greedy stack attempt.", "after": "Through levels 3-6 you own the lane. Facebreaker only stuns with enemies on both sides, so pull him across your minions for a free Knuckle Down and Haymaker. Siphoning Strike is an auto reset — the wind-up is your cue to step out, not the cast itself." },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Nasus Wither: matchup-defining — His only kite. Bait it before your all-in. Track it before every engage.", "after": "- Nasus Wither (W, 700 range, 15s at rank 1): his only kite. Bait it, then commit inside that window." }
+  ],
+  "notes": "packet.suspectNames flags wants.you[0] 'Deny Siphoning Strike' as a probable wrong name — it is a FALSE POSITIVE. Siphoning Strike is the correct Riot name for Nasus's Q; the string was left untouched. Fury of the Sands carries a percentHealth flag, so stacking raw HP against him is not the answer; that is consistent with the existing Plated Steelcaps / Executioner's advice and needed no rewrite. Whether Facebreaker's pull can catch him against terrain the way the old text implied is not stated in Riot's description, so the wall wording was replaced with the both-sides rule rather than expanded."
+}

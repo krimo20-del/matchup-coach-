@@ -1,0 +1,63 @@
+{
+  "ownerKey": "sett",
+  "enemy": "vayne",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart read Skill/Skill/Skill/Vayne/Skill/Vayne/Vayne in both layers, contradicting the content-layer whys, which already describe Vayne winning Level 1, Sett winning Levels 2 through 6, and Vayne winning late.",
+      "why": "Vayne out-ranges Sett at level 1 but has no dash — Tumble is a 300-range hop against Sett's 490-range Facebreaker — so the melee bracket from level 2 to first item belongs to Sett.",
+      "corrected": "Vayne / Sett / Sett / Sett / Sett / Sett / Vayne, matching the packet chart and the existing whys.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/vayne.json", "champ-data/_kits/sett.json", "packets/sett.json levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[6].why credited Sterak's Gage with making Sett 'nearly unburstable' against Vayne.",
+      "why": "Silver Bolts (W) deals a percentage of max health as bonus TRUE damage on every third hit, so health and resistances are the wrong purchase against her — a flagged missing interaction (resistances-invalidated).",
+      "corrected": "phases[6].why now states the true-damage scaling and why stacking stats does not answer it.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/vayne.json", "_missing/sett.json rule resistances-invalidated"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing recorded that Tumble (Q) is an auto-attack reset, nor Condemn's real cooldown.",
+      "why": "Tumble carries the autoReset flag: the damage arrives on the attack wind-up, not on the cast, which is the actual cue for stepping in or out. Condemn is 20/18/16/14/12s and requires terrain behind the target to stun at all.",
+      "corrected": "The reset tell is now in spikes[0].text; Condemn's rank-1 20s and rank-5 12s and its wall requirement are in breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/vayne.json", "_missing/sett.json rule autoreset-burst-tell"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Vayne"},
+    {"layer":"content","path":"win[0]","before":"Skill","after":"Vayne"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Sett"},
+    {"layer":"content","path":"win[1]","before":"Skill","after":"Sett"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Sett"},
+    {"layer":"content","path":"win[2]","before":"Skill","after":"Sett"},
+    {"layer":"full","path":"phases[3].side","before":"Vayne","after":"Sett"},
+    {"layer":"content","path":"win[3]","before":"Vayne","after":"Sett"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Sett"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Sett"},
+    {"layer":"full","path":"phases[5].side","before":"Vayne","after":"Sett"},
+    {"layer":"content","path":"win[5]","before":"Vayne","after":"Sett"},
+    {"layer":"full","path":"phases[0].rating","before":"5/10","after":"3/10"},
+    {"layer":"full","path":"phases[1].rating","before":"5/10","after":"7/10"},
+    {"layer":"full","path":"phases[2].rating","before":"5/10","after":"7/10"},
+    {"layer":"full","path":"phases[3].rating","before":"3/10","after":"7/10"},
+    {"layer":"full","path":"phases[4].rating","before":"6/10","after":"8/10"},
+    {"layer":"full","path":"phases[5].rating","before":"3/10","after":"6/10"},
+
+    {"layer":"full","path":"phases[0].why","before":"Double-punch passive makes you the strongest level-1 auto-trader in the lane. Punish Vayne on every CS, but respect her opening tool — chips now, all-ins later.","after":"Vayne's attack range and Night Hunter move speed let her chip you for free at level 1. Take the melee CS, eat nothing extra, and wait for Facebreaker at 3."},
+    {"layer":"full","path":"phases[3].why","before":"Q ranks make your punch trades heavier, but Vayne has her core tools too. Keep the grit bar honest: trade in, W-shield her return damage, out.","after":"Vayne has no dash — Tumble (Q) is a 300-range hop. Facebreaker at 490 catches her mid-hop, and a full Grit Haymaker deletes a 550-range squishy."},
+    {"layer":"full","path":"phases[6].why","before":"Sterak's makes your all-in nearly unburstable. Fights are decided by whether you cash a max-grit W — track Condemn and commit on the gap.","after":"Silver Bolts (W) is percent max health true damage, so Sterak's and armour do not save you. Land Facebreaker or you never touch her."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Vayne Condemn: matchup-defining — Wall-stun. E-stun her so she can’t kite. Track it before every engage.","after":"- Vayne Condemn (E): 20s at rank 1, 12s at rank 5 — the only stun she has, and it needs a wall behind you."},
+    {"layer":"full","path":"tldr","before":"She kites your all-in — E-stun to stick, all-in early. Sett wins by trading around Vayne's Condemn and cashing the pattern: e-stun to stick, all-in early.","after":"Vayne has no dash — only Tumble, a 300-range hop. Facebreaker at 490 out-reaches it, so all-in levels 2-6 before Silver Bolts' percent-HP true damage scales past you."},
+
+    {"layer":"content","path":"spikes[0].text","before":"Once you have E Facebreaker you win: pull her out of a Q Tumble reposition, W with a full Grit bar, and her Silver Bolts third-proc can't out-race your burst at melee range.","after":"Facebreaker (E) wins this window: Tumble (Q) is an auto reset, so the wind-up is your cue — step in as she lands it, pull her, and cash a full Grit Haymaker before her third Silver Bolt."}
+  ],
+  "notes": "Chart flipped in matched pairs to the packet chart; the content whys already described that chart, so only the side/rating tokens and three contradicting full-layer whys needed changing. Whether Condemn's knockback can be Flash-buffered or cleansed is not in the kit data and was not asserted."
+}

@@ -1,0 +1,112 @@
+{
+  "ownerKey": "olaf",
+  "enemy": "kennen",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "54.85% over 505 games against a diffRating of 7.5/10 is a little pessimistic, but the mirror settled the tags and the lane genuinely swings — Kennen owns the shuriken window and level 6, Olaf owns 4-5 and two items. Not worth fighting the mirror over.",
+      "corrected": "Left diff TRICKY, diffRating 7.5/10, carryRating 7/10.",
+      "confidence": "Medium",
+      "sources": ["packet.winRate", "mirrorFindings point 2"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers agreed with each other but not with the packet or the already-applied mirror. Page had Kennen,Skill,Olaf,Olaf,Kennen,Olaf,Olaf; packet and mirror both give Skill,Kennen,Skill,Olaf,Kennen,Skill,Olaf.",
+      "why": "The mirror (kennen__olaf) is already on disk with the packet order, so mirror-fix.js would overwrite four rows here anyway. Rows 1 and 2 in particular were backwards: the page's own whys[1] calls levels 2-3 'his poke peak', which cannot be an Olaf row.",
+      "corrected": "Rows 0, 1, 2 and 5 flipped as matched full/content pairs to Skill, Kennen, Skill, Skill; ratings on those rows rescaled to 5/4/5/5. whys[0] and whys[5] reworded so the prose stops claiming Olaf owns rows that are now Skill.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "mirrorFindings point 2", "currentText.content.whys"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three strings credit Olaf's W with sustain ('W-omnivamp', 'W-sustain'). Riot's W text is 'Olaf's Attack Speed is increased and he gains a Shield' — the lifesteal is Berserker Rage, the passive, scaling with MISSING health. Separately, no Kennen cooldown appears anywhere: Lightning Rush is 10/9/8/7/6s and Slicing Maelstrom is a flat 120s at every rank, which is the single most exploitable number in the lane.",
+      "why": "The W/passive mix-up changes the decision: a shield says disengage after it pops, missing-health lifesteal says stay in and swing. And 'engage on his ult cooldown' is unusable advice without the 120s — that is a two-minute window in which Kennen cannot answer an all-in at all. The decisive interaction is right and stays: Ragnarok makes Olaf immune to disables while he keeps attacking, so Mark of the Storm's triple-mark stun does not land through it.",
+      "corrected": "Berserker Rage named in whys[3], spikes[2].text and content.mid. Lightning Rush's 10s and Slicing Maelstrom's flat 120s written into dosFull[0].d, breakdown.cooldowns and phases[4].why. spikes[1].text now names Mark of the Storm and Slicing Maelstrom rather than 'his ult'.",
+      "confidence": "High",
+      "sources": ["ownerKit P and W text", "ownerKit R text", "enemyKit P text", "enemyKit E cd 10/9/8/7/6", "enemyKit R cd 120", "packet.defects"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The page tracks Lightning Rush as the matchup-defining cooldown. The genuinely punishable one is Slicing Maelstrom at 120s flat.",
+      "why": "Lightning Rush is a 6-10s escape — you cannot plan a lane around a cooldown that short. The 120s ult is the window that decides whether an all-in works.",
+      "corrected": "breakdown.cooldowns now tracks both, with Slicing Maelstrom's 120s named. focus.text left as Lightning Rush to stay consistent with the mirror and the ~12 other strings keyed to it.",
+      "confidence": "High",
+      "sources": ["enemyKit E and R cooldowns"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Kennen","after":"Skill"},
+    {"layer":"content","path":"win[0]","before":"Kennen","after":"Skill"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Kennen"},
+    {"layer":"content","path":"win[1]","before":"Skill","after":"Kennen"},
+    {"layer":"full","path":"phases[2].side","before":"Olaf","after":"Skill"},
+    {"layer":"content","path":"win[2]","before":"Olaf","after":"Skill"},
+    {"layer":"full","path":"phases[5].side","before":"Olaf","after":"Skill"},
+    {"layer":"content","path":"win[5]","before":"Olaf","after":"Skill"},
+    {"layer":"full","path":"phases[0].rating","before":"3/10","after":"5/10"},
+    {"layer":"full","path":"phases[1].rating","before":"6/10","after":"4/10"},
+    {"layer":"full","path":"phases[2].rating","before":"6/10","after":"5/10"},
+    {"layer":"full","path":"phases[5].rating","before":"6/10","after":"5/10"},
+    {
+      "layer":"full",
+      "path":"phases[4].why",
+      "before":"Ragnarok deletes CC — once you press R, nothing he has stops the run-down. Reassess every all-in at 6 — Kennen's ultimate changes the math too.",
+      "after":"Ragnarok blanks his triple-mark stun while you keep swinging, but Slicing Maelstrom plus his kite still edges 6 — commit only with the wave behind you."
+    },
+    {
+      "layer":"full",
+      "path":"dosFull[0].d",
+      "before":"His escape. Axe-slow before it. Only engage once it is down or baited.",
+      "after":"Lightning Rush is his escape, 10s at rank 1 — slow him before he presses it."
+    },
+    {
+      "layer":"full",
+      "path":"breakdown.cooldowns",
+      "before":"- Kennen Lightning Rush: matchup-defining — His escape. Axe-slow before it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after":"- Kennen Lightning Rush: matchup-defining — his 10s escape; Slicing Maelstrom is a flat 120s. Track both. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only."
+    },
+    {
+      "layer":"content",
+      "path":"whys[0]",
+      "before":"Kennen has no escape and dies to first contact — land Q, walk up and auto before his energy poke even starts.",
+      "after":"Kennen has no escape but outranges you — Level 1 goes to whoever lands first, your axe or his shuriken."
+    },
+    {
+      "layer":"content",
+      "path":"whys[3]",
+      "before":"Your W-omnivamp out-sustains his Q/W poke and the Q-reset slow lets you stick and trade short — you out-grind him here.",
+      "after":"Berserker Rage lifesteals harder the lower you drop, and the Q-reset slow lets you stick and trade short — you out-grind him."
+    },
+    {
+      "layer":"content",
+      "path":"whys[5]",
+      "before":"Bramble/Black Cleaver plus W sustain is your most oppressive point — perma-slow and walk him down through every poke.",
+      "after":"Your first item lets you perma-slow and walk him down, but Slicing Maelstrom is back every 120s — it stays a read."
+    },
+    {
+      "layer":"content",
+      "path":"spikes[1].text",
+      "before":"Ragnarok eats his ult — pop R as the stun lands so the AOE never roots you, then E his face for true damage while he has no kite left.",
+      "after":"Ragnarok blanks Mark of the Storm while you keep swinging — pop it as Slicing Maelstrom lands, then E his face for true damage."
+    },
+    {
+      "layer":"content",
+      "path":"spikes[2].text",
+      "before":"Black Cleaver / Bramble online: Q-reset perma-slow plus W-omnivamp lets you walk him down and out-sustain every Q/W poke he lands.",
+      "after":"Black Cleaver / Bramble online: Q-reset perma-slow plus Berserker Rage lifesteal walks him down through every Q/W poke he lands."
+    },
+    {
+      "layer":"content",
+      "path":"mid",
+      "before":"This is where you take over. Your W-omnivamp heals back everything his Q/W poke does, and a Q-reset perma-slow means once you're on him he can't kite out. The whole lane pivots on his R: he wants to land the AOE stun the instant you engage so he can dance away. So bait it — once his ult is on cooldown, OR pop your own Ragnarok as the stun lands so it never roots you, then E his face for the true-damage chunk. At 6 with R up, a Kennen with no peel and no flash is just dead.",
+      "after":"This is where you take over. Berserker Rage lifesteals back everything his Q/W poke does, and a Q-reset perma-slow means once you're on him he can't kite out. The whole lane pivots on Slicing Maelstrom: he wants the triple-mark stun the instant you engage so he can dance away. So bait it — its 120s is your window — or pop Ragnarok as the stun lands so it never holds you, then E his face. A Kennen with no ult and no flash is dead."
+    }
+  ],
+  "notes": "Both layers already agreed with each other here, so this was not a two-layer split — the shared chart was simply the wrong order versus the packet and the already-applied mirror, on four of seven rows. Structural oddity worth a look: spikes[] is out of chronological order — spikes[2].when is '1st item' but spikes[3].when is 'Lvl 2-3', so the page renders the level 2-3 poke window last, after the late-game entry. I did not reorder them because that would need four coordinated text swaps and the entry count must not change; flagging it instead. Same Olaf-W-sustain misattribution as on the kayle and kassadin pages — this is repo-wide on Olaf and worth one bulk pass rather than per-matchup fixes."
+}

@@ -1,0 +1,127 @@
+{
+  "ownerKey": "olaf",
+  "enemy": "chogath",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 3, 4 and 5 read Olaf/Skill/Olaf in both layers; the packet levelChart says Skill/Cho'Gath/Skill, the whys[] agree with the packet, and the mirror audit has ALREADY applied the packet chart from Cho'Gath's side.",
+      "why": "whys[3] 'Levels 4-5 are even' is a Skill row marked Olaf; whys[4] 'Cho owns level 6' is a Cho'Gath row marked Skill; whys[5] 'edges back even-to-favoured' is a Skill row marked Olaf. Leaving these would put the two directions in direct conflict and mirror-fix would overwrite them anyway.",
+      "corrected": "Rows 3, 4, 5 set to Skill, Cho'Gath, Skill in BOTH layers as one atomic group, with ratings re-scaled. Rows 0, 1, 2, 6 already matched.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "mirrorFindings", "currentText.content.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The first-item stage was written as Olaf's fight-forcing spike; the packet and the mirror both call it parity. Level 6 was under-stated as merely 'reassess'.",
+      "why": "Feast (R, 80/70/60s) is the real spike in this lane and it arrives at 6. Olaf's first item does not out-run a Cho'Gath who is refilling max health with every successful Feast, which is why the mirror downgraded that stage to parity from the other side.",
+      "corrected": "phases[3], phases[4] and phases[5] rewritten to that timeline.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/chogath.json", "packet.levelChart", "mirrorFindings"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "'Ragnarok deletes CC' / 'R cleanses it too' appears in breakdown.cooldowns, dosFull[0].d, report[5].t, phases[4] and breakdown.late. Ragnarok grants IMMUNITY while active — it removes nothing already applied, so it has to be pressed before Rupture lands, not after. More importantly, the interaction that decides level 6 was only half-stated: Feast is TRUE damage, so the bonus armour and magic resist Ragnarok gives are worth exactly nothing against it.",
+      "why": "Riot text, Olaf R: 'passively gains increased armor and magic resist. He can activate this ability to become immune to disables for as long as he keeps attacking.' Riot text, Cho'Gath R: 'Devours an enemy unit, dealing a high amount of true damage.' The kit file marks Feast trueDamage and percentHealth. The mirror audit reached the same conclusion from Cho'Gath's side.",
+      "corrected": "Cleanse language replaced with prevention-if-pressed-first; the true-damage-versus-resists point stated in phases[4], whys[4], spikes[1] and mid.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/olaf.json", "champ-data/_kits/chogath.json", "mirrorFindings"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "'W omnivamp' / 'W sustain' in whys[2], whys[3], spikes[1], mid and wants.you[1]. Olaf's W is Tough It Out — attack speed plus a shield, 16/15/14/13/12s, no healing.",
+      "why": "Riot text, Olaf W: 'Olaf's Attack Speed is increased and he gains a Shield.' The lifesteal is Berserker Rage (P), scaling with missing health. The mirror audit flagged the same five-field problem and could not reach mid and late inside the length band; both are corrected here.",
+      "corrected": "Shield and Berserker Rage named correctly in all five.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/olaf.json", "mirrorFindings"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[3].side", "before": "Olaf", "after": "Skill"},
+    {"layer": "content", "path": "win[3]", "before": "Olaf", "after": "Skill"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Cho'Gath"},
+    {"layer": "content", "path": "win[4]", "before": "Skill", "after": "Cho'Gath"},
+    {"layer": "full", "path": "phases[5].side", "before": "Olaf", "after": "Skill"},
+    {"layer": "content", "path": "win[5]", "before": "Olaf", "after": "Skill"},
+    {"layer": "full", "path": "phases[3].rating", "before": "7/10", "after": "5/10"},
+    {"layer": "full", "path": "phases[4].rating", "before": "5/10", "after": "3/10"},
+    {"layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "5/10"},
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Rupture's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Even from 4: Feast stacks start absorbing your short trades, and the Tough It Out shield is what keeps it from tipping his way."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Ragnarok deletes CC — once you press R, nothing he has stops the run-down. Reassess every all-in at 6 — Cho'Gath's ultimate changes the math too.",
+      "after": "Feast is percent-HP TRUE damage, so Ragnarok's bonus armour and MR do nothing against it. Never all-in below half health at 6 — bait it first."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Sundered Sky is your spike — force fights the moment it completes, on Rupture's cooldown.",
+      "after": "Even — Black Cleaver and Reckless Swing shred his stacking HP, but Feast refills it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Cho'Gath Rupture: matchup-defining — Telegraphed. R cleanses it too. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Cho'Gath Rupture: matchup-defining — a telegraphed 6s knockup. Ragnarok prevents it, but only if pressed first. - Feral Scream: an 11s silence. - Your ultimate: kill windows only, never chip."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Telegraphed. R cleanses it too. Only engage once it is down or baited.",
+      "after": "Telegraphed, and back every 6s. Only engage once it is down or baited."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Cho'Gath's Rupture (Knockup): Telegraphed. R cleanses it too. When it is down — Axe + E him.",
+      "after": "Track Rupture: a telegraphed 6s knockup. Ragnarok prevents it if pressed first — it never cleanses."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 your E true damage burst lands clean through his bulk and W omnivamp heals the trade he can't match.",
+      "after": "Level 3 your E true damage lands clean through his bulk and the Tough It Out shield eats the answer back."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Levels 4-5 are even — his Feast stacks start absorbing your short trades, but your W sustain keeps it from tipping his way.",
+      "after": "Levels 4-5 are even — his Feast stacks absorb your short trades, but Berserker Rage's lifesteal keeps it from tipping."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Cho owns level 6: his R is true-damage percent-HP execute, so even with Ragnarok's CC immunity his ult finishes you when you're chunked.",
+      "after": "Cho owns level 6: Feast is percent-HP true damage, so Ragnarok's armour and MR count for nothing — it finishes you when you're chunked."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Cho'Gath's R is a true-damage percent-HP execute — once you are chunked, his ult can finish you even through your W omnivamp, so this is his real kill window.",
+      "after": "Cho'Gath's R is percent-HP true damage — Ragnarok's bonus armour and MR are worth nothing against it, which is exactly why level 6 is his real kill window."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Trade short with E true damage and W omnivamp so his W silence window is wasted",
+      "after": "Trade short with Reckless Swing and the W shield so his 11s Feral Scream is wasted"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 stay close to even because Cho starts farming Feast stacks and your short trades chip a growing HP pool, but you still out-sustain him with W omnivamp if you trade on his Q cooldown. Level 6 flips to him: Ragnarok ignores his knockup, but his R is true-damage percent execute, so the lower you dive the more his ult finishes you regardless of your immunity. Don't all-in below half HP at 6 — bait his W silence and R, then commit. After first item your Black Cleaver and E shred his stacks again and this is your strongest pressure window.",
+      "after": "Levels 4-5 stay close to even because Cho farms Feast stacks and your short trades chip a growing HP pool, but Berserker Rage's missing-health lifesteal holds you level if you trade on his 6s Q. Level 6 flips to him: Ragnarok stops the knockup, but Feast is percent-HP TRUE damage, so the armour and MR it grants are worth nothing — the lower you are, the more surely it finishes you. Don't all-in below half HP at 6; bait the 11s silence and the ult, then commit. After first item Cleaver and Reckless Swing shred his stacks again."
+    }
+  ],
+  "notes": "Feral Scream is a silence, and a silence is a disable — so it can stop you casting Ragnarok, but cannot end an active one. The page's dosFull[2].t 'R to cleanse his Q knockup' is still wrong (Ragnarok prevents, never cleanses) but at 26 characters it sits on the applier's short-string boundary, so I left it rather than risk a skipped-but-counted edit; worth a manual fix. Cho'Gath's Q carries a derived 'grounding' flag Riot's description does not support (knockup, damage, slow); no grounding claim was made."
+}

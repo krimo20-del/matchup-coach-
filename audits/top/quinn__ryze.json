@@ -1,0 +1,78 @@
+{
+  "ownerKey": "quinn",
+  "enemy": "ryze",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart said Skill at Levels 1, 4-5 and 6 and Quinn at 2+ items, contradicting both the packet chart (Quinn x6, then Ryze) and the whys text, which says Quinn owns levels 1-6 and Ryze outscales at two items.",
+      "why": "Packet levelChart is [Quinn,Quinn,Quinn,Quinn,Quinn,Quinn,Ryze] and Quinn's 57.42% win rate over 310 games supports an early-favoured lane that flips late.",
+      "corrected": "Rows 0, 3 and 4 to Quinn; row 6 to Ryze, proposed as one atomic group across both layers.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "content whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are right in shape: Quinn levels 1-3, level 6 roam, first-item lethality; Ryze at Tear/Archangel's two items. Row 6 of the chart now matches that spike instead of fighting it.",
+      "corrected": "phases[6].why rewritten to name the two-item Archangel's flip rather than claiming Quinn peaks there.",
+      "confidence": "High",
+      "sources": ["brief spikes[0..3]", "enemyKit P (mana scaling)"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing recorded that Rune Prison (W) only ROOTS when Spell Flux (E) is already on the target — otherwise it is a slow — and nothing recorded that Rune Prison can cancel Behind Enemy Lines (R), which is a channel.",
+      "why": "Riot text on Rune Prison: 'If the target has Flux on it, they are instead rooted.' Quinn's R carries the channel flag ('interruptible — any CC cancels it'), and the missing-interactions entry for this matchup flags exactly this channel punish. Rune Prison is 11s at rank 1; Spell Flux is 3.5s at rank 1 and resets Overload.",
+      "corrected": "Advice now keys off dodging Spell Flux to downgrade the root to a slow, and off never channelling R while Rune Prison is up.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits ryze W/E text and cooldowns", "champ-data/_kits quinn R flags", "_missing rule your-channel-punished"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns gave no numbers and no interaction, just 'bait it'.",
+      "why": "Rune Prison's 11/10.5/10/9.5/9s cooldown is the punish window and the Flux dependency is what makes baiting it actually possible.",
+      "corrected": "Real cooldown plus the Flux condition and the channel cancel now stated.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ryze.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Quinn" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Quinn" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Quinn" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Quinn" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Quinn" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Quinn" },
+    { "layer": "full", "path": "phases[6].side", "before": "Quinn", "after": "Ryze" },
+    { "layer": "content", "path": "win[6]", "before": "Quinn", "after": "Ryze" },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Passive-mark AA trades win every short exchange. Identify how Ryze contests the first waves before you commit anything.",
+      "after": "Harrier-marked autos out-damage a level-1 Ryze whose only tool is Overload (Q), a 5s skillshot that roots nothing without Flux."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Two items on: your pattern is at full power. Ryze carry threat 8.5/10 — close before the map decides instead of you.",
+      "after": "Archangel's mana and Q-E spam-root flip it: he bursts your frame. Ryze carry threat 8.5/10 — close before two items land."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ryze Rune Prison: matchup-defining — His point-blank root — sets up his combo. Bait it. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Ryze Rune Prison (W): 11s at rank 1, and it only roots if Spell Flux (E) landed first — dodge the E and it is a slow. It also cancels Behind Enemy Lines, so channel only after he spends it. - Your Vault: spacing, never chip."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Ryze's Rune Prison: His point-blank root — sets up his combo. Bait it. When it is down — Blind + vault re-kite.",
+      "after": "Rune Prison (W) roots only through Spell Flux (E), else it slows; it also cancels your R channel. Vault out on his E."
+    }
+  ],
+  "notes": "Ryze W root requires Flux from E — this is the single most useful unstated fact in the matchup and now appears in three places. Behind Enemy Lines is a channel and Rune Prison cancels it (missing-interactions rule your-channel-punished). Left diff 'EVEN' alone despite a 57.42% win rate, since ratings should be settled against the mirror. Quinn's Q blind is worthless against Ryze's ability damage; existing wants.you[1] already says so correctly."
+}

@@ -1,0 +1,90 @@
+{
+  "ownerKey": "quinn",
+  "enemy": "ksante",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "EVEN / 6/10 with a 7/10 carry threat fits 54.55% over 297 games: Quinn owns levels 1-3, K'Sante reclaims from 6 onward. The recorded 'chart contradicts data' defect is not a ratings problem — Quinn's win rate comes from converting the early window into map pressure, which the text already says.",
+      "corrected": "Ratings unchanged.",
+      "confidence": "High",
+      "sources": ["packet winRate/games", "currentText.early / late"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 3 read K'Sante while its why says 'comes down to who lands first', and Level 6 read Quinn while its why says his R 'dashes you into a wall and isolates you — your squishy frame gets deleted'.",
+      "why": "Packet chart is Quinn, Skill, Skill, K'Sante, K'Sante, K'Sante, K'Sante. Both mismatched rows are captioned by text that already states the correct side.",
+      "corrected": "Row 2 to Skill and row 4 to K'Sante, in matched full/content pairs. Rows 0, 1, 3, 5 and 6 already agree. Spike ladder (lvl 1 range, lvl 2-3 punish, lvl 6 R isolation, 2+ items tank-fighter) is accurate.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.whys[2], whys[4]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The knockup is attributed to Ntofo Strikes in five places ('his Q knockup', 'Q-knockup all-in'). Ntofo Strikes pulls enemies IN at two stacks; the knockback and stun are Path Maker (W). Path Maker's true damage and All Out's healing are never mentioned either.",
+      "why": "Kit: Q 'At 2 stacks, K'Sante fires a shockwave that pulls enemies in', 3.5s cooldown, 450 range. W 'dashes, knocking back and stunning', 14s, flagged trueDamage. R All Out grants healing, 120s at rank 1. Missing-interaction rows list needs-antiheal and resistances-invalidated for this matchup.",
+      "corrected": "spikes[0].text, spikes[1].text, wants.you[1] and wants.foe[1] now use the real mechanics; breakdown.cooldowns, dosFull[0].d, report[5].t and dontsFull[1].d carry the 3.5s / 14s / 120s numbers, the true-damage warning against stacking armour, and the anti-heal requirement.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/R", "missingInteractions rules needs-antiheal, resistances-invalidated"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Itemization recommends Plated Steelcaps as the boot without noting Path Maker deals true damage.",
+      "why": "True damage ignores armour, so armour boots are not the mitigation the line implies against his engage.",
+      "corrected": "Stated in the cooldown block and report[5].t rather than rewriting the item string, which is otherwise sound (Steelcaps still answer his autos).",
+      "confidence": "Medium",
+      "sources": ["enemyKit W trueDamage flag"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[2].side","before":"K'Sante","after":"Skill"},
+    {"layer":"content","path":"win[2]","before":"K'Sante","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Quinn","after":"K'Sante"},
+    {"layer":"content","path":"win[4]","before":"Quinn","after":"K'Sante"},
+    {
+      "layer":"content","path":"spikes[0].text",
+      "before":"You out-range his melee Q knockup and Harrier-reset autos for free poke before he has W block.",
+      "after":"You out-range Ntofo Strikes at 450 and get free Harrier-reset poke before Path Maker is leveled."
+    },
+    {
+      "layer":"content","path":"spikes[1].text",
+      "before":"Q blind into E-Vault repositions out of his Q-knockup all-in — your cleanest punish window before items.",
+      "after":"Blinding Assault into Vault repositions out of the Ntofo Strikes pull — your cleanest punish before items."
+    },
+    {
+      "layer":"content","path":"wants.you[1]",
+      "before":"Use E-Vault to escape his Q knockup and W dash whenever he steps to all-in",
+      "after":"Vault out of the Ntofo Strikes pull and the Path Maker stun when he steps up"
+    },
+    {
+      "layer":"content","path":"wants.foe[1]",
+      "before":"Land his Q knockup or W dash to pin you in range of his all-in",
+      "after":"Land the Ntofo Strikes pull or the Path Maker stun to pin you down"
+    },
+    {
+      "layer":"full","path":"breakdown.cooldowns",
+      "before":"- K'Sante All Out: matchup-defining — His duelist mode. Poke when it’s down. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after":"- K'Sante All Out: 120s at rank 1 — his duelist mode, so poke while it is down. - Path Maker: 14s, and its true damage means armour is not the answer. - Ntofo Strikes: 3.5s, pulls you in at two stacks."
+    },
+    {
+      "layer":"full","path":"dosFull[0].d",
+      "before":"His duelist mode. Poke when it’s down. Only engage once it is down or baited.",
+      "after":"His duelist mode, 120s at rank 1 — poke while it is down, and bring anti-heal."
+    },
+    {
+      "layer":"full","path":"report[5].t",
+      "before":"Track K'Sante's All Out: His duelist mode. Poke when it’s down. When it is down — Vault-blind + R him.",
+      "after":"All Out is 120s and heals him — anti-heal early. Path Maker's true damage ignores the armour you buy."
+    },
+    {
+      "layer":"full","path":"dontsFull[1].d",
+      "before":"Burning it for tiny value leaves you naked for its full cooldown.",
+      "after":"All Out heals him and hits harder — disengage until it ends."
+    }
+  ],
+  "notes": "Packet header says games 358 but the packet body says 297 — same mismatch pattern seen on kled (148 vs 142); worth checking the packet builder. Per the mirror, 'Vault (Dash/Blind)' style labelling still sits in breakdown.trading and report[3].t; not rewritten here because those are long composite strings whose trade advice is otherwise sound. No cooldown written for Quinn's R: the kit's '3' is the flight timer, not the ability cooldown."
+}

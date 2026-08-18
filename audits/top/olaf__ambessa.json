@@ -1,0 +1,176 @@
+{
+  "ownerKey": "olaf",
+  "enemy": "ambessa",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Both chart layers read Skill/Olaf/Olaf/Skill/Skill/Olaf/Olaf; the packet levelChart reads Olaf/Olaf/Skill/Olaf/Ambessa/Skill/Olaf, and the packet order is what the whys[] already say.",
+      "why": "whys[0] 'wins first contact' is an Olaf row marked Skill; whys[2] 'Even window' is a Skill row marked Olaf; whys[3] 'out-trade her short combos' is an Olaf row marked Skill; whys[4] 'Ambessa owns 6' is an Ambessa row marked Skill; whys[5] 'Skill window' is a Skill row marked Olaf.",
+      "corrected": "Chart set to Olaf, Olaf, Skill, Olaf, Ambessa, Skill, Olaf in BOTH layers as one atomic group.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.whys"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1] claims 'her ult animation ignores your Ragnarok'. It does not — Ragnarok grants immunity to disables while Olaf keeps attacking, and Public Execution's suppression plus stun is precisely a disable.",
+      "why": "Riot text, Olaf R: 'become immune to disables for as long as he keeps attacking.' Riot text, Ambessa R: 'blinks to the farthest enemy champion... suppresses them upon her arrival... slams the enemy into the ground where they take damage and are stunned.' The real spike asymmetry is the cooldowns: her R is 130/115/100s against Ragnarok's 100/90/80s. The mirror audit resolved the same contradiction from her side.",
+      "corrected": "Level 6 rewritten on the suppress-versus-immunity trade and the two cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/olaf.json", "champ-data/_kits/ambessa.json", "mirrorFindings"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "FABRICATED ABILITY NAME. 'Repeating Dashes' is not an Ambessa ability and it is the tracked ability across focus.text, loading, winCon, tldr, breakdown.cooldowns, dosFull[0].t and report[5].t. Her passive is Drakehound's Step. Her real slots: Q Cunning Sweep / Sundering Slam (14/13/12/11/10s), W Repudiation (18/17/16/15/14s, braced shield then slam, extra damage if it blocked non-minion damage), E Lacerate (13/12/11/10/9s, slow), R Public Execution (130/115/100s, 1250 range).",
+      "why": "packet.enemyAbilities and the kit file list every real name; 'Repeating Dashes' appears in neither. packet.defects already flags that no Ambessa ability is ever named in this entry.",
+      "corrected": "Tracked ability renamed to Drakehound's Step throughout, and Repudiation, Lacerate and Public Execution named where the advice depends on them.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ambessa.json", "packet.enemyAbilities", "packet.defects"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "'W omnivamp' appears in whys[3], whys[6], spikes[2], mid, late and wants.you[1]. Olaf's W is Tough It Out — attack speed plus a shield, 16/15/14/13/12s. No lifesteal.",
+      "why": "Riot text, Olaf W: 'Olaf's Attack Speed is increased and he gains a Shield.' The sustain is Berserker Rage (P), lifesteal scaling with missing health.",
+      "corrected": "Shield and Berserker Rage named correctly in each.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/olaf.json"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Olaf"},
+    {"layer": "content", "path": "win[0]", "before": "Skill", "after": "Olaf"},
+    {"layer": "full", "path": "phases[2].side", "before": "Olaf", "after": "Skill"},
+    {"layer": "content", "path": "win[2]", "before": "Olaf", "after": "Skill"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Olaf"},
+    {"layer": "content", "path": "win[3]", "before": "Skill", "after": "Olaf"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ambessa"},
+    {"layer": "content", "path": "win[4]", "before": "Skill", "after": "Ambessa"},
+    {"layer": "full", "path": "phases[5].side", "before": "Olaf", "after": "Skill"},
+    {"layer": "content", "path": "win[5]", "before": "Olaf", "after": "Skill"},
+    {
+      "layer": "full",
+      "path": "focus.text",
+      "before": "Ambessa Repeating Dashes",
+      "after": "Ambessa Public Execution"
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Olaf vs Ambessa - Track: Ambessa Repeating Dashes. - Keep the wave on your side. - Engage only on Repeating Dashes's cooldown. - Don't chase past the wave. - Ultimate = kill windows only.",
+      "after": "- Olaf vs Ambessa - Track: Ambessa Public Execution. - Keep the wave on your side. - Engage only on Public Execution's 130s cooldown. - Don't chase her dashes. - Ragnarok = kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "R her CC, axe to stick, out-brawl her. Track Repeating Dashes before every commit and keep the wave on your side.",
+      "after": "Ragnarok her suppress, axe to stick, out-brawl her. Track Public Execution before every commit and hold the wave."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ambessa Repeating Dashes: matchup-defining — Her mobility. Axe-slow + R to stick. Track it before every engage. - Your committal tool: never spend it on chip. - Your ultimate: the win condition — kill windows only.",
+      "after": "- Ambessa Public Execution: matchup-defining — 130/115/100s, blinks 1250 and suppresses. Ragnarok is the answer. - Drakehound's Step: her dash off every cast — axe-slow it. - Your ultimate: kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Track Ambessa's Repeating Dashes before you commit",
+      "after": "Track Ambessa's Public Execution before you commit"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Her mobility. Axe-slow + R to stick. Only engage once it is down or baited.",
+      "after": "Blink, suppress, stun from 1250. Only commit once it is down, or with Ragnarok up."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Ambessa's Repeating Dashes: Her mobility. Axe-slow + R to stick. When it is down — Axe + E her.",
+      "after": "Track Public Execution: 130s, blinks 1250, suppresses then stuns. Ragnarok is immune to it — hold both."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Axe-slow + W sustain wins the first trades. Identify how Ambessa contests the first waves before you commit anything.",
+      "after": "Undertow's slow beats her dash combo at 1 — she can't kite a slow she is standing in. Throw it as she steps up to last-hit."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit online — your core pattern starts now. Keep the wave near your side so Ambessa must walk into your engage range.",
+      "after": "She can weave the full dash combo around a single Q now, so the trade is whether your slow lands or Repudiation does."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "The lane-control window: trade around Repeating Dashes's cooldown and bank small leads. If ahead, freeze and deny; if behind, farm safe.",
+      "after": "Axe-reset slows plus the Tough It Out shield out-trade her short combos and she has no sustain to answer. Bank leads, hold the wave."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Ragnarok deletes CC — once you press R, nothing he has stops the run-down. Reassess every all-in at 6 — Ambessa's ultimate changes the math too.",
+      "after": "Ragnarok's disable-immunity is exactly the answer to Public Execution's suppress — but hers is 130s and yours 100s. Never fight her 6 without it."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Sundered Sky is your spike — force fights the moment it completes, on Repeating Dashes's cooldown.",
+      "after": "Even — your first bruiser item trades with her combo; whoever lands their engage cleanly takes it."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Axe-reset slows plus W omnivamp out-trade her short combos and heal back her W chip — she has no sustain to answer it.",
+      "after": "Axe-reset slows plus the Tough It Out shield out-trade her combos and eat Repudiation's chip — she has no sustain."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Ambessa owns 6: her ult lock and chain CC catch you mid-trade, and if your Ragnarok is down you can't escape the chain.",
+      "after": "Ambessa owns 6: Public Execution suppresses you from 1250 range, and with Ragnarok's 100s down there is no answer to it."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "You reclaim the 1v1 — her bruiser stats can't outrun your slows and E true damage, and W omnivamp wins the extended fight.",
+      "after": "You reclaim the 1v1 — her stats can't outrun your slows and E true damage, and Berserker Rage wins the extended fight."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Ambessa's spike: her R lock + chain CC catches you mid-trade and her ult animation ignores your Ragnarok if you blew it early.",
+      "after": "Ambessa's spike: Public Execution suppresses then stuns from 1250 range. Ragnarok answers it — but only if you still have your 100s ult."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Black Cleaver / bruiser core with W omnivamp on — your most oppressive all-in window; perma-slow her with axe resets and out-sustain her W damage.",
+      "after": "Black Cleaver / bruiser core with Tough It Out on — your most oppressive all-in window; perma-slow her with axe resets and shield Repudiation's slam."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Bait her W damage combo, pop W omnivamp, then E true-damage nuke and out-sustain the trade",
+      "after": "Bait Repudiation's braced shield, pop Tough It Out, then Reckless Swing her and take the trade"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Through 4-5 you stay ahead — short trades with axe-reset slows plus W omnivamp heal back anything her W chips off you, and she has no sustain to match. Level 6 is HER window, not yours: her ult lock and chain CC can catch you mid-commit, so do NOT all-in into her R unless your Ragnarok (R) is up to ignore the chain. If you have R, you flip it — pop it, eat the CC for free, and run her down with the slow + E.",
+      "after": "Through 4-5 you stay ahead — short trades with axe-reset slows plus the Tough It Out shield absorb anything Repudiation chips off you, and she has no sustain to match. Level 6 is HER window: Public Execution blinks 1250 units, suppresses, then stuns, so do NOT all-in into it unless your Ragnarok (R) is up. If you have R, you flip it — pop it, the suppress does nothing, and run her down with the slow and E."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "You reclaim the straight 1v1 because Ambessa has no true escape — your slows stick, your E true damage ignores her bruiser armor, and W out-sustains her. But she's the one with the chain CC, so the danger is getting isolated and locked before you reach her. Group with your team, force the all-in when your Ragnarok is up, and don't let her dash-combo onto you while you're slowed and Rless. Close it before she's fully online.",
+      "after": "You reclaim the straight 1v1 because her Drakehound's Step dashes are short — your slows stick, Reckless Swing's true damage ignores her armour, and Berserker Rage's missing-health lifesteal outlasts her. The danger is being isolated and suppressed by Public Execution before you reach her. Group with your team, force the all-in while Ragnarok is up, and never let her combo onto you slowed and Rless."
+    }
+  ],
+  "notes": "Ambessa's Repudiation (W) carries a derived 'grounding' flag that Riot's description does not support (shield, brace, then slam) — no grounding claim was made. Olaf's Undertow (Q) carries the same misfiring flag; armour shred and slow only. Her Q has two forms (Cunning Sweep, then a transformed Sundering Slam after a hit) which nothing on the page mentions; there was no writable field short enough to add it inside the length band, so it is recorded here rather than invented into an existing string."
+}

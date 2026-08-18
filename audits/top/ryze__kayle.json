@@ -1,0 +1,92 @@
+{
+  "ownerKey": "ryze",
+  "enemy": "kayle",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "48.91% over 184 recorded games is an even lane, and the difficulty text, diff enum and rating all already agree at 5.5/10.",
+      "corrected": "Left diff EVEN, diffRating 5.5/10, carryRating 6/10.",
+      "confidence": "High",
+      "sources": ["packet winRate 48.91 / 184 games"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Both layers read Skill, Kayle, Kayle, Skill, Skill, Kayle, Kayle. The packet chart and the mirror both say Ryze, Ryze, Ryze, Kayle, Kayle, Kayle, Ryze — and the whys[] captions already argue the packet's version (whys[1] and whys[2] describe a clean Ryze window, whys[3]/[4] a Kayle one, whys[6] a Ryze teamfight).",
+      "why": "Kayle is melee with no dash and no invulnerability until 6, so levels 1-3 are Ryze's; Celestial Blessing and Divine Judgment take 4-6; Nashor's takes first item; Ryze reclaims the game at two mana items through teamfights and Realm Warp.",
+      "corrected": "Six paired flips across phases[N].side and win[N] with matching ratings; phases[5] already read Kayle and stays.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "mirrorFindings kayle__ryze point 2", "existing whys[] captions"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.foe[0] names Kayle's passive 'Holy Fervor' — it is Divine Ascent. No cooldown anywhere (packet defect: zero sequencing cues). wants.you[0] puts 'full-ranged form at level 6' while spikes[3] puts it at 11; neither level is in the kit file.",
+      "why": "Divine Ascent is the real passive. Radiant Blast is 12s at rank 1 and reduces resistances on the way through; Celestial Blessing is a flat 15s heal plus move speed; Divine Judgment is 160s at rank 1. Those are the punish windows the page never gave.",
+      "corrected": "Passive renamed, Q/W/R cooldowns written into whys[3], whys[4] and mid, and the unverifiable ranged-form level dropped from wants.you[0] in favour of the levels 2-3 window the kit does support.",
+      "confidence": "High",
+      "sources": ["enemyKit Kayle P/Q/W/R", "packet suspectNames", "packet defects"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Celestial Blessing's heal is never answered; no Grievous Wounds timing on the page.",
+      "why": "A 15s heal on move speed is what lets her erase the chip from your rotation in extended trades.",
+      "corrected": "Anti-heal folded into whys[3].",
+      "confidence": "High",
+      "sources": ["missingInteractions rule needs-antiheal", "enemyKit W heal flag"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Ryze" },
+    { "layer": "content", "path": "win[0]", "before": "Skill", "after": "Ryze" },
+    { "layer": "full", "path": "phases[1].side", "before": "Kayle", "after": "Ryze" },
+    { "layer": "content", "path": "win[1]", "before": "Kayle", "after": "Ryze" },
+    { "layer": "full", "path": "phases[2].side", "before": "Kayle", "after": "Ryze" },
+    { "layer": "content", "path": "win[2]", "before": "Kayle", "after": "Ryze" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Kayle" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Kayle" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Kayle" },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Kayle" },
+    { "layer": "full", "path": "phases[6].side", "before": "Kayle", "after": "Ryze" },
+    { "layer": "content", "path": "win[6]", "before": "Kayle", "after": "Ryze" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "5/10", "after": "6/10" },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "She gains Celestial Blessing move speed and stacks Starfire Spellblade faster at levels 4-5, making post-combo kiting easier while your mana costs remain high pre-item.",
+      "after": "Celestial Blessing heals and speeds her on a flat 15 seconds, so she kites your combo cooldown and erases the chip — Grievous Wounds is what makes levels 4-5 trades stick."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Divine Judgment comes online at level 6 — she can pop invulnerability inside your root, wasting your entire committed combo and leaving you on full cooldowns.",
+      "after": "Divine Judgment arrives at 6 on a 160-second cooldown — she pops invulnerability inside your root and the committed combo is wasted, so only go once you have seen it spent."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Keep you at auto range pre-6 to stack her Passive (Holy Fervor) stacks and deny your melee-range E pattern safely",
+      "after": "Hold you at auto range pre-6 so Divine Ascent keeps ramping while your 615-range Spell Flux never reaches her"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Root her with W before she reaches full-ranged form at level 6 so she cannot safely kite your Flux chains",
+      "after": "Spell Flux then Rune Prison at levels 2-3, while she still has no dash and no invulnerability to answer it"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "From levels 4-5 she still has no ranged form and no dash, but her Celestial Blessing (W) gives her a move speed burst that makes kiting your post-combo cooldown easier, and her Starfire Spellblade (E) empowered auto starts to stack damage faster — she is not threatening you but she is also no longer passive. At level 6 she gains a major defensive tool in Divine Judgment (R invulnerability): never commit your full W-root-into-empowered-Q if her R is available, because she will pop it the instant she is rooted and your window is wasted entirely. Use your Realm Warp to pressure other lanes if she sits back farming — your macro map pressure is worth more than a coin-flip 1v1 while her invulnerability is up.",
+      "after": "From levels 4-5 she still has no dash, but Celestial Blessing heals and speeds her on a flat 15 seconds, letting her kite your combo cooldown, and Starfire Spellblade's empowered auto starts to bite — no longer passive, not yet threatening. Radiant Blast is 12 seconds at rank 1 and cuts your resistances on the way through, so step up once it is spent, never into it. At 6 Divine Judgment lands on 160 seconds: never commit Rune Prison into empowered Q while it is available, because she pops it the instant she is rooted and the whole rotation is wasted. If she sits back farming, Realm Warp another lane — map pressure beats a coin-flip 1v1 with invulnerability up."
+    }
+  ],
+  "notes": "The level chart was the big defect here: both layers said Kayle wins levels 2-3 while the captions underneath them described a clean Ryze root window, and the packet and mirror both say Ryze. Flipped six rows in matched pairs. Passive name corrected (Divine Ascent, not Holy Fervor). I deliberately did NOT restate which level Kayle goes ranged — the kit file only says range comes as she levels, and the page contradicted itself with 6 and 11; spikes[3] still says 11 and I left it rather than assert a number I cannot verify. Flagged in unverified."
+}

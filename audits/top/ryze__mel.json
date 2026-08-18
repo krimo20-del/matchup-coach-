@@ -1,0 +1,82 @@
+{
+  "ownerKey": "ryze",
+  "enemy": "mel",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Ryze wins 57.95% over 195 games. Disk level chart (Mel / Skill / Skill / Skill / Skill / Ryze / Ryze) already matches that shape: Mel owns level 1 range, the middle is skill, Ryze owns items. The packet's levelChart field (Mel 5/7) is STALE relative to disk — full and content layers agree with each other, so no chart flip is needed and none is proposed.",
+      "corrected": "No chart change. Early belongs to Mel's 950-range Radiant Volley (Q); Ryze takes over at first item.",
+      "confidence": "High",
+      "sources": ["brief packet", "brief currentText"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are Lvl 1 (Mel range), Lvl 3-5 (Rebuttal coverage), 1st item, 2+ items — all four present, matching the Rod of Ages/Seraph's curve described in breakdown.spikes. Level 6 is macro only: Realm Warp gives no duel steroid, which the text already states.",
+      "corrected": "Kept; only the ability slot inside spikes[1] is corrected.",
+      "confidence": "High",
+      "sources": ["brief ownerKit", "brief enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text calls Rebuttal Mel's R and claims it reflects 'your projectile Q and W'. Rebuttal is her W (cd 38/35/33/29/26), and Rune Prison (W) carries no projectile flag — Ryze's projectiles are Overload (Q) and Spell Flux (E). whys[2] says 'Full Flux' instead of Spell Flux. dosFull[2].d quotes a 'fifteen-second' Rebuttal window that does not exist.",
+      "why": "Mirror audit (mel vs ryze) already established: Rune Prison roots only through Spell Flux; Overload is the line projectile; reflect Spell Flux specifically. Kit flags confirm projectile on Ryze Q and E only. Mel's P (Searing Brilliance) carries the execute flag — Overwhelm stacks consume for a threshold kill, absent from the current text.",
+      "corrected": "Rebuttal (W) reflects Overload (Q) and Spell Flux (E). Rune Prison (W) still lands through it but slows instead of rooting when Flux never applied. Rebuttal is 26-38s, not fifteen. Overwhelm executes on a hidden threshold — track the HP number.",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "brief ownerKit", "brief mirrorFindings", "brief missingInteractions"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing in the matchup mentioned Searing Brilliance's execute threshold.",
+      "why": "missingInteractions rule 'execute-threshold' applies here and no writable field carried it.",
+      "corrected": "Folded into dontsFull[0].d.",
+      "confidence": "High",
+      "sources": ["brief missingInteractions"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Mel's Rebuttal (R) reflects your projectile Q and W back at you, punishing every greedy full-rotation attempt and extending her range advantage through the whole laning phase.",
+      "after": "Mel's Rebuttal (W) reflects Overload (Q) and Spell Flux (E), not Rune Prison — but with no Flux applied that root is only a slow, so bait the 26-38s reflect before any full rotation."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Full Flux loop is online but Rebuttal still covers your combo; she controls spacing and wins any fight where you commit into the reflect.",
+      "after": "Spell Flux loop is online but Rebuttal still covers your combo; she controls spacing and wins any fight where you commit into the reflect."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "Trade rotations, not autos — your EQ out-damages his poke if you land Flux chains.",
+      "after": "Trade rotations, not autos — your EQ out-damages her poke if you land Flux chains."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "Trade rotations, not autos — your EQ out-damages his poke if you land Flux chains.",
+      "after": "Trade rotations, not autos — your EQ out-damages her poke if you land Flux chains."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Mel burns Rebuttal on nothing — take the fifteen-second invitation.",
+      "after": "Mel burns Rebuttal on nothing — that is a 26-38s invitation, take it."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That’s Mel’s bread-and-butter play — deny it and they run out of answers.",
+      "after": "Overwhelm stacks execute you at a threshold — watch the HP number, not the bar."
+    }
+  ],
+  "notes": "Packet levelChart for this matchup is stale (shows Mel 5/7); disk full+content charts already agree with each other and with the 57.95% win rate, so no chart edits were proposed. Left the 'his/her' pronoun mismatch in tradeGood, tradeBad, dosFull[1].d, report[3].t and breakdown.trading: those strings are duplicated across five paths and each is a separate exact-match edit; flagged rather than churned."
+}

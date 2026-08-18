@@ -1,0 +1,104 @@
+{
+  "ownerKey": "ryze",
+  "enemy": "aatrox",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart contradicted itself across layers and contradicted the mirror. full phases[].side read Ryze/Ryze/Skill/Skill/Skill/Ryze/Ryze while content win[] read Ryze/Ryze/Skill/Skill/Aatrox/Aatrox/Ryze — rows 4 and 5 rendered two different answers.",
+      "why": "The already-audited mirror (aatrox__ryze) states Levels 1-4 belong to Aatrox and only Two+ items flips to Ryze; the packet levelChart also gives Aatrox rows 2-5 and Ryze row 6. Aatrox out-trades Ryze at every point in lane and Ryze's 53.53% comes from scaling, not from laning.",
+      "corrected": "Chart set to Aatrox for Level 1 through First item, Ryze at 2+ items, proposed as matched full/content pairs for every changed row.",
+      "confidence": "High",
+      "sources": ["mirrorFindings (aatrox__ryze)", "packet.levelChart", "packet.defects"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1] and the late block both call World Ender a 100-second cooldown as if that were the lane number.",
+      "why": "Riot kit data: World Ender is 120/100/80. At level 6 — the level the spike is keyed to — it is 120s, not 100s.",
+      "corrected": "Spike text now names the 120-second rank-1 cooldown; the late block names the same number as the wait.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/aatrox.json (R: 120/100/80)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[3] and mid both attribute Aatrox's sustain to \"World Ender's passive healing\". Aatrox's healing passive is Deathbringer Stance (P) plus Umbral Dash (E); World Ender only amplifies it. whys[0] also claims Ryze 'must close to melee range' to use Q.",
+      "why": "Overload (Q) has 1000 range on a flat 5s cooldown — Ryze farms and pokes from well outside melee. Umbral Dash heals on every point of champion damage and is down to 6s at rank 4, which is what actually outruns Ryze's chip in a long trade. The missing-interactions file flags both the anti-heal requirement and the Deathbringer Stance auto-reset as absent from this page.",
+      "corrected": "Real source of the sustain named (Deathbringer Stance + Umbral Dash), the 6s Umbral Dash cooldown given, Grievous Wounds timing added to the ROA line, and the auto-reset wind-up added as the burst tell in Critical Don'ts.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/aatrox.json", "champ-data/_kits/ryze.json", "_missing/ryze.json (needs-antiheal, autoreset-burst-tell)"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "packet reports sequencingCues 0 — no 'wait for X before you Y' line anywhere.",
+      "why": "Ryze's whole pattern is stepping in while an Aatrox cooldown is spent.",
+      "corrected": "Concrete cooldown numbers added to mid and whys[3] (Umbral Dash 6s at rank 4) and to the World Ender spike (120s at rank 1).",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/aatrox.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Ryze", "after": "Aatrox" },
+    { "layer": "content", "path": "win[0]", "before": "Ryze", "after": "Aatrox" },
+    { "layer": "full", "path": "phases[1].side", "before": "Ryze", "after": "Aatrox" },
+    { "layer": "content", "path": "win[1]", "before": "Ryze", "after": "Aatrox" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Aatrox" },
+    { "layer": "content", "path": "win[2]", "before": "Skill", "after": "Aatrox" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Aatrox" },
+    { "layer": "content", "path": "win[3]", "before": "Skill", "after": "Aatrox" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Aatrox" },
+    { "layer": "full", "path": "phases[5].side", "before": "Ryze", "after": "Aatrox" },
+    { "layer": "full", "path": "phases[0].rating", "before": "7/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "7/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "You have only Q and must close to melee range to use it — Aatrox's Q poke hits you every time you step up, so farm from max range and bank Manaflow stacks rather than trading.",
+      "after": "You have only Overload (Q, 1000 range, flat 5s) and no root yet — The Darkin Blade's third swing knocks up, so farm at Q range and bank Manaflow stacks rather than stepping into his arc."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "World Ender and passive drain sustain mean his healing outpaces your burst in any extended fight; proc Phase Rush on each rotation, deal your damage, and walk out before the drain compounds.",
+      "after": "Deathbringer Stance and Umbral Dash (E, down to 6s at rank 4) heal him through chip, so his sustain outpaces your burst; proc Phase Rush each rotation, land the damage, and leave before the drain compounds."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "World Ender is Aatrox's hardest all-in window; never take an extended fight into it, and treat its 100-second cooldown as your engage timer.",
+      "after": "World Ender is Aatrox's hardest all-in window; never take an extended fight into it, and treat its 120-second rank-1 cooldown as your engage timer."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "From levels 4 through 6 Aatrox owns the 1v1 window — his drain healing compounds with World Ender and you cannot out-damage that sustain without items. Play the lane for CS and Manaflow stacks, not kills. When he walks forward, combo into Phase Rush and slide backward before World Ender's passive healing outraces your burst; never commit W as a poke tool when you need it as an escape. Realm Warp at 6 adds macro threat — roam mid or threaten a flank — but it gives you no combat spike in a straight 1v1, so do not suddenly try to duel him at 6 because your ultimate is up.",
+      "after": "From levels 4 through 6 Aatrox owns the 1v1 window — Deathbringer Stance and Umbral Dash heal him back faster than you chip, and you cannot out-damage that without items. Play the lane for CS and Manaflow stacks, not kills. When he steps up, E-Flux the minion beside him, W root, Q twice, and slide out on Phase Rush before that healing outruns your burst; never spend W as poke when you need it as an escape. Realm Warp at 6 adds macro threat — roam mid or flank — but gives you no combat spike in a straight 1v1, so do not duel him at 6 just because your ultimate is up."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Seraph's Embrace is the flip point: your combo is now nearly permanent, your Flux bounces chain continuously off a full wave, and your short-trade DPS exceeds what Aatrox's passive healing can cover between his Q cooldowns. Side-lane, crash the wave, and Realm Warp into every teamfight rather than fighting him alone in a long melee duel — your advantage is teamfight carry output and warp execution, not the straight 1v1. If World Ender is down, that is your green light to force; if it is up, kite and wait the 100-second cooldown out before pressing.",
+      "after": "Seraph's Embrace is the flip point: your combo is now nearly permanent, your Flux bounces chain continuously off a full wave, and your short-trade DPS exceeds what Deathbringer Stance and Umbral Dash can heal back between his Q cooldowns. Side-lane, crash the wave, and Realm Warp into every teamfight rather than fighting him alone in a long melee duel — your advantage is teamfight output and warp execution, not the straight 1v1. World Ender down is your green light to force; up, kite it out — 120s at rank 1, 80s at rank 3."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Aatrox spends World Ender early — the closest thing this matchup has to a guarantee.",
+      "after": "ROA ends the burst threat — and buy Grievous Wounds before his Umbral Dash healing compounds."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That’s Aatrox’s bread-and-butter play — deny it and they run out of answers.",
+      "after": "His opener is a Deathbringer Stance auto reset — that wind-up is your cue to leave."
+    }
+  ],
+  "notes": "Packet suspectNames were false positives: 'World Ender' is the correct R name in both flagged snippets. The real name error was attributing Aatrox's healing passive to World Ender in whys[3] and mid — it is Deathbringer Stance (P) plus Umbral Dash (E). Chart aligned to the mirror (aatrox__ryze): Aatrox owns Level 1 through First item, Ryze takes 2+ items. Ratings moved with the sides. Note the full layer for this matchup is heavily templated — breakdown.cooldowns, dosFull[0].d and dosFull[1].d all repeat tradeGood/tradeBad verbatim; left alone here rather than duplicating rewrites across five paths."
+}

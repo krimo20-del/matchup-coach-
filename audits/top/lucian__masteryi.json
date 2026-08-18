@@ -1,0 +1,52 @@
+{
+  "ownerKey": "lucian",
+  "enemy": "masteryi",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The content chart reads Lucian, Lucian, Lucian, Lucian, Lucian, Skill, Master Yi and that is packet.levelChart exactly. There is no full layer on this matchup at all (currentText.full is null), so there is no phases[]/win[] pair to disagree — nothing to reconcile, and nothing rendering a second answer.",
+      "corrected": "No chart change.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.full = null"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 spike was written as unconditional ('even clean Alpha dodges do not save him from the full combo'), and the two later spikes carried no cooldowns.",
+      "why": "Alpha Strike makes Master Yi untargetable for its flight on a 20/19.5/19/18.5/18s cooldown that his basic attacks shorten, so a Culling channelled as he casts is simply lost. Highlander is a flat 85s and makes him immune to slows.",
+      "corrected": "spikes[1].text, whys[4], whys[6] and 'mid' now key the ult to his blink — channel after he lands, not as he casts — and Highlander's 85s and slow immunity are stated.",
+      "confidence": "High",
+      "sources": ["enemyKit Master Yi Q cd and untargetable flag", "enemyKit Master Yi R cd 85"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page claimed The Culling beats Alpha Strike dodges. It does not — Alpha Strike is untargetable. Wuju Style's true damage and Meditate's healing were also absent.",
+      "why": "Riot's Alpha Strike text: 'teleports across the battlefield with blinding speed... while simultaneously becoming untargetable'. Riot's Wuju Style: 'Grants bonus true damage on basic attacks' — so armour is the wrong buy against him. Meditate restores health and reduces damage taken on a flat 10s and is a CHANNEL, meaning it is interruptible, which is the real counterplay and matters more than out-damaging it.",
+      "corrected": "The untargetable window written into whys[4], spikes[1].text and 'mid'; Wuju Style's true damage into whys[5]; Meditate's heal and 10s cooldown into spikes[2].text.",
+      "confidence": "High",
+      "sources": ["enemyKit Master Yi Q/W/E text and flags", "missingInteractions rules untargetable-dodges-burst, needs-antiheal, resistances-invalidated"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "The packet flags 'Piercing Light' in whys[0] as a probable wrong name.",
+      "why": "Piercing Light is the real Riot name of Lucian's Q. False positive in suspectNames.",
+      "corrected": "No change made.",
+      "confidence": "High",
+      "sources": ["ownerKit Lucian Q", "packet.suspectNames"]
+    }
+  ],
+  "edits": [
+    {"layer": "content", "path": "whys[4]", "before": "At 6 The Culling gives you kill pressure that outdoes his even through Alpha Strike dodges.", "after": "At 6 The Culling kills — but Alpha Strike goes untargetable, so fire it after he blinks."},
+    {"layer": "content", "path": "whys[5]", "before": "With his first attack-speed item it becomes a skill fight — he can now dodge and stick to you.", "after": "First attack-speed item makes it a skill fight — Wuju Style's true damage ignores your armour."},
+    {"layer": "content", "path": "whys[6]", "before": "Late, Highlander resets and attack speed let him out-scale and all-in your squishy frame.", "after": "Late, Highlander resets on takedowns and ignores slows — he all-ins your squishy frame."},
+    {"layer": "content", "path": "spikes[1].text", "before": "The Culling adds kill pressure his Alpha dodges cannot fully cancel — snowball windows are open.", "after": "The Culling adds kill pressure, but Alpha Strike's untargetable window eats it — fire after his blink."},
+    {"layer": "content", "path": "spikes[2].text", "before": "He gains dodge-and-stick threat — the free lane becomes a skill fight overnight.", "after": "Dodge-and-stick threat arrives, and Meditate heals through your chip on a flat 10s."},
+    {"layer": "content", "path": "mid", "before": "At 6 The Culling stacks kill pressure on top of the beating, and even clean Alpha dodges do not save him from the full combo. His first item is the turn: dodge-and-stick threat makes it a skill fight, so keep your distance discipline — dash after his Q, not before — and spend the lead on the map.", "after": "At 6 The Culling stacks kill pressure on top of the beating, but Alpha Strike is untargetable in flight — channel after he lands, not as he casts. His first item is the turn: dodge-and-stick threat makes it a skill fight, so keep your distance discipline — dash after his Q, not before — and spend the lead on the map."}
+  ],
+  "notes": "STRUCTURAL GAP: this matchup has no full-layer entry at all — currentText.full is null, so CHAMP_FULL['lucian']['masteryi'] does not exist. That is one of the 92 known missing full entries. I did not try to build it with before:null creates: a full entry is ~50 fields (tldr, winCon, enemyWin, diff, tone, two ratings, seven phases with three sub-fields each, eleven breakdown keys, three Do's, three Don'ts and fifteen report rows), and filling all of them from a brief this thin would mean inventing the majority of the text — exactly the 'fabricated content is worse than a visible gap' failure mode. Flagging it so the user can decide whether these 92 get a generated skeleton from the template or stay empty. The content layer is in good shape and now carries the three real interactions (untargetable Alpha Strike, true-damage Wuju Style, Meditate's heal)."
+}

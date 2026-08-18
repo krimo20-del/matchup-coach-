@@ -1,0 +1,49 @@
+{
+  "ownerKey": "lucian",
+  "enemy": "locke",
+  "lane": "top",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers read Lucian, Lucian, Lucian, Lucian, Skill, Locke, Skill and that is exactly packet.levelChart. Every win[N] matches its phases[N].side, and every whys[N] argues the same side as its row — the only matchup in this slice where the chart was already sound.",
+      "corrected": "No chart change. Ratings (6/6/6/6/4/4/4) also track the sides sensibly, so they were left alone.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText full phases[] and content win[]/whys[]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The spike structure is already concrete and correct against the kit: level 6 Purgatory rewriting fight maths, the first-item Lich Bane blink-bite, and the post-E window as the recurring anti-spike. Ashen Pursuit's flat 10s is stated in report[7] and the cooldown block, and it matches the kit's E cd of 10.",
+      "corrected": "No change needed.",
+      "confidence": "High",
+      "sources": ["enemyKit Locke E cd 10, R cd 120/100/80"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t states 'Anti-heal is optional — his sustain is self-refund, not lifesteal.' That is the wrong conclusion: Grievous Wounds reduces healing by source-agnostic percentage, so it cuts Soul Ignition's refund exactly like any other heal. Nothing on the page mentions that Silver Stake's on-hit scales with MISSING health, or that Ashen Pursuit is an auto reset.",
+      "why": "Riot's W text: 'At the end of the duration, Locke will heal back a portion of the damage he takes during the effect.' That is healing, and it is the biggest single number in an extended trade against him. Riot's passive: 'additional magic damage On-Hit, increased based on enemy missing Health' — so the trade gets worse the longer you stay low, which inverts the usual 'stay and finish it' instinct.",
+      "corrected": "report[8].t now calls for Grievous Wounds against the Soul Ignition refund; dontsFull[0].d states the missing-health scaling; dosFull[2].d names Ashen Pursuit's auto reset as the wind-up tell.",
+      "confidence": "High",
+      "sources": ["enemyKit Locke P/W text", "missingInteractions rules needs-antiheal, onhit-itemization, autoreset-burst-tell"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "The packet flags 'Piercing Light' in whys[1] as a probable wrong name.",
+      "why": "Piercing Light is the real Riot name of Lucian's Q. False positive in suspectNames.",
+      "corrected": "No change made.",
+      "confidence": "High",
+      "sources": ["ownerKit Lucian Q", "packet.suspectNames"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "report[8].t", "before": "Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Anti-heal is optional — his sustain is self-refund, not lifesteal.", "after": "Early HP and MR blunt the nail chip (his damage is AP). A stopwatch/Zhonya’s-class answer beats Purgatory outright: untargetable at the floor = execute denied. Bring Grievous Wounds — Soul Ignition's refund is healing, and anti-heal cuts it."},
+    {"layer": "full", "path": "dontsFull[0].d", "before": "That is Locke’s favourite window — refusing it removes half his win condition.", "after": "His on-hit scales with your MISSING health — low HP is his best window, not yours."},
+    {"layer": "full", "path": "dosFull[2].d", "before": "Locke wastes Ritual Nails — that is your full-commit window.", "after": "His blink is an auto reset — the wind-up is the tell, not the cast."}
+  ],
+  "notes": "Two things I would not assert without a ruling, both recorded rather than edited. (1) NAME: the page calls Locke's Q 'Ritual Nails' everywhere (focus.text, winCon, enemyWin, the cooldown block, report[5]). Riot's own Q text in the kit says 'Locke readies a set of SOUL Nails to throw'. The kit file carries no ability names for Locke at all (packet.enemyAbilities is null), and the only names available anywhere in the brief come from the missing-interactions headlines: Silver Stake (P), Soul Ignition (W), Ashen Pursuit (E). So 'Ritual Nails' and 'Purgatory' are unverifiable from the data I have, and 'Ritual Nails' actively conflicts with the one piece of Riot text that mentions nails. I did not rename anything — this is a champion-wide string that appears in a dozen fields and getting it wrong in either direction is worse than leaving it. (2) The supplied missing-interaction 'Locke bypasses stacking resistances (Soul Ignition (W))' looks like a tooltip-parsing misfire in the same family the instructions warn about: the trueDamage flag sits on an ability whose only damage in Riot's text is damage Locke deals TO HIMSELF. I wrote no 'armour is the wrong answer' advice on the strength of it."
+}

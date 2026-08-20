@@ -6780,14 +6780,20 @@ class Component extends DCLogic {
     const champGroups = rosterSrc.map(g => ({
       group: g.group,
       champs: g.champs.filter(n => n.toLowerCase().includes(q)).map(n => {
-        const ok = jgAvail ? jgAvail(n) : true;
+        // A champion is never its own counter-pick. Mirror matchups carry no coaching
+        // value — both sides have identical kits, cooldowns and spikes, so every
+        // "who wins this stage" answer is a coin flip. Not selectable as an enemy.
+        const isMirror = this.state.homeStep !== 'you' && n === this.state.myChamp;
+        const ok = (jgAvail ? jgAvail(n) : true) && !isMirror;
         return {
           name: n,
           iconCss: window.CHAMP_ART ? window.CHAMP_ART.iconCss(n) : '',
           onClick: ok ? (() => (this.state.homeStep === 'you' ? this.pickYou(n) : this.pickEnemy(n))) : (() => {}),
-          op: ok ? 1 : 0.35,
+          op: ok ? 1 : (isMirror ? 0.25 : 0.35),
           cursor: ok ? 'pointer' : 'not-allowed',
-          soon: !ok
+          // "SOON" means data is coming. A mirror is permanently unavailable, so it must
+          // not carry that badge or it reads as a gap we intend to fill.
+          soon: !ok && !isMirror
         };
       })
     })).filter(g => g.champs.length > 0);

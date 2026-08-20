@@ -103,7 +103,7 @@ window.GEN_ENGINE = (function () {
     gwen:        { slot:'W', name:'Hallowed Mist', cd:'16s', note:'Untargetable from outside the mist — never burn damage into it.', winT:'MIST DOWN' },
     irelia:      { slot:'E', name:'Flawless Duet (Stun)', cd:'18s', note:'Her stun setup — dodge it and the dive falls apart.', winT:'STUN DOWN' },
     jax:         { slot:'E', name:'Counter Strike', cd:'8s', note:'Dodges every auto and stuns — hold your damage until it ends.', winT:'COUNTER STRIKE DOWN' },
-    kled:        { slot:'Q', name:'Beartrap on a Rope', cd:'9s', note:'The hook starts his all-in — dodge it and disengage his remount.', winT:'BEARTRAP DOWN' },
+    kled:        { slot:'Q', name:'Bear Trap on a Rope', cd:'9s', note:'The hook starts his all-in — dodge it and disengage his remount.', winT:'BEARTRAP DOWN' },
     olaf:        { slot:'Q', name:'Undertow (Axe)', cd:'5s', note:'Axe slows let him reach you — stand on the pickup spot to deny resets.', winT:'AXE DENIED' },
     pantheon:    { slot:'W', name:'Shield Vault (Stun)', cd:'14s', note:'Point-and-click stun — respect the all-in any time it is up.', winT:'VAULT DOWN' },
     renekton:    { slot:'W', name:'Ruthless Predator (Stun)', cd:'13s', note:'Fury-empowered stun — never trade into a full rage bar.', winT:'STUN DOWN' },

@@ -114,7 +114,7 @@ window.ENEMY_KITS = {
     R: { n: "Grandmaster\u2019s Might", d: "Passively every third hit deals bonus magic damage; the active grants big armor and MR plus a slam \u2014 the stat-check button for his all-ins and dives." } },
   kled: { cls: "Diver \u00b7 Mounted Skirmisher",
     P: { n: "Skaarl the Cowardly Lizard", d: "Mounted, Skaarl\u2019s HP tanks for him; dismounted he\u2019s squishy with a pistol but rebuilds courage by fighting \u2014 killing the mount is half the job; finish KLED before he remounts." },
-    Q: { n: "Beartrap on a Rope", d: "Hooks a champion and after a beat YANKS them toward him with bonus damage and a slow (dismounted it becomes a self-knockback pistol) \u2014 his engage; dodge it and he\u2019s toothless." },
+    Q: { n: "Bear Trap on a Rope", d: "Hooks a champion and after a beat YANKS them toward him with bonus damage and a slow (dismounted it becomes a self-knockback pistol) \u2014 his engage; dodge it and he\u2019s toothless." },
     W: { n: "Violent Tendencies", d: "Auto-triggers four hyper-fast attacks, the last dealing bonus max-HP damage \u2014 give ground for the four-hit window, then re-engage." },
     E: { n: "Jousting", d: "Dashes through enemies with a recast to dash back through \u2014 damage, mobility, and a dodge; note he cannot cross walls with it." },
     R: { n: "Chaaaaaaaarge!!!", d: "Charges across the map building a ramping SHIELD and leaving a speed trail for his team \u2014 the arrival hits like a gank; back off when he points at your lane." } },

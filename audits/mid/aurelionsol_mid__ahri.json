@@ -1,0 +1,376 @@
+{
+  "ownerKey": "aurelionsol_mid",
+  "enemy": "ahri",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Emerald+ win rate 46.37% over 1393 games; the page's TRICKY / 7-10 framing matches a losing-but-playable lane.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packet.winRate",
+        "MC_REAL_GAMES"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer's level chart said 'Skill' at First item and 2+ items while the content layer's win[5]/win[6] both said 'Aurelion Sol'. The page rendered two different answers to the same row, and the packet levelChart says Aurelion Sol for both.",
+      "why": "Ahri owns levels 1-6: Orb of Deception reaches 970 against a 750 Breath of Light, and Charm (975, flat 12s) instantly stops movement abilities, which cancels Astral Flight and Breath of Light. From the first item on, stardust is permanent and Ahri's kit stops scaling, so the packet's Aurelion Sol verdict is right and the full layer's 'Skill' is the stale side.",
+      "corrected": "phases[5].side and phases[6].side move from 'Skill' to 'Aurelion Sol', matching win[5]/win[6] which already read 'Aurelion Sol'. Both existing whys already describe Aurelion Sol winning those stages, so side and why now agree.",
+      "confidence": "High",
+      "sources": [
+        "packet.levelChart",
+        "currentText.content.win[5..6]",
+        "kit: Ahri Q range 970, E range 975 / 12s; ASol Q range 750"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2] and spikes[3] describe a 'Comet' that Aurelion Sol does not have, and spikes[2] calls W a stun. On the reworked kit W is Astral Flight (flight, 22/20.5/19/17.5/16s) and the only stun is R, Falling Star (120/110/100s).",
+      "why": "The content layer was written against the pre-rework Aurelion Sol (Comet of Legend / orbiting stars). Every 'Comet' reference and every 'W stun' is a fabricated ability on the live kit.",
+      "corrected": "Spikes rewritten around the real kit: level 6 Falling Star, first-item Rod of Ages, and The Skies Descend as the late spike. Ahri's own spikes are Charm's flat 12s at 3-5 and Spirit Rush at 6 (140s at rank 1).",
+      "confidence": "High",
+      "sources": [
+        "ownerKit slots W/R",
+        "enemyKit slots E/R"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The decisive interaction was never stated. Charm's own text says it instantly stops movement abilities, and both of Aurelion Sol's core abilities are interruptible channels — so Charm rips him out of Astral Flight mid-flight and cancels Breath of Light.",
+      "why": "Riot's Charm description: 'instantly stopping movement abilities'. ASol's Q and W both carry the channel flag 'interruptible — any CC cancels it'. Charm is a flat 12s at every rank; Astral Flight is 22s at rank 1, so Ahri gets roughly two Charms per flight and the cooldown asymmetry, not the damage, is what loses the lane.",
+      "corrected": "Stated in breakdown.cooldowns, report[5], enemyWin and dosFull[0]: channel only once Charm is spent, and treat the 12s window after a whiffed Charm as the entire green light.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit E text + hardCC flag",
+        "ownerKit Q/W channel flags",
+        "missingInteractions: your-channel-punished"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing on the page said Orb of Deception's return hit is true damage.",
+      "why": "Riot's text: 'dealing magic damage on the way out and true damage on the way back'. Stacking MR does not answer her poke, so the counterplay is sidestepping the return path, not buying resistances.",
+      "corrected": "Added to dontsFull[0].d and content early.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit Q text + trueDamage flag",
+        "missingInteractions: resistances-invalidated"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Essence Theft sustain was never mentioned; Aurelion Sol has no sustain of his own in this matchup.",
+      "why": "Ahri heals every 9 minions killed and for more on a takedown, so a chip-damage war is one she wins outright without Grievous Wounds.",
+      "corrected": "Added to dontsFull[2].d.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit P text",
+        "missingInteractions: needs-antiheal"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit at all — the one field that exists to hold real cooldown numbers.",
+      "why": "Charm 12s flat, Astral Flight 22s at rank 1, Falling Star 120s at rank 1 are all in the kits and all change what the player does.",
+      "corrected": "Rewritten with those three numbers and the two-Charms-per-flight consequence.",
+      "confidence": "High",
+      "sources": [
+        "ownerKit W/R cd",
+        "enemyKit E cd"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Copy-paste bleed: dosFull[1].d ('Hold R as the anti-dive stun post-6') was the tradeGood string, and dontsFull[2].d ('Trade HP for stacks below half health') was the tradeBad string.",
+      "why": "Title promises one thing, body explains another; both bodies are now written to their own titles.",
+      "corrected": "dosFull[1].d rewritten around Falling Star's 120s and Spirit Rush; dontsFull[2].d rewritten around Essence Theft sustain and Charm-into-Orb kill range.",
+      "confidence": "High",
+      "sources": [
+        "currentText comparison"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Pronouns: Ahri is female (champ-gender.js) but tldr, tradeGood, tradeBad and report[9] all called her 'his/him'.",
+      "why": "Template written for a male enemy with only the name swapped.",
+      "corrected": "All fixed to her/she.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/champ-gender.js"
+      ]
+    },
+    {
+      "point": 11,
+      "status": "needs-correction",
+      "whatIsWrong": "content late called Aurelion Sol's ultimate 'global'. Falling Star / The Skies Descend has 1250 range.",
+      "why": "Only Astral Flight gives map presence; the ultimate is a local zone.",
+      "corrected": "late rewritten to fly onto objectives rather than claiming a global ult.",
+      "confidence": "High",
+      "sources": [
+        "ownerKit R range 1250"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Mechanical lint pass (tools/matchup-lint.js) over aurelionsol_mid: female enemies referred to as he/him/his in prose fields, breakdown.cooldowns fields containing no cooldown number, Do/Don't bodies that were the generic tradeGood/tradeBad string pasted under an unrelated title, \"doubles\" magnitude claims with no number, and report[4].t still holding the pre-audit template while breakdown.wave had been rewritten.",
+      "why": "Pronouns checked against champ-data/champ-gender.js; every flagged pronoun refers to the enemy laner, none to a jungler, so there are no false positives in this set. Cooldowns and ranges taken from champ-data/_kits/. report[4].t is the report mirror of breakdown.wave and had drifted out of sync on 15 matchups.",
+      "corrected": "Pronouns corrected to she/her. breakdown.cooldowns given real numbers. Bled Do/Don't bodies rewritten to their own titles. Magnitude claims given the supporting number. Stale report[4].t re-synced to the rewritten breakdown.wave.",
+      "confidence": "High",
+      "sources": [
+        "tools/matchup-lint.js",
+        "champ-data/champ-gender.js",
+        "champ-data/_kits/"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Aurelion Sol"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Aurelion Sol"
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "His burst window is real and yours is a slow burn — give him nothing to burst until Falling Star changes the math.",
+      "after": "Her burst window is real and yours is a slow burn — give her nothing to burst until Falling Star changes the math."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "His burst window is real and yours is a slow burn — give him nothing to burst until Falling Star changes the math.",
+      "after": "Her burst window is real and yours is a slow burn — give her nothing to burst until Falling Star changes the math."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Ahri wins by landing Charm, denying your pattern, and out-ranging your plan one polite trade at a time.",
+      "after": "Ahri wins by landing Charm to rip you out of Astral Flight, then Orb's true-damage return finishes the job."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "W-flyby: fly a lateral arc, drag Q across Ahri for two seconds of burn + stacks, and land outside his answer range — repeat forever from one item.",
+      "after": "W-flyby: fly a lateral arc, drag Q across Ahri for two seconds of burn + stacks, and land outside her 975-unit Charm — repeat when Astral Flight is back."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Channelling Q face-to-face inside his engage range with W down — every champion that touches you wins that exchange pre-items.",
+      "after": "Channelling Q face-to-face with W down — Charm comes back every 12s, cancels the beam mid-tick, and Fox-Fire collects the rest pre-items."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ahri Charm: matchup-defining — The charm starts every kill pattern — stay behind minions while it is up. Read it like a second minimap. - Guard your W Astral Flight like a fifth summoner spell. - Ultimate goes to kill windows only.",
+      "after": "- Ahri Charm: flat 12s at every rank, and it stops movement abilities — it cancels Astral Flight mid-air. Read it like a second minimap. - Your W is 22s at rank 1, so she gets two Charms per flight. - Falling Star is 120s: kill windows only."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: W-flyby: fly a lateral arc, drag Q across Ahri for two seconds of burn + stacks, and land outside his answer range — repeat forever from one item. Bad trade: Channelling Q face-to-face inside his engage range with W down — every champion that touches you wins that exchange pre-items.",
+      "after": "Good trade: fly a lateral arc, drag Q across Ahri for two seconds of burn + stacks, and land outside her 975-unit Charm — repeat when Astral Flight is back. Bad trade: channelling Q face-to-face with W down — Charm returns every 12s, cancels the beam mid-tick, and Fox-Fire collects the rest."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: W-flyby: fly a lateral arc, drag Q across Ahri for two seconds of burn + stacks, and land outside his answer range — repeat forever from one item. Great trade: Ahri wastes Charm — commit immediately. Bad trade: Channelling Q face-to-face inside his engage range with W down — every champion that touches you wins that exchange pre-items.",
+      "after": "Good trade: fly a lateral arc, drag Q across Ahri for two seconds of burn + stacks, and land outside her 975-unit Charm. Great trade: Ahri wastes Charm — that is a 12s green light, commit immediately. Bad trade: channelling Q face-to-face with W down — Charm cancels the beam mid-tick and Fox-Fire collects the rest pre-items."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Ahri’s Charm: The charm starts every kill pattern — stay behind minions while it is up. The whole green-light system is its cooldown.",
+      "after": "Charm instantly stops movement abilities — it rips you out of Astral Flight and cancels Breath of Light. Its flat 12s is the whole green-light system."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Charm’s cooldown, on your Rod of Ages spike, and with your jungler’s setup. His answer goes first; yours goes last.",
+      "after": "Commit on Charm’s 12s cooldown, on your Rod of Ages spike, and with your jungler’s setup. Her answer goes first; yours goes last."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "The charm starts every kill pattern — stay behind minions while it is up. Until it’s spent, every commit is a coin flip.",
+      "after": "Charm reaches 975 to your 750 beam — channel from behind the caster minions so they eat the kiss, and step out once it is spent."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "W-flyby: fly a lateral arc, drag Q across Ahri for two seconds of burn + stacks, and land outside his answer range — repeat forever from one item.",
+      "after": "Falling Star is 120s at rank 1 — spend it on her Spirit Rush dive, never on a wave. Her three dashes are 450 units each and none of them outrun a landed stun."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Ahri whiffs Charm and the lane briefly belongs to you.",
+      "after": "A whiffed Charm buys 12 seconds with no lockdown on you."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Ahri’s whole plan in one window — decline politely and watch it retire.",
+      "after": "Orb's return hit is true damage — sidestep the way back; resistances save nothing."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Channelling Q face-to-face inside his engage range with W down — every champion that touches you wins that exchange pre-items.",
+      "after": "Essence Theft heals her every 9 minions; you have no sustain. Below half you sit inside Charm-into-Orb range and stacks buy nothing dead."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry by scaling honestly — every stardust stack is permanent, and the 30-minute version of you wins fights your laning self cannot imagine.",
+      "after": "Carry by scaling honestly — stardust is permanent, and once Charm is Ahri's only lockdown her ceiling stops moving while your beam keeps widening."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Spirit Rush gives Ahri a three-dash burst combo you cannot out-position or shield through",
+      "after": "Spirit Rush gives Ahri a three-dash burst combo you cannot out-position or fly away from"
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Two-item Comet and 5-star ultimate out-scale her all-in kit for objective and teamfight control",
+      "after": "Two items and The Skies Descend out-scale her all-in kit for objective and teamfight control"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Ahri gets Charm off Fox-Fire procs and can zone you from CS range without ever entering your Q arc, punishing every star you commit to a minion.",
+      "after": "Charm reaches 975 and Orb 970 against your 750 beam, so she zones you off CS from outside it and punishes every second you stand still to channel."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Spirit Rush gives her three dashes to close, Charm, and reset — a burst window you cannot out-range or Comet away from.",
+      "after": "Spirit Rush gives her three dashes to close, Charm, and reset — and Charm cancels the flight you would escape with."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Your first completed core item (usually Shadowflame or Liandry's) lets your Q poke and W stun start out-trading her sustained Orb of Deception harass.",
+      "after": "Your first completed core item (Rod of Ages or Liandry's) lets your beam ticks and Falling Star start out-trading her sustained Orb of Deception harass."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Your global Comet threat and 5-star ult wipe teamfights and side lanes at once, something Ahri's single-target Charm chain can't answer.",
+      "after": "A fully stacked Breath of Light and The Skies Descend wipe grouped fights outright, something Ahri's single-target Charm chain can't answer."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Ahri's Orb of Deception harasses you from a range your early Q arc can't answer, and she can walk it back through minions for a second tick while you're still building star count. Charm is the real threat: if she lands it near a minion wave you're dead to the Fox-Fire follow-up before your shield or W stun ever comes online. Play passive, hold your stacked star count for zoning rather than farming aggression, and never let your HP dip low enough that a landed Charm is lethal.",
+      "after": "Ahri's Orb of Deception reaches 970 to your 750 beam, and the return hit is true damage, so resistances answer none of it while you're still banking stardust. Charm is the real threat: it instantly stops movement abilities, so it rips you out of Astral Flight and cancels Breath of Light, and Fox-Fire finishes from there. Farm with Q ticks from behind the caster minions, hold the flight as escape, and never let your HP dip low enough that a landed Charm is lethal."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Spirit Rush at 6 turns her from a poke champion into a three-dash execute threat — she can Charm you off a wall angle, dash in twice for Fox-Fire stacks, and reset out before your W stun ever lands. You're still surviving on Comet zoning and W peel rather than winning trades outright here. The moment either Charm or Spirit Rush is on cooldown is your only real all-in window; otherwise keep priority soft and deny roams with vision instead of forcing fights.",
+      "after": "Spirit Rush at 6 turns her from a poke champion into a three-dash execute threat — she can Charm you off a wall angle, dash in twice for Fox-Fire, and reset out before Falling Star ever lands. You're surviving on singularity zoning and flight spacing rather than winning trades outright here. Charm on its 12s or Spirit Rush on its 140s is your only real all-in window; otherwise keep priority soft and deny roams with vision instead of forcing fights."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Once you finish your core burst item your Q-into-W combo starts outpacing her charm-poke pattern, and by two items your global ultimate threatens both side lanes and teamfights in a way her Spirit Rush kit can't match. Play the objective map: use Comet to threaten drakes/Herald from lane, force her to either walk into your zone control or give up map presence. In teamfights, land Q on her first — Ahri without Charm available folds instantly to your ultimate.",
+      "after": "Once you finish Rod of Ages your flight-into-beam pattern starts outpacing her charm-poke, and by two items The Skies Descend threatens both side lanes and teamfights in a way her Spirit Rush kit can't match. Play the objective map: fly onto drakes and Herald straight from lane, forcing her to either walk into your singularity or give up map presence. In fights, burn her first — Ahri without Charm folds instantly to your ultimate."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Bank Comets for Ahri's roam paths, not for lane poke",
+      "after": "Bank Astral Flight for Ahri's roams, not for lane poke"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Look for all-in only when her Charm and E are both down",
+      "after": "Look for all-in only when Charm and Spirit Rush are down"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Poke you with Fox-Fire/Orb from max range while denying stars",
+      "after": "Poke with Orb from 970, outside your 750 beam, denying stacks"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a back-line E execute pattern that clears from safety while you bank stardust — the wave dies and you never stepped forward. Worst wave: a shoved wave at his tower pre-6 with your W down — you are the slowest, most killable mage in the game in that picture. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a back-line E execute pattern that clears from safety while you bank stardust — the wave dies and you never stepped forward. Worst wave: a shoved wave at her tower pre-6 with your W down — you are the slowest, most killable mage in the game in that picture. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Still farming. Drag the Q beam across his face only when he steps onto your caster minions — every champion tick is permanent stacks.",
+      "after": "Still farming. Drag the Q beam across her face only when she steps onto your caster minions — every champion tick is permanent stacks."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "W lets you Q while flying — the burn-flyby trade is real now. In-and-out: never land inside his engage range.",
+      "after": "W lets you Q while flying — the burn-flyby trade is real now. In-and-out: never land inside her engage range."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Falling Star online — the self-peel stun your kit was missing. With R up, his dive math suddenly has a second variable.",
+      "after": "Falling Star online — the self-peel stun your kit was missing. With R up, her dive math suddenly has a second variable."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Stand off his combo line while channelling Q",
+      "after": "Stand off her combo line while channelling Q"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].t",
+      "before": "Punish his cooldown gap with W flybys",
+      "after": "Punish her cooldown gap with W flybys"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].t",
+      "before": "Fly in while his burst is loaded",
+      "after": "Fly in while her burst is loaded"
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: a back-line E execute pattern that clears from safety while you bank stardust — the wave dies and you never stepped forward. Worst wave: a shoved wave at his tower pre-6 with your W down — you are the slowest, most killable mage in the game in that picture. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a back-line E execute pattern that clears from safety while you bank stardust — the wave dies and you never stepped forward. Worst wave: a shoved wave at her tower pre-6 with your W down — you are the slowest, most killable mage in the game in that picture. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Eat poke while greeding beam ticks. Fly in while his burst is loaded. Trade HP for stacks below half health. Save the R for moments with names on them.",
+      "after": "Eat poke while greeding beam ticks. Fly in while her burst is loaded. Trade HP for stacks below half health. Save the R for moments with names on them."
+    }
+  ],
+  "notes": "The whole content layer for this matchup was written against the PRE-REWORK Aurelion Sol: 'Comet' (Comet of Legend) appeared in whys[6], spikes[2], spikes[3], early, mid, late and wants.you[1], and W was repeatedly called a stun when the live W is Astral Flight and the stun is R. I corrected every instance I edited. Expect the same pre-rework language across other aurelionsol matchups. Also fixed the two-layer chart disagreement at First item and 2+ items (full said 'Skill', content said 'Aurelion Sol', packet says 'Aurelion Sol') — I moved the full side to match; both whys already described Aurelion Sol winning, so no why rewrite was needed. Not verified and therefore untouched: whether Charm's stop applies to Astral Flight while airborne over terrain (the kit text says it stops movement abilities and ASol's W carries the interruptible-channel flag, so I stated the cancel, but the terrain-drop behaviour is not in Riot's text); tenacity/QSS behaviour on Charm; and whether Falling Star's stun can be Flash-buffered. Rune and item lines in report[6]/report[8] were left alone — I have no patch-26.15 source to confirm them."
+}

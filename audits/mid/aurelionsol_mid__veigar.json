@@ -1,0 +1,324 @@
+{
+  "ownerKey": "aurelionsol_mid",
+  "enemy": "veigar",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "ALL SEVEN chart rows disagree between the layers. Every phases[N].side reads 'Skill' while win[0..4] read 'Veigar' and win[5]/win[6] read 'Aurelion Sol'. The page renders a different answer to 'who wins Level 1' depending on which layer the reader looks at, for all seven stages.",
+      "why": "packet.levelChart matches the content layer exactly (Veigar x5, then Aurelion Sol x2). The full layer's uniform 'Skill' is the template default, not a verdict — phases[5].why and phases[6].why already argue that Aurelion Sol owns those stages, and phases[0].why says outright that you are the weakest champion in the lane at level 1.",
+      "corrected": "Proposed as one atomic group: phases[0..4].side to 'Veigar', phases[5..6].side to 'Aurelion Sol'. phases[4].why also rewritten, because it argued for Aurelion Sol against a row that belongs to Veigar. phases[0..3].why describe your farming pattern rather than a verdict, so they sit correctly under a Veigar row unchanged.",
+      "confidence": "High",
+      "sources": [
+        "packet.levelChart",
+        "brief currentText both layers"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The one interaction that decides this lane was never written: Event Horizon stuns only what PASSES THROUGH the wall, and Aurelion Sol's Breath of Light and Astral Flight are both interruptible channels. So being inside the cage is survivable — crossing the edge, or flying out through it, is what kills you. The existing text half-says this ('only the cage EDGE stuns') but pairs it with 'never dash into the wall', and Aurelion Sol has no dash.",
+      "why": "Riot's E text: 'creates a cage that Stuns enemies that pass through.' ownerKit flags Q and W as 'interruptible — any CC cancels it'. Event Horizon is 20/18.5/17/15.5/14s at 725 range — the longest cooldown in his kit and the whole green light.",
+      "corrected": "Written into breakdown.cooldowns, dosFull[0].d, dosFull[2].d, dontsFull[1].d, tradeGood, tradeBad, report[5].t and early, with the real 20s-to-14s numbers and 'keep beaming rather than crossing it' as the actual instruction.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit E text, cd, range",
+        "ownerKit Q/W channel flags",
+        "missingInteractions: your-channel-punished"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer is written for the pre-rework Aurelion Sol — 'Starsurge', 'stacked stars', 'slow orbit windup', 'Comet of Legend', 'Voice of Light star count' and 'movespeed/dash options' appear across whys[3], whys[6], spikes[0..3], early, mid and late. Aurelion Sol has no dash and no orbiting stars.",
+      "why": "Current kit: Breath of Light (750 beam), Astral Flight (1500 flight over terrain), the black hole (750 percent-health execute), Falling Star / The Skies Descend (1250), Stardust as the permanent passive.",
+      "corrected": "All rewritten in current-kit terms, with Astral Flight named as the tool that carries you clear of a forming Event Horizon.",
+      "confidence": "High",
+      "sources": [
+        "ownerKit P/Q/W/E/R text"
+      ]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.foe[2] says Primordial Burst is an 'execute once you're below 40% HP', and whys[4], spikes[1].text and mid all call it an execute.",
+      "why": "Riot: 'Blasts target enemy champion, dealing a large amount of magic damage, increasing based on the target's missing health.' There is no threshold and no execute — it is a scaling nuke, and 40% is a magnitude with no source (defect catalogue item 6). It is also 120/90/60s at 650 range, dropping to 60 seconds while Falling Star only reaches 100.",
+      "corrected": "Restated as damage that grows with missing health, with the real cooldown curve in spikes[1].text and dontsFull[2].d.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit R text and cd",
+        "ownerKit R cd"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Copy-paste bleed: dosFull[1].d is the tradeGood string under 'Hold R as the anti-dive stun post-6', dontsFull[2].d is the tradeBad string under 'Trade HP for stacks below half health'. dontsFull[0].d also calls a single male enemy 'they'.",
+      "why": "Defect catalogue item 2.",
+      "corrected": "Both bodies rewritten to match their titles. dontsFull[0].d now carries the real reason eating poke is expensive here: Phenomenal Evil grants permanent AP every time a spell strikes you.",
+      "confidence": "High",
+      "sources": [
+        "brief currentText.full",
+        "enemyKit P text"
+      ]
+    },
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "52.11% over 735 games; no elo split written anywhere.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packet.winRate",
+        "brief games"
+      ]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "This audit moved phases[0..3].side from \"Skill\" to \"Veigar\" but left the four whys unchanged, so each of those level-chart rows displayed a Veigar verdict above prose still written as Aurelion Sol winning the stage. tools/regression-check.js flagged all four as regressions introduced by this audit.",
+      "why": "The content layer already said Veigar for rows 0-4 and its whys already described Veigar winning, so the sides were the correct half and the full-layer prose was the stale half. Veigar Baleful Strike is 1000 range on a 6s cooldown at rank 1 and converts kills into permanent AP; Event Horizon is 725 range and stuns on its edge; Aurelion Sol channels Breath of Light at 750. That range and scaling gap is why he owns levels 1-5.",
+      "corrected": "phases[0..3].why rewritten to state Veigar winning each stage with the real ranges and cooldowns, so side and why now agree and match the content whys.",
+      "confidence": "High",
+      "sources": [
+        "tools/regression-check.js",
+        "champ-data/_kits/veigar.json",
+        "champ-data/_kits/aurelionsol.json",
+        "currentText.content.whys[0..3]"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Veigar"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Veigar"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Skill",
+      "after": "Veigar"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Veigar"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Veigar"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Aurelion Sol"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Aurelion Sol"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Falling Star online — the self-peel stun your kit was missing. With R up, his dive math suddenly has a second variable.",
+      "after": "Falling Star gives you a stun, but Primordial Burst is 120s too and it grows with every point of health you are missing."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Veigar wins by landing Event Horizon (Cage), denying your pattern, and owning the spacing war until your tempo starves.",
+      "after": "Veigar wins by catching you on the cage edge, then landing Dark Matter, Baleful Strike and Primordial Burst with nowhere to walk."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Veigar Event Horizon (Cage): matchup-defining — Only the cage EDGE stuns — hold position near the center or leave before it forms; never dash into the wall. Read it like a second minimap. - Guard your W Astral Flight like a fifth summoner spell. - Ultimate goes to kill windows only.",
+      "after": "- Event Horizon (E): 20s at rank 1, 14s at rank 5, 725 range — only the edge stuns, so if it forms around you, stand still and keep beaming rather than crossing it. - Primordial Burst (R): 120s at rank 1, 650 range, and it grows with your missing health. - Baleful Strike (Q): 6s down to 4s."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "W-flyby: fly a lateral arc, drag Q across Veigar for two seconds of burn + stacks, and land outside his answer range — repeat forever from one item.",
+      "after": "W-flyby: fly a lateral arc, drag Q across Veigar for two seconds of burn, and land clear of the cage — never end the flight on the wall itself."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Channelling Q face-to-face inside his engage range with W down — every champion that touches you wins that exchange pre-items.",
+      "after": "Channelling Q inside 725 with W down — Event Horizon lands, you cannot leave, and Dark Matter drops on a target that cannot move."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: W-flyby: fly a lateral arc, drag Q across Veigar for two seconds of burn + stacks, and land outside his answer range — repeat forever from one item. Bad trade: Channelling Q face-to-face inside his engage range with W down — every champion that touches you wins that exchange pre-items.",
+      "after": "Good trade: W-flyby: fly a lateral arc, drag Q across Veigar for two seconds of burn, and land clear of the cage — never end the flight on the wall itself. Bad trade: Channelling Q inside 725 with W down — Event Horizon lands, you cannot leave, and Dark Matter drops on a target that cannot move."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: W-flyby: fly a lateral arc, drag Q across Veigar for two seconds of burn + stacks, and land outside his answer range — repeat forever from one item. Great trade: Veigar wastes Event Horizon (Cage) — commit immediately. Bad trade: Channelling Q face-to-face inside his engage range with W down — every champion that touches you wins that exchange pre-items.",
+      "after": "Good trade: W-flyby: fly a lateral arc, drag Q across Veigar for two seconds of burn, and land clear of the cage — never end the flight on the wall itself. Great trade: Veigar spends Event Horizon on the wave — step up immediately. Bad trade: Channelling Q inside 725 with W down — Event Horizon lands, you cannot leave, and Dark Matter drops on a target that cannot move."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry by scaling honestly — every stardust stack is permanent, and the 30-minute version of you wins fights your laning self cannot imagine.",
+      "after": "Carry by outstacking the stacker: his Phenomenal Evil needs to hit you, and a beam at 750 from behind minions gives him nothing to hit."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Veigar takes first blood, tighten up: Event Horizon (Cage) is now always up in your head. A second kill means the duel is over and the game isn’t — farm with E executes and stay relevant through the stardust curve.",
+      "after": "If Veigar takes first blood he takes permanent AP with it, so stop feeding the passive: every spell he lands on you makes him bigger for the rest of the game. Farm with E executes and stay relevant through the stardust curve."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, compound it: shove with E executes, burn Veigar on every W rotation, and group early — your beam turns small mid-game leads into unanswerable objective control.",
+      "after": "Ahead, starve the stacks: shove with E so his Baleful Strike hits minions you already killed, and burn him off the wave on every W flyby — a Veigar with no stacks is a slow mage."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Only the cage EDGE stuns — hold position near the center or leave before it forms; never dash into the wall. Commit on its cooldown, never into it.",
+      "after": "Only the cage edge stuns — if it lands around you, hold still and beam him through it. It is 20s at rank 1, so the next twenty seconds are yours."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "W-flyby: fly a lateral arc, drag Q across Veigar for two seconds of burn + stacks, and land outside his answer range — repeat forever from one item.",
+      "after": "Falling Star is 1250 range and Primordial Burst is 650 — stun him at the edge of his own ultimate range instead of waiting for the cage."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Veigar spends Event Horizon (Cage) early — the closest thing this matchup has to a guarantee.",
+      "after": "Cage spent at rank 1 means twenty seconds with no CC — that is a full W flyby of free burn."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That’s Veigar’s bread-and-butter play — deny it and they run out of answers.",
+      "after": "Baleful Strike reaches 1000, your beam 750 — every greedy tick is free AP for him."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Your flight is your only escape — a W spent poking is a death sentence against the next gank.",
+      "after": "Flying through the cage edge stuns you mid-flight — check Event Horizon before you commit the W."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Channelling Q face-to-face inside his engage range with W down — every champion that touches you wins that exchange pre-items.",
+      "after": "Primordial Burst grows with the health you are missing, so every point you trade away makes his 650-range finisher bigger."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Veigar’s Event Horizon (Cage): Only the cage EDGE stuns — hold position near the center or leave before it forms; never dash into the wall. Forward steps wait for its downtime.",
+      "after": "Track Event Horizon: 20s at rank 1 falling to 14s, 725 range, and only the wall stuns. Caught inside, keep beaming — crossing the edge is what hands him the full combo."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "He's still landing poke trades that out-damage your mid-tempo Starsurge in this window",
+      "after": "He is still landing 1000-range poke that out-damages your unstacked beam in this window"
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Stacked stars and Comet of Legend roams let you outscale his flat AP stacking by two items",
+      "after": "Deep stardust and The Skies Descend let you outscale his flat AP stacking by two items"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Veigar's Dark Matter zoning plus Baleful Strike stacks give him safe poke that punishes your slow orbit windup, and Event Horizon threatens a full stun-cage combo the second you misstep in lane.",
+      "after": "Dark Matter drops from 950 and Baleful Strike pokes from 1000, both outside your 750 beam, and Event Horizon turns any misstep into a stun that holds you still for the whole combo."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Primordial Burst execute damage scales with missing HP and can delete you through a Q poke war before your own Voice of Light star count matters much.",
+      "after": "Primordial Burst grows with the health you are missing and can finish a Q poke war outright, and it falls to 60 seconds while yours only reaches 100."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Once you finish your first item your range and stacked Q outpoke his Baleful Strike, and your movespeed/dash options let you dodge Event Horizon cage setups he relied on all game.",
+      "after": "Once you finish your first item the stacked beam out-damages Baleful Strike in any exchange, and Astral Flight is the tool that carries you clear of an Event Horizon before it closes."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "With Comet of Legend and stacked stars you can roam and one-shot squishies from range that his flat AP stacking can't match, while his cage combo becomes a one-and-done cooldown you can play around.",
+      "after": "With deep stardust the beam burns down anything his flat AP stacking can match, and Event Horizon becomes a single 14-second cooldown you plan around instead of a whole lane sentence."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Veigar's Baleful Strike farm poke and Dark Matter zoning outpace your unstacked Starsurge in the early trades, and any misplaced Event Horizon cage into a full combo can delete you before your kit online, so you're playing cautious and ceding lane tempo through level 5.",
+      "after": "Veigar pokes from 1000 with Baleful Strike and drops Dark Matter from 950 while your beam only reaches 750, so the early trades are his by default. Event Horizon is 20 seconds at rank 1 and only the wall stuns — bait it on the wave, then farm freely for the twenty seconds that follow."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "His Event Horizon setup plus Primordial Burst execute remains a real all-in threat right up to level 6, since his damage scales off stacks he's already banked while your Comet of Legend and Voice of Light stars are still catching up — you need to respect his cage range every wave.",
+      "after": "Event Horizon into Dark Matter and Primordial Burst is a real all-in from level 6 onward, and his damage comes from Phenomenal Evil stacks he has already banked while your stardust is still building. Respect the 725 cage range on every wave, and remember his R grows with whatever health you have given away."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Once your first item lands your range, kite tools, and stacked Q burst start winning the poke war outright, and by two items your Comet of Legend roams and stacked Starsurge one-shot potential outscale his stat-check AP stacking, turning his all-in from a threat into a single dodgeable cooldown.",
+      "after": "Once your first item lands the stacked beam wins the poke war outright, and by two items The Skies Descend and a full stardust bank outscale his flat AP stacking. His all-in becomes one 14-second Event Horizon you plan around, and Astral Flight is the answer to it as long as you never cross the wall."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Threaten Primordial Burst execute once you're below 40% HP",
+      "after": "Threaten Primordial Burst the moment your health bar dips"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q-channel last hits only — you are the weakest level-1 champion in the lane. Give ground, take CS, stack the first stardust.",
+      "after": "Baleful Strike reaches 1000 to your 750 channel, so he pokes you off the wave for free — last-hit with the beam and give ground."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Still farming. Drag the Q beam across his face only when he steps onto your caster minions — every champion tick is permanent stacks.",
+      "after": "Every Baleful Strike kill is permanent AP on a 6s cooldown — he grows while you only bank stardust. Beam him off your caster minions."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E online: drop the black hole ON the wave and Q the pull — your first real clear pattern, and every execute tick stacks stardust.",
+      "after": "E online, but Event Horizon stuns anything crossing its edge — drop the black hole on the wave from range and never walk the cage."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "W lets you Q while flying — the burn-flyby trade is real now. In-and-out: never land inside his engage range.",
+      "after": "W lets you Q while flying, but land inside 725 and Event Horizon stuns you where you stand. Never touch the cage."
+    }
+  ],
+  "notes": "SEVEN-ROW CHART DISAGREEMENT — the worst one in my slice. Every phases[N].side on this matchup read 'Skill' while the content win[] row read Veigar x5 then Aurelion Sol x2, so all seven stages rendered two different answers. Proposed as one atomic group. phases[4].why was rewritten in the same proposal because it argued for Aurelion Sol under a Veigar row; phases[0..3].why describe your farming pattern rather than a verdict and read correctly under a Veigar row unchanged.\n\nPACKET SUSPECT NAME IS A FALSE POSITIVE: 'His Event Horizon' in mid is the correct name for Veigar's E. The real defect in that sentence was 'Primordial Burst execute' (it is not an execute) and the pre-rework 'Comet of Legend and Voice of Light stars'.\n\nKIT DATA ODDITY, NOT WRITTEN ANYWHERE: enemyKit lists Dark Matter (W) with cd '0'. Riot's text says 'Stacks of Phenomenal Evil reduce Dark Matter's cooldown', so the base value is simply missing from the extract rather than actually zero. I gave Dark Matter's range (950) and never quoted a cooldown for it.\n\nKIT FLAG MISFIRE: ownerKit W (Astral Flight) carries terrain='creates terrain'. Riot says he flies OVER terrain. Same false flag on all six briefs I have read for this champion.\n\nUNVERIFIED / LEFT ALONE: whether Event Horizon's wall stuns Aurelion Sol while he is mid-Astral-Flight (the ownerKit calls W an interruptible channel and Riot says the cage stuns 'enemies that pass through', but flight over the wall is not addressed). dontsFull[1].d is written as 'check Event Horizon before you commit the W', which is correct advice either way, but the underlying claim is Medium confidence. Also unverified: whether Falling Star's stun can interrupt Primordial Burst's cast.\n\nTemplated but left standing for lack of Veigar-specific grounding: breakdown.early, breakdown.mid, breakdown.wave, breakdown.spikes, breakdown.late, breakdown.difficulty, whys[0], whys[1], whys[2], whys[4], whys[5], wants.you[0..2] (all three are already accurate and Veigar-specific)."
+}

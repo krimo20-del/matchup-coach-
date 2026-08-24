@@ -1,0 +1,120 @@
+{
+  "ownerKey": "akshan_mid",
+  "enemy": "akali",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "52.27% over 2097 games. TRICKY at 7/10 is right: Akshan owns levels 1-5 on range (850 Avengerang vs 550 Five Point Strike), Akali owns everything from Perfect Execution onward.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet.winRate", "packet.games"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The chart disagreed with itself in three places. Full layer read Skill/Skill/Skill/Skill/Akali/Skill/Akali; content win[] read Akshan x5, Akali, Akshan; whys[5] opened 'Skill:' while win[5] said Akali, and whys[6] opened 'Akshan:' while phases[6].side said Akali.",
+      "why": "phases[N].side and win[N] are the same row and rendered different answers. The mirror audit (audits/mid/akali_mid__akshan.json) states the chart as Akshan levels 1-4, Akali 5-7, which matches Akali's real scaling.",
+      "corrected": "Chart set to Akshan/Akshan/Akshan/Akshan/Akali/Akali/Akali across both layers, with whys[5], whys[6], phases[4].why, phases[5].why and phases[6].why rewritten to argue the row they sit on.",
+      "confidence": "High",
+      "sources": ["currentText.full.phases", "currentText.content.win", "audits/mid/akali_mid__akshan.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet defect is right: the page never named one Akali ability. The decisive interaction was also absent — Twilight Shroud makes her 'unable to be selected by enemy spells and attacks', so Comeuppance cannot even lock onto her inside it, which is the whole reason her dive works. Shuriken Flip marking her own smoke cloud (so the dash returns her to safety) was never mentioned. phases[4].why called the ultimate 'Vengeance' — it is Comeuppance. spikes[0] called Heroic Swing a 'reset'; it is a terrain-anchored swing that gets knocked off by champion collision.",
+      "why": "Riot text: W 'unable to be selected by enemy spells and attacks'; E 'The first enemy or smoke cloud hit is marked. Re-cast to dash to the marked target'; R 'Re-cast: Akali dashes in a direction, executing all enemies she strikes'; Akshan R hits 'the first champion, minion, or structure hit'.",
+      "corrected": "Written into breakdown.cooldowns, report[5].t, dosFull[0].d, dontsFull[1].d, tradeBad, spikes[1], spikes[3], mid and late.",
+      "confidence": "High",
+      "sources": ["enemyKit W/E/R text", "ownerKit E/R text", "packet.defects"]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "'she has no ranged answer before level 3' in the content early block is false — Five Point Strike is a 550-range cast available at level 1.",
+      "why": "Riot Q text and the 550 range field. The real edge is the 300-unit range gap and her 110 energy cost at rank 1, not an absence of poke.",
+      "corrected": "early rewritten around the 850-vs-550 gap and the energy drain.",
+      "confidence": "High",
+      "sources": ["enemyKit Q range/cost", "ownerKit Q range"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldown numbers anywhere, and dosFull[2].d invented a 'fifteen-second invitation' for Twilight Shroud.",
+      "why": "Twilight Shroud is 20/19/18/17/16 — 20s at rank 1, not fifteen. Shuriken Flip 16/14.5/13/11.5/10, Perfect Execution 120/90/60, Heroic Swing 18/16.5/15/13.5/12, Avengerang 9/8/7/6/5.",
+      "corrected": "Real numbers written into breakdown.cooldowns, report[5].t, dosFull[2].d, dontsFull[1].d, mid and late.",
+      "confidence": "High",
+      "sources": ["enemyKit", "ownerKit"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Assassin's Mark was never mentioned, so the burst tell was missing.",
+      "why": "missingInteractions rule 'autoreset-burst-tell': spell damage rings the target and Akali empowers her next attack with bonus range on exiting the ring — the wind-up, not the cast, is the cue to step back.",
+      "corrected": "Written into dontsFull[0].d and tradeGood.",
+      "confidence": "High",
+      "sources": ["missingInteractions", "enemyKit P text"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Akshan" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Akshan" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Akshan" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Akshan" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Akali" },
+    { "layer": "content", "path": "win[4]", "before": "Akshan", "after": "Akali" },
+    { "layer": "content", "path": "win[6]", "before": "Akshan", "after": "Akali" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "7/10" },
+
+    { "layer": "full", "path": "phases[4].why", "before": "Avengerang... no — R online: Vengeance executes the chipped from two screens. Chip, then channel.", "after": "Level 6: Perfect Execution's re-cast executes — stay above her threshold or do not step up." },
+
+    { "layer": "full", "path": "phases[5].why", "before": "First item spike: swing-autos shred. Force extended trades the passive shield math wins.", "after": "Her first AP item outburns your shield — trade only while Twilight Shroud's 20s is down." },
+
+    { "layer": "full", "path": "phases[6].why", "before": "Late Akshan picks and avenges: swing the flank, execute the carry, and revive your team's mistakes... by avenging their killers.", "after": "Late she picks you first: Perfect Execution at 60s executes anyone below the threshold, so never fight without a wall behind you." },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Akali Twilight Shroud: matchup-defining — Untargetable inside — hold your CC and burst for when she exits. Step up only on its downtime. - Budget E Heroic Swing for emergencies and the R for opportunities — never swap them.", "after": "- Twilight Shroud is 20s at rank 1 and she is untargetable inside it — Comeuppance cannot lock her there. - Shuriken Flip marks her own smoke, so she dashes back into it. - Heroic Swing is 18s; save it for her R." },
+
+    { "layer": "full", "path": "report[5].t", "before": "Track Akali’s Twilight Shroud: Untargetable inside — hold your CC and burst for when she exits. It’s down or you don’t go.", "after": "Track Akali’s Twilight Shroud: 20s at rank 1, and she is untargetable inside — Comeuppance cannot even lock onto her in it." },
+
+    { "layer": "full", "path": "dosFull[0].d", "before": "Untargetable inside — hold your CC and burst for when she exits. Its cooldown is the green light — wait for it.", "after": "Untargetable inside — Comeuppance will not lock her, so hold the shot until she steps out of the smoke." },
+
+    { "layer": "full", "path": "dosFull[2].d", "before": "Akali burns Twilight Shroud on nothing — take the fifteen-second invitation.", "after": "Akali burns Twilight Shroud on nothing — that is a twenty-second invitation." },
+
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Akali’s bread-and-butter play — deny it and they run out of answers.", "after": "Her Assassin's Mark ring empowers her next auto — the wind-up is your cue." },
+
+    { "layer": "full", "path": "dontsFull[1].d", "before": "The swing is your entrance AND your exit — never spend both directions in one play.", "after": "Shuriken Flip is 825 range and re-casts into a dash — her mark is the commit tell." },
+
+    { "layer": "full", "path": "tradeGood", "before": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight — three-hit math he answers with one spell.", "after": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight before her ring closes into an empowered auto." },
+
+    { "layer": "full", "path": "dosFull[1].d", "before": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight — three-hit math he answers with one spell.", "after": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight before her ring closes into an empowered auto." },
+
+    { "layer": "full", "path": "tradeBad", "before": "Swinging in to 'finish' a trade with his answer loaded — the rope is your escape, and spent ropes write obituaries.", "after": "Swinging in to 'finish' a trade with Twilight Shroud up — she vanishes, Shuriken Flips back, and you land in her smoke." },
+
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Swinging in to 'finish' a trade with his answer loaded — the rope is your escape, and spent ropes write obituaries.", "after": "Swinging in to 'finish' a trade with Twilight Shroud up — she vanishes, Shuriken Flips back, and you land in her smoke." },
+
+    { "layer": "full", "path": "ahead", "before": "Ahead, bully harder: string Akali off every contact, swing-roam the rivers, and execute the map's mistakes with R.", "after": "Ahead, deny her energy: force Five Point Strike out at 110 energy a cast, then shove and roam while she cannot follow." },
+
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through strings and executes — chip everything, finish anything under a third, and let the swing write angles no one wards.", "after": "Carry by holding Comeuppance for the moment she leaves Twilight Shroud — locked from 2500, it collects her the instant she is targetable." },
+
+    { "layer": "content", "path": "whys[5]", "before": "Skill: whoever plays around cooldowns and vision better wins this trade — a fair fight overall.", "after": "Akali: her first AP item turns Five Point Strike and Perfect Execution into burst your shield cannot cover." },
+
+    { "layer": "content", "path": "whys[6]", "before": "Akshan: item power amplifies his kiting and long-range execute more than it does her short burst window.", "after": "Akali: two items and a 60s Perfect Execution let her delete you before Comeuppance finishes storing bullets." },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Your Q poke and E-to-terrain resets punish Akali's melee approach before she has Shroud up reliably.", "after": "Your Q poke punishes Akali's 550-range approach, and Heroic Swing off a wall breaks her Shuriken Flip chase." },
+
+    { "layer": "content", "path": "spikes[1].text", "before": "Akali's Shroud+R all-in comes online and she can dive through your camo if she commits smart, so respect the level 6 spike.", "after": "Perfect Execution's re-cast executes outright, and Twilight Shroud makes her untargetable, so Comeuppance cannot answer the dive." },
+
+    { "layer": "content", "path": "spikes[3].text", "before": "Your R snipes her from range before she can even engage, reasserting full control.", "after": "Your R snipes her from 2500, but the first minion in the line eats it — angle it clean." },
+
+    { "layer": "content", "path": "early", "before": "Akshan can zone Akali with Q boomerang poke since she has no ranged answer before level 3 and has to walk up through minions to trade. Her Q mark procs are easy to dodge with your mobility from E, and you should punish any Shroud usage by holding your own cooldowns until it drops. Avoid overextending into her E stun setups, and use your camouflage near brush to bait her into face-checking. As long as you keep range, she's stuck farming under pressure.", "after": "Akshan zones Akali with Avengerang at 850 while Five Point Strike only reaches 550, so she has to walk into your string to trade at all. Five Point Strike costs 110 energy at rank 1, so bait two casts and she cannot follow the third. Avoid overextending into her Shuriken Flip re-cast, which dashes her to whatever the shuriken marked, and use camouflage near brush to bait her into face-checking. Keep the 550 gap and she farms under pressure." },
+
+    { "layer": "content", "path": "mid", "before": "Level 6 is Akali's only real window: her Shroud-R combo lets her dive from stealth and burst you down if you're caught out of position, so play safer around minion waves near 6. From 7 onward your Q resets and E disengage let you out-trade her repeatedly, and you should look to shove and roam since her all-in threat resets every time you buy an item. Ward her Shroud flank routes so she can't blindside you during a side lane skirmish.", "after": "Level 6 is Akali's real window: her Shroud-R combo lets her dive from stealth and burst you down if you're caught out of position, so play safer around minion waves near 6. Twilight Shroud is 20s at rank 1 and Perfect Execution 120s, so the window between them is when you shove and roam, and Comeuppance cannot lock her while she sits inside the smoke. Ward her Shroud flank routes so she can't blindside you during a side lane skirmish." },
+
+    { "layer": "content", "path": "late", "before": "With a completed first item Akshan out-ranges and out-kites Akali in extended trades, since your empowered Q and camo let you disengage her dash strings safely. By two items your R threatens to execute her from screen-range before she reaches you, and teamfights favor you as long as you stay on the edge of vision and pick off marked targets from afar rather than brawling in her Shroud cloud.", "after": "With a completed AP item Akali's Five Point Strike chunks you through the Dirty Fighting shield, and Perfect Execution drops to 90 then 60 seconds. Comeuppance answers from 2500 only when she is targetable and the line is clear of minions, so fight beside a wall you can Heroic Swing off, keep your health above her execute threshold, and never contest a fight that starts inside her Shroud cloud." }
+  ],
+  "notes": "Derived-flag misfire: Akali's W carries the 'revealsStealth' flag, but Riot's Twilight Shroud text says nothing about revealing stealth — it only makes HER invisible and untargetable. I did not write any claim that the shroud reveals Going Rogue, and I did not write the opposite either, since spotting camouflage is not answerable from the kit files. Chart: I followed the mirror audit's stated chart (Akshan levels 1-4, Akali 5-7) rather than packet.levelChart, which had Akshan at level 6 and 2+ items while both the full layer and whys[4] argued Akali — the mirror and Akali's actual scaling agree. Fields judged templated but left rather than fabricated: breakdown.early, breakdown.mid, breakdown.wave, breakdown.spikes, breakdown.feeding, breakdown.late, loading, spikes[2].text."
+}

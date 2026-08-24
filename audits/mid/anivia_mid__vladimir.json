@@ -1,0 +1,72 @@
+{
+  "ownerKey": "anivia_mid",
+  "enemy": "vladimir",
+  "lane": "mid",
+  "audit": [
+    { "point": 2, "status": "needs-correction",
+      "whatIsWrong": "Level chart disagrees between layers on five of seven rows: phases[0..2].side=Skill vs win=Anivia, phases[5].side=Skill vs win=Anivia, phases[6].side=Vladimir vs win=Anivia.",
+      "why": "Packet levelChart reads Anivia, Anivia, Anivia, Skill, Anivia, Anivia, Anivia — the content layer already matches it; the full layer does not. phases[6].why literally describes Anivia dominating while the side says Vladimir.",
+      "corrected": "phases[0],[1],[2],[5],[6].side set to Anivia; phases[3] stays Skill, phases[4] stays Anivia.",
+      "confidence": "High", "sources": ["packet.levelChart", "currentText.content.win[]"] },
+    { "point": 3, "status": "correct",
+      "whatIsWrong": "",
+      "why": "Anivia spikes at Lost Chapter, level 6 and Rylai's/Seraph's. Vladimir's spike is level 9 into two items with Crimson Pact converting health to AP; Hemoplague is a flat 120s all game so his fight windows are rare.",
+      "corrected": "Recorded the 120s Hemoplague cooldown in breakdown.cooldowns.",
+      "confidence": "High", "sources": ["brief.enemyKit"] },
+    { "point": 4, "status": "needs-correction",
+      "whatIsWrong": "The decisive interactions were never stated: Sanguine Pool's 2s untargetability eats a committed Flash Frost, Tides of Blood is blocked by minions, Transfusion and Tides cost him no mana, and Hemoplague amplifies damage you take before it detonates. wants.you[2] told you to group into Hemoplague windows 'to outheal his sustain', which is backwards.",
+      "why": "Riot text: Pool is 2s untargetable on 28/25/22/19/16; E 'can be blocked by enemy units'; Q and W and E all cost 0 mana; R makes 'affected enemies take increased damage'.",
+      "corrected": "Bait Pool with the 4s Frostbite before spending the stun; last-hit behind minions to eat his E; buy Grievous Wounds rather than trading into Hemoplague.",
+      "confidence": "High", "sources": ["brief.enemyKit", "brief.missingInteractions[29]"] },
+    { "point": 10, "status": "needs-correction",
+      "whatIsWrong": "Anti-heal was mentioned only in the itemization report line and contradicted by wants.you[2].",
+      "why": "_missing flags needs-antiheal for this matchup: Transfusion and Hemoplague both heal him.",
+      "corrected": "wants.you[2] now names Grievous Wounds.",
+      "confidence": "High", "sources": ["brief.missingInteractions[29]"] },
+    { "point": 13, "status": "needs-correction",
+      "whatIsWrong": "Packet flagged 'Use Sanguine Pool' in wants.foe[1] as a probable wrong name.",
+      "why": "False positive — Sanguine Pool is the real W name; the flag matched on the leading verb.",
+      "corrected": "No change; left as written.",
+      "confidence": "High", "sources": ["brief.enemyKit", "packet.suspectNames"] }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Anivia" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Anivia" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Anivia" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Anivia" },
+    { "layer": "full", "path": "phases[6].side", "before": "Vladimir", "after": "Anivia" },
+
+    { "layer": "full", "path": "enemyWin",
+      "before": "Vladimir wins by landing Sanguine Pool, denying your pattern, and renting you the lane at a range markup.",
+      "after": "Vladimir wins by pooling your commit, healing chip off with free Transfusions, then scaling past you." },
+
+    { "layer": "full", "path": "breakdown.cooldowns",
+      "before": "- Vladimir Sanguine Pool: matchup-defining — Untargetable dodge — bait it before you spend your kill window. It governs your forward steps. - W Crystallize spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- Sanguine Pool: 28s at rank 1 but only 16s at rank 5 — 2s untargetable eats a committed combo, so bait it with Frostbite before you spend Flash Frost. - Tides of Blood is blocked by minions and costs him health. - Hemoplague is 120s all game." },
+
+    { "layer": "full", "path": "breakdown.carry",
+      "before": "Carry by controlling space — storm and wall decide where fights happen, and your stun decides who dies first inside them.",
+      "after": "Carry by making him spend Sanguine Pool early — once the 2s is gone he is a slow, mana-free mage stuck inside your Glacial Storm." },
+
+    { "layer": "full", "path": "dosFull[0].d",
+      "before": "Untargetable dodge — bait it before you spend your kill window. Its cooldown is the green light — wait for it.",
+      "after": "Frostbite is on a 4s cooldown — throw it first, and if he pools you have lost 50 mana instead of your stun." },
+
+    { "layer": "full", "path": "dosFull[2].d",
+      "before": "Vladimir whiffs Sanguine Pool and the lane briefly belongs to you.",
+      "after": "Pool only covers 350 units — wall past it and he surfaces in your storm." },
+
+    { "layer": "full", "path": "dontsFull[0].d",
+      "before": "That is Vladimir’s whole plan in one window — decline politely and watch it retire.",
+      "after": "Transfusion is free and heals it back — poke with no stun threat just feeds him." },
+
+    { "layer": "full", "path": "dontsFull[2].d",
+      "before": "Spamming Q on cooldown until you are out of mana with no stun threat left — that is when Vladimir walks straight at you.",
+      "after": "Hemoplague amplifies the damage you take before it detonates — caught out with no egg, that window kills you." },
+
+    { "layer": "content", "path": "wants.you[2]",
+      "before": "Group your damage into Hemoplague windows to outheal his sustain",
+      "after": "Buy Grievous Wounds early — Transfusion and Hemoplague both heal him" }
+  ],
+  "notes": "phases[6].why described Anivia owning teamfights while phases[6].side read Vladimir — the full layer was simply out of sync with win[] and the packet on five rows. wants.you[2] was factually inverted (Hemoplague amplifies damage taken by YOU, it is not a heal window for your team) and is replaced with the anti-heal instruction _missing asks for. Left mid/late/early and the whys alone — they are already grounded in Pool, Transfusion and Hemoplague specifically."
+}

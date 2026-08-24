@@ -1,0 +1,71 @@
+{
+  "ownerKey": "akshan_mid",
+  "enemy": "galio",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[6].side reads 'Galio' while win[6] reads 'Akshan' — a live two-layer contradiction on the 2+ items row. The other six full rows are unset at 'Skill' while the content layer reads Akshan on all seven.",
+      "why": "packet.levelChart is Akshan x7 and the win rate is 51.49% over 1109 games. Galio has no lane-phase kill pattern: his only lockdown, Shield of Durand, reaches 275, and Hero's Entrance is 180 seconds at rank 1 and lands on an ally, not on you.",
+      "corrected": "All seven full sides set to Akshan, matching win[0..6] and the packet.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate", "enemyKit W range", "enemyKit R cooldowns"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why is garbled ('Avengerang... no —') and calls Akshan's R 'Vengeance'. packet.defects also records 'NO cooldown-sequencing advice anywhere' — the matchup had zero concrete numbers to trade around.",
+      "why": "The spikes here are cooldown spikes, not item spikes: Justice Punch is 11/10/9/8/7s and 650 range — that number is the entire step-up rule. Shield of Durand is 18/17/16/15/14s at 275 range. Hero's Entrance is 180/160/140s at 4000/4750/5500 range.",
+      "corrected": "Real numbers written into ahead, breakdown.carry, breakdown.feeding, spikes[0] and late so every 'wait for X before you Y' has a figure attached.",
+      "confidence": "High",
+      "sources": ["ownerKit R", "enemyKit E/W/R cooldowns and ranges", "packet.defects"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "MAJOR: the content layer credits Galio with 'Righteous Gust' in two places (the late paragraph and wants.foe[1]). Galio has no such ability — it was removed in his rework years ago. Separately, early and spikes[0] refer to 'his passive shield'. Galio's passive is Colossal Smash, an empowered area basic attack, with no shield attached.",
+      "why": "Kit file: P Colossal Smash (empowered auto), Q Winds of War (825, 11-7s), W Shield of Durand (275, 18-14s, taunt and damage), E Justice Punch (650, 11-7s, dash and knockup), R Hero's Entrance. The real lane rule the page never gave: everything Galio has that touches you starts with Justice Punch at 650, and Shield of Durand cannot reach you at all unless he has already connected. Hold Heroic Swing for that knockup rather than spending it on poke, and note he can cut your retreat with it — from missingInteractions, that is what Flash is for here, not the damage.",
+      "corrected": "Righteous Gust removed and replaced with Shield of Durand. Passive named correctly as Colossal Smash and explicitly flagged as not a shield. The 650/275 range gap stated as the spacing rule.",
+      "confidence": "High",
+      "sources": ["enemyKit P/W/E text and ranges", "missingInteractions enemy-dash-deniable, terrain-cuts-retreat"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flags \"Hero's Entrance\" in spikes[1] as a probable wrong name. It is Galio's real R name. False positive — no edit.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit R name"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Akshan"},
+    {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Akshan"},
+    {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Akshan"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Akshan"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Akshan"},
+    {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Akshan"},
+    {"layer": "full", "path": "phases[6].side", "before": "Galio", "after": "Akshan"},
+
+    {"layer": "full", "path": "phases[4].why", "before": "Avengerang... no — R online: Vengeance executes the chipped from two screens. Chip, then channel.", "after": "R online: he has no lane answer — Hero's Entrance is 180 seconds and lands on his allies."},
+
+    {"layer": "full", "path": "enemyWin", "before": "Galio wins by landing Justice Punch, denying your pattern, and turning your every misstep into the all-in you hadn’t budgeted.", "after": "Galio wins by knocking you up with Justice Punch from 650 and taunting on landing — Shield of Durand pins you there until his jungler arrives."},
+
+    {"layer": "full", "path": "ahead", "before": "Ahead, bully harder: string Galio off every contact, swing-roam the rivers, and execute the map's mistakes with R.", "after": "Ahead, hold him outside 650: Justice Punch is 11 seconds at rank 1, and while it is down he cannot reach you at all."},
+
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through strings and executes — chip everything, finish anything under a third, and let the swing write angles no one wards.", "after": "Carry by taxing the walk-up — Justice Punch is 11s and Shield of Durand only reaches 275, so every string you land outside that is free."},
+
+    {"layer": "full", "path": "breakdown.feeding", "before": "If Galio gets a kill, the lane gets honest — give Justice Punch extra room and farm it back. Two kills: stop dueling your tilt — farm with Q strings and stay relevant through R executes.", "after": "If Galio gets a kill, the lane gets honest — stand beyond 650 where Justice Punch cannot reach, farm it back with Q at 850, and save Heroic Swing for the knockup rather than the poke."},
+
+    {"layer": "content", "path": "early", "before": "Galio has low base damage and a windup on Winds of War, so you can walk up during his cast animations and punish with clean auto-trades. His passive shield only matters if he's landing hits, and your mobility lets you dictate when trades happen. There's very little he can do to punish your aggression before level 6.", "after": "Galio has low base damage and a windup on Winds of War, so you can walk up during his cast and punish with clean strings. His passive is Colossal Smash — an empowered area auto, not a shield — and his only lockdown, Shield of Durand, reaches 275, so stay outside it and he lands nothing. Little punishes your aggression before 6."},
+
+    {"layer": "content", "path": "spikes[0].text", "before": "Galio's Winds of War needs a windup and his auto-attacks are slow, so you punish his passive shield windows with hit-and-run E-Q trades.", "after": "Galio's Winds of War needs a windup and his autos are slow, so punish the 11-second gap after a spent Justice Punch with hit-and-run trades."},
+
+    {"layer": "content", "path": "late", "before": "Galio typically builds tanky/utility, meaning his damage never really threatens you even with items, and his taunt is reactive rather than a lane-phase tool. Your R still lets you pick off backline priority targets before he can react with Righteous Gust or his ultimate to save them. Keep pressuring split targets rather than fighting into his group peel.", "after": "Galio typically builds tanky and utility, so his damage never really threatens you even with items, and his taunt is reactive rather than a lane tool. Your R still picks off backline targets before he can answer with Shield of Durand or drop Hero's Entrance on them — that ultimate reaches 4000 at rank 1, so check it before committing to a pick."},
+
+    {"layer": "content", "path": "wants.foe[1]", "before": "Use Righteous Gust to speed teammates or slow you", "after": "Use Shield of Durand to taunt you out of a string"}
+  ],
+  "notes": "This matchup credited Galio with 'Righteous Gust' — an ability he has not had since his rework — in the late paragraph and in wants.foe[1]. Replaced with Shield of Durand, his actual W. Second error: early and spikes[0] both referred to 'his passive shield'; Galio's passive is Colossal Smash, an empowered area basic attack with no shield component. packet.defects recorded zero cooldown-sequencing advice in this matchup, so the 650-range/11-second Justice Punch figure and the 275-range Shield of Durand are now written into five fields as the actual step-up rule. Real two-layer contradiction on phases[6] (Galio vs Akshan); all seven full rows proposed as one atomic group to match the content layer and the packet. packet.suspectNames flagged \"Hero's Entrance\" as a wrong name; it is correct. Left breakdown.wave and breakdown.mid templated — no Galio-specific wave interaction I could ground without inventing one."
+}

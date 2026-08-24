@@ -1,0 +1,148 @@
+{
+  "ownerKey": "anivia_mid",
+  "enemy": "diana",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The two layers disagree on six of seven rows. Full reads Diana/Diana/Diana/Skill/Diana/Skill/Skill; content win[] and the packet levelChart both read Anivia/Anivia/Diana/Diana/Anivia/Diana/Anivia.",
+      "why": "Diana has no ranged ability at levels 1-2 and must walk into Flash Frost's 1075 range, so Anivia owns those rows; Diana takes over at 3 once Crescent Strike and Lunar Rush are online, and again at first item; Anivia retakes 6 and the two-item mark.",
+      "corrected": "phases[0,1,4,6].side = Anivia and phases[3,5].side = Diana, matching win[] and the packet chart. phases[1] and phases[5] whys rewritten so the reason matches the new owner.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]", "enemyKit Q/E"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[5].why sold the First-item row as Anivia's Seraph's spike while the chart owner for that row is Diana, and spikes[1] described Moonfall vaguely as a \"pull-and-reset\".",
+      "why": "Moonfall is a 475-range pull on a 100/90/80s cooldown that sets up the Lunar Rush chain; her first item is what turns that pull into a kill rather than a trade.",
+      "corrected": "phases[5].why rewritten to Diana's first-item pull threat; spikes[1] now names the 475 range.",
+      "confidence": "High",
+      "sources": ["enemyKit R range and cd"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page repeats \"Moonlight marks reset her dash\" without the part that matters, and never mentions Pale Cascade at all.",
+      "why": "Lunar Rush has NO cooldown only when dashing to a target afflicted with Moonlight; dodge Crescent Strike (900 range, 8s at rank 1) and her dash is on 22 seconds at rank 1. Dashing to any other target strips Moonlight. Separately, Pale Cascade shields her every 15s at rank 1 and eats exactly the Flash Frost into Frostbite burst you are saving up — the missingInteractions entry flags this as absent. Crystallize is terrain and Lunar Rush is a dash, so the wall genuinely denies the dive.",
+      "corrected": "breakdown.cooldowns, breakdown.carry, enemyWin, ahead, the do/don't details, spikes[1], spikes[3] and whys[6] now carry the Moonlight-reset condition, the 22s dash cooldown, the 15s shield, and the terrain-versus-dash fact.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E text and cds", "ownerKit W terrain flag", "missingInteractions: shield-absorbs-burst"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "suspectNames flagged wants.foe[0] \"Land Crescent Strike\" as a probable wrong name. It is Diana's real Q name per the kit. False positive; left alone.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit Q"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Diana", "after": "Anivia" },
+    { "layer": "full", "path": "phases[1].side", "before": "Diana", "after": "Anivia" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Diana" },
+    { "layer": "full", "path": "phases[4].side", "before": "Diana", "after": "Anivia" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Diana" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Anivia" },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q only — last-hit with autos and save the stun strictly for his step-ups. Your egg is NOT a license to int level 1.",
+      "after": "Diana has no ranged spell yet — Flash Frost reaches 1075 and she must walk into it. Poke, but never stand in melee range."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Q-E online — a landed stun now means a real chunk. Trade only when his engage tool is down; your mana hates wasted rotations.",
+      "after": "Q-E online — Frostbite doubles on anything Flash Frost chilled. She has no dash until 3, so a landed stun is free damage."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Seraph's/RoA spike: your storm stays on longer than his patience. Zone him off the wave and call jungle dives onto the chill slow.",
+      "after": "Her first item turns Moonfall's 475 pull into a kill rather than a trade — hold Crystallize for the pull and stay behind minions."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Diana Crescent Strike: matchup-defining — Moonlight marks reset her dash — sidestep the arc and her dive has no follow-up. Check it before every step-up. - W Crystallize is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+      "after": "- Lunar Rush is free only onto a Moonlight-marked target: dodge the Crescent Strike arc and her dash sits on a 22-second cooldown at rank 1. - Pale Cascade shields her every 15s — bait the spheres out before you spend Flash Frost on her."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Diana wins by landing Crescent Strike, denying your pattern, and starting the fight your kit wanted ten seconds later.",
+      "after": "Diana wins by marking you with Crescent Strike, dashing free onto the mark, and shielding through the answer you had ready."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, the lane is a prison: storm every wave, wall Diana away from the comeback farm, and rotate first to every river fight with your stun loaded.",
+      "after": "Ahead, keep her mana-poor and unmarked: storm every wave, wall the dash lane, and fight only while Lunar Rush is on its long cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry by controlling space — storm and wall decide where fights happen, and your stun decides who dies first inside them.",
+      "after": "Carry by forcing Pale Cascade out first — her shield is your burst window, and Frostbite doubles on anything the storm has chilled."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Moonlight marks reset her dash — sidestep the arc and her dive has no follow-up. Until it’s spent, every commit is a coin flip.",
+      "after": "Lunar Rush reaches 825 — a wave parked near her tower means she dashes in with tower cover. Hold it where your tower answers."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Threaten Q until Diana burns his sidestep tool, land it, then E + auto and walk before the answer — chilled E double-damage is the whole trade.",
+      "after": "Crystallize is terrain and Lunar Rush is a dash — put the wall between her and the mark and the dive never happens, then Frostbite her."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Diana spends Crescent Strike early — the closest thing this matchup has to a guarantee.",
+      "after": "Stun her in tower range and the free reset expires — Moonlight lasts only 3 seconds."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Diana’s rehearsed moment — don’t audition for it.",
+      "after": "With Flash Frost down you have no answer to an 825 dash."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Your wall is your Flash — a wasted Crystallize means the next gank kills the bird AND the egg.",
+      "after": "Crystallize on a 17s cooldown is your only answer to Lunar Rush — spend it on the dash, not on poke."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Spamming Q on cooldown until you are out of mana with no stun threat left — that is when Diana walks straight at you.",
+      "after": "Every Moonlight mark she lands makes the next Lunar Rush free — chasing her through minions just hands her the reset."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Moonfall's pull-and-reset lets Diana chain into a kill combo that outraces your fresh Glacial Storm.",
+      "after": "Moonfall pulls at 475 into the Lunar Rush chain — her cleanest kill window against your fresh Glacial Storm."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Your wall blocks her only gap-close angle, letting you kite and burst her from range before she reaches you.",
+      "after": "Your wall is terrain and Lunar Rush is a dash — block the approach and burst her from 1075 before she is in range."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Anivia: wall denial of her only gap-close plus ranged burst wins the late-game exchange.",
+      "after": "Anivia: Crystallize is terrain, so Lunar Rush cannot cross it — she arrives late or not at all."
+    }
+  ],
+  "notes": "Level chart: win[0..6] on disk already matches the packet, so only the six full-layer side tokens are proposed as one group; after the write both layers agree on all seven rows. phases[].rating left untouched. Anti-shield note: Pale Cascade's third-sphere bonus shield strength is in Riot's text but the exact values are not, so no numbers were asserted."
+}

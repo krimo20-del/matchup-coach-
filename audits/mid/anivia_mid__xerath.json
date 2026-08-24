@@ -1,0 +1,90 @@
+{
+  "ownerKey": "anivia_mid",
+  "enemy": "xerath",
+  "lane": "mid",
+  "audit": [
+    { "point": 2, "status": "needs-correction",
+      "whatIsWrong": "phases[3..6].side read Skill while win[3..6] read Xerath and the packet chart reads Xerath on all seven rows.",
+      "why": "47.92% over 1686 games with a permanent range deficit — Xerath holds every row. Two layers were rendering different answers.",
+      "corrected": "phases[3],[4],[5],[6].side set to Xerath.",
+      "confidence": "High", "sources": ["packet.levelChart", "packet.winRate", "currentText.content.win[]"] },
+    { "point": 3, "status": "needs-correction",
+      "whatIsWrong": "Level 6 was written as pure range dominance with no mention of what Rite of the Arcane costs him.",
+      "why": "Riot text: 'Xerath immobilizes himself' for the barrage, and the kit flags it channel/interruptible on 130/115/100s. That is the one moment he cannot move.",
+      "corrected": "spikes[1] and whys[4] now state the self-root and the 130s cooldown, and that Flash Frost cancels the channel.",
+      "confidence": "High", "sources": ["brief.enemyKit", "brief.missingInteractions[30]"] },
+    { "point": 4, "status": "needs-correction",
+      "whatIsWrong": "Three interaction errors: 'Eye of Destruction stacks/charges' (the W has no stacking mechanic), 'use minions as cover to block incoming Arcanopulse' (Q hits all targets in its path, so minions are not cover), and no mention anywhere that his R is an interruptible channel.",
+      "why": "Riot text for Q is 'a long-range beam of energy, dealing magic damage to all targets hit' — piercing, not single-target. W 'calls down a barrage… slowing and dealing damage', a one-shot zone. E 'deals magic damage to an enemy and stuns them' — a projectile that stops on the first unit, so THAT is what minions block. R is flagged channel.",
+      "corrected": "Minion cover moved to Shocking Orb; W described as a slow that sets up the orb; R channel-cancel stated.",
+      "confidence": "High", "sources": ["brief.enemyKit", "brief.missingInteractions[30]"] },
+    { "point": 6, "status": "missing",
+      "whatIsWrong": "Packet defect: no cooldown-sequencing advice anywhere (sequencingCues 0).",
+      "why": "Shocking Orb is 13s at rank 1 and is his only CC; Rite of the Arcane is 130s at rank 1. Those two numbers are the whole timing model of the lane.",
+      "corrected": "breakdown.cooldowns rewritten with both numbers and the wait-for-X-then-Y structure.",
+      "confidence": "High", "sources": ["brief.enemyKit"] }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Xerath" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Xerath" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Xerath" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Xerath" },
+
+    { "layer": "full", "path": "enemyWin",
+      "before": "Xerath wins by landing Shocking Orb (Stun), denying your pattern, and renting you the lane at a range markup.",
+      "after": "Xerath wins by slowing you with Eye of Destruction, landing Shocking Orb, and finishing from off your screen." },
+
+    { "layer": "full", "path": "breakdown.cooldowns",
+      "before": "- Xerath Shocking Orb (Stun): matchup-defining — His only CC — dodge the orb and his artillery never converts into a kill. Read it like a second minimap. - Guard your W Crystallize like a fifth summoner spell. - Ultimate goes to kill windows only.",
+      "after": "- Shocking Orb: 13s at rank 1 and his only CC — it stops on the first unit, so keep a minion between you; with it down the artillery never converts. - Rite of the Arcane is 130s at rank 1 and a channel your Flash Frost cancels outright." },
+
+    { "layer": "full", "path": "breakdown.carry",
+      "before": "Carry by controlling space — storm and wall decide where fights happen, and your stun decides who dies first inside them.",
+      "after": "Carry by punishing the one moment he stands still: Rite of the Arcane roots him for the channel, and a stun there ends it." },
+
+    { "layer": "full", "path": "dosFull[2].d",
+      "before": "Xerath whiffs Shocking Orb (Stun) and the lane briefly belongs to you.",
+      "after": "With the orb on cooldown he has no CC — walk up and wall his path home." },
+
+    { "layer": "full", "path": "dontsFull[0].d",
+      "before": "That is Xerath’s rehearsed moment — don’t audition for it.",
+      "after": "Your Q costs 80 mana; Mana Surge refunds his poke for free." },
+
+    { "layer": "full", "path": "dontsFull[1].d",
+      "before": "Your wall is your Flash — a wasted Crystallize means the next gank kills the bird AND the egg.",
+      "after": "Arcanopulse pierces every minion in the line — cover does not exist against his Q, only distance." },
+
+    { "layer": "full", "path": "dontsFull[2].d",
+      "before": "Spamming Q on cooldown until you are out of mana with no stun threat left — that is when Xerath walks straight at you.",
+      "after": "Rite of the Arcane reaches 5000 units — with the egg down, being anywhere on his half of the map is the danger." },
+
+    { "layer": "content", "path": "whys[2]",
+      "before": "Level 3: Eye of Destruction stacks begin adding to his poke damage, widening his lead as Anivia's combo still can't reach him.",
+      "after": "Level 3: Eye of Destruction adds a 1000-range slow that sets up Shocking Orb, widening his lead while your combo cannot reach." },
+
+    { "layer": "content", "path": "whys[4]",
+      "before": "Level 6: Rite of the Arcane hits from a range Anivia's Glacial Storm can never match, keeping Xerath's advantage intact through the power spike.",
+      "after": "Level 6: Rite of the Arcane fires at 5000 range while he stands rooted in place — he keeps the edge unless you are close enough to stun the channel." },
+
+    { "layer": "content", "path": "spikes[0].text",
+      "before": "Xerath's Arcanopulse-Eye of Destruction poke outranges your Flash Frost setup entirely, letting him chip you down without ever entering your combo range.",
+      "after": "Arcanopulse pierces the whole minion line and Eye of Destruction slows you into Shocking Orb, chipping you down from outside your combo range." },
+
+    { "layer": "content", "path": "spikes[1].text",
+      "before": "Rite of the Arcane out-damages your Glacial Storm at a range you can never close, keeping his lead firmly intact.",
+      "after": "Rite of the Arcane roots him in place for the channel — 130s at rank 1, and your Flash Frost cancels it outright." },
+
+    { "layer": "content", "path": "early",
+      "before": "Anivia is at a fundamental range disadvantage from level 1 — Xerath's poke starts outranging your Flash Frost setup immediately and only gets worse as he stacks Eye of Destruction charges through levels 3-5. There's no real engage window here since walking into his poke range to set up Q just eats more damage than you can trade back. Farm patiently from max range, use minions for cover, and don't contest CS he's willing to zone you off of.",
+      "after": "Anivia is at a fundamental range disadvantage from level 1 — Xerath's poke starts outranging your Flash Frost setup immediately, and by 3-5 Eye of Destruction slows you into a 13s Shocking Orb for free. There's no real engage window here since walking into his poke range to set up Q just eats more damage than you can trade back. Farm patiently from max range, body-block the orb with a minion, and don't contest CS he's willing to zone you off of." },
+
+    { "layer": "content", "path": "wants.you[1]",
+      "before": "Use minions as cover to block incoming Arcanopulse",
+      "after": "Keep a minion between you and his Shocking Orb stun" },
+
+    { "layer": "content", "path": "wants.foe[0]",
+      "before": "Poke relentlessly from max range with Arcanopulse and Eye of Destruction stacks",
+      "after": "Poke from max range with Arcanopulse, then slow with Eye of Destruction" }
+  ],
+  "notes": "Two real mechanical errors killed: Eye of Destruction has no stacks or charges (it is a single barrage that slows), and minions do NOT block Arcanopulse — Riot's text says it damages all targets hit. Minion cover works against Shocking Orb, which stops on the first unit, so the advice was pointed at the wrong ability. Added the R-is-a-channel interaction from _missing. Level chart squared to all-Xerath across both layers, matching the packet and the 47.92% win rate."
+}

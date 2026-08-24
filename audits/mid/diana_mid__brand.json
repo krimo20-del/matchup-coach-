@@ -1,0 +1,88 @@
+{
+  "ownerKey": "diana_mid",
+  "enemy": "brand",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "56.41% over 1592 games, and Brand has no dash, blink or defensive tool — Diana owns every stage of the chart.",
+      "corrected": "Diana-favoured lane throughout; the only difficulty is eating Sear while ablaze.",
+      "confidence": "High",
+      "sources": ["packet.winRate", "brief.enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Six of seven full-layer phases[N].side rows read 'Skill' while the content win[N] rows and packet.levelChart both read Diana.",
+      "why": "packet.levelChart is Diana on all seven rows and matches win[0..6]; the full layer is stale.",
+      "corrected": "phases[0,1,2,3,5,6].side -> Diana; the whys already describe Diana winning those stages, so no verdict reversal is introduced.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Slot error: spikes[1].text calls Pillar of Flame his E — it is his W; Conflagration is E. content.late attributes the stun to Conflagration — the stun is Sear (Q), and only against an ablaze target. breakdown.cooldowns carried no cooldown number, and two bullets were the trade lines pasted under unrelated titles.",
+      "why": "Riot text: Sear stuns only if the target is ablaze; Blaze comes from any prior Brand spell. Sear 8/7.5/7/6.5/6, Pillar of Flame 10/9.5/9/8.5/8, Conflagration 13/12/11/10/9, Pyroclasm 100/90/80. Diana's Lunar Rush is 22/20/18/16/14 and only refunds onto a Moonlight target.",
+      "corrected": "Slots corrected, stun attributed to Sear, real cooldowns written into breakdown.cooldowns, bullets grounded in the E-reset and Conflagration windows.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.defects flags no cooldown-sequencing advice anywhere in this matchup.",
+      "why": "Conflagration at 13s early is the concrete 'wait for X before you Y' window, since Sear only stuns through a Blaze application.",
+      "corrected": "dosFull[1].d now keys the commit to Conflagration's 13s downtime.",
+      "confidence": "High",
+      "sources": ["packet.defects", "brief.enemyKit"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Diana" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Diana" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Diana" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Diana" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Diana" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Diana" },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Brand Sear (Stun): matchup-defining — Q only stuns when you are ablaze — after eating W or E, the stun line is the dodge that matters. Step up only on its downtime. - Budget W Pale Cascade for emergencies and the R for opportunities — never swap them.",
+      "after": "- Sear is 8s at rank 1 and only stuns while you are ablaze — break the burn and the stun never arrives. - Pillar of Flame is his shortest at 10s down to 8s. - Conflagration is 13s early; that gap is your walk-up. - Pyroclasm is 100s."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left.",
+      "after": "Conflagration is 13s at rank 1 — the moment it is spent, Q the mark and E onto it; the reset means that dash costs you nothing."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.",
+      "after": "Lunar Rush only refunds onto a Moonlight target — dash at an unmarked Brand and you are stuck at 22s next to a full combo."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the dive — mark, dash, pull, delete; your R turns their teamfight spacing into a suggestion.",
+      "after": "Carry by killing Brand first — no dash, no escape, so a marked Lunar Rush ends him before Pyroclasm bounces."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Moonfall (R) closes the gap on a champion with zero mobility, meaning your ult is nearly unavoidable while his Pillar of Flame (E) requires him to predict your dash.",
+      "after": "Moonfall (R) closes the gap on a champion with zero mobility, so your ult is near-unavoidable while his Pillar of Flame (W) lands on a delay and has to predict your dash."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "The 1v1 stays yours completely, but respect his teamfight scaling — Pyroclasm bounces and a well-timed Conflagration stun-chain can wreck your team from range even if he can't beat you solo. Look to isolate and burst him before fights start rather than diving into his zone once his team is grouped.",
+      "after": "The 1v1 stays yours completely, but respect his teamfight scaling — Pyroclasm bounces five times and a Blaze-stacked Sear stun can wreck your team from range even if he can't beat you solo. Look to isolate and burst him before fights start rather than diving into his zone once his team is grouped."
+    }
+  ],
+  "notes": "win[0..6] were already correct (Diana on all seven) and match packet.levelChart, so the six side flips have no proposable paired content edit — before would equal after. Real slot error corrected: Pillar of Flame is Brand's W, not E. All three lintFindings fixed plus the packet's no-sequencing defect."
+}

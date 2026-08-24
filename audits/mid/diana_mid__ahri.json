@@ -1,0 +1,101 @@
+{
+  "ownerKey": "diana_mid",
+  "enemy": "ahri",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer level chart read 'Skill' on all seven rows while the content layer win[0..6] and the packet levelChart both read Ahri/Ahri/Ahri/Ahri/Diana/Diana/Diana. The page rendered two answers to 'who wins Level 1'.",
+      "why": "Ahri's Orb of Deception is 970 range and returns for true damage; Diana's Q is 900 and she has no dash until level 3, so Ahri owns 1-5. Moonfall at 6 plus the Lunar Rush reset flips it.",
+      "corrected": "phases[0..3].side = Ahri, phases[4..6].side = Diana, with phases[0..3].why rewritten to describe Ahri winning those stages.",
+      "confidence": "High",
+      "sources": ["brief packet.levelChart", "brief currentText.content.win[]", "ownerKit Q range 900", "enemyKit Q range 970"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are level 3 (Lunar Rush online, 22s at rank 1), level 6 Moonfall (100/90/80), first item, and the late window where a spent Spirit Rush (140/120/100) leaves Ahri with no exit. spikes[] already tracks this; breakdown.carry and breakdown.late were generic Diana boilerplate and were grounded onto Spirit Rush charges.",
+      "corrected": "breakdown.carry / breakdown.late rewritten around Ahri's Spirit Rush cooldown.",
+      "confidence": "High",
+      "sources": ["ownerKit R 100/90/80", "enemyKit R 140/120/100"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "winCon said 'dash the silence' — Ahri has no silence in her kit. The decisive interaction (Charm 'instantly stopping movement abilities', i.e. it kills Lunar Rush mid-dash) was never stated anywhere on the page.",
+      "why": "Riot's Charm text explicitly stops movement abilities; that is the single interaction that decides whether Diana's E commit works. Charm is a flat 12s at every rank, Lunar Rush is 22/20/18/16/14, so the Charm gap is the only safe step-up window.",
+      "corrected": "Stated in winCon, phases[2].why, phases[3].why, breakdown.cooldowns, dosFull[1].d and loading: Charm stops Lunar Rush mid-flight; commit only in the 12s gap after it is thrown.",
+      "confidence": "High",
+      "sources": ["enemyKit E text and cd 12", "ownerKit E cd 22/20/18/16/14"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit at all (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that carries real cooldown numbers.",
+      "corrected": "Charm 12s flat, Fox-Fire 9s->5s, Pale Cascade 15s->9s, Moonfall 100s at rank 1.",
+      "confidence": "High",
+      "sources": ["enemyKit", "ownerKit"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Essence Theft healing was never mentioned; Grievous Wounds timing was absent.",
+      "why": "missingInteractions rule 'needs-antiheal' — Ahri heals off every 9 minions and off takedowns, so chip damage does not stick.",
+      "corrected": "Folded into breakdown.mid with a named item (Oblivion Orb) rather than a placeholder.",
+      "confidence": "High",
+      "sources": ["brief.missingInteractions", "enemyKit P text"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flagged 'Use Spirit Rush' in wants.foe[1] — false positive, Spirit Rush is Ahri's real R name per the kit. The real defect in that line was the doubled word 'reset ... reset'.",
+      "corrected": "Reworded to 'disengage after poking, then reset to shop'.",
+      "confidence": "High",
+      "sources": ["enemyKit R name"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"tldr","before":"His combo is scheduled — yours is reactive. Shield the rotation, mark the caster, and arrive before his cooldowns do.","after":"Her combo is scheduled — yours is reactive. Pale Cascade the rotation, mark her with Q, and arrive in the 12s Charm gap."},
+    {"layer":"full","path":"winCon","before":"Absorb the burst, dash the silence, and pull the conclusion. Charm is the clock this lane runs on — read it before every step forward.","after":"Absorb the poke with Pale Cascade, dash the spent Charm, and pull the conclusion. Charm is the 12-second clock this lane runs on."},
+    {"layer":"full","path":"enemyWin","before":"Ahri wins by landing Charm, denying your pattern, and out-ranging your plan one polite trade at a time.","after":"Ahri wins by Charming you mid-Lunar Rush, killing the dash, then finishing with Fox-Fire and 970-range Orb."},
+    {"layer":"full","path":"tradeGood","before":"Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left.","after":"Q through the wave onto her chest, E the mark, three-hit string, walk — you are gone before Fox-Fire finishes tracking."},
+    {"layer":"full","path":"loading","before":"- Diana vs Ahri - Track: Ahri Charm. - Dash only onto marks — the reset is the kit. - No commits into Charm. - The ultimate closes arguments; it doesn’t open them.","after":"- Diana vs Ahri - Charm is 12s — count it. - Dash only onto Moonlight marks; the reset is the kit. - Never step up into Charm. - Moonfall closes arguments, it doesn't open them."},
+
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Ahri"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Ahri"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Ahri"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Ahri"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Diana"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Diana"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Diana"},
+
+    {"layer":"full","path":"phases[0].why","before":"Q the wave's edge and his face in one arc — the crescent farms and pokes at once; learn the curve's sweet spot.","after":"Orb of Deception is 970 range to your 900 and hurts both ways — farm the wave's edge and accept the chip for now."},
+    {"layer":"full","path":"phases[1].why","before":"W shield-trade window: orbs absorb his poke and pay it back on the three-hit passive.","after":"Pale Cascade blunts Fox-Fire, but with no dash yet you eat Orb chip and cannot answer it."},
+    {"layer":"full","path":"phases[2].why","before":"E pull joins... no — your dash threat begins: Q-mark into E reset chases are live; trade on every landed crescent.","after":"Lunar Rush is live at 22s, but a 12s Charm beats it — she stops the dash mid-flight and full-combos you."},
+    {"layer":"full","path":"phases[3].why","before":"Mark-dash trades on cooldown — Q, E to the mark, passive three-hit, walk. The lane respects the curve now.","after":"Charm on 12s returns faster than your 20s Lunar Rush — step up in the gap after she throws it, never before."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Ahri Charm: matchup-defining — The charm starts every kill pattern — stay behind minions while it is up. Check it before every step-up. - W Pale Cascade is the lifeline; chip damage never gets it. - The ult answers fights, not waves.","after":"- Charm: a flat 12s at every rank and matchup-defining — it stops Lunar Rush mid-dash, so step up only in that window. - Fox-Fire shortens from 9s to 5s by rank 5. - Pale Cascade is your lifeline: 15s, 9s maxed. - Moonfall is 100s at rank 1."},
+    {"layer":"full","path":"breakdown.mid","before":"First item onward, chain the phases: mark-dash the contacts, R the river clumps, and reset through whatever groups.","after":"Essence Theft heals her off every 9 minions, so chip never sticks — bring Ignite or Oblivion Orb before you commit to extended trades."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a Q-cleared slow push you crash before roam windows — the crescent farms the wave and threatens the lane in one cast. Worst wave: a frozen wave near his tower with E down — walking up markless into poke is the lane's only losing pattern. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a Q-cleared slow push you crash before roam windows — the crescent farms the wave and threatens the lane in one cast. Worst wave: a frozen wave near her tower with E down — walking up markless into poke is the lane's only losing pattern. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.","after":"Good trade: Q through the wave onto her chest, E the mark, three-hit string, walk — you are gone before Fox-Fire finishes tracking. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the dive — mark, dash, pull, delete; your R turns their teamfight spacing into a suggestion.","after":"Carry by punishing a spent Spirit Rush — three dashes on a 100s rank-3 cooldown, and after the last one she cannot leave."},
+    {"layer":"full","path":"breakdown.late","before":"You are the dive: E through the front line onto their carry, R the collapse, and let the resets carry you out famous.","after":"You are the dive: E onto the Moonlight mark past the front line, R the collapse, and hunt Ahri once her Spirit Rush is spent."},
+
+    {"layer":"full","path":"dosFull[0].t","before":"W-shield his opening rotation","after":"Pale Cascade her Fox-Fire wave"},
+    {"layer":"full","path":"dosFull[1].d","before":"Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left.","after":"The moment Charm flies past you, Q to mark and E in — you have roughly 12 seconds before she can stop the dash again."},
+    {"layer":"full","path":"dontsFull[0].t","before":"Dash in while his combo is loaded","after":"Dash in while her Charm is loaded"},
+    {"layer":"full","path":"dontsFull[1].t","before":"Trade shield-less at his range","after":"Trade shield-less at her range"},
+    {"layer":"full","path":"dontsFull[1].d","before":"Your W is the trade — entering without orbs is volunteering for his combo at melee range.","after":"Your W is the trade — entering without orbs is volunteering for her combo at melee range."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.","after":"Lunar Rush only refunds onto a Moonlight target — burning it on a clean enemy leaves you at her feet with 22s of nothing."},
+
+    {"layer":"full","path":"report[0].t","before":"His combo is scheduled — yours is reactive. Shield the rotation, mark the caster, and arrive before his cooldowns do.","after":"Her combo is scheduled — yours is reactive. Pale Cascade the rotation, mark her with Q, and arrive in the 12s Charm gap."},
+    {"layer":"full","path":"report[3].t","before":"Good trade: Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left. Great trade: Ahri wastes Charm — commit immediately. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.","after":"Good trade: Q through the wave onto her chest, E the mark, three-hit string, walk — you are gone before Fox-Fire finishes tracking. Great trade: Ahri wastes Charm — commit immediately. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity."},
+
+    {"layer":"content","path":"wants.foe[1]","before":"Use Spirit Rush to reset after poking, then reset to shop","after":"Use Spirit Rush to disengage after poking, then reset to shop"}
+  ],
+  "notes": "CHART: full-layer phases[].side was 'Skill' on all seven rows while content win[0..6] already read Ahri/Ahri/Ahri/Ahri/Diana/Diana/Diana (matching packet.levelChart). I moved the side values to agree with the existing win[] rows, so no paired win[N] edit was possible — a win[N] edit would have had before === after and been refused. This closes a cross-layer disagreement rather than creating one. phases[0..3].why were rewritten in the same proposal to match the Ahri verdict; phases[4..6].why already described Diana winning, so they were left alone. Ratings left untouched (5/10, 5/10, 5/10, 5/10, 6/10, 6/10, 6/10) — I could not ground a rating change from the kit.\nREPORT CAP: the sweep allows at most two report[] rewrites, so I fixed report[0].t and report[3].t only. report[1].t still contains the false 'dash the silence' claim (Ahri has no silence), and report[4].t / report[9].t / report[11].t are still misgendered ('his'). Those four are flagged for a later pass — I did not exceed the two-entry limit.\nSUSPECT NAME: packet flagged 'Use Spirit Rush' in wants.foe[1] as a probable wrong ability name. False positive — Spirit Rush is Ahri's real R. The genuine defect there was the repeated word 'reset', which I fixed.\nANTI-HEAL: missingInteractions needs-antiheal folded into breakdown.mid with a named item (Oblivion Orb), replacing a fully templated sentence."
+}

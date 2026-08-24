@@ -1,0 +1,60 @@
+{
+  "ownerKey": "diana_mid",
+  "enemy": "sylas",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer level chart says \"Skill\" on all seven rows while the content layer and the packet levelChart both say Sylas/Diana/Sylas/Diana/Diana/Diana/Diana. The page renders two different answers to who wins each stage.",
+      "why": "Sylas at levels 1 and 3 has Chain Lash (Q, 10s rank 1) chip plus Kingslayer (W, 12s) healing it back, and at 3 he owns Abscond into Abduct; Diana only has one Pale Cascade shield (15s rank 1) to cover both. From 4-5 onward Diana's Q-mark into a cooldown-free Lunar Rush reset out-trades him.",
+      "corrected": "Align full phases[N].side to the content win[N] values and rewrite the whys on rows 0 and 2 to describe Sylas winning them.",
+      "confidence": "High",
+      "sources": ["brief packet.levelChart", "brief currentText.content.win", "ownerKit/enemyKit cooldowns"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are level 3 (mark-dash pattern), level 6 Moonfall vs conditional Hijack (80/55/30s), first item, late reset chains. Hijack's rank-1 80s cooldown and its dependence on an enemy ultimate being available is the real spike asymmetry and the content layer already states it.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit R", "content spikes[]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contains no number at all (lint COOLDOWN_NO_DIGIT) and describes Abscond as a \"chain-stun\", which Riot's text does not say — Abscond is a dash, Abduct the recast pull.",
+      "why": "Abscond/Abduct is 13/12/11/10/9s, Kingslayer 12/10.5/9/7.5/6s and heals against champions, Hijack 80/55/30s, Diana's Pale Cascade 15/13.5/12/10.5/9s and Lunar Rush 22s at rank 1 but free onto a Moonlight-marked target. Those numbers are what make the step-up advice concrete.",
+      "corrected": "Rewrite breakdown.cooldowns with the real Abscond, Kingslayer, Pale Cascade and Hijack numbers, and fold in the Grievous Wounds requirement flagged by missingInteractions.",
+      "confidence": "High",
+      "sources": ["enemyKit", "ownerKit", "missingInteractions needs-antiheal"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Two copy-paste bleeds: dosFull[1].d is the tradeGood string verbatim and dontsFull[2].d is the tradeBad string verbatim, both under unrelated titles.",
+      "why": "The titles promise \"Mark-dash his disengage windows\" and \"Chase resets through his wave\"; the bodies explain something else entirely.",
+      "corrected": "Replace both bodies with content that matches the titles and is grounded in Abscond's 13s and Petricite Burst procs off his wave.",
+      "confidence": "High",
+      "sources": ["lintFindings", "enemyKit P/E"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Sylas"},
+    {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Diana"},
+    {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Sylas"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Diana"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Diana"},
+    {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Diana"},
+    {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Diana"},
+    {"layer": "full", "path": "phases[0].why", "before": "Q the wave's edge and his face in one arc — the crescent farms and pokes at once; learn the curve's sweet spot.", "after": "Chain Lash chips you twice per cast and Kingslayer heals it back — farm the arc's edge and skip the level 1 fight."},
+    {"layer": "full", "path": "phases[2].why", "before": "E pull joins... no — your dash threat begins: Q-mark into E reset chases are live; trade on every landed crescent.", "after": "Abscond (13s) plus Kingslayer (12s) is a full all-in at 3, and one Pale Cascade shield does not cover both halves."},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Sylas Abscond / Abduct: matchup-defining — Dash into chain-stun — punish him hard while it is down. Check it before every step-up. - W Pale Cascade is the lifeline; chip damage never gets it. - The ult answers fights, not waves.", "after": "- Abscond / Abduct is 13s at rank 1: once he dashes in, that window is yours to step up in. - Kingslayer is 12s and heals off you — buy Grievous Wounds before extended trades. - Pale Cascade is 15s at rank 1; no orbs, no trade. - Hijack is 80s at rank 1."},
+    {"layer": "full", "path": "dosFull[1].d", "before": "Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left.", "after": "Abscond is his only exit at 13s — Q-mark him the moment he spends it, then E the mark and take the free three-hit string."},
+    {"layer": "full", "path": "dontsFull[2].d", "before": "Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.", "after": "Chasing him past his minions feeds Petricite Burst free procs and lets Kingslayer heal off the wave while your E burns."},
+    {"layer": "full", "path": "enemyWin", "before": "Sylas wins by landing Abscond / Abduct, denying your pattern, and starting the fight your kit wanted ten seconds later.", "after": "Sylas wins by hitting Abduct off the wave, healing the trade back with Kingslayer, then casting your own Moonfall at you."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through the dive — mark, dash, pull, delete; your R turns their teamfight spacing into a suggestion.", "after": "Carry by making Hijack worthless: R after he spends his steal, then mark, dash and delete him first in every fight."}
+  ],
+  "notes": "Chart: the full layer had all seven phases[N].side set to \"Skill\" while content win[N] and packet.levelChart agree on Sylas/Diana/Sylas/Diana/Diana/Diana/Diana. I moved the full layer onto the content values rather than the other way round, so NO paired win[N] edit exists — win[N] is already the correct value on every row and an edit whose before equals its after cannot be written. This is a chart-alignment group, not a verdict change; the two layers agree after it lands. Whys on rows 0 and 2 were rewritten in the same proposal so no row argues with itself. Anti-heal interaction from missingInteractions is now stated in breakdown.cooldowns (report[8] already mentioned it). Petricite Burst is a basic-attack chain proc, not a stun — the old cooldowns text called it a chain-stun and content whys[2] repeats that error ('lands Petricite Burst into sustain'); I left whys[2] alone because it is the content half of a chart row I did not move, and flagged it here instead."
+}

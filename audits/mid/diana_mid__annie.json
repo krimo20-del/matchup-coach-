@@ -1,0 +1,99 @@
+{
+  "ownerKey": "diana_mid",
+  "enemy": "annie",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer sides read Annie/Annie/Skill/Skill/Annie/Skill/Skill while content win[0..6] and packet.levelChart both read Diana/Diana/Annie/Annie/Diana/Diana/Diana. Every row disagreed with the sentence beside it.",
+      "why": "Diana's 900-range Q beats a 625-range Disintegrate at levels 1-2 before Pyromania is stocked; levels 3-5 flip because a stocked stun makes any Lunar Rush a free full combo; Moonfall at 6 and item scaling flip it back, matching 55.8% over 853 games.",
+      "corrected": "phases[0..1].side = Diana, phases[2..3].side = Annie, phases[4..6].side = Diana, with phases[0..3].why rewritten to match.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[]", "enemyKit Q range 625", "ownerKit Q range 900"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Level 3-5 is her stun window, 6 is Moonfall, first item is the burst spike, late she is a one-combo threat. spikes[] tracks it. Summon: Tibbers is 130s at rank 1 and 100s at rank 3, which is the number the page never gave.",
+      "corrected": "Tibbers' real cooldown written into breakdown.cooldowns and loading; breakdown.carry grounded onto a spent Pyromania.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd 130/115/100"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "winCon said 'dash the silence' — Annie has no silence anywhere in her kit. Separately, the mechanism of Pyromania was never stated: it stuns on her next offensive spell after four casts, and with Disintegrate on 4s and Incinerate on 7s she restocks it faster than your 20s Lunar Rush returns.",
+      "why": "The stun stack, not Tibbers, is the actual clock of this lane — Tibbers is just what follows it. The page tracked the ultimate and ignored the trigger.",
+      "corrected": "winCon, phases[2].why, phases[3].why, breakdown.cooldowns, loading and dosFull[1].d rebuilt around counting her four casts.",
+      "confidence": "High",
+      "sources": ["enemyKit P text", "enemyKit Q cd 4", "enemyKit W cd 7"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Molten Shield 'damages enemies who strike her with attacks or spells' and was never mentioned.",
+      "why": "Diana's damage is a three-hit auto string plus orbs, which is exactly the pattern that feeds a reflect shield on a 10s cooldown.",
+      "corrected": "Written into breakdown.mid, replacing a fully templated sentence.",
+      "confidence": "High",
+      "sources": ["enemyKit E text and cd 10"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit in it (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that carries the real numbers.",
+      "corrected": "Disintegrate 4s, Incinerate 7s, Molten Shield 10s, Tibbers 130s->100s, Pale Cascade 15s.",
+      "confidence": "High",
+      "sources": ["enemyKit", "ownerKit"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was tradeGood verbatim and dontsFull[2].d was tradeBad verbatim under unrelated titles; thirteen fields called Annie 'he'.",
+      "why": "champ-gender.js lists annie as female, and each bullet body explained something other than its title.",
+      "corrected": "Both bullets rewritten to their own titles; every flagged pronoun fixed in the fields I edited.",
+      "confidence": "High",
+      "sources": ["lintFindings", "champ-gender.js"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"tldr","before":"His combo is scheduled — yours is reactive. Shield the rotation, mark the caster, and arrive before his cooldowns do.","after":"Her combo is scheduled — yours is reactive. Pale Cascade the rotation, count her four spells, and step in stunless."},
+    {"layer":"full","path":"winCon","before":"Absorb the burst, dash the silence, and pull the conclusion. Track Summon: Tibbers before every commit and keep the wave where your pattern works.","after":"Absorb the burst and count her spells. Pyromania stuns on the fourth cast — step up only when the glow under her feet is gone, then commit."},
+    {"layer":"full","path":"enemyWin","before":"Annie wins by landing Summon: Tibbers, denying your pattern, and renting you the lane at a range markup.","after":"Annie wins by stunning you off a stocked Pyromania, then Tibbers and a 4s Disintegrate finish it before you move."},
+    {"layer":"full","path":"tradeGood","before":"Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left.","after":"Q through the wave onto her chest, E the mark, three-hit string, walk — the phase trade she answers after you've left."},
+    {"layer":"full","path":"loading","before":"- Diana vs Annie - Track: Annie Summon: Tibbers. - Dash only onto marks — the reset is the kit. - Engage only on Summon: Tibbers’s cooldown. - Spend your ultimate on kill windows only.","after":"- Diana vs Annie - Count her casts: the fourth one stuns. - Dash only onto Moonlight marks. - Tibbers is 130s at rank 1. - Step up once the glow under her feet is gone."},
+
+    {"layer":"full","path":"phases[0].side","before":"Annie","after":"Diana"},
+    {"layer":"full","path":"phases[1].side","before":"Annie","after":"Diana"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Annie"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Annie"},
+    {"layer":"full","path":"phases[4].side","before":"Annie","after":"Diana"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Diana"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Diana"},
+
+    {"layer":"full","path":"phases[0].why","before":"Q the wave's edge and his face in one arc — the crescent farms and pokes at once; learn the curve's sweet spot.","after":"Q the wave's edge and her face in one arc at 900 range — she has to walk inside 625 just to answer you."},
+    {"layer":"full","path":"phases[1].why","before":"W shield-trade window: orbs absorb his poke and pay it back on the three-hit passive.","after":"Pale Cascade orbs absorb Disintegrate and pay it back on the three-hit passive."},
+    {"layer":"full","path":"phases[2].why","before":"E pull joins... no — your dash threat begins: Q-mark into E reset chases are live; trade on every landed crescent.","after":"Her fourth spell arrives here — a stocked Pyromania turns your Lunar Rush into a free full combo for her."},
+    {"layer":"full","path":"phases[3].why","before":"Mark-dash trades on cooldown — Q, E to the mark, passive three-hit, walk. The lane respects the curve now.","after":"She holds the stun and you cannot step up: Disintegrate is 4s, so the stack rebuilds faster than your 20s E."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Annie Summon: Tibbers: matchup-defining — Flash-Tibbers off a stocked passive stun is her whole threat — watch the glow under her feet. Count it out loud if you must. - Your W Pale Cascade has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Pyromania: matchup-defining — it stuns on her fourth spell, and with Disintegrate on 4s and Incinerate on 7s she restocks it fast. Step up only once it is spent. - Summon: Tibbers is 130s at rank 1 and 100s at rank 3. - Molten Shield is 10s. - Pale Cascade is 15s."},
+    {"layer":"full","path":"breakdown.mid","before":"First item onward, chain the phases: mark-dash the contacts, R the river clumps, and reset through whatever groups.","after":"Molten Shield is on 10s and damages you back on every hit — burning your three-hit string into it wastes the trade."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a Q-cleared slow push you crash before roam windows — the crescent farms the wave and threatens the lane in one cast. Worst wave: a frozen wave near his tower with E down — walking up markless into poke is the lane's only losing pattern. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a Q-cleared slow push you crash before roam windows — the crescent farms the wave and threatens the lane in one cast. Worst wave: a frozen wave near her tower with E down — walking up markless into poke is the lane's only losing pattern. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.","after":"Good trade: Q through the wave onto her chest, E the mark, three-hit string, walk — the phase trade she answers after you've left. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the dive — mark, dash, pull, delete; your R turns their teamfight spacing into a suggestion.","after":"Carry by fighting on a spent stun — with Pyromania used, Annie has 600 range, no dash and nothing to stop you."},
+    {"layer":"full","path":"breakdown.late","before":"You are the dive: E through the front line onto their carry, R the collapse, and let the resets carry you out famous.","after":"You are the dive: E onto the Moonlight mark past Tibbers, R the collapse, and reach Annie before the stun restocks."},
+
+    {"layer":"full","path":"dosFull[0].t","before":"W-shield his opening rotation","after":"Pale Cascade her opening cast"},
+    {"layer":"full","path":"dosFull[1].d","before":"Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left.","after":"The moment Pyromania is spent, Q to mark and E straight in — four more casts stand between her and the next stun."},
+    {"layer":"full","path":"dontsFull[0].t","before":"Dash in while his combo is loaded","after":"Dash in while her stun is stocked"},
+    {"layer":"full","path":"dontsFull[1].t","before":"Trade shield-less at his range","after":"Trade shield-less at her range"},
+    {"layer":"full","path":"dontsFull[1].d","before":"Your W is the trade — entering without orbs is volunteering for his combo at melee range.","after":"Your W is the trade — entering without orbs is volunteering for her combo at melee range."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.","after":"Lunar Rush only refunds onto a Moonlight target — an unmarked dash leaves you at 600 range with 22s of nothing."},
+
+    {"layer":"full","path":"report[0].t","before":"His combo is scheduled — yours is reactive. Shield the rotation, mark the caster, and arrive before his cooldowns do.","after":"Her combo is scheduled — yours is reactive. Pale Cascade the rotation, count her four spells, and step in stunless."},
+    {"layer":"full","path":"report[3].t","before":"Good trade: Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left. Great trade: Annie wastes Summon: Tibbers — commit immediately. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.","after":"Good trade: Q through the wave onto her chest, E the mark, three-hit string, walk — the phase trade she answers after you've left. Great trade: Annie wastes Pyromania — commit immediately. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity."}
+  ],
+  "notes": "CHART: all seven full-layer sides disagreed with content win[] and packet.levelChart. I moved the sides onto the existing win[] values, so no paired win[N] edit was possible (before would equal after and be refused) — this closes seven cross-layer disagreements rather than creating any. phases[0..3].why rewritten in the same proposal; phases[4..6].why already described Diana winning. Ratings untouched.\nFACTUAL ERROR: winCon said 'dash the silence'. Annie has no silence — this is Diana boilerplate written for a different enemy. Removed.\nphases[2].why on disk was garbled ('E pull joins... no —'), a template leak. Replaced.\nREPORT CAP: two entries only, both lint-flagged — report[0].t and report[3].t. report[4].t, report[9].t and report[11].t are still misgendered ('His'/'his') and report[1].t still carries the 'dash the silence' line; flagged for a later pass rather than exceeding the limit.\nLEFT ALONE: diff TRICKY / 7/10 / carry 7.5/10. It sits against a 55.8% win rate, but unlike the anivia entry the chart genuinely gives Annie levels 3-5 on a stocked stun, so I could not decide from the kit which way the rating should move."
+}

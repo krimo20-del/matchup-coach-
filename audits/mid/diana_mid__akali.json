@@ -1,0 +1,99 @@
+{
+  "ownerKey": "diana_mid",
+  "enemy": "akali",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer chart read Akali/Akali/Skill/Skill/Akali/Skill/Skill while content win[0..6] and packet.levelChart both read Diana/Diana/Diana/Diana/Skill/Diana/Diana. Every row disagreed with the row rendered beside it.",
+      "why": "Diana's Q is 900 range against a 550-range Five Point Strike and Akali has no Shroud until level 2 and no ultimate until 6; at 54.2% over 3,063 games the packet chart is the credible one. Level 6 is the genuine coinflip because Perfect Execution (120s at rank 1) and Moonfall (100s) arrive together.",
+      "corrected": "phases[0..3].side = Diana, phases[4].side = Skill, phases[5..6].side = Diana, with phases[0..4].why rewritten to match each new verdict.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[]", "ownerKit Q range 900", "enemyKit Q range 550", "enemyKit R cd 120/90/60"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Level 2 Shroud, level 3 Lunar Rush, the shared level 6, first item, then Diana's scaling. spikes[] already tracks it. breakdown.carry and breakdown.late were generic Diana boilerplate; carry was grounded onto Shroud's 20s downtime.",
+      "corrected": "breakdown.carry rewritten around the 20-second Twilight Shroud window.",
+      "confidence": "High",
+      "sources": ["enemyKit W cd 20/19/18/17/16"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The single decisive interaction was never stated: inside Twilight Shroud Akali is 'unable to be selected by enemy spells and attacks', so Lunar Rush — a targeted dash — has no target and cannot follow her in, and the Moonlight mark is worthless while she is inside. Nothing on the page said this.",
+      "why": "Riot's W text is explicit about untargetability, and Riot's E text says Lunar Rush 'dash[es] to an enemy', i.e. it requires a target. This is what makes the matchup a 7/10 rather than a free lane.",
+      "corrected": "Stated in winCon, enemyWin, loading, breakdown.cooldowns and dontsFull[2].d.",
+      "confidence": "High",
+      "sources": ["enemyKit W text", "ownerKit E text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The ownerKit revealsStealth flag on Diana's Q contradicts Riot's own description of the ability.",
+      "why": "Riot's Q text reads that it reveals enemies struck 'if they are not stealthed' — so Q does NOT pull Akali out of Twilight Shroud. Diana's R text does say she 'reveals and draws in all nearby enemies'. Per the brief's rule, the description beats the derived flag.",
+      "corrected": "No page text was written claiming Q reveals a shrouded Akali. I also declined to claim Moonfall pulls her out of Shroud, because untargetability versus the R pull is not decidable from the kit text.",
+      "confidence": "High",
+      "sources": ["ownerKit Q text", "ownerKit R text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that carries real cooldowns.",
+      "corrected": "Shroud 20s->16s, Shuriken Flip 16s, Pale Cascade 15s, Moonfall 100s.",
+      "confidence": "High",
+      "sources": ["enemyKit", "ownerKit"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Assassin's Mark was absent from the whole page — the auto-reset burst tell flagged in missingInteractions.",
+      "why": "Her combo opens with the empowered auto she gets by leaving the ring her spell damage created, so the ring exit is the cue to step back, not the ability cast.",
+      "corrected": "Written into breakdown.mid, replacing a fully templated sentence.",
+      "confidence": "High",
+      "sources": ["brief.missingInteractions", "enemyKit P text"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"tldr","before":"A dive mirror where your shield votes — trade three-hit strings behind W and out-sustain the burst exchange.","after":"A dive mirror your shield wins — trade behind Pale Cascade and punish the window while Twilight Shroud sits on 20s."},
+    {"layer":"full","path":"winCon","before":"Win the shielded exchanges and flip the all-in with Moonfall. Shorthand: Twilight Shroud down, wave right, go.","after":"Win shielded exchanges and flip with Moonfall — inside Shroud she is untargetable, so Lunar Rush simply cannot follow her."},
+    {"layer":"full","path":"enemyWin","before":"Akali wins by landing Twilight Shroud, denying your pattern, and starting the fight your kit wanted ten seconds later.","after":"Akali wins by dropping Shroud on your commit — untargetable, she deletes your dash target and re-opens on her own timing."},
+    {"layer":"full","path":"tradeGood","before":"Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left.","after":"Q through the wave onto her chest, E the mark, three-hit string, walk — she answers it after you have already left."},
+    {"layer":"full","path":"loading","before":"- Diana vs Akali - Track: Akali Twilight Shroud. - Dash only onto marks — the reset is the kit. - Fights start when Twilight Shroud ends. - The R is for endings, not openings.","after":"- Diana vs Akali - Shroud is 20s at rank 1 — count it. - She is untargetable inside; Lunar Rush cannot follow. - Fight when it ends. - Moonfall is for endings, not openings."},
+
+    {"layer":"full","path":"phases[0].side","before":"Akali","after":"Diana"},
+    {"layer":"full","path":"phases[1].side","before":"Akali","after":"Diana"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Diana"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Diana"},
+    {"layer":"full","path":"phases[4].side","before":"Akali","after":"Skill"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Diana"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Diana"},
+
+    {"layer":"full","path":"phases[0].why","before":"Q the wave's edge and his face in one arc — the crescent farms and pokes at once; learn the curve's sweet spot.","after":"Q the wave's edge and her face in one arc — the crescent farms and pokes at once, and she has no Shroud yet."},
+    {"layer":"full","path":"phases[1].why","before":"W shield-trade window: orbs absorb his poke and pay it back on the three-hit passive.","after":"Pale Cascade orbs absorb Five Point Strike and pay it back on the three-hit passive."},
+    {"layer":"full","path":"phases[2].why","before":"E pull joins... no — your dash threat begins: Q-mark into E reset chases are live; trade on every landed crescent.","after":"Lunar Rush is live at 22s: Q to mark, E in, three-hit string, and she must burn a 20s Shroud to answer it."},
+    {"layer":"full","path":"phases[3].why","before":"Mark-dash trades on cooldown — Q, E to the mark, passive three-hit, walk. The lane respects the curve now.","after":"Mark-dash trades on cooldown — Q, E to the mark, three-hit, walk. Her 16s Shuriken Flip is her only exit."},
+    {"layer":"full","path":"phases[4].why","before":"Moonfall online — the R pull turns any clumped trade into your fight. With jungle help it's a guaranteed flip.","after":"Both ultimates land here — Perfect Execution is 120s at rank 1 to your 100s, and whoever opens first takes it."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Akali Twilight Shroud: matchup-defining — Untargetable inside — hold your CC and burst for when she exits. Count it out loud if you must. - Your W Pale Cascade has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Twilight Shroud: 20s at rank 1, 16s maxed, and matchup-defining — she is untargetable inside it, so Lunar Rush has no target to dash to. Commit on its downtime. - Shuriken Flip is 16s at rank 1. - Pale Cascade is 15s. - Moonfall is 100s."},
+    {"layer":"full","path":"breakdown.mid","before":"First item onward, chain the phases: mark-dash the contacts, R the river clumps, and reset through whatever groups.","after":"Assassin's Mark rings you on spell hit — when she leaves that ring an empowered auto follows, so move before she does."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a Q-cleared slow push you crash before roam windows — the crescent farms the wave and threatens the lane in one cast. Worst wave: a frozen wave near his tower with E down — walking up markless into poke is the lane's only losing pattern. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.","after":"Best wave: a Q-cleared slow push you crash before roam windows — the crescent farms the wave and threatens the lane in one cast. Worst wave: a frozen wave near her tower with E down — walking up markless into poke is the lane's only losing pattern. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.","after":"Good trade: Q through the wave onto her chest, E the mark, three-hit string, walk — she answers it after you have already left. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the dive — mark, dash, pull, delete; your R turns their teamfight spacing into a suggestion.","after":"Carry where Shroud is already spent — 20s of downtime is a whole fight she survives without going untargetable."},
+
+    {"layer":"full","path":"dosFull[1].t","before":"Mark-dash his disengage windows","after":"Mark-dash her Shroud downtime"},
+    {"layer":"full","path":"dosFull[1].d","before":"Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left.","after":"The 20s after Shroud pops is your lane — Q to mark, E in, three-hit string, and leave before it comes back up."},
+    {"layer":"full","path":"dosFull[2].t","before":"Hold R to flip his committed all-in","after":"Hold R to flip her committed all-in"},
+    {"layer":"full","path":"dontsFull[1].d","before":"Your W is the trade — entering without orbs is volunteering for his combo at melee range.","after":"Your W is the trade — entering without orbs is volunteering for her combo at melee range."},
+    {"layer":"full","path":"dontsFull[2].t","before":"Chase resets through his wave","after":"Chase resets through her wave"},
+    {"layer":"full","path":"dontsFull[2].d","before":"Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.","after":"Lunar Rush needs a target, and she is untargetable in Shroud — chasing a reset into the smoke leaves you standing in it."},
+
+    {"layer":"full","path":"report[3].t","before":"Good trade: Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left. Great trade: Akali wastes Twilight Shroud — commit immediately. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.","after":"Good trade: Q through the wave onto her chest, E the mark, three-hit string, walk — she answers it after you have already left. Great trade: Akali wastes Twilight Shroud — commit immediately. Bad trade: Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity."},
+    {"layer":"full","path":"report[8].t","before":"Start Doran's Shield or Ring + pots. Stormsurge or Riftmaker line, Sorcerer's/Mercs, then Zhonya's and Rabadon's. Add anti-heal early into his sustain.","after":"Start Doran's Shield + pots. Stormsurge or Riftmaker line, Sorcerer's or Mercs, then Zhonya's and Rabadon's — Zhonya's answers Perfect Execution."}
+  ],
+  "notes": "CHART: all seven full-layer sides disagreed with the content-layer win[] rows and with packet.levelChart. I moved the sides onto the existing win[] values, so no paired win[N] edit was possible (before would equal after and be refused). This closes seven cross-layer disagreements rather than creating any. phases[0..4].why were rewritten in the same proposal so every moved row's sentence matches its new verdict; phases[5..6].why already described Diana winning. Ratings left alone — nothing in the kit grounds a change.\nphases[2].why on disk was garbled ('E pull joins... no —'), a template leak from a different champion. Replaced.\nREPORT CAP: only report[3].t and report[8].t rewritten, per the two-entry limit. report[4].t and report[11].t are still misgendered ('his') and report[1].t still carries the templated shorthand — flagged for a later pass, not touched.\nDERIVED FLAG CONFLICT: ownerKit marks Diana's Q revealsStealth, but Riot's text says it reveals 'if they are not stealthed'. Q does not answer Twilight Shroud. I wrote nothing claiming it does, and also did not claim Moonfall pulls her out of Shroud — untargetability versus the R pull is not decidable from the kit text alone."
+}

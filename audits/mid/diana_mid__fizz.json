@@ -1,0 +1,90 @@
+{
+  "ownerKey": "diana_mid",
+  "enemy": "fizz",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "54.82% over 3194 games at 7/10 difficulty: Diana wins the ranged early, loses the first-item window, and takes the late game back.",
+      "corrected": "Tricky but Diana-favoured overall; the danger band is Fizz's first item.",
+      "confidence": "High",
+      "sources": ["packet.winRate", "packet.levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer chart read Fizz/Fizz/Skill/Skill/Fizz/Skill/Skill while win[N] and packet.levelChart both read Diana on every row except First item, which is Fizz. Six of seven rows disagreed across layers, and the row Fizz actually wins was labelled 'Skill' with a why describing Diana spiking.",
+      "why": "packet.levelChart matches win[0..6] exactly; the full layer is stale in both directions.",
+      "corrected": "Sides aligned to win[N], and phases[5].why rewritten to state why Fizz owns the first-item window (Nashor's burst plus untargetable Playful/Trickster).",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.foe[0] calls Seastone Trident his Q — it is his W; Urchin Strike is Q. breakdown.cooldowns carried no cooldown number, and two bullets were the trade lines pasted under unrelated titles. Nothing anywhere stated that Chum the Waters grounds.",
+      "why": "Riot text and flags: Urchin Strike (Q) 8/7.5/7/6.5/6 dash; Seastone Trident (W) 7/6/5/4/3 with an auto-attack reset; Playful/Trickster (E) 16/14/12/10/8, untargetable and grounding; Chum the Waters (R) 120/100/80, grounding and knockup. Diana's Lunar Rush is denied by both E and R.",
+      "corrected": "Slot corrected, real cooldowns written in, and the grounding on Chum the Waters stated as the reason not to dash in unmarked.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.missingInteractions"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The most punishable cooldown was described only qualitatively.",
+      "why": "Playful/Trickster is 16s at rank 1 falling to 8s at rank 5 — the whole matchup is fought around that number.",
+      "corrected": "Both the cooldowns field and dosFull[1].d now key the commit to the 16s window.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit E"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Fizz", "after": "Diana" },
+    { "layer": "full", "path": "phases[1].side", "before": "Fizz", "after": "Diana" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Diana" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Diana" },
+    { "layer": "full", "path": "phases[4].side", "before": "Fizz", "after": "Diana" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Fizz" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "First item spike: the mark-dash combo chunks half bars and the reset chains through waves.",
+      "after": "His first item lands first: Nashor's burst plus untargetable Playful/Trickster wins short trades."
+    },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Diana" },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Fizz Playful / Trickster: matchup-defining — The untargetable hop dodges your whole combo — bait it before spending your burst. Read it like a second minimap. - Guard your W Pale Cascade like a fifth summoner spell. - Ultimate goes to kill windows only.",
+      "after": "- Playful/Trickster is 16s at rank 1 and 8s at rank 5 — the untargetable hop eats your whole combo, so bait it before you spend burst. - Urchin Strike is 8s. - Chum the Waters is 120s and grounds you: no Lunar Rush out. - Pale Cascade is 15s."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q through the wave onto his chest, E the mark, three-hit string, walk — the phase trade he answers after you've left.",
+      "after": "Playful/Trickster is 16s at rank 1 — the moment it lands, Q the mark and Lunar Rush in; he has no second dodge."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Dashing onto an unmarked target with W down — Diana without the reset or the shield is a melee mage donating proximity.",
+      "after": "Chum the Waters grounds you where the shark lands — dash in unmarked and you cannot leave, on a 120s cooldown he holds."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the dive — mark, dash, pull, delete; your R turns their teamfight spacing into a suggestion.",
+      "after": "Carry by fighting after the hop — Playful/Trickster is 8s late, so bait it, then mark, dash and pull."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land Seastone Trident (Q) and burst you before you can shield",
+      "after": "Land Seastone Trident (W) and burst you before you can shield"
+    }
+  ],
+  "notes": "packet.suspectNames flagged wants.foe[0]; the ability NAME was spelled correctly but the SLOT was wrong — Seastone Trident is Fizz's W, not his Q. Fixed. Both missingInteractions are now covered: dash-denial by Playful/Trickster and Chum the Waters is stated in breakdown.cooldowns and dontsFull[2].d. The Seastone Trident auto-reset tell is still unstated anywhere on the page — there was no templated field left inside the length band to carry it without displacing a grounded line; listed for a follow-up pass."
+}

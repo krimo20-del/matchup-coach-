@@ -1,0 +1,113 @@
+{
+  "ownerKey": "ahri_mid",
+  "enemy": "naafiri",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer's level chart read \"Skill\" on all seven rows while content win[] and the packet levelChart both read Skill, Naafiri, Naafiri, Naafiri, Ahri, Ahri, Ahri.",
+      "why": "Two layers rendering different answers to \"who wins Level 2\" on the same page. Naafiri genuinely owns levels 2-5 (49.52% Ahri win rate over 6934 games, and her all-in exists before your charm does), and Ahri owns everything from Spirit Rush onward.",
+      "corrected": "phases[1..3].side set to Naafiri and phases[4..6].side set to Ahri, matching win[] exactly; ratings on her rows dropped to 4/10 so the numbers agree with the side.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spike text named her dash chain \"Pack Your Bags\", which is not an ability in her kit, and the packet flags that the matchup never names a single Naafiri ability.",
+      "why": "Her dash is Eviscerate (E), 450 range, 11/10/9/8/7 seconds. The Call of the Pack (W) is 26/24/22/20/18 and Hounds' Pursuit (R) is 110/95/80. Those three numbers are the whole spike schedule and none of them appeared.",
+      "corrected": "Spikes rebuilt on Eviscerate, The Call of the Pack and Hounds' Pursuit with their real cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E/R", "packet.enemyAbilities", "packet.defects"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The decisive interaction was never stated: Charm instantly stops movement abilities, so it freezes Eviscerate and Hounds' Pursuit mid-dash — and The Call of the Pack's untargetability is the one thing that beats it.",
+      "why": "Ahri's E text says it instantly stops movement abilities. Naafiri's E and R are both dashes, so a landed charm ends her commit outright. Her W explicitly makes her Untargetable, which means a charm thrown into it is simply spent for nothing — that is the wait-it-out window, and it is 26s at rank 1 falling to 18s.",
+      "corrected": "Stated in spikes[3], whys[2], whys[5], breakdown.carry and dontsFull[0].d: charm stops the dash, but never throw it into The Call of the Pack.",
+      "confidence": "High",
+      "sources": ["ownerKit E text", "enemyKit W/E/R text", "missingInteractions rule untargetable-dodges-burst"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Itemization advised \"Add anti-heal early into his sustain\".",
+      "why": "Riot's Eviscerate text says it recalls her packmates and fully heals THEM — it is not champion self-sustain. The needs-antiheal flag in the derived data contradicts the description, and per the brief's own rule the description wins. Buying Grievous Wounds as the answer to Naafiri's dive is the wrong item on the wrong problem.",
+      "corrected": "Replaced with Zhonya's, which actually answers a lock-on dash commit.",
+      "confidence": "Medium",
+      "sources": ["enemyKit E text vs derived heal flag", "missingInteractions rule needs-antiheal"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Naafiri was written as \"his\"/\"him\" across the full layer.",
+      "why": "Wrong-gender pronouns are the signature of copy pasted from another matchup, and a reader spots it immediately.",
+      "corrected": "Corrected in winCon, tradeGood, tradeBad, phases[0].why, phases[2].why, breakdown.wave, dosFull, dontsFull and the matching report entries.",
+      "confidence": "High",
+      "sources": ["enemyKit name"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The punishable-cooldown section named only Hounds' Pursuit.",
+      "why": "Hounds' Pursuit is 110s at rank 1, so it is not the lane's rhythm — Eviscerate at 11s is the cooldown you actually schedule around, and The Call of the Pack at 26s is the one that eats your charm.",
+      "corrected": "breakdown.cooldowns rewritten around all three numbers.",
+      "confidence": "High",
+      "sources": ["enemyKit W/E/R cd fields"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Naafiri"},
+    {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Naafiri"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Naafiri"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "4/10"},
+    {"layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "4/10"},
+    {"layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "4/10"},
+
+    {"layer": "content", "path": "spikes[0].text", "before": "Naafiri's packmates let her all-in through minion wave with a dash-and-reset pattern your Charm can't punish until you have full combo, so levels 2-4 are her strongest all-in windows.", "after": "Naafiri's packmates let her all-in through the wave with Darkin Daggers into Eviscerate, and levels 2-4 are her strongest windows because your charm is a flat 12 seconds and she can wait it out."},
+    {"layer": "content", "path": "spikes[1].text", "before": "Your Spirit Rush finally gives you an escape and re-engage tool that matches her Pack Your Bags dash chain, letting you dodge her all-in and burst back with Charm-Orb-ult before she can reset.", "after": "Spirit Rush gives you three dashes against Eviscerate, a 450-range hop on 11 seconds at rank 1, so you dodge the commit and burst back with charm into orb before her packmates regroup on you."},
+    {"layer": "content", "path": "spikes[2].text", "before": "Once you have a defensive item or burst completion, you can trade into her dash resets and win since her damage falls off relative to your scaling combo.", "after": "Once Malignance and Sorcerer's land, charm stops Eviscerate mid-dash and your combo kills her before she can recast Hounds' Pursuit for its shield."},
+    {"layer": "content", "path": "spikes[3].text", "before": "Your Charm lockdown and burst let you delete her before her pack of doggos can finish their combo, since she has no way to escape a landed Charm at range.", "after": "Charm stops movement abilities outright, so it freezes Eviscerate and Hounds' Pursuit mid-dash — only The Call of the Pack's untargetable window saves her from it."},
+
+    {"layer": "content", "path": "whys[1]", "before": "Naafiri's Hound-backed all-ins land hard while you have no disengage yet", "after": "Darkin Daggers into Eviscerate lands before you own any disengage"},
+    {"layer": "content", "path": "whys[2]", "before": "Same all-in pattern continues punishing you through level 4", "after": "Same pattern: her 26s W untargetable eats your charm window"},
+    {"layer": "content", "path": "whys[3]", "before": "Her dash-reset combo still outpaces your incomplete kit at level 5", "after": "Her Eviscerate resets outpace your kit until Spirit Rush lands"},
+    {"layer": "content", "path": "whys[5]", "before": "Your escape and burst combo now consistently beats her all-in attempts", "after": "Charm freezes Eviscerate mid-dash and your burst combo finishes her"},
+    {"layer": "content", "path": "whys[6]", "before": "Your Charm-burst now wins the exchange once you have item power behind it", "after": "Charm-burst beats Hounds' Pursuit even through the recast shield now"},
+
+    {"layer": "content", "path": "early", "before": "Level 1 is close since neither kit is online yet, but from level 2 through 5 Naafiri's dash-reset all-ins backed by her Hounds consistently punish you before you have Spirit Rush to disengage or answer in kind.", "after": "Level 1 is close since neither kit is online yet, but from level 2 through 5 Darkin Daggers into Eviscerate, backed by packmates, punishes you before you have Spirit Rush to disengage or answer in kind."},
+    {"layer": "content", "path": "late", "before": "With items your Charm one-shots her out of her own dash chain, and she has no ranged answer to a landed Charm, so you take over skirmishes and picks in the late game.", "after": "With items your charm stops Eviscerate mid-dash and her only escape from it is The Call of the Pack's untargetable window, so you take over the skirmishes and the picks."},
+
+    {"layer": "content", "path": "wants.foe[1]", "before": "Use minions to mask extra dash resets from Hounds", "after": "Use minions to mask her Eviscerate dash angle"},
+
+    {"layer": "full", "path": "winCon", "before": "Charm the dive, dash out of the reset, and bleed him with poke he can't answer. Nothing here works through Hounds’ Pursuit — schedule your pattern around its cooldown.", "after": "Charm the dive, dash out of the reset, and bleed her with poke she can't answer. Nothing works through The Call of the Pack's untargetable — schedule your charm around its 26s."},
+    {"layer": "full", "path": "enemyWin", "before": "Naafiri wins by landing Hounds’ Pursuit, denying your pattern, and turning your every misstep into the all-in you hadn’t budgeted.", "after": "Naafiri wins by locking on with Hounds’ Pursuit, dashing again with Eviscerate, and turning a missed charm into an all-in you hadn’t budgeted."},
+    {"layer": "full", "path": "tradeGood", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "Q through her last-hit so both hits land, W if she eats the return, and walk — repeat until the charm window is lethal instead of optimistic."},
+    {"layer": "full", "path": "tradeBad", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Charming into The Call of the Pack and then facing her real engage with nothing — the charm is the matchup, not the poke."},
+    {"layer": "full", "path": "ahead", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Naafiri's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, dash-flank the river, and charm-pick before Naafiri's packmates can converge on anyone alone."},
+    {"layer": "full", "path": "phases[0].why", "before": "Q both ways through the wave on his last-hits — the true-damage return is most of your early poke.", "after": "Q both ways through the wave on her last-hits — the true-damage return is most of your early poke."},
+    {"layer": "full", "path": "phases[2].why", "before": "Charm online — the lane's first kill threat. Hold it for his step-up, not for prayer-range poke.", "after": "Charm online — but she wins the row: hold it for Eviscerate, not for prayer-range poke."},
+    {"layer": "full", "path": "breakdown.early", "before": "Trade orbs and bank heals — your pre-6 is honest and your 6 is not. Reach it healthy and the lane re-prices.", "after": "Trade orbs and bank heals — she has no ranged poke, so health she takes costs her Eviscerate. Reach 6 healthy."},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Naafiri Hounds’ Pursuit: matchup-defining — The lock-on pack dash starts her dive — stand near minions to body-block the hounds. Step up only on its downtime. - Budget R Spirit Rush (last dash) for emergencies and the R for opportunities — never swap them.", "after": "- Naafiri Eviscerate: 11s at rank 1, 7s at rank 5 — that is the lane's real rhythm; step up when it is down. - The Call of the Pack, 26s: untargetable, so a charm thrown into it is spent for nothing. - Hounds’ Pursuit is 110s at rank 1 — one lock-on dive per wave cycle."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.", "after": "Carry through picks — charm stops Eviscerate and Hounds’ Pursuit mid-dash, and your own dashes make angles no one wards."},
+    {"layer": "full", "path": "breakdown.late", "before": "You are the pick and the cleanup: flank-charm the carry, orb the convergence, and dash out through the chaos you started.", "after": "You are the pick: flank-charm Naafiri before she chooses a target, because Hounds’ Pursuit locks on and no one can body-block it."},
+    {"layer": "full", "path": "dosFull[0].t", "before": "Hold charm exclusively for his engage", "after": "Hold charm exclusively for her engage"},
+    {"layer": "full", "path": "dosFull[1].d", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "Q through her last-hit so both hits land, W if she eats the return, and walk — repeat until the charm window is lethal instead of optimistic."},
+    {"layer": "full", "path": "dosFull[2].t", "before": "Q-poke the farm he has to walk to", "after": "Q-poke the farm she has to walk to"},
+    {"layer": "full", "path": "dosFull[2].d", "before": "Naafiri spends Hounds’ Pursuit early — the closest thing this matchup has to a guarantee.", "after": "Her Q reaches 900 and your orb 970 — poke the minions she must step to and she bleeds first."},
+    {"layer": "full", "path": "dontsFull[0].d", "before": "That’s Naafiri’s bread-and-butter play — deny it and they run out of answers.", "after": "Charm is a flat 12s and she can wait it out inside The Call of the Pack."},
+    {"layer": "full", "path": "dontsFull[1].t", "before": "Burn R before his engage shows", "after": "Burn R before her engage shows"},
+    {"layer": "full", "path": "dontsFull[2].d", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Charming into The Call of the Pack and then facing her real engage with nothing — the charm is the matchup, not the poke."},
+    {"layer": "full", "path": "report[1].t", "before": "Charm the dive, dash out of the reset, and bleed him with poke he can't answer. Nothing here works through Hounds’ Pursuit — schedule your pattern around its cooldown.", "after": "Charm the dive, dash out of the reset, and bleed her with poke she can't answer. Nothing works through The Call of the Pack's untargetable — schedule your charm around its 26s."},
+    {"layer": "full", "path": "report[8].t", "before": "Start Doran's Ring + 2 pots. Malignance into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive comps. Add anti-heal early into his sustain.", "after": "Start Doran's Ring + 2 pots. Malignance into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's is the real buy here — it answers a lock-on dive."},
+    {"layer": "full", "path": "report[9].t", "before": "Commit on Hounds’ Pursuit’s cooldown, on your Malignance spike, and with your jungler’s setup. Make him flinch first.", "after": "Commit on Eviscerate's 11-second cooldown, on your Malignance spike, and with your jungler’s setup. Make her dash first."},
+    {"layer": "full", "path": "report[11].t", "before": "Charm-poke and face the dive empty. Burn R before his engage shows. Shove past river with E down. The R buys fights, not poke — spend it like the last one in stock.", "after": "Charm-poke and face the dive empty. Burn R before her engage shows. Shove past river with E down. The R buys fights, not poke — spend it like the last one in stock."},
+    {"layer": "full", "path": "report[13].t", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Naafiri's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, dash-flank the river, and charm-pick before Naafiri's packmates can converge on anyone alone."}
+  ],
+  "notes": "\"Pack Your Bags\" is not a Naafiri ability — her dash is Eviscerate (E). The packet's defect line was accurate: not one of her five abilities was named anywhere in the matchup before this pass. Level chart disagreed between layers on all six non-Level-1 rows; fixed as one atomic group. Derived-flag conflict recorded rather than asserted: Eviscerate carries a heal flag, but Riot's text says it fully heals her PACKMATES, not Naafiri, so the anti-heal advice was removed rather than restated. Left alone because the kit cannot answer it: whether Charm is cleansable or tenacity-reduced, and whether Eviscerate and Hounds' Pursuit actually grant untargetability during the dash (the derived flags claim it; Riot's text only says it for The Call of the Pack)."
+}

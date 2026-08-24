@@ -1,0 +1,103 @@
+{
+  "ownerKey": "ahri_mid",
+  "enemy": "qiyana",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "full phases[0..6].side read \"Skill\" on every row while content win[] and the packet levelChart read Ahri, Skill, Skill, Skill, Skill, Skill, Ahri.",
+      "why": "Level 1 is genuinely yours — Qiyana has no ranged tool at all and must walk into a 970-range orb — and the late game is yours once terrain stops deciding fights. Showing \"Skill\" on those two rows in one layer and \"Ahri\" in the other is two answers to the same question.",
+      "corrected": "phases[0].side and phases[6].side flipped to Ahri to match win[0] and win[6]; the five middle rows were already in agreement and were left alone.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2] and whys[5] built her first-item spike on \"Recurve Bow/Serrated Dirk\".",
+      "why": "Recurve Bow is an attack-speed component and has no place on an AD assassin's build — a reader watching her item bar for it will never see it, and will therefore never see the spike coming. Serrated Dirk is the real early buy.",
+      "corrected": "Rewritten around Serrated Dirk and the lethality line it builds into.",
+      "confidence": "Medium",
+      "sources": ["packet.enemyAbilities (AD assassin kit)", "currentText spikes[2]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three ability errors in the interaction text. Her element pickup was called \"E-Q\"; her ultimate was said to \"root\" and to \"reset her E dash on takedown\"; and breakdown.cooldowns claimed that once Audacity is spent \"she cannot reach you\". The packet also flags that none of her six ability names appear anywhere.",
+      "why": "Terrashape (W) is the 1100-range dash that enchants her weapon off terrain — that is the ability tied to walls and brush, not E. Audacity (E) is a 650-range dash to an enemy, 11 seconds at rank 1. Supreme Display of Talent (R) is a 950-range shockwave that knocks up and stuns; Riot's text says nothing about a root or a dash reset, so neither can be asserted. And because Terrashape is itself a 1100-range dash on 7 seconds, \"once Audacity is spent she cannot reach you\" is simply false — she has a longer dash than the one you were told to count.",
+      "corrected": "Terrashape named as the element/terrain ability, the ultimate described as a knockup-and-stun, and the cooldown section rebuilt around both of her dashes.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E/R text, range and cd", "packet.enemyAbilities", "packet.defects"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Qiyana was written as \"his\"/\"he\" throughout the full layer; \"Fox Fire\" appeared for Fox-Fire; dosFull[2].d cited a \"fifteen-second\" Audacity cooldown.",
+      "why": "Audacity is 11/10/9/8/7 — a player stepping up on a fifteen-second count steps into a dash that came back four seconds ago.",
+      "corrected": "Pronouns fixed, Fox-Fire hyphenated, cooldown corrected to eleven seconds.",
+      "confidence": "High",
+      "sources": ["enemyKit name and E cd", "ownerKit W text", "packet.suspectNames"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "wants.you and wants.foe each had only three entries where the structure carries four.",
+      "why": "An inherited structural gap — the fourth slot has never had content because a normal edit has no before-string to match.",
+      "corrected": "Filled both with \"before\": null, grounded in Royal Privilege's first-hit bonus and Terrashape's terrain requirement.",
+      "confidence": "High",
+      "sources": ["enemyKit P/W text", "currentText.content.wants"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Ahri"},
+
+    {"layer": "content", "path": "spikes[0].text", "before": "Qiyana hits her elemental empowers off river brush and wall procs and can dash-stun-all-in you the instant she has E-Q combo online, so you need to hug casters and pre-emptively Charm any dash telegraphed near terrain.", "after": "Qiyana enchants her weapon with Terrashape, a 1100-range dash onto terrain, then closes with Audacity at 650 — so hug the casters, stand away from walls and brush, and charm the dash the instant she leaves the ground."},
+    {"layer": "content", "path": "spikes[1].text", "before": "Both ultimates are all-in tools; Qiyana's R roots and resets her E dash on takedown while your R sets up a Charm-Orb-Fox Fire burst, so trades around level 6 hinge on who lands CC first.", "after": "Both ultimates are all-in tools; Supreme Display of Talent knocks up and stuns off the terrain it detonates, while your R sets up a charm into orb into Fox-Fire burst, so 6 hinges on who lands CC first."},
+    {"layer": "content", "path": "spikes[2].text", "before": "Qiyana's Recurve Bow/Serrated Dirk spike gives her burst to one-shot you off a wall combo, so a rushed Zhonya or just playing max range with your Q poke matters a lot here.", "after": "Serrated Dirk into a lethality item gives her the burst to one-shot you off a terrain combo, so a rushed Zhonya's or simply poking from max orb range matters a great deal here."},
+    {"layer": "content", "path": "spikes[3].text", "before": "In extended teamfights you out-scale on utility and reset potential with Spirit Rush, while Qiyana's all-in power plateaus without terrain to abuse.", "after": "In extended fights Spirit Rush and its takedown recasts out-scale her, because Terrashape needs terrain nearby and open ground leaves her weapon un-enchanted."},
+
+    {"layer": "content", "path": "whys[1]", "before": "Once she has E-Q online near a wall or brush she can dash-stun-all-in you instantly, making this a pure skill check on your positioning.", "after": "Once Terrashape and Q are online near a wall or brush she can dash-stun-all-in instantly, making this a pure skill check on your positioning."},
+    {"layer": "content", "path": "whys[2]", "before": "Her wall-empowered combo is now fully live and one whiffed dodge from you means a huge trade loss, so it stays an even skill window.", "after": "Her Terrashape-empowered combo is fully live and one whiffed dodge means a huge trade loss, so it stays an even skill window."},
+    {"layer": "content", "path": "whys[4]", "before": "Both ultimates are all-in enablers here and whoever lands CC first (her root or your Charm) wins the exchange, making it a coin-flip skill window.", "after": "Both ultimates are all-in enablers and whoever lands CC first — her knockup and stun, or your charm — wins the exchange outright, so it stays a coin flip."},
+    {"layer": "content", "path": "whys[5]", "before": "Her Recurve Bow/Serrated Dirk spike lets her one-shot you off a wall combo, so this item spike is still a dangerous skill check you must play around.", "after": "Serrated Dirk lets her one-shot you off a terrain combo, so this item spike is still a dangerous skill check that you have to play around."},
+    {"layer": "content", "path": "whys[6]", "before": "By full items your Charm-Orb-Fox Fire combo and Spirit Rush mobility out-scale her all-in power once she has no more terrain tricks to abuse.", "after": "By full items your charm into orb into Fox-Fire combo and Spirit Rush out-scale her all-in once open ground leaves Terrashape with nothing to grab."},
+
+    {"layer": "content", "path": "mid", "before": "Levels 3-5 flip hard in her favor once she has enough points in E and Q to threaten wall-empowered all-ins from brush; this is a genuine skill matchup where good ward placement and refusing to walk near terrain is what keeps you alive, and it stays that way through 6 since her ultimate resets off takedowns and can snowball a fight instantly if she catches you out of position.", "after": "Levels 3-5 flip hard in her favour once Terrashape and Q threaten empowered all-ins out of brush; this is a genuine skill matchup where warding and refusing to walk near terrain is what keeps you alive, and it stays that way through 6, since a 950-range shockwave that knocks up and stuns can end a fight the moment she catches you out of position."},
+    {"layer": "content", "path": "late", "before": "Once you both have your first back and roam potential kicks in, Ahri claws it back — Spirit Rush gives you safer disengage and better roam speed than Qiyana's E, and by full items your Charm-Orb combo out-trades her burst if she doesn't get the jump on you first.", "after": "Once you both have your first back and roam potential kicks in, Ahri claws it back — three Spirit Rush dashes beat one 11-second Audacity for disengage and roam speed, and by full items your charm into orb combo out-trades her burst unless she jumps you first."},
+
+    {"layer": "content", "path": "wants.you[1]", "before": "Bait her E dash with predictable movement then punish with Charm the instant she commits", "after": "Bait Audacity with predictable movement, then charm her the instant the dash commits"},
+    {"layer": "content", "path": "wants.foe[0]", "before": "Wait in brush near a wall to get free elemental empowers on her E-Q", "after": "Wait in brush near a wall for a free Terrashape element on her Q"},
+    {"layer": "content", "path": "wants.foe[1]", "before": "All-in the moment she has both Q and E off cooldown near terrain", "after": "All-in with Terrashape and Audacity both up and terrain nearby"},
+    {"layer": "content", "path": "wants.you[3]", "before": null, "after": "Deny her Royal Privilege opener by taking the first trade yourself"},
+    {"layer": "content", "path": "wants.foe[3]", "before": null, "after": "Open with Royal Privilege's bonus first-hit damage on every trade"},
+
+    {"layer": "full", "path": "winCon", "before": "Charm the dive, dash out of the reset, and bleed him with poke he can't answer. Nothing here works through Audacity — schedule your pattern around its cooldown.", "after": "Charm the dive, dash out of the reset, and bleed her with poke she can't answer. She has two dashes, not one: Terrashape at 1100 reaches terrain, Audacity at 650 reaches you."},
+    {"layer": "full", "path": "enemyWin", "before": "Qiyana wins by landing Audacity, denying your pattern, and starting the fight your kit wanted ten seconds later.", "after": "Qiyana wins by enchanting off a wall, closing with Audacity, and stunning you with a shockwave off that same terrain."},
+    {"layer": "full", "path": "tradeGood", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "Q through her last-hit so both hits land, W if she eats the return, and walk — repeat until the charm window is lethal instead of optimistic."},
+    {"layer": "full", "path": "tradeBad", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Charming on cooldown for chip damage and then facing her real engage with nothing — the charm is the matchup, not the poke."},
+    {"layer": "full", "path": "ahead", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Qiyana's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, and fight in the open where Terrashape has no wall or brush to enchant her weapon from."},
+    {"layer": "full", "path": "phases[0].why", "before": "Q both ways through the wave on his last-hits — the true-damage return is most of your early poke.", "after": "Your row: she has no ranged tool at all, so orb both ways and make her walk 970 units to answer."},
+    {"layer": "full", "path": "phases[2].why", "before": "Charm online — the lane's first kill threat. Hold it for his step-up, not for prayer-range poke.", "after": "Charm online — the lane's first kill threat. Hold it for the Audacity dash, not for prayer-range poke."},
+    {"layer": "full", "path": "phases[6].why", "before": "Late Ahri is a pick machine: flank dash, charm the carry, and orb the body your team converges on.", "after": "Your row again: fights in the open leave Terrashape nothing to grab, and charm still eats both her dashes."},
+    {"layer": "full", "path": "breakdown.early", "before": "Trade orbs and bank heals — your pre-6 is honest and your 6 is not. Reach it healthy and the lane re-prices.", "after": "Trade orbs and bank heals — her Q reaches 525 and yours 970, so she pays to start. Reach 6 healthy."},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Qiyana Audacity: matchup-defining — Her stick dash — once spent she cannot reach you; kite the cooldown. Step up only on its downtime. - Budget R Spirit Rush (last dash) for emergencies and the R for opportunities — never swap them.", "after": "- Qiyana Audacity: 11s at rank 1, 650 range, the dash that reaches you — charm it mid-flight. - Terrashape is a second dash at 1100 range on 7s, so spending Audacity does not strand her. - Budget the last Spirit Rush dash for emergencies, never for poke."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.", "after": "Carry through picks — charm stops movement abilities, so it eats Terrashape and Audacity alike and strands her mid-commit."},
+    {"layer": "full", "path": "breakdown.late", "before": "You are the pick and the cleanup: flank-charm the carry, orb the convergence, and dash out through the chaos you started.", "after": "You are the pick: fight on open ground, charm Qiyana off her wall, and orb the body before she finds terrain to enchant from."},
+    {"layer": "full", "path": "dosFull[0].t", "before": "Hold charm exclusively for his engage", "after": "Hold charm exclusively for her engage"},
+    {"layer": "full", "path": "dosFull[0].d", "before": "Her stick dash — once spent she cannot reach you; kite the cooldown. Commit on its cooldown, never into it.", "after": "Audacity closes 650 to a target on 11s — charm it mid-dash and she arrives with nothing left to spend."},
+    {"layer": "full", "path": "dosFull[1].d", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "Q through her last-hit so both hits land, W if she eats the return, and walk — repeat until the charm window is lethal instead of optimistic."},
+    {"layer": "full", "path": "dosFull[2].t", "before": "Q-poke the farm he has to walk to", "after": "Q-poke the farm she has to walk to"},
+    {"layer": "full", "path": "dosFull[2].d", "before": "Qiyana burns Audacity on nothing — take the fifteen-second invitation.", "after": "Qiyana burns Audacity on a minion — take the eleven-second invitation."},
+    {"layer": "full", "path": "dontsFull[0].d", "before": "That is Qiyana’s whole plan in one window — decline politely and watch it retire.", "after": "Terrashape onto a wall, Audacity onto you, shockwave on the same wall — one window."},
+    {"layer": "full", "path": "dontsFull[1].t", "before": "Burn R before his engage shows", "after": "Burn R before her engage shows"},
+    {"layer": "full", "path": "dontsFull[2].d", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Charming on cooldown for chip damage and then facing her real engage with nothing — the charm is the matchup, not the poke."},
+    {"layer": "full", "path": "report[1].t", "before": "Charm the dive, dash out of the reset, and bleed him with poke he can't answer. Nothing here works through Audacity — schedule your pattern around its cooldown.", "after": "Charm the dive, dash out of the reset, and bleed her with poke she can't answer. She has two dashes, not one: Terrashape at 1100 reaches terrain, Audacity at 650 reaches you."},
+    {"layer": "full", "path": "report[5].t", "before": "Track Qiyana’s Audacity: Her stick dash — once spent she cannot reach you; kite the cooldown. It’s down or you don’t go.", "after": "Track Audacity: 650 range on 11s, the dash that reaches you. Terrashape is a second one at 1100 — count both."},
+    {"layer": "full", "path": "report[9].t", "before": "Commit on Audacity’s cooldown, on your Malignance spike, and with your jungler’s setup. His answer goes first; yours goes last.", "after": "Commit on Audacity’s 11-second cooldown, on your Malignance spike, and with your jungler’s setup. Her answer goes first; yours last."},
+    {"layer": "full", "path": "report[11].t", "before": "Charm-poke and face the dive empty. Burn R before his engage shows. Shove past river with E down. The R buys fights, not poke — spend it like the last one in stock.", "after": "Charm-poke and face the dive empty. Burn R before her engage shows. Shove past river with E down. The R buys fights, not poke — spend it like the last one in stock."},
+    {"layer": "full", "path": "report[13].t", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Qiyana's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, and fight in the open where Terrashape has no wall or brush to enchant her weapon from."}
+  ],
+  "notes": "The packet's defect line was right: not one of Qiyana's six ability names appeared in the matchup. Three real errors beyond that. (1) Her terrain/element ability was consistently called 'E' — it is Terrashape (W), a 1100-range dash, while Audacity (E) is the 650-range gap-close; that mislabel propagates into every piece of positioning advice on the page. (2) breakdown.cooldowns told the reader that once Audacity is spent 'she cannot reach you', which is false — Terrashape is a longer dash on a shorter cooldown. (3) 'Recurve Bow' was named as her first-item spike; it is an attack-speed component with no place in a lethality build. Also removed: the claim that her ultimate roots and resets her E on takedown — Riot's text says knock up and stun, and says nothing about a reset, so it is not asserted here either way. wants.you and wants.foe each had a missing fourth entry; both filled from Royal Privilege's first-hit bonus. Left unasserted: whether Charm is cleansable or tenacity-reduced, and whether Audacity's cooldown genuinely resets on takedown (widely believed, not in the kit text)."
+}

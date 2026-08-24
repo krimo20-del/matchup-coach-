@@ -1,0 +1,103 @@
+{
+  "ownerKey": "ahri_mid",
+  "enemy": "aurelionsol",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Listed as EVEN at 5.5/10 while the data says 56.87% over 1382 games and the level chart gives Ahri every single row.",
+      "why": "A matchup Ahri wins on all seven rows at nearly 57% is not even. I left diff/diffRating alone rather than guess a new label, and flagged it as a question — but the full-layer chart at least now matches the content chart.",
+      "corrected": "Chart aligned to all-Ahri; diff label raised as a question.",
+      "confidence": "Medium",
+      "sources": ["packet"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Full chart read Ahri, Ahri, Ahri, Skill, Skill, Aurelion Sol, Aurelion Sol while content and packet read Ahri on all seven rows. Four rows rendered two different answers.",
+      "why": "phases[N].side and win[N] are the same row.",
+      "corrected": "phases[3..6].side -> Ahri.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The entire content layer described the PRE-REWORK Aurelion Sol: 'Starsurge', 'orbit stacking', 'orbit range', 'orbit damage', and a 'global ultimate' that lets him 'reposition across the map'. None of those exist in his current kit. The full layer named only Astral Flight and never mentioned Singularity's execute at all. spikes[3] also carried a mojibake 'AS?SoL'.",
+      "why": "His current kit is Cosmic Creator (Stardust), Breath of Light (Q, a 750-range channel on a 3s cooldown), Astral Flight (W, 22s at rank 1, flies over terrain), Singularity (E, 12s, 90 mana, 750 range, a black hole that pulls and whose centre executes below a health percentage), and Falling Star at 1250 range upgrading into The Skies Descend with enough Stardust. He does not reposition across the map with his ultimate.",
+      "corrected": "Every content field rewritten onto the real kit; full layer now names Breath of Light, Singularity, Falling Star and The Skies Descend.",
+      "confidence": "High",
+      "sources": ["enemyKit", "packet.enemyAbilities", "packet.defects"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldown numbers, and Breath of Light's channel — the thing Charm actually beats — was never named as interruptible.",
+      "why": "Astral Flight 22/20.5/19/17.5/16s, Singularity 12s at 90 mana, Falling Star 120/110/100s, Breath of Light a 3s-cooldown channel that CC ends.",
+      "corrected": "Written into breakdown.cooldowns, dosFull[0].d and report[5].t.",
+      "confidence": "High",
+      "sources": ["enemyKit", "ownerKit"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Singularity's percent-health execute and its indifference to resistances were absent.",
+      "why": "Stacking armour or MR is the wrong answer to a percent-health threshold, and the pull drags you toward the centre where it fires.",
+      "corrected": "Stated in dosFull[1].d, dontsFull[0].d, dontsFull[2].d, spikes[3].text.",
+      "confidence": "High",
+      "sources": ["enemyKit E", "missingInteractions: resistances-invalidated, execute-threshold"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Ahri" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ahri" },
+    { "layer": "full", "path": "phases[5].side", "before": "Aurelion Sol", "after": "Ahri" },
+    { "layer": "full", "path": "phases[6].side", "before": "Aurelion Sol", "after": "Ahri" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "7/10", "after": "6/10" },
+
+    { "layer": "full", "path": "enemyWin", "before": "Aurelion Sol wins by landing Astral Flight, denying your pattern, and out-ranging your plan one polite trade at a time.", "after": "Aurelion Sol wins by holding Breath of Light on you, banking Stardust off it, and executing you in Singularity's centre." },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Aurelion Sol Astral Flight: matchup-defining — His reposition and escape — he is a stationary battery while it is down. It governs your forward steps. - R Spirit Rush (last dash) spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Astral Flight is 22s at rank 1 and flies over terrain — while it is down he is grounded and killable. - Singularity is 12s and 90 mana, and its centre executes under a health percentage, so never retreat through the middle. - Breath of Light is a channel any CC ends." },
+
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.", "after": "Carry by interrupting: Charm ends Breath of Light mid-channel, and every second you cut is Stardust he never banks." },
+
+    { "layer": "full", "path": "report[5].t", "before": "Track Aurelion Sol’s Astral Flight: His reposition and escape — he is a stationary battery while it is down. The whole green-light system is its cooldown.", "after": "Charm cuts channels: Breath of Light dies to your E from 975, outside its 750 reach. Singularity keeps pulling once cast — leave the black hole sideways, never through its centre." },
+
+    { "layer": "full", "path": "dosFull[0].d", "before": "His reposition and escape — he is a stationary battery while it is down. Until it’s spent, every commit is a coin flip.", "after": "Astral Flight is 22s at rank 1 — while it is down he cannot cross terrain, and your orb out-reaches his 750 breath." },
+
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "Singularity's centre executes below a health percentage — armour and MR do not answer it, so track the HP number and never sit in the middle." },
+
+    { "layer": "full", "path": "dosFull[2].d", "before": "Aurelion Sol whiffs Astral Flight and the lane briefly belongs to you.", "after": "Bank the ninth-minion heal before he starts breathing on you at 750." },
+
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Aurelion Sol’s rehearsed moment — don’t audition for it.", "after": "Keep a dash for Singularity's pull — it drags you toward the execute." },
+
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Stepping in while Singularity is up hands him free Stardust and a pull toward the centre that executes you outright." },
+
+    { "layer": "content", "path": "whys[1]", "before": "Level 2 stays yours as Charm punishes every Starsurge windup attempt", "after": "Level 2 stays yours as Charm cancels Breath of Light mid-channel" },
+    { "layer": "content", "path": "whys[3]", "before": "Levels 4-5 stay yours as you continue to zone him off orbit stacking", "after": "Levels 4-5 stay yours as you deny him the Stardust his kit needs" },
+    { "layer": "content", "path": "whys[4]", "before": "Level 6 stays yours since Spirit Rush lets you dodge his slow ultimate and punish the recovery", "after": "Level 6 stays yours since Spirit Rush dashes clear before Singularity's centre executes" },
+    { "layer": "content", "path": "whys[5]", "before": "1st item stays yours as your burst still beats him down before his orbit ramps up", "after": "1st item stays yours as your burst beats him before Stardust ramps his numbers" },
+    { "layer": "content", "path": "whys[6]", "before": "Late game stays yours because your mobility keeps denying him the clean cast window his kit needs", "after": "Late game stays yours because your mobility denies the uninterrupted channel his damage needs" },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Aurelion Sol has to stand still to charge Starsurge, so once your Charm is live you punish every cast attempt and force him to either whiff or eat a full combo before his stars ever do real damage.", "after": "Breath of Light is a channel, so once Charm is live at 975 you cancel it from outside its 750 reach — every second you cut is a second of Stardust he never banks, and he cannot trade without it." },
+
+    { "layer": "content", "path": "spikes[1].text", "before": "His ultimate lets him black-hole and reposition across the map, but it has a long cast and travel time, so if you dodge the pull with Spirit Rush his ult is wasted and you can punish the recovery, keeping his power spike from ever landing clean.", "after": "Falling Star crashes down at 1250 range and stuns, and enough Stardust upgrades it into The Skies Descend, but it telegraphs — Spirit Rush's three dashes clear the impact, and a 120s ultimate spent on empty ground is your window to step up." },
+
+    { "layer": "content", "path": "spikes[2].text", "before": "Even once he finishes a mana/AP item, his orbit damage still requires standing still to ramp, and your burst combo continues to punish him before his stars can stack meaningfully.", "after": "Even with his first item his damage still needs channel time on Breath of Light, and Singularity costs 90 mana on a 12s timer, so your burst punishes him between casts before Stardust makes either hurt." },
+
+    { "layer": "content", "path": "spikes[3].text", "before": "Late-game AS?SoL still leans on a slow, telegraphed ultimate to threaten from range, and your assassin combo continues to close the gap and burst him down before he can set up a black hole, keeping the matchup in your favor throughout.", "after": "Late-game Aurelion Sol still leans on Singularity to hold ground, and its centre executes anyone under a health percentage — stay out of the middle, flank with Spirit Rush, and burst him before the black hole finishes pulling." },
+
+    { "layer": "content", "path": "early", "before": "From level 1 through 5 you completely dominate this matchup — his kit requires him to stand still and charge for real damage, so your Charm punishes every commitment, and your Fox-Fire poke chips him down while he's forced to play passively just to survive lane.", "after": "From level 1 through 5 you dominate — Breath of Light is a 750-range channel he has to hold on you, so Charm at 975 cancels it from outside his reach, and your fox-fire poke chips him down while he farms defensively just to stay in the lane at all." },
+
+    { "layer": "content", "path": "mid", "before": "Level 6 stays in your favor: his global ultimate has a long cast and travel time, so your Spirit Rush lets you dodge the black hole and punish the recovery window, denying him the payoff his kit is built around.", "after": "Level 6 stays in your favor: Falling Star reaches 1250 and stuns, but it telegraphs, so Spirit Rush's dashes take you out of the impact and out of Singularity's pull, and a 120s ultimate on empty ground is your commit window." },
+
+    { "layer": "content", "path": "wants.you[0]", "before": "Punish every stationary Starsurge charge-up with Charm", "after": "Cancel his Breath of Light channel with a 975 Charm" },
+    { "layer": "content", "path": "wants.you[1]", "before": "Deny his orbit stacking by breaking line of contact", "after": "Deny his Stardust by breaking the line of contact" },
+    { "layer": "content", "path": "wants.foe[0]", "before": "Land a full-charge Starsurge to set up trades", "after": "Hold Breath of Light on you to bank Stardust" },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Farm safely behind orbit range until core items complete", "after": "Farm safely at 750 range until core items complete" },
+    { "layer": "content", "path": "wants.foe[2]", "before": "Use ultimate to roam and generate leads elsewhere on the map", "after": "Use Astral Flight to fly over walls and roam for leads" }
+  ],
+  "notes": "This was the worst matchup in my slice: the entire content layer described the pre-rework Aurelion Sol — Starsurge, orbit stacking, orbit range, and a global repositioning ultimate. None of that is in his kit. Everything is rewritten onto Cosmic Creator / Breath of Light / Astral Flight / Singularity / Falling Star. spikes[3] also shipped a mojibake 'AS?SoL' to a paying reader, now fixed. The full-layer chart disagreed with the content chart on four of seven rows, including two rows that named Aurelion Sol as the winner of a matchup he loses at 56.87%."
+}

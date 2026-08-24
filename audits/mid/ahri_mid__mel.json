@@ -1,0 +1,105 @@
+{
+  "ownerKey": "ahri_mid",
+  "enemy": "mel",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart disagreed between layers: full phases[0..6].side was all \"Skill\" while content win[] and the packet levelChart both read Skill, Skill, Ahri, Ahri, Ahri, Ahri, Skill.",
+      "why": "Ahri holds a 53.64% win rate over 5412 games and owns levels 3 through first item; rendering \"Skill\" in one layer and \"Ahri\" in the other shows a paying user two answers to the same row.",
+      "corrected": "phases[2..5].side flipped to Ahri to match win[2..5], which are already Ahri. Rows 1, 2 and 7 stay Skill in both layers.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spike text credited Mel's power curve to a \"passive reflect shield\" that scales, and named the source \"Golden Sentence\".",
+      "why": "Mel's passive is Searing Brilliance — bonus projectiles on the next attack plus Overwhelm stacks that execute at a threshold. There is no passive shield. The reflect is Rebuttal (W), a 38/35/33/29/26s cooldown ability, and Golden Eclipse is the R. The spike story is therefore backwards: Mel's late power is Golden Eclipse cashing Overwhelm at any range, not a scaling shield.",
+      "corrected": "Spikes rebuilt around Rebuttal's real cooldown (38s at rank 1, 26s at rank 5) and Golden Eclipse's 120/100/80s range-independent strike.",
+      "confidence": "High",
+      "sources": ["enemyKit P/W/R", "packet.enemyAbilities"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive interaction was never stated: Rebuttal reflects projectiles, and Ahri's Q, W and R are ALL flagged projectile. Text said only \"never poke while it glows\".",
+      "why": "Orb of Deception, Fox-Fire and Spirit Rush's essence bolts are all projectiles, so Rebuttal turns a full Ahri combo back onto Ahri. Rebuttal also creates terrain and grants move speed but is not a dash — Charm's movement-stopping effect therefore has nothing to break, and Mel has no escape from a landed Charm. Rebuttal is 250 range and self-centred, so it cannot be used at poke range against her.",
+      "corrected": "Stated explicitly: bait Rebuttal with a single orb, commit inside its 38-second rank-1 gap; a landed Charm is a dead Mel because Rebuttal gives move speed, not a dash.",
+      "confidence": "High",
+      "sources": ["ownerKit Q/W/R projectile flags", "enemyKit W text", "missingInteractions rule dash-denied"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Searing Brilliance's execute threshold and the auto-attack-reset burst tell were absent everywhere.",
+      "why": "Overwhelm stacks infinitely and consumes to execute, so Mel kills from a health bar that still looks survivable; her combo also opens with a bonus-projectile attack, which is the wind-up cue.",
+      "corrected": "Added to spikes[3], breakdown.feeding and whys[6].",
+      "confidence": "High",
+      "sources": ["enemyKit P", "missingInteractions rules execute-threshold, autoreset-burst-tell"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Mel was referred to as \"his\"/\"he\" throughout the full layer.",
+      "why": "Wrong pronoun on a live page reads as text written for a different champion, which is exactly what it was.",
+      "corrected": "Pronouns corrected in tldr, tradeGood, tradeBad, phases[0].why, phases[2].why, breakdown.wave and the matching report entries.",
+      "confidence": "High",
+      "sources": ["enemyKit name"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ahri"},
+
+    {"layer": "content", "path": "spikes[0].text", "before": "Once you have all three basic spells online, your Charm-Fox Fire combo out-trades Mel's Radiant Volley pokes since she needs to land multiple casts where you only need one Charm to swing a fight.", "after": "Once all three basics are online, your Charm into Fox-Fire combo out-trades Radiant Volley: her Q is a zone she has to land repeatedly, where one Charm at 975 range swings the whole fight."},
+    {"layer": "content", "path": "spikes[1].text", "before": "Your Spirit Rush burst lands before she can stack Golden Sentence's reflect meaningfully, and you can bait her damage reflect shield down before committing your real combo.", "after": "Rebuttal reflects your Q, W and R bolts and it is a 38-second cooldown at rank 1, so bait it with one orb from minion range and spend all three Spirit Rush dashes inside that gap."},
+    {"layer": "content", "path": "spikes[2].text", "before": "With Luden's or similar burst, you kill her fast enough that her passive reflect shield barely matters since the fight is over before she can capitalize.", "after": "With Malignance and Sorcerer's, Charm into Fox-Fire into orb kills through her window, so Rebuttal delays your kill rather than answering it once you have baited it."},
+    {"layer": "content", "path": "spikes[3].text", "before": "Her reflect shield scales into a real threat with teamfight AoE, and if she baits your all-in into her shield window she punishes you hard, evening out the late game.", "after": "Golden Eclipse hits every Overwhelm-marked enemy at any range on an 80s cooldown and her passive executes at a threshold, so track the number, not the bar, and never sit low."},
+
+    {"layer": "content", "path": "whys[0]", "before": "Mel's ranged poke chips you while your combo is still incomplete and can't punish her casts", "after": "Radiant Volley chips you from 950 while your combo is incomplete and cannot punish it"},
+    {"layer": "content", "path": "whys[1]", "before": "Same dynamic at level 2 — her poke still edges out your incomplete kit", "after": "Same at level 2 — Radiant Volley outranges the two spells you have"},
+    {"layer": "content", "path": "whys[2]", "before": "Full 3-spell combo now lets you out-trade her poke reliably", "after": "Charm at 975 outranges her Q window and starts your full combo"},
+    {"layer": "content", "path": "whys[3]", "before": "Your damage keeps climbing ahead of her burst window here", "after": "Your Q ranks climb ahead of her Overwhelm stacking here"},
+    {"layer": "content", "path": "whys[4]", "before": "Spirit Rush burst wins all-ins before her reflect shield stacks up", "after": "Spirit Rush dashes inside Rebuttal's 250-range bubble and out again"},
+    {"layer": "content", "path": "whys[5]", "before": "Item power lets you kill her before her passive shield matters", "after": "Item power kills her inside Rebuttal's 26-second late downtime"},
+    {"layer": "content", "path": "whys[6]", "before": "Her reflect and AoE finally scale enough to punish careless engages, roughly even", "after": "Golden Eclipse and the Overwhelm execute punish careless commits, roughly even"},
+
+    {"layer": "content", "path": "early", "before": "Levels 1-2 are close to even but slightly hers since her ranged poke chips you while your kit is still incomplete, so you avoid trading into her cooldowns.", "after": "Levels 1-2 lean slightly hers: Radiant Volley chips from 950 on a 10-second cooldown while your kit is incomplete, so trade only in the window after it is spent."},
+    {"layer": "content", "path": "mid", "before": "From level 3 onward your full combo — Charm into Fox-Fire into Q — outdamages her poke pattern, and by 6 your burst kills through her passive shield if you bait it early, keeping you ahead through the mid-game skirmishes.", "after": "From level 3 your full combo — Charm into Fox-Fire into orb — outdamages her poke pattern, and by 6 Spirit Rush closes the gap; bait Rebuttal first, because it reflects your Q, W and R bolts straight back into your own face."},
+    {"layer": "content", "path": "late", "before": "Her passive reflect shield and AoE scale into teamfights, punishing a sloppy all-in, so you need to end the game on your mid-game lead before her kit catches up.", "after": "Rebuttal and Golden Eclipse's range-free damage scale into teamfights, so end on your mid-game lead: she needs no line of sight to finish anyone she has already marked."},
+
+    {"layer": "content", "path": "wants.you[2]", "before": "Bait out her passive shield before committing full combo", "after": "Bait Rebuttal with one orb before committing the combo"},
+    {"layer": "content", "path": "wants.you[3]", "before": "Close the game before her reflect scaling takes over", "after": "Close the game before Golden Eclipse hits rank 3"},
+    {"layer": "content", "path": "wants.foe[0]", "before": "Poke safely with Q before Ahri's kit comes online", "after": "Poke with Radiant Volley before Charm comes online"},
+    {"layer": "content", "path": "wants.foe[1]", "before": "Hold passive shield for a real all-in, don't waste it on trades", "after": "Hold Rebuttal for the real all-in, don't spend it on a poke trade"},
+    {"layer": "content", "path": "wants.foe[3]", "before": "Scale toward late-game teamfight shields and reflect burst", "after": "Scale toward Golden Eclipse hitting your team anywhere"},
+
+    {"layer": "full", "path": "tldr", "before": "His combo needs a landed setup — yours needs a landed charm. Whoever hits the skillshot first runs the exchange.", "after": "Her combo needs a landed Solar Snare — yours needs a landed charm. Whoever hits the skillshot first runs the exchange."},
+    {"layer": "full", "path": "winCon", "before": "Make the setup spell miss, land the charm, and out-rotate the gap with dash angles. Keep one eye on Rebuttal and one on the wave, in that order.", "after": "Sidestep Solar Snare, land the charm, and take the gap with dash angles. Keep one eye on Rebuttal's 38-second timer and one on the wave, in that order."},
+    {"layer": "full", "path": "enemyWin", "before": "Mel wins by landing Rebuttal, denying your pattern, and renting you the lane at a range markup.", "after": "Mel wins by rooting you with Solar Snare, stacking Overwhelm, and cashing it out with Golden Eclipse."},
+    {"layer": "full", "path": "tradeGood", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "Q through her last-hit so both hits land, W if she eats the return, and walk — repeat until the charm window is lethal instead of optimistic."},
+    {"layer": "full", "path": "tradeBad", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Charming on cooldown for chip and then facing her Solar Snare engage with nothing — the charm is the matchup, not the poke."},
+    {"layer": "full", "path": "ahead", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Mel's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, dash-flank the river, and charm-pick before Mel banks Overwhelm stacks on your whole team."},
+    {"layer": "full", "path": "phases[0].why", "before": "Q both ways through the wave on his last-hits — the true-damage return is most of your early poke.", "after": "Q both ways through the wave on her last-hits — the true-damage return is most of your early poke."},
+    {"layer": "full", "path": "phases[2].why", "before": "Charm online — the lane's first kill threat. Hold it for his step-up, not for prayer-range poke.", "after": "Charm online — the lane's first kill threat. Hold it for her step-up, not for prayer-range poke."},
+    {"layer": "full", "path": "breakdown.early", "before": "Trade orbs and bank heals — your pre-6 is honest and your 6 is not. Reach it healthy and the lane re-prices.", "after": "Trade orbs and bank heals — last-hit moving so Radiant Volley never lands twice. Reach 6 healthy and it re-prices."},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Mel Rebuttal: matchup-defining — Reflects your projectiles back — never poke while it glows. Count it out loud if you must. - Your R Spirit Rush (last dash) has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.", "after": "- Mel Rebuttal: 38s at rank 1, 26s at rank 5 — it reflects your Q, W and R bolts, so bait it with one orb and commit in the gap. - Your charm is a flat 12s: miss it and her Solar Snare window is free. - Bank the last Spirit Rush dash for the exit."},
+    {"layer": "full", "path": "breakdown.feeding", "before": "If Mel takes first blood, tighten up: Rebuttal is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q clears and stay relevant through charm picks.", "after": "If Mel takes first blood, tighten up: Overwhelm executes you from a bar that still looks safe. A second kill means the duel is over and the game isn’t — farm with Q clears and stay relevant through charm picks."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.", "after": "Carry through picks — charm stops her dead and Rebuttal only gives move speed, not a dash, so a landed charm is a dead Mel."},
+    {"layer": "full", "path": "breakdown.late", "before": "You are the pick and the cleanup: flank-charm the carry, orb the convergence, and dash out through the chaos you started.", "after": "You are the pick: flank-charm Mel first — Golden Eclipse cashes her Overwhelm stacks on your team from any range if she lives."},
+    {"layer": "full", "path": "dosFull[0].d", "before": "Reflects your projectiles back — never poke while it glows. Bait it, count it, then go.", "after": "Rebuttal reflects your Q, W and R bolts back — bait it, then go in its 38-second gap."},
+    {"layer": "full", "path": "dosFull[2].d", "before": "Mel whiffs Rebuttal and the lane briefly belongs to you.", "after": "Two dashes reach her; bank the third as your way back out."},
+    {"layer": "full", "path": "dontsFull[0].d", "before": "That is Mel’s whole plan in one window — decline politely and watch it retire.", "after": "Solar Snare roots at 1000 and her passive adds bolts to the attack after it."},
+    {"layer": "full", "path": "dontsFull[2].d", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Charming on cooldown for chip and then facing her Solar Snare engage with nothing — the charm is the matchup, not the poke."},
+    {"layer": "full", "path": "report[0].t", "before": "His combo needs a landed setup — yours needs a landed charm. Whoever hits the skillshot first runs the exchange.", "after": "Her combo needs a landed Solar Snare — yours needs a landed charm. Whoever hits the skillshot first runs the exchange."},
+    {"layer": "full", "path": "report[1].t", "before": "Make the setup spell miss, land the charm, and out-rotate the gap with dash angles. Keep one eye on Rebuttal and one on the wave, in that order.", "after": "Sidestep Solar Snare, land the charm, and take the gap with dash angles. Keep one eye on Rebuttal's 38-second timer and one on the wave, in that order."},
+    {"layer": "full", "path": "report[5].t", "before": "Track Mel’s Rebuttal: Reflects your projectiles back — never poke while it glows. The whole green-light system is its cooldown.", "after": "Track Mel’s Rebuttal: it reflects Q, W and R bolts back at you, 38s at rank 1. The whole green-light system is that cooldown."},
+    {"layer": "full", "path": "report[9].t", "before": "Commit on Rebuttal’s cooldown, on your Malignance spike, and with your jungler’s setup. His answer goes first; yours goes last.", "after": "Commit on Rebuttal’s 38-second cooldown, on your Malignance spike, and with your jungler’s setup. Her answer goes first; yours last."},
+    {"layer": "full", "path": "report[13].t", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Mel's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, dash-flank the river, and charm-pick before Mel banks Overwhelm stacks on your whole team."}
+  ],
+  "notes": "Mel's kit was substantially fabricated in the content layer: 'Golden Sentence' does not exist (R is Golden Eclipse), and the repeated 'passive reflect shield' is actually Rebuttal (W). Mel's real passive, Searing Brilliance, is a bonus-projectile attack buff plus infinitely stacking Overwhelm that executes — a completely different threat that appeared nowhere. Mel was also written as male throughout the full layer. Level chart disagreed between layers on rows 3-6; fixed as an atomic group of four side flips (win[] was already correct). Not asserted, because the kit text cannot answer it: whether Rebuttal's reflection returns Spirit Rush's essence bolts at full damage, and whether Charm is cleansable/tenacity-reduced."
+}

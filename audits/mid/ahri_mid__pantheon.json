@@ -1,0 +1,90 @@
+{
+  "ownerKey": "ahri_mid",
+  "enemy": "pantheon",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The two layers disagreed on six of seven rows: full read Pantheon, Pantheon, Pantheon, Pantheon, Skill, Skill, Skill while content win[] and the packet levelChart read Skill, Skill, Skill, Pantheon, Ahri, Ahri, Ahri.",
+      "why": "Only row 4 matched. The page was telling a paying user that Pantheon wins level 1 in one place and that level 1 is a skill matchup in another, then that level 6 is even in one place and Ahri's in another — with Ahri sitting on a 53.6% win rate over 3280 games, the content layer is the one backed by the data.",
+      "corrected": "phases[0..2].side to Skill and phases[4..6].side to Ahri, matching win[] on all seven rows; ratings and why text on the flipped rows brought in line.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "His ultimate was called \"Grand Skyfall\" in wants.foe[1], and dosFull[2].d cited a \"fifteen-second\" Shield Vault cooldown.",
+      "why": "The ultimate is Grand Starfall — 5500 range, 180/165/150 seconds, which is why it is a map tool and not a lane tool. Shield Vault is 13/12/11/10/9, so the fifteen-second figure would have a player step up two full seconds before the stun is actually back.",
+      "corrected": "Name corrected, cooldown corrected to thirteen seconds, and Grand Starfall's real 180-second rank-1 cooldown added.",
+      "confidence": "High",
+      "sources": ["packet.enemyAbilities", "enemyKit W/R cd"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The decisive interaction in the matchup was absent: Aegis Assault is a channel, and Charm cancels it outright.",
+      "why": "Riot's E text is a set-shield channel that makes him invulnerable to damage from the front while he strikes. It is 22 seconds at rank 1 — the longest cooldown he has in lane. Ahri's Charm is immobilizing crowd control, so it interrupts the channel instead of being wasted against it, which inverts the standing advice (\"waste charm on a shielded window\" as a don't). Equally, Shield Vault is a 600-range targeted dash and Charm instantly stops movement abilities, so charm thrown before he commits denies the engage entirely.",
+      "corrected": "Stated in spikes[1], whys[4], breakdown.cooldowns, dosFull[0].d and dontsFull[1].d.",
+      "confidence": "High",
+      "sources": ["enemyKit E/W text and flags", "ownerKit E text", "missingInteractions rules channel-interruptible and untargetable-dodges-burst"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Mortal Will's empowerment cycle and the Shield Vault auto-attack reset were never mentioned.",
+      "why": "Every few spells or attacks his next spell is empowered, and his combo opens with an attack reset — the wind-up is the cue to step back, not the ability cast. Without that, a reader watches for the wrong frame.",
+      "corrected": "Added to breakdown.early and dontsFull[0].d.",
+      "confidence": "High",
+      "sources": ["enemyKit P text", "missingInteractions rule autoreset-burst-tell"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Pantheon", "after": "Skill"},
+    {"layer": "full", "path": "phases[1].side", "before": "Pantheon", "after": "Skill"},
+    {"layer": "full", "path": "phases[2].side", "before": "Pantheon", "after": "Skill"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[0].rating", "before": "7/10", "after": "6/10"},
+    {"layer": "full", "path": "phases[1].rating", "before": "7/10", "after": "6/10"},
+    {"layer": "full", "path": "phases[2].rating", "before": "7/10", "after": "6/10"},
+
+    {"layer": "full", "path": "phases[0].why", "before": "Q both ways through the wave on his last-hits — the true-damage return is most of your early poke.", "after": "Q both ways from outside his 600-range vault — the true-damage return is most of your early poke."},
+    {"layer": "full", "path": "phases[1].why", "before": "W joins the pattern: Q-W on anyone who eats the orb return is a real chunk already.", "after": "W joins the pattern, but stay past 600: Shield Vault is a dash he does not have to aim."},
+    {"layer": "full", "path": "phases[2].why", "before": "Charm online — the lane's first kill threat. Hold it for his step-up, not for prayer-range poke.", "after": "Charm online — hold it for the Shield Vault, not for poke. It stops the dash before it starts."},
+    {"layer": "full", "path": "phases[3].why", "before": "Lost Chapter timing — orb every wave contact and bank the passive heals off full clears.", "after": "His window: Mortal Will empowers the combo and your kit is still a level short of answering it."},
+
+    {"layer": "content", "path": "spikes[1].text", "before": "Once you have Charm and Spirit Rush, you can finally answer his stun-into-burst combo by dashing away or Charming him first before he closes the gap.", "after": "Charm cancels Aegis Assault outright because it is a channel, and it stops Shield Vault before the dash starts, so you now answer his whole combo."},
+    {"layer": "content", "path": "spikes[3].text", "before": "Your mobility keeps you safely out of his engage range in skirmishes and teamfights, while your burst kills him before his stun-combo can land.", "after": "Stay past his 600-range Shield Vault and Grand Starfall's 150-second late cooldown is his only other way in — your burst kills him before it returns."},
+
+    {"layer": "content", "path": "whys[4]", "before": "Charm and Spirit Rush finally let you dodge and punish his engage", "after": "Charm cancels Aegis Assault and stops Shield Vault mid-dash"},
+    {"layer": "content", "path": "whys[5]", "before": "Your ranged burst now outpaces his need to walk into melee range", "after": "Your 970-range orb outpaces a man who must reach 600 first"},
+    {"layer": "content", "path": "whys[6]", "before": "Your mobility keeps you safe while your combo kills him from range", "after": "Three dashes keep you past 600 while your combo kills him off"},
+
+    {"layer": "content", "path": "wants.you[1]", "before": "Contest his Shield Vault stun windows rather than conceding them outright", "after": "Charm the Shield Vault dash rather than conceding the window to him"},
+    {"layer": "content", "path": "wants.you[3]", "before": "Punish his all-in cooldowns once you have Charm and dash", "after": "Punish the 22 seconds Aegis Assault spends on cooldown"},
+    {"layer": "content", "path": "wants.foe[1]", "before": "Use Grand Skyfall to reset lane or roam for kills", "after": "Use Grand Starfall's 5500 range to roam for kills"},
+
+    {"layer": "content", "path": "mid", "before": "Level 5 is risky as his combo hits hardest right before your spike, but level 6 flips it hard — your Charm and Spirit Rush give you the tools to dodge his stun and punish him at range instead.", "after": "Level 5 is risky as his combo hits hardest right before your spike, but level 6 flips it hard — charm cancels the Aegis Assault channel and stops Shield Vault mid-dash, and Spirit Rush covers the rest."},
+
+    {"layer": "full", "path": "winCon", "before": "Interrupt the engage with charm and tax the lane from orb range. Keep one eye on Shield Vault (Stun) and one on the wave, in that order.", "after": "Interrupt the engage with charm and tax the lane from orb range. Charm also cancels the Aegis Assault channel — it is never wasted into his shield."},
+    {"layer": "full", "path": "enemyWin", "before": "Pantheon wins by landing Shield Vault (Stun), denying your pattern, and front-loading the violence while your kit is still stretching.", "after": "Pantheon wins by vaulting 600 units onto you with an empowered Mortal Will spell, then shielding out the answer with Aegis Assault."},
+    {"layer": "full", "path": "ahead", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Pantheon's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, dash-flank the river, and track Grand Starfall — 180 seconds up means someone else is dying."},
+    {"layer": "full", "path": "breakdown.early", "before": "Trade orbs and bank heals — your pre-6 is honest and your 6 is not. Reach it healthy and the lane re-prices.", "after": "Trade orbs and bank heals, and watch for the attack reset — the wind-up is the tell, not the cast. Reach 6 healthy."},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Pantheon Shield Vault (Stun): matchup-defining — Point-and-click stun — respect the all-in any time it is up. Check it before every step-up. - R Spirit Rush (last dash) is the lifeline; chip damage never gets it. - The ult answers fights, not waves.", "after": "- Pantheon Shield Vault: 13s at rank 1, 600 range, point-and-click — stand past it or charm it mid-dash. - Aegis Assault is 22s and it is a channel, so charm cancels it rather than bouncing off. - The last Spirit Rush dash is the lifeline; chip damage never gets it."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.", "after": "Carry through picks — charm both cancels his channel and eats his dash, so one cast answers the only two ways in he has."},
+    {"layer": "full", "path": "breakdown.late", "before": "You are the pick and the cleanup: flank-charm the carry, orb the convergence, and dash out through the chaos you started.", "after": "You are the pick: hold charm for whoever he vaults onto, orb the convergence, and dash out before Aegis Assault comes back up."},
+    {"layer": "full", "path": "dosFull[0].d", "before": "Point-and-click stun — respect the all-in any time it is up. Until it’s spent, every commit is a coin flip.", "after": "Shield Vault is a 600-range dash and charm stops movement abilities — cast it as he leaves the ground."},
+    {"layer": "full", "path": "dosFull[2].d", "before": "Pantheon burns Shield Vault (Stun) on nothing — take the fifteen-second invitation.", "after": "Pantheon burns Shield Vault on a minion — take the thirteen-second invitation."},
+    {"layer": "full", "path": "dontsFull[0].d", "before": "That is Pantheon’s whole plan in one window — decline politely and watch it retire.", "after": "Mortal Will empowers his next spell — the extended trade is the one he is built for."},
+    {"layer": "full", "path": "dontsFull[1].t", "before": "Waste charm on a shielded window", "after": "Wait out Aegis Assault instead"},
+    {"layer": "full", "path": "dontsFull[1].d", "before": "The last dash is your life insurance — an Ahri who spends all three going in is an assassin's favorite story.", "after": "It is a channel, so charm cancels it outright — the mistake is holding charm while he shields for free."},
+    {"layer": "full", "path": "report[5].t", "before": "Track Pantheon’s Shield Vault (Stun): Point-and-click stun — respect the all-in any time it is up. It’s down or you don’t go.", "after": "Track Shield Vault: a 600-range point-and-click dash on 13s. Charm stops it mid-flight; Aegis Assault cancels to it too."},
+    {"layer": "full", "path": "report[9].t", "before": "Commit on Shield Vault (Stun)’s cooldown, on your Malignance spike, and with your jungler’s setup. His answer goes first; yours goes last.", "after": "Commit on Shield Vault's 13-second cooldown, on your Malignance spike, and with your jungler’s setup. His answer goes first; yours last."},
+    {"layer": "full", "path": "report[11].t", "before": "Trade extended inside his reach. Waste charm on a shielded window. Stand still admiring the orb return. Treat your ultimate as a verdict, never as harassment.", "after": "Trade extended inside his reach. Hold charm while he channels Aegis Assault for free. Stand still admiring the orb return. Treat your ultimate as a verdict."},
+    {"layer": "full", "path": "report[13].t", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Pantheon's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, dash-flank the river, and track Grand Starfall — 180 seconds up means someone else is dying."}
+  ],
+  "notes": "\"Grand Skyfall\" corrected to Grand Starfall, and a fabricated fifteen-second Shield Vault cooldown corrected to its real thirteen. The biggest gap was point 4: Aegis Assault is flagged channel in the data AND described by Riot as a set-shield strike sequence, so Charm interrupts it — yet the page listed 'waste charm on a shielded window' as a critical DON'T, which is close to the opposite of the truth. That advice is now inverted with the mechanism stated. Level chart disagreed on six of seven rows; the content layer matched the packet and the win rate, so the full layer was moved to it. Deliberately not asserted: whether Aegis Assault's front-facing invulnerability blocks the orb's true-damage return from behind (Riot says 'from the front' but gives no arc), and whether Charm is cleansable or reduced by tenacity."
+}

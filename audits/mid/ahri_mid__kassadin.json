@@ -1,0 +1,97 @@
+{
+  "ownerKey": "ahri_mid",
+  "enemy": "kassadin",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The two layers disagree on all seven rows: full has Skill/Skill/Skill/Skill/Skill/Kassadin/Kassadin while content has Ahri on every row.",
+      "why": "Kassadin's pre-6 kit is a 650-range Null Sphere and a 21s Force Pulse — Ahri clearly wins levels 1-5. After first and second item Riftwalk's cooldown falls to 3.5s and 2s and he chooses every engagement, which is what the full layer's 7/10 and 8/10 ratings already encode.",
+      "corrected": "phases[0..4].side = Ahri (matching win[0..4]); win[5] and win[6] = Kassadin (matching phases[5..6].side already on disk). Chart proposed as one atomic group.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd 5/3.5/2", "brief.currentText.full.phases[5..6]", "winRate 50.55"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[5].why and phases[6].why describe Ahri spikes while the side on those rows is Kassadin — the page tells the reader Kassadin wins and then explains why Ahri does.",
+      "why": "Kassadin's real spike is his mana/Sheen item, after which repeat Riftwalks stop being a liability.",
+      "corrected": "Rewrote both whys to Kassadin's item spike and his 2s Riftwalk.",
+      "confidence": "High",
+      "sources": ["enemyKit R", "enemyKit R text on stacking mana cost"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive interaction is absent: Void Stone reduces magic damage, and Ahri's Orb of Deception deals TRUE damage on the return — the half that ignores it, and ignores Null Sphere's magic shield too. Also spikes[0].text asserts Kassadin has \"no shield yet\" on Null Sphere, which contradicts Riot's own text.",
+      "why": "Riot text, Q: \"The excess energy forms around himself, granting a temporary shield that absorbs magic damage.\" Passive: \"Kassadin takes reduced magic damage and ignores unit collision.\" Ahri Q: \"magic damage on the way out and true damage on the way back.\"",
+      "corrected": "Poke with the orb's return half; the true damage cuts through both Void Stone and the Null Sphere shield. Void Stone's collision-ignore also means minions never body-block his approach.",
+      "confidence": "High",
+      "sources": ["ownerKit Q text/flags", "enemyKit P and Q text"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "Force Pulse's charging mechanic was never mentioned.",
+      "why": "Riot text: \"Kassadin draws energy from spells cast in his vicinity.\" Your own Q, W and E cast near him arm his 21/20/19/18/17s slow.",
+      "corrected": "Added to breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit E text/cd"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "missingInteractions claims \"Null Sphere (Q) is a channel — your Charm (E) cancels it outright.\" That is a derived-flag misfire.",
+      "why": "Riot's description says Null Sphere \"interrupt[s] channels\" — it is the interrupter, not a channel. Per the brief's own rule, the description wins over the flag.",
+      "corrected": "Not written to the page. The Nether Blade (W) auto-attack reset as a burst tell is genuine and is reflected in the trading lines.",
+      "confidence": "High",
+      "sources": ["enemyKit Q text", "enemyKit W flags autoReset"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Ahri" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Ahri" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Ahri" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Ahri" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ahri" },
+    { "layer": "content", "path": "win[5]", "before": "Ahri", "after": "Kassadin" },
+    { "layer": "content", "path": "win[6]", "before": "Ahri", "after": "Kassadin" },
+
+    { "layer": "full", "path": "phases[5].why", "before": "Malignance spike: R cooldown drops and every dash window chains a full charm combo.", "after": "His Sheen-and-mana spike lands here — Riftwalk stops being a liability and becomes a real all-in." },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Ahri is a pick machine: flank dash, charm the carry, and orb the body your team converges on.", "after": "Riftwalk is a 2-second blink he can now afford — he picks the fight, so Charm only the one aimed at you." },
+
+    { "layer": "full", "path": "tldr", "before": "You are the assassin-proof mage — charm beats the engage, R beats the reset, and your poke wins everything between.", "after": "You own every level before he does — poke him off the wave pre-6, because past two items Riftwalk decides when you fight." },
+    { "layer": "full", "path": "report[0].t", "before": "You are the assassin-proof mage — charm beats the engage, R beats the reset, and your poke wins everything between.", "after": "You own every level before he does — poke him off the wave pre-6, because past two items Riftwalk decides when you fight." },
+
+    { "layer": "full", "path": "enemyWin", "before": "Kassadin wins by landing Riftwalk, denying your pattern, and turning your every misstep into the all-in you hadn’t budgeted.", "after": "Kassadin wins by surviving to two items, where a 2-second Riftwalk lets him choose the fight and blink straight out of your Spirit Rush." },
+
+    { "layer": "full", "path": "tradeGood", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "Q through his last-hit so the true-damage return lands, W if he steps up, then walk — Void Stone cuts magic, so the orb's way back is your real damage." },
+    { "layer": "full", "path": "tradeBad", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Spending Charm as poke and then meeting his level 6 blink-in with nothing — Charm answers Riftwalk, it does not answer his last-hits." },
+
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic. Bad trade: Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Good trade: Q through his last-hit so the true-damage return lands — Void Stone reduces magic, so the orb's way back is the half that hurts — then W and walk. Bad trade: spending Charm as poke and meeting his level 6 blink-in with your E another 12 seconds away." },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Kassadin Riftwalk: matchup-defining — His mobility spike — the lane is decided before it scales. Count it out loud if you must. - Your R Spirit Rush (last dash) has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.", "after": "- Riftwalk, 5/3.5/2s, 500 range: cheap on cooldown but each repeat blink costs more mana — the second one in a row is what he cannot afford early. - Force Pulse, 21s at rank 1, charges off spells cast near him, so every orb you throw beside him arms his slow." },
+
+    { "layer": "full", "path": "breakdown.feeding", "before": "If Kassadin takes first blood, tighten up: Riftwalk is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q clears and stay relevant through charm picks.", "after": "If Kassadin takes first blood he buys his mana items early and the lane clock flips: farm with Q, refuse the solo kill, and shove so every Riftwalk roam costs him CS. Stay relevant through flank Charms." },
+
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.", "after": "Carry through picks — punish the landing, not the blink: he arrives at 500 range and has to stand there, and Charm ends that." },
+
+    { "layer": "full", "path": "dosFull[0].d", "before": "His mobility spike — the lane is decided before it scales. Bait it, count it, then go.", "after": "Riftwalk is 500 range and costs more each cast — Charm him on the landing, not on the approach." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "Riftwalk drops to a 2-second blink late, so the dash you bank is the only reason he doesn't get a free re-entry after you spend your rotation on him." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Kassadin whiffs Riftwalk and the lane briefly belongs to you.", "after": "Null Sphere is 650 range — sit at 900 and he has to walk to you." },
+
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Kassadin’s whole plan in one window — decline politely and watch it retire.", "after": "Spend Charm on poke and his level 6 blink-in arrives with your E still 12 seconds out." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Void Stone ignores unit collision, so minions never body-block his approach — never be caught past the river with Charm down." },
+
+    { "layer": "full", "path": "report[5].t", "before": "Track Kassadin’s Riftwalk: His mobility spike — the lane is decided before it scales. The whole green-light system is its cooldown.", "after": "Track Riftwalk, 5/3.5/2s at 500 range: repeat blinks cost extra mana early. Your Q's return half is true damage — Void Stone can't stop it." },
+    { "layer": "full", "path": "report[9].t", "before": "Commit on Riftwalk’s cooldown, on your Malignance spike, and with your jungler’s setup. His answer goes first; yours goes last.", "after": "Commit before he can afford a second Riftwalk, on your Malignance spike, and with your jungler's setup. Make him blink first, then Charm." },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Kassadin is one of the weakest laners in the game before 6 — no shield yet on Null Sphere's silence-and-poke, and Riftwalk isn't spammable, so you freely poke him with Orb of Deception and punish any farming attempt with Charm.", "after": "Kassadin is one of the weakest laners before 6, but Null Sphere already grants a magic-damage shield — Orb of Deception's return half is true damage and ignores both that shield and Void Stone, so poke with the way back, not the way out." },
+    { "layer": "content", "path": "early", "before": "Kassadin has one of the worst level 1-2 kits in mid lane — Null Sphere is just a silence-poke on a long cooldown with no shield, so you freely win extended trades and can punish any CS attempt with Charm into full combo.", "after": "Kassadin's level 1-2 is among the worst in mid, but Null Sphere does shield against magic — lean on Orb of Deception's return half, whose true damage cuts through both that shield and Void Stone's magic reduction." },
+    { "layer": "content", "path": "late", "before": "Kassadin scales his mobility but never his raw damage output — your Charm-locked burst combo still kills him faster than his Riftwalk blinks can punish, so you stay ahead through the skirmish phase if you keep landing Charm first.", "after": "Kassadin scales past you: at two items Riftwalk is a 2-second blink he can pay for, so he chooses every engagement. Your late game is the flank Charm on someone he isn't guarding — arrive, pick, and leave before he lands." },
+    { "layer": "content", "path": "whys[5]", "before": "Full Riftwalk uptime still can't out-damage your itemized combo — you keep winning the fight.", "after": "With a mana item Riftwalk hits 3.5s — he can blink in, commit, and blink out of your rotation." },
+    { "layer": "content", "path": "whys[6]", "before": "Even with infinite Riftwalk resets his mana-hungry blink pattern never out-trades your Charm-locked burst.", "after": "At rank 3 Riftwalk is a 2-second blink he can afford — he picks the fight, so save Charm for the one aimed at you." }
+  ],
+  "notes": "Both layers of the level chart were wrong and in opposite directions — full read Skill on rows 0-4, content read Ahri on rows 5-6 while full read Kassadin there. Proposed the full flips and the two content flips together as the chart group. spikes[0].text's claim that Null Sphere has \"no shield\" contradicts Riot's own text and is corrected. The missingInteractions entry \"Null Sphere is a channel — Charm cancels it\" is a derived-flag misfire (Null Sphere interrupts channels; it is not one) and was NOT written to the page. Nether Blade's auto-reset is a real burst tell but there was no length-neutral field left to carry it without displacing better content — recorded here."
+}

@@ -1,0 +1,87 @@
+{
+  "ownerKey": "ahri_mid",
+  "enemy": "swain",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "full phases[0..6].side read \"Skill\" on all seven rows while content win[] and the packet levelChart both read Ahri, Skill, Ahri, Ahri, Ahri, Ahri, Skill.",
+      "why": "Five of seven rows disagreed. Ahri is at 55.63% over 2628 games and owns everything from level 3 to two items; only level 2 and the full-build row are genuinely even.",
+      "corrected": "phases[0], phases[2], phases[3], phases[4] and phases[5] set to Ahri as one atomic group, matching win[] exactly. Rows 2 and 7 stay Skill in both layers.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The pull was attributed to his Q in four places (\"E-root into Q-pull\", \"Bait his Q pull-in\", \"safe Q pull-in from max range\"), and the root mechanic itself was described as a skillshot you dodge on the way out.",
+      "why": "Nevermove (E) does both jobs: Riot's text is a wave that travels forward, RETURNS to Swain, roots what it hits, and then Swain may recast to pull the rooted champions in. Death's Hand (Q) is a 750-range cone of piercing bolts with no displacement at all. Two consequences the page never gave the reader: the root lands on the RETURN pass, so sidestepping the outgoing wave is only half the dodge; and there is no separate cooldown to track for the pull — it is the same 12-second E.",
+      "corrected": "All four references rewritten onto Nevermove, with the return-pass root stated in spikes[0], whys[1], breakdown.cooldowns and dosFull[0].d.",
+      "confidence": "High",
+      "sources": ["enemyKit E text, range and cd", "enemyKit Q text", "packet.enemyAbilities"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[4] and spikes[1] both state that Demonic Ascension \"roots him in place while draining HP\", and wants.you[2] tells the reader to deny it by breaking line of sight.",
+      "why": "Riot's R text: Swain transforms and drains health from nearby enemies, and the form lasts indefinitely as long as he keeps draining champions. Nothing immobilises him — he walks at you the entire time — and the drain is a 650-radius effect, not a vision-dependent one, so line of sight breaks nothing. The real counterplay is the range number and the sustain condition: leave 650 and the form ends because there is no champion left to drain.",
+      "corrected": "Rewritten around the 650 radius, the 120-second cooldown and the drain-to-sustain condition.",
+      "confidence": "High",
+      "sources": ["enemyKit R text, range and cd"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Vision of Empire never appears anywhere in the matchup, and Ravenous Flock's permanent max-health growth is only implied.",
+      "why": "Vision of Empire is a 22-second, 5500-to-7500-range eye that damages, slows, reveals and hands Swain a Soul Fragment off a champion hit — it is how he pressures a lane he is not standing in, and how he heals without touching you. Ravenous Flock turns those fragments into permanent maximum health, which is exactly why Grievous Wounds timing decides long trades.",
+      "corrected": "Added to breakdown.early, wants.foe[3] and ahead.",
+      "confidence": "High",
+      "sources": ["enemyKit W text", "enemyKit P text", "missingInteractions rules needs-antiheal and resistances-invalidated"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ahri"},
+
+    {"layer": "content", "path": "whys[1]", "before": "His E-root into Q-pull combo requires landing a skillshot first, and if it whiffs your Charm range punishes the long recovery, making this an even read-and-react skill window.", "after": "Nevermove roots on the way BACK, not the way out, and the pull is a recast of that same root — dodge both passes and his 12-second opener is spent, so this stays an even read-and-react window."},
+    {"layer": "content", "path": "whys[4]", "before": "His Demonic Ascension roots him in place while draining HP, so a well-timed Charm or dash to break vision denies most of its value and lets you burst him down first.", "after": "Demonic Ascension drains everything within 650 and lasts as long as he keeps draining a champion, so dash out of that radius and the form starves itself while you burst him."},
+    {"layer": "content", "path": "whys[6]", "before": "Full-build Swain's ultimate heals him back up every time he taps multiple targets in a teamfight, letting his sustain outweigh your damage advantage.", "after": "Full-build, every champion inside his 650 radius feeds the drain, and Ravenous Flock has been banking permanent health all game on top of it."},
+
+    {"layer": "content", "path": "spikes[0].text", "before": "Swain's E-root into Q-pull-in combo needs him to hit a skillshot first, and your Charm range and dash mobility make it easy to punish the recovery if his E whiffs on the wave.", "after": "Nevermove travels out and roots on the RETURN pass, then recasts to pull you in — so sidestepping the first half is only half a dodge, and a fully whiffed 12-second E is your window to commit."},
+    {"layer": "content", "path": "spikes[1].text", "before": "His Demonic Ascension ult drains HP in a big AoE but roots him in place, so a well-timed Charm before he ults or a dash to break vision denies most of its value; you can burst him down before the drain heals him back up.", "after": "Demonic Ascension does not slow him down — he walks at you draining everything inside 650, and the form only ends when no champion is left in it. Spirit Rush out of that circle on a 120-second cooldown and it starves."},
+
+    {"layer": "content", "path": "early", "before": "Levels 1-2 are a close skill matchup — Swain's E is a slow skillshot you can dodge with basic movement, and your Q poke edges the trades if he plays passively, but neither side has a real spike yet.", "after": "Levels 1-2 are close — Nevermove is slow enough to dodge, but remember it roots on the return, and your orb reaches 970 against his 750 cone, so the poke war is yours if he stands still."},
+    {"layer": "content", "path": "mid", "before": "From level 3 through 6 you take firm control: Swain is committing to landing a root before he can do anything, and your Charm plus dash mobility punishes any missed E hard, letting you win nearly every skirmish and threaten his roams before his ultimate ramps his sustain online.", "after": "From level 3 through 6 you take firm control: Swain has to root you before he can do anything, and a missed Nevermove is 12 seconds of nothing, so charm and dashes punish it hard — win the skirmishes and threaten roams before the drain form comes online."},
+    {"layer": "content", "path": "late", "before": "Once Swain hits his mana/HP scaling items and teamfights start revolving around his Demonic Ascension healing him back up every time he taps multiple targets, the fight tempo shifts to his favor — you need to shut him down with burst before the ult drain starts or peel/kite so he never gets the AoE heal rolling.", "after": "Once Swain hits his health-scaling items and fights revolve around a drain that sustains him for as long as anyone at all stands within 650 of him, the tempo shifts his way — buy Grievous Wounds early, burst him down before the form ever starts, and kite hard so that nobody keeps feeding it once it has."},
+
+    {"layer": "content", "path": "wants.you[1]", "before": "Bait his Q pull-in with fake proximity then Charm the instant he commits E", "after": "Bait Nevermove, dodge the return pass, then charm the pull recast hard"},
+    {"layer": "content", "path": "wants.you[2]", "before": "Deny his ultimate value by breaking line of sight or interrupting the drain early with burst", "after": "Deny the drain by leaving its 650 radius, since line of sight has nothing to do with it"},
+    {"layer": "content", "path": "wants.foe[1]", "before": "Look for a safe Q pull-in from max range to set up all-ins", "after": "Recast Nevermove to pull a rooted Ahri in even closer"},
+    {"layer": "content", "path": "wants.foe[3]", "before": null, "after": "Farm Soul Fragments with Vision of Empire for permanent health"},
+
+    {"layer": "full", "path": "winCon", "before": "Break even pre-6, then out-angle him with dash-charm picks he cannot ward. Nothing here works through Demonic Ascension — schedule your pattern around its cooldown.", "after": "Break even pre-6, then out-angle him with dash-charm picks he cannot ward. Nothing works inside Demonic Ascension's 650 radius — the answer is leaving it, not out-damaging it."},
+    {"layer": "full", "path": "enemyWin", "before": "Swain wins by landing Demonic Ascension, denying your pattern, and keeping the fight at a distance your kit resents.", "after": "Swain wins by rooting you on Nevermove's return, pulling you in, and draining a fight nobody can leave back into his favour."},
+    {"layer": "full", "path": "ahead", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Swain's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, dash-flank the river, and deny Soul Fragments — every Vision of Empire hit is permanent health."},
+    {"layer": "full", "path": "phases[0].why", "before": "Q both ways through the wave on his last-hits — the true-damage return is most of your early poke.", "after": "Your row: orb both ways from 970 while his cone only reaches 750 and his root is not up yet."},
+    {"layer": "full", "path": "phases[2].why", "before": "Charm online — the lane's first kill threat. Hold it for his step-up, not for prayer-range poke.", "after": "Charm online — hold it for the Nevermove recast, not for prayer-range poke. A whiffed E is 12 seconds."},
+    {"layer": "full", "path": "phases[4].why", "before": "Spirit Rush online — three dashes change every rule: charm angles multiply and ganks stop working on you.", "after": "Spirit Rush online — three dashes take you straight out of the 650 circle his whole ultimate depends on."},
+    {"layer": "full", "path": "breakdown.early", "before": "Trade orbs and bank heals — your pre-6 is honest and your 6 is not. Reach it healthy and the lane re-prices.", "after": "Trade orbs and bank heals, and dodge Vision of Empire — a champion hit hands him a Soul Fragment and health."},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. Step up only on its downtime. - Budget R Spirit Rush (last dash) for emergencies and the R for opportunities — never swap them.", "after": "- Swain Nevermove: 12s, 850 range, roots on the RETURN pass — the pull is a recast, not a second cooldown. - Demonic Ascension is 120s, 650 radius, and lasts only while it has a champion to drain. - Budget the last Spirit Rush dash for leaving that circle."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.", "after": "Carry through picks — catch Swain alone, where the drain has one target and Grievous Wounds turns his sustain off."},
+    {"layer": "full", "path": "breakdown.late", "before": "You are the pick and the cleanup: flank-charm the carry, orb the convergence, and dash out through the chaos you started.", "after": "You are the pick: charm from outside 650, orb the convergence, and dash out before the drain finds a second body to feed on."},
+    {"layer": "full", "path": "dosFull[0].d", "before": "His drain mode — disengage and reset the fight when it starts. Its cooldown is the green light — wait for it.", "after": "Nevermove roots on the way back, not the way out — clear both passes and the next 12 seconds are yours."},
+    {"layer": "full", "path": "dosFull[2].d", "before": "Swain whiffs Demonic Ascension and the lane briefly belongs to you.", "after": "Swain whiffs Nevermove both passes and the lane briefly belongs to you."},
+    {"layer": "full", "path": "dontsFull[0].d", "before": "That is Swain’s rehearsed moment — don’t audition for it.", "after": "Inside 650 his drain pays him for every second you stay."},
+    {"layer": "full", "path": "dontsFull[2].t", "before": "Trade while his key spell is loaded", "after": "Trade inside his 650 drain radius"},
+    {"layer": "full", "path": "report[1].t", "before": "Break even pre-6, then out-angle him with dash-charm picks he cannot ward. Nothing here works through Demonic Ascension — schedule your pattern around its cooldown.", "after": "Break even pre-6, then out-angle him with dash-charm picks he cannot ward. Nothing works inside Demonic Ascension's 650 radius — the answer is leaving it, not out-damaging it."},
+    {"layer": "full", "path": "report[5].t", "before": "Track Swain’s Demonic Ascension: His drain mode — disengage and reset the fight when it starts. The whole green-light system is its cooldown.", "after": "Track Swain’s Nevermove: 850 range on 12s, rooting on the RETURN pass, with the pull as a recast. Dodge both halves or don’t step up."},
+    {"layer": "full", "path": "report[9].t", "before": "Commit on Demonic Ascension’s cooldown, on your Malignance spike, and with your jungler’s setup. Bait the answer, then sign.", "after": "Commit on Nevermove's 12-second cooldown, on your Malignance spike, and with your jungler’s setup. Bait both passes, then sign."},
+    {"layer": "full", "path": "report[11].t", "before": "Burn R dashes for poke spacing. Charm at prayer range on cooldown. Trade while his key spell is loaded. The R buys fights, not poke — spend it like the last one in stock.", "after": "Burn R dashes for poke spacing. Charm at prayer range on cooldown. Trade inside his 650 drain radius. The R buys fights, not poke — spend it like the last one in stock."},
+    {"layer": "full", "path": "report[13].t", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Swain's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, dash-flank the river, and deny Soul Fragments — every Vision of Empire hit is permanent health."}
+  ],
+  "notes": "Two mechanical errors that would change how a player behaves. (1) The pull was attributed to Death's Hand (Q) in four places — it is a recast of Nevermove (E), the same 12-second cooldown, so the reader was told to track a spell that has no displacement at all. Riot's E text also puts the root on the RETURN pass, which the matchup never mentioned; sidestepping the outgoing wave is only half the dodge and that alone explains a lot of lost trades. (2) 'Demonic Ascension roots him in place' is stated twice and is false — the form leaves him fully mobile, drains within 650, and persists only while a champion is inside it; the paired advice to 'break line of sight' does nothing, since the drain is radius-based. Both replaced with the range and the sustain condition. Vision of Empire (22s, 5500-7500 range, grants a Soul Fragment on a champion hit) appeared nowhere despite being how Swain heals and pressures without walking anywhere; it is now in three fields. Anti-heal advice in report[8] was already correct here and was left alone. Level chart disagreed on five of seven rows. Not asserted: whether Charm interrupts Demonic Ascension's transformation cast, and whether Nevermove's root is tenacity-reduced or cleansable."
+}

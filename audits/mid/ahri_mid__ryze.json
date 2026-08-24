@@ -1,0 +1,88 @@
+{
+  "ownerKey": "ahri_mid",
+  "enemy": "ryze",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "full phases read Ahri, Ahri, Ahri, Skill, Skill, Ryze, Ryze while content win[] and the packet levelChart both read Ahri on all seven rows.",
+      "why": "The full layer handed Ryze the last two rows outright and called 4-6 even. Ahri is at 56.63% over 2859 games and the packet chart has no Ryze row anywhere. Worse, the full layer's own why text on those rows (\"Late Ahri is a pick machine\") argued for Ahri while the side said Ryze — the page disagreed with itself inside a single row.",
+      "corrected": "phases[3..6].side set to Ahri as one atomic group, matching win[3..6]; ratings normalised and the two rows whose why text no longer fitted rewritten.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[]", "packet.winRate"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The root was attributed to E throughout (\"Q into E-root\", \"a whiffed E leaves him with no follow-up\", \"the EQ chain\"), and the actual conditional was never stated.",
+      "why": "Rune Prison is his W, 615 range, 11 seconds at rank 1 — and Riot's text is explicit: it damages and SLOWS, and roots only if the target already has Flux on them. Spell Flux (E) is the debuff that upgrades it, on a 3.5-second cooldown at 615 range. So the whole matchup has a clean break point that the page never named: deny Spell Flux and the root is only a slow. Naming the wrong slot meant a reader watching his E cooldown was watching a 3.5-second spell instead of the 11-second one that actually locks them down.",
+      "corrected": "Every reference rebuilt as Spell Flux into Rune Prison, with the conditional root stated in whys[1], wants.you[1], wants.foe[1], spikes[0], breakdown.cooldowns, dosFull[0].d and report[5].t.",
+      "confidence": "High",
+      "sources": ["enemyKit W text and cd", "enemyKit E text and cd", "packet.enemyAbilities"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1] and whys[4] described a \"root-Q-flash-ult combo\" and \"his R portal engage\"; whys[0] and early said Ryze is \"stuck auto-attacking for chip damage\" at levels 1-2.",
+      "why": "Realm Warp creates a portal that teleports allies standing near it to the target location after a few seconds — 3000 range, 180 seconds at rank 1. It is a map and rotation tool, not an engage he flashes in with, and telling a player to fear it in a lane all-in points their attention at the wrong thing. And Overload is a 1000-range spell on a flat 5-second cooldown that his other abilities reset — he is not reduced to auto-attacks at any point in the game, he simply outranges your orb by 30 units while lacking the range to root you.",
+      "corrected": "Realm Warp described as the delayed group portal it is; the early-game description rebuilt on the 1000 vs 615 range split rather than on a false lack of poke.",
+      "confidence": "High",
+      "sources": ["enemyKit R text", "enemyKit Q text, range and cd", "ownerKit Q range"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "wants.you and wants.foe each carried only three entries.",
+      "why": "Inherited structural gap — no before-string exists on disk, so it has never been fixable by a normal edit.",
+      "corrected": "Fourth entry added to each with \"before\": null, grounded in Arcane Mastery's bonus-mana scaling and the 615-range requirement.",
+      "confidence": "High",
+      "sources": ["enemyKit P text", "currentText.content.wants"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ahri"},
+    {"layer": "full", "path": "phases[5].side", "before": "Ryze", "after": "Ahri"},
+    {"layer": "full", "path": "phases[6].side", "before": "Ryze", "after": "Ahri"},
+    {"layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10"},
+    {"layer": "full", "path": "phases[6].rating", "before": "7/10", "after": "6/10"},
+
+    {"layer": "full", "path": "phases[3].why", "before": "Lost Chapter timing — orb every wave contact and bank the passive heals off full clears.", "after": "Lost Chapter timing — orb from 970 where neither Spell Flux nor Rune Prison reaches you."},
+    {"layer": "full", "path": "phases[5].why", "before": "Malignance spike: R cooldown drops and every dash window chains a full charm combo.", "after": "Malignance spike: your R cooldown drops while Realm Warp stays a 180-second map tool."},
+    {"layer": "full", "path": "phases[6].why", "before": "Late Ahri is a pick machine: flank dash, charm the carry, and orb the body your team converges on.", "after": "Still yours: he has to reach 615 to lock anyone down, and charm answers the step-in every time."},
+
+    {"layer": "content", "path": "whys[0]", "before": "Ryze has no burst this early and is stuck auto-attacking for chip damage while your Orb of Deception poke already out-trades him.", "after": "Ryze pokes with Overload, but Spell Flux and Rune Prison both need 615 range, so Orb of Deception out-trades him from 970."},
+    {"layer": "content", "path": "whys[1]", "before": "His combo needs landed Q into E-root, which your dash mobility easily slips, letting you punish the recovery every time.", "after": "His combo needs Spell Flux landed first — Rune Prison only roots a Flux'd target and merely slows without it."},
+    {"layer": "content", "path": "whys[4]", "before": "Spirit Rush lets you dodge his root-Q-flash-ult combo attempts and burst him down before his own all-in fully connects.", "after": "Spirit Rush dodges the Spell Flux into Rune Prison setup and bursts him before his 615-range chain connects."},
+
+    {"layer": "content", "path": "spikes[0].text", "before": "You dominate this window because Ryze is a walking wet noodle before he has mana items — his Q poke is weak and his E-root combo whiffs easily against your mobility, so aggressive Q-E trades punish him hard.", "after": "You own this window because Rune Prison only roots a target that already has Spell Flux on it — break the chain by staying past 615 and his 11-second root is a slow, so aggressive orb into charm trades punish him hard."},
+    {"layer": "content", "path": "spikes[1].text", "before": "Your Spirit Rush lets you dodge his root-Q-flash-ult combo attempts, and you can burst him down before he lands his own R portal engage since his all-in still isn't fully online.", "after": "Spirit Rush dodges the Spell Flux into Rune Prison chain, and Realm Warp is a 3000-range portal that moves allies after a delay — a map tool, not an engage he can answer you with."},
+
+    {"layer": "content", "path": "early", "before": "Levels 1-2 are close to even since neither champion has a real burst window yet, but you already out-trade with Orb of Deception poke while Ryze is stuck auto-attacking for chip damage.", "after": "Levels 1-2 are close to even since neither champion has a real burst window yet, but you out-trade with Orb of Deception because everything that locks you down starts at 615 range."},
+    {"layer": "content", "path": "mid", "before": "Levels 3-6 are your strongest window in the entire matchup — Ryze's combo requires him to land Q into E-root, and your dash-heavy kit lets you dodge those roots or punish the recovery time, so aggressive all-ins from level 3 onward snowball the lane hard in your favor.", "after": "Levels 3-6 are your strongest window in the matchup — Rune Prison only roots a target Spell Flux has already marked, and your dash-heavy kit lets you break that chain or punish the recovery, so aggressive all-ins from level 3 snowball the lane hard in your favour."},
+
+    {"layer": "content", "path": "wants.you[1]", "before": "Punish his root attempts with Charm since a whiffed E leaves him with no follow-up", "after": "Punish a whiffed Spell Flux — without it Rune Prison only slows, never roots"},
+    {"layer": "content", "path": "wants.foe[1]", "before": "Look for isolated root-Q-E combos once he has enough mana to burst", "after": "Land Spell Flux first so that Rune Prison roots instead of slowing"},
+    {"layer": "content", "path": "wants.you[3]", "before": null, "after": "Stay past 615 and his entire lockdown chain is out of reach"},
+    {"layer": "content", "path": "wants.foe[3]", "before": null, "after": "Stack mana — Arcane Mastery turns every point of it into damage"},
+
+    {"layer": "full", "path": "winCon", "before": "Break even pre-6, then out-angle him with dash-charm picks he cannot ward. Shorthand: Rune Prison (Root) down, wave right, go.", "after": "Break even pre-6, then out-angle him with dash-charm picks he cannot ward. Shorthand: no Spell Flux on you, no root. Keep 615 between you."},
+    {"layer": "full", "path": "enemyWin", "before": "Ryze wins by landing Rune Prison (Root), denying your pattern, and renting you the lane at a range markup.", "after": "Ryze wins by tagging you with Spell Flux, upgrading Rune Prison from a slow to a root, and chaining resets."},
+    {"layer": "full", "path": "ahead", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Ryze's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, dash-flank the river, and take fights before Realm Warp's 180 seconds brings his team to him."},
+    {"layer": "full", "path": "breakdown.early", "before": "Trade orbs and bank heals — your pre-6 is honest and your 6 is not. Reach it healthy and the lane re-prices.", "after": "Trade orbs and bank heals — everything that locks you down starts at 615, so pay nothing to stand at 970."},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Ryze Rune Prison (Root): matchup-defining — Point-blank root — respect the EQ chain that follows it. Read it like a second minimap. - Guard your R Spirit Rush (last dash) like a fifth summoner spell. - Ultimate goes to kill windows only.", "after": "- Ryze Rune Prison: 11s at rank 1, 615 range, and it only ROOTS if Spell Flux is already on you — otherwise it is a slow. - Spell Flux is the 3.5s spell to dodge; deny it and the root never exists. - Guard the last Spirit Rush dash like a fifth summoner spell."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.", "after": "Carry through picks — he needs 615 range and a landed Spell Flux to hold anyone still, and charm answers the step-in."},
+    {"layer": "full", "path": "breakdown.late", "before": "You are the pick and the cleanup: flank-charm the carry, orb the convergence, and dash out through the chaos you started.", "after": "You are the pick: catch Ryze before his team gathers on a Realm Warp portal, because after the delay they arrive together."},
+    {"layer": "full", "path": "dosFull[0].d", "before": "Point-blank root — respect the EQ chain that follows it. Its cooldown is the green light — wait for it.", "after": "Rune Prison roots only a Flux'd target — dodge Spell Flux and his 11-second lockdown is just a slow."},
+    {"layer": "full", "path": "dosFull[2].d", "before": "Ryze whiffs Rune Prison (Root) and the lane briefly belongs to you.", "after": "Ryze whiffs Spell Flux and his next Rune Prison cannot root you."},
+    {"layer": "full", "path": "dontsFull[0].d", "before": "That is Ryze’s rehearsed moment — don’t audition for it.", "after": "Overload resets off his other spells — he wins that war."},
+    {"layer": "full", "path": "dontsFull[2].t", "before": "Trade while his key spell is loaded", "after": "Trade while Spell Flux is on you"},
+    {"layer": "full", "path": "report[1].t", "before": "Break even pre-6, then out-angle him with dash-charm picks he cannot ward. Shorthand: Rune Prison (Root) down, wave right, go.", "after": "Break even pre-6, then out-angle him with dash-charm picks he cannot ward. Shorthand: no Spell Flux on you, no root. Keep 615 between you."},
+    {"layer": "full", "path": "report[5].t", "before": "Track Ryze’s Rune Prison (Root): Point-blank root — respect the EQ chain that follows it. The whole green-light system is its cooldown.", "after": "Track Rune Prison: 615 range, 11s, and it roots only a target Spell Flux already marked. Deny the Flux and it is only a slow."},
+    {"layer": "full", "path": "report[9].t", "before": "Commit on Rune Prison (Root)’s cooldown, on your Malignance spike, and with your jungler’s setup. Bait the answer, then sign.", "after": "Commit on Rune Prison’s 11-second cooldown, on your Malignance spike, and with your jungler’s setup. Bait the Flux, then sign."},
+    {"layer": "full", "path": "report[11].t", "before": "Burn R dashes for poke spacing. Charm at prayer range on cooldown. Trade while his key spell is loaded. Chip damage doesn’t get to borrow the ultimate.", "after": "Burn R dashes for poke spacing. Charm at prayer range on cooldown. Trade while Spell Flux is stuck on you. Chip damage doesn’t get to borrow the ultimate."},
+    {"layer": "full", "path": "report[13].t", "before": "Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick Ryze's teammates until the lane lead is a game lead.", "after": "Ahead, hunt the map: shove with Q, dash-flank the river, and take fights before Realm Warp's 180 seconds brings his team to him."}
+  ],
+  "notes": "The root was attributed to Ryze's E across the whole matchup. It is Rune Prison (W, 615 range, 11s), and Riot's text makes it conditional: it SLOWS, and only roots a target that already carries Flux from Spell Flux (E, 3.5s). That conditional is the entire matchup and it appeared nowhere — a reader was being told to track the wrong slot and the wrong cooldown. Also corrected: Realm Warp described as an engage Ryze 'lands' on you, when it is a delayed 3000-range group portal; and the claim that Ryze is 'stuck auto-attacking for chip damage' early, when Overload is a 1000-range spell on a flat 5s cooldown that his other abilities reset. Level chart disagreed on four rows, and on two of them the full layer's side (Ryze) contradicted its OWN why text (which described Ahri winning). wants.you and wants.foe were each missing a fourth entry; both filled. Not asserted: whether Charm is cleansable or tenacity-reduced, and whether Rune Prison's root can be shortened by tenacity where the slow cannot."
+}

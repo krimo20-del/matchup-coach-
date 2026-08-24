@@ -1,0 +1,97 @@
+{
+  "ownerKey": "ahri_mid",
+  "enemy": "akshan",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "50.94% over 3675 games; EVEN at 5.5/10 is right. Akshan owns levels 1-2, Ahri owns 6 onward.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer chart was 'Skill' on all seven rows; content and packet both read Akshan/Akshan/Skill/Skill/Ahri/Ahri/Ahri.",
+      "why": "phases[N].side and win[N] render the same row and disagreed.",
+      "corrected": "phases[0..1].side -> Akshan, phases[4..6].side -> Ahri, ratings aligned.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three fabricated mechanics shipped: 'Akshan's passive camouflage triggers off nearby minion deaths' (camouflage is Going Rogue (W), an activated 18s spell, not a passive off minion deaths); 'Comeback Time' as his ultimate (his ult is Comeuppance; the revive is Going Rogue and only fires when he kills a Scoundrel — the enemy who killed his ally); and 'auto-attack resets' (Dirty Fighting fires an extra reduced-damage attack and shields on every third hit — it is not a reset). Dirty Fighting's shield, the single most important thing about bursting him, was never mentioned. 'Fox Fire' was also flagged as a suspect name.",
+      "why": "Riot text: Dirty Fighting shields on every third hit from attacks or abilities; Going Rogue is the camouflage and revive; Comeuppance locks on from 2500 and stores bullets scaling with missing health. Charm 'instantly stops movement abilities', which applies to Heroic Swing.",
+      "corrected": "Rewrote spikes[0..2], early, mid, whys[0], whys[1], whys[4], whys[5], breakdown.cooldowns, report[5].t and the do/don't bodies on the real kit.",
+      "confidence": "High",
+      "sources": ["enemyKit", "ownerKit", "missingInteractions: shield-absorbs-burst", "packet.suspectNames"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldown number anywhere.",
+      "why": "Heroic Swing 18/16.5/15/13.5/12s and requires terrain; Avengerang 9s falling to 5s; Charm 12s flat; Comeuppance 100/85/70s.",
+      "corrected": "Numbers written into breakdown.cooldowns and the don'ts.",
+      "confidence": "High",
+      "sources": ["enemyKit", "ownerKit"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Heroic Swing's terrain requirement was never stated.",
+      "why": "It fires a hook into terrain; in open lane away from walls he has no swing.",
+      "corrected": "Stated in breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit E text"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Akshan" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Akshan" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ahri" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ahri" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Ahri" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "7/10" },
+
+    { "layer": "full", "path": "phases[0].why", "before": "Q both ways through the wave on his last-hits — the true-damage return is most of your early poke.", "after": "Dirty Fighting shields his third hit, so your orb return trades down — farm safe and hold Charm until level 3." },
+
+    { "layer": "full", "path": "enemyWin", "before": "Akshan wins by landing Heroic Swing, denying your pattern, and turning your every misstep into the all-in you hadn’t budgeted.", "after": "Akshan wins by swinging in off terrain, shielding through your burst with Dirty Fighting, and finishing with Comeuppance." },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Akshan Heroic Swing: matchup-defining — His swing engage/escape — fight only while it is down. Check it before every step-up. - R Spirit Rush (last dash) is the lifeline; chip damage never gets it. - The ult answers fights, not waves.", "after": "- Heroic Swing is 18s at rank 1 and needs terrain — fight him in open lane while it is down. - Dirty Fighting shields every third hit, so force it out on minions first. - Keep the third Spirit Rush dash for his swing-in." },
+
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.", "after": "Carry by pre-empting the swing: Charm him out of the air, then dash off his Comeuppance line before the bullets release." },
+
+    { "layer": "full", "path": "report[5].t", "before": "Track Akshan’s Heroic Swing: His swing engage/escape — fight only while it is down. Forward steps wait for its downtime.", "after": "Charm instantly stops movement abilities, so it snuffs Heroic Swing mid-swing — hold E for his hook, not for the wave." },
+
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "Comeuppance locks on from 2500 range and stores bullets — keep the third dash to break the line, and never open a fight by dashing in." },
+
+    { "layer": "full", "path": "dosFull[2].d", "before": "Akshan spends Heroic Swing early — the closest thing this matchup has to a guarantee.", "after": "His Q costs 60 mana and his swing 70 — poke the farm he must walk to and he runs dry first." },
+
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Charm is 12s flat — without it his Heroic Swing lands free and Comeuppance finishes you, so hold the wave until E is up." },
+
+    { "layer": "content", "path": "whys[0]", "before": "Level 1 favors Akshan — his camouflage and auto resets punish your lack of an early trade tool", "after": "Level 1 favors Akshan — Avengerang hits going out and back, and Dirty Fighting shields his third hit" },
+    { "layer": "content", "path": "whys[1]", "before": "Level 2 still favors Akshan as he out-trades your poke using camo re-engages", "after": "Level 2 still favors Akshan as Dirty Fighting shields the orb return he eats" },
+    { "layer": "content", "path": "whys[4]", "before": "Level 6 turns to you — Spirit Rush safely repositions you around his skillshots and revive window", "after": "Level 6 turns to you — Spirit Rush's three dashes leave Comeuppance's lock-on with no clean line" },
+    { "layer": "content", "path": "whys[5]", "before": "2+ items favors you as your burst combo kills him before Comeback Time can matter", "after": "2+ items favors you as your burst kills him before Comeuppance finishes storing" },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Akshan's passive camouflage triggers off nearby minion deaths, so early waves he vanishes mid-trade and punishes your Orb of Deception with free autos you can't return.", "after": "Dirty Fighting shields him on every third hit from an attack or ability, so early waves he eats your Orb of Deception, absorbs the return, and autos back while you wait on the 7s recast." },
+
+    { "layer": "content", "path": "spikes[1].text", "before": "Comeback Time can revive a dead ally the instant you kill them, so any all-in you win can be undone unless you finish the fight fast or your team follows up before his passive triggers.", "after": "Going Rogue revives his fallen allies only if he kills a Scoundrel — the enemy who killed them — so once you take that kill you are the mark, and Comeuppance from 2500 range is how he collects." },
+
+    { "layer": "content", "path": "spikes[2].text", "before": "Once you finish Shadowflame/Luden's your burst clears his low HP pool in one Orb-Charm-Fox Fire combo before he can land three autos back, flipping every skirmish your way.", "after": "Once you finish Shadowflame/Luden's your burst clears his low HP pool in one Orb-Charm-fox-fire combo before Dirty Fighting stacks a third hit, flipping every skirmish your way." },
+
+    { "layer": "content", "path": "early", "before": "Level 1-2 belongs to Akshan — his camouflage plus auto-attack resets let him punish your immobile early poke, and he can freely disengage into brush before you can Charm him, so you're stuck playing passive and losing CS.", "after": "Level 1-2 belongs to Akshan — Avengerang damages going out and back and extends its range off each hit, and Dirty Fighting shields his every third hit, so you cannot win the poke war and should farm what you can safely reach." },
+
+    { "layer": "content", "path": "mid", "before": "Levels 3-5 stay roughly even as your Charm range starts threatening his auto-reset pattern, but it's still a Skill-check phase since a well-timed camo engage from him can still punish a bad position, while level 6 tips clearly to you — Spirit Rush lets you dodge his skillshots and land a full combo he can't revive through fast enough.", "after": "Levels 3-5 stay roughly even: Charm at 975 range outreaches Avengerang's 850 and instantly stops Heroic Swing mid-flight, but his 18s swing still punishes a bad position, while level 6 tips clearly to you — Spirit Rush's three dashes break Comeuppance's firing line and let you combo before his shield restacks." },
+
+    { "layer": "content", "path": "wants.foe[0]", "before": "Auto-reset combo through camo whenever minions die nearby", "after": "Land a third Dirty Fighting hit to shield through your burst" },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Bank ult charge from his passive to threaten flank picks", "after": "Swing off a side wall to close range you cannot answer" }
+  ],
+  "notes": "This matchup carried three outright fabrications — camouflage 'triggering off nearby minion deaths', an ultimate called 'Comeback Time', and Akshan having auto-attack resets. All three are replaced with Riot's actual kit. The revive belongs to Going Rogue (W) and is conditional on killing a Scoundrel, which is a real and under-used piece of advice for an Ahri who just took a kill. Charm stopping Heroic Swing mid-swing follows from Riot's 'instantly stopping movement abilities' line but I could not verify frame-level behaviour, so it is phrased as stopping the swing rather than promising a guaranteed dismount. tradeGood/tradeBad remain fully templated and duplicated into breakdown.trading and report[3].t; nothing in Akshan's kit gave me a same-length replacement I could ground, so they are left."
+}

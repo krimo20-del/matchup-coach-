@@ -1,83 +1,196 @@
 {
-  "ownerKey": "akshan_mid",
-  "enemy": "cassiopeia",
-  "lane": "mid",
-  "audit": [
-    {
-      "point": 2,
-      "status": "needs-correction",
-      "whatIsWrong": "Full-layer phases[0..6].side all read 'Skill' while the content layer reads Akshan/Akshan/Akshan then Cassiopeia x4. Two different answers render for every row.",
-      "why": "Content layer matches packet.levelChart exactly, and the reasoning holds: Akshan bullies a dashless mage at 1-3, and the lane flips at Petrifying Gaze (level 6) plus Twin Fang uptime. Win rate 50.31% over 652 games supports a lane that flips rather than one side owning it.",
-      "corrected": "Full side rows set to Akshan, Akshan, Akshan, Cassiopeia, Cassiopeia, Cassiopeia, Cassiopeia to match win[0..6] and the packet.",
-      "confidence": "High",
-      "sources": ["packet.levelChart", "currentText.content.win[0..6]"]
-    },
-    {
-      "point": 3,
-      "status": "needs-correction",
-      "whatIsWrong": "The level 6 phase text is garbled ('Avengerang... no —') and names Akshan's R 'Vengeance'. Content repeatedly calls Cassiopeia's ultimate 'Petrify'.",
-      "why": "Akshan's R is Comeuppance (100/85/70s, 2500 range). Cassiopeia's R is Petrifying Gaze (120/100/80s, 825 range) — it stuns only enemies facing her and slows those with their back turned, which is the actual level 6 spike in this lane.",
-      "corrected": "Real names used, with the facing mechanic and the 120s rank-1 cooldown stated so the dive timing is concrete.",
-      "confidence": "High",
-      "sources": ["ownerKit R", "enemyKit R text and cooldowns"]
-    },
-    {
-      "point": 4,
-      "status": "needs-correction",
-      "whatIsWrong": "MAJOR FABRICATION: the content layer credits Cassiopeia with 'Noxious Trap' and describes 'trap fields', 'traps everywhere', and 'her Trap placement'. Cassiopeia has no traps in her kit — that is a Teemo ability. Her zoning tool is Miasma (W), the grounding cloud.",
-      "why": "Kit file: Q Noxious Blast (3.5s, 850), W Miasma (24/22/20/18/16s, 700, grounds and slows), E Twin Fang (0.75s, 700, heals her, extra damage on poisoned targets), R Petrifying Gaze. The decisive interaction the page never states: Miasma GROUNDS, and grounded means Heroic Swing does not cast at all — she can shut off both your entry and your exit with one 24-second spell. Second decisive interaction, flagged in missingInteractions: Twin Fang heals her off every tick of chip damage, so Grievous Wounds decides extended trades.",
-      "corrected": "Trap language removed everywhere. Miasma grounding stated as the swing-denial, with its rank-1 24s cooldown as the commit window. Anti-heal against Twin Fang promoted into breakdown.carry.",
-      "confidence": "High",
-      "sources": ["enemyKit W text ('Grounded enemies cannot use Movement abilities')", "enemyKit E text ('heals her for a percentage of the damage dealt')", "missingInteractions needs-antiheal"]
-    },
-    {
-      "point": 10,
-      "status": "correct",
-      "whatIsWrong": "",
-      "why": "report[8] already carries 'Add anti-heal early into his sustain', which is right for Twin Fang. Left alone.",
-      "corrected": "",
-      "confidence": "High",
-      "sources": ["currentText.full.report[8].t"]
-    }
-  ],
-  "edits": [
-    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Akshan"},
-    {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Akshan"},
-    {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Akshan"},
-    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Cassiopeia"},
-    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Cassiopeia"},
-    {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Cassiopeia"},
-    {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Cassiopeia"},
-
-    {"layer": "full", "path": "phases[4].why", "before": "Avengerang... no — R online: Vengeance executes the chipped from two screens. Chip, then channel.", "after": "Her level 6: Petrifying Gaze stuns anyone facing her. Turn and walk, never trade into it."},
-
-    {"layer": "full", "path": "enemyWin", "before": "Cassiopeia wins by landing Miasma, denying your pattern, and owning the spacing war until your tempo starves.", "after": "Cassiopeia wins by grounding you inside Miasma, then healing through your whole string with Twin Fang until you cannot leave."},
-
-    {"layer": "full", "path": "ahead", "before": "Ahead, bully harder: string Cassiopeia off every contact, swing-roam the rivers, and execute the map's mistakes with R.", "after": "Ahead, hold her off the wave: she has no dash, so every Miasma she burns to escape is 24 seconds of free swing access for you."},
-
-    {"layer": "full", "path": "breakdown.carry", "before": "Carry through strings and executes — chip everything, finish anything under a third, and let the swing write angles no one wards.", "after": "Carry by buying Grievous Wounds early — Twin Fang heals her back through your chip, and un-healed she cannot survive one full string."},
-
-    {"layer": "full", "path": "breakdown.feeding", "before": "If Cassiopeia takes first blood, tighten up: Miasma is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q strings and stay relevant through R executes.", "after": "If Cassiopeia takes first blood, tighten up: Twin Fang costs 40 mana and heals her, so her poke never stops. Farm at 850 with Q, never stand in the poison, and stay relevant through Comeuppance executes."},
-
-    {"layer": "content", "path": "whys[0]", "before": "Akshan's early mobility and burst punish Cassiopeia's immobile, trap-dependent kit before she scales", "after": "Akshan's early mobility and burst punish Cassiopeia's immobile, mana-hungry kit before she scales"},
-    {"layer": "content", "path": "whys[2]", "before": "Level 3 still favors Akshan as Cassiopeia's damage and traps haven't come online enough", "after": "Level 3 still favors Akshan as Cassiopeia's Twin Fang damage hasn't come online enough"},
-    {"layer": "content", "path": "whys[3]", "before": "Cassiopeia's Petrify unlocks a stun-into-execute combo Akshan can't out-damage, flips to her", "after": "Petrifying Gaze unlocks a stun-into-Twin-Fang combo Akshan can't out-damage, flips to her"},
-    {"layer": "content", "path": "whys[6]", "before": "Twin Fang stacking plus long Petrify range make her the stronger late-game threat", "after": "Twin Fang uptime plus Petrifying Gaze's 825 range make her the stronger late threat"},
-
-    {"layer": "content", "path": "spikes[0].text", "before": "You out-trade her early because Twin Fang isn't fully rewarded yet and her Noxious Trap zoning is easy to walk around before she has points in everything.", "after": "You out-trade her early because Twin Fang only pays off once Noxious Blast is on you, and one point of Miasma barely covers the lane at a 24s cooldown."},
-    {"layer": "content", "path": "spikes[1].text", "before": "Her Petrify becomes a lane-ending stun-into-execute once she hits 6, and Comeuppance doesn't out-damage her burst if you're caught facing her — so bait it before diving.", "after": "Petrifying Gaze becomes a lane-ending stun once she hits 6 — it only stuns if you are facing her, so turn and walk rather than trade, and dive only after its 120s is spent."},
-    {"layer": "content", "path": "spikes[3].text", "before": "Cassiopeia's Petrify range and Twin Fang reset damage make her one of the scariest late-game mid mages, and unless you pick her off with R before she sets up, prolonged fights favor her hard.", "after": "Petrifying Gaze's 825-range stun and Twin Fang's 0.75s cycle make her a brutal late-game mage, and unless you execute her with Comeuppance before she sets up, long fights favour her hard."},
-
-    {"layer": "content", "path": "early", "before": "Cassiopeia has no dash and low base damage before she can lay traps everywhere, so you walk her down at levels 1-2 with E-Q combos and punish any trade attempt. Her Noxious Trap takes time to blanket the lane, and until then you can freely contest CS and poke. Respect her mana costs early — she can't spam Twin Fang forever without going dry.", "after": "Cassiopeia has no dash and low base damage before she stacks levels, so you walk her down at 1-2 with swing-and-Q strings and punish any trade attempt. Miasma is a 24-second cooldown at rank 1, and once it is spent she cannot ground your E, so that is your window to contest CS and poke. Respect her mana — Twin Fang costs 40 a cast and drains her."},
-
-    {"layer": "content", "path": "mid", "before": "This is where it flips: once she hits 6, Petrify's stun-if-facing mechanic turns any misstep into a full burst combo that outpaces your kit, and her passive move speed lets her kite your engages. Play around her trap fields carefully, and don't commit R into her unless you're sure she's already used Petrify. From here she's building toward a poke-and-burst lane state you can't out-trade head-on.", "after": "This is where it flips: once she hits 6, Petrifying Gaze stuns anyone facing her and turns one misstep into a full Twin Fang burst, while Serpentine Grace amplifies every move speed buff she buys. Walk clear of Miasma before you swing — grounded, your E does not cast at all — and hold Comeuppance until her 120-second ultimate is spent. From here she out-trades you head-on."},
-
-    {"layer": "content", "path": "late", "before": "Cassiopeia's Twin Fang stacking damage and long-range Petrify stun make her a lane-phase and skirmish nightmare late — she deletes anyone she catches facing her. Your best plan is picking her off in side lane before objectives with R rather than fighting her in extended trades. If she groups with even one peel, avoid diving in without vision on her Trap placement.", "after": "Cassiopeia's Twin Fang uptime and her 825-range Petrifying Gaze make her a skirmish nightmare late — she deletes anyone she catches facing her. Your best plan is executing her in the side lane with Comeuppance before objectives rather than trading with her. If she has peel, do not swing in: Miasma grounds the exit as surely as the entry, and you are left standing in the poison."},
-
-    {"layer": "content", "path": "wants.you[0]", "before": "Punish her lack of mobility levels 1-2 before Traps are everywhere", "after": "Punish her immobility at levels 1-2 before Twin Fang rewards her"},
-    {"layer": "content", "path": "wants.foe[0]", "before": "Lay Noxious Traps to control zones and set up Petrify", "after": "Land Noxious Blast so Twin Fang and the stun follow"},
-    {"layer": "content", "path": "wants.foe[1]", "before": "Land Petrify facing to guarantee the stun combo", "after": "Catch you facing her for the Petrifying Gaze stun"},
-    {"layer": "content", "path": "wants.foe[2]", "before": "Kite with movement speed steroid from passive stacks", "after": "Kite with Serpentine Grace amplifying her speed buffs"}
-  ],
-  "notes": "This matchup carried a fabricated ability: 'Noxious Trap' (a Teemo ability) appeared in spikes[0] and the trap fiction spread through early, mid, late and wants.foe[0]. Cassiopeia has no traps; her zoning is Miasma. All trap language removed. Her ultimate was written as 'Petrify' throughout — corrected to Petrifying Gaze. The grounding interaction (Miasma disables Heroic Swing entirely, both in and out) was never stated anywhere on the page and is now in mid and late. Anti-heal versus Twin Fang, flagged in missingInteractions, is now in breakdown.carry as well as report[8]. Full-layer level chart disagreed with content on all seven rows; proposed as one atomic group on the full side, since win[0..6] already matched the packet."
+ "ownerKey": "akshan_mid",
+ "enemy": "cassiopeia",
+ "lane": "mid",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[0..6].side all read 'Skill' while the content layer reads Akshan/Akshan/Akshan then Cassiopeia x4. Two different answers render for every row.",
+   "why": "Content layer matches packet.levelChart exactly, and the reasoning holds: Akshan bullies a dashless mage at 1-3, and the lane flips at Petrifying Gaze (level 6) plus Twin Fang uptime. Win rate 50.31% over 652 games supports a lane that flips rather than one side owning it.",
+   "corrected": "Full side rows set to Akshan, Akshan, Akshan, Cassiopeia, Cassiopeia, Cassiopeia, Cassiopeia to match win[0..6] and the packet.",
+   "confidence": "High",
+   "sources": [
+    "packet.levelChart",
+    "currentText.content.win[0..6]"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "The level 6 phase text is garbled ('Avengerang... no —') and names Akshan's R 'Vengeance'. Content repeatedly calls Cassiopeia's ultimate 'Petrify'.",
+   "why": "Akshan's R is Comeuppance (100/85/70s, 2500 range). Cassiopeia's R is Petrifying Gaze (120/100/80s, 825 range) — it stuns only enemies facing her and slows those with their back turned, which is the actual level 6 spike in this lane.",
+   "corrected": "Real names used, with the facing mechanic and the 120s rank-1 cooldown stated so the dive timing is concrete.",
+   "confidence": "High",
+   "sources": [
+    "ownerKit R",
+    "enemyKit R text and cooldowns"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "MAJOR FABRICATION: the content layer credits Cassiopeia with 'Noxious Trap' and describes 'trap fields', 'traps everywhere', and 'her Trap placement'. Cassiopeia has no traps in her kit — that is a Teemo ability. Her zoning tool is Miasma (W), the grounding cloud.",
+   "why": "Kit file: Q Noxious Blast (3.5s, 850), W Miasma (24/22/20/18/16s, 700, grounds and slows), E Twin Fang (0.75s, 700, heals her, extra damage on poisoned targets), R Petrifying Gaze. The decisive interaction the page never states: Miasma GROUNDS, and grounded means Heroic Swing does not cast at all — she can shut off both your entry and your exit with one 24-second spell. Second decisive interaction, flagged in missingInteractions: Twin Fang heals her off every tick of chip damage, so Grievous Wounds decides extended trades.",
+   "corrected": "Trap language removed everywhere. Miasma grounding stated as the swing-denial, with its rank-1 24s cooldown as the commit window. Anti-heal against Twin Fang promoted into breakdown.carry.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit W text ('Grounded enemies cannot use Movement abilities')",
+    "enemyKit E text ('heals her for a percentage of the damage dealt')",
+    "missingInteractions needs-antiheal"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "report[8] already carries 'Add anti-heal early into his sustain', which is right for Twin Fang. Left alone.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "currentText.full.report[8].t"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Cassiopeia"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Avengerang... no — R online: Vengeance executes the chipped from two screens. Chip, then channel.",
+   "after": "Her level 6: Petrifying Gaze stuns anyone facing her. Turn and walk, never trade into it."
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Cassiopeia wins by landing Miasma, denying your pattern, and owning the spacing war until your tempo starves.",
+   "after": "Cassiopeia wins by grounding you inside Miasma, then healing through your whole string with Twin Fang until you cannot leave."
+  },
+  {
+   "layer": "full",
+   "path": "ahead",
+   "before": "Ahead, bully harder: string Cassiopeia off every contact, swing-roam the rivers, and execute the map's mistakes with R.",
+   "after": "Ahead, hold her off the wave: she has no dash, so every Miasma she burns to escape is 24 seconds of free swing access for you."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.carry",
+   "before": "Carry through strings and executes — chip everything, finish anything under a third, and let the swing write angles no one wards.",
+   "after": "Carry by buying Grievous Wounds early — Twin Fang heals her back through your chip, and un-healed she cannot survive one full string."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.feeding",
+   "before": "If Cassiopeia takes first blood, tighten up: Miasma is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q strings and stay relevant through R executes.",
+   "after": "If Cassiopeia takes first blood, tighten up: Twin Fang costs 40 mana and heals her, so her poke never stops. Farm at 850 with Q, never stand in the poison, and stay relevant through Comeuppance executes."
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Akshan's early mobility and burst punish Cassiopeia's immobile, trap-dependent kit before she scales",
+   "after": "Akshan's early mobility and burst punish Cassiopeia's immobile, mana-hungry kit before she scales"
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "Level 3 still favors Akshan as Cassiopeia's damage and traps haven't come online enough",
+   "after": "Level 3 still favors Akshan as Cassiopeia's Twin Fang damage hasn't come online enough"
+  },
+  {
+   "layer": "content",
+   "path": "whys[3]",
+   "before": "Cassiopeia's Petrify unlocks a stun-into-execute combo Akshan can't out-damage, flips to her",
+   "after": "Petrifying Gaze unlocks a stun-into-Twin-Fang combo Akshan can't out-damage, flips to her"
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "Twin Fang stacking plus long Petrify range make her the stronger late-game threat",
+   "after": "Twin Fang uptime plus Petrifying Gaze's 825 range make her the stronger late threat"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "You out-trade her early because Twin Fang isn't fully rewarded yet and her Noxious Trap zoning is easy to walk around before she has points in everything.",
+   "after": "You out-trade her early because Twin Fang only pays off once Noxious Blast is on you, and one point of Miasma barely covers the lane at a 24s cooldown."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Her Petrify becomes a lane-ending stun-into-execute once she hits 6, and Comeuppance doesn't out-damage her burst if you're caught facing her — so bait it before diving.",
+   "after": "Petrifying Gaze becomes a lane-ending stun once she hits 6 — it only stuns if you are facing her, so turn and walk rather than trade, and dive only after its 120s is spent."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Cassiopeia's Petrify range and Twin Fang reset damage make her one of the scariest late-game mid mages, and unless you pick her off with R before she sets up, prolonged fights favor her hard.",
+   "after": "Petrifying Gaze's 825-range stun and Twin Fang's 0.75s cycle make her a brutal late-game mage, and unless you execute her with Comeuppance before she sets up, long fights favour her hard."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Cassiopeia has no dash and low base damage before she can lay traps everywhere, so you walk her down at levels 1-2 with E-Q combos and punish any trade attempt. Her Noxious Trap takes time to blanket the lane, and until then you can freely contest CS and poke. Respect her mana costs early — she can't spam Twin Fang forever without going dry.",
+   "after": "Cassiopeia has no dash and low base damage before she stacks levels, so you walk her down at 1-2 with swing-and-Q strings and punish any trade attempt. Miasma is a 24-second cooldown at rank 1, and once it is spent she cannot ground your E, so that is your window to contest CS and poke. Respect her mana — Twin Fang costs 40 a cast and drains her."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "This is where it flips: once she hits 6, Petrify's stun-if-facing mechanic turns any misstep into a full burst combo that outpaces your kit, and her passive move speed lets her kite your engages. Play around her trap fields carefully, and don't commit R into her unless you're sure she's already used Petrify. From here she's building toward a poke-and-burst lane state you can't out-trade head-on.",
+   "after": "This is where it flips: once she hits 6, Petrifying Gaze stuns anyone facing her and turns one misstep into a full Twin Fang burst, while Serpentine Grace amplifies every move speed buff she buys. Walk clear of Miasma before you swing — grounded, your E does not cast at all — and hold Comeuppance until her 120-second ultimate is spent. From here she out-trades you head-on."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "Cassiopeia's Twin Fang stacking damage and long-range Petrify stun make her a lane-phase and skirmish nightmare late — she deletes anyone she catches facing her. Your best plan is picking her off in side lane before objectives with R rather than fighting her in extended trades. If she groups with even one peel, avoid diving in without vision on her Trap placement.",
+   "after": "Cassiopeia's Twin Fang uptime and her 825-range Petrifying Gaze make her a skirmish nightmare late — she deletes anyone she catches facing her. Your best plan is executing her in the side lane with Comeuppance before objectives rather than trading with her. If she has peel, do not swing in: Miasma grounds the exit as surely as the entry, and you are left standing in the poison."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Punish her lack of mobility levels 1-2 before Traps are everywhere",
+   "after": "Punish her immobility at levels 1-2 before Twin Fang rewards her"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Lay Noxious Traps to control zones and set up Petrify",
+   "after": "Land Noxious Blast so Twin Fang and the stun follow"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Land Petrify facing to guarantee the stun combo",
+   "after": "Catch you facing her for the Petrifying Gaze stun"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Kite with movement speed steroid from passive stacks",
+   "after": "Kite with Serpentine Grace amplifying her speed buffs"
+  }
+ ],
+ "notes": "This matchup carried a fabricated ability: 'Noxious Trap' (a Teemo ability) appeared in spikes[0] and the trap fiction spread through early, mid, late and wants.foe[0]. Cassiopeia has no traps; her zoning is Miasma. All trap language removed. Her ultimate was written as 'Petrify' throughout — corrected to Petrifying Gaze. The grounding interaction (Miasma disables Heroic Swing entirely, both in and out) was never stated anywhere on the page and is now in mid and late. Anti-heal versus Twin Fang, flagged in missingInteractions, is now in breakdown.carry as well as report[8]. Full-layer level chart disagreed with content on all seven rows; proposed as one atomic group on the full side, since win[0..6] already matched the packet. | COHERENCE: 3 chart edit(s) withdrawn — they moved the row to the enemy while leaving the phase why describing the owner winning it. Chart authority is an open question, so the label was reverted rather than the prose rewritten. Re-propose only as a side+why pair."
 }

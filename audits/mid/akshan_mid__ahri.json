@@ -1,107 +1,231 @@
 {
-  "ownerKey": "akshan_mid",
-  "enemy": "ahri",
-  "lane": "mid",
-  "audit": [
-    {
-      "point": 2,
-      "status": "correct",
-      "whatIsWrong": "",
-      "why": "52.6% over 3728 games. EVEN at 5.5/10 holds: Akshan owns levels 1-4 on string trades, Ahri owns 6 onward once Charm-Spirit Rush is a kill pattern.",
-      "corrected": "",
-      "confidence": "High",
-      "sources": ["packet.winRate", "packet.games"]
-    },
-    {
-      "point": 3,
-      "status": "needs-correction",
-      "whatIsWrong": "Every phases[N].side read 'Skill' while content win[0..6] and packet.levelChart both read Akshan/Akshan/Akshan/Akshan/Ahri/Ahri/Ahri. The two layers rendered different answers to who wins each level.",
-      "why": "phases[N].side and win[N] are the same row. win[] already matches the packet, so the full layer is the one that is wrong.",
-      "corrected": "phases[0..3].side -> Akshan, phases[4..6].side -> Ahri, ratings pulled in line (4/10 while Akshan leads, 7/10 once she is itemised).",
-      "confidence": "High",
-      "sources": ["packet.levelChart", "currentText.content.win"]
-    },
-    {
-      "point": 4,
-      "status": "needs-correction",
-      "whatIsWrong": "The decisive interaction was never stated: Charm 'instantly stops movement abilities', which snuffs Heroic Swing mid-air. Comeuppance's stop-on-first-minion rule was absent. spikes[2] claimed 'Spellblade procs punish any greedy E-swing approach' — Ahri builds Luden's/Shadowflame, not a Sheen line, so that proc does not exist. late[] attributed true damage to Charm; the true damage is on Orb of Deception's return. phases[4].why called the ultimate 'Vengeance' — it is Comeuppance. tradeGood/tradeBad/report[3] refer to Ahri as 'he'.",
-      "why": "Riot text: Charm 'instantly stopping movement abilities'; Comeuppance deals damage 'to the first champion, minion, or structure hit'; Orb of Deception deals 'true damage on the way back'. Heroic Swing fires a hook into terrain, so it needs a wall to exist at all.",
-      "corrected": "Charm-stops-Heroic-Swing written into report[5].t, dontsFull[0].d and tradeBad; Comeuppance's minion block written into phases[4].why; true damage moved onto Orb in late; ability names and pronouns fixed.",
-      "confidence": "High",
-      "sources": ["enemyKit E/Q text", "ownerKit E/R text"]
-    },
-    {
-      "point": 6,
-      "status": "needs-correction",
-      "whatIsWrong": "breakdown.cooldowns was a template with no numbers, and spikes[0] claimed 'she has no Q ready fast enough to trade back' — false. Orb of Deception is 7s flat; Avengerang is 9s at rank 1, so she out-cycles you early, not the other way round.",
-      "why": "Charm 12s flat, Orb 7s flat, Spirit Rush 140/120/100, Avengerang 9/8/7/6/5, Heroic Swing 18/16.5/15/13.5/12, Comeuppance 100/85/70.",
-      "corrected": "Real numbers written into breakdown.cooldowns, spikes[0], spikes[2], dosFull[2].d and breakdown.carry.",
-      "confidence": "High",
-      "sources": ["ownerKit", "enemyKit"]
-    },
-    {
-      "point": 10,
-      "status": "needs-correction",
-      "whatIsWrong": "Nothing anywhere flagged Grievous Wounds, despite Essence Theft healing her off every 9 minions and again on a takedown.",
-      "why": "missingInteractions rule 'needs-antiheal' applies to this matchup, and Akshan's whole pattern is chip damage that her passive refunds.",
-      "corrected": "Written into 'ahead' as denying her Essence Theft farm heals by shoving her off the wave.",
-      "confidence": "High",
-      "sources": ["missingInteractions", "enemyKit P text"]
-    },
-    {
-      "point": 13,
-      "status": "needs-correction",
-      "whatIsWrong": "Heroic Swing's terrain requirement was never stated on this page either.",
-      "why": "The hook goes into terrain — in open mid lane away from a wall there is no swing, which is exactly where Ahri wants to fight you.",
-      "corrected": "Stated in breakdown.cooldowns and spikes[0].",
-      "confidence": "High",
-      "sources": ["ownerKit E text"]
-    }
-  ],
-  "edits": [
-    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Akshan" },
-    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Akshan" },
-    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Akshan" },
-    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Akshan" },
-    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ahri" },
-    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ahri" },
-    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Ahri" },
-    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10" },
-    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "4/10" },
-    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "7/10" },
-    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "7/10" },
-
-    { "layer": "full", "path": "phases[4].why", "before": "Avengerang... no — R online: Vengeance executes the chipped from two screens. Chip, then channel.", "after": "R online: Comeuppance stores bullets on missing health, but stops on the first minion — clear the line." },
-
-    { "layer": "full", "path": "enemyWin", "before": "Ahri wins by landing Charm, denying your pattern, and renting you the lane at a range markup.", "after": "Ahri wins by charming you out of the swing, then Orb-fox-fire-Spirit Rush before your shield restacks." },
-
-    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Ahri Charm: matchup-defining — The charm starts every kill pattern — stay behind minions while it is up. Read it like a second minimap. - Guard your E Heroic Swing like a fifth summoner spell. - Ultimate goes to kill windows only.", "after": "- Charm is 12s flat and 975 range, outranging Avengerang — stay behind minions until she spends it. - Heroic Swing is 18s at rank 1 and needs a wall, so never spend it as poke. - Comeuppance is 100s; hold it for her Spirit Rush commit." },
-
-    { "layer": "full", "path": "breakdown.carry", "before": "Carry through strings and executes — chip everything, finish anything under a third, and let the swing write angles no one wards.", "after": "Carry by punishing Charm's 12s downtime — chip her, then take the Comeuppance line from a wall she cannot Spirit Rush behind." },
-
-    { "layer": "full", "path": "ahead", "before": "Ahead, bully harder: string Ahri off every contact, swing-roam the rivers, and execute the map's mistakes with R.", "after": "Ahead, deny her Essence Theft farm heals: shove her off the wave, swing-roam, and R the low targets she cannot dash to." },
-
-    { "layer": "full", "path": "tradeGood", "before": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight — three-hit math he answers with one spell.", "after": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight — the shield lands before her Orb returns." },
-
-    { "layer": "full", "path": "tradeBad", "before": "Swinging in to 'finish' a trade with his answer loaded — the rope is your escape, and spent ropes write obituaries.", "after": "Swinging in to 'finish' a trade with Charm loaded — the swing is your escape, and Charm stops it mid-air." },
-
-    { "layer": "full", "path": "dosFull[1].d", "before": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight — three-hit math he answers with one spell.", "after": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight — the shield lands before her Orb returns." },
-
-    { "layer": "full", "path": "dosFull[2].d", "before": "Ahri whiffs Charm and the lane briefly belongs to you.", "after": "Charm whiffed: 12s where she cannot stop your swing." },
-
-    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Ahri’s whole plan in one window — decline politely and watch it retire.", "after": "Charm instantly stops movement abilities — it snuffs Heroic Swing mid-air." },
-
-    { "layer": "full", "path": "dontsFull[2].d", "before": "Swinging in to 'finish' a trade with his answer loaded — the rope is your escape, and spent ropes write obituaries.", "after": "Swinging in to 'finish' a trade with Charm loaded — the swing is your escape, and Charm stops it mid-air." },
-
-    { "layer": "full", "path": "report[5].t", "before": "Track Ahri’s Charm: The charm starts every kill pattern — stay behind minions while it is up. The whole green-light system is its cooldown.", "after": "Track Ahri’s Charm: 12s flat, 975 range, and it instantly stops movement abilities — it will catch you mid-Heroic Swing every time." },
-
-    { "layer": "content", "path": "whys[0]", "before": "Level 1: Akshan's early trade pattern (Q-AA-Q) beats Ahri's unranked Orb before she has mana or item power to punish it.", "after": "Level 1: auto-Q-auto plus the Dirty Fighting shield beats her Orb trade before she has the mana to keep casting it." },
-
-    { "layer": "content", "path": "spikes[0].text", "before": "Your Q-AA-Q poke plus E swing engages punish any flat-ground stand she takes before Charm is up reliably; she has no Q ready fast enough to trade back before level 3-4 without Charm landing.", "after": "Your auto-Q-auto strings and the Dirty Fighting shield punish her before Charm is ranked, but Heroic Swing needs a wall — off terrain you have no engage, and her 7s Orb out-cycles your 9s boomerang early." },
-
-    { "layer": "content", "path": "spikes[2].text", "before": "Once she has Luden's/Shadowflame online her poke chunks you every wave before you can close distance, and Spellblade procs punish any greedy E-swing approach.", "after": "Once she has Luden's/Shadowflame online her poke chunks you every wave before you can close distance, and Charm's 12s cooldown punishes any greedy E-swing approach." },
-
-    { "layer": "content", "path": "late", "before": "Her item spikes (Luden's, Shadowflame) let her poke you off wave without ever entering E-swing range, and true damage Charm procs shred through any armor you build. Late game she also has more mobility to disengage after baiting your all-in. Your best path is to force side-lane 1v1s away from her Charm range or wait for her Spirit Rush to be down before diving.", "after": "Her item spikes (Luden's, Shadowflame) let her poke you off wave without ever entering E-swing range, and Orb of Deception's return hit is true damage, so resistances do not save you. Late game she also has more mobility to disengage after baiting your all-in. Your best path is to force side-lane 1v1s away from her Charm range or wait for her Spirit Rush to be down before diving." }
-  ],
-  "notes": "packet.suspectNames flagged wants.foe[2] 'Use Spirit Rush' as a probable wrong name — it is a FALSE POSITIVE. Spirit Rush is Ahri's real R and the line is left alone. Mirror discrepancy for mirror-fix.js: the already-written audits/mid/ahri_mid__akshan.json sets its rows 2-3 to 'Skill', while this side's packet.levelChart AND content win[2]/win[3] both read 'Akshan'. I followed my own two agreeing sources rather than introducing a full-vs-content split on this page; rows 0-1 and 4-6 match the mirror exactly. Fields I judged templated but could not ground without inventing: breakdown.early, breakdown.mid, breakdown.wave, breakdown.spikes, breakdown.feeding, breakdown.late and loading — Ahri gives nothing specific there that is not already said in the fields above, so they are left rather than fabricated."
+ "ownerKey": "akshan_mid",
+ "enemy": "ahri",
+ "lane": "mid",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "52.6% over 3728 games. EVEN at 5.5/10 holds: Akshan owns levels 1-4 on string trades, Ahri owns 6 onward once Charm-Spirit Rush is a kill pattern.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packet.winRate",
+    "packet.games"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "Every phases[N].side read 'Skill' while content win[0..6] and packet.levelChart both read Akshan/Akshan/Akshan/Akshan/Ahri/Ahri/Ahri. The two layers rendered different answers to who wins each level.",
+   "why": "phases[N].side and win[N] are the same row. win[] already matches the packet, so the full layer is the one that is wrong.",
+   "corrected": "phases[0..3].side -> Akshan, phases[4..6].side -> Ahri, ratings pulled in line (4/10 while Akshan leads, 7/10 once she is itemised).",
+   "confidence": "High",
+   "sources": [
+    "packet.levelChart",
+    "currentText.content.win"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The decisive interaction was never stated: Charm 'instantly stops movement abilities', which snuffs Heroic Swing mid-air. Comeuppance's stop-on-first-minion rule was absent. spikes[2] claimed 'Spellblade procs punish any greedy E-swing approach' — Ahri builds Luden's/Shadowflame, not a Sheen line, so that proc does not exist. late[] attributed true damage to Charm; the true damage is on Orb of Deception's return. phases[4].why called the ultimate 'Vengeance' — it is Comeuppance. tradeGood/tradeBad/report[3] refer to Ahri as 'he'.",
+   "why": "Riot text: Charm 'instantly stopping movement abilities'; Comeuppance deals damage 'to the first champion, minion, or structure hit'; Orb of Deception deals 'true damage on the way back'. Heroic Swing fires a hook into terrain, so it needs a wall to exist at all.",
+   "corrected": "Charm-stops-Heroic-Swing written into report[5].t, dontsFull[0].d and tradeBad; Comeuppance's minion block written into phases[4].why; true damage moved onto Orb in late; ability names and pronouns fixed.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit E/Q text",
+    "ownerKit E/R text"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns was a template with no numbers, and spikes[0] claimed 'she has no Q ready fast enough to trade back' — false. Orb of Deception is 7s flat; Avengerang is 9s at rank 1, so she out-cycles you early, not the other way round.",
+   "why": "Charm 12s flat, Orb 7s flat, Spirit Rush 140/120/100, Avengerang 9/8/7/6/5, Heroic Swing 18/16.5/15/13.5/12, Comeuppance 100/85/70.",
+   "corrected": "Real numbers written into breakdown.cooldowns, spikes[0], spikes[2], dosFull[2].d and breakdown.carry.",
+   "confidence": "High",
+   "sources": [
+    "ownerKit",
+    "enemyKit"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "needs-correction",
+   "whatIsWrong": "Nothing anywhere flagged Grievous Wounds, despite Essence Theft healing her off every 9 minions and again on a takedown.",
+   "why": "missingInteractions rule 'needs-antiheal' applies to this matchup, and Akshan's whole pattern is chip damage that her passive refunds.",
+   "corrected": "Written into 'ahead' as denying her Essence Theft farm heals by shoving her off the wave.",
+   "confidence": "High",
+   "sources": [
+    "missingInteractions",
+    "enemyKit P text"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "Heroic Swing's terrain requirement was never stated on this page either.",
+   "why": "The hook goes into terrain — in open mid lane away from a wall there is no swing, which is exactly where Ahri wants to fight you.",
+   "corrected": "Stated in breakdown.cooldowns and spikes[0].",
+   "confidence": "High",
+   "sources": [
+    "ownerKit E text"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Ahri"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].rating",
+   "before": "5/10",
+   "after": "4/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].rating",
+   "before": "5/10",
+   "after": "4/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].rating",
+   "before": "6/10",
+   "after": "7/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].rating",
+   "before": "6/10",
+   "after": "7/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Avengerang... no — R online: Vengeance executes the chipped from two screens. Chip, then channel.",
+   "after": "R online: Comeuppance stores bullets on missing health, but stops on the first minion — clear the line."
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Ahri wins by landing Charm, denying your pattern, and renting you the lane at a range markup.",
+   "after": "Ahri wins by charming you out of the swing, then Orb-fox-fire-Spirit Rush before your shield restacks."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Ahri Charm: matchup-defining — The charm starts every kill pattern — stay behind minions while it is up. Read it like a second minimap. - Guard your E Heroic Swing like a fifth summoner spell. - Ultimate goes to kill windows only.",
+   "after": "- Charm is 12s flat and 975 range, outranging Avengerang — stay behind minions until she spends it. - Heroic Swing is 18s at rank 1 and needs a wall, so never spend it as poke. - Comeuppance is 100s; hold it for her Spirit Rush commit."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.carry",
+   "before": "Carry through strings and executes — chip everything, finish anything under a third, and let the swing write angles no one wards.",
+   "after": "Carry by punishing Charm's 12s downtime — chip her, then take the Comeuppance line from a wall she cannot Spirit Rush behind."
+  },
+  {
+   "layer": "full",
+   "path": "ahead",
+   "before": "Ahead, bully harder: string Ahri off every contact, swing-roam the rivers, and execute the map's mistakes with R.",
+   "after": "Ahead, deny her Essence Theft farm heals: shove her off the wave, swing-roam, and R the low targets she cannot dash to."
+  },
+  {
+   "layer": "full",
+   "path": "tradeGood",
+   "before": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight — three-hit math he answers with one spell.",
+   "after": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight — the shield lands before her Orb returns."
+  },
+  {
+   "layer": "full",
+   "path": "tradeBad",
+   "before": "Swinging in to 'finish' a trade with his answer loaded — the rope is your escape, and spent ropes write obituaries.",
+   "after": "Swinging in to 'finish' a trade with Charm loaded — the swing is your escape, and Charm stops it mid-air."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight — three-hit math he answers with one spell.",
+   "after": "Auto-Q-auto at wave contact so the boomerang double-passes, then break line of sight — the shield lands before her Orb returns."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Ahri whiffs Charm and the lane briefly belongs to you.",
+   "after": "Charm whiffed: 12s where she cannot stop your swing."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That is Ahri’s whole plan in one window — decline politely and watch it retire.",
+   "after": "Charm instantly stops movement abilities — it snuffs Heroic Swing mid-air."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Swinging in to 'finish' a trade with his answer loaded — the rope is your escape, and spent ropes write obituaries.",
+   "after": "Swinging in to 'finish' a trade with Charm loaded — the swing is your escape, and Charm stops it mid-air."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Ahri’s Charm: The charm starts every kill pattern — stay behind minions while it is up. The whole green-light system is its cooldown.",
+   "after": "Track Ahri’s Charm: 12s flat, 975 range, and it instantly stops movement abilities — it will catch you mid-Heroic Swing every time."
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Level 1: Akshan's early trade pattern (Q-AA-Q) beats Ahri's unranked Orb before she has mana or item power to punish it.",
+   "after": "Level 1: auto-Q-auto plus the Dirty Fighting shield beats her Orb trade before she has the mana to keep casting it."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Your Q-AA-Q poke plus E swing engages punish any flat-ground stand she takes before Charm is up reliably; she has no Q ready fast enough to trade back before level 3-4 without Charm landing.",
+   "after": "Your auto-Q-auto strings and the Dirty Fighting shield punish her before Charm is ranked, but Heroic Swing needs a wall — off terrain you have no engage, and her 7s Orb out-cycles your 9s boomerang early."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Once she has Luden's/Shadowflame online her poke chunks you every wave before you can close distance, and Spellblade procs punish any greedy E-swing approach.",
+   "after": "Once she has Luden's/Shadowflame online her poke chunks you every wave before you can close distance, and Charm's 12s cooldown punishes any greedy E-swing approach."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "Her item spikes (Luden's, Shadowflame) let her poke you off wave without ever entering E-swing range, and true damage Charm procs shred through any armor you build. Late game she also has more mobility to disengage after baiting your all-in. Your best path is to force side-lane 1v1s away from her Charm range or wait for her Spirit Rush to be down before diving.",
+   "after": "Her item spikes (Luden's, Shadowflame) let her poke you off wave without ever entering E-swing range, and Orb of Deception's return hit is true damage, so resistances do not save you. Late game she also has more mobility to disengage after baiting your all-in. Your best path is to force side-lane 1v1s away from her Charm range or wait for her Spirit Rush to be down before diving."
+  }
+ ],
+ "notes": "packet.suspectNames flagged wants.foe[2] 'Use Spirit Rush' as a probable wrong name — it is a FALSE POSITIVE. Spirit Rush is Ahri's real R and the line is left alone. Mirror discrepancy for mirror-fix.js: the already-written audits/mid/ahri_mid__akshan.json sets its rows 2-3 to 'Skill', while this side's packet.levelChart AND content win[2]/win[3] both read 'Akshan'. I followed my own two agreeing sources rather than introducing a full-vs-content split on this page; rows 0-1 and 4-6 match the mirror exactly. Fields I judged templated but could not ground without inventing: breakdown.early, breakdown.mid, breakdown.wave, breakdown.spikes, breakdown.feeding, breakdown.late and loading — Ahri gives nothing specific there that is not already said in the fields above, so they are left rather than fabricated. | COHERENCE: 2 chart edit(s) withdrawn — they moved the row to the enemy while leaving the phase why describing the owner winning it. Chart authority is an open question, so the label was reverted rather than the prose rewritten. Re-propose only as a side+why pair."
 }

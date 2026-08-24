@@ -1,138 +1,199 @@
 {
-  "ownerKey": "anivia_mid",
-  "enemy": "ryze",
-  "lane": "mid",
-  "audit": [
-    {
-      "point": 2,
-      "status": "needs-correction",
-      "whatIsWrong": "Three chart rows disagree between layers: phases[0] says Skill against win[0] Anivia, phases[5] says Skill against win[5] Ryze, and phases[6] says Ryze against win[6] Anivia — the last one is inverted outright.",
-      "why": "The packet chart matches the content layer on all seven rows: Anivia, Skill, Skill, Skill, Anivia, Ryze, Anivia. The first-item row is Ryze's because Realm Warp plus mana scaling is his window; the last row is Anivia's, which is why she sits at 56.07% over 1350 games.",
-      "corrected": "phases[0].side -> Anivia, phases[5].side -> Ryze, phases[6].side -> Anivia.",
-      "confidence": "High",
-      "sources": ["brief packet.levelChart", "brief currentText.content win[]"]
-    },
-    {
-      "point": 3,
-      "status": "correct",
-      "whatIsWrong": "",
-      "why": "Realm Warp at 6 is 180s at rank 1 and is his genuine tempo spike; Anivia's ladder is Lost Chapter, level 6, Seraph's/RoA. The chart already gives Ryze the first-item row for exactly this reason.",
-      "corrected": "Added the 180s figure so the roam window is trackable.",
-      "confidence": "High",
-      "sources": ["brief enemyKit R cd"]
-    },
-    {
-      "point": 4,
-      "status": "needs-correction",
-      "whatIsWrong": "Rune Prison is called a \"point-blank root\" and Overload is described as poking \"through minions\". Both are wrong, and the one interaction that decides every trade is missing: Rune Prison only roots if the target already has Flux on them, otherwise it is a slow.",
-      "why": "Riot's text: Rune Prison \"traps a target in a cage of runes, damaging them and slowing their movement. If the target has Flux on it, they are instead rooted.\" Overload \"deals damage to the first enemy struck\", so the wave blocks it. Spell Flux is 615 range on 3.5s at rank 1 and is the ability that arms everything else.",
-      "corrected": "Rewrote the cooldown and trading lines around Spell Flux arming Rune Prison, and around standing behind the wave to eat Overload.",
-      "confidence": "High",
-      "sources": ["brief enemyKit W and E and Q Riot text"]
-    },
-    {
-      "point": 6,
-      "status": "needs-correction",
-      "whatIsWrong": "dosFull[2].d calls Rune Prison \"the fifteen-second invitation\". It is 11 seconds at rank 1 and 9 at rank 5. The packet also reports zero sequencing cues anywhere.",
-      "why": "Overstating his downtime by four to six seconds is exactly the kind of number that gets an immobile champion killed stepping up.",
-      "corrected": "Real cooldowns written into breakdown.cooldowns, dosFull[2].d and the phase whys.",
-      "confidence": "High",
-      "sources": ["brief enemyKit W cd", "brief packet.defects"]
-    },
-    {
-      "point": 13,
-      "status": "needs-correction",
-      "whatIsWrong": "wants.you[0] says to use \"Frostbite auto resets\". Frostbite has no auto-attack reset — it is a 4-second targeted cast that doubles its damage against a chilled target.",
-      "why": "A player told to weave an auto reset that does not exist will mistime the only burst window Anivia has.",
-      "corrected": "Replaced with the real Flash Frost into Frostbite sequence.",
-      "confidence": "High",
-      "sources": ["brief ownerKit E"]
-    }
-  ],
-  "edits": [
-    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Anivia" },
-    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ryze" },
-    { "layer": "full", "path": "phases[6].side", "before": "Ryze", "after": "Anivia" },
-
-    { "layer": "full", "path": "tldr",
-      "before": "A wave-clear war you eventually win — survive his range early, then R erases waves while your stun threatens his face.",
-      "after": "Rune Prison only roots you if Spell Flux landed first — dodge the orb and his whole combo becomes a slow." },
-
-    { "layer": "full", "path": "winCon",
-      "before": "Survive the early range war, then out-clear and out-zone him with storm + wall. Keep one eye on Rune Prison (Root) and one on the wave, in that order.",
-      "after": "Survive the early range war, then out-clear and out-zone him with storm and wall. Watch Spell Flux, not Rune Prison — without Flux on you the cage is only a slow." },
-
-    { "layer": "full", "path": "enemyWin",
-      "before": "Ryze wins by landing Rune Prison (Root), denying your pattern, and keeping the fight at a distance your kit resents.",
-      "after": "Ryze wins by tagging you with Spell Flux, upgrading Rune Prison into a root, and chaining Overload resets until the egg is gone too." },
-
-    { "layer": "full", "path": "tradeGood",
-      "before": "Threaten Q until Ryze burns his sidestep tool, land it, then E + auto and walk before the answer — chilled E double-damage is the whole trade.",
-      "after": "Trade while Spell Flux is off you: land Flash Frost, then Frostbite for the doubled chill damage and walk before Rune Prison returns at 11 seconds." },
-
-    { "layer": "full", "path": "tradeBad",
-      "before": "Spamming Q on cooldown until you are out of mana with no stun threat left — that is when Ryze walks straight at you.",
-      "after": "Stepping up already carrying Flux — Rune Prison roots instead of slows, and every basic ability he casts resets Overload onto you." },
-
-    { "layer": "full", "path": "breakdown.cooldowns",
-      "before": "- Ryze Rune Prison (Root): matchup-defining — Point-blank root — respect the EQ chain that follows it. Check it before every step-up. - W Crystallize is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
-      "after": "- Spell Flux: 615 range, 3.5s at rank 1 — it is what turns Rune Prison into a root, so it is the real cooldown to count. - Rune Prison: 11s at rank 1, 9s maxed. - Overload: 5s, but his other spells reset it. - Realm Warp: 180s." },
-
-    { "layer": "full", "path": "breakdown.carry",
-      "before": "Carry by controlling space — storm and wall decide where fights happen, and your stun decides who dies first inside them.",
-      "after": "Carry by staying outside 615 units: both Spell Flux and Rune Prison stop there, and Overload hits only the first target, so the wave eats it for you." },
-
-    { "layer": "full", "path": "breakdown.feeding",
-      "before": "If Ryze gets a kill, the lane gets honest — give Rune Prison (Root) extra room and farm it back. Two kills: stop dueling your tilt — farm with R wave-clear and stay relevant through zone control.",
-      "after": "If Ryze gets a kill, farm from behind your own minions — Overload stops on the first body it touches. Two kills: clear with R, stay past 615 units, and never let Spell Flux sit on you when he walks up." },
-
-    { "layer": "full", "path": "ahead",
-      "before": "Ahead, the lane is a prison: storm every wave, wall Ryze away from the comeback farm, and rotate first to every river fight with your stun loaded.",
-      "after": "Ahead, the lane is a prison: storm every wave, wall Ryze off the comeback farm, and track his 180-second Realm Warp — that portal is the only way he changes the map." },
-
-    { "layer": "full", "path": "phases[1].why",
-      "before": "Q-E online — a landed stun now means a real chunk. Trade only when his engage tool is down; your mana hates wasted rotations.",
-      "after": "Q-E online — a landed stun means a real chunk. Trade with Rune Prison on its 11 seconds, and never while Spell Flux is still ticking on you." },
-
-    { "layer": "full", "path": "phases[2].why",
-      "before": "Full basic kit: W cuts the lane in half. Wall his path to the wave when your jungler shadows — free stun setups.",
-      "after": "Full basic kit: Crystallize cuts the lane in half. He has no dash, so a wall behind him when your jungler shadows is simply a kill." },
-
-    { "layer": "full", "path": "dosFull[0].d",
-      "before": "Point-blank root — respect the EQ chain that follows it. Its cooldown is the green light — wait for it.",
-      "after": "It roots only through Spell Flux — unfluxed it is a slow. His 615-range Flux is the real green light." },
-
-    { "layer": "full", "path": "dosFull[2].d",
-      "before": "Ryze burns Rune Prison (Root) on nothing — take the fifteen-second invitation.",
-      "after": "Ryze burns Rune Prison on nothing — that is 11 seconds at rank 1 with no root left in the kit." },
-
-    { "layer": "full", "path": "dontsFull[0].d",
-      "before": "That is Ryze’s whole plan in one window — decline politely and watch it retire.",
-      "after": "Overload costs him 40 mana on 5s and resets off his other spells — you cannot win that exchange." },
-
-    { "layer": "content", "path": "spikes[0].text",
-      "before": "Ryze's Q-E-W root combo starts one-shotting your Egg cooldown windows once he has 2-3 items worth of mana rune scaling, but pre-6 his damage is soft and easy to disengage from.",
-      "after": "Ryze's Flux-into-Rune-Prison chain starts threatening the egg once mana scaling lands, but pre-6 Rune Prison is 11 seconds and only slows you unless Spell Flux hit first." },
-
-    { "layer": "content", "path": "spikes[2].text",
-      "before": "Anivia's Rylai's/Seraph's-equivalent power spike gives you enough burst and slow uptime to punish his root sequence before he lands it.",
-      "after": "Anivia's Rylai's/Seraph's spike gives you the burst to punish the 11 seconds after Rune Prison, when nothing in his kit can hold you still." },
-
-    { "layer": "content", "path": "whys[5]",
-      "before": "Ryze's Realm Warp grants him global pressure and all-in potential that flips the immediate ult-timing exchange his way.",
-      "after": "Realm Warp on 180 seconds gives him a portal fight you cannot answer at the same timer." },
-
-    { "layer": "content", "path": "wants.you[0]",
-      "before": "Punish his short-ranged Q with Flash Frost poke and Frostbite auto resets",
-      "after": "Punish from past 615 units with Flash Frost into a chilled Frostbite" },
-
-    { "layer": "content", "path": "wants.you[1]",
-      "before": "Hold Wall to block his Realm Warp engage angle before it channels",
-      "after": "Hold Wall for his walk-up; he has no dash to cross it" },
-
-    { "layer": "content", "path": "wants.foe[0]",
-      "before": "Land Root through minions to lock you for a full E-Q-AA combo",
-      "after": "Land Spell Flux first so Rune Prison roots instead of slows" }
-  ],
-  "notes": "Biggest correction here: Rune Prison was described as a flat root everywhere, but Riot's text says it slows and only roots if the target already has Flux on them — Spell Flux (3.5s at rank 1) is therefore the cooldown that actually gates his kill. Two other errors: dosFull[2].d claimed a fifteen-second Rune Prison cooldown (it is 11/10.5/10/9.5/9), and wants.you[0] told the player to use \"Frostbite auto resets\", which do not exist. content.early also says his Q pokes \"through minions\" — Overload damages only the first enemy struck, so that is wrong too; I left that 450-character paragraph alone rather than rewrite it around one clause, and flag it here."
+ "ownerKey": "anivia_mid",
+ "enemy": "ryze",
+ "lane": "mid",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Three chart rows disagree between layers: phases[0] says Skill against win[0] Anivia, phases[5] says Skill against win[5] Ryze, and phases[6] says Ryze against win[6] Anivia — the last one is inverted outright.",
+   "why": "The packet chart matches the content layer on all seven rows: Anivia, Skill, Skill, Skill, Anivia, Ryze, Anivia. The first-item row is Ryze's because Realm Warp plus mana scaling is his window; the last row is Anivia's, which is why she sits at 56.07% over 1350 games.",
+   "corrected": "phases[0].side -> Anivia, phases[5].side -> Ryze, phases[6].side -> Anivia.",
+   "confidence": "High",
+   "sources": [
+    "brief packet.levelChart",
+    "brief currentText.content win[]"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Realm Warp at 6 is 180s at rank 1 and is his genuine tempo spike; Anivia's ladder is Lost Chapter, level 6, Seraph's/RoA. The chart already gives Ryze the first-item row for exactly this reason.",
+   "corrected": "Added the 180s figure so the roam window is trackable.",
+   "confidence": "High",
+   "sources": [
+    "brief enemyKit R cd"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Rune Prison is called a \"point-blank root\" and Overload is described as poking \"through minions\". Both are wrong, and the one interaction that decides every trade is missing: Rune Prison only roots if the target already has Flux on them, otherwise it is a slow.",
+   "why": "Riot's text: Rune Prison \"traps a target in a cage of runes, damaging them and slowing their movement. If the target has Flux on it, they are instead rooted.\" Overload \"deals damage to the first enemy struck\", so the wave blocks it. Spell Flux is 615 range on 3.5s at rank 1 and is the ability that arms everything else.",
+   "corrected": "Rewrote the cooldown and trading lines around Spell Flux arming Rune Prison, and around standing behind the wave to eat Overload.",
+   "confidence": "High",
+   "sources": [
+    "brief enemyKit W and E and Q Riot text"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[2].d calls Rune Prison \"the fifteen-second invitation\". It is 11 seconds at rank 1 and 9 at rank 5. The packet also reports zero sequencing cues anywhere.",
+   "why": "Overstating his downtime by four to six seconds is exactly the kind of number that gets an immobile champion killed stepping up.",
+   "corrected": "Real cooldowns written into breakdown.cooldowns, dosFull[2].d and the phase whys.",
+   "confidence": "High",
+   "sources": [
+    "brief enemyKit W cd",
+    "brief packet.defects"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "wants.you[0] says to use \"Frostbite auto resets\". Frostbite has no auto-attack reset — it is a 4-second targeted cast that doubles its damage against a chilled target.",
+   "why": "A player told to weave an auto reset that does not exist will mistime the only burst window Anivia has.",
+   "corrected": "Replaced with the real Flash Frost into Frostbite sequence.",
+   "confidence": "High",
+   "sources": [
+    "brief ownerKit E"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Anivia"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Ryze",
+   "after": "Anivia"
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "A wave-clear war you eventually win — survive his range early, then R erases waves while your stun threatens his face.",
+   "after": "Rune Prison only roots you if Spell Flux landed first — dodge the orb and his whole combo becomes a slow."
+  },
+  {
+   "layer": "full",
+   "path": "winCon",
+   "before": "Survive the early range war, then out-clear and out-zone him with storm + wall. Keep one eye on Rune Prison (Root) and one on the wave, in that order.",
+   "after": "Survive the early range war, then out-clear and out-zone him with storm and wall. Watch Spell Flux, not Rune Prison — without Flux on you the cage is only a slow."
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Ryze wins by landing Rune Prison (Root), denying your pattern, and keeping the fight at a distance your kit resents.",
+   "after": "Ryze wins by tagging you with Spell Flux, upgrading Rune Prison into a root, and chaining Overload resets until the egg is gone too."
+  },
+  {
+   "layer": "full",
+   "path": "tradeGood",
+   "before": "Threaten Q until Ryze burns his sidestep tool, land it, then E + auto and walk before the answer — chilled E double-damage is the whole trade.",
+   "after": "Trade while Spell Flux is off you: land Flash Frost, then Frostbite for the doubled chill damage and walk before Rune Prison returns at 11 seconds."
+  },
+  {
+   "layer": "full",
+   "path": "tradeBad",
+   "before": "Spamming Q on cooldown until you are out of mana with no stun threat left — that is when Ryze walks straight at you.",
+   "after": "Stepping up already carrying Flux — Rune Prison roots instead of slows, and every basic ability he casts resets Overload onto you."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Ryze Rune Prison (Root): matchup-defining — Point-blank root — respect the EQ chain that follows it. Check it before every step-up. - W Crystallize is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+   "after": "- Spell Flux: 615 range, 3.5s at rank 1 — it is what turns Rune Prison into a root, so it is the real cooldown to count. - Rune Prison: 11s at rank 1, 9s maxed. - Overload: 5s, but his other spells reset it. - Realm Warp: 180s."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.carry",
+   "before": "Carry by controlling space — storm and wall decide where fights happen, and your stun decides who dies first inside them.",
+   "after": "Carry by staying outside 615 units: both Spell Flux and Rune Prison stop there, and Overload hits only the first target, so the wave eats it for you."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.feeding",
+   "before": "If Ryze gets a kill, the lane gets honest — give Rune Prison (Root) extra room and farm it back. Two kills: stop dueling your tilt — farm with R wave-clear and stay relevant through zone control.",
+   "after": "If Ryze gets a kill, farm from behind your own minions — Overload stops on the first body it touches. Two kills: clear with R, stay past 615 units, and never let Spell Flux sit on you when he walks up."
+  },
+  {
+   "layer": "full",
+   "path": "ahead",
+   "before": "Ahead, the lane is a prison: storm every wave, wall Ryze away from the comeback farm, and rotate first to every river fight with your stun loaded.",
+   "after": "Ahead, the lane is a prison: storm every wave, wall Ryze off the comeback farm, and track his 180-second Realm Warp — that portal is the only way he changes the map."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Q-E online — a landed stun now means a real chunk. Trade only when his engage tool is down; your mana hates wasted rotations.",
+   "after": "Q-E online — a landed stun means a real chunk. Trade with Rune Prison on its 11 seconds, and never while Spell Flux is still ticking on you."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "Full basic kit: W cuts the lane in half. Wall his path to the wave when your jungler shadows — free stun setups.",
+   "after": "Full basic kit: Crystallize cuts the lane in half. He has no dash, so a wall behind him when your jungler shadows is simply a kill."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Point-blank root — respect the EQ chain that follows it. Its cooldown is the green light — wait for it.",
+   "after": "It roots only through Spell Flux — unfluxed it is a slow. His 615-range Flux is the real green light."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Ryze burns Rune Prison (Root) on nothing — take the fifteen-second invitation.",
+   "after": "Ryze burns Rune Prison on nothing — that is 11 seconds at rank 1 with no root left in the kit."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That is Ryze’s whole plan in one window — decline politely and watch it retire.",
+   "after": "Overload costs him 40 mana on 5s and resets off his other spells — you cannot win that exchange."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Ryze's Q-E-W root combo starts one-shotting your Egg cooldown windows once he has 2-3 items worth of mana rune scaling, but pre-6 his damage is soft and easy to disengage from.",
+   "after": "Ryze's Flux-into-Rune-Prison chain starts threatening the egg once mana scaling lands, but pre-6 Rune Prison is 11 seconds and only slows you unless Spell Flux hit first."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Anivia's Rylai's/Seraph's-equivalent power spike gives you enough burst and slow uptime to punish his root sequence before he lands it.",
+   "after": "Anivia's Rylai's/Seraph's spike gives you the burst to punish the 11 seconds after Rune Prison, when nothing in his kit can hold you still."
+  },
+  {
+   "layer": "content",
+   "path": "whys[5]",
+   "before": "Ryze's Realm Warp grants him global pressure and all-in potential that flips the immediate ult-timing exchange his way.",
+   "after": "Realm Warp on 180 seconds gives him a portal fight you cannot answer at the same timer."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Punish his short-ranged Q with Flash Frost poke and Frostbite auto resets",
+   "after": "Punish from past 615 units with Flash Frost into a chilled Frostbite"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Hold Wall to block his Realm Warp engage angle before it channels",
+   "after": "Hold Wall for his walk-up; he has no dash to cross it"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Land Root through minions to lock you for a full E-Q-AA combo",
+   "after": "Land Spell Flux first so Rune Prison roots instead of slows"
+  }
+ ],
+ "notes": "Biggest correction here: Rune Prison was described as a flat root everywhere, but Riot's text says it slows and only roots if the target already has Flux on them — Spell Flux (3.5s at rank 1) is therefore the cooldown that actually gates his kill. Two other errors: dosFull[2].d claimed a fifteen-second Rune Prison cooldown (it is 11/10.5/10/9.5/9), and wants.you[0] told the player to use \"Frostbite auto resets\", which do not exist. content.early also says his Q pokes \"through minions\" — Overload damages only the first enemy struck, so that is wrong too; I left that 450-character paragraph alone rather than rewrite it around one clause, and flag it here. | COHERENCE: 1 chart edit(s) withdrawn — they moved the row to the enemy while leaving the phase why describing the owner winning it. Chart authority is an open question, so the label was reverted rather than the prose rewritten. Re-propose only as a side+why pair."
 }

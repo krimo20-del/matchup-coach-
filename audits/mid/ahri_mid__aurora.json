@@ -1,96 +1,207 @@
 {
-  "ownerKey": "ahri_mid",
-  "enemy": "aurora",
-  "lane": "mid",
-  "audit": [
-    {
-      "point": 2,
-      "status": "correct",
-      "whatIsWrong": "",
-      "why": "51.89% over 3182 games. EVEN 5.5/10 fits: four Skill rows, Ahri at 6 and first item, Aurora at two items.",
-      "corrected": "",
-      "confidence": "High",
-      "sources": ["packet"]
-    },
-    {
-      "point": 3,
-      "status": "needs-correction",
-      "whatIsWrong": "Full chart was 'Skill' on all seven rows while content and packet read Skill x4, Ahri, Ahri, Aurora.",
-      "why": "phases[N].side and win[N] are the same row.",
-      "corrected": "phases[4..5].side -> Ahri, phases[6].side -> Aurora, rating adjusted.",
-      "confidence": "High",
-      "sources": ["packet.levelChart", "currentText.content.win"]
-    },
-    {
-      "point": 4,
-      "status": "needs-correction",
-      "whatIsWrong": "Aurora's kit was described wrongly in four places. Her ultimate was said to 'remove buffs', 'grant a temporary shield/speed burst that resets on takedown', 'cleanse your Charm' and enable 'ult-reset chaining'. Between Worlds does none of that: she leaps, shockwaves for damage and a slow, then leaves a slowing area she can teleport across. Her passive was called 'a stacking mark' when Spirit Abjuration exorcises spirits that follow her and heal her. No ability was ever named.",
-      "why": "A reader told Aurora cleanses Charm will hold E for a cleanse that does not exist, and a reader told her ult resets on takedown will disengage from a fight she is winning.",
-      "corrected": "Rewrote spikes[0], spikes[1], spikes[3], mid, late, wants.foe[0..2], wants.you[1]; full layer now names Twofold Hex, Across the Veil, The Weirding and Between Worlds with cooldowns.",
-      "confidence": "High",
-      "sources": ["enemyKit", "packet.enemyAbilities", "packet.defects"]
-    },
-    {
-      "point": 6,
-      "status": "needs-correction",
-      "whatIsWrong": "packet flagged 'NO cooldown-sequencing advice anywhere' — sequencingCues was 0.",
-      "why": "Across the Veil 22/21/20/19/18s, Twofold Hex 9s falling to 7s, The Weirding 15s falling to 11s, Between Worlds 140s at rank 1 and only 250 range.",
-      "corrected": "Concrete wait-for-X lines written into breakdown.cooldowns, dosFull[0].d, dosFull[1].d, breakdown.carry, mid, spikes[1].",
-      "confidence": "High",
-      "sources": ["enemyKit"]
-    },
-    {
-      "point": 10,
-      "status": "needs-correction",
-      "whatIsWrong": "Itemization never mentioned Grievous Wounds despite the enemy healing off her passive.",
-      "why": "Spirit Abjuration heals her from spirits exorcised off everything she damages — an extended poke war refills her.",
-      "corrected": "Oblivion Orb added to report[8].t and the sustain problem stated in dontsFull[0].d and 'late'.",
-      "confidence": "High",
-      "sources": ["enemyKit P", "missingInteractions: needs-antiheal"]
-    }
-  ],
-  "edits": [
-    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ahri" },
-    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ahri" },
-    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Aurora" },
-    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "4/10" },
-
-    { "layer": "full", "path": "enemyWin", "before": "Aurora wins by landing Across the Veil (Hop), denying your pattern, and keeping the fight at a distance your kit resents.", "after": "Aurora wins by hexing you twice with one Q, healing the chip back off her spirits, and leaping in once you are low." },
-
-    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Aurora Across the Veil (Hop): matchup-defining — Her hop + stealth escape — she is killable only while it is down. It governs your forward steps. - R Spirit Rush (last dash) spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Across the Veil is 22s at rank 1 and turns her invisible on landing — she is killable only while it is down. - Twofold Hex is 9s and hits twice, out and back; dodge the recast, not just the missile. - The Weirding hops her backward, so it is her exit as well as her slow." },
-
-    { "layer": "full", "path": "breakdown.carry", "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.", "after": "Carry by timing her 22s Across the Veil: while it is down she has no escape from a 975 Charm and no way out of your combo." },
-
-    { "layer": "full", "path": "report[5].t", "before": "Track Aurora’s Across the Veil (Hop): Her hop + stealth escape — she is killable only while it is down. Forward steps wait for its downtime.", "after": "Twofold Hex curses on the way out and damages again when she recalls it — step off the curse line before the recast, not once the missile has passed." },
-
-    { "layer": "full", "path": "report[8].t", "before": "Start Doran's Ring + 2 pots. Malignance into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive comps.", "after": "Start Doran's Ring + 2 pots. Malignance into Sorcerer's, then Shadowflame. Add Oblivion Orb — her spirits out-heal poke." },
-
-    { "layer": "full", "path": "dosFull[0].d", "before": "Her hop + stealth escape — she is killable only while it is down. Its cooldown is the green light — wait for it.", "after": "Across the Veil is 22s and turns her invisible on landing — step up only once you have watched her spend it." },
-
-    { "layer": "full", "path": "dosFull[1].d", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "The Weirding hops her backward on a 15s timer — the moment it is spent she has no disengage, so charm the ground she just landed on." },
-
-    { "layer": "full", "path": "dosFull[2].d", "before": "Aurora spends Across the Veil (Hop) early — the closest thing this matchup has to a guarantee.", "after": "Between Worlds leaves a slow field — keep one dash to leave it, or you walk out at her pace." },
-
-    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Aurora’s bread-and-butter play — deny it and they run out of answers.", "after": "Her spirits heal back whatever chip you land — trade to kill or do not trade." },
-
-    { "layer": "full", "path": "dontsFull[2].d", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Her passive heals her through chip while yours waits on nine minions — bank the full clear first, then step into her range." },
-
-    { "layer": "content", "path": "whys[6]", "before": "2+ items favors Aurora since her ult-reset chaining outclasses your single-target poke in a teamfight", "after": "2+ items favors Aurora since Between Worlds zones the whole fight while she blinks across it" },
-
-    { "layer": "content", "path": "spikes[0].text", "before": "Aurora's passive punishes anything she hits with a stacking mark, so whoever lands first poke — your Fox-Fire or her Q — sets the tempo for the trade, keeping this phase a genuine skill check on both sides.", "after": "Spirit Abjuration heals her off every spirit she exorcises from what she damages, so a poke war she keeps landing feeds her sustain — whoever lands first, your fox-fires or her Twofold Hex, sets the tempo." },
-
-    { "layer": "content", "path": "spikes[1].text", "before": "Her ultimate removes buffs and grants a temporary shield/speed burst that resets on takedown, but Spirit Rush lets you burst and reposition before that reset ever has a kill to chain off, so the level tips your way.", "after": "Between Worlds leaps in, shockwaves for damage and a slow, then leaves a slow field she can teleport across — but it is 140s at rank 1, so one whiffed leap hands you the level and Spirit Rush takes you out of the field." },
-
-    { "layer": "content", "path": "spikes[3].text", "before": "Aurora's ultimate reset and cleanse utility let her run down isolated targets across a teamfight in ways your kit can't easily answer once she's fed, tipping the late game in her favor.", "after": "Between Worlds' slow field plus the teleport across it lets her hold a whole teamfight's ground and reach isolated targets your kit cannot peel, tipping the late game her way once she is fed." },
-
-    { "layer": "content", "path": "mid", "before": "Level 6 tips your way — your Spirit Rush burst and reposition punish her before her ultimate's reset value has a kill to chain off of, and that edge carries into the first-item spike where your combo still lands cleanly.", "after": "Level 6 tips your way — Between Worlds is 140s at rank 1 and only 250 range, so if she leaps in and you dash out with Spirit Rush she has spent the fight's biggest cooldown on nothing, and that edge carries the first-item spike." },
-
-    { "layer": "content", "path": "late", "before": "Once the game reaches the late stages, Aurora's ultimate reset lets her chain kills through a teamfight far more efficiently than your poke-and-pick kit can answer, especially against a fed Aurora who can cleanse your Charm and keep repositioning, so the late-game edge tips to her.", "after": "Once the game reaches the late stages, Between Worlds gives her a slow field she can teleport across, so she picks which side of a fight to stand on and your flank charm has nowhere safe to land; buy Grievous Wounds early too, or her spirits heal through everything you chip off." },
-
-    { "layer": "content", "path": "wants.you[1]", "before": "Save Charm to punish her E dash commitments", "after": "Save Charm for her Across the Veil landing" },
-    { "layer": "content", "path": "wants.foe[0]", "before": "Land Q marks to set up burst combos", "after": "Land Twofold Hex and recall the curse" },
-    { "layer": "content", "path": "wants.foe[1]", "before": "Use ultimate to cleanse CC and reset in fights", "after": "Leap in with Between Worlds and slow your exit" },
-    { "layer": "content", "path": "wants.foe[2]", "before": "Chain takedowns off ultimate's refresh in skirmishes", "after": "Teleport across her own slow field to re-engage" }
-  ],
-  "notes": "Four fabricated claims about Between Worlds shipped here: that it removes buffs, grants a shield and speed burst, resets on takedown, and cleanses CC. Riot's text gives it a leap, a damaging slow shockwave, and a slow field she can teleport across — nothing else. The 'she can cleanse your Charm' line was the most dangerous, because it tells an Ahri to hold her single most important cooldown for a threat that does not exist. Her passive was also miscast as a stacking mark when it is a heal, which is why anti-heal now appears in the itemization line. packet flagged sequencingCues=0 for this matchup; the cooldown block and both do's now carry real numbers."
+ "ownerKey": "ahri_mid",
+ "enemy": "aurora",
+ "lane": "mid",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "51.89% over 3182 games. EVEN 5.5/10 fits: four Skill rows, Ahri at 6 and first item, Aurora at two items.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packet"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "Full chart was 'Skill' on all seven rows while content and packet read Skill x4, Ahri, Ahri, Aurora.",
+   "why": "phases[N].side and win[N] are the same row.",
+   "corrected": "phases[4..5].side -> Ahri, phases[6].side -> Aurora, rating adjusted.",
+   "confidence": "High",
+   "sources": [
+    "packet.levelChart",
+    "currentText.content.win"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Aurora's kit was described wrongly in four places. Her ultimate was said to 'remove buffs', 'grant a temporary shield/speed burst that resets on takedown', 'cleanse your Charm' and enable 'ult-reset chaining'. Between Worlds does none of that: she leaps, shockwaves for damage and a slow, then leaves a slowing area she can teleport across. Her passive was called 'a stacking mark' when Spirit Abjuration exorcises spirits that follow her and heal her. No ability was ever named.",
+   "why": "A reader told Aurora cleanses Charm will hold E for a cleanse that does not exist, and a reader told her ult resets on takedown will disengage from a fight she is winning.",
+   "corrected": "Rewrote spikes[0], spikes[1], spikes[3], mid, late, wants.foe[0..2], wants.you[1]; full layer now names Twofold Hex, Across the Veil, The Weirding and Between Worlds with cooldowns.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit",
+    "packet.enemyAbilities",
+    "packet.defects"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "packet flagged 'NO cooldown-sequencing advice anywhere' — sequencingCues was 0.",
+   "why": "Across the Veil 22/21/20/19/18s, Twofold Hex 9s falling to 7s, The Weirding 15s falling to 11s, Between Worlds 140s at rank 1 and only 250 range.",
+   "corrected": "Concrete wait-for-X lines written into breakdown.cooldowns, dosFull[0].d, dosFull[1].d, breakdown.carry, mid, spikes[1].",
+   "confidence": "High",
+   "sources": [
+    "enemyKit"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "needs-correction",
+   "whatIsWrong": "Itemization never mentioned Grievous Wounds despite the enemy healing off her passive.",
+   "why": "Spirit Abjuration heals her from spirits exorcised off everything she damages — an extended poke war refills her.",
+   "corrected": "Oblivion Orb added to report[8].t and the sustain problem stated in dontsFull[0].d and 'late'.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit P",
+    "missingInteractions: needs-antiheal"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Ahri"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Ahri"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].rating",
+   "before": "6/10",
+   "after": "4/10"
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Aurora wins by landing Across the Veil (Hop), denying your pattern, and keeping the fight at a distance your kit resents.",
+   "after": "Aurora wins by hexing you twice with one Q, healing the chip back off her spirits, and leaping in once you are low."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Aurora Across the Veil (Hop): matchup-defining — Her hop + stealth escape — she is killable only while it is down. It governs your forward steps. - R Spirit Rush (last dash) spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+   "after": "- Across the Veil is 22s at rank 1 and turns her invisible on landing — she is killable only while it is down. - Twofold Hex is 9s and hits twice, out and back; dodge the recast, not just the missile. - The Weirding hops her backward, so it is her exit as well as her slow."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.carry",
+   "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.",
+   "after": "Carry by timing her 22s Across the Veil: while it is down she has no escape from a 975 Charm and no way out of your combo."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Aurora’s Across the Veil (Hop): Her hop + stealth escape — she is killable only while it is down. Forward steps wait for its downtime.",
+   "after": "Twofold Hex curses on the way out and damages again when she recalls it — step off the curse line before the recast, not once the missile has passed."
+  },
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "Start Doran's Ring + 2 pots. Malignance into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive comps.",
+   "after": "Start Doran's Ring + 2 pots. Malignance into Sorcerer's, then Shadowflame. Add Oblivion Orb — her spirits out-heal poke."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Her hop + stealth escape — she is killable only while it is down. Its cooldown is the green light — wait for it.",
+   "after": "Across the Veil is 22s and turns her invisible on landing — step up only once you have watched her spend it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.",
+   "after": "The Weirding hops her backward on a 15s timer — the moment it is spent she has no disengage, so charm the ground she just landed on."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Aurora spends Across the Veil (Hop) early — the closest thing this matchup has to a guarantee.",
+   "after": "Between Worlds leaves a slow field — keep one dash to leave it, or you walk out at her pace."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That’s Aurora’s bread-and-butter play — deny it and they run out of answers.",
+   "after": "Her spirits heal back whatever chip you land — trade to kill or do not trade."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.",
+   "after": "Her passive heals her through chip while yours waits on nine minions — bank the full clear first, then step into her range."
+  },
+  {
+   "layer": "content",
+   "path": "whys[6]",
+   "before": "2+ items favors Aurora since her ult-reset chaining outclasses your single-target poke in a teamfight",
+   "after": "2+ items favors Aurora since Between Worlds zones the whole fight while she blinks across it"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Aurora's passive punishes anything she hits with a stacking mark, so whoever lands first poke — your Fox-Fire or her Q — sets the tempo for the trade, keeping this phase a genuine skill check on both sides.",
+   "after": "Spirit Abjuration heals her off every spirit she exorcises from what she damages, so a poke war she keeps landing feeds her sustain — whoever lands first, your fox-fires or her Twofold Hex, sets the tempo."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Her ultimate removes buffs and grants a temporary shield/speed burst that resets on takedown, but Spirit Rush lets you burst and reposition before that reset ever has a kill to chain off, so the level tips your way.",
+   "after": "Between Worlds leaps in, shockwaves for damage and a slow, then leaves a slow field she can teleport across — but it is 140s at rank 1, so one whiffed leap hands you the level and Spirit Rush takes you out of the field."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": "Aurora's ultimate reset and cleanse utility let her run down isolated targets across a teamfight in ways your kit can't easily answer once she's fed, tipping the late game in her favor.",
+   "after": "Between Worlds' slow field plus the teleport across it lets her hold a whole teamfight's ground and reach isolated targets your kit cannot peel, tipping the late game her way once she is fed."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Level 6 tips your way — your Spirit Rush burst and reposition punish her before her ultimate's reset value has a kill to chain off of, and that edge carries into the first-item spike where your combo still lands cleanly.",
+   "after": "Level 6 tips your way — Between Worlds is 140s at rank 1 and only 250 range, so if she leaps in and you dash out with Spirit Rush she has spent the fight's biggest cooldown on nothing, and that edge carries the first-item spike."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "Once the game reaches the late stages, Aurora's ultimate reset lets her chain kills through a teamfight far more efficiently than your poke-and-pick kit can answer, especially against a fed Aurora who can cleanse your Charm and keep repositioning, so the late-game edge tips to her.",
+   "after": "Once the game reaches the late stages, Between Worlds gives her a slow field she can teleport across, so she picks which side of a fight to stand on and your flank charm has nowhere safe to land; buy Grievous Wounds early too, or her spirits heal through everything you chip off."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Save Charm to punish her E dash commitments",
+   "after": "Save Charm for her Across the Veil landing"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Land Q marks to set up burst combos",
+   "after": "Land Twofold Hex and recall the curse"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Use ultimate to cleanse CC and reset in fights",
+   "after": "Leap in with Between Worlds and slow your exit"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Chain takedowns off ultimate's refresh in skirmishes",
+   "after": "Teleport across her own slow field to re-engage"
+  }
+ ],
+ "notes": "Four fabricated claims about Between Worlds shipped here: that it removes buffs, grants a shield and speed burst, resets on takedown, and cleanses CC. Riot's text gives it a leap, a damaging slow shockwave, and a slow field she can teleport across — nothing else. The 'she can cleanse your Charm' line was the most dangerous, because it tells an Ahri to hold her single most important cooldown for a threat that does not exist. Her passive was also miscast as a stacking mark when it is a heal, which is why anti-heal now appears in the itemization line. packet flagged sequencingCues=0 for this matchup; the cooldown block and both do's now carry real numbers. | COHERENCE: 1 chart edit(s) withdrawn — they moved the row to the enemy while leaving the phase why describing the owner winning it. Chart authority is an open question, so the label was reverted rather than the prose rewritten. Re-propose only as a side+why pair."
 }

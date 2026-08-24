@@ -1,73 +1,161 @@
 {
-  "ownerKey": "akshan_mid",
-  "enemy": "fizz",
-  "lane": "mid",
-  "audit": [
-    {
-      "point": 2,
-      "status": "needs-correction",
-      "whatIsWrong": "The two layers disagree on two rows and are unset on five. Full layer reads Skill, Skill, Skill, Skill, Fizz, Skill, Fizz; content reads Akshan x5, Fizz, Akshan. Level 6 and 2+ items each render two different answers.",
-      "why": "packet.levelChart is Akshan, Akshan, Akshan, Akshan, Akshan, Fizz, Akshan and the content layer matches it exactly. The reasoning holds: the single Fizz window is his first-item burst with Chum the Waters available, and Akshan reclaims the late game because Comeuppance snipes from 2500 while Fizz has to close to 550.",
-      "corrected": "Full sides set Akshan, Akshan, Akshan, Akshan, Akshan, Fizz, Akshan. Ratings moved with them so the hardest row is the Fizz row: phases[4] 7/10 to 6/10, phases[5] 6/10 to 7/10.",
-      "confidence": "High",
-      "sources": ["packet.levelChart", "currentText.content.win[0..6]"]
-    },
-    {
-      "point": 3,
-      "status": "needs-correction",
-      "whatIsWrong": "phases[4].why is garbled ('Avengerang... no —') and calls Akshan's R 'Vengeance'. Cooldown numbers are described only as 'a real cooldown' and 'long enough'.",
-      "why": "Real numbers make the timing concrete: Playful/Trickster is 16/14/12/10/8s, Chum the Waters 120/100/80s at 1300 range, Urchin Strike 550 range on 8/7.5/7/6.5/6s, Seastone Trident 7/6/5/4/3s. Akshan's R is Comeuppance, 100/85/70s at 2500 range.",
-      "corrected": "Names corrected and the 16-second rank-1 hop and 120-second rank-1 shark written in where they set the trade window.",
-      "confidence": "High",
-      "sources": ["ownerKit R", "enemyKit E/R/Q/W cooldowns and ranges"]
-    },
-    {
-      "point": 4,
-      "status": "needs-correction",
-      "whatIsWrong": "The decisive interaction is stated in breakdown.cooldowns only and never reaches the content layer: Playful/Trickster makes Fizz untargetable, which eats a stored Comeuppance outright. wants.foe[2] also calls the hop a 'reset', which it is not.",
-      "why": "Comeuppance locks onto a champion and stores bullets before firing. An untargetable window during that sequence wastes a 100-second ultimate. Second interaction, from missingInteractions: Seastone Trident is an auto-attack reset, so the wind-up — not the cast bar — is the cue to step back, and Heroic Swing should be banked for his Urchin Strike engage rather than spent on poke.",
-      "corrected": "Untargetability written into the mid paragraph and breakdown.carry as the reason to delay the execute. 'Reset' removed from wants.foe[2]. Shark handling made concrete: keep minions between you so the fish attaches to them.",
-      "confidence": "High",
-      "sources": ["enemyKit E text ('becoming untargetable')", "enemyKit R text ('attaches to any champion that touches it')", "ownerKit R text", "missingInteractions autoreset-burst-tell, enemy-dash-deniable"]
-    },
-    {
-      "point": 13,
-      "status": "correct",
-      "whatIsWrong": "",
-      "why": "packet.suspectNames flags 'Chum the Waters' in wants.foe[0] as a probable wrong name. It is Fizz's real R name. False positive — no edit.",
-      "corrected": "",
-      "confidence": "High",
-      "sources": ["enemyKit R name"]
-    }
-  ],
-  "edits": [
-    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Akshan"},
-    {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Akshan"},
-    {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Akshan"},
-    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Akshan"},
-    {"layer": "full", "path": "phases[4].side", "before": "Fizz", "after": "Akshan"},
-    {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Fizz"},
-    {"layer": "full", "path": "phases[6].side", "before": "Fizz", "after": "Akshan"},
-    {"layer": "full", "path": "phases[4].rating", "before": "7/10", "after": "6/10"},
-    {"layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "7/10"},
-
-    {"layer": "full", "path": "phases[4].why", "before": "Avengerang... no — R online: Vengeance executes the chipped from two screens. Chip, then channel.", "after": "R online: Comeuppance executes him from 2500 — chip first, and fire after his hop lands."},
-
-    {"layer": "full", "path": "enemyWin", "before": "Fizz wins by landing Playful / Trickster, denying your pattern, and starting the fight your kit wanted ten seconds later.", "after": "Fizz wins by sticking Chum the Waters on you from 1300 range — the shark knocks you up and the rest of his combo lands unanswered."},
-
-    {"layer": "full", "path": "ahead", "before": "Ahead, bully harder: string Fizz off every contact, swing-roam the rivers, and execute the map's mistakes with R.", "after": "Ahead, trade on his hop timer: Playful/Trickster is 16 seconds at rank 1, and without it Urchin Strike only reaches 550."},
-
-    {"layer": "full", "path": "breakdown.carry", "before": "Carry through strings and executes — chip everything, finish anything under a third, and let the swing write angles no one wards.", "after": "Carry by holding Comeuppance until his hop is spent — Playful/Trickster is untargetable and swallows the whole stored volley otherwise."},
-
-    {"layer": "full", "path": "breakdown.feeding", "before": "If Fizz opens the score, reset expectations and respect Playful / Trickster doubly. After a second, your job description changes — farm with Q strings and stay relevant through R executes.", "after": "If Fizz opens the score, respect the 1300-range shark above all — hold minions between you so the fish attaches to them, farm at 850 with Q, and keep Heroic Swing purely for his dive."},
-
-    {"layer": "content", "path": "whys[4]", "before": "Akshan's item spike and range control let him keep punishing Fizz's cooldowns post-6", "after": "Akshan's range control still punishes the 16-second Playful/Trickster window at 6"},
-
-    {"layer": "content", "path": "spikes[0].text", "before": "Fizz's Seastone Trident poke costs a lot of mana early and Playful/Trickster has a real cooldown, so punishing his all-in attempts before 6 wins you these trades.", "after": "Fizz's Seastone Trident poke costs real mana early and Playful/Trickster is 16 seconds at rank 1, so punishing his all-in attempts before 6 wins you these trades."},
-
-    {"layer": "content", "path": "mid", "before": "Chum the Waters gives him a knockup setup for a burst all-in at 6, and that's the one window where he can flip a losing lane around — bait it out with wave positioning rather than facing him directly. Outside of that cooldown you still control the trade pattern through your mobility and passive damage. Punish him hard right after he lands or misses the shark.", "after": "Chum the Waters gives him a knockup setup for a burst all-in at 6, and that 120-second cooldown is the one window where he flips a losing lane — keep minions between you so the fish attaches to them instead. Outside it you still own the trade pattern with your strings, but never fire Comeuppance into his hop: Playful/Trickster is untargetable and eats it whole."},
-
-    {"layer": "content", "path": "wants.foe[2]", "before": "Use Playful/Trickster to dodge your engage and reset", "after": "Use Playful/Trickster untargetable to dodge your burst"}
-  ],
-  "notes": "This matchup had a genuine two-layer contradiction rather than just an unset full layer: phases[4].side read 'Fizz' while win[4] read 'Akshan', and phases[6].side read 'Fizz' while win[6] read 'Akshan'. The content layer matches packet.levelChart, so the full side was moved to it and the two ratings swapped so the 7/10 sits on the actual Fizz row (first item) instead of level 6. The untargetable-hop-versus-Comeuppance interaction existed only in breakdown.cooldowns and never reached the content layer; it is now in mid and breakdown.carry. Note on derived flags: the kit file tags Fizz's E and R with 'grounding', but Riot's own descriptions for both mention only untargetability, slow and knockup — I did not assert grounding anywhere, per the rule to trust the description over a misfiring flag. packet.suspectNames flagged 'Chum the Waters' as a wrong name; it is correct. Left breakdown.wave and breakdown.mid templated — nothing in Fizz's kit gives a wave-specific interaction I could ground."
+ "ownerKey": "akshan_mid",
+ "enemy": "fizz",
+ "lane": "mid",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The two layers disagree on two rows and are unset on five. Full layer reads Skill, Skill, Skill, Skill, Fizz, Skill, Fizz; content reads Akshan x5, Fizz, Akshan. Level 6 and 2+ items each render two different answers.",
+   "why": "packet.levelChart is Akshan, Akshan, Akshan, Akshan, Akshan, Fizz, Akshan and the content layer matches it exactly. The reasoning holds: the single Fizz window is his first-item burst with Chum the Waters available, and Akshan reclaims the late game because Comeuppance snipes from 2500 while Fizz has to close to 550.",
+   "corrected": "Full sides set Akshan, Akshan, Akshan, Akshan, Akshan, Fizz, Akshan. Ratings moved with them so the hardest row is the Fizz row: phases[4] 7/10 to 6/10, phases[5] 6/10 to 7/10.",
+   "confidence": "High",
+   "sources": [
+    "packet.levelChart",
+    "currentText.content.win[0..6]"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[4].why is garbled ('Avengerang... no —') and calls Akshan's R 'Vengeance'. Cooldown numbers are described only as 'a real cooldown' and 'long enough'.",
+   "why": "Real numbers make the timing concrete: Playful/Trickster is 16/14/12/10/8s, Chum the Waters 120/100/80s at 1300 range, Urchin Strike 550 range on 8/7.5/7/6.5/6s, Seastone Trident 7/6/5/4/3s. Akshan's R is Comeuppance, 100/85/70s at 2500 range.",
+   "corrected": "Names corrected and the 16-second rank-1 hop and 120-second rank-1 shark written in where they set the trade window.",
+   "confidence": "High",
+   "sources": [
+    "ownerKit R",
+    "enemyKit E/R/Q/W cooldowns and ranges"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The decisive interaction is stated in breakdown.cooldowns only and never reaches the content layer: Playful/Trickster makes Fizz untargetable, which eats a stored Comeuppance outright. wants.foe[2] also calls the hop a 'reset', which it is not.",
+   "why": "Comeuppance locks onto a champion and stores bullets before firing. An untargetable window during that sequence wastes a 100-second ultimate. Second interaction, from missingInteractions: Seastone Trident is an auto-attack reset, so the wind-up — not the cast bar — is the cue to step back, and Heroic Swing should be banked for his Urchin Strike engage rather than spent on poke.",
+   "corrected": "Untargetability written into the mid paragraph and breakdown.carry as the reason to delay the execute. 'Reset' removed from wants.foe[2]. Shark handling made concrete: keep minions between you so the fish attaches to them.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit E text ('becoming untargetable')",
+    "enemyKit R text ('attaches to any champion that touches it')",
+    "ownerKit R text",
+    "missingInteractions autoreset-burst-tell, enemy-dash-deniable"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "packet.suspectNames flags 'Chum the Waters' in wants.foe[0] as a probable wrong name. It is Fizz's real R name. False positive — no edit.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "enemyKit R name"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Fizz",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Fizz",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].rating",
+   "before": "7/10",
+   "after": "6/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].rating",
+   "before": "6/10",
+   "after": "7/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Avengerang... no — R online: Vengeance executes the chipped from two screens. Chip, then channel.",
+   "after": "R online: Comeuppance executes him from 2500 — chip first, and fire after his hop lands."
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Fizz wins by landing Playful / Trickster, denying your pattern, and starting the fight your kit wanted ten seconds later.",
+   "after": "Fizz wins by sticking Chum the Waters on you from 1300 range — the shark knocks you up and the rest of his combo lands unanswered."
+  },
+  {
+   "layer": "full",
+   "path": "ahead",
+   "before": "Ahead, bully harder: string Fizz off every contact, swing-roam the rivers, and execute the map's mistakes with R.",
+   "after": "Ahead, trade on his hop timer: Playful/Trickster is 16 seconds at rank 1, and without it Urchin Strike only reaches 550."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.carry",
+   "before": "Carry through strings and executes — chip everything, finish anything under a third, and let the swing write angles no one wards.",
+   "after": "Carry by holding Comeuppance until his hop is spent — Playful/Trickster is untargetable and swallows the whole stored volley otherwise."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.feeding",
+   "before": "If Fizz opens the score, reset expectations and respect Playful / Trickster doubly. After a second, your job description changes — farm with Q strings and stay relevant through R executes.",
+   "after": "If Fizz opens the score, respect the 1300-range shark above all — hold minions between you so the fish attaches to them, farm at 850 with Q, and keep Heroic Swing purely for his dive."
+  },
+  {
+   "layer": "content",
+   "path": "whys[4]",
+   "before": "Akshan's item spike and range control let him keep punishing Fizz's cooldowns post-6",
+   "after": "Akshan's range control still punishes the 16-second Playful/Trickster window at 6"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Fizz's Seastone Trident poke costs a lot of mana early and Playful/Trickster has a real cooldown, so punishing his all-in attempts before 6 wins you these trades.",
+   "after": "Fizz's Seastone Trident poke costs real mana early and Playful/Trickster is 16 seconds at rank 1, so punishing his all-in attempts before 6 wins you these trades."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Chum the Waters gives him a knockup setup for a burst all-in at 6, and that's the one window where he can flip a losing lane around — bait it out with wave positioning rather than facing him directly. Outside of that cooldown you still control the trade pattern through your mobility and passive damage. Punish him hard right after he lands or misses the shark.",
+   "after": "Chum the Waters gives him a knockup setup for a burst all-in at 6, and that 120-second cooldown is the one window where he flips a losing lane — keep minions between you so the fish attaches to them instead. Outside it you still own the trade pattern with your strings, but never fire Comeuppance into his hop: Playful/Trickster is untargetable and eats it whole."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Use Playful/Trickster to dodge your engage and reset",
+   "after": "Use Playful/Trickster untargetable to dodge your burst"
+  }
+ ],
+ "notes": "This matchup had a genuine two-layer contradiction rather than just an unset full layer: phases[4].side read 'Fizz' while win[4] read 'Akshan', and phases[6].side read 'Fizz' while win[6] read 'Akshan'. The content layer matches packet.levelChart, so the full side was moved to it and the two ratings swapped so the 7/10 sits on the actual Fizz row (first item) instead of level 6. The untargetable-hop-versus-Comeuppance interaction existed only in breakdown.cooldowns and never reached the content layer; it is now in mid and breakdown.carry. Note on derived flags: the kit file tags Fizz's E and R with 'grounding', but Riot's own descriptions for both mention only untargetability, slow and knockup — I did not assert grounding anywhere, per the rule to trust the description over a misfiring flag. packet.suspectNames flagged 'Chum the Waters' as a wrong name; it is correct. Left breakdown.wave and breakdown.mid templated — nothing in Fizz's kit gives a wave-specific interaction I could ground. | COHERENCE: 1 chart edit(s) withdrawn — they moved the row to the enemy while leaving the phase why describing the owner winning it. Chart authority is an open question, so the label was reverted rather than the prose rewritten. Re-propose only as a side+why pair."
 }

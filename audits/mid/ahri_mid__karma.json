@@ -1,101 +1,233 @@
 {
-  "ownerKey": "ahri_mid",
-  "enemy": "karma",
-  "lane": "mid",
-  "audit": [
-    {
-      "point": 2,
-      "status": "needs-correction",
-      "whatIsWrong": "Full-layer level chart reads \"Skill\" on all seven rows while the content layer and the packet chart both read Karma/Karma/Karma/Skill/Ahri/Ahri/Ahri. The page renders two different answers to who wins each level.",
-      "why": "Karma's Inner Flame is 950 range with a slow and her Mantra is off cooldown from level 1 (40/38/36/34s, shortened further by her passive whenever she damages you), so she prices you out of levels 1-3. Ahri has no gap-closer until Spirit Rush at 6, after which the lane flips.",
-      "corrected": "phases[0..2].side = Karma, phases[3].side = Skill, phases[4..6].side = Ahri, matching win[0..6] already on disk.",
-      "confidence": "High",
-      "sources": ["brief.packet.levelChart", "brief.currentText.content.win[0..6]", "enemyKit Q/R"]
-    },
-    {
-      "point": 3,
-      "status": "correct",
-      "whatIsWrong": "",
-      "why": "Spikes are accurate: Karma peaks in the level 3-5 Mantra-Q poke window; Ahri spikes at 6 with Spirit Rush (140/120/100s), again on first item, and scales into flank picks. Karma has no burst item path and plateaus.",
-      "corrected": "",
-      "confidence": "High",
-      "sources": ["ownerKit R cd", "enemyKit R cd"]
-    },
-    {
-      "point": 4,
-      "status": "needs-correction",
-      "whatIsWrong": "The decisive interaction is never stated: Focused Resolve is a tether that only roots if the link survives, and Ahri is one of the few mids who can guarantee breaking it. Text also calls Karma \"he\"/\"his\" throughout and uses the invented label \"Focused Resolve (Tether)\".",
-      "why": "Riot's own text: \"Karma creates a tether between herself and a targeted enemy... If the tether is not broken, the enemy will be rooted.\" W range is 675 and its cooldown is a flat 12s at every rank. Spirit Rush (three dashes) or simply walking past 675 range ends it before the root lands. Mantra-W also heals Karma, so extended chip trades want Grievous Wounds.",
-      "corrected": "Name it Focused Resolve (W), 12s flat, 675 range; break the tether by leaving range; anti-heal before committing to long trades.",
-      "confidence": "High",
-      "sources": ["enemyKit W text/cd/range", "ownerKit R", "missingInteractions needs-antiheal"]
-    },
-    {
-      "point": 6,
-      "status": "missing",
-      "whatIsWrong": "Packet defect: no cooldown-sequencing advice anywhere.",
-      "why": "Focused Resolve is 12s flat and Ahri's Charm is 12s flat — they trade one-for-one, so the sequencing rule is simply who spends first.",
-      "corrected": "Added concrete 12s-vs-12s sequencing to cooldowns, winCon, tradeBad and the loading tips.",
-      "confidence": "High",
-      "sources": ["ownerKit E cd 12", "enemyKit W cd 12"]
-    },
-    {
-      "point": 13,
-      "status": "missing",
-      "whatIsWrong": "Mantra-W self-heal not mentioned anywhere.",
-      "why": "Riot text: \"Mantra Bonus: Karma strengthens the link, healing herself and extending the root duration.\"",
-      "corrected": "Added to dontsFull[2].d as a Grievous Wounds cue.",
-      "confidence": "High",
-      "sources": ["enemyKit W text"]
-    }
-  ],
-  "edits": [
-    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Karma" },
-    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Karma" },
-    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Karma" },
-    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ahri" },
-    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ahri" },
-    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Ahri" },
-    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10" },
-    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "4/10" },
-
-    { "layer": "full", "path": "tldr", "before": "His combo needs a landed setup — yours needs a landed charm. Whoever hits the skillshot first runs the exchange.", "after": "Her Inner Flame outranges your orb early; your Charm ends it later. Whoever lands the first skillshot runs the exchange." },
-    { "layer": "full", "path": "report[0].t", "before": "His combo needs a landed setup — yours needs a landed charm. Whoever hits the skillshot first runs the exchange.", "after": "Her Inner Flame outranges your orb early; your Charm ends it later. Whoever lands the first skillshot runs the exchange." },
-
-    { "layer": "full", "path": "winCon", "before": "Make the setup spell miss, land the charm, and out-rotate the gap with dash angles. Every commit starts with one question: is Focused Resolve (Tether) down?", "after": "Bait Focused Resolve (W), break the tether by leaving its 675 range, then Charm her while it sits on its 12s cooldown. Every commit asks one question: is her W spent?" },
-    { "layer": "full", "path": "report[1].t", "before": "Make the setup spell miss, land the charm, and out-rotate the gap with dash angles. Every commit starts with one question: is Focused Resolve (Tether) down?", "after": "Bait Focused Resolve (W), break the tether by leaving its 675 range, then Charm her while it sits on its 12s cooldown. Every commit asks one question: is her W spent?" },
-
-    { "layer": "full", "path": "enemyWin", "before": "Karma wins by landing Focused Resolve (Tether), denying your pattern, and keeping the fight at a distance your kit resents.", "after": "Karma wins by holding the Focused Resolve (W) tether long enough to root, then dropping her Mantra-empowered Inner Flame on the spot you are stuck in." },
-
-    { "layer": "full", "path": "tradeGood", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "Q through her last-hit so both halves land, W if she eats the true-damage return, and walk out before Inner Flame's slow lets her follow up on you." },
-    { "layer": "full", "path": "dosFull[1].d", "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.", "after": "Q through her last-hit so both halves land, W if she eats the true-damage return, and walk out before Inner Flame's slow lets her follow up on you." },
-
-    { "layer": "full", "path": "tradeBad", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Spending Charm for chip damage and then eating a Mantra-W root with your E still 12 seconds away — Charm is the matchup, not the poke." },
-
-    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Karma Focused Resolve (Tether): matchup-defining — The root tether — break it with range or line of sight. Step up only on its downtime. - Budget R Spirit Rush (last dash) for emergencies and the R for opportunities — never swap them.", "after": "- Focused Resolve (W), 12s flat at every rank: the tether only roots if the link survives, so leave its 675 range and it breaks. - Mantra is 40/38/36/34s, but her passive shaves it every time she damages you — count her Q hits, not the clock." },
-
-    { "layer": "full", "path": "breakdown.feeding", "before": "If Karma takes first blood, tighten up: Focused Resolve (Tether) is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q clears and stay relevant through charm picks.", "after": "If Karma takes first blood her Inner Flame prices you out of the wave: farm the back rank with Q, bank the passive heal every nine minions, and wait for Spirit Rush to re-enter. Stay relevant through flank Charms." },
-
-    { "layer": "full", "path": "breakdown.carry", "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.", "after": "Carry through picks — Karma has no dash, so a Charm off a Spirit Rush angle leaves her a shield and nothing else to answer you." },
-
-    { "layer": "full", "path": "dosFull[0].t", "before": "Stand behind minions while his setup is up", "after": "Break the tether instead of tanking it" },
-    { "layer": "full", "path": "dosFull[0].d", "before": "The root tether — break it with range or line of sight. Bait it, count it, then go.", "after": "Focused Resolve roots only if the link holds — leave its 675 range and it dies early." },
-
-    { "layer": "full", "path": "dosFull[2].d", "before": "Karma spends Focused Resolve (Tether) early — the closest thing this matchup has to a guarantee.", "after": "Spirit Rush's last dash is also your tether-break — never spend all three going in on Karma." },
-
-    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Karma’s bread-and-butter play — deny it and they run out of answers.", "after": "Mantra makes her Q a cataclysm and her W a longer root — never trade into it." },
-
-    { "layer": "full", "path": "dontsFull[2].d", "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.", "after": "Karma heals herself off a Mantra-empowered Focused Resolve, so chip damage without Grievous Wounds just pays for her sustain." },
-
-    { "layer": "full", "path": "loading", "before": "- Ahri vs Karma - Track: Karma Focused Resolve (Tether). - Hold charm for engages — never spend it as poke. - Focused Resolve (Tether) down is the green light. - Hold the ult for names, not waves.", "after": "- Ahri vs Karma - Track: Focused Resolve (W), 12s flat. - Break the tether by leaving her 675 range. - Charm on her W downtime, never as poke. - Hold the ult for names, not waves." },
-
-    { "layer": "full", "path": "report[5].t", "before": "Track Karma’s Focused Resolve (Tether): The root tether — break it with range or line of sight. Forward steps wait for its downtime.", "after": "Track Focused Resolve (W), 12s flat: the tether roots only if it survives, so dash or walk past 675 range. Step up on its downtime." },
-
-    { "layer": "full", "path": "report[9].t", "before": "Commit on Focused Resolve (Tether)’s cooldown, on your Malignance spike, and with your jungler’s setup. Make him flinch first.", "after": "Commit while Focused Resolve is on its 12s cooldown, on your Malignance spike, and with your jungler's setup. Make her spend W first." },
-
-    { "layer": "content", "path": "whys[0]", "before": "Karma's longer-range poke and Soulflare cooldown chip you for free before you have any gap-closer to answer it.", "after": "Karma's 950-range Inner Flame and its slow chip you for free before you own any gap-closer that can answer it." },
-    { "layer": "content", "path": "whys[2]", "before": "Poke continues to outpace your ability to punish since you still lack Spirit Rush and she's maxing Q for exactly this window.", "after": "Her poke outpaces your punish: no Spirit Rush yet, and Inner Flame drops from 9s to 5s as she maxes Q for exactly this window." },
-    { "layer": "content", "path": "wants.foe[0]", "before": "max Q first and poke every wave with Soulflare stacks", "after": "max Q first and spend Mantra on Inner Flame every wave" }
-  ],
-  "notes": "Full-layer level chart was all-Skill while content and packet both had Karma/Karma/Karma/Skill/Ahri/Ahri/Ahri — proposed the six side flips as one atomic group; win[0..6] on disk already match the corrected values, so no paired content edit was possible (nothing to change). Karma was referred to as \"he/his\" in tldr, tradeGood, dosFull and report copy — fixed where edited. \"Focused Resolve (Tether)\" and \"Soulflare\" are not Riot Data Dragon names; replaced with Focused Resolve (W) and Mantra-empowered Inner Flame. Mantra-W self-heal (needs-antiheal from missingInteractions) now surfaced in dontsFull[2].d."
+ "ownerKey": "ahri_mid",
+ "enemy": "karma",
+ "lane": "mid",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer level chart reads \"Skill\" on all seven rows while the content layer and the packet chart both read Karma/Karma/Karma/Skill/Ahri/Ahri/Ahri. The page renders two different answers to who wins each level.",
+   "why": "Karma's Inner Flame is 950 range with a slow and her Mantra is off cooldown from level 1 (40/38/36/34s, shortened further by her passive whenever she damages you), so she prices you out of levels 1-3. Ahri has no gap-closer until Spirit Rush at 6, after which the lane flips.",
+   "corrected": "phases[0..2].side = Karma, phases[3].side = Skill, phases[4..6].side = Ahri, matching win[0..6] already on disk.",
+   "confidence": "High",
+   "sources": [
+    "brief.packet.levelChart",
+    "brief.currentText.content.win[0..6]",
+    "enemyKit Q/R"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes are accurate: Karma peaks in the level 3-5 Mantra-Q poke window; Ahri spikes at 6 with Spirit Rush (140/120/100s), again on first item, and scales into flank picks. Karma has no burst item path and plateaus.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "ownerKit R cd",
+    "enemyKit R cd"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The decisive interaction is never stated: Focused Resolve is a tether that only roots if the link survives, and Ahri is one of the few mids who can guarantee breaking it. Text also calls Karma \"he\"/\"his\" throughout and uses the invented label \"Focused Resolve (Tether)\".",
+   "why": "Riot's own text: \"Karma creates a tether between herself and a targeted enemy... If the tether is not broken, the enemy will be rooted.\" W range is 675 and its cooldown is a flat 12s at every rank. Spirit Rush (three dashes) or simply walking past 675 range ends it before the root lands. Mantra-W also heals Karma, so extended chip trades want Grievous Wounds.",
+   "corrected": "Name it Focused Resolve (W), 12s flat, 675 range; break the tether by leaving range; anti-heal before committing to long trades.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit W text/cd/range",
+    "ownerKit R",
+    "missingInteractions needs-antiheal"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "missing",
+   "whatIsWrong": "Packet defect: no cooldown-sequencing advice anywhere.",
+   "why": "Focused Resolve is 12s flat and Ahri's Charm is 12s flat — they trade one-for-one, so the sequencing rule is simply who spends first.",
+   "corrected": "Added concrete 12s-vs-12s sequencing to cooldowns, winCon, tradeBad and the loading tips.",
+   "confidence": "High",
+   "sources": [
+    "ownerKit E cd 12",
+    "enemyKit W cd 12"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "missing",
+   "whatIsWrong": "Mantra-W self-heal not mentioned anywhere.",
+   "why": "Riot text: \"Mantra Bonus: Karma strengthens the link, healing herself and extending the root duration.\"",
+   "corrected": "Added to dontsFull[2].d as a Grievous Wounds cue.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit W text"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Ahri"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Ahri"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Ahri"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].rating",
+   "before": "5/10",
+   "after": "4/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].rating",
+   "before": "5/10",
+   "after": "4/10"
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "His combo needs a landed setup — yours needs a landed charm. Whoever hits the skillshot first runs the exchange.",
+   "after": "Her Inner Flame outranges your orb early; your Charm ends it later. Whoever lands the first skillshot runs the exchange."
+  },
+  {
+   "layer": "full",
+   "path": "report[0].t",
+   "before": "His combo needs a landed setup — yours needs a landed charm. Whoever hits the skillshot first runs the exchange.",
+   "after": "Her Inner Flame outranges your orb early; your Charm ends it later. Whoever lands the first skillshot runs the exchange."
+  },
+  {
+   "layer": "full",
+   "path": "winCon",
+   "before": "Make the setup spell miss, land the charm, and out-rotate the gap with dash angles. Every commit starts with one question: is Focused Resolve (Tether) down?",
+   "after": "Bait Focused Resolve (W), break the tether by leaving its 675 range, then Charm her while it sits on its 12s cooldown. Every commit asks one question: is her W spent?"
+  },
+  {
+   "layer": "full",
+   "path": "report[1].t",
+   "before": "Make the setup spell miss, land the charm, and out-rotate the gap with dash angles. Every commit starts with one question: is Focused Resolve (Tether) down?",
+   "after": "Bait Focused Resolve (W), break the tether by leaving its 675 range, then Charm her while it sits on its 12s cooldown. Every commit asks one question: is her W spent?"
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Karma wins by landing Focused Resolve (Tether), denying your pattern, and keeping the fight at a distance your kit resents.",
+   "after": "Karma wins by holding the Focused Resolve (W) tether long enough to root, then dropping her Mantra-empowered Inner Flame on the spot you are stuck in."
+  },
+  {
+   "layer": "full",
+   "path": "tradeGood",
+   "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.",
+   "after": "Q through her last-hit so both halves land, W if she eats the true-damage return, and walk out before Inner Flame's slow lets her follow up on you."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q through his last-hit so both hits land, W if he eats the return, and walk — repeat until the charm window is lethal instead of optimistic.",
+   "after": "Q through her last-hit so both halves land, W if she eats the true-damage return, and walk out before Inner Flame's slow lets her follow up on you."
+  },
+  {
+   "layer": "full",
+   "path": "tradeBad",
+   "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.",
+   "after": "Spending Charm for chip damage and then eating a Mantra-W root with your E still 12 seconds away — Charm is the matchup, not the poke."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Karma Focused Resolve (Tether): matchup-defining — The root tether — break it with range or line of sight. Step up only on its downtime. - Budget R Spirit Rush (last dash) for emergencies and the R for opportunities — never swap them.",
+   "after": "- Focused Resolve (W), 12s flat at every rank: the tether only roots if the link survives, so leave its 675 range and it breaks. - Mantra is 40/38/36/34s, but her passive shaves it every time she damages you — count her Q hits, not the clock."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.feeding",
+   "before": "If Karma takes first blood, tighten up: Focused Resolve (Tether) is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q clears and stay relevant through charm picks.",
+   "after": "If Karma takes first blood her Inner Flame prices you out of the wave: farm the back rank with Q, bank the passive heal every nine minions, and wait for Spirit Rush to re-enter. Stay relevant through flank Charms."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.carry",
+   "before": "Carry through picks — a landed charm is a won fight, and your dashes manufacture charm angles no one wards against.",
+   "after": "Carry through picks — Karma has no dash, so a Charm off a Spirit Rush angle leaves her a shield and nothing else to answer you."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].t",
+   "before": "Stand behind minions while his setup is up",
+   "after": "Break the tether instead of tanking it"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "The root tether — break it with range or line of sight. Bait it, count it, then go.",
+   "after": "Focused Resolve roots only if the link holds — leave its 675 range and it dies early."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Karma spends Focused Resolve (Tether) early — the closest thing this matchup has to a guarantee.",
+   "after": "Spirit Rush's last dash is also your tether-break — never spend all three going in on Karma."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].d",
+   "before": "That’s Karma’s bread-and-butter play — deny it and they run out of answers.",
+   "after": "Mantra makes her Q a cataclysm and her W a longer root — never trade into it."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Charming on cooldown for chip damage and then facing his real engage with nothing — the charm is the matchup, not the poke.",
+   "after": "Karma heals herself off a Mantra-empowered Focused Resolve, so chip damage without Grievous Wounds just pays for her sustain."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Ahri vs Karma - Track: Karma Focused Resolve (Tether). - Hold charm for engages — never spend it as poke. - Focused Resolve (Tether) down is the green light. - Hold the ult for names, not waves.",
+   "after": "- Ahri vs Karma - Track: Focused Resolve (W), 12s flat. - Break the tether by leaving her 675 range. - Charm on her W downtime, never as poke. - Hold the ult for names, not waves."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Karma’s Focused Resolve (Tether): The root tether — break it with range or line of sight. Forward steps wait for its downtime.",
+   "after": "Track Focused Resolve (W), 12s flat: the tether roots only if it survives, so dash or walk past 675 range. Step up on its downtime."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Focused Resolve (Tether)’s cooldown, on your Malignance spike, and with your jungler’s setup. Make him flinch first.",
+   "after": "Commit while Focused Resolve is on its 12s cooldown, on your Malignance spike, and with your jungler's setup. Make her spend W first."
+  },
+  {
+   "layer": "content",
+   "path": "whys[0]",
+   "before": "Karma's longer-range poke and Soulflare cooldown chip you for free before you have any gap-closer to answer it.",
+   "after": "Karma's 950-range Inner Flame and its slow chip you for free before you own any gap-closer that can answer it."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "Poke continues to outpace your ability to punish since you still lack Spirit Rush and she's maxing Q for exactly this window.",
+   "after": "Her poke outpaces your punish: no Spirit Rush yet, and Inner Flame drops from 9s to 5s as she maxes Q for exactly this window."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "max Q first and poke every wave with Soulflare stacks",
+   "after": "max Q first and spend Mantra on Inner Flame every wave"
+  }
+ ],
+ "notes": "Full-layer level chart was all-Skill while content and packet both had Karma/Karma/Karma/Skill/Ahri/Ahri/Ahri — proposed the six side flips as one atomic group; win[0..6] on disk already match the corrected values, so no paired content edit was possible (nothing to change). Karma was referred to as \"he/his\" in tldr, tradeGood, dosFull and report copy — fixed where edited. \"Focused Resolve (Tether)\" and \"Soulflare\" are not Riot Data Dragon names; replaced with Focused Resolve (W) and Mantra-empowered Inner Flame. Mantra-W self-heal (needs-antiheal from missingInteractions) now surfaced in dontsFull[2].d. | COHERENCE: 3 chart edit(s) withdrawn — they moved the row to the enemy while leaving the phase why describing the owner winning it. Chart authority is an open question, so the label was reverted rather than the prose rewritten. Re-propose only as a side+why pair."
 }

@@ -1,176 +1,200 @@
 {
-  "ownerKey": "akali_mid",
-  "enemy": "swain",
-  "lane": "mid",
-  "audit": [
-    {
-      "point": 2,
-      "status": "needs-correction",
-      "whatIsWrong": "All seven full-layer rows read \"Skill\" while content win[] read Swain/Swain/Swain/Swain/Akali/Akali/Akali.",
-      "why": "The packet levelChart matches win[] exactly — Swain owns the lane to level 5 and the matchup flips at 6, finishing at 53.41% over 1818 games.",
-      "corrected": "phases[0..3].side=Swain, [4..6].side=Akali, as one atomic group.",
-      "confidence": "High",
-      "sources": ["packet.levelChart", "currentText.content.win"]
-    },
-    {
-      "point": 3,
-      "status": "needs-correction",
-      "whatIsWrong": "The content layer calls Swain's root \"Torment\" in six places, credits a damage-over-time to Death's Hand, and calls Ravenous Flock a wave-clear tool.",
-      "why": "Torment is not a Swain ability at all — his root is Nevermove (E). Death's Hand fires piercing bolts that deal MORE damage per bolt that hits, with no DoT in Riot's text. Ravenous Flock is his passive: ravens collect Soul Fragments that heal him and permanently raise his maximum health.",
-      "corrected": "Root renamed to Nevermove throughout, Death's Hand described by its stacking-bolt rule, and the passive described as heal plus permanent health.",
-      "confidence": "High",
-      "sources": ["enemyKit P/Q/E text"]
-    },
-    {
-      "point": 4,
-      "status": "needs-correction",
-      "whatIsWrong": "Two decisive interactions were missing. Nevermove roots on the RETURN wave, not the outbound one, and he can then pull every rooted champion toward him. And Vision of Empire reveals champions it hits — which drags Akali out of Twilight Shroud.",
-      "why": "The whole page told the player to hide in the shroud and to fear the ultimate. In fact the shroud is not concealment against a Swain holding W, and the root that starts every fight has a second, later hitbox that a player watching the outbound wave will walk straight into. Third point from _missing: his passive heals and banks permanent max health, so Grievous Wounds timing decides every extended trade and raw resistances are not the answer.",
-      "corrected": "Step in after the return pass; expect W to reveal you; buy anti-heal before duelling him.",
-      "confidence": "High",
-      "sources": ["enemyKit E text", "enemyKit W text and revealsStealth flag", "missingInteractions key 20"]
-    },
-    {
-      "point": 6,
-      "status": "needs-correction",
-      "whatIsWrong": "breakdown.cooldowns tracked only the 120s ultimate and gave no numbers.",
-      "why": "Nevermove at 10-12s is the punish clock in lane; Vision of Empire is 18-22s; Death's Hand falls to 3s at rank 5.",
-      "corrected": "Real numbers written in.",
-      "confidence": "High",
-      "sources": ["enemyKit"]
-    },
-    {
-      "point": 10,
-      "status": "correct",
-      "whatIsWrong": "",
-      "why": "report[8].t already says \"Add anti-heal early into his sustain\", which is right for Ravenous Flock and matches the _missing needs-antiheal rule.",
-      "corrected": "Left as is; reinforced in winCon and breakdown.carry.",
-      "confidence": "High",
-      "sources": ["missingInteractions key 20"]
-    }
-  ],
-  "edits": [
-    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Swain" },
-    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Swain" },
-    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Swain" },
-    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Swain" },
-    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Akali" },
-    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Akali" },
-    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Akali" },
-    {
-      "layer": "full",
-      "path": "tldr",
-      "before": "He pokes until you shroud, then the lane belongs to the smoke — trade in obscured windows and energy-walk the rest.",
-      "after": "Vision of Empire reveals you through the smoke, so the shroud is not a hiding place here — dodge Nevermove's return and burst."
-    },
-    {
-      "layer": "full",
-      "path": "winCon",
-      "before": "Survive the poke, then win every shrouded exchange until one becomes a kill. Demonic Ascension is the clock this lane runs on — read it before every step forward.",
-      "after": "Survive the poke, then all-in the eleven seconds after Nevermove. His passive heals and banks permanent health, so buy Grievous Wounds before you ever duel him."
-    },
-    {
-      "layer": "full",
-      "path": "enemyWin",
-      "before": "Swain wins by landing Demonic Ascension, denying your pattern, and keeping the fight at a distance your kit resents.",
-      "after": "Swain wins by rooting you with Nevermove's return, pulling you in, and draining you flat inside Demonic Ascension."
-    },
-    {
-      "layer": "full",
-      "path": "breakdown.cooldowns",
-      "before": "- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. Check it before every step-up. - W Twilight Shroud is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
-      "after": "- Nevermove: 10-12s, and it roots on the RETURN wave, not the way out — hold your step-up until the second pass has gone by. - Vision of Empire: 18-22s, and it reveals whoever it hits, so it drags you out of the shroud."
-    },
-    {
-      "layer": "full",
-      "path": "breakdown.carry",
-      "before": "Carry through deletions — one carry per fight, every fight; the shroud buys the time and the resets pay the exit.",
-      "after": "Carry by killing him before the drain starts — Grievous Wounds first, then one shrouded flank per fight."
-    },
-    {
-      "layer": "full",
-      "path": "breakdown.feeding",
-      "before": "If Swain takes first blood, tighten up: Demonic Ascension is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q range and stay relevant through shroud picks.",
-      "after": "If Swain takes first blood, his passive is already banking permanent health off you — buy anti-heal on the next back. A second kill means the duel is over and the game is not: farm at Q range, take grouped picks only."
-    },
-    {
-      "layer": "full",
-      "path": "dosFull[0].d",
-      "before": "His drain mode — disengage and reset the fight when it starts. Its cooldown is the green light — wait for it.",
-      "after": "Nevermove roots on the return pass — step in after the wave has come back, not when it flies out."
-    },
-    {
-      "layer": "full",
-      "path": "dosFull[2].d",
-      "before": "Swain whiffs Demonic Ascension and the lane briefly belongs to you.",
-      "after": "Swain whiffs Nevermove — that is a clean 11-second window, so go."
-    },
-    {
-      "layer": "full",
-      "path": "report[5].t",
-      "before": "Track Swain’s Demonic Ascension: His drain mode — disengage and reset the fight when it starts. The whole green-light system is its cooldown.",
-      "after": "Track Nevermove: the root lands on the return pass and he can then pull you in, and Vision of Empire reveals you inside Twilight Shroud."
-    },
-    {
-      "layer": "content",
-      "path": "spikes[0].text",
-      "before": "Swain's Vision of Empire poke plus Torment root punishes any approach, and his passive DoT from Death's Hand chunks your HP before you're even in Q range.",
-      "after": "Vision of Empire poke plus the Nevermove root punishes any approach, and Death's Hand hits harder for every bolt that strikes you before you're in Q range."
-    },
-    {
-      "layer": "content",
-      "path": "spikes[2].text",
-      "before": "Once you finish Shroud haste and burst (Nashor's/Riftmaker), your dive speed starts outrunning his root-and-drain setup since he needs time to land Torment before Ravenous Flock ticks.",
-      "after": "Once you finish Shroud haste and burst (Nashor's/Riftmaker), your dive speed starts outrunning his setup, since Nevermove has to land on its return pass before he can pull and drain you."
-    },
-    {
-      "layer": "content",
-      "path": "early",
-      "before": "Swain's poke-and-root package is miserable to lane into — Death's Hand DoT stacks chip you from range, Torment roots punish any dash-in attempt, and Vision of Empire adds global poke you can't dodge. From level 3 he can zone you off CS entirely without ever entering your combo range. Play for farm with Q pokes of your own, and never engage into an up Torment.",
-      "after": "Swain's poke-and-root package is miserable to lane into — Death's Hand hits harder for each bolt that clips you, Nevermove roots on its return pass to punish any dash-in, and Vision of Empire pokes from across the map and reveals you. From level 3 he can zone you off CS entirely without ever entering your combo range. Play for farm with Q pokes of your own, and never engage into an up Nevermove."
-    },
-    {
-      "layer": "content",
-      "path": "late",
-      "before": "Your first real item spike changes the math: Shroud haste plus burst stats let you close the gap and threaten a kill before he can land Torment and pop Ascension in time. In the late game, stealth-engaging from an angle he hasn't warded lets you burst him down before his drain radius stabilizes, so this is where you start winning the 1v1 outright.",
-      "after": "Your first real item spike changes the math: Shroud haste plus burst stats let you close the gap and threaten a kill before he can land Nevermove and pop Ascension in time. In the late game, stealth-engaging from an angle he hasn't warded lets you burst him down before his drain radius stabilizes, so this is where you start winning the 1v1 outright."
-    },
-    {
-      "layer": "content",
-      "path": "whys[1]",
-      "before": "He keeps chunking you with DoT and Torment through levels 3-5 while you still lack the item power to punish",
-      "after": "He keeps chunking you with Death's Hand and Nevermove through levels 3-5 while you lack the item power to punish"
-    },
-    {
-      "layer": "content",
-      "path": "whys[2]",
-      "before": "His ranged poke and Ravenous Flock wave control keep him ahead as he approaches his ultimate spike",
-      "after": "His ranged poke and the health his passive banks off you keep him ahead into his ultimate spike"
-    },
-    {
-      "layer": "content",
-      "path": "wants.you[0]",
-      "before": "Farm from max range and avoid walking into Torment root angles pre-6",
-      "after": "Farm from max range and avoid Nevermove's return-pass root angles pre-6"
-    },
-    {
-      "layer": "content",
-      "path": "wants.you[1]",
-      "before": "Bait his passive DoT stacks onto minions instead of yourself when pushing",
-      "after": "Bait his Death's Hand bolts onto minions instead of yourself when pushing"
-    },
-    {
-      "layer": "content",
-      "path": "wants.foe[0]",
-      "before": "Land Torment roots to lock you down before Vision of Empire poke chunks your HP",
-      "after": "Land Nevermove roots to lock you down before Vision of Empire poke chunks your HP"
-    },
-    {
-      "layer": "content",
-      "path": "wants.foe[2]",
-      "before": "Push and roam using Ravenous Flock's wave clear while you can't punish his range",
-      "after": "Push and roam using Death's Hand wave clear while you can't punish his range"
-    }
-  ],
-  "notes": "Six occurrences of \"Torment\" — a Morgana ability — were being used as the name of Swain's root; the real ability is Nevermove, and it roots on the RETURN pass, which is the single most useful thing a player can know in this lane and was nowhere on the page. Also corrected the invented Death's Hand DoT and the claim that Ravenous Flock (his passive) provides wave clear. The packet's two suspectNames entries (\"Demonic Ascension's\", \"Ravenous Flock's\") are FALSE POSITIVES — both are the correct names in possessive form; the real errors were elsewhere. Templated fields left in place: breakdown.wave, breakdown.early, breakdown.mid, ahead, tradeGood, tradeBad, breakdown.late. Unverified: whether Vision of Empire's reveal specifically cancels Twilight Shroud's untargetability or only grants vision, and whether Nevermove's pull can drag Akali out of the shroud."
+ "ownerKey": "akali_mid",
+ "enemy": "swain",
+ "lane": "mid",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All seven full-layer rows read \"Skill\" while content win[] read Swain/Swain/Swain/Swain/Akali/Akali/Akali.",
+   "why": "The packet levelChart matches win[] exactly — Swain owns the lane to level 5 and the matchup flips at 6, finishing at 53.41% over 1818 games.",
+   "corrected": "phases[0..3].side=Swain, [4..6].side=Akali, as one atomic group.",
+   "confidence": "High",
+   "sources": [
+    "packet.levelChart",
+    "currentText.content.win"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "The content layer calls Swain's root \"Torment\" in six places, credits a damage-over-time to Death's Hand, and calls Ravenous Flock a wave-clear tool.",
+   "why": "Torment is not a Swain ability at all — his root is Nevermove (E). Death's Hand fires piercing bolts that deal MORE damage per bolt that hits, with no DoT in Riot's text. Ravenous Flock is his passive: ravens collect Soul Fragments that heal him and permanently raise his maximum health.",
+   "corrected": "Root renamed to Nevermove throughout, Death's Hand described by its stacking-bolt rule, and the passive described as heal plus permanent health.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit P/Q/E text"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Two decisive interactions were missing. Nevermove roots on the RETURN wave, not the outbound one, and he can then pull every rooted champion toward him. And Vision of Empire reveals champions it hits — which drags Akali out of Twilight Shroud.",
+   "why": "The whole page told the player to hide in the shroud and to fear the ultimate. In fact the shroud is not concealment against a Swain holding W, and the root that starts every fight has a second, later hitbox that a player watching the outbound wave will walk straight into. Third point from _missing: his passive heals and banks permanent max health, so Grievous Wounds timing decides every extended trade and raw resistances are not the answer.",
+   "corrected": "Step in after the return pass; expect W to reveal you; buy anti-heal before duelling him.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit E text",
+    "enemyKit W text and revealsStealth flag",
+    "missingInteractions key 20"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns tracked only the 120s ultimate and gave no numbers.",
+   "why": "Nevermove at 10-12s is the punish clock in lane; Vision of Empire is 18-22s; Death's Hand falls to 3s at rank 5.",
+   "corrected": "Real numbers written in.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "report[8].t already says \"Add anti-heal early into his sustain\", which is right for Ravenous Flock and matches the _missing needs-antiheal rule.",
+   "corrected": "Left as is; reinforced in winCon and breakdown.carry.",
+   "confidence": "High",
+   "sources": [
+    "missingInteractions key 20"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Akali"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Akali"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Akali"
+  },
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "He pokes until you shroud, then the lane belongs to the smoke — trade in obscured windows and energy-walk the rest.",
+   "after": "Vision of Empire reveals you through the smoke, so the shroud is not a hiding place here — dodge Nevermove's return and burst."
+  },
+  {
+   "layer": "full",
+   "path": "winCon",
+   "before": "Survive the poke, then win every shrouded exchange until one becomes a kill. Demonic Ascension is the clock this lane runs on — read it before every step forward.",
+   "after": "Survive the poke, then all-in the eleven seconds after Nevermove. His passive heals and banks permanent health, so buy Grievous Wounds before you ever duel him."
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Swain wins by landing Demonic Ascension, denying your pattern, and keeping the fight at a distance your kit resents.",
+   "after": "Swain wins by rooting you with Nevermove's return, pulling you in, and draining you flat inside Demonic Ascension."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. Check it before every step-up. - W Twilight Shroud is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+   "after": "- Nevermove: 10-12s, and it roots on the RETURN wave, not the way out — hold your step-up until the second pass has gone by. - Vision of Empire: 18-22s, and it reveals whoever it hits, so it drags you out of the shroud."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.carry",
+   "before": "Carry through deletions — one carry per fight, every fight; the shroud buys the time and the resets pay the exit.",
+   "after": "Carry by killing him before the drain starts — Grievous Wounds first, then one shrouded flank per fight."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.feeding",
+   "before": "If Swain takes first blood, tighten up: Demonic Ascension is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q range and stay relevant through shroud picks.",
+   "after": "If Swain takes first blood, his passive is already banking permanent health off you — buy anti-heal on the next back. A second kill means the duel is over and the game is not: farm at Q range, take grouped picks only."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His drain mode — disengage and reset the fight when it starts. Its cooldown is the green light — wait for it.",
+   "after": "Nevermove roots on the return pass — step in after the wave has come back, not when it flies out."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Swain whiffs Demonic Ascension and the lane briefly belongs to you.",
+   "after": "Swain whiffs Nevermove — that is a clean 11-second window, so go."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Swain’s Demonic Ascension: His drain mode — disengage and reset the fight when it starts. The whole green-light system is its cooldown.",
+   "after": "Track Nevermove: the root lands on the return pass and he can then pull you in, and Vision of Empire reveals you inside Twilight Shroud."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Swain's Vision of Empire poke plus Torment root punishes any approach, and his passive DoT from Death's Hand chunks your HP before you're even in Q range.",
+   "after": "Vision of Empire poke plus the Nevermove root punishes any approach, and Death's Hand hits harder for every bolt that strikes you before you're in Q range."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "Once you finish Shroud haste and burst (Nashor's/Riftmaker), your dive speed starts outrunning his root-and-drain setup since he needs time to land Torment before Ravenous Flock ticks.",
+   "after": "Once you finish Shroud haste and burst (Nashor's/Riftmaker), your dive speed starts outrunning his setup, since Nevermove has to land on its return pass before he can pull and drain you."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Swain's poke-and-root package is miserable to lane into — Death's Hand DoT stacks chip you from range, Torment roots punish any dash-in attempt, and Vision of Empire adds global poke you can't dodge. From level 3 he can zone you off CS entirely without ever entering your combo range. Play for farm with Q pokes of your own, and never engage into an up Torment.",
+   "after": "Swain's poke-and-root package is miserable to lane into — Death's Hand hits harder for each bolt that clips you, Nevermove roots on its return pass to punish any dash-in, and Vision of Empire pokes from across the map and reveals you. From level 3 he can zone you off CS entirely without ever entering your combo range. Play for farm with Q pokes of your own, and never engage into an up Nevermove."
+  },
+  {
+   "layer": "content",
+   "path": "late",
+   "before": "Your first real item spike changes the math: Shroud haste plus burst stats let you close the gap and threaten a kill before he can land Torment and pop Ascension in time. In the late game, stealth-engaging from an angle he hasn't warded lets you burst him down before his drain radius stabilizes, so this is where you start winning the 1v1 outright.",
+   "after": "Your first real item spike changes the math: Shroud haste plus burst stats let you close the gap and threaten a kill before he can land Nevermove and pop Ascension in time. In the late game, stealth-engaging from an angle he hasn't warded lets you burst him down before his drain radius stabilizes, so this is where you start winning the 1v1 outright."
+  },
+  {
+   "layer": "content",
+   "path": "whys[1]",
+   "before": "He keeps chunking you with DoT and Torment through levels 3-5 while you still lack the item power to punish",
+   "after": "He keeps chunking you with Death's Hand and Nevermove through levels 3-5 while you lack the item power to punish"
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "His ranged poke and Ravenous Flock wave control keep him ahead as he approaches his ultimate spike",
+   "after": "His ranged poke and the health his passive banks off you keep him ahead into his ultimate spike"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Farm from max range and avoid walking into Torment root angles pre-6",
+   "after": "Farm from max range and avoid Nevermove's return-pass root angles pre-6"
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Bait his passive DoT stacks onto minions instead of yourself when pushing",
+   "after": "Bait his Death's Hand bolts onto minions instead of yourself when pushing"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Land Torment roots to lock you down before Vision of Empire poke chunks your HP",
+   "after": "Land Nevermove roots to lock you down before Vision of Empire poke chunks your HP"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Push and roam using Ravenous Flock's wave clear while you can't punish his range",
+   "after": "Push and roam using Death's Hand wave clear while you can't punish his range"
+  }
+ ],
+ "notes": "Six occurrences of \"Torment\" — a Morgana ability — were being used as the name of Swain's root; the real ability is Nevermove, and it roots on the RETURN pass, which is the single most useful thing a player can know in this lane and was nowhere on the page. Also corrected the invented Death's Hand DoT and the claim that Ravenous Flock (his passive) provides wave clear. The packet's two suspectNames entries (\"Demonic Ascension's\", \"Ravenous Flock's\") are FALSE POSITIVES — both are the correct names in possessive form; the real errors were elsewhere. Templated fields left in place: breakdown.wave, breakdown.early, breakdown.mid, ahead, tradeGood, tradeBad, breakdown.late. Unverified: whether Vision of Empire's reveal specifically cancels Twilight Shroud's untargetability or only grants vision, and whether Nevermove's pull can drag Akali out of the shroud. | COHERENCE: 4 chart edit(s) withdrawn — they moved the row to the enemy while leaving the phase why describing the owner winning it. Chart authority is an open question, so the label was reverted rather than the prose rewritten. Re-propose only as a side+why pair."
 }

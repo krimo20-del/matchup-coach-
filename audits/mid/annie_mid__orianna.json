@@ -1,0 +1,96 @@
+{
+  "ownerKey": "annie_mid",
+  "enemy": "orianna",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "TRICKY 7/10 is right for a 625-range immobile mage into an 815-range poke mage with a 9s shield, even at 56.53% over 704 games — the win rate comes from the level 4+ rows, not from lane safety.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet winRate/games", "brief kits"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[].side reads Skill on rows 0-5 and Orianna on row 6; content win[] reads Orianna, Orianna, Skill, Annie, Annie, Annie, Annie — the two layers disagree on six of seven rows, including a straight inversion at 2+ items.",
+      "why": "packet.levelChart matches the content layer exactly. The full layer's phases[0].why and [1].why also describe an Annie-favoured level 1-2 that the win rate and the range gap do not support.",
+      "corrected": "Flip the full layer to Orianna/Orianna/Skill/Annie/Annie/Annie/Annie and rewrite phases[0].why and [1].why to explain Orianna's early edge (815 Q range, Command: Protect on 9s).",
+      "confidence": "High",
+      "sources": ["packet levelChart", "brief enemyKit Q/E"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The `early` field and wants.foe[1] both say Orianna pokes with Command: Dissonance from safe range; wants.foe[2] calls the ultimate 'Shockwave'.",
+      "why": "Command: Dissonance (W) is 225 range — a pulse around the ball, not a poke tool. The 815-range poke is Command: Attack (Q, 7/6/5/4/3s). The ultimate's full name is Command: Shockwave (110/95/80s, 410 range) and it launches enemies toward the ball, which is the single most important positional fact in the matchup.",
+      "corrected": "Name Command: Attack as the poke, and tell the player to watch the ball's position because Shockwave pulls toward the ball, not toward Orianna.",
+      "confidence": "High",
+      "sources": ["brief enemyKit Q/W/R text and ranges", "packet suspectNames"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "No cooldown numbers anywhere — the cooldown field says 'count it out loud' without naming a duration.",
+      "why": "Command: Shockwave is 110s at rank 1 and Command: Protect is a flat 9s. Those two numbers are the entire timing of the lane.",
+      "corrected": "Bait Command: Protect (9s), then commit; step up on the 110s Shockwave window.",
+      "confidence": "High",
+      "sources": ["brief enemyKit cooldowns"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Orianna"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Orianna"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Annie"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Annie"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Annie"},
+    {"layer":"full","path":"phases[6].side","before":"Orianna","after":"Annie"},
+
+    {"layer":"full","path":"phases[0].why","before":"Q last-hits refund mana on kill — farm with it for free and let the stun counter tick where he can see it.","after":"Command: Attack out-ranges your 625 Q by 190 — last-hit with autos and eat chip you cannot answer yet."},
+
+    {"layer":"full","path":"phases[1].why","before":"W joins the stack engine: the cone clears and counts. A stocked stun at level 2 already makes him flinch.","after":"She parks the ball on herself with Command: Protect every 9s, so a level 2 stun trade bounces off. Stack."},
+
+    {"layer":"full","path":"phases[3].why","before":"Hold the four-stack glow and watch him orbit at max range — a stocked Annie controls the lane by standing there.","after":"Hold the four-stack glow: inside 625 a landed stun beats any ball she has parked, and she has to respect it."},
+
+    {"layer":"full","path":"tldr","before":"He out-ranges you — but a stocked stun makes every step into your Flash radius a coin he can't afford to flip.","after":"She out-ranges you — but a stocked stun makes every step into your Flash radius a coin she can't afford to flip."},
+
+    {"layer":"full","path":"report[0].t","before":"He out-ranges you — but a stocked stun makes every step into your Flash radius a coin he can't afford to flip.","after":"She out-ranges you — but a stocked stun makes every step into your Flash radius a coin she can't afford to flip."},
+
+    {"layer":"full","path":"enemyWin","before":"Orianna wins by landing Command: Shockwave, denying your pattern, and owning the spacing war until your tempo starves.","after":"Orianna wins by parking the ball between you and the wave, chipping with Command: Attack, and never letting you inside 625."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Orianna Command: Shockwave: matchup-defining — The fight-flipping wombo — track the ball position like a second enemy. Count it out loud if you must. - Your E Molten Shield has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Command: Shockwave is 110s at rank 1 and only 410 range — it launches you toward the ball, so watch the ball, not her. - Command: Protect shields on a flat 9s: bait it, then stun. - Your E is for disaster, your R for the opening."},
+
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the one button — Flash-Tibbers on two is a won fight; your whole game is engineering the radius.","after":"Carry through the one button — Orianna has no dash, so a stun landed inside 625 ends her before the ball helps."},
+
+    {"layer":"full","path":"tradeGood","before":"At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a guaranteed chunk he answered with nothing.","after":"At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a chunk she has no dash to leave."},
+
+    {"layer":"full","path":"tradeBad","before":"Spending the stocked stun on wave-clear with his engage loaded — unstacked Annie is the most killable mage in the lane.","after":"Spending the stocked stun on wave-clear with Shockwave up — unstacked Annie is the most killable mage in the lane."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"The fight-flipping wombo — track the ball position like a second enemy. Commit on its cooldown, never into it.","after":"The ball is the second enemy — Shockwave drags you to it, not to her. Commit on its cooldown, never into it."},
+
+    {"layer":"full","path":"dosFull[1].d","before":"At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a guaranteed chunk he answered with nothing.","after":"At four stacks: walk forward, Q-stun, W, auto, walk away — inside 625 she has no dash and a parked ball cannot peel her."},
+
+    {"layer":"full","path":"dosFull[2].t","before":"Flash-R the one overstep he donates","after":"Flash-R the one overstep she donates"},
+
+    {"layer":"full","path":"dosFull[2].d","before":"Orianna wastes Command: Shockwave — that is your full-commit window.","after":"Orianna spends Command: Shockwave on a wave — that is a 110s window."},
+
+    {"layer":"full","path":"dontsFull[0].t","before":"Trade into his range with stacks down","after":"Trade into her range with stacks down"},
+
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Orianna’s rehearsed moment — don’t audition for it.","after":"Her Q reaches 815 and yours 625 — unstacked you only donate HP."},
+
+    {"layer":"full","path":"dontsFull[1].t","before":"Burn the stun on poke he can answer","after":"Burn the stun on poke she can answer"},
+
+    {"layer":"full","path":"dontsFull[2].d","before":"Spending the stocked stun on wave-clear with his engage loaded — unstacked Annie is the most killable mage in the lane.","after":"Unstacked inside 815 range, Command: Attack and her stacking auto passive chip you for free and you cannot answer."},
+
+    {"layer":"content","path":"early","before":"Levels 1-2 favor Orianna clearly: her ball attached to herself grants a shield that blunts your stun-into-burst combo, and she can poke you with Command: Dissonance from safe range while you're forced to walk up. Farm cautiously and look for moments she detaches the ball to poke a minion wave, since that's your window to punish her without the shield absorbing your damage.","after":"Levels 1-2 favor Orianna clearly: Command: Protect attaches the ball to herself for a shield that blunts your stun-into-burst combo, and she pokes with Command: Attack from 815 while your Q only reaches 625. Farm cautiously and look for the moments she leaves the ball parked out in the wave, since that's your window to punish her without the shield absorbing your damage."},
+
+    {"layer":"content","path":"whys[4]","before":"Annie's stun-into-Tibbers combo edges out Orianna's Shockwave in a straight isolated duel at level 6.","after":"Annie's stun-into-Tibbers combo edges out Command: Shockwave in a straight isolated duel at level 6."},
+
+    {"layer":"content","path":"wants.foe[1]","before":"Poke with Command: Dissonance from max range whenever possible","after":"Poke with Command: Attack from 815 range whenever possible"},
+
+    {"layer":"content","path":"wants.foe[2]","before":"Hold Shockwave for a teamfight-winning pickup rather than dueling","after":"Hold Command: Shockwave for a teamfight pickup rather than dueling"}
+  ],
+  "notes": "Two real ability errors: `early` and wants.foe[1] both had Orianna poking with Command: Dissonance, which is a 225-range pulse around the ball, not a poke spell — the poke is Command: Attack at 815. The packet's suspectName on wants.foe[2] ('Hold Shockwave') was a genuine hit; corrected to Command: Shockwave. Level chart was inverted between layers on six of seven rows, including 2+ items reading Orianna on the full layer and Annie on the content layer; the content layer matches packet.levelChart, so the full layer was flipped as one atomic group and phases[0]/[1].why rewritten to actually justify an Orianna-favoured early game. Orianna is female; corrected the pronouns in the fields I touched."
+}

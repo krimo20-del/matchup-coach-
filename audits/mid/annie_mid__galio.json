@@ -1,0 +1,75 @@
+{
+  "ownerKey": "annie_mid",
+  "enemy": "galio",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full layer said 'Skill' on all seven rows while the content layer and packet both said Skill/Skill/Skill/Annie/Annie/Annie/Annie.",
+      "why": "Galio's kit past level 3 buys durability and team utility; Annie's stun-into-burst is the only lane kill threat, which is what a 52.22% win rate over 1103 games reflects.",
+      "corrected": "phases[3..6].side aligned to the content/packet chart with ratings following.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spikes said Galio's ultimate is 'a roam/peel tool' without the number that makes that actionable.",
+      "why": "Hero's Entrance is 180/160/140s with a 4000-5500 range — the longest cooldown either champion has, and the reason his level 6 barely touches the lane.",
+      "corrected": "180 seconds stated in phases[4].why and spikes[1].",
+      "confidence": "High",
+      "sources": ["enemyKit R cooldown and range"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three problems. (a) whys[0], early and spikes[0] all refer to 'Galio's passive shield' — his passive is Colossal Smash, an empowered area basic attack, not a shield. (b) The auto-reset tell was absent entirely. (c) Nothing on the page mentioned the taunt, which is the ability that actually decides whether Annie escapes.",
+      "why": "Riot text: passive is 'Every few seconds, Galio's next basic attack deals bonus magic damage in an area'. Shield of Durand (W, 18/17/16/15/14s, 275 range) is the defensive stance that taunts on release. missingInteractions flags the auto-reset tell on Colossal Smash. Annie has no dash, so a taunt into Justice Punch's knockup is the whole death pattern.",
+      "corrected": "Shield of Durand named as the stance and taunt; Colossal Smash written in as the wind-up tell in dosFull[1].d; taunt added to enemyWin and dontsFull[0].d.",
+      "confidence": "High",
+      "sources": ["missingInteractions key 9", "enemyKit P/W/E text", "ownerKit — no dash on any slot"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "The brief's derived flags put 'terrain: creates terrain, blocks paths and dashes' on Justice Punch, and missingInteractions builds a 'terrain-cuts-retreat' item on top of it.",
+      "why": "Riot's description of Justice Punch is a step-back charge that knocks up the first enemy champion encountered — no terrain is created. Per the instruction to trust the description over a misfiring flag, no terrain claim was written.",
+      "corrected": "The underlying true half was kept — you have no dash, so Flash is reserved for his knockup, not for damage — and written into breakdown.feeding without asserting terrain.",
+      "confidence": "High",
+      "sources": ["enemyKit E text vs its derived flags"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Annie"},
+    {"layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Annie"},
+    {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Annie"},
+    {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Annie"},
+    {"layer": "full", "path": "phases[0].why", "before": "Q last-hits refund mana on kill — farm with it for free and let the stun counter tick where he can see it.", "after": "Q last-hits refund mana — farm free, since Colossal Smash only reaches you if you stand in his auto range."},
+    {"layer": "full", "path": "phases[1].why", "before": "W joins the stack engine: the cone clears and counts. A stocked stun at level 2 already makes him flinch.", "after": "W joins the stack engine, and Shield of Durand is still a level away — the cone is free damage right now."},
+    {"layer": "full", "path": "phases[2].why", "before": "E shield completes the loop: stack the passive on your own shield safely. Trade only with the stun loaded.", "after": "Justice Punch arrives at 3 on 11s — his only entry. Stack on your own shield, trade with the stun loaded."},
+    {"layer": "full", "path": "phases[3].why", "before": "Hold the four-stack glow and watch him orbit at max range — a stocked Annie controls the lane by standing there.", "after": "Hold the four-stack glow: he needs Justice Punch to reach you, and it is down 11 seconds every time it misses."},
+    {"layer": "full", "path": "phases[4].why", "before": "Tibbers online — Flash-R-W-Q deletes most mids from full health. The lane is now a geometry problem about your Flash range.", "after": "Tibbers online, and Hero's Entrance is 180s at rank 1 — a roam button, not a lane answer. Stock, then take the fight."},
+    {"layer": "full", "path": "phases[5].why", "before": "Luden's/Stormsurge spike: the stun-burst math kills through Doran's defenses. Stock, walk forward, win.", "after": "Your burst item outruns a build that buys resistances — stun into full combo beats anything he has in lane."},
+    {"layer": "full", "path": "phases[6].why", "before": "Late Annie flips fights with one button: flash-Tibbers the clump, peel with the bear, and re-stock off the chaos.", "after": "His value is the taunt and a global shield; yours is one button on their carry — flank, and make sure you use it first."},
+    {"layer": "full", "path": "enemyWin", "before": "Galio wins by landing Justice Punch, denying your pattern, and starting the fight your kit wanted ten seconds later.", "after": "Galio wins by knocking you up with Justice Punch and taunting you back toward his tower with Shield of Durand."},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Galio Justice Punch: matchup-defining — His dash knockup — he has no engage while it is down. It governs your forward steps. - E Molten Shield spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Galio Justice Punch: 11s at rank 1, 650 range — it knocks up only the first champion it meets, and with it down he has no entry at all. - Shield of Durand's taunt is 18s and needs 275 range. - Hold Tibbers for the fight that decides something."},
+    {"layer": "full", "path": "breakdown.feeding", "before": "If Galio opens the score, reset expectations and respect Justice Punch doubly. After a second, your job description changes — farm with Q refunds and stay relevant through stocked-stun threat.", "after": "If Galio opens the score, hold Flash for the knockup rather than for damage — you have no dash to leave with. Farm with Q refunds and stay relevant through stocked-stun threat."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through the one button — Flash-Tibbers on two is a won fight; your whole game is engineering the radius.", "after": "Carry the one button — Flash-Tibbers their carry while Galio's 180s ultimate is still on the far side of the map."},
+    {"layer": "full", "path": "ahead", "before": "Ahead, shrink the lane: hold the glow, zone Galio off CS by existing, and Flash-Tibbers the recovery attempt — fed Annie ends games at 20.", "after": "Ahead, shrink the lane: hold the glow, deny CS whenever his 11s knockup is down, and Flash-Tibbers the recovery attempt — fed Annie ends games at 20."},
+    {"layer": "full", "path": "dosFull[0].d", "before": "His dash knockup — he has no engage while it is down. Commit on its cooldown, never into it.", "after": "The knockup is his only entry, at 650 range — commit on its 11s cooldown, never into it."},
+    {"layer": "full", "path": "dosFull[1].d", "before": "At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a guaranteed chunk he answered with nothing.", "after": "Colossal Smash is an empowered auto on a timer — that wind-up, not his Q, is the cue to shield and step out of range."},
+    {"layer": "full", "path": "dosFull[2].d", "before": "Galio whiffs Justice Punch and the lane briefly belongs to you.", "after": "Galio whiffs Justice Punch — eleven seconds of lane are yours."},
+    {"layer": "full", "path": "dontsFull[0].d", "before": "That is Galio’s rehearsed moment — don’t audition for it.", "after": "His taunt turns your retreat into a walk back toward him."},
+    {"layer": "content", "path": "whys[0]", "before": "Level 1 is skill-based: Galio's passive shield and Annie's stun threat roughly cancel out, so execution decides trades.", "after": "Level 1 is skill-based: Colossal Smash's empowered auto and Annie's stun threat cancel out, so execution decides trades."},
+    {"layer": "content", "path": "whys[4]", "before": "Level 6 favors Annie: Galio's ultimate is a roam/peel tool with little lane impact, while Tibbers-stun remains a real kill threat.", "after": "Level 6 favors Annie: Hero's Entrance is a 180-second roam and peel tool with little lane impact, while Tibbers-stun kills."},
+    {"layer": "content", "path": "spikes[0].text", "before": "Galio's Q poke and passive shield make early trades close and skill-based — good spacing and stun-timing decide these exchanges more than raw kit power.", "after": "Winds of War pokes from 825 and Shield of Durand's stance blunts your burst, so spacing and stun timing decide these exchanges more than kit power."},
+    {"layer": "content", "path": "spikes[1].text", "before": "Galio's ultimate is a roam/peel tool, not a lane burst tool, so Annie's stun-Tibbers combo remains the more dangerous immediate lane threat.", "after": "Hero's Entrance is a 180-second roam and peel tool, not lane burst, so Annie's stun-Tibbers combo stays the more dangerous immediate threat."},
+    {"layer": "content", "path": "spikes[3].text", "before": "Annie's raw burst continues to threaten one-shots on squishies, while Galio's kit is built for tankiness and team utility rather than lane kill pressure.", "after": "Annie still one-shots squishies, while Galio buys resistances and sells his taunt and global shield to his team instead of kill pressure."},
+    {"layer": "content", "path": "early", "before": "Levels 1-2 are close and mechanical — Galio's passive shield absorbs some of your burst, but your stun still punishes bad positioning, so whoever plays cleaner wins these trades. Through level 3 it stays skill-dependent: his Q poke adds up but doesn't threaten a kill alone, and your Pyromania stun can turn a poke exchange into a real trade if you time your engage right. Play patiently and look to punish his cooldowns rather than force fights blindly.", "after": "Levels 1-2 are close and mechanical — Shield of Durand's stance blunts some of your burst, but your stun still punishes bad positioning, so whoever plays cleaner wins these trades. Through level 3 it stays skill-dependent: Winds of War adds up from 825 but never threatens a kill alone, and Pyromania turns a poke exchange into a real trade if you time the engage. Punish his cooldowns rather than force fights blindly."},
+    {"layer": "content", "path": "late", "before": "Annie's burst combo continues to threaten a one-shot on squishy targets throughout the game, while Galio's itemization leans into tankiness and taunt-lockdown for his team rather than personal kill pressure. Respect his ultimate as a teamfight-swinging tool that can lock down your whole team, but in isolated skirmishes your stun-Tibbers combo remains the scarier immediate threat. Play around vision so Galio can't flash-ult onto you unseen.", "after": "Annie's burst still threatens a one-shot on squishy targets all game, while Galio's itemization leans into resistances and taunt lockdown for his team rather than personal kill pressure. Respect Hero's Entrance as a teamfight swing — he lands on an ally, shields them, and knocks your group up — but in isolated skirmishes your stun-Tibbers stays the scarier threat. Track where his allies are, because that is where he can arrive."},
+    {"layer": "content", "path": "wants.foe[0]", "before": "Farm safely behind his shield and poke with Q", "after": "Poke with Winds of War from 825 range"}
+  ],
+  "notes": "Packet defect confirmed: no Galio ability was named anywhere. All five now appear. Repeated factual error corrected in three places: 'Galio's passive shield' — the passive is Colossal Smash, an empowered area auto; the defensive stance is Shield of Durand (W). Derived-flag error: Justice Punch carries a 'terrain: creates terrain' flag that Riot's description does not support, so the 'terrain-cuts-retreat' missing-interaction was written in only for its true half (Annie has no dash, so Flash answers the knockup). Left templated but ungroundable without invention: breakdown.wave, breakdown.mid, breakdown.late, breakdown.early, tradeGood/tradeBad, dontsFull[1].d, loading."
+}

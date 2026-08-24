@@ -1,0 +1,157 @@
+{
+  "ownerKey": "annie_mid",
+  "enemy": "katarina",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full layer reads Annie on all seven rows; content win[0..2] and the packet chart both read Skill for Levels 1, 2 and 3.",
+      "why": "Katarina's Bouncing Blade is free (0 mana, 11s at rank 1) and chips off minion bounces, while Annie pays 60-80 mana per cast and has 625 range with no reach. Neither side owns levels 1-3. Annie's 52.13% over 1924 games is earned from level 4 onward, not at level 1.",
+      "corrected": "phases[0..2].side = Skill with ratings 5/10; rows 3-6 stay Annie.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[0..2]", "enemyKit Q cost 0 / cd 11"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Level 6 is genuinely Annie's peak here and the text already says so: Death Lotus is a channel on a 75s cooldown at rank 1, and Pyromania ends it. Katarina's real spike is not a level but a death — Voracity refunds her cooldowns whenever a champion she damaged dies.",
+      "corrected": "Voracity added to enemyWin, breakdown.feeding and breakdown.carry, where the spike model was previously described only in level terms.",
+      "confidence": "High",
+      "sources": ["enemyKit P and R text", "enemyKit R cd 75/60/45"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The Molten Shield interaction was never stated, Shunpo's cooldown was given as \"fifteen-second\" when it is 12s falling to 8s, and five fields called Katarina \"he/his\".",
+      "why": "Riot's E text: Molten Shield damages enemies who strike Annie with attacks or spells. Katarina's damage arrives as many rapid hits, so the retaliation is unusually large in this specific matchup and it is free information the page was not giving. Shunpo's real cooldown is 12/11/10/9/8.",
+      "corrected": "Rewrote phases[2].why, tradeGood, dosFull[2].d and the gendered fields.",
+      "confidence": "High",
+      "sources": ["ownerKit E text", "enemyKit E cd 12/11/10/9/8"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.defects flags zero cooldown-sequencing advice; breakdown.cooldowns carried no numbers.",
+      "why": "The punish window shrinks with Shunpo's rank — 12s at rank 1 down to 8s at rank 5 — which is the reason to be aggressive early rather than to wait.",
+      "corrected": "breakdown.cooldowns now carries the Shunpo ranks and the Death Lotus channel.",
+      "confidence": "High",
+      "sources": ["enemyKit E and R cooldown fields"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flags whys[4] \"Death Lotus's\" — false positive, Death Lotus is her real R. Left alone.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit R slot name"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Annie", "after": "Skill" },
+    { "layer": "full", "path": "phases[1].side", "before": "Annie", "after": "Skill" },
+    { "layer": "full", "path": "phases[2].side", "before": "Annie", "after": "Skill" },
+    { "layer": "full", "path": "phases[0].rating", "before": "7/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "7/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "8/10", "after": "5/10" },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q last-hits refund mana on kill — farm with it for free and let the stun counter tick where he can see it.",
+      "after": "Q last-hits refund mana — farm free while she chips off Bouncing Blade bounces; neither of you can commit yet."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "W joins the stack engine: the cone clears and counts. A stocked stun at level 2 already makes him flinch.",
+      "after": "W stacks off the caster pack, but her Q is 11s and free — she can trade for zero mana while you pay 70."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E shield completes the loop: stack the passive on your own shield safely. Trade only with the stun loaded.",
+      "after": "Molten Shield burns anyone who hits you — her combo is many fast hits, so it taxes every Shunpo she throws."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Hold the four-stack glow and watch him orbit at max range — a stocked Annie controls the lane by standing there.",
+      "after": "Hold the four-stack glow and watch her orbit her daggers — Shunpo is 725 range and your stun does not need to aim."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Katarina Shunpo: matchup-defining — Her blink to daggers and targets — hard CC during her resets and she folds. Check it before every step-up. - E Molten Shield is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+      "after": "- Shunpo is 12s at rank 1 and only 8s at rank 5, so the free window shrinks fast — punish the early ranks hardest. - Death Lotus is a 75s channel at rank 1: your stun ends it and she gets nothing back unless someone dies for Voracity."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Katarina wins by landing Shunpo, denying your pattern, and turning your every misstep into the all-in you hadn’t budgeted.",
+      "after": "Katarina wins off Voracity: one death anywhere near her refunds her cooldowns and the reset chain starts without you."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a guaranteed chunk he answered with nothing.",
+      "after": "At four stacks: walk forward, Q-stun, W, auto, walk out re-stacking — Molten Shield taxes her back and she has no shield."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Spending the stocked stun on wave-clear with his engage loaded — unstacked Annie is the most killable mage in the lane.",
+      "after": "Burning the stun on wave-clear while her Shunpo is up — unstacked, you are the low-health target Voracity is hunting."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a guaranteed chunk he answered with nothing. Bad trade: Spending the stocked stun on wave-clear with his engage loaded — unstacked Annie is the most killable mage in the lane.",
+      "after": "Good trade: at four stacks walk forward, Q-stun, W, auto, walk out re-stacking — Molten Shield taxes her back and she has no shield. Bad trade: burning the stun on wave-clear while Shunpo is up — unstacked, you are the low-health target Voracity is hunting."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the one button — Flash-Tibbers on two is a won fight; your whole game is engineering the radius.",
+      "after": "Carry by denying resets: her cooldowns only refund on a death, so a fight where nobody dies is a fight she loses."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Katarina gets a kill, the lane gets honest — give Shunpo extra room and farm it back. Two kills: stop dueling your tilt — farm with Q refunds and stay relevant through stocked-stun threat.",
+      "after": "If Katarina gets a kill, Voracity resets her whole kit on the spot — never stand next to a dying ally. Farm with Q refunds and hold four stacks so her next dive costs her the reset."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a guaranteed chunk he answered with nothing.",
+      "after": "Death Lotus is a channel — any hard CC ends it, and Tibbers keeps burning her for standing inside his aura to finish it."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Katarina burns Shunpo on nothing — take the fifteen-second invitation.",
+      "after": "Katarina burns Shunpo on nothing — that is an 8-to-12 second invitation."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].t",
+      "before": "Spend the stun on wave-clear near his timers",
+      "after": "Spend the stun on wave-clear near her daggers"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Spending the stocked stun on wave-clear with his engage loaded — unstacked Annie is the most killable mage in the lane.",
+      "after": "Chasing a Shunpo out of Tibbers' aura hands her the one thing she needs — a fight fought away from your bear."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Shunpo’s cooldown, on your Stormsurge spike, and with your jungler’s setup. His answer goes first; yours goes last.",
+      "after": "Commit on Shunpo's cooldown, on your Stormsurge spike, and with your jungler's setup. Her blink goes first; your stun goes last."
+    }
+  ],
+  "notes": "DERIVED FLAG MISFIRES on Katarina: Q carries \"grounding: shuts off enemy dashes\" and W carries \"knockup: displacement\", neither of which appears in Riot's descriptions (Q bounces daggers, W tosses a dagger upward and grants move speed). Nothing was written from either flag. Her R does carry a real antiHeal (Grievous Wounds while channelling) which is in the kit text but was out of scope for the length band this pass. Level chart flipped in the full layer only — content win[0..2] already read Skill and matched the packet."
+}

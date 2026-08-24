@@ -1,0 +1,85 @@
+{
+  "ownerKey": "annie_mid",
+  "enemy": "pantheon",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "TRICKY 7/10 matches a 53.19% win rate over 141 games: Pantheon owns levels 1-3 with Comet Spear and a 13s dash-stun, and Annie takes over from 4 onward.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["packet winRate/games", "brief enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Every full-layer phases[].side disagrees with content win[]: full reads Pantheon, Pantheon, Pantheon, Pantheon, Skill, Skill, Skill while content reads Skill, Skill, Skill, Annie, Annie, Annie, Annie.",
+      "why": "packet.levelChart matches the content layer. All seven rows currently render two different answers.",
+      "corrected": "Flip the whole full-layer chart to match content as one atomic group.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "brief currentText"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Aegis Assault is described only as a 'block' that eats Q poke. The channel property and the front-only limitation are absent, and Grand Starfall is called 'Grand Skyfall' in three places.",
+      "why": "Aegis Assault is a channel (22/21/20/19/18s) that makes him invulnerable to damage from the front — CC cancels it outright, so Pyromania or Tibbers ends it, and damage from behind is not blocked at all. The ultimate is Grand Starfall (180/165/150s, 5500 range).",
+      "corrected": "Stun or Tibbers through Aegis Assault to cancel it; never poke into its face; call the ultimate Grand Starfall.",
+      "confidence": "High",
+      "sources": ["brief enemyKit E/R text and flags", "brief missingInteractions", "packet suspectNames"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Shield Vault's auto-attack reset is never mentioned.",
+      "why": "The W carries an autoReset flag — the wind-up, not the spell cast, is the tell that the all-in has started.",
+      "corrected": "Read the auto wind-up as the engage cue.",
+      "confidence": "Medium",
+      "sources": ["brief enemyKit W flags", "brief missingInteractions"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Pantheon","after":"Skill"},
+    {"layer":"full","path":"phases[1].side","before":"Pantheon","after":"Skill"},
+    {"layer":"full","path":"phases[2].side","before":"Pantheon","after":"Skill"},
+    {"layer":"full","path":"phases[3].side","before":"Pantheon","after":"Annie"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Annie"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Annie"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Annie"},
+
+    {"layer":"full","path":"enemyWin","before":"Pantheon wins by landing Shield Vault (Stun), denying your pattern, and cashing the all-in before your pattern matures.","after":"Pantheon wins by opening with Shield Vault's dash-stun and finishing before Pyromania is back — the empowered spear does the rest."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Pantheon Shield Vault (Stun): matchup-defining — Point-and-click stun — respect the all-in any time it is up. It governs your forward steps. - E Molten Shield spent on poke is a death you scheduled. - Hold the R for the fight that decides something.","after":"- Shield Vault is his engage and it is down 13s at rank 1 — that gap is your step-up. - Aegis Assault is a channel: your stun or Tibbers cancels it, and it only blocks the front. - Hold the R for the fight that decides something."},
+
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the one button — Flash-Tibbers on two is a won fight; your whole game is engineering the radius.","after":"Carry through the one button — Tibbers cancels Aegis Assault, so the bear ends the only defence he has."},
+
+    {"layer":"full","path":"tradeGood","before":"At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a guaranteed chunk he answered with nothing.","after":"At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a chunk Aegis Assault cannot block."},
+
+    {"layer":"full","path":"tradeBad","before":"Spending the stocked stun on wave-clear with his engage loaded — unstacked Annie is the most killable mage in the lane.","after":"Spending the stocked stun on wave-clear with Shield Vault up — unstacked Annie is the most killable mage in the lane."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"Point-and-click stun — respect the all-in any time it is up. Its cooldown is the green light — wait for it.","after":"Shield Vault dashes 600 and stuns on arrival, down 13s at rank 1. That cooldown is the green light — wait for it."},
+
+    {"layer":"full","path":"dosFull[1].d","before":"At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a guaranteed chunk he answered with nothing.","after":"At four stacks: walk forward, Q-stun, W, auto, walk away — and a stun landed mid-Aegis Assault cancels the channel outright."},
+
+    {"layer":"full","path":"dosFull[2].d","before":"Pantheon whiffs Shield Vault (Stun) and the lane briefly belongs to you.","after":"Pantheon whiffs Shield Vault and you own the next thirteen seconds."},
+
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Pantheon’s whole plan in one window — decline politely and watch it retire.","after":"Aegis Assault blocks everything in front of him; step around the shield, never into it."},
+
+    {"layer":"full","path":"dontsFull[2].d","before":"Spending the stocked stun on wave-clear with his engage loaded — unstacked Annie is the most killable mage in the lane.","after":"Flash is your only exit once Shield Vault lands on you — spend it on his arrival, never on chip damage or a wave."},
+
+    {"layer":"content","path":"spikes[1].text","before":"His Grand Skyfall lets him leave lane to impact sidelines, but if he stays you still win a straight stun-race with Tibbers backup.","after":"Grand Starfall is 180s at rank 1 and takes him out of lane — if he stays, you still win the stun-race with Tibbers backup."},
+
+    {"layer":"content","path":"mid","before":"This stays skill-intensive through level 5 since both champions threaten to stun-and-burst the other first, but your growing item lead starts giving you the edge in straight damage races. Level 6 introduces his Grand Skyfall, which lets him disengage or roam to impact other lanes, but if he commits to staying in lane your Tibbers-backed all-in combo out-damages his kit in an isolated fight.","after":"This stays skill-intensive through level 5 since both champions threaten to stun-and-burst the other first, but your growing item lead starts giving you the edge in straight damage races. Level 6 introduces Grand Starfall, a 180-second leap that lets him disengage or roam to impact other lanes, but if he commits to staying in lane your Tibbers-backed all-in out-damages his kit in an isolated fight."},
+
+    {"layer":"content","path":"late","before":"Your first item spike lets you consistently win the burst race against Pantheon as long as you dodge or bait his Shield Vault stun first — his kit has no shield or hard escape to survive a landed combo. A fed Pantheon becomes a genuine threat through his Comet Spear poke and repeated ultimate roams that snowball other lanes, so ward his likely roam paths and don't let him accumulate a gold lead unanswered.","after":"Your first item spike lets you consistently win the burst race against Pantheon as long as you bait Shield Vault first — Aegis Assault only blocks the front, and a stun or Tibbers cancels the channel outright. A fed Pantheon becomes a genuine threat through Comet Spear poke and repeated Grand Starfall roams that snowball other lanes, so ward his likely paths and don't let him build a gold lead unanswered."},
+
+    {"layer":"content","path":"whys[6]","before":"A fed Pantheon's poke damage and repeated roam pressure via his ultimate make him the bigger threat late.","after":"A fed Pantheon's Comet Spear poke and repeated Grand Starfall roams make him the bigger threat late."},
+
+    {"layer":"content","path":"wants.you[1]","before":"Punish him when his Aegis Assault block is on cooldown","after":"Punish him while Aegis Assault's 22s block is on cooldown"},
+
+    {"layer":"content","path":"wants.foe[2]","before":"Roam via Grand Skyfall to swing side lanes once ahead","after":"Roam via Grand Starfall to swing side lanes once ahead"}
+  ],
+  "notes": "Packet flagged three suspect names; two were false positives (Aegis Assault is correct) and one was real — 'Grand Skyfall' appeared in spikes[1].text, mid and wants.foe[2] and is Grand Starfall. Separate factual error in `late`: it claimed Pantheon 'has no shield', which is wrong — Aegis Assault is a shield channel that makes him invulnerable from the front. The useful correction is that it is a channel any CC cancels and that it protects only the front. Level chart disagreed on all seven rows between layers; content matches packet.levelChart, so the full layer was flipped wholesale as one group. Note phases[0..3].rating stays 7/10 while the side flips to Skill/Annie — rating reads as difficulty rather than ownership, so I left it, but flag if the applier treats rating as part of the chart group."
+}

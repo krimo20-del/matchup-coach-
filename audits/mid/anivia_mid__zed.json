@@ -1,0 +1,82 @@
+{
+  "ownerKey": "anivia_mid",
+  "enemy": "zed",
+  "lane": "mid",
+  "audit": [
+    { "point": 2, "status": "needs-correction",
+      "whatIsWrong": "Four of seven chart rows disagree across layers: phases[3].side=Skill vs win=Zed, phases[4].side=Zed vs win=Anivia, phases[5].side=Skill vs win=Zed, phases[6].side=Skill vs win=Anivia.",
+      "why": "Packet levelChart is Zed, Zed, Zed, Zed, Anivia, Zed, Anivia — win[] already matches it exactly; the full layer matched on none of the last four rows, and phases[4].why describes Anivia taking over while its side said Zed.",
+      "corrected": "phases[3]=Zed, phases[4]=Anivia, phases[5]=Zed, phases[6]=Anivia.",
+      "confidence": "High", "sources": ["packet.levelChart", "currentText.content.win[]"] },
+    { "point": 3, "status": "correct",
+      "whatIsWrong": "",
+      "why": "The non-monotonic chart is right and worth keeping: level 6 is yours, then his first-item lethality spike takes it back, then two items and Zhonya's return it. Death Mark is 120s at rank 1 so his kill windows are countable.",
+      "corrected": "Added the 120s number to breakdown.cooldowns.",
+      "confidence": "High", "sources": ["brief.enemyKit", "packet.levelChart"] },
+    { "point": 4, "status": "needs-correction",
+      "whatIsWrong": "Three errors: 'Zed's shadow poke combo outranges you completely' (Razor Shuriken is 900, your Flash Frost is 1075), 'after E-marking you' (Shadow Slash marks nothing — only Death Mark marks), and 'Living Shadow gives him a free escape if you ever land a stun' (he cannot reactivate the swap while stunned).",
+      "why": "Riot text: Q is 900 range and thrown by Zed and each shadow; E is a 290-range slash that slows; W is a shadow that dashes out and can be swapped to by reactivating; R makes him untargetable during the dash and triggers 3s later.",
+      "corrected": "He wins the poke by throwing twice, not by outranging you. Your stun is what denies the swap — landing it is the punish, not the thing he escapes.",
+      "confidence": "High", "sources": ["brief.enemyKit", "brief.ownerKit"] },
+    { "point": 6, "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no numbers and two filler lines about Anivia's own W and R (sequencingCues 1).",
+      "why": "Death Mark 120s at rank 1, Living Shadow 20s at rank 1 — the two timers the lane runs on.",
+      "corrected": "Rewritten with both, plus the untargetable-during-dash detail that decides when the stun goes out.",
+      "confidence": "High", "sources": ["brief.enemyKit"] }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Zed" },
+    { "layer": "full", "path": "phases[4].side", "before": "Zed", "after": "Anivia" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Zed" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Anivia" },
+
+    { "layer": "full", "path": "enemyWin",
+      "before": "Zed wins by landing Death Mark, denying your pattern, and starting the fight your kit wanted ten seconds later.",
+      "after": "Zed wins by chipping you out with doubled Razor Shurikens, then marking the egg and swapping away before it hatches." },
+
+    { "layer": "full", "path": "breakdown.cooldowns",
+      "before": "- Zed Death Mark: matchup-defining — The all-in — spend your defensive answer AFTER the mark lands, not before. It governs your forward steps. - W Crystallize spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- Death Mark: 120s at rank 1 — he is untargetable through the dash, so the stun goes out after he lands, not before, and the mark repeats his damage 3s later. - Living Shadow is 20s at rank 1: stun him and he cannot swap back to it." },
+
+    { "layer": "full", "path": "breakdown.carry",
+      "before": "Carry by controlling space — storm and wall decide where fights happen, and your stun decides who dies first inside them.",
+      "after": "Carry by holding the stun for his arrival — Death Mark drops him beside you untargetable, and a stunned Zed cannot swap home." },
+
+    { "layer": "full", "path": "dosFull[2].d",
+      "before": "Zed whiffs Death Mark and the lane briefly belongs to you.",
+      "after": "Under tower, his 3s mark becomes your jungler's free kill." },
+
+    { "layer": "full", "path": "dontsFull[0].d",
+      "before": "That is Zed’s rehearsed moment — don’t audition for it.",
+      "after": "Your Q is 80 mana; his shurikens cost energy he regains." },
+
+    { "layer": "full", "path": "dontsFull[1].d",
+      "before": "Your wall is your Flash — a wasted Crystallize means the next gank kills the bird AND the egg.",
+      "after": "Shadow Slash only reaches 290 units — spacing him is free, so keep the wall for the ult." },
+
+    { "layer": "full", "path": "dontsFull[2].d",
+      "before": "Spamming Q on cooldown until you are out of mana with no stun threat left — that is when Zed walks straight at you.",
+      "after": "He leaves a shadow behind before every commit, so the Zed you are chasing is often the one already leaving." },
+
+    { "layer": "content", "path": "whys[0]",
+      "before": "Zed's shadow poke combo outranges you completely at level 1-2, giving him a clear early lane lead.",
+      "after": "Razor Shuriken is thrown by him and his shadow at once, out-chipping you for free at levels 1-2." },
+
+    { "layer": "content", "path": "whys[1]",
+      "before": "The chip-damage pattern from Q-E-W resets keeps compounding through levels 3-5 with no punish window for you.",
+      "after": "Living Shadow is 20s at rank 1, but he only spends it with a Q already in the air — the chip keeps compounding." },
+
+    { "layer": "content", "path": "whys[2]",
+      "before": "Same poke dynamic holds through level 5 as his shadow lets him disengage from any retaliation.",
+      "after": "Same poke pattern through level 5 — the shadow swap pulls him clear of your Flash Frost line." },
+
+    { "layer": "content", "path": "early",
+      "before": "Zed's shadow-based Q-E harass lets him poke you constantly from level 1 while staying just outside your Flash Frost range, and Living Shadow gives him a free escape if you ever land a stun. He can reset the trade with W after E-marking you, meaning you're eating consistent chip damage with almost no way to punish him back at levels 1-2. Play max-range farming with Q, hold Wall for his all-in rather than trades, and accept you're losing the poke war early.",
+      "after": "Zed's Razor Shuriken harass lets him poke you constantly from level 1, and because his shadow throws its own copy a single cast hits you twice. He can swap out with Living Shadow the moment a trade turns, meaning you're eating consistent chip damage with almost no way to punish him back at levels 1-2. Play max-range farming with Q, hold Wall for his all-in rather than trades, and accept you're losing the poke war early." },
+
+    { "layer": "content", "path": "wants.you[1]",
+      "before": "Save Wall specifically to block his ultimate dash-back, not just his engage",
+      "after": "Save Wall to cut off Living Shadow's path, not to space out his poke" }
+  ],
+  "notes": "Corrections: Razor Shuriken is 900 range against your 1075 Flash Frost, so 'outranges you completely' was false — his edge is that he and the shadow both throw. Shadow Slash does not mark; only Death Mark does. And a stunned Zed cannot reactivate Living Shadow, so landing the stun is the punish, not the thing he escapes — the page had that backwards. The non-monotonic level chart (his first-item row is genuinely his) is correct and was preserved; the full layer disagreed with it on four rows and is now squared with win[] and the packet."
+}

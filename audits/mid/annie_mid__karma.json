@@ -1,0 +1,164 @@
+{
+  "ownerKey": "annie_mid",
+  "enemy": "karma",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer level chart reads \"Skill\" on all seven rows while the content layer (win[0..6]) and the packet chart both read Karma/Karma/Karma/Annie/Annie/Annie/Annie. The page renders two different answers to \"who wins Level 1\".",
+      "why": "Karma has 950 range on Inner Flame versus Annie's 625 Q, Mantra is available at level 1 without a skill point, and Annie has no way to close before Tibbers. After level 6 the point-and-click stun plus Tibbers beats a kit with no dash and no burst answer, matching Annie's 54.91% win rate over 1914 games.",
+      "corrected": "phases[0..2].side = Karma, phases[3..6].side = Annie, with ratings 4/4/4/6/7/7/7. win[0..6] already matches on disk, so only the full layer needs the flip.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]", "enemyKit ranges"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Level 6 Tibbers, Luden's/Stormsurge and Rabadon's are the real spikes and are already recorded. Karma's spike is Mantra itself at level 1 plus the Q cooldown falling from 9s to 5s by rank 5, which the cooldown section now states.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit Q cd 9/8/7/6/5", "enemyKit R text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Karma is referred to as \"he/his\" in five fields. The decisive interactions are never stated: Focused Resolve is a break-on-range tether (12s flat), Mantra-Q leaves a delayed cataclysm on the ground, and Karma's passive Gathering Fire cuts Mantra's 40/38/36/34s cooldown every time she lands a damaging spell.",
+      "why": "Riot's W text says explicitly \"If the tether is not broken, the enemy will be rooted\" — Molten Shield's move-speed burst is Annie's tool for breaking that range before the root lands. Riot's passive text says her damaging abilities reduce Mantra's cooldown, so a Mantra you did not see spent may be back far earlier than 40s.",
+      "corrected": "Rewrote breakdown.cooldowns, enemyWin, breakdown.feeding, breakdown.carry, tradeGood, tradeBad, breakdown.trading and dosFull[1..2] around these three interactions.",
+      "confidence": "Medium",
+      "sources": ["enemyKit W/R/P text", "enemyKit W cd 12", "ownerKit E range 800"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.defects flags zero cooldown-sequencing advice, and breakdown.cooldowns carried no numbers at all.",
+      "why": "Focused Resolve is 12s flat at every rank and Inner Flame drops 9s to 5s; those two numbers are what make \"step up on the cast\" actionable.",
+      "corrected": "breakdown.cooldowns now names the 12s tether, the 9s-to-5s Q, and the E-breaks-range answer.",
+      "confidence": "High",
+      "sources": ["enemyKit cooldown fields"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No anti-heal mention despite Mantra-W healing Karma through the tether.",
+      "why": "missingInteractions flags needs-antiheal, and Riot's W Mantra text says she heals herself while the link is strengthened. Extended trades flip on Grievous Wounds timing.",
+      "corrected": "report[8].t now buys Oblivion Orb when she outlasts you.",
+      "confidence": "High",
+      "sources": ["missingInteractions rule needs-antiheal", "enemyKit W Mantra text"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Annie" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Annie" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Annie" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Annie" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "7/10" },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q last-hits refund mana on kill — farm with it for free and let the stun counter tick where he can see it.",
+      "after": "Karma outranges you 950 to 625 — Q last-hits refund mana, so farm from the back and stack where she cannot reach."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "W joins the stack engine: the cone clears and counts. A stocked stun at level 2 already makes him flinch.",
+      "after": "Her Q is still 8s and Mantra is already up — W stacks you safely on the wave, but stepping up is still hers."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E shield completes the loop: stack the passive on your own shield safely. Trade only with the stun loaded.",
+      "after": "Molten Shield completes the loop — stack on your own shield, but her poke and shield sustain still win the chip war."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Hold the four-stack glow and watch him orbit at max range — a stocked Annie controls the lane by standing there.",
+      "after": "Hold the four-stack glow and watch her orbit at max range — she has no dash, so one step inside 625 ends her."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Karma Focused Resolve (Tether): matchup-defining — The root tether — break it with range or line of sight. Step up only on its downtime. - Budget E Molten Shield for emergencies and the R for opportunities — never swap them.",
+      "after": "- Focused Resolve is a 12s tether: Molten Shield's move-speed burst breaks it before the root lands, so hold E for her W, not for poke. - Her Q falls from 9s to 5s by rank 5 — step up on the cast, not between them."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Karma wins by landing Focused Resolve (Tether), denying your pattern, and owning the spacing war until your tempo starves.",
+      "after": "Karma wins by rooting you at 675 range with Focused Resolve, then Mantra-Q cataclysm on the spot you cannot leave."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Karma gets a kill, the lane gets honest — give Focused Resolve (Tether) extra room and farm it back. Two kills: stop dueling your tilt — farm with Q refunds and stay relevant through stocked-stun threat.",
+      "after": "If Karma gets a kill, her Mantra comes up faster — every damaging spell she lands cuts its 40s timer, so respect a Mantra you did not see spent. Farm with Q refunds, hold four stacks, and let her walk into the glow."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the one button — Flash-Tibbers on two is a won fight; your whole game is engineering the radius.",
+      "after": "Carry by making Karma the target: she has no dash, so a stocked stun from 625 lands whenever she steps to poke."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a guaranteed chunk he answered with nothing.",
+      "after": "At four stacks: walk forward, Q-stun, W, auto, walk out re-stacking off the wave — her shield eats part of it, her root does not stop it."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Spending the stocked stun on wave-clear with his engage loaded — unstacked Annie is the most killable mage in the lane.",
+      "after": "Burning the stocked stun on wave-clear while her Mantra is up — unstacked Annie eats Mantra-Q and the root with no answer."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a guaranteed chunk he answered with nothing. Bad trade: Spending the stocked stun on wave-clear with his engage loaded — unstacked Annie is the most killable mage in the lane.",
+      "after": "Good trade: at four stacks walk forward, Q-stun, W, auto, walk out re-stacking — her shield eats part of it, her root does not stop it. Bad trade: burning the stun on wave-clear while Mantra is up — unstacked, you eat Mantra-Q and Focused Resolve with no answer."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].t",
+      "before": "E-shield his combo before it lands",
+      "after": "E-shield her Mantra-Q before it hits"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "At four stacks: walk forward, Q-stun, W, auto, walk away re-stacking off the wave — a guaranteed chunk he answered with nothing.",
+      "after": "Mantra-Q lands a delayed cataclysm on your feet — pop Molten Shield as the ball flies and its move speed walks you out of the zone."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Karma spends Focused Resolve (Tether) early — the closest thing this matchup has to a guarantee.",
+      "after": "Q refunds its mana on a kill and W cones the whole caster pack — four stacks are back in one wave."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Karma’s rehearsed moment — don’t audition for it.",
+      "after": "At three stacks Q is only damage — her root answers it."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Ring + 2 pots. Luden's or Stormsurge into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — cast it mid-Tibbers.",
+      "after": "Start Doran's Ring + 2 pots. Luden's into Sorcerer's, then Shadowflame and Rabadon's. Mantra-W heals her mid-tether — Oblivion Orb if she outlasts you."
+    }
+  ],
+  "notes": "Level chart was fully disagreed between layers: full said Skill on all 7 rows, content win[0..6] already said Karma/Karma/Karma/Annie/Annie/Annie/Annie and matched the packet. Only the full layer needed flipping, so these are full-only edits by necessity — the content side is already correct on disk. Karma was written as male in five fields; all corrected. Tether-break-by-move-speed is inferred from Riot's own W wording (\"if the tether is not broken\") rather than stated anywhere in the kit — Medium confidence, listed in unverified."
+}

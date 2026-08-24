@@ -1,0 +1,154 @@
+{
+  "ownerKey": "annie_mid",
+  "enemy": "viktor",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Difficulty 7/10 with a 52.23% win rate over 1857 games is defensible: Viktor out-ranges Annie with Hextech Ray (525) and Siphon Power (600) versus Annie's 625 Q, but Annie's stocked Pyromania stun makes any step inside Flash+R range lethal for him.",
+      "corrected": "Left as is.",
+      "confidence": "High",
+      "sources": ["brief packet", "kits"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level chart disagreed between layers: phases[3..6].side read Skill/Skill/Skill/Viktor while win[3..6] read Annie for all four rows.",
+      "why": "Both layers render the same row. win[] matches the packet levelChart (Skill,Skill,Skill,Annie,Annie,Annie,Annie) and matches phases[6].why, which describes Annie flipping late fights — so the full layer is the wrong one.",
+      "corrected": "phases[3..6].side set to Annie, proposed as one atomic group.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two fabricated ability names: 'Death Ray' (Viktor E is Hextech Ray) and 'Chaos Storm' (Viktor R is Arcane Storm). The Siphon Power auto-attack reset was never mentioned.",
+      "why": "Riot's kit file gives Q Siphon Power (shield + empowered next attack, autoReset flag), W Gravity Field (17/16/15/14/13s, slow then stun), E Hextech Ray (12/11/10/9/8s line), R Arcane Storm (120/100/80s, channel-interrupting storm). Viktor's damage tell is the empowered-auto wind-up, not the ability cast.",
+      "corrected": "All name errors fixed; the Siphon Power reset tell added to breakdown.cooldowns; real cooldown numbers put on Gravity Field and Arcane Storm.",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "brief missingInteractions rule autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns said 'matchup-defining' with no number, and dosFull[2].d called Gravity Field a fifteen-second cooldown.",
+      "why": "Gravity Field is 17/16/15/14/13s; fifteen seconds is only true at rank 3.",
+      "corrected": "Both grounded to 17s at rank 1.",
+      "confidence": "High",
+      "sources": ["brief enemyKit"]
+    },
+    {
+      "point": 7,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.wave punished a shoved wave with a generic 'every assassin timer in the game' line that fits any enemy.",
+      "why": "Template. Viktor specifically clears a shoved wave with Hextech Ray and then holds the poke advantage on the next one.",
+      "corrected": "Rewrote the worst-wave clause around Hextech Ray.",
+      "confidence": "High",
+      "sources": ["brief enemyKit"]
+    },
+    {
+      "point": 11,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.carry was a generic 'one button / engineering the radius' template.",
+      "why": "Viktor's Arcane Storm is a 120s channel he steers; catching him during it is the concrete carry pattern.",
+      "corrected": "Grounded to Arcane Storm.",
+      "confidence": "Medium",
+      "sources": ["brief enemyKit"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Annie"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Annie"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Annie"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Viktor",
+      "after": "Annie"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Viktor scales into a genuine teamfight threat with Chaos Storm zoning and Death Ray poke, but in a direct lane duel your burst combo still comes down faster than his combo can punish.",
+      "after": "Viktor scales into a genuine teamfight threat with Arcane Storm zoning and Hextech Ray poke, but in a direct lane duel your burst still lands before he can steer that 80-second storm onto you."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Chaos Storm is a slow zone-control ultimate, not a burst tool, so once your Tibbers-stun combo is live you can force all-ins he has no fast answer to.",
+      "after": "Arcane Storm is a slow zone-control ultimate on a 120s cooldown, not a burst tool, so once Tibbers and a stocked stun are live he has no fast answer to your all-in."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Viktor's Siphon Power poke and shield chip you if you walk up carelessly, but landing your Q stun off a passive-charged auto through his shield still wins the trade outright.",
+      "after": "Siphon Power shields him and empowers his next auto — the wind-up is the tell, so step back on it, then walk in on the down cycle and Q-stun through the shield to win the trade."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Annie's stun-Tibbers combo comes online and outraces Viktor's slow-arming Chaos Storm by mid lane",
+      "after": "Annie's stun-Tibbers combo comes online and outraces Viktor's slow-arming Arcane Storm by mid lane"
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "From level 3 through 6 your stun-Tibbers combo lands faster than anything Viktor can punish with — Chaos Storm is a slow-arming zone tool, not an instant burst answer, so you comfortably win forced all-ins in this window.",
+      "after": "From level 3 through 6 your stun-Tibbers combo lands faster than anything Viktor answers with — Arcane Storm is a slow-arming zone tool on a 120s cooldown, not instant burst, so you win forced all-ins in this window."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Viktor eventually becomes a strong teamfight zoning threat as Hex Core upgrades and Chaos Storm scale, but in an isolated lane duel your combo still kills him faster than he can peel or punish, keeping this matchup in your favor throughout.",
+      "after": "Viktor eventually becomes a strong teamfight zoning threat as his Hex Fragment augments and Arcane Storm scale, but in an isolated duel your combo still kills him before Gravity Field's stun ever finishes ticking, keeping this in your favor."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Poke safely with Siphon Power and Death Ray from max range",
+      "after": "Poke safely with Siphon Power and Hextech Ray from max range"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Viktor Gravity Field: matchup-defining — The stun zone owns every all-in — walk out the moment it drops or fight outside it. Step up only on its downtime. - Budget E Molten Shield for emergencies and the R for opportunities — never swap them.",
+      "after": "- Viktor Gravity Field: 17s at rank 1 — that stun zone owns every all-in, so walk out the moment it drops and step up on its downtime. - Siphon Power empowers his next auto: the wind-up is the tell, not the cast. Arcane Storm is 120s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Viktor burns Gravity Field on nothing — take the fifteen-second invitation.",
+      "after": "Viktor burns Gravity Field on nothing — that is a 17-second invitation at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the one button — Flash-Tibbers on two is a won fight; your whole game is engineering the radius.",
+      "after": "Carry through one button — Flash-Tibbers Viktor mid-Arcane Storm and the fight ends; the radius is your whole game."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a Q-refund farmed wave you never push past river — your kill threat is Flash radius, not wave state. Worst wave: a shoved wave with zero stacks and Tibbers down — every assassin timer in the game points at that picture. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.",
+      "after": "Best wave: a Q-refund farmed wave you never push past river — your kill threat is Flash radius, not wave state. Worst wave: a shoved wave with zero stacks and Tibbers down — Viktor clears it free with Hextech Ray and pokes you off the next one. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores."
+    }
+  ],
+  "notes": "Level chart disagreed across layers on rows 3-6; fixed as one atomic group toward the packet chart and win[] values. Two fabricated names corrected repo-wide in this matchup: 'Death Ray' -> Hextech Ray, 'Chaos Storm' -> Arcane Storm. Viktor's passive is Glorious Evolution granting Hex Fragments; 'Hex Core' language in spikes[2] and wants.foe[1] is outdated but left alone rather than guessed at, since the augment naming may be intentional shorthand."
+}

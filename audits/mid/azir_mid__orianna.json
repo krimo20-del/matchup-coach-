@@ -1,0 +1,100 @@
+{
+  "ownerKey": "azir_mid",
+  "enemy": "orianna",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[0..4].side and phases[6].side read 'Skill' while content win[] and packet.levelChart read Orianna x5 then Azir, Azir. Six of seven rows disagreed across layers.",
+      "why": "Content and packet agree, and the kit supports it: Command: Attack is 815 range on 7s at rank 1 falling to 3s maxed for a flat 35 mana, against Azir's 740-range Q on 14s at 70 mana. She out-ranges and out-sustains the poke war until Nashor's. 47.87% over 493 games matches a lane you lose then out-scale.",
+      "corrected": "phases[0..4].side -> Orianna, phases[6].side -> Azir, with each .why rewritten to match.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content.win", "brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes named no Orianna timing.",
+      "why": "Her spike is level 6 Command: Shockwave (110/95/80s, 410 radius). Azir's are Nashor's Tooth and Emperor's Divide (120/105/90s). Her E, Command: Protect, is 9s flat and is how the ball comes home — it is the cooldown that actually gates her, not her Q.",
+      "corrected": "breakdown.spikes plus phases[4]/[6].why rewritten around Shockwave and the ball's position.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Every Shockwave line said to track HER. Command: Shockwave launches nearby enemies toward the BALL after a short delay — the ball's location is the danger zone, and it can be parked far from Orianna.",
+      "why": "Riot's text: 'Orianna commands her Ball to unleash a shockwave, dealing magic damage and launching nearby enemies towards the Ball after a short delay.' Command: Attack leaves the ball at the target location, and Command: Protect (1095 range, 9s) is the retrieval. So the whole matchup reads off ball position: ball parked away and Protect on cooldown is the only real green light, and Emperor's Divide's knock-back is the counter to the group Shockwave needs.",
+      "corrected": "tldr, winCon, tradeBad, breakdown.cooldowns, dosFull[0].d, dontsFull[2].d, report[5].t and phases[4].why all rewritten to track the ball rather than the champion.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Q/E/R text", "brief.ownerKit R text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "COOLDOWN_NO_DIGIT on breakdown.cooldowns, and the packet's own defect: 'NO cooldown-sequencing advice anywhere — needs concrete wait-for-X-before-you-Y lines' (sequencingCues: 0).",
+      "why": "Command: Attack 7/6/5/4/3, Command: Dissonance 7 flat, Command: Protect 9 flat, Shockwave 110/95/80, Shifting Sands 22/20.5/19/17.5/16. The sequencing that matters: her Q reaches 3 seconds when maxed, so waiting it out is not a plan — the wait is Command: Protect at 9 seconds with the ball parked away from her.",
+      "corrected": "breakdown.cooldowns now carries the numbers AND an explicit wait-for-Protect-before-you-step-up line.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit", "brief.packet.defects"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Seventeen MISGENDER hits and two COPY_PASTE_BLEED bullets.",
+      "why": "Orianna is she/her; dosFull[1].d was tradeGood verbatim, dontsFull[2].d was tradeBad verbatim under a warding title.",
+      "corrected": "Pronouns fixed; both bleed bodies replaced with content matching their titles (range spacing, and ball-in-fog when shoving past river).",
+      "confidence": "High",
+      "sources": ["brief.lintFindings"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Orianna"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Orianna"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Orianna"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Orianna"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Orianna"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Azir"},
+
+    {"layer":"full","path":"phases[0].why","before":"W a soldier behind the wave and farm THROUGH it — your auto range is the soldier's range. Don't poke yet; sand costs mana.","after":"Command: Attack outranges your sand at 815 — W a soldier behind the wave and farm THROUGH it. Don't poke yet; mana is life."},
+    {"layer":"full","path":"phases[1].why","before":"Two soldiers up means a real trade: W-Q the drag-through and step back. The poke is free only when his engage is down.","after":"Two soldiers means a real trade, but her ball costs a flat 35 mana against your 70-plus — she can spam and you cannot."},
+    {"layer":"full","path":"phases[2].why","before":"E completes the safety net — you now have the shield-dash out. Greedier soldier placements are allowed, not encouraged.","after":"Shifting Sands completes the safety net at 22s, but her Q is down to 5s by now — she chips you between your windows."},
+    {"layer":"full","path":"phases[3].why","before":"Nashor's components arrive and the soldier DPS starts to sting. Drag Qs through Orianna on every last-hit he takes.","after":"Nashor's parts sting, but her ball punishes a static soldier line — drag Qs only on last-hits she has to walk for."},
+    {"layer":"full","path":"phases[4].why","before":"Emperor's Divide online — the dive insurance and the insec flip. With R up you win every 2v2 your jungler joins.","after":"Emperor's Divide is up, but Shockwave drags you to the ball — with the ball on you, R is a reaction, not a plan."},
+    {"layer":"full","path":"phases[6].why","before":"Full build Azir is a teamfight: R cuts the fight in half, soldiers melt whoever is on your side of the wall.","after":"Full build flips it: soldiers out-range the ball and your wall breaks the grouping Shockwave needs to be worth casting."},
+
+    {"layer":"full","path":"tldr","before":"Soldier range vs spell range — poke through the wave he has to stand in, and dodge the answer he throws back.","after":"Soldier range vs ball range — poke through the wave she has to stand in, and never stand where the ball is parked."},
+    {"layer":"full","path":"winCon","before":"Out-poke through soldiers, dodge the answer, and out-scale into the siege machine he cannot match. Track Command: Shockwave before every commit and keep the wave where your pattern works.","after":"Out-poke through soldiers, dodge the answer, and out-scale into the siege machine she cannot match. Shockwave pulls you to the ball, not to her — check where the ball is parked before every commit."},
+    {"layer":"full","path":"enemyWin","before":"Orianna wins by landing Command: Shockwave, denying your pattern, and keeping the fight at a distance your kit resents.","after":"Orianna wins by parking the ball on top of you and cashing a Shockwave that drags your whole side into her team."},
+    {"layer":"full","path":"tradeGood","before":"W behind the wave, Q-drag the soldier through Orianna on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"W behind the wave, Q-drag the soldier through Orianna on her last-hit, auto once through the soldier, step back — short trades she cannot answer while her ball sits in the wave."},
+    {"layer":"full","path":"tradeBad","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Orianna player is waiting for.","after":"Standing where the ball is parked with your E down — Shockwave launches you toward it after a delay, wherever she is stood."},
+    {"layer":"full","path":"ahead","before":"Ahead, siege: crash waves with soldier autos, take every plate, and rotate to river with R held — your wall converts even fights into massacres.","after":"Ahead, siege: crash with soldier autos, take every plate, and rotate with R held — the knock-back is what breaks a Shockwave setup."},
+    {"layer":"full","path":"loading","before":"- Azir vs Orianna - Track: Orianna Command: Shockwave. - Poke through soldiers on his last-hits — never step past your own sand. - Engage only on Command: Shockwave’s cooldown. - Spend your ultimate on kill windows only.","after":"- Azir vs Orianna - Track: Orianna Command: Shockwave. - Poke through soldiers on her last-hits — never step past your own sand. - Engage only on Command: Shockwave’s cooldown. - Spend your ultimate on kill windows only."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Orianna Command: Shockwave: matchup-defining — The fight-flipping wombo — track the ball position like a second enemy. Count it out loud if you must. - Your E Shifting Sands has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Command: Shockwave: 110s at rank 1, 80s at rank 3 — it launches you toward the BALL, so track the ball, not her. - Command: Attack is 3s when maxed, so never wait it out; wait for Command: Protect (9s) instead — ball parked and E down is your step-up. - Shifting Sands (22s) is the exit."},
+    {"layer":"full","path":"breakdown.early","before":"Farm through soldiers and poke only on last-hit windows. Pre-Nashor's you are a promise, not a threat — spend mana like it is HP.","after":"Farm through soldiers and step up only when the ball is parked elsewhere. Pre-Nashor's you are a promise, not a threat — spend mana like it is HP."},
+    {"layer":"full","path":"breakdown.spikes","before":"Nashor's Tooth is the inflection; level 6 adds dive insurance; Rabadon's turns poke into deletion.","after":"Nashor's Tooth is the inflection; level 6 hands her Shockwave; Rabadon's turns poke into deletion."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Orianna gets one kill, respect Command: Shockwave and reset to farming. Two kills: play for the team, not for solo redemption — farm at soldier range and stay relevant through wave control.","after":"If Orianna gets one kill, stop walking near the parked ball and reset to farming. Two kills: play for the team, not for solo redemption — farm at soldier range and stay relevant through wave control."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through siege control — soldiers take plates, R denies engages, and your DPS curve outlasts every assassin spike in the lobby.","after":"Carry through siege — soldiers take plates from outside her 815-range ball, and R breaks the group before Shockwave lands."},
+    {"layer":"full","path":"breakdown.late","before":"You are the best siege and the best counter-engage in the game: wall their dive, melt their frontline, and never fight without three soldiers banked.","after":"Wall their dive, melt their frontline, never fight without three soldiers banked — and never group tight where one Shockwave collects the whole team."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.","after":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near her tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: W behind the wave, Q-drag the soldier through Orianna on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Orianna player is waiting for.","after":"Good trade: W behind the wave, Q-drag the soldier through Orianna on her last-hit, auto once through the soldier, step back — short trades she cannot answer while her ball sits in the wave. Bad trade: standing where the ball is parked with your E down, because Shockwave launches you toward it wherever she is stood."},
+
+    {"layer":"full","path":"dosFull[0].t","before":"Drag W-Q through his last-hit position","after":"Drag W-Q through her last-hit position"},
+    {"layer":"full","path":"dosFull[0].d","before":"The fight-flipping wombo — track the ball position like a second enemy. Bait it, count it, then go.","after":"Shockwave launches you toward the ball, not toward her — track the ball like a second enemy."},
+    {"layer":"full","path":"dosFull[1].t","before":"Stand outside his answer while soldiers poke","after":"Stand outside her answer while soldiers poke"},
+    {"layer":"full","path":"dosFull[1].d","before":"W behind the wave, Q-drag the soldier through Orianna on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"Your soldier extends your reach past your own body; her ball throws 815. Sit at the edge, poke through the sand, and make her walk in to retrieve it."},
+    {"layer":"full","path":"dosFull[2].d","before":"Orianna wastes Command: Shockwave — that is your full-commit window.","after":"Her ball costs a flat 35 mana; your Q costs up to 110 — bank first."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That’s Orianna’s bread-and-butter play — deny it and they run out of answers.","after":"Each soldier costs up to 40 mana and her ball costs 35 — you lose that race."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Orianna player is waiting for.","after":"The ball can be left parked in a bush or on a minion — shoving past river with no vision hands her a free 410-range Shockwave."},
+
+    {"layer":"full","path":"report[0].t","before":"Soldier range vs spell range — poke through the wave he has to stand in, and dodge the answer he throws back.","after":"Soldier range vs ball range — poke through the wave she has to stand in, and never stand where the ball is parked."},
+    {"layer":"full","path":"report[1].t","before":"Out-poke through soldiers, dodge the answer, and out-scale into the siege machine he cannot match. Track Command: Shockwave before every commit and keep the wave where your pattern works.","after":"Out-poke through soldiers, dodge the answer, and out-scale into the siege machine she cannot match. Shockwave pulls you to the ball, not to her — check where the ball is parked before every commit."},
+    {"layer":"full","path":"report[3].t","before":"Good trade: W behind the wave, Q-drag the soldier through Orianna on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Great trade: Orianna wastes Command: Shockwave — commit immediately. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Orianna player is waiting for.","after":"Good trade: W behind the wave, Q-drag the soldier through Orianna on her last-hit, auto once through the soldier, step back — short trades she cannot answer while her ball sits in the wave. Great trade: Orianna wastes Command: Shockwave — commit immediately. Bad trade: standing where the ball is parked with your E down, because Shockwave launches you toward it wherever she is stood."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.","after":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near her tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."},
+    {"layer":"full","path":"report[5].t","before":"Track Orianna’s Command: Shockwave: The fight-flipping wombo — track the ball position like a second enemy. It’s down or you don’t go.","after":"Track Orianna’s Command: Shockwave: it launches you toward the BALL after a short delay, so the ball's position is the danger, not hers."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Command: Shockwave’s cooldown, on your Nashor's Tooth spike, and with your jungler’s setup. Make him flinch first.","after":"Commit on Command: Shockwave’s cooldown, on your Nashor's Tooth spike, and with your jungler’s setup. Make her flinch first."}
+  ],
+  "notes": "CHART: phases[0..4].side and phases[6].side were the stale token 'Skill'; content win[] and packet.levelChart already agreed on Orianna x5 then Azir, Azir, so the full layer was moved onto them and every changed .why was rewritten in the same proposal. No paired win[N] edit exists to propose — win[N] is already correct on disk for all six rows. Ratings left untouched (scale orientation ambiguous). The packet's own defect ('NO cooldown-sequencing advice anywhere', sequencingCues 0) is addressed by the breakdown.cooldowns rewrite: the concrete line is wait for Command: Protect (9s) with the ball parked away, because Command: Attack reaches 3s maxed and cannot be waited out. Deliberately unasserted: whether Shifting Sands can be used to escape Shockwave's delay, whether Sand Soldiers absorb Command: Attack, and whether Emperor's Divide's wall blocks the ball's travel — none of that is in Riot's text, so the copy only claims the knock-back breaking her grouping."
+}

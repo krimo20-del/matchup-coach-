@@ -1,0 +1,153 @@
+{
+  "ownerKey": "azir_mid",
+  "enemy": "kassadin",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 0-4 of the level chart disagreed between layers: content win[0..4]=Azir (matching packet.levelChart, which reads Azir on all seven rows) while full phases[0..4].side all read \"Skill\". Rows 5-6 disagree the other way: win[5]=win[6]=Azir but phases[5].side=phases[6].side=Kassadin — and the phases whys under those two rows describe AZIR winning, so those rows argue with themselves.",
+      "why": "For rows 0-4 every source agrees Azir: the packet chart, the content winner, both sets of whys, and the kit (Kassadin has no dash before 6, Null Sphere reaches only 650, Force Pulse needs 400 to land). For rows 5-6 I cannot decide from the kits alone — a 48.06% win rate and Riftwalk reaching 2s at rank 3 argue for Kassadin, the packet chart and both content rows argue for Azir.",
+      "corrected": "phases[0..4].side -> Azir with all five whys rewritten to match. Rows 5 and 6 LEFT ALONE per the chart rule and raised in questionsForUser.",
+      "confidence": "High",
+      "sources": ["brief packet.levelChart", "brief currentText.content win[0..6]", "brief enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spike prose treated Kassadin's power curve as item-based (\"his mana-sustain item spike\", \"a scaling item spike\"). His curve is rank-based: Riftwalk is 5s at rank 1, 3.5s at rank 2, 2s at rank 3 — levels 6, 11, 16.",
+      "why": "enemyKit R cd \"5/3.5/2\" with stacking mana cost on repeats. That is the whole spike schedule, and it is levels, not gold.",
+      "corrected": "breakdown.spikes, spikes[2].text, whys[3] and report[9].t now key off levels 6/11/16 and the shrinking Riftwalk cooldown.",
+      "confidence": "High",
+      "sources": ["brief enemyKit R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Not one interaction was stated; breakdown.cooldowns held no digit at all (packet defect: 'NO cooldown-sequencing advice anywhere', sequencingCues 0). Two outright factual errors: spikes[0].text and content early both said Kassadin has 'no shield' / 'no defensive tool' early.",
+      "why": "Null Sphere grants him a magic-absorbing shield on cast from rank 1, and Azir's damage is entirely magic — so the shield eats your poke specifically. Void Stone reduces magic damage taken and ignores unit collision, so minions never body-block his approach and your soldier DPS lands lighter on him than on anyone else. Force Pulse charges from spells cast in his vicinity, meaning your own W and Q spam arms the 400-range cone that slows you. Nether Blade is an auto-attack reset on a 7s cooldown that also restores his mana — the wind-up is the burst tell (missingInteractions: autoreset-burst-tell).",
+      "corrected": "All four written into breakdown.cooldowns, tradeGood, tradeBad, phases[2].why, phases[3].why, dosFull[0].d, spikes[0].text and content early/mid/late.",
+      "confidence": "High",
+      "sources": ["brief enemyKit P/Q/W/E", "brief missingInteractions rule autoreset-burst-tell"]
+    },
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "48.06% over 360 games; no rank tiers written anywhere.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief packet.winRate"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no number — catalogue defect 3.",
+      "why": "The punishable numbers are Riftwalk 5/3.5/2, Force Pulse 21 down to 17, Null Sphere 9 at rank 1, and your own E at 22.",
+      "corrected": "All written in.",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "brief ownerKit E"]
+    },
+    {
+      "point": 7,
+      "status": "needs-correction",
+      "whatIsWrong": "Wave section was the generic Azir template with no reference to why shoving matters against this specific enemy.",
+      "why": "Kassadin's power is levels, so denied CS and XP directly delays rank 2 and rank 3 Riftwalk. That makes the crash the win condition rather than a tempo tool.",
+      "corrected": "breakdown.wave and report[4].t rewritten around denying the levels.",
+      "confidence": "High",
+      "sources": ["brief enemyKit R"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Itemization ignored Void Stone entirely.",
+      "why": "Void Stone is flat magic damage reduction, so raw AP output matters more here than usual. I deliberately did NOT write Void Staff: Void Staff pierces magic resist, which is not what Void Stone does, and claiming it counters the passive would be wrong.",
+      "corrected": "report[8].t now names Rabadon's and states the Void Stone reason.",
+      "confidence": "Medium",
+      "sources": ["brief enemyKit P"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Copy-paste bleed: dosFull[1].d was the tradeGood string verbatim under 'Shove crashes and ping his every roam', and dontsFull[2].d was the tradeBad string verbatim under 'Let him shove-and-roam without pings'. Both replaced with bodies that match their titles.",
+      "why": "Catalogue defect 2.",
+      "corrected": "Rewritten.",
+      "confidence": "High",
+      "sources": ["brief currentText.full"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing recorded about whether Emperor's Divide's wall stops Riftwalk.",
+      "why": "Riot's text calls Riftwalk a teleport, while the derived flag labels it a dash that 'walls can deny' — the flag and the description disagree, so I refused to assert either way and kept every R line to what is certain: the knockback buys distance and costs him mana to undo. spikes[1].text previously claimed the ult walls him away 'entirely'; that overclaim is removed.",
+      "corrected": "Claim removed, not replaced with an opposite claim.",
+      "confidence": "Low",
+      "sources": ["brief enemyKit R text vs flags"]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Nothing in the brief shows a 26.15 change to either kit; no patch claim written.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["brief"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"winCon","before":"Tax the approach with soldiers, cancel the dive with R, and starve his roam game with shoves. Every commit starts with one question: is Riftwalk down?","after":"Tax the approach with soldiers and starve the mana bar — every extra Riftwalk costs more than the last, so make him spend two to reach you and one to leave."},
+    {"layer":"full","path":"report[1].t","before":"Tax the approach with soldiers, cancel the dive with R, and starve his roam game with shoves. Every commit starts with one question: is Riftwalk down?","after":"Tax the approach with soldiers and starve the mana bar — every extra Riftwalk costs more than the last, so make him spend two to reach you and one to leave."},
+    {"layer":"full","path":"enemyWin","before":"Kassadin wins by landing Riftwalk, denying your pattern, and cashing the all-in before your pattern matures.","after":"Kassadin wins by surviving to level 16, where Void Stone blunts your magic damage and Riftwalk costs him 2 seconds."},
+    {"layer":"full","path":"tradeGood","before":"W behind the wave, Q-drag the soldier through Kassadin on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"W behind the wave, Q-drag the soldier through Kassadin on his last-hit, auto once, step back — every cast charges Force Pulse, so trade in bursts and never sit in its 400 cone."},
+    {"layer":"full","path":"tradeBad","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Kassadin player is waiting for.","after":"Poking into a full Force Pulse with E on cooldown — his 400 cone slows you and Nether Blade's reset lands before you walk out."},
+    {"layer":"full","path":"ahead","before":"Ahead, siege: crash waves with soldier autos, take every plate, and rotate to river with R held — your wall converts even fights into massacres.","after":"Ahead, siege: crash with soldier autos, take plates, and deny his XP — every level he misses pushes Riftwalk's 2-second rank further away."},
+    {"layer":"full","path":"report[13].t","before":"Ahead, siege: crash waves with soldier autos, take every plate, and rotate to river with R held — your wall converts even fights into massacres.","after":"Ahead, siege: crash with soldier autos, take plates, and deny his XP — every level he misses pushes Riftwalk's 2-second rank further away."},
+    {"layer":"full","path":"loading","before":"- Azir vs Kassadin - Track: Kassadin Riftwalk. - Poke through soldiers on his last-hits — never step past your own sand. - No commits into Riftwalk. - The ultimate closes arguments; it doesn’t open them.","after":"- Azir vs Kassadin - Track: Kassadin Riftwalk. - Poke through soldiers on his last-hits — never stand in the 400 Force Pulse cone. - Kill him before 16. - The ultimate closes arguments; it doesn’t open them."},
+
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[0].why","before":"W a soldier behind the wave and farm THROUGH it — your auto range is the soldier's range. Don't poke yet; sand costs mana.","after":"W a soldier behind the wave and farm THROUGH it at 525 — Null Sphere is 650 and costs 60 mana, which he cannot spend on you."},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[1].why","before":"Two soldiers up means a real trade: W-Q the drag-through and step back. The poke is free only when his engage is down.","after":"Two soldiers up means a real trade: W-Q the drag-through and step back. He has no dash until 6 and his Q shield eats magic."},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[2].why","before":"E completes the safety net — you now have the shield-dash out. Greedier soldier placements are allowed, not encouraged.","after":"E completes the safety net — you now have the shield-dash out. Every soldier you cast charges his Force Pulse, so trade in bursts."},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[3].why","before":"Nashor's components arrive and the soldier DPS starts to sting. Drag Qs through Kassadin on every last-hit he takes.","after":"Nashor's components arrive and soldier DPS starts to sting, but Void Stone cuts magic damage — poke to deny farm, not to kill."},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[4].why","before":"Emperor's Divide online — the dive insurance and the insec flip. With R up you win every 2v2 your jungler joins.","after":"Emperor's Divide online — the dive insurance and the insec flip. Riftwalk is 5s at rank 1, so his escape is not free."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Kassadin Riftwalk: matchup-defining — His mobility spike — the lane is decided before it scales. Step up only on its downtime. - Budget E Shifting Sands for emergencies and the R for opportunities — never swap them.","after":"- Kassadin Riftwalk: 5s at rank 1, 3.5s at 11, 2s at 16 — the window shrinks with every point. - Force Pulse is 21s down to 17s and needs your casts to charge. - Null Sphere is 9s at rank 1. - Your E is 22s: never spend it on damage."},
+    {"layer":"full","path":"breakdown.early","before":"Farm through soldiers and poke only on last-hit windows. Pre-Nashor's you are a promise, not a threat — spend mana like it is HP.","after":"Farm through soldiers and deny CS — he has no dash before 6 and Null Sphere at 650 is his only reach into your soldier line."},
+    {"layer":"full","path":"breakdown.mid","before":"Nashor's onward: shove crashes, soldier-siege plates, and rotate to river fights where your R turns 3v3s into 3v1s. The insec flip wins drakes by itself.","after":"Nashor's onward: shove crashes and deny XP — Void Stone eats part of your magic damage, so win by starving his levels, not by out-damaging him straight up."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: shove and crash — Kassadin needs CS and levels more than any mid, and every wave he misses under tower delays Riftwalk's next rank. Worst wave: a slow push you have to hold with your E down — he Riftwalks in on the 5s and you have no dash out. Crash timing: crash, deny, reset, and take the plate the crash bought you."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: shove and crash — Kassadin needs CS and levels more than any mid, and every wave he misses under tower delays Riftwalk's next rank. Worst wave: a slow push you have to hold with your E down — he Riftwalks in on the 5s and you have no dash out. Crash timing: crash, deny, reset, and take the plate the crash bought you."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: W behind the wave, Q-drag the soldier through Kassadin on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Kassadin player is waiting for.","after":"Good trade: W behind the wave, Q-drag the soldier through Kassadin on his last-hit, auto once, step back — every cast charges Force Pulse, so trade in bursts and never sit in its 400 cone. Bad trade: Poking into a full Force Pulse with E on cooldown — his 400 cone slows you and Nether Blade's reset lands before you walk out."},
+    {"layer":"full","path":"report[3].t","before":"Good trade: W behind the wave, Q-drag the soldier through Kassadin on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Great trade: Kassadin wastes Riftwalk — commit immediately. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Kassadin player is waiting for.","after":"Good trade: W behind the wave, Q-drag the soldier through Kassadin on his last-hit, auto once, step back — every cast charges Force Pulse, so trade in bursts and never sit in its 400 cone. Great trade: Kassadin spends Riftwalk to farm — walk up before it returns. Bad trade: Poking into a full Force Pulse with E on cooldown — his 400 cone slows you and Nether Blade's reset lands before you walk out."},
+    {"layer":"full","path":"breakdown.spikes","before":"Nashor's Tooth is the inflection; level 6 adds dive insurance; Rabadon's turns poke into deletion.","after":"Nashor's Tooth is the inflection; 6 gives him Riftwalk; his real spike is level 16, not an item."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Kassadin takes first blood, tighten up: Riftwalk is now always up in your head. A second kill means the duel is over and the game isn’t — farm at soldier range and stay relevant through wave control.","after":"If Kassadin takes first blood he gets the one thing he needs — gold and XP. Give up the duel, farm at soldier range, shove every wave into his tower, and make him earn 16 the slow way."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through siege control — soldiers take plates, R denies engages, and your DPS curve outlasts every assassin spike in the lobby.","after":"Carry by ending it early — soldiers take plates, shoves deny his levels, and a Kassadin who reaches 16 on even farm beats your build."},
+    {"layer":"full","path":"breakdown.late","before":"You are the best siege and the best counter-engage in the game: wall their dive, melt their frontline, and never fight without three soldiers banked.","after":"Wall their engage, melt whoever is left on your side, and never fight without three soldiers banked — Riftwalk lets him pick the moment, so hold R."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"His mobility spike — the lane is decided before it scales. Its cooldown is the green light — wait for it.","after":"Void Stone ignores unit collision, so minions never stop him — keep a soldier on the line he has to walk."},
+    {"layer":"full","path":"dosFull[1].d","before":"W behind the wave, Q-drag the soldier through Kassadin on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"Crash the wave into his tower every time; Kassadin needs CS and XP more than any mid in the game, and every wave he misses under turret pushes level 16 further away."},
+    {"layer":"full","path":"dosFull[2].d","before":"Kassadin whiffs Riftwalk and the lane briefly belongs to you.","after":"Riftwalk in costs 40 mana, and the trip home costs more."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Kassadin’s whole plan in one window — decline politely and watch it retire.","after":"Your E is the only exit from a 500-range blink; trade damage is never worth the 22s."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Kassadin player is waiting for.","after":"Kassadin roams to find the gold his lane will not give him — ping the moment he leaves and your sidelanes stay even and alive."},
+    {"layer":"full","path":"report[5].t","before":"Track Kassadin’s Riftwalk: His mobility spike — the lane is decided before it scales. The whole green-light system is its cooldown.","after":"Track Kassadin’s Riftwalk: 500 range, 5s at rank 1 and 2s at 16, and every repeat inside seconds costs him additional mana."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Riftwalk’s cooldown, on your Nashor's Tooth spike, and with your jungler’s setup. His answer goes first; yours goes last.","after":"Commit before 11, on your Nashor's Tooth spike, and with your jungler’s setup — after rank 2 his escape is 3.5s and shrinking."},
+    {"layer":"full","path":"report[8].t","before":"Start Doran's Ring + 2 pots. Nashor's Tooth rush into Sorcerer's, then Liandry's and Rabadon's. Zhonya's vs dive; Banshee's vs pick comps.","after":"Start Doran's Ring + 2 pots. Nashor's Tooth rush into Sorcerer's, then Rabadon's — Void Stone cuts magic damage, so buy raw output. Zhonya's vs dive."},
+
+    {"layer":"content","path":"whys[0]","before":"Your zone control and range punish his weak early kit with no real recourse for him","after":"Null Sphere at 650 is his only reach and it costs 60 mana he cannot spare at rank 1"},
+    {"layer":"content","path":"whys[1]","before":"The same denial continues to snowball as he falls further behind on CS","after":"Every wave you crash under tower costs him the CS and XP he needs"},
+    {"layer":"content","path":"whys[2]","before":"He's still far behind in stats and tempo heading into his ult unlock","after":"He has no dash until 6 and Force Pulse needs 400 range to land"},
+    {"layer":"content","path":"whys[3]","before":"Riftwalk offers escape but little damage this early, so your lead holds","after":"Riftwalk is 5s at rank 1 and costs 40 mana — an escape, not a kill button"},
+    {"layer":"content","path":"whys[4]","before":"Your ultimate lets you wall his limited engage tools away entirely","after":"Emperor's Divide knocks him off you and buys the seconds you need"},
+    {"layer":"content","path":"spikes[0].text","before":"Kassadin is one of the weakest early laners in the game — his Q has a long cooldown and no shield yet, so your soldier zone poke wins every exchange for free.","after":"Kassadin is one of the weakest early laners in the game — Null Sphere is 9s at rank 1 and its shield only eats magic, so soldier chip plus autos still wins the wave."},
+    {"layer":"content","path":"spikes[1].text","before":"Riftwalk gives him mobility but almost no burst this early, and your ult lets you wall him away from you or your soldiers entirely.","after":"Riftwalk gives him mobility but almost no burst at rank 1, and Emperor's Divide knocks him back off your soldier line when he commits."},
+    {"layer":"content","path":"spikes[2].text","before":"He still hasn't scaled into his mana-sustain item spike, so you keep shoving and denying his farm behind a soldier wall.","after":"Riftwalk hits 3.5s at rank 2, so his escape improves before his damage does — keep shoving and deny the levels behind soldiers."},
+    {"layer":"content","path":"early","before":"Kassadin is famously the weakest lane presence in the game before level 9 — his Q is short-range and long-cooldown, he has no defensive tool, and your soldier zone lets you poke him for free every single wave without any real answer from him.","after":"Kassadin is the weakest lane presence in the game before 6 — Null Sphere is 650 range on a 9s cooldown and its shield only absorbs magic, so your soldier zone pokes him every wave and his only reply is to give up CS and walk back."},
+    {"layer":"content","path":"mid","before":"Riftwalk at 6 gives him escape but negligible damage output this early, so you keep pressing your advantage: wall him off with your ult if he tries to engage, and keep shoving waves into his tower to starve his farm.","after":"Riftwalk at 6 is a 5s escape with little damage attached, so keep pressing: Emperor's Divide knocks him off you when he commits, every cast of yours charges Force Pulse, and shoving into his tower starves the levels he needs."},
+    {"layer":"content","path":"late","before":"Kassadin needs a massive gold and level lead to become the scaling monster he's known for, and if you've dominated lane like the numbers suggest you should, he never gets there — press the advantage into a snowballing stomp rather than playing passive.","after":"Kassadin needs gold and levels to become the scaling monster he is known for, and Void Stone means your magic damage lands lighter on him than on anyone else — end it on the map: siege with soldiers, hold R for his commit, and never duel him at 16."},
+    {"layer":"content","path":"wants.foe[1]","before":"Avoid all trades until Riftwalk cooldown allows safe poke","after":"Farm safely to 6, then use the 5s Riftwalk to dodge your poke"}
+  ],
+  "notes": "CHART, rows 0-4: fixed. full phases[0..4].side was \"Skill\" while content win[0..4] said Azir and packet.levelChart says Azir; I moved the full layer onto that verdict and rewrote all five whys in the same proposal. No win[N] edit is needed — win[N] already holds the target value. CHART, rows 5-6: LEFT ALONE on purpose. win[5]/win[6] say Azir and packet.levelChart says Azir, but full phases[5].side/phases[6].side say Kassadin while the whys under those same two rows describe Azir winning — the full layer contradicts itself there and I could not resolve it from the kits. Kassadin's Riftwalk reaching 2s at rank 3 and the 48.06% win rate argue Kassadin owns the last two rows; the packet and content argue Azir. That is a pre-existing two-layer disagreement, not one I introduced. See questionsForUser. FACTUAL ERRORS CORRECTED: spikes[0].text and content early both stated Kassadin has no shield / no defensive tool early — Null Sphere shields him from rank 1, and it absorbs MAGIC damage, which is all Azir deals. FLAG MISFIRE: the derived flag on Riftwalk reads 'dash: mobility that grounding and walls can deny', but Riot's own text says 'teleports to a nearby location'. Per the rule I trusted the description and wrote nothing either way about Emperor's Divide stopping it; I also removed spikes[1].text's claim that the ult walls him away 'entirely'. ITEM CAUTION: I did not write Void Staff against Void Stone — Void Staff pierces magic resist and Void Stone is flat magic damage reduction, so it would be a wrong recommendation. Ratings left untouched throughout: on this page the rating column tracks difficulty and carry threat (7/10, 7.5/10 overall), not the row winner, and moving them would contradict breakdown.difficulty."
+}

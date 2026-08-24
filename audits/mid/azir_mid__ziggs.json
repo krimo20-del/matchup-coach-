@@ -1,0 +1,92 @@
+{
+  "ownerKey": "azir_mid",
+  "enemy": "ziggs",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer credited Ziggs's wave-zoning to his W in six places — 'stacks W bombs on the wave', 'His W-spam zoning', 'Spam W onto the minion wave', 'Q-W combos', 'his W bomb zone', 'spam W on the wave'. W is Satchel Charge: a 20/18/16/14/12s knockback and escape that also hexplodes turrets. The mine-field zoning tool is Hexplosive Minefield (E), 900 range, flat 16s. Nothing about W is spammable — 20s and 80 mana at rank 1.",
+      "why": "enemyKit W and E texts are unambiguous, and the packet flags that the matchup 'never names any of Ziggs's abilities'.",
+      "corrected": "Hexplosive Minefield named as the zoning tool in whys[1], spikes[0].text, wants.foe[0], wants.you[0] and early; Bouncing Bomb (850, 6/5.5/5/4.5/4s) named as the poke; Satchel Charge kept as the escape it actually is.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E", "packet.defects", "packet.enemyAbilities"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer sides read Ziggs/Ziggs/Skill/Skill/Skill/Skill/Skill while the content layer and packet levelChart read Ziggs/Ziggs/Ziggs/Ziggs/Azir/Azir/Azir — five rows rendering two answers.",
+      "why": "44.27% over 436 games: Ziggs owns the early lane on range, and the flip at 6 is real because Ziggs has no dash in his kit at all, so Emperor's Divide behind him removes his only exit once Satchel Charge is spent.",
+      "corrected": "phases[2..3].side moved to Ziggs and phases[4..6].side to Azir; those five whys rewritten to match.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[]", "enemyKit", "ownerKit R"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spike order holds: Ziggs owns 3-5 on Hexplosive Minefield, Azir's level 6 Emperor's Divide is the inflection against a champion with no mobility, Nashor's widens it. Grounded with real cooldowns rather than replaced.",
+      "corrected": "phases[4].why now states WHY 6 flips it — Ziggs has no dash, so the wall is lethal.",
+      "confidence": "High",
+      "sources": ["enemyKit (no dash flag on any ability)", "ownerKit R"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that exists to hold cooldowns.",
+      "corrected": "Satchel Charge 20s, Hexplosive Minefield flat 16s, Bouncing Bomb 6s, Azir E 22s.",
+      "confidence": "High",
+      "sources": ["ownerKit", "enemyKit"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was tradeGood verbatim and dontsFull[2].d was tradeBad verbatim under unrelated titles (lint COPY_PASTE_BLEED); dosFull[0].d, dosFull[2].d and dontsFull[0].d also did not match their titles.",
+      "why": "Each title promises an action the body never explained.",
+      "corrected": "Five bodies rewritten to their own titles using Ziggs's ranges, cooldowns and mana costs.",
+      "confidence": "High",
+      "sources": ["lintFindings", "enemyKit", "ownerKit"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "missingInteractions carries a 'resistances-invalidated' rule saying Satchel Charge bypasses stacking resistances, and a 'autoreset-burst-tell' rule for Short Fuse.",
+      "why": "The Short Fuse tell is real and is now stated (phases[0].why). The Satchel Charge percent-health/resistance claim is NOT in Riot's text — 'The explosion deals magic damage to enemies, knocking them away' — so the derived percentHealth flag looks like a tooltip-parsing misfire. Per the brief, the description wins over the flag.",
+      "corrected": "Short Fuse's empowered auto added; the resistance-bypass claim deliberately NOT written anywhere. Recorded as unverified.",
+      "confidence": "Medium",
+      "sources": ["enemyKit P/W text", "missingInteractions[24]"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Ziggs"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Ziggs"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[0].why","before":"W a soldier behind the wave and farm THROUGH it — your auto range is the soldier's range. Don't poke yet; sand costs mana.","after":"Bouncing Bomb is 850 range and Short Fuse empowers his auto. W behind the wave, farm through it, spend no mana yet."},
+    {"layer":"full","path":"phases[1].why","before":"Two soldiers up means a real trade: W-Q the drag-through and step back. The poke is free only when his engage is down.","after":"Two soldiers let you drag a Q through him, but Satchel Charge knocks you away on 20s. Trade once, then step off."},
+    {"layer":"full","path":"phases[2].why","before":"E completes the safety net — you now have the shield-dash out. Greedier soldier placements are allowed, not encouraged.","after":"E is your shield-dash out, but Hexplosive Minefield covers 900 range on 16s and slows — do not walk into the mines."},
+    {"layer":"full","path":"phases[3].why","before":"Nashor's components arrive and the soldier DPS starts to sting. Drag Qs through Ziggs on every last-hit he takes.","after":"Bouncing Bomb reaches 850 on a 5s cooldown at rank 3 and clears the wave. Farm behind the sand and take the chip."},
+    {"layer":"full","path":"phases[4].why","before":"Emperor's Divide online — the dive insurance and the insec flip. With R up you win every 2v2 your jungler joins.","after":"Emperor's Divide online: Ziggs has no dash at all, so a wall behind him is a dead Ziggs. The lane flips here."},
+    {"layer":"full","path":"phases[5].why","before":"Nashor's spike: your soldier poke becomes shred. Shove crashes and rotate — the soldiers siege towers better than any mid.","after":"Nashor's spike: soldier poke becomes shred. Crash waves and force a champion with no mobility to answer you at 525."},
+    {"layer":"full","path":"phases[6].why","before":"Full build Azir is a teamfight: R cuts the fight in half, soldiers melt whoever is on your side of the wall.","after":"Full build your wall cuts off his only escape, and soldiers delete a Ziggs who cannot leave the zone."},
+    {"layer":"full","path":"enemyWin","before":"Ziggs wins by landing Satchel Charge, denying your pattern, and renting you the lane at a range markup.","after":"Ziggs mines the ground with Hexplosive Minefield, chips you at 850 with Bouncing Bomb, then satchels out when you step."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Ziggs Satchel Charge: matchup-defining — His knockback escape — he is catchable only while it is down. Check it before every step-up. - E Shifting Sands is the lifeline; chip damage never gets it. - The ult answers fights, not waves.","after":"- Satchel Charge is 20s at rank 1: it knocks you away and is his only escape, so step up while it is down. - Hexplosive Minefield is a flat 16s and Bouncing Bomb 6s. - E Shifting Sands (22s) is the lifeline; chip damage never gets it."},
+    {"layer":"full","path":"dosFull[0].d","before":"His knockback escape — he is catchable only while it is down. Its cooldown is the green light — wait for it.","after":"Place the soldier past him, Q it back through his body as he steps up for a minion, then retreat off the mines."},
+    {"layer":"full","path":"dosFull[1].d","before":"W behind the wave, Q-drag the soldier through Ziggs on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"Bouncing Bomb reaches 850 and Hexplosive Minefield 900, but neither follows you: hold the far side of the sand, let the soldier poke, and step out of the mine field."},
+    {"layer":"full","path":"dosFull[2].d","before":"Ziggs spends Satchel Charge early — the closest thing this matchup has to a guarantee.","after":"Q costs 110 mana at rank 5 while Bouncing Bomb clears the wave for 50 — you run out first."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That’s Ziggs’s bread-and-butter play — deny it and they run out of answers.","after":"Every whiffed soldier costs 40 mana and buys him another free Bouncing Bomb."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Ziggs player is waiting for.","after":"Mega Inferno Bomb reaches 5000 units, so shoving past river without flank wards means it lands on you from a screen away."},
+    {"layer":"full","path":"ahead","before":"Ahead, siege: crash waves with soldier autos, take every plate, and rotate to river with R held — your wall converts even fights into massacres.","after":"Ahead, siege: crash with soldier autos, take plates while Satchel Charge's 20 seconds is down, and rotate with R held to wall off his only escape."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through siege control — soldiers take plates, R denies engages, and your DPS curve outlasts every assassin spike in the lobby.","after":"Carry through siege — soldiers take plates, and Emperor's Divide traps a champion with no dash where your sand can reach him."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Ziggs takes first blood, tighten up: Satchel Charge is now always up in your head. A second kill means the duel is over and the game isn’t — farm at soldier range and stay relevant through wave control.","after":"If Ziggs takes first blood, tighten up: assume Satchel Charge is up and never step into the mines. A second kill means the duel is over and the game isn't — farm at soldier range and hold R for his escape."},
+    {"layer":"content","path":"whys[1]","before":"His W-spam zoning is fully online and Azir has no ultimate yet to punish the aggression","after":"His Hexplosive Minefield zoning is fully online and Azir has no ultimate yet to punish it"},
+    {"layer":"content","path":"spikes[0].text","before":"Ziggs stacks W bombs on the wave and can zone you off farm entirely from beyond your soldier range, forcing you to eat CS losses or risk a stray Q.","after":"Ziggs lays Hexplosive Minefield across the wave and zones you off farm entirely from beyond your soldier range, forcing CS losses or a stray Bouncing Bomb to the face."},
+    {"layer":"content","path":"wants.foe[0]","before":"Spam W onto the minion wave to zone you off CS and chip your health","after":"Lay Hexplosive Minefield on the wave to zone you off CS and chip you"},
+    {"layer":"content","path":"wants.foe[1]","before":"Poke with Q-W combos whenever you're forced to last-hit","after":"Poke with Bouncing Bomb whenever you're forced to last-hit"},
+    {"layer":"content","path":"wants.you[0]","before":"Farm with soldiers from max range, don't walk up into his W bomb zone","after":"Farm with soldiers from max range, never walk into his Hexplosive Minefield"},
+    {"layer":"content","path":"early","before":"Levels 1-2 are already tough as Ziggs's bomb range outpokes your early soldier trades, but it truly bites levels 3-5 when he can spam W on the wave and threaten a Q-W combo the instant you step up to farm. Play a freeze near your tower, let minions do the last-hitting, and just survive the poke rather than contest it directly.","after":"Levels 1-2 are already tough as Bouncing Bomb's 850 range outpokes your early soldier trades, but it truly bites levels 3-5 when Hexplosive Minefield covers the wave on a flat 16 seconds and threatens a follow-up the instant you step up to farm. Play a freeze near your tower, let minions do the last-hitting, and survive the poke rather than contest it."}
+  ],
+  "notes": "The derived percentHealth flag on Satchel Charge contradicts Riot's own text ('The explosion deals magic damage to enemies, knocking them away'), so the missingInteractions 'resistances-invalidated' headline was NOT written to the page — it looks like a tooltip-parsing misfire and asserting it would put a false itemisation rule in front of a paying user. Flagged as unverified. phases[N].rating untouched — the scale is not internally consistent on this champion."
+}

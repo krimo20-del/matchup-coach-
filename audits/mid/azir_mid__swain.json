@@ -1,0 +1,95 @@
+{
+  "ownerKey": "azir_mid",
+  "enemy": "swain",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[0..4].side all read 'Skill' while content win[] and packet.levelChart both read Azir, Swain, Skill, Skill, Swain. Three of those rows disagreed across layers.",
+      "why": "Content and packet agree exactly, and the kit supports the shape: Azir owns level 1 (Swain has one ability), Swain takes level 2-3 once Death's Hand stacks bolts and Nevermove is up, 4-5 is a genuine skillshot stage, and level 6 is his single biggest spike because Demonic Ascension is a flat 120s that lasts as long as he keeps draining.",
+      "corrected": "phases[0].side -> Azir, phases[1].side -> Swain, phases[4].side -> Swain; phases[2] and [3] left on 'Skill' because they already match. Each moved row's .why rewritten.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content.win", "brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes named no Swain timing, and content spikes[0].text put 'the drain damage on his Ultimate' at level 3.",
+      "why": "Demonic Ascension is a level 6 ability — flat 120s, 650 radius, indefinite while he keeps draining champions, and it shortens Nevermove's cooldown while active. Azir's spikes are Nashor's Tooth and Emperor's Divide (120/105/90s). The item spike that actually matters here is Grievous Wounds, because Ravenous Flock heals him and permanently raises his max health.",
+      "corrected": "breakdown.spikes now names Grievous Wounds; spikes[0].text no longer places the ultimate at level 3; phases[4].why carries the flat 120s and the drain's duration.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit P/R text", "brief.ownerKit", "brief.missingInteractions needs-antiheal"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "A fabricated ability name shipped here: the content layer repeatedly names 'Torment' as a Swain ability, and mis-assigns slots — 'Vision-into-Torment (W-Q)' and wants.foe[0] 'Land Vision of Empire (Q) into Torment (W)'. Swain has no ability called Torment, Vision of Empire is his W not his Q, and spikes[1].text says W roots when W slows and reveals.",
+      "why": "Per the kit: Q Death's Hand (750, 7s to 3s, bolts that stack damage per bolt), W Vision of Empire (5500-7500, 22s to 18s, damage + slow + reveal + a Soul Fragment), E Nevermove (850, 12s to 10s — a wave that goes out, roots on the RETURN, then lets him pull the rooted target in), R Demonic Ascension. The root is E, and it roots on the way back — that is the single most useful timing fact in the matchup and the page never had it.",
+      "corrected": "'Torment' removed everywhere; the return-pass root written into tldr, tradeBad, breakdown.cooldowns, dosFull[0].d, phases[1].why and the content whys/spikes; wants.foe[0] re-slotted to Nevermove (E) into Death's Hand (Q).",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Q/W/E/R text", "brief.packet.suspectNames", "brief.packet.defects"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "COOLDOWN_NO_DIGIT on breakdown.cooldowns; the packet also reports 'NO cooldown-sequencing advice anywhere' with sequencingCues: 0; and dosFull[2].d invented a 'fifteen-second invitation'.",
+      "why": "Nevermove 12/11.5/11/10.5/10, Death's Hand 7/6/5/4/3, Vision of Empire 22/21/20/19/18, Demonic Ascension a flat 120 — nothing in the kit is fifteen seconds.",
+      "corrected": "breakdown.cooldowns now carries real numbers plus the concrete sequencing line (wait Nevermove out before stepping to 740); the fabricated fifteen seconds is gone.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit", "brief.packet.defects"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Two COPY_PASTE_BLEED bullets: dosFull[1].d was tradeGood verbatim, dontsFull[2].d was tradeBad verbatim under a warding title.",
+      "why": "Both bodies contradicted their titles.",
+      "corrected": "Replaced with the 750/850 range band, and with what Vision of Empire's reveal does to a blind shove past river.",
+      "confidence": "High",
+      "sources": ["brief.lintFindings", "brief.enemyKit"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Swain"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Swain"},
+
+    {"layer":"full","path":"phases[0].why","before":"W a soldier behind the wave and farm THROUGH it — your auto range is the soldier's range. Don't poke yet; sand costs mana.","after":"Your soldier autos out-poke a Swain with one ability up — take level 1 free, then W behind the wave and farm through it."},
+    {"layer":"full","path":"phases[1].why","before":"Two soldiers up means a real trade: W-Q the drag-through and step back. The poke is free only when his engage is down.","after":"His Death's Hand bolts stack damage per bolt and reach 750 — two soldiers do not out-trade that yet, so hold the poke."},
+    {"layer":"full","path":"phases[4].why","before":"Emperor's Divide online — the dive insurance and the insec flip. With R up you win every 2v2 your jungler joins.","after":"Demonic Ascension is a flat 120s and lasts while he drains — your wall knocks him off, but it cannot out-heal him."},
+
+    {"layer":"full","path":"tldr","before":"Soldier range vs spell range — poke through the wave he has to stand in, and dodge the answer he throws back.","after":"His Nevermove roots from 850 and then pulls — poke on his last-hits and never stand still inside that band."},
+    {"layer":"full","path":"winCon","before":"Out-poke through soldiers, dodge the answer, and out-scale into the siege machine he cannot match. Every commit starts with one question: is Demonic Ascension down?","after":"Out-poke through soldiers, dodge Nevermove, and out-scale him. Wait that 12-second root out before you step to soldier range — it is what starts every fight he wins."},
+    {"layer":"full","path":"enemyWin","before":"Swain wins by landing Demonic Ascension, denying your pattern, and keeping the fight at a distance your kit resents.","after":"Swain wins by rooting you with Nevermove, pulling you into Demonic Ascension, and healing back everything you poked off."},
+    {"layer":"full","path":"tradeGood","before":"W behind the wave, Q-drag the soldier through Swain on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"W behind the wave, Q-drag the soldier through Swain on his last-hit, auto once through the soldier, step back — short trades that end before Ravenous Flock heals them off."},
+    {"layer":"full","path":"tradeBad","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Swain player is waiting for.","after":"Standing still inside 850 with your E down — Nevermove roots you on the return pass and then pulls you in toward him."},
+    {"layer":"full","path":"ahead","before":"Ahead, siege: crash waves with soldier autos, take every plate, and rotate to river with R held — your wall converts even fights into massacres.","after":"Ahead, siege: crash waves with soldier autos, take every plate, and rotate with R held — he has no dash to follow your knock-back."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. Step up only on its downtime. - Budget E Shifting Sands for emergencies and the R for opportunities — never swap them.","after":"- Nevermove: 12s at rank 1, 10s at rank 5 — it roots on the way BACK, and it is shorter while his ultimate is running; wait it out before you step to 740. - Demonic Ascension is a flat 120s and lasts as long as he keeps draining. - Shifting Sands (22s) is the exit."},
+    {"layer":"full","path":"breakdown.early","before":"Farm through soldiers and poke only on last-hit windows. Pre-Nashor's you are a promise, not a threat — spend mana like it is HP.","after":"Farm through soldiers and poke only after Nevermove has passed you twice. Pre-Nashor's you are a promise, not a threat — spend mana like HP."},
+    {"layer":"full","path":"breakdown.spikes","before":"Nashor's Tooth is the inflection; level 6 adds dive insurance; Rabadon's turns poke into deletion.","after":"Nashor's Tooth is the inflection; level 6 turns him into sustain; Grievous Wounds is the answer."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Swain gets a kill, the lane gets honest — give Demonic Ascension extra room and farm it back. Two kills: stop dueling your tilt — farm at soldier range and stay relevant through wave control.","after":"If Swain gets a kill, the lane gets honest — buy Grievous Wounds early and farm it back. Two kills: stop dueling your tilt — farm at soldier range and stay relevant through wave control."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through siege control — soldiers take plates, R denies engages, and your DPS curve outlasts every assassin spike in the lobby.","after":"Carry through siege — soldiers take plates from outside his 750-range Death's Hand, and he owns no dash to close that gap."},
+    {"layer":"full","path":"breakdown.late","before":"You are the best siege and the best counter-engage in the game: wall their dive, melt their frontline, and never fight without three soldiers banked.","after":"Wall their dive, melt their frontline, never fight without three soldiers banked — and never let your body or your sand sit inside his 650 drain."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.","after":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — resetting it walks you into an 850-range root you cannot dodge. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: W behind the wave, Q-drag the soldier through Swain on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Swain player is waiting for.","after":"Good trade: W behind the wave, Q-drag the soldier through Swain on his last-hit, auto once through the soldier, step back — short trades that end before Ravenous Flock heals them off. Bad trade: standing still inside 850 with your E down, because Nevermove roots on the return pass and then pulls you in toward him."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"His drain mode — disengage and reset the fight when it starts. Bait it, count it, then go.","after":"Nevermove roots on its return pass, not on the way out — step only after it goes by."},
+    {"layer":"full","path":"dosFull[1].d","before":"W behind the wave, Q-drag the soldier through Swain on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"Death's Hand reaches 750 and Nevermove 850, so nothing he owns beats a soldier placed at the edge — poke through the sand and make him walk to you."},
+    {"layer":"full","path":"dosFull[2].d","before":"Swain burns Demonic Ascension on nothing — take the fifteen-second invitation.","after":"His Q costs up to 60 mana and yours 110 — bank before you contest a shove."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Swain’s whole plan in one window — decline politely and watch it retire.","after":"Wasted sand is mana you don't have, and his passive heals the chip back anyway."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Swain player is waiting for.","after":"Vision of Empire reaches over 5500 units and reveals whoever it hits — shoving blind past river marks you for his whole team."},
+
+    {"layer":"full","path":"report[0].t","before":"Soldier range vs spell range — poke through the wave he has to stand in, and dodge the answer he throws back.","after":"His Nevermove roots from 850 and then pulls — poke on his last-hits and never stand still inside that band."},
+    {"layer":"full","path":"report[5].t","before":"Track Swain’s Demonic Ascension: His drain mode — disengage and reset the fight when it starts. It’s down or you don’t go.","after":"Track Swain’s Demonic Ascension: a flat 120s that runs as long as he keeps draining — and Nevermove's root is what feeds it."},
+
+    {"layer":"content","path":"whys[1]","before":"By level 2-3 Swain's Vision-into-Torment (W-Q) combo out-damages Azir's early poke, flipping trades hard in Swain's favor exactly as the prose describes.","after":"By level 2-3 Swain's Death's Hand (Q) bolts into a Nevermove (E) root out-damage Azir's early poke, flipping trades hard into Swain's favor."},
+    {"layer":"content","path":"whys[3]","before":"The same holds through the rest of that mid-lane skillshot window — whoever lands Torment or soldier pokes cleanly wins the exchange, not raw kit strength.","after":"The same holds through the rest of that skillshot window — whoever lands Nevermove or the soldier poke cleanly wins the exchange, not raw kit strength."},
+    {"layer":"content","path":"spikes[0].text","before":"Once Swain hits 2 he can chain Vision->Torment (W-Q) to shred your health bar, and by level 3 the drain damage on his Ultimate becomes an actual threat if you stand in it, flipping the trade around from your level-1 soldier-poke edge.","after":"Once Swain hits 2 he chains Death's Hand into Nevermove to shred your health bar, and by level 3 that root-and-pull is a real kill threat if you stand still, flipping the trade from your level-1 soldier-poke edge."},
+    {"layer":"content","path":"spikes[1].text","before":"Swain's Demonic Ascension Ultimate heals him off your soldiers if he catches them in it and roots you if you're caught by W, punishing you hard for over-extending into his zone.","after":"Swain's Demonic Ascension drains health from every champion and minion nearby and shortens his Nevermove, so a root inside that 650 radius punishes any over-extension hard."},
+    {"layer":"content","path":"early","before":"Level 1 you can poke with soldier autos before he has any threat, but the moment he hits level 2-3 and unlocks Torment stacks plus his Ultimate drain, the trade flips hard against you — his root-into-drain combo out-damages your early kit and forces you to play from max range rather than engaging, making levels 2 through 5 genuinely rough even though you started ahead.","after":"Level 1 you can poke with soldier autos before he has any threat, but the moment he hits level 2-3 and has Death's Hand bolts plus the Nevermove root, the trade flips hard against you — root-into-bolts out-damages your early kit and forces you to play from max range rather than engaging, making levels 2 through 5 genuinely rough even though you started ahead."},
+    {"layer":"content","path":"wants.you[0]","before":"Trade cautiously levels 2-5 since his W-Q combo out-damages your early poke","after":"Trade cautiously levels 2-5 since his E-Q combo out-damages your early poke"},
+    {"layer":"content","path":"wants.foe[0]","before":"Land Vision of Empire (Q) into Torment (W) to snowball early trades","after":"Land Nevermove (E) into Death's Hand (Q) to snowball early trades"}
+  ],
+  "notes": "CHART: phases[0..4].side all read the stale token 'Skill'; content win[] and packet.levelChart agree exactly on Azir, Swain, Skill, Skill, Swain, Azir, Azir, so I moved [0] to Azir, [1] and [4] to Swain and left [2]/[3] on Skill because they already matched. No paired win[N] edit exists to propose — win[N] is already correct on disk for every row I touched — and each moved row's .why was rewritten in this same proposal. Ratings untouched. FABRICATED NAME KILLED: the content layer named 'Torment' as a Swain ability in three places and mis-slotted Vision of Empire as his Q; the real Q is Death's Hand, W is Vision of Empire and the root is Nevermove (E). The packet's suspectNames flagged wants.foe[0] and it was a TRUE positive. Also removed an invented 'fifteen-second invitation' on Demonic Ascension, which is a flat 120s. The packet's 'NO cooldown-sequencing advice' defect is answered by breakdown.cooldowns and winCon: wait out the 12-second Nevermove before stepping to 740, and note it is shorter while his ultimate runs. DELIBERATELY NOT WRITTEN: the missingInteractions entry 'Swain bypasses stacking resistances (Ravenous Flock)'. Riot's own description of Ravenous Flock only says the ravens collect Soul Fragments that heal him and permanently increase his maximum health — nothing about ignoring armour or MR. Per the brief's rule that the description beats a derived flag, I wrote only the anti-heal half (Grievous Wounds) and left the resistances claim out."
+}

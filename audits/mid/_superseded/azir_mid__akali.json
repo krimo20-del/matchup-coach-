@@ -1,0 +1,321 @@
+{
+  "ownerKey": "azir_mid",
+  "enemy": "akali",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Three level-chart rows render two different answers: full phases[4].side=Akali vs content win[4]=Azir; phases[5].side=Skill vs win[5]=Akali; phases[6].side=Skill vs win[6]=Azir.",
+      "why": "packet.levelChart reads Akali, Akali, Skill, Skill, Azir, Akali, Azir — it agrees with the content layer, so the full layer is the stale one. I could only ground one of the three: at 2+ items both whys already argue Azir (R cuts the fight, soldiers melt, late item scaling), so Skill there is simply wrong.",
+      "corrected": "phases[6].side moved to Azir with rating and why rewritten in the same proposal. Rows 4 and 5 left alone deliberately — see notes and questionsForUser.",
+      "confidence": "High",
+      "sources": ["brief packet.levelChart", "brief currentText.content.win[]", "existing phases[6].why and whys[6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text and content.mid both called Akali's ultimate \"Shadow Dance\", and spikes[1] called Azir's ultimate \"Shurima's Legacy\". whys[5] repeated \"Shadow Dance\".",
+      "why": "Akali's R is Perfect Execution (120/90/60, 675 range, recast executes). Shurima's Legacy is Azir's PASSIVE — the Disc of the Sun from turret ruins. His wall is Emperor's Divide.",
+      "corrected": "All three renamed and rebuilt around the real numbers: two dashes, 675 range, execute on the recast, 120s at rank 1.",
+      "confidence": "High",
+      "sources": ["enemyKit R slot", "ownerKit P and R slots"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Assassin's Mark was mentioned but never explained, and the page attributed \"mark damage ignores your soldier positioning\" and a \"Shroud heal\" to Akali. Neither is in her kit.",
+      "why": "Riot's passive text: spell damage creates a ring; EXITING the ring empowers her next attack with bonus range and damage. That bonus range is what actually beats soldier spacing, and it is an auto-attack reset — the wind-up is the tell. Twilight Shroud grants invisibility and unselectability, no healing.",
+      "corrected": "spikes[0].text rebuilt on the real ring-exit mechanic; dosFull[0].d now teaches the auto-reset wind-up as the step-back cue; spikes[2].text drops the invented Shroud heal for the real 18s shroud cooldown.",
+      "confidence": "High",
+      "sources": ["enemyKit P text", "enemyKit W text", "brief missingInteractions autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit anywhere (catalogue defect 3), and dosFull[2].d called Twilight Shroud a \"fifteen-second\" window.",
+      "why": "Twilight Shroud is 20/19/18/17/16, Shuriken Flip 16/14.5/13/11.5/10, Perfect Execution 120/90/60, Five Point Strike a flat 1.5s at 110 energy rank 1, Azir E 22s at rank 1.",
+      "corrected": "Real numbers written into breakdown.cooldowns, dosFull[2].d, dontsFull[0].d, dontsFull[1].d, dontsFull[2].d, report[5].t, breakdown.early and ahead.",
+      "confidence": "High",
+      "sources": ["ownerKit", "enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Perfect Execution's execute threshold was never stated, so the page told the reader to watch a health bar.",
+      "why": "missingInteractions rule execute-threshold for this matchup; Riot's recast text executes all enemies struck.",
+      "corrected": "breakdown.feeding now says track the number, not the bar.",
+      "confidence": "High",
+      "sources": ["brief missingInteractions", "enemyKit R text"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t ended \"Add anti-heal early into his sustain.\"",
+      "why": "Akali has no heal, drain or lifesteal in her kit — nothing carries the heal flag. Grievous Wounds buys nothing here, and the pronoun was wrong on top of it.",
+      "corrected": "Replaced with the Zhonya's timing that actually matters: before her 6.",
+      "confidence": "High",
+      "sources": ["enemyKit — no heal flag on any slot"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Akali was called he/his/him in tldr, winCon, tradeGood, loading, phases[1].why, phases[3].why, dosFull[0..2].t, dontsFull[2].t, breakdown.trading, breakdown.wave and reports 0, 1, 3, 9, 11.",
+      "why": "champ-gender.js lists akali as female; the owner is \"you\", so every third-person pronoun is Akali.",
+      "corrected": "All swapped to she/her at matching length.",
+      "confidence": "High",
+      "sources": ["champ-data/champ-gender.js listing in brief instructions"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Azir" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "7/10" },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Full build Azir is a teamfight: R cuts the fight in half, soldiers melt whoever is on your side of the wall.",
+      "after": "Full build you win outright: R cuts her off her targets and soldiers melt anything on your side of the wall."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "He has to enter soldier range to kill you — that trip costs HP, and your E + R make the return trip expensive too.",
+      "after": "She has to enter soldier range to kill you — that trip costs HP, and your E + R make the return trip expensive too."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "He has to enter soldier range to kill you — that trip costs HP, and your E + R make the return trip expensive too.",
+      "after": "She has to enter soldier range to kill you — that trip costs HP, and your E + R make the return trip expensive too."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Tax the approach with soldiers, cancel the dive with R, and starve his roam game with shoves. Shorthand: Twilight Shroud down, wave right, go.",
+      "after": "Tax the approach with soldiers, cancel the dive with R, and starve her roam game with shoves. Shorthand: Twilight Shroud down, wave right, go."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Tax the approach with soldiers, cancel the dive with R, and starve his roam game with shoves. Shorthand: Twilight Shroud down, wave right, go.",
+      "after": "Tax the approach with soldiers, cancel the dive with R, and starve her roam game with shoves. Shorthand: Twilight Shroud down, wave right, go."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Akali wins by landing Twilight Shroud, denying your pattern, and cashing the all-in before your pattern matures.",
+      "after": "Akali wins by shrouding out of your soldiers, marking you with Assassin's Mark, and executing you at 6 before Nashor's."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "W behind the wave, Q-drag the soldier through Akali on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.",
+      "after": "W behind the wave, Q-drag the soldier through Akali on her last-hit, auto once through the soldier, step back — two-second trades she cannot answer without overextending."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "W behind the wave, Q-drag the soldier through Akali on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.",
+      "after": "W behind the wave, Q-drag the soldier through Akali on her last-hit, auto once through the soldier, step back — two-second trades she cannot answer without overextending."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: W behind the wave, Q-drag the soldier through Akali on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Akali player is waiting for.",
+      "after": "Good trade: W behind the wave, Q-drag the soldier through Akali on her last-hit, auto once through the soldier, step back — two-second trades she cannot answer without overextending. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Akali player is waiting for."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: W behind the wave, Q-drag the soldier through Akali on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Great trade: Akali wastes Twilight Shroud — commit immediately. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Akali player is waiting for.",
+      "after": "Good trade: W behind the wave, Q-drag the soldier through Akali on her last-hit, auto once through the soldier, step back — two-second trades she cannot answer without overextending. Great trade: Akali wastes Twilight Shroud — commit immediately. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Akali player is waiting for."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Azir vs Akali - Track: Akali Twilight Shroud. - Poke through soldiers on his last-hits — never step past your own sand. - Twilight Shroud down is the green light. - Hold the ult for names, not waves.",
+      "after": "- Azir vs Akali - Track: Akali Twilight Shroud. - Poke through soldiers on her last-hits — never step past your own sand. - Twilight Shroud down is the green light. - Hold the ult for names, not waves."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Two soldiers up means a real trade: W-Q the drag-through and step back. The poke is free only when his engage is down.",
+      "after": "Two soldiers up means a real trade: W-Q the drag-through and step back. The poke is free only when her engage is down."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Nashor's components arrive and the soldier DPS starts to sting. Drag Qs through Akali on every last-hit he takes.",
+      "after": "Nashor's components arrive and the soldier DPS starts to sting. Drag Qs through Akali on every last-hit she takes."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Akali Twilight Shroud: matchup-defining — Untargetable inside — hold your CC and burst for when she exits. Count it out loud if you must. - Your E Shifting Sands has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Twilight Shroud: 20s at rank 1, matchup-defining — she is unselectable inside it, so hold Q and R for the exit and count the 20. - Shuriken Flip is 16s at rank 1 and it is her only way back to you once the shroud drops. - Perfect Execution: 120s at 6, 60s at rank 3."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Keep a soldier between you and his engage line",
+      "after": "Keep a soldier between you and her engage line"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Untargetable inside — hold your CC and burst for when she exits. Its cooldown is the green light — wait for it.",
+      "after": "Her combo opens with the Assassin's Mark auto reset — the wind-up is the tell, not the cast. Step back on the wind-up, not after the damage lands."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].t",
+      "before": "Shove crashes and ping his every roam",
+      "after": "Shove crashes and ping her every roam"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].t",
+      "before": "Hold R to flip his dive into your kill",
+      "after": "Hold R to flip her dive into your kill"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Akali burns Twilight Shroud on nothing — take the fifteen-second invitation.",
+      "after": "Akali burns Twilight Shroud on nothing — take the twenty-second invitation."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That’s Akali’s bread-and-butter play — deny it and they run out of answers.",
+      "after": "E is 22s at rank 1 and it is your only exit from her Perfect Execution."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Your E is your Flash — burning the shield-dash for damage leaves the emperor on foot for nineteen seconds.",
+      "after": "Five Point Strike is 550 range and costs her 110 energy — step past your sand and you are inside it for free."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].t",
+      "before": "Let him shove-and-roam without pings",
+      "after": "Let her shove-and-roam without pings"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Akali player is waiting for.",
+      "after": "Five Point Strike is a 1.5s cooldown — she clears fast and leaves. Shove first, ping the moment she is gone, and follow the wave."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Akali’s Twilight Shroud: Untargetable inside — hold your CC and burst for when she exits. It’s down or you don’t go.",
+      "after": "Track Akali’s Twilight Shroud: 20s at rank 1, and she is unselectable inside it — hold Q and R for the exit. It’s down or you don’t go."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Ring + 2 pots. Nashor's Tooth rush into Sorcerer's, then Liandry's and Rabadon's. Zhonya's vs dive; Banshee's vs pick comps. Add anti-heal early into his sustain.",
+      "after": "Start Doran's Ring + 2 pots. Nashor's Tooth rush into Sorcerer's, then Liandry's and Rabadon's. Zhonya's vs dive; Banshee's vs pick comps. Buy it before her 6, not after."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Twilight Shroud’s cooldown, on your Nashor's Tooth spike, and with your jungler’s setup. Make him flinch first.",
+      "after": "Commit on Twilight Shroud’s cooldown, on your Nashor's Tooth spike, and with your jungler’s setup. Make her flinch first."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Burn E for trade damage. Step past your soldiers to greed poke. Let him shove-and-roam without pings. And keep the ultimate holstered until a kill is actually on the table.",
+      "after": "Burn E for trade damage. Step past your soldiers to greed poke. Let her shove-and-roam without pings. And keep the ultimate holstered until a kill is actually on the table."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Farm through soldiers and poke only on last-hit windows. Pre-Nashor's you are a promise, not a threat — spend mana like it is HP.",
+      "after": "Farm through soldiers; Five Point Strike is 550 range, so anything past your sand is her trade. Pre-Nashor's, mana is HP."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Nashor's onward: shove crashes, soldier-siege plates, and rotate to river fights where your R turns 3v3s into 3v1s. The insec flip wins drakes by itself.",
+      "after": "Nashor's onward: shove crashes and rotate — she roams the second the wave leaves. R walls her off your carry, and soldiers punish every Shroud exit."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.",
+      "after": "Best wave: a controlled slow push you crash with soldier autos — the crash funds your plates and takes the roam window away from her. Worst wave: a frozen wave near her tower with E down — Twilight Shroud is 20s and she only needs one of those to reach you. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.",
+      "after": "Best wave: a controlled slow push you crash with soldier autos — the crash funds your plates and takes the roam window away from her. Worst wave: a frozen wave near her tower with E down — Twilight Shroud is 20s and she only needs one of those to reach you. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Akali opens the score, reset expectations and respect Twilight Shroud doubly. After a second, your job description changes — farm at soldier range and stay relevant through wave control.",
+      "after": "One kill and Perfect Execution's threshold covers more of your bar — track the number, not the bar. Two and she has Shroud plus flip to reach you, so farm at soldier range behind minions."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through siege control — soldiers take plates, R denies engages, and your DPS curve outlasts every assassin spike in the lobby.",
+      "after": "Carry by never being reachable — soldiers take plates, R throws her back out of a Perfect Execution, and your DPS outlasts her 60s ultimate."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, siege: crash waves with soldier autos, take every plate, and rotate to river with R held — your wall converts even fights into massacres.",
+      "after": "Ahead, siege: crash with soldier autos, take every plate, and hold R for her entry — Perfect Execution is 120s at rank 1 and she has one attempt."
+    },
+    {
+      "layer": "full",
+      "path": "report[13].t",
+      "before": "Ahead, siege: crash waves with soldier autos, take every plate, and rotate to river with R held — your wall converts even fights into massacres.",
+      "after": "Ahead, siege: crash with soldier autos, take every plate, and hold R for her entry — Perfect Execution is 120s at rank 1 and she has one attempt."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "Her Shadow Dance all-in remains a real kill threat if you're caught out of position near her Shroud",
+      "after": "Her Perfect Execution all-in stays a real kill threat if you are caught out of position near her Shroud"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Akali's Five Point Strike into Twilight Shroud lets her stack Assassin's Mark and dive your soldier zone with impunity since her mark damage ignores most of your soldier positioning.",
+      "after": "Akali's Five Point Strike into Twilight Shroud is the 3-5 kill pattern: the Q ring procs Assassin's Mark, and leaving the ring gives her an empowered attack with bonus range that reaches past the sand."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Akali 6 (Shadow Dance) is a hard all-in threat with a dash-reset that can chase you down even through soldier walls, punishing any time you're caught pushed up without Shurima's Legacy off cooldown.",
+      "after": "Akali 6 (Perfect Execution) is a hard all-in: two dashes, 675 range, and the second one executes, so it is a threat on 120s any time you are caught pushed up without Emperor's Divide off cooldown."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Your first item (Shojin or Liandry's) plus consistent soldier spacing lets you finally punish her for entering Shroud, since your damage-over-time and R combo threaten to burst her before her Shroud heal offsets it.",
+      "after": "Your first item (Nashor's Tooth, then Liandry's) plus consistent soldier spacing lets you finally punish her for entering Shroud, since the soldier DPS keeps ticking on the exit while Twilight Shroud is still 18s from coming back."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Level 6 is her spike — Shadow Dance's dash reset chases you down even behind soldiers — so play it safe until your own ultimate is up, at which point Emperor's Divide can shove her out of all-in range and even Skill-check her dash timing.",
+      "after": "Level 6 is her spike — Perfect Execution is two dashes at 675 range and the recast executes, so play safe until your own ultimate is up. From there Emperor's Divide knocks her back out of all-in range and the wall denies her dash."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Rush Shojin to make your combo threaten her before her Shroud sustain kicks in",
+      "after": "Rush Nashor's Tooth so soldier DPS punishes her the moment she leaves Shroud"
+    }
+  ],
+  "notes": "Left phases[4] (Level 6) and phases[5] (First item) alone even though full and content disagree on both. The full layer says Akali wins 6 and the row is Skill at first item; content and packet say Azir wins 6 and Akali wins first item. I cannot ground the content/packet version from the kits — Perfect Execution at 6 is 120s with an execute recast while Azir's level-6 gain is a defensive wall, which argues the OPPOSITE of what the packet says, and Nashor's is Azir's biggest lane spike, which again argues the opposite. Per the chart rule I left both rows rather than move a side I cannot explain. Also note content.mid contained the literal token 'Skill-check', which looks like a chart-token find/replace leak rather than intended prose; it is gone in the rewrite. breakdown.late left as generic Azir boilerplate — nothing in Akali's kit gives me a specific late-game statement I can source."
+}

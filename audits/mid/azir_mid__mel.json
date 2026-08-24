@@ -1,0 +1,101 @@
+{
+  "ownerKey": "azir_mid",
+  "enemy": "mel",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Page said 'EVEN 5.5/10' but the full-layer level chart read 'Skill' for rows 0-4 while the content layer and the packet both read Mel/Mel/Mel/Mel/Azir. Two layers answered 'who wins Level 1' differently.",
+      "why": "packet.levelChart and content win[0..6] agree (Mel x4, then Azir x3); phases[].side was stale template 'Skill'. Difficulty is genuinely lane-losing-then-scaling: Mel's Radiant Volley is 950 range on a 10s cooldown at rank 1 vs Azir's 740-range Q on 14s, so she trades on cooldown until Nashor's.",
+      "corrected": "phases[0..3].side -> Mel, phases[4].side -> Azir, with each .why rewritten to match the new verdict.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content.win", "brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spike text called the reflect a passive and breakdown.spikes named no Mel timing at all.",
+      "why": "The reflect/immunity is Rebuttal (W), cooldown 38/35/33/29/26. Mel's passive is Searing Brilliance: bonus projectiles on the next attack after any ability, plus infinite Overwhelm stacking that Golden Eclipse (120/100/80s, global) cashes in. Azir's spikes are level 6 Emperor's Divide (120/105/90s) and Nashor's Tooth.",
+      "corrected": "spikes[0].text and breakdown.spikes rewritten to name Rebuttal, Golden Eclipse and the MR timing.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: the matchup never named a single Mel ability. breakdown.cooldowns contained no digit.",
+      "why": "The decisive interactions are: (a) Rebuttal (W, 250 range) both prevents Mel taking damage and reflects projectiles, on 38s at rank 1 down to 26s at rank 5 — that cooldown is the whole green-light system for Azir's soldier poke; (b) Solar Snare (E, 1000 range, 11/10.5/10/9.5/9s) roots at the centre and slows around it, which is what sets up her volley and denies your Shifting Sands exit; (c) Searing Brilliance loads bonus projectiles onto her NEXT attack after any ability, so the auto wind-up — not the cast — is the tell; (d) every point of chip you take stacks Overwhelm for Golden Eclipse, which reaches you at any distance (25000 range).",
+      "corrected": "Rebuttal and Solar Snare cooldowns written into breakdown.cooldowns; the auto-reset tell folded into the Do's; Overwhelm banking folded into feeding and early.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.missingInteractions[0] autoreset-burst-tell", "brief.packet.defects"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "COOLDOWN_NO_DIGIT lint on breakdown.cooldowns.",
+      "why": "Rebuttal 38/35/33/29/26, Solar Snare 11/10.5/10/9.5/9, Shifting Sands 22/20.5/19/17.5/16 are all in the kits.",
+      "corrected": "All three numbers now in breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Nineteen MISGENDER lint hits — Mel called he/his/him throughout.",
+      "why": "champ-gender.js lists mel as female.",
+      "corrected": "Every flagged field rewritten with she/her.",
+      "confidence": "High",
+      "sources": ["brief.lintFindings"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Mel"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Mel"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Mel"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Mel"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Azir"},
+
+    {"layer":"full","path":"phases[0].why","before":"W a soldier behind the wave and farm THROUGH it — your auto range is the soldier's range. Don't poke yet; sand costs mana.","after":"Radiant Volley outranges your sand at 950 — W a soldier behind the wave and farm THROUGH it. Don't poke yet; sand costs mana."},
+    {"layer":"full","path":"phases[1].why","before":"Two soldiers up means a real trade: W-Q the drag-through and step back. The poke is free only when his engage is down.","after":"Two soldiers means a real trade, but Solar Snare roots you into her volley — step up only once that 11s root is spent."},
+    {"layer":"full","path":"phases[2].why","before":"E completes the safety net — you now have the shield-dash out. Greedier soldier placements are allowed, not encouraged.","after":"Shifting Sands completes the safety net at 22s, but her Q is on 8s — she trades on cooldown and you lose that race."},
+    {"layer":"full","path":"phases[3].why","before":"Nashor's components arrive and the soldier DPS starts to sting. Drag Qs through Mel on every last-hit he takes.","after":"Nashor's parts sting, but Overwhelm is stacking on you — drag Qs through Mel on her last-hits and take no free chip."},
+    {"layer":"full","path":"phases[4].why","before":"Emperor's Divide online — the dive insurance and the insec flip. With R up you win every 2v2 your jungler joins.","after":"Emperor's Divide is up: Golden Eclipse still reaches you anywhere, but your wall breaks the setup her team needs."},
+
+    {"layer":"full","path":"tldr","before":"His burst beats your shield once — make him spend it into E, then poke the cooldown gap to death.","after":"Her burst beats your shield once — bait Rebuttal out, then poke the 26-second gap to death."},
+    {"layer":"full","path":"winCon","before":"Survive the burst window with E + R, then out-DPS the long fight his kit was never built for. Nothing here works through Rebuttal — schedule your pattern around its cooldown.","after":"Survive Golden Eclipse with E + R, then out-DPS the long fight her kit was never built for. Rebuttal blanks damage on a 38-to-26-second cooldown — schedule your pattern around it."},
+    {"layer":"full","path":"enemyWin","before":"Mel wins by landing Rebuttal, denying your pattern, and renting you the lane at a range markup.","after":"Mel wins by stacking Overwhelm on you all lane, then cashing it with Golden Eclipse the moment you dip."},
+    {"layer":"full","path":"tradeGood","before":"W behind the wave, Q-drag the soldier through Mel on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"W behind the wave, Q-drag the soldier through Mel on her last-hit, auto once through the soldier, step back — short trades she cannot answer while Rebuttal is down."},
+    {"layer":"full","path":"tradeBad","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Mel player is waiting for.","after":"Poking into a lit Rebuttal — it blanks the damage, and every stack you eat elsewhere is fuel for her Golden Eclipse."},
+    {"layer":"full","path":"ahead","before":"Ahead, siege: crash waves with soldier autos, take every plate, and rotate to river with R held — your wall converts even fights into massacres.","after":"Ahead, siege: crash with soldier autos and take plates where her 250-range Rebuttal cannot contest — hold R to break her Solar Snare angle."},
+    {"layer":"full","path":"loading","before":"- Azir vs Mel - Track: Mel Rebuttal. - Poke through soldiers on his last-hits — never step past your own sand. - Fights start when Rebuttal ends. - The R is for endings, not openings.","after":"- Azir vs Mel - Track: Mel Rebuttal. - Poke through soldiers on her last-hits — never step past your own sand. - Fights start when Rebuttal ends. - The R is for endings, not openings."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Mel Rebuttal: matchup-defining — Reflects your projectiles back — never poke while it glows. Step up only on its downtime. - Budget E Shifting Sands for emergencies and the R for opportunities — never swap them.","after":"- Rebuttal: 38s at rank 1, 26s at rank 5 — it stops her taking damage and reflects projectiles; never poke while it glows. - Solar Snare is down 11s at rank 1: that gap is your step-up. - Budget Shifting Sands (22s to 16s) for escapes."},
+    {"layer":"full","path":"breakdown.early","before":"Farm through soldiers and poke only on last-hit windows. Pre-Nashor's you are a promise, not a threat — spend mana like it is HP.","after":"Farm through soldiers and poke only once Rebuttal is spent. Pre-Nashor's you are a promise, not a threat — spend mana like it is HP."},
+    {"layer":"full","path":"breakdown.spikes","before":"Nashor's Tooth is the inflection; level 6 adds dive insurance; Rabadon's turns poke into deletion.","after":"Nashor's is the inflection; level 6 answers her Golden Eclipse setup; an early MR item beats stacked Overwhelm."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Mel opens the score, reset expectations and respect Rebuttal doubly. After a second, your job description changes — farm at soldier range and stay relevant through wave control.","after":"If Mel opens the score, stop handing her Overwhelm stacks — every point of chip is Golden Eclipse damage banked. Farm at soldier range, buy MR, and stay relevant through wave control."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through siege control — soldiers take plates, R denies engages, and your DPS curve outlasts every assassin spike in the lobby.","after":"Carry through siege — soldiers take plates from outside her 950-range Radiant Volley, and R denies the engage her team needs to reach you."},
+    {"layer":"full","path":"breakdown.late","before":"You are the best siege and the best counter-engage in the game: wall their dive, melt their frontline, and never fight without three soldiers banked.","after":"Wall their dive, melt their frontline, never fight without three soldiers banked — and never start a fight low, because Golden Eclipse finds you anywhere."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.","after":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near her tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: W behind the wave, Q-drag the soldier through Mel on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Mel player is waiting for.","after":"Good trade: W behind the wave, Q-drag the soldier through Mel on her last-hit, auto once through the soldier, step back — short trades she cannot answer while Rebuttal is down. Bad trade: poking into a lit Rebuttal — it blanks the damage, and every stack you eat elsewhere is fuel for her Golden Eclipse."},
+
+    {"layer":"full","path":"dosFull[0].t","before":"Hold E to shield-dash out of his combo","after":"Hold E to shield-dash out of her combo"},
+    {"layer":"full","path":"dosFull[0].d","before":"Reflects your projectiles back — never poke while it glows. Bait it, count it, then go.","after":"Solar Snare roots you to set up her volley — save Shifting Sands to leave, not to chase."},
+    {"layer":"full","path":"dosFull[1].t","before":"Punish his cooldown gap with full soldier volleys","after":"Punish her cooldown gap with full soldier volleys"},
+    {"layer":"full","path":"dosFull[1].d","before":"W behind the wave, Q-drag the soldier through Mel on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"Rebuttal is 26 seconds at rank 5 and lasts only a moment — when it drops, W-Q-drag through the soldier and auto, then step out before Solar Snare returns at 9 seconds."},
+    {"layer":"full","path":"dosFull[2].t","before":"Wall him INTO your team when he overcommits","after":"Wall her INTO your team when she overcommits"},
+    {"layer":"full","path":"dosFull[2].d","before":"Mel whiffs Rebuttal and the lane briefly belongs to you.","after":"Rebuttal spent on nothing: the lane briefly belongs to you."},
+    {"layer":"full","path":"dontsFull[1].t","before":"Trade while his full combo is loaded","after":"Trade while her full combo is loaded"},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Mel player is waiting for.","after":"R is your only answer to a Solar Snare setup once E is down — spend it to break the root chain, never to squeeze out extra poke."},
+
+    {"layer":"full","path":"report[0].t","before":"His burst beats your shield once — make him spend it into E, then poke the cooldown gap to death.","after":"Her burst beats your shield once — bait Rebuttal out, then poke the 26-second gap to death."},
+    {"layer":"full","path":"report[1].t","before":"Survive the burst window with E + R, then out-DPS the long fight his kit was never built for. Nothing here works through Rebuttal — schedule your pattern around its cooldown.","after":"Survive Golden Eclipse with E + R, then out-DPS the long fight her kit was never built for. Rebuttal blanks damage on a 38-to-26-second cooldown — schedule your pattern around it."},
+    {"layer":"full","path":"report[3].t","before":"Good trade: W behind the wave, Q-drag the soldier through Mel on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Great trade: Mel wastes Rebuttal — commit immediately. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Mel player is waiting for.","after":"Good trade: W behind the wave, Q-drag the soldier through Mel on her last-hit, auto once through the soldier, step back — short trades she cannot answer while Rebuttal is down. Great trade: Mel wastes Rebuttal — commit immediately. Bad trade: poking into a lit Rebuttal, which blanks the damage while every stack you eat feeds her Golden Eclipse."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.","after":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near her tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."},
+    {"layer":"full","path":"report[11].t","before":"Stand at soldier max range with E down. Trade while his full combo is loaded. Use R aggressively when it is your only out. The R buys fights, not poke — spend it like the last one in stock.","after":"Stand at soldier max range with E down. Trade while her full combo is loaded. Use R aggressively when it is your only out. The R buys fights, not poke — spend it like the last one in stock."},
+
+    {"layer":"content","path":"spikes[0].text","before":"Mel's ranged poke and reflected-damage passive punish careless soldier trades, chipping you down faster than you can answer with cooldown-limited tools.","after":"Mel's 950-range Radiant Volley and Rebuttal's damage immunity punish careless soldier trades, chipping you down faster than your cooldown-limited tools answer."},
+    {"layer":"content","path":"early","before":"Mel's kit punishes aggressive trading thanks to her reflect passive, so avoid throwing needless poke into her and instead focus on safe soldier farming from max range. She out-trades you in raw poke damage in this window, so respect her cooldowns and don't overextend for CS. Ward tri-bush since she can set up poke angles you won't see coming otherwise.","after":"Rebuttal, not her passive, is the reflect — it prevents her taking damage for its duration, so never poke into it and farm with soldiers from max range. Her passive stacks Overwhelm on everything that hits you, and free chip now becomes Golden Eclipse damage at 6. Radiant Volley is a 10-second cooldown at rank 1; don't overextend for CS while it is up."}
+  ],
+  "notes": "CHART: phases[0..4].side were the stale token 'Skill' while content win[0..4] and packet.levelChart already read Mel/Mel/Mel/Mel/Azir. I moved the full layer onto the content layer's answer, so NO paired win[N] edit exists to propose — win[N] is already correct on disk for every row I touched. Each moved row's .why was rewritten in this same proposal. phases[].rating left untouched: the rating scale's owner-vs-enemy orientation is ambiguous on this page and moving it without knowing which side it describes would be a guess. breakdown.difficulty left alone (matches diff/diffRating/carryRating). Rebuttal's damage prevention and projectile reflect are stated from Riot's text only — whether Azir's Sand Soldier attacks count as projectiles for the reflect is NOT in the kit data, so nothing in the rewrite asserts it either way; the advice is keyed to Rebuttal's cooldown instead. Same for whether Solar Snare's root blocks a Shifting Sands cast: I wrote 'roots you to set up her volley', not a dash-denial claim."
+}

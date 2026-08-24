@@ -1,0 +1,78 @@
+{
+  "ownerKey": "azir_mid",
+  "enemy": "malzahar",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer read Skill for levels 1 through 6 while the content layer and the packet both read Malzahar for all five rows.",
+      "why": "Void Shift gives him damage reduction and crowd-control immunity whenever he has not recently been hit, Call of the Void is 900 range on a flat 6 seconds with a silence, and Malefic Visions ticks on after the trade ends. Azir's Q is 740 on 14 seconds at rank 1 for 70 mana. He wins every prolonged exchange in that window.",
+      "corrected": "phases[0..4].side moved to Malzahar with all five whys rewritten in the same proposal; win[0..4] already read Malzahar, so the layers now agree.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/malzahar.json", "champ-data/_kits/azir.json", "packet.levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The page put no number on his level 6 spike and described Nether Grasp as a 'root-and-burst combo'.",
+      "why": "Nether Grasp is a suppression on 140/110/80 seconds at 700 range. Calling it a root understates it — suppression ignores tenacity and only removal answers it — and a 140-second cooldown at rank 1 is an enormous punish window that the page never told the reader about.",
+      "corrected": "spikes[1].text, phases[4].why and breakdown.cooldowns now carry the real numbers and call it suppression.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/malzahar.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three decisive interactions were absent and breakdown.cooldowns had no digit in it (lint COOLDOWN_NO_DIGIT). The page also called Void Shift a 'passive shield'.",
+      "why": "First, Nether Grasp is a channel — Riot's own flag and text agree that CC interrupts it, and Emperor's Divide knocks back, so the wall ends the suppression. Second, Call of the Void silences: if you pre-cast Shifting Sands you are stuck with no dash for its duration, which is the interaction flagged in missingInteractions. Third, Void Shift is damage reduction plus CC immunity that lingers only while he has not been hit, so one soldier auto strips it — it is not a shield with a health value.",
+      "corrected": "Written into dosFull[0].d (channel break), dosFull[1].d (strip Void Shift first), dontsFull[2].d (silence plus fog), breakdown.cooldowns and the early paragraph.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/malzahar.json", "champ-data/_kits/azir.json", "champ-data/_kits/_missing/azir_mid.json"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was the tradeGood string verbatim under a spacing title, dontsFull[2].d was tradeBad verbatim under a flank-warding title, and wants.foe[1] read 'Land Malefic Visions/Void Swarm and follow with root/burst' — the packet flagged the name and the effect is a suppression, not a root.",
+      "why": "Both bled bullets promise one thing and explain another; the wants line misnames the effect of his ultimate.",
+      "corrected": "Both bullets rewritten to answer their titles; wants.foe[1] now says suppress.",
+      "confidence": "High",
+      "sources": ["lintFindings", "packet.suspectNames", "champ-data/_kits/malzahar.json"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "tldr", "before": "Soldier range vs spell range — poke through the wave he has to stand in, and dodge the answer he throws back.", "after": "Soldier range vs spell range — poke through the wave he has to stand in, and strip Void Shift before you commit."},
+    {"layer": "full", "path": "winCon", "before": "Out-poke through soldiers, dodge the answer, and out-scale into the siege machine he cannot match. Nether Grasp is the clock this lane runs on — read it before every step forward.", "after": "Out-poke through soldiers, strip Void Shift with chip damage, and out-scale the siege he cannot match. Nether Grasp is the clock this lane runs on — read it before every step forward."},
+    {"layer": "full", "path": "enemyWin", "before": "Malzahar wins by landing Nether Grasp, denying your pattern, and keeping the fight at a distance your kit resents.", "after": "Malzahar wins by silencing your dash with Call of the Void, then suppressing you for the whole Nether Grasp channel."},
+    {"layer": "full", "path": "tradeGood", "before": "W behind the wave, Q-drag the soldier through Malzahar on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.", "after": "W behind the wave, Q-drag the soldier through Malzahar on his last-hit, auto once through the soldier, step back — the chip strips Void Shift and his Q is a flat 6 seconds."},
+    {"layer": "full", "path": "tradeBad", "before": "Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Malzahar player is waiting for.", "after": "Standing at max soldier range with E down while Nether Grasp is up — a 700-range suppression does not care how far your sand reaches."},
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Malzahar"},
+    {"layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10"},
+    {"layer": "full", "path": "phases[0].why", "before": "W a soldier behind the wave and farm THROUGH it — your auto range is the soldier's range. Don't poke yet; sand costs mana.", "after": "W a soldier behind the wave and farm THROUGH it — Void Shift ignores your slow entirely until you chip it off him."},
+    {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Malzahar"},
+    {"layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "4/10"},
+    {"layer": "full", "path": "phases[1].why", "before": "Two soldiers up means a real trade: W-Q the drag-through and step back. The poke is free only when his engage is down.", "after": "Two soldiers up means a real trade, but Void Swarm feeds him and his DoT outlasts a two-second exchange every time."},
+    {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Malzahar"},
+    {"layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "4/10"},
+    {"layer": "full", "path": "phases[2].why", "before": "E completes the safety net — you now have the shield-dash out. Greedier soldier placements are allowed, not encouraged.", "after": "E completes the safety net — but Call of the Void silences it, so never pre-cast the dash while his Q is up."},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Malzahar"},
+    {"layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "4/10"},
+    {"layer": "full", "path": "phases[3].why", "before": "Nashor's components arrive and the soldier DPS starts to sting. Drag Qs through Malzahar on every last-hit he takes.", "after": "Malefic Visions is down to 8 seconds and keeps ticking after you leave — his damage does not stop when the trade does."},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Malzahar"},
+    {"layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "5/10"},
+    {"layer": "full", "path": "phases[4].why", "before": "Emperor's Divide online — the dive insurance and the insec flip. With R up you win every 2v2 your jungler joins.", "after": "Nether Grasp suppresses at 700 range — level 6 is his until Emperor's Divide is up to break the channel."},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Malzahar Nether Grasp: matchup-defining — Point-and-click suppression — never step up solo while his passive shield is intact and R is up. It governs your forward steps. - E Shifting Sands spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Nether Grasp is 140s at rank 1 and 80s at rank 3, 700 range, and it is a channel — Emperor's Divide knocks him out of it. Call of the Void is a flat 6s and silences, so your dash is gone for its duration. Malefic Visions runs 11s down to 7s. - Shifting Sands (22s) is never poke."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through siege control — soldiers take plates, R denies engages, and your DPS curve outlasts every assassin spike in the lobby.", "after": "Carry by never being alone — soldiers siege from 740, and the one thing that beats you is a 700-range suppression landing with no ally in sight."},
+    {"layer": "full", "path": "breakdown.late", "before": "You are the best siege and the best counter-engage in the game: wall their dive, melt their frontline, and never fight without three soldiers banked.", "after": "Late his suppression decides fights: keep three soldiers banked, never cross fog unwarded, and buy Quicksilver Sash if the ultimate keeps finding you."},
+    {"layer": "full", "path": "dosFull[0].d", "before": "Point-and-click suppression — never step up solo while his passive shield is intact and R is up. Its cooldown is the green light — wait for it.", "after": "Nether Grasp is a channel, not a sentence — the Emperor's Divide knockback ends the suppression outright, so hold the wall for exactly that."},
+    {"layer": "full", "path": "dosFull[1].d", "before": "W behind the wave, Q-drag the soldier through Malzahar on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.", "after": "Void Shift holds only while he is undamaged — one soldier auto strips the damage reduction and the CC immunity, so chip him first and step up second, never the other way round."},
+    {"layer": "full", "path": "dontsFull[2].d", "before": "Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Malzahar player is waiting for.", "after": "Nether Grasp reaches 700 from a bush you never checked, and a silenced Azir has no dash at all — ward before you shove past river."},
+    {"layer": "full", "path": "report[0].t", "before": "Soldier range vs spell range — poke through the wave he has to stand in, and dodge the answer he throws back.", "after": "Soldier range vs spell range — poke through the wave he has to stand in, and strip Void Shift before you commit."},
+    {"layer": "full", "path": "report[1].t", "before": "Out-poke through soldiers, dodge the answer, and out-scale into the siege machine he cannot match. Nether Grasp is the clock this lane runs on — read it before every step forward.", "after": "Out-poke through soldiers, strip Void Shift with chip damage, and out-scale the siege he cannot match. Nether Grasp is the clock this lane runs on — read it before every step forward."},
+    {"layer": "content", "path": "whys[0]", "before": "Level 1: Malzahar's passive shield and DoT poke already win sustained trades against your cooldown-limited kit.", "after": "Level 1: Void Shift gives him damage reduction and CC immunity until a soldier auto strips it off him."},
+    {"layer": "content", "path": "spikes[1].text", "before": "His ult is an inescapable root-and-burst combo pre-6 for you — extremely dangerous since you have zero mobility to dodge it until your own R comes online.", "after": "Nether Grasp is a suppression, not a root — 700 range on 140 seconds, and nothing you own escapes it until your own R can break the channel."},
+    {"layer": "content", "path": "early", "before": "Malzahar's passive shield and DoT poke win prolonged trades against your immobile, cooldown-heavy kit, so avoid extended exchanges and focus on safe soldier farming instead. His ultimate suppress is a near-guaranteed kill setup if you're caught alone without vision control, so respect river bushes and track his position carefully. This is one of the more dangerous pre-6 matchups for you — play very passively.", "after": "Void Shift gives him damage reduction and crowd-control immunity whenever he has not just been hit, so a soldier auto to strip it comes before any trade, and his DoT wins prolonged exchanges against your cooldown-heavy kit. Nether Grasp is a near-guaranteed kill if you are caught alone without vision, so respect river bushes and track his position. This is one of the more dangerous pre-6 matchups you get — play it passively."},
+    {"layer": "content", "path": "wants.foe[1]", "before": "Land Malefic Visions/Void Swarm and follow with root/burst before you scale", "after": "Land Malefic Visions, then follow with the suppress before you scale"}
+  ],
+  "notes": "Full-layer chart was stale on rows 1-6 and has been moved onto the content chart and the packet, which agreed; every moved side has its why rewritten in the same proposal, and win[] needed no edit. The most valuable thing missing from this page was that Nether Grasp is a channel and Emperor's Divide's knockback interrupts it — that reframes the entire level 6 window and is now stated in three places. Also corrected the repeated description of Void Shift as a 'passive shield': Riot's text gives damage reduction and CC immunity conditional on not having been hit, with no health value, so 'strip it with a soldier auto' replaces 'break the shield'. Unverified: the exact duration of the Call of the Void silence and of the Nether Grasp suppression — neither kit file carries durations, so no number for either appears in the text."
+}

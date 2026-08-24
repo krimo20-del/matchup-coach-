@@ -1,0 +1,102 @@
+{
+  "ownerKey": "azir_mid",
+  "enemy": "naafiri",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4..6].side read 'Skill' while content win[4..6] and packet.levelChart read Naafiri, Naafiri, Azir. Three rows disagreed across layers.",
+      "why": "47.2% over 1106 games with a level chart that stays Naafiri through first item is consistent: her Q is 900 range on 9s at rank 1 and Eviscerate is a 450-range dash on 11s, so she chooses every fight until Azir's soldier DPS is item-backed.",
+      "corrected": "phases[4].side -> Naafiri, phases[5].side -> Naafiri, phases[6].side -> Azir, each .why rewritten to match.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content.win", "brief.enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes named no Naafiri timing and the anti-heal spike was absent entirely.",
+      "why": "Her spikes are level 6 Hounds' Pursuit (110/95/80s, 900 range, recasts for a shield) and any lead that makes the Q-into-E chain lethal. Azir's are Nashor's Tooth and level 6 Emperor's Divide (120/105/90s). Eviscerate recalling and fully healing the packmates is what makes chip damage on the dogs worthless.",
+      "corrected": "breakdown.spikes and phases[4..6].why now carry those timings; Grievous Wounds named.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit", "brief.missingInteractions[0] needs-antiheal"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: not one Naafiri ability was named. breakdown.cooldowns had no digit.",
+      "why": "Decisive interactions: (a) Darkin Daggers is the engage trigger, not Hounds' Pursuit — packmates leap to the FIRST champion or monster it hits, so standing behind minions means the dagger lands on a minion and the pack never reaches you; (b) Eviscerate (450 range, 11/10/9/8/7s) recalls and fully heals her packmates, which is why chipping the dogs between casts achieves nothing; (c) The Call of the Pack makes her Untargetable on 26s at rank 1; (d) Emperor's Divide knocks back and damages, which is Azir's answer to the pack's approach; (e) Hounds' Pursuit recasts once for a shield, so the first knock-back is not the end of it.",
+      "corrected": "Written into breakdown.cooldowns, dosFull[0].d, dosFull[2].d and enemyWin.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit", "brief.packet.defects"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "COOLDOWN_NO_DIGIT on breakdown.cooldowns.",
+      "why": "Hounds' Pursuit 110/95/80, Darkin Daggers 9/8.5/8/7.5/7, Eviscerate 11/10/9/8/7, Shifting Sands 22/20.5/19/17.5/16 are all in the kits.",
+      "corrected": "Real numbers now in breakdown.cooldowns and the punishable window is named as both Q and E being down.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Twenty-one MISGENDER hits and two COPY_PASTE_BLEED bullets.",
+      "why": "Naafiri is she/her per champ-gender.js; dosFull[1].d was tradeGood verbatim and dontsFull[2].d was tradeBad verbatim.",
+      "corrected": "All pronouns fixed; both bleed bullets replaced with bodies that match their titles (roam pings).",
+      "confidence": "High",
+      "sources": ["brief.lintFindings"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Naafiri"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Naafiri"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Azir"},
+
+    {"layer":"full","path":"phases[4].why","before":"Emperor's Divide online — the dive insurance and the insec flip. With R up you win every 2v2 your jungler joins.","after":"Hounds' Pursuit is a lock-on dash from 900 range — Emperor's Divide answers it only if you save R for her commit."},
+    {"layer":"full","path":"phases[5].why","before":"Nashor's spike: your soldier poke becomes shred. Shove crashes and rotate — the soldiers siege towers better than any mid.","after":"Nashor's makes your poke shred, but one Eviscerate heals the whole pack back — she still picks the fight and wins it."},
+    {"layer":"full","path":"phases[6].why","before":"Full build Azir is a teamfight: R cuts the fight in half, soldiers melt whoever is on your side of the wall.","after":"Full build flips it: R knocks her 900-range leap away from you and soldiers melt the pack before it lands."},
+
+    {"layer":"full","path":"phases[1].why","before":"Two soldiers up means a real trade: W-Q the drag-through and step back. The poke is free only when his engage is down.","after":"Two soldiers means a real trade, but her packmates leap to the first thing Darkin Daggers hits — keep a minion in front."},
+    {"layer":"full","path":"phases[3].why","before":"Nashor's components arrive and the soldier DPS starts to sting. Drag Qs through Naafiri on every last-hit he takes.","after":"Nashor's parts sting, but this is her peak dive window — drag Qs through Naafiri only on last-hits she has to walk for."},
+
+    {"layer":"full","path":"tldr","before":"He has to enter soldier range to kill you — that trip costs HP, and your E + R make the return trip expensive too.","after":"She has to enter soldier range to kill you — that trip costs HP, and Emperor's Divide makes the return trip worse."},
+    {"layer":"full","path":"winCon","before":"Tax the approach with soldiers, cancel the dive with R, and starve his roam game with shoves. Every commit starts with one question: is Hounds’ Pursuit down?","after":"Tax the approach with soldiers, knock the dive back with R, and starve her roam game with shoves. Every commit starts with one question: is Hounds’ Pursuit down?"},
+    {"layer":"full","path":"enemyWin","before":"Naafiri wins by landing Hounds’ Pursuit, denying your pattern, and cashing the all-in before your pattern matures.","after":"Naafiri wins by chaining Darkin Daggers into Eviscerate to reach you, then cashing Hounds’ Pursuit before Nashor's lands."},
+    {"layer":"full","path":"tradeGood","before":"W behind the wave, Q-drag the soldier through Naafiri on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"W behind the wave, Q-drag the soldier through Naafiri on her last-hit, auto once through the soldier, step back — short trades she cannot answer without spending Eviscerate."},
+    {"layer":"full","path":"tradeBad","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Naafiri player is waiting for.","after":"Standing at max soldier range with your E down while Darkin Daggers is up — that 900-range dagger is her cue to send the pack in."},
+    {"layer":"full","path":"ahead","before":"Ahead, siege: crash waves with soldier autos, take every plate, and rotate to river with R held — your wall converts even fights into massacres.","after":"Ahead, siege: crash with soldier autos, take every plate, and rotate with R held — the wall is what turns her 900-range leap into a whiff."},
+    {"layer":"full","path":"loading","before":"- Azir vs Naafiri - Track: Naafiri Hounds’ Pursuit. - Poke through soldiers on his last-hits — never step past your own sand. - Hounds’ Pursuit down is the green light. - Hold the ult for names, not waves.","after":"- Azir vs Naafiri - Track: Naafiri Hounds’ Pursuit. - Poke through soldiers on her last-hits — never step past your own sand. - Hounds’ Pursuit down is the green light. - Hold the ult for names, not waves."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Naafiri Hounds’ Pursuit: matchup-defining — The lock-on pack dash starts her dive — stand near minions to body-block the hounds. Step up only on its downtime. - Budget E Shifting Sands for emergencies and the R for opportunities — never swap them.","after":"- Hounds’ Pursuit: 110s at rank 1, 80s at rank 3 — the lock-on pack dash starts her dive, and it recasts once for a shield. - Darkin Daggers is 9s at rank 1 and Eviscerate 11s: with both spent she cannot reach you. - Shifting Sands is 22s — keep it for the exit."},
+    {"layer":"full","path":"breakdown.early","before":"Farm through soldiers and poke only on last-hit windows. Pre-Nashor's you are a promise, not a threat — spend mana like it is HP.","after":"Farm through soldiers and poke only once Darkin Daggers is spent. Pre-Nashor's you are a promise, not a threat — spend mana like it is HP."},
+    {"layer":"full","path":"breakdown.spikes","before":"Nashor's Tooth is the inflection; level 6 adds dive insurance; Rabadon's turns poke into deletion.","after":"Nashor's Tooth is the inflection; level 6 hands her a 900-range leap; Grievous Wounds blunts Eviscerate."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Naafiri takes first blood, tighten up: Hounds’ Pursuit is now always up in your head. A second kill means the duel is over and the game isn’t — farm at soldier range and stay relevant through wave control.","after":"If Naafiri takes first blood, tighten up: assume Hounds’ Pursuit is always up. A second kill means the duel is over and the game isn’t — farm at soldier range, buy Zhonya's, and stay relevant through wave control."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through siege control — soldiers take plates, R denies engages, and your DPS curve outlasts every assassin spike in the lobby.","after":"Carry through siege — soldiers take plates from outside her 900-range daggers, and R knocks the pack off whoever it jumped on."},
+    {"layer":"full","path":"breakdown.late","before":"You are the best siege and the best counter-engage in the game: wall their dive, melt their frontline, and never fight without three soldiers banked.","after":"Wall their dive, melt their frontline, never fight without three soldiers banked — and never stand alone where Hounds’ Pursuit can reach you first."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near her tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: W behind the wave, Q-drag the soldier through Naafiri on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Naafiri player is waiting for.","after":"Good trade: W behind the wave, Q-drag the soldier through Naafiri on her last-hit, auto once through the soldier, step back — short trades she cannot answer without spending Eviscerate. Bad trade: standing at max soldier range with your E down while Darkin Daggers is up — that dagger is her cue to send the pack in."},
+
+    {"layer":"full","path":"dosFull[0].t","before":"Keep a soldier between you and his engage line","after":"Keep a soldier between you and her engage line"},
+    {"layer":"full","path":"dosFull[0].d","before":"The lock-on pack dash starts her dive — stand near minions to body-block the hounds. Bait it, count it, then go.","after":"Her packmates leap to the first champion Darkin Daggers hits — stay behind minions and the dogs never reach you."},
+    {"layer":"full","path":"dosFull[1].t","before":"Shove crashes and ping his every roam","after":"Shove crashes and ping her every roam"},
+    {"layer":"full","path":"dosFull[1].d","before":"W behind the wave, Q-drag the soldier through Naafiri on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"She leaves the moment the wave is even and her pack clears fast — crash first, then ping the second she disappears so nobody trades a kill for the plate you took."},
+    {"layer":"full","path":"dosFull[2].t","before":"Hold R to flip his dive into your kill","after":"Hold R to flip her dive into your kill"},
+    {"layer":"full","path":"dosFull[2].d","before":"Naafiri spends Hounds’ Pursuit early — the closest thing this matchup has to a guarantee.","after":"Emperor's Divide knocks the whole pack back — the closest thing this matchup has to a reset."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That’s Naafiri’s bread-and-butter play — deny it and they run out of answers.","after":"Shifting Sands is 22 seconds at rank 1 — spend it on damage and her next dive is free."},
+    {"layer":"full","path":"dontsFull[2].t","before":"Let him shove-and-roam without pings","after":"Let her shove-and-roam without pings"},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Naafiri player is waiting for.","after":"Her pack clears a wave fast and she picks a side-lane fight you cannot rotate to — ping her out the second she leaves your screen."},
+
+    {"layer":"full","path":"report[0].t","before":"He has to enter soldier range to kill you — that trip costs HP, and your E + R make the return trip expensive too.","after":"She has to enter soldier range to kill you — that trip costs HP, and Emperor's Divide makes the return trip worse."},
+    {"layer":"full","path":"report[1].t","before":"Tax the approach with soldiers, cancel the dive with R, and starve his roam game with shoves. Every commit starts with one question: is Hounds’ Pursuit down?","after":"Tax the approach with soldiers, knock the dive back with R, and starve her roam game with shoves. Every commit starts with one question: is Hounds’ Pursuit down?"},
+    {"layer":"full","path":"report[3].t","before":"Good trade: W behind the wave, Q-drag the soldier through Naafiri on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Great trade: Naafiri wastes Hounds’ Pursuit — commit immediately. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Naafiri player is waiting for.","after":"Good trade: W behind the wave, Q-drag the soldier through Naafiri on her last-hit, auto once through the soldier, step back — short trades she cannot answer without spending Eviscerate. Great trade: Naafiri wastes Hounds’ Pursuit — commit immediately. Bad trade: standing at max soldier range with your E down while Darkin Daggers is up, which is her cue to send the pack in."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near her tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"report[8].t","before":"Start Doran's Ring + 2 pots. Nashor's Tooth rush into Sorcerer's, then Liandry's and Rabadon's. Zhonya's vs dive; Banshee's vs pick comps. Add anti-heal early into his sustain.","after":"Start Doran's Ring + 2 pots. Nashor's Tooth rush into Sorcerer's, then Liandry's and Rabadon's. Zhonya's vs dive; Banshee's vs pick comps. Add anti-heal early into her sustain."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Hounds’ Pursuit’s cooldown, on your Nashor's Tooth spike, and with your jungler’s setup. Make him flinch first.","after":"Commit on Hounds’ Pursuit’s cooldown, on your Nashor's Tooth spike, and with your jungler’s setup. Make her flinch first."},
+    {"layer":"full","path":"report[11].t","before":"Burn E for trade damage. Step past your soldiers to greed poke. Let him shove-and-roam without pings. Treat your ultimate as a verdict, never as harassment.","after":"Burn E for trade damage. Step past your soldiers to greed poke. Let her shove-and-roam without pings. Treat your ultimate as a verdict, never as harassment."},
+
+    {"layer":"content","path":"spikes[2].text","before":"Mana and some defensive stats let you start punishing her dash cooldowns with poke, though she's still dangerous if she catches you out of position.","after":"Nashor's lets you punish the 11-second Eviscerate gap with soldier poke, though she is still lethal the moment she catches you off a minion."}
+  ],
+  "notes": "CHART: phases[4..6].side were the stale token 'Skill' while content win[4..6] and packet.levelChart already read Naafiri/Naafiri/Azir. Full layer moved onto the content layer's answer, so no paired win[N] edit exists to propose — win[N] is already correct on disk for all three rows, and each .why was rewritten in this same proposal. Ratings left untouched (orientation of the rating scale is ambiguous). KIT DISCREPANCY: the derived 'heal' flag on Eviscerate is on Naafiri, but Riot's own description says the dash 'recalls her packmates and fully healing them' — the heal is on the PACKMATES, not on Naafiri. Per the brief's rule I followed the description: the anti-heal advice is written as Grievous Wounds blunting Eviscerate's pack sustain, and nothing claims Naafiri herself heals. Also deliberately unasserted: whether Emperor's Divide's wall blocks her Hounds' Pursuit dash — Riot's text only supports the knock-back, so the copy says knocked back, not blocked."
+}

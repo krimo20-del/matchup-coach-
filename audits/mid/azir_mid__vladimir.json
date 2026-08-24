@@ -1,0 +1,94 @@
+{
+  "ownerKey": "azir_mid",
+  "enemy": "vladimir",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Three-way contradiction: the full layer read Skill/Skill/Skill/Skill/Skill/Vladimir/Vladimir, the content layer read Azir/Azir/Azir/Azir/Vladimir/Azir/Azir, and the packet flagged 'level chart contradicts data: Azir wins only 42.5% but the chart gives Azir 6/7 stages'. Rows 5 and 6 also had a full-layer side of Vladimir with a why describing Azir dominating.",
+      "why": "Vladimir's early game is genuinely weak against Azir — Transfusion is 600 range, Tides of Blood costs his own health and is blocked by minions, and Sanguine Pool is 28s at rank 1 with no gap-closer. But Crimson Pact converts every item into AP and health simultaneously, so the late game is his, which is what the 42.5% over 727 games reflects.",
+      "corrected": "Chart set to Azir/Azir/Azir/Azir/Vladimir/Vladimir/Vladimir in BOTH layers: full sides 0-4 moved (content win[0..4] already read that way), content win[5] and win[6] moved to Vladimir (full sides already read Vladimir). All four whys rewritten to match their new verdict.",
+      "confidence": "High",
+      "sources": ["packet.winRate/games/defects", "enemyKit P/Q/W/E", "ownerKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The page treated level 6 as Vladimir's ONLY spike and said Azir's first item and full build both widen an Azir lead — with a 42.5% win rate that is backwards after lane.",
+      "why": "Crimson Pact: '30 bonus Health gives 1 AP and 1 AP gives 1.6 bonus Health'. Every item he buys spikes him twice, and Hemoplague (120s flat) heals him per champion hit.",
+      "corrected": "spikes[2] and spikes[3], mid and late rewritten around Crimson Pact double-scaling and the Grievous Wounds timing that decides whether soldier chip sticks.",
+      "confidence": "High",
+      "sources": ["enemyKit P/R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "No anti-heal advice anywhere in the lane text despite Vladimir's entire kit being sustain, and no statement of what Sanguine Pool actually dodges.",
+      "why": "missingInteractions rule 'needs-antiheal': Transfusion (Q) and Hemoplague (R) sustain through chip damage. enemyKit W: 'untargetable for 2 seconds', 28/25/22/19/16s — it dodges your Q soldier snap and the Emperor's Divide knockback outright. Azir's E is 22s at rank 1, his only disengage against a pool-flank.",
+      "corrected": "Grievous Wounds timing stated in cooldowns, carry, feeding, ahead, spikes[2], late and mid; the 2-second untargetable window and its 28s rank-1 cooldown named where the advice needs it.",
+      "confidence": "High",
+      "sources": ["missingInteractions[23]", "enemyKit W/Q/R", "ownerKit E"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit in it (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that exists to hold cooldowns.",
+      "corrected": "Sanguine Pool 28s, Transfusion 9s, Azir E 22s all stated at rank 1.",
+      "confidence": "High",
+      "sources": ["ownerKit", "enemyKit"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was tradeGood verbatim, dontsFull[2].d was tradeBad verbatim (lint COPY_PASTE_BLEED); dosFull[0].d and dosFull[2].d described something other than their titles.",
+      "why": "The title promises one action and the body explained another.",
+      "corrected": "Four bullet bodies rewritten to match their titles using Vladimir's 600-range, no-cost kit and Azir's mana costs.",
+      "confidence": "High",
+      "sources": ["lintFindings", "enemyKit", "ownerKit"]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet suspectNames flagged wants.foe[2] 'Use Sanguine Pool' as a probable wrong name; Sanguine Pool is Vladimir's real W in the kit file. False positive — left alone.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["enemyKit W"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Vladimir"},
+    {"layer":"content","path":"win[5]","before":"Azir","after":"Vladimir"},
+    {"layer":"content","path":"win[6]","before":"Azir","after":"Vladimir"},
+    {"layer":"full","path":"phases[0].why","before":"W a soldier behind the wave and farm THROUGH it — your auto range is the soldier's range. Don't poke yet; sand costs mana.","after":"Transfusion is 600 range and Vladimir has no engage. W a soldier behind the wave and farm through it — free CS, no mana on poke."},
+    {"layer":"full","path":"phases[1].why","before":"Two soldiers up means a real trade: W-Q the drag-through and step back. The poke is free only when his engage is down.","after":"Two soldiers and a Q drag-through beat a Vladimir paying his own health for Tides of Blood. Poke him off the melee minions."},
+    {"layer":"full","path":"phases[2].why","before":"E completes the safety net — you now have the shield-dash out. Greedier soldier placements are allowed, not encouraged.","after":"E is your shield-dash out, and his only escape is Sanguine Pool on 28s at rank 1. Zone him off CS while that is down."},
+    {"layer":"full","path":"phases[3].why","before":"Nashor's components arrive and the soldier DPS starts to sting. Drag Qs through Vladimir on every last-hit he takes.","after":"Nashor's components arrive and soldier DPS stings a Vladimir still stacking levels. Drag Qs through his every last-hit."},
+    {"layer":"full","path":"phases[4].why","before":"Emperor's Divide online — the dive insurance and the insec flip. With R up you win every 2v2 your jungler joins.","after":"Hemoplague on 120s is his one all-in: it amplifies all damage on you and heals him per champion hit. Do not be caught forward."},
+    {"layer":"full","path":"phases[5].why","before":"Nashor's spike: your soldier poke becomes shred. Shove crashes and rotate — the soldiers siege towers better than any mid.","after":"Your Nashor's lands, but Crimson Pact turns his HP into AP and back — he heals through soldier chip without Grievous Wounds."},
+    {"layer":"full","path":"phases[6].why","before":"Full build Azir is a teamfight: R cuts the fight in half, soldiers melt whoever is on your side of the wall.","after":"Full build he heals off every enemy Hemoplague touches — your wall buys space but not against a pool-flank."},
+    {"layer":"content","path":"whys[5]","before":"Azir's zone control and disengage return to dominating as Vladimir's ultimate cooldown passes.","after":"Crimson Pact turns his items into AP and health at once, out-sustaining Azir's soldier chip damage."},
+    {"layer":"content","path":"whys[6]","before":"Azir's soldier walls deny Vladimir the space to safely land Hemoplague in late-game fights, keeping Azir ahead.","after":"Hemoplague amplifies his team's damage and heals him per champion hit, and a pool-flank ignores Azir's soldier walls."},
+    {"layer":"full","path":"enemyWin","before":"Vladimir wins by landing Sanguine Pool, denying your pattern, and renting you the lane at a range markup.","after":"Vladimir pools out of your kill window, heals it back with Transfusion, and wins once Hemoplague amplifies his team."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Vladimir Sanguine Pool: matchup-defining — Untargetable dodge — bait it before you spend your kill window. Read it like a second minimap. - Guard your E Shifting Sands like a fifth summoner spell. - Ultimate goes to kill windows only.","after":"- Sanguine Pool is 28s at rank 1 and 2 seconds of untargetable — bait it before you spend a kill window. - Transfusion heals every 9s at rank 1, so buy Grievous Wounds before you commit. - Guard E Shifting Sands, 22s at rank 1. - R goes to kill windows only."},
+    {"layer":"full","path":"dosFull[0].d","before":"Untargetable dodge — bait it before you spend your kill window. Its cooldown is the green light — wait for it.","after":"Place the soldier past him, Q it back through his body as he steps up for a minion, then step out before Tides of Blood."},
+    {"layer":"full","path":"dosFull[1].d","before":"W behind the wave, Q-drag the soldier through Vladimir on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"Tides of Blood and Transfusion both stop at 600 range and his E is blocked by minions. Stand behind the sand — your soldier reaches him and he cannot reach you."},
+    {"layer":"full","path":"dosFull[2].d","before":"Vladimir whiffs Sanguine Pool and the lane briefly belongs to you.","after":"Q costs 110 mana at rank 5 while Vladimir pays none — bank it."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Vladimir’s rehearsed moment — don’t audition for it.","after":"Sanguine Pool eats a whiffed snap and heals him for it."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Vladimir player is waiting for.","after":"Sanguine Pool is untargetable for 2 seconds and he flanks with it — shoving past river without flank wards hands him a free angle."},
+    {"layer":"full","path":"ahead","before":"Ahead, siege: crash waves with soldier autos, take every plate, and rotate to river with R held — your wall converts even fights into massacres.","after":"Ahead, siege: crash with soldier autos, take plates while Sanguine Pool's 28 seconds is down, and buy Grievous Wounds before he heals the lead back."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through siege control — soldiers take plates, R denies engages, and your DPS curve outlasts every assassin spike in the lobby.","after":"Carry through siege — soldiers take plates and Emperor's Divide answers his pool-flank, but only Grievous Wounds makes your chip damage stick."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Vladimir opens the score, reset expectations and respect Sanguine Pool doubly. After a second, your job description changes — farm at soldier range and stay relevant through wave control.","after":"If Vladimir opens the score his health-and-AP scaling compounds fast — buy Grievous Wounds immediately and farm at soldier range. After a second, your job is wave control and denying him the side lane."},
+    {"layer":"content","path":"spikes[2].text","before":"Your first item widens the lead further — soldier wave clear and poke damage let you punish his passive farming pattern while he's still reliant on level-based scaling rather than items.","after":"Your first item narrows things, but Crimson Pact hands Vladimir AP and health from the same purchase — soldier poke stops sticking around here unless you have already bought Grievous Wounds."},
+    {"layer":"content","path":"spikes[3].text","before":"Full build Azir controls zones and out-ranges Vladimir's short-range kit entirely; his Hemoplague is strong in fights but your soldier walls and ultimate deny him the space to land it safely, keeping you ahead.","after":"Full build Vladimir converts every item into both AP and health, so soldier chip stops sticking without Grievous Wounds; your walls buy space in fights but never stop a Sanguine Pool flank onto your carries."},
+    {"layer":"content","path":"mid","before":"Level 6 is his only spike — Hemoplague adds real burst potential when paired with his other damage, so avoid standing in the pool zone and don't get caught overextended right as he hits it. Outside that narrow window you keep shoving and denying farm; a behind Vladimir mid-game has almost no way to catch back up.","after":"Level 6 is his real spike — Hemoplague on 120 seconds amplifies all damage on you and heals him for each champion it hits, so avoid standing forward as it comes up. Keep shoving and denying farm before then; every wave he misses pre-6 is one he cannot convert into the health-and-AP scaling that carries him later."},
+    {"layer":"content","path":"late","before":"By full items you still control the fight — your soldier walls and ultimate deny him the positioning he needs to land Hemoplague safely, and your range keeps him from ever getting a free poke window. He's a real threat if fights get chaotic and he flanks with Sanguine Pool, so keep vision up and don't let him pool into your backline unnoticed.","after":"By full items he is the harder scaler — Crimson Pact doubles every purchase into AP and health, so your soldier chip stops mattering unless you bought Grievous Wounds early. Your walls still buy space, but Sanguine Pool is untargetable for 2 seconds on a 16-second cooldown at rank 5, so keep vision up and never let him pool into your backline unnoticed."}
+  ],
+  "notes": "phases[N].rating left untouched for this matchup: the existing values are internally incoherent (Azir-favoured rows and enemy-favoured rows both carry 5-7/10 across the champion), so I could not tell which direction the scale runs and moving them blind risked making the page worse. Flagged in questionsForUser. The suspectNames hit on wants.foe[2] ('Use Sanguine Pool') is a false positive — that is the real ability name."
+}

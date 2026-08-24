@@ -1,0 +1,110 @@
+{
+  "ownerKey": "azir_mid",
+  "enemy": "neeko",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[0..4].side read 'Skill' while content win[0..4] and packet.levelChart both read Neeko. Five rows disagreed across layers.",
+      "why": "The content layer and the packet agree, so the full layer is the stale one. It is also the defensible reading: Blooming Burst is 800 range on 9s at rank 1 and Tangle-Barbs is 1000 range on 12s, against Azir's 740-range Q on 14s. She trades on cooldown until Nashor's, which is exactly where both charts hand the lane back.",
+      "corrected": "phases[0..4].side -> Neeko with all five .why rewritten to match.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content.win", "brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes named no Neeko timing.",
+      "why": "Her spike is level 6 Pop Blossom (120/105/90s, 600 range, knock-up then stun on landing) and the fact that its preparation is HIDDEN while she is disguised. Azir's are Nashor's Tooth and his own Emperor's Divide on the same 120/105/90.",
+      "corrected": "breakdown.spikes, phases[4].why and tldr now carry the hidden-wind-up spike.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page told you to 'sidestep it behind minions'. Tangle-Barbs damages and roots EVERYTHING it passes through — minions do not block it. That is advice that gets a reader rooted.",
+      "why": "Riot's text: 'Neeko slings a tangle that damages and roots everything it passes through. If the tangle kills an enemy or passes through a champion, it becomes larger, faster, and roots for longer.' So the wave is not cover, and letting it eat a minion makes the root WORSE. Second interaction: Inherent Glamour breaks on 'receiving immobilizing crowd control' — Emperor's Divide's knock-up is immobilizing, so your R strips her disguise; Sand Soldier slows do not.",
+      "corrected": "breakdown.cooldowns, dosFull[0].d, dontsFull[0].d, report[5].t and phases[1].why rewritten around the real behaviour; the disguise-strip written into dosFull[2].d and ahead.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Q/E/R/P text", "brief.ownerKit R text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "COOLDOWN_NO_DIGIT on breakdown.cooldowns.",
+      "why": "Tangle-Barbs 12/11.5/11/10.5/10, Blooming Burst 9/8.5/8/7.5/7, Shapesplitter 16/15/14/13/12, Shifting Sands 22/20.5/19/17.5/16.",
+      "corrected": "Real numbers now in breakdown.cooldowns and dosFull[1].d.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Twenty MISGENDER hits plus two COPY_PASTE_BLEED bullets.",
+      "why": "Neeko is she/her; dosFull[1].d was tradeGood verbatim and dontsFull[2].d was tradeBad verbatim.",
+      "corrected": "Pronouns fixed everywhere flagged; both bleed bullets replaced with bodies matching their titles.",
+      "confidence": "High",
+      "sources": ["brief.lintFindings"]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The packet's suspectName flag on wants.foe[0] ('Land Blooming Burst') is a FALSE POSITIVE — Blooming Burst is the real name of Neeko's Q per the kit file. No edit made.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.packet.suspectNames"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Neeko"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Neeko"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Neeko"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Neeko"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Neeko"},
+
+    {"layer":"full","path":"phases[0].why","before":"W a soldier behind the wave and farm THROUGH it — your auto range is the soldier's range. Don't poke yet; sand costs mana.","after":"Blooming Burst outranges your sand at 800 — W a soldier behind the wave and farm THROUGH it. Don't poke yet; mana is life."},
+    {"layer":"full","path":"phases[1].why","before":"Two soldiers up means a real trade: W-Q the drag-through and step back. The poke is free only when his engage is down.","after":"Two soldiers means a real trade, but her 1000-range Tangle-Barbs roots through the whole minion line — sidestep, don't hide."},
+    {"layer":"full","path":"phases[2].why","before":"E completes the safety net — you now have the shield-dash out. Greedier soldier placements are allowed, not encouraged.","after":"Shifting Sands completes the safety net at 22s; her Q is on 8s. She still trades on cooldown and you still lose that race."},
+    {"layer":"full","path":"phases[3].why","before":"Nashor's components arrive and the soldier DPS starts to sting. Drag Qs through Neeko on every last-hit he takes.","after":"Nashor's parts sting, but this is her peak window — drag Qs through Neeko only on last-hits she has to walk for."},
+    {"layer":"full","path":"phases[4].why","before":"Emperor's Divide online — the dive insurance and the insec flip. With R up you win every 2v2 your jungler joins.","after":"Emperor's Divide is up, but Pop Blossom's wind-up is hidden while she is disguised — hold R for the landing."},
+
+    {"layer":"full","path":"tldr","before":"His burst beats your shield once — make him spend it into E, then poke the cooldown gap to death.","after":"Her burst beats your shield once — Pop Blossom's wind-up is hidden while disguised, so treat every ally as her."},
+    {"layer":"full","path":"winCon","before":"Survive the burst window with E + R, then out-DPS the long fight his kit was never built for. Every commit starts with one question: is Tangle-Barbs (Root) down?","after":"Survive the burst window with E + R, then out-DPS the long fight her kit was never built for. Every commit starts with one question: is Tangle-Barbs (Root) down?"},
+    {"layer":"full","path":"enemyWin","before":"Neeko wins by landing Tangle-Barbs (Root), denying your pattern, and keeping the fight at a distance your kit resents.","after":"Neeko wins by rooting you with Tangle-Barbs straight through the minion line, then landing a Pop Blossom you never saw wind up."},
+    {"layer":"full","path":"tradeGood","before":"W behind the wave, Q-drag the soldier through Neeko on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"W behind the wave, Q-drag the soldier through Neeko on her last-hit, auto once through the soldier, step back — short trades she cannot answer with Tangle-Barbs down."},
+    {"layer":"full","path":"tradeBad","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Neeko player is waiting for.","after":"Standing at max soldier range with your E down while Tangle-Barbs is up — a 1000-range root reaches further than you can walk."},
+    {"layer":"full","path":"ahead","before":"Ahead, siege: crash waves with soldier autos, take every plate, and rotate to river with R held — your wall converts even fights into massacres.","after":"Ahead, siege: crash with soldier autos, take every plate, and rotate with R held — the knock-up also strips whatever disguise she arrives in."},
+    {"layer":"full","path":"loading","before":"- Azir vs Neeko - Track: Neeko Tangle-Barbs (Root). - Poke through soldiers on his last-hits — never step past your own sand. - Tangle-Barbs (Root) down is the green light. - Hold the ult for names, not waves.","after":"- Azir vs Neeko - Track: Neeko Tangle-Barbs (Root). - Poke through soldiers on her last-hits — never step past your own sand. - Tangle-Barbs (Root) down is the green light. - Hold the ult for names, not waves."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Neeko Tangle-Barbs (Root): matchup-defining — The root sets up her whole burst — sidestep it behind minions. Step up only on its downtime. - Budget E Shifting Sands for emergencies and the R for opportunities — never swap them.","after":"- Tangle-Barbs: 12s at rank 1, 10s at rank 5 — it roots everything it passes through, so minions do not block it; sidestep the line, never hide behind it. - Blooming Burst is 9s. - Budget Shifting Sands (22s) for the escape, never the trade."},
+    {"layer":"full","path":"breakdown.early","before":"Farm through soldiers and poke only on last-hit windows. Pre-Nashor's you are a promise, not a threat — spend mana like it is HP.","after":"Farm through soldiers and poke only once Tangle-Barbs is spent. Pre-Nashor's you are a promise, not a threat — spend mana like it is HP."},
+    {"layer":"full","path":"breakdown.spikes","before":"Nashor's Tooth is the inflection; level 6 adds dive insurance; Rabadon's turns poke into deletion.","after":"Nashor's Tooth is the inflection; level 6 gives her a hidden Pop Blossom; Rabadon's turns poke into deletion."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Neeko takes first blood, tighten up: Tangle-Barbs (Root) is now always up in your head. A second kill means the duel is over and the game isn’t — farm at soldier range and stay relevant through wave control.","after":"If Neeko takes first blood, tighten up: assume Tangle-Barbs is always up and check every ally silhouette twice. A second kill means the duel is over and the game isn’t — farm at soldier range and stay relevant."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through siege control — soldiers take plates, R denies engages, and your DPS curve outlasts every assassin spike in the lobby.","after":"Carry through siege — soldiers take plates from outside her 800-range Blooming Burst, and R knocks her out of Pop Blossom's circle."},
+    {"layer":"full","path":"breakdown.late","before":"You are the best siege and the best counter-engage in the game: wall their dive, melt their frontline, and never fight without three soldiers banked.","after":"Wall their dive, melt their frontline, never fight without three soldiers banked — and spread out so one Pop Blossom cannot catch your whole side."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near her tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: W behind the wave, Q-drag the soldier through Neeko on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Neeko player is waiting for.","after":"Good trade: W behind the wave, Q-drag the soldier through Neeko on her last-hit, auto once through the soldier, step back — short trades she cannot answer with Tangle-Barbs down. Bad trade: standing at max soldier range with your E down while Tangle-Barbs is up, because a 1000-range root reaches further than you can walk."},
+
+    {"layer":"full","path":"dosFull[0].t","before":"Hold E to shield-dash out of his combo","after":"Hold E to shield-dash out of her combo"},
+    {"layer":"full","path":"dosFull[0].d","before":"The root sets up her whole burst — sidestep it behind minions. Bait it, count it, then go.","after":"Tangle-Barbs roots through minions — sidestep the line, don't stand behind the wave and hope."},
+    {"layer":"full","path":"dosFull[1].t","before":"Punish his cooldown gap with full soldier volleys","after":"Punish her cooldown gap with full soldier volleys"},
+    {"layer":"full","path":"dosFull[1].d","before":"W behind the wave, Q-drag the soldier through Neeko on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending.","after":"Tangle-Barbs is 12 seconds at rank 1 — the moment it misses, W two soldiers, Q-drag both through her and auto through the sand, then walk out before the root comes back."},
+    {"layer":"full","path":"dosFull[2].t","before":"Wall him INTO your team when he overcommits","after":"Wall her INTO your team when she overcommits"},
+    {"layer":"full","path":"dosFull[2].d","before":"Neeko spends Tangle-Barbs (Root) early — the closest thing this matchup has to a guarantee.","after":"Emperor's Divide knocks her up, and that immobilise also strips whatever disguise she wore in."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That’s Neeko’s bread-and-butter play — deny it and they run out of answers.","after":"A 1000-range root reaches much further than your 740-range Q ever will."},
+    {"layer":"full","path":"dontsFull[1].t","before":"Trade while his full combo is loaded","after":"Trade while her full combo is loaded"},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Neeko player is waiting for.","after":"R is your answer to a Pop Blossom landing on top of you — spend it on her commit, never to squeeze out a little extra poke."},
+
+    {"layer":"full","path":"report[0].t","before":"His burst beats your shield once — make him spend it into E, then poke the cooldown gap to death.","after":"Her burst beats your shield once — Pop Blossom's wind-up is hidden while disguised, so treat every ally as her."},
+    {"layer":"full","path":"report[1].t","before":"Survive the burst window with E + R, then out-DPS the long fight his kit was never built for. Every commit starts with one question: is Tangle-Barbs (Root) down?","after":"Survive the burst window with E + R, then out-DPS the long fight her kit was never built for. Every commit starts with one question: is Tangle-Barbs (Root) down?"},
+    {"layer":"full","path":"report[3].t","before":"Good trade: W behind the wave, Q-drag the soldier through Neeko on his last-hit, auto once through the soldier, step back — two-second trades he cannot answer without overextending. Great trade: Neeko wastes Tangle-Barbs (Root) — commit immediately. Bad trade: Standing at max soldier range admiring your poke with E on cooldown — that is the engage window every Neeko player is waiting for.","after":"Good trade: W behind the wave, Q-drag the soldier through Neeko on her last-hit, auto once through the soldier, step back — short trades she cannot answer with Tangle-Barbs down. Great trade: Neeko wastes Tangle-Barbs (Root) — commit immediately. Bad trade: standing at max soldier range with your E down while Tangle-Barbs is up, because a 1000-range root reaches further than you can walk."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near his tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a controlled slow push you crash with soldier autos — the crash funds your roam, your plates, and your scuttle-fight presence. Worst wave: a frozen wave near her tower with your E down — walking up to reset it is the most-ganked walk in mid lane. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"report[5].t","before":"Track Neeko’s Tangle-Barbs (Root): The root sets up her whole burst — sidestep it behind minions. Forward steps wait for its downtime.","after":"Track Neeko’s Tangle-Barbs (Root): it roots everything it passes through, so minions never block it — sidestep, and step up on its downtime."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Tangle-Barbs (Root)’s cooldown, on your Nashor's Tooth spike, and with your jungler’s setup. Make him flinch first.","after":"Commit on Tangle-Barbs (Root)’s cooldown, on your Nashor's Tooth spike, and with your jungler’s setup. Make her flinch first."},
+    {"layer":"full","path":"report[11].t","before":"Stand at soldier max range with E down. Trade while his full combo is loaded. Use R aggressively when it is your only out. Treat your ultimate as a verdict, never as harassment.","after":"Stand at soldier max range with E down. Trade while her full combo is loaded. Use R aggressively when it is your only out. Treat your ultimate as a verdict, never as harassment."}
+  ],
+  "notes": "CHART: phases[0..4].side were the stale token 'Skill'; content win[0..4] and packet.levelChart already read Neeko, so the full layer was moved onto them and every .why rewritten in this same proposal. No paired win[N] edit exists to propose — win[N] is already correct on disk for all five rows. The packet flags 'level chart contradicts data: Azir wins 54.55% but the chart gives Neeko 5/7 stages'; I did NOT flip the chart to resolve that, because two independent layers agree on Neeko and her ranges/cooldowns support it — a 54.55% win rate off a lane you lose and then out-scale is coherent. SUSPECT NAME: packet flags wants.foe[0] 'Land Blooming Burst' as a probable wrong name — it is a FALSE POSITIVE, Blooming Burst is Neeko's real Q. No edit. Biggest real defect fixed: the page repeatedly said to sidestep Tangle-Barbs 'behind minions'; Riot's text says it roots everything it passes through and grows larger/faster/longer-rooting if it kills a unit, so the wave is not cover and hiding behind it makes the root worse. Deliberately unasserted: whether Sand Soldiers themselves block or absorb the tangle, and whether the disguise breaks to Azir's Q slow — only the immobilise clause is in Riot's text, so only the R knock-up strip is claimed."
+}

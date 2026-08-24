@@ -1,0 +1,223 @@
+{
+  "ownerKey": "akali_mid",
+  "enemy": "diana",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "All seven level-chart rows disagreed between the two layers. phases[].side read Diana/Diana/Skill/Skill/Diana/Skill/Skill; win[] read Akali/Akali/Akali/Diana/Skill/Akali/Akali. The content chart also gave Akali 5 of 7 stages against a 50.22% win rate.",
+      "why": "50.22% over 229 games is dead even, so the chart should balance out. Diana's real ownership window is levels 4-6: Pale Cascade falls to 10.5s and its third sphere doubles the shield, then Moonfall arrives on 100s against Akali's 120s. Akali owns 1-2 (Crescent Strike 8s vs Q 1.5s, and Lunar Rush costs a full 22s without Moonlight) and late (Moonfall is only 475 range, so a flank never enters the pull).",
+      "corrected": "Reconciled chart, both layers, matched pairs: Akali, Akali, Skill, Diana, Diana, Skill, Akali — 3 Akali, 2 Skill, 2 Diana.",
+      "confidence": "High",
+      "sources": ["packet.winRate", "enemyKit cd", "ownerKit cd"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 6 was described as Diana's spike but the reason given ('lets her pull you into range') missed the part that matters against Akali, and the first-item spike was hand-waved as a coinflip with no mechanism.",
+      "why": "Moonfall REVEALS as well as draws in — it is the one tool in her kit that answers Twilight Shroud, and at 100/90/80 it cycles faster than Perfect Execution's 120/90/60. Pale Cascade's shield is the first-item mechanism: it decides whether Akali's one burst window kills.",
+      "corrected": "spikes[1].text and spikes[2].text rewritten around Moonfall's reveal-plus-pull and Pale Cascade's shield, with the real ultimate cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit R text and cd", "ownerKit R cd", "ownerKit W text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three things. (a) Crescent Strike was repeatedly called a 'sphere' — the spheres are Pale Cascade (W); Crescent Strike is an arcing bolt. (b) The Moonlight rule was stated backwards-lite: the point is that Lunar Rush has NO cooldown against a Moonlight target and costs 22/20/18/16/14 otherwise, and that casting Lunar Rush at anything else strips Moonlight from everyone. (c) Moonfall's reveal — the single interaction that beats Twilight Shroud — was never mentioned anywhere on the page.",
+      "why": "All three come straight from Riot's descriptions in the kit. Note that Crescent Strike's 'revealsStealth' derived flag is a parse misfire: Riot's text says it reveals enemies 'if they are not stealthed', so it does NOT pull Akali out of the shroud. Only Moonfall does.",
+      "corrected": "breakdown.cooldowns, dosFull[0].d, dosFull[2].d, dontsFull[0].d, dontsFull[1].d, enemyWin, breakdown.feeding, wants.foe[0], spikes[0..2].text rewritten.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E/R text", "packet.suspectNames"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "No numbers. 'Read it like a second minimap' is not a cooldown window.",
+      "why": "The punishable cooldown is Lunar Rush at 22s rank 1, and it only exists when Crescent Strike misses. Crescent Strike itself is 8/7.5/7/6.5/6, Pale Cascade 15 down to 9, Moonfall 100/90/80.",
+      "corrected": "Real numbers written into breakdown.cooldowns, dosFull[0].d, phases[0].why and phases[1].why.",
+      "confidence": "High",
+      "sources": ["enemyKit cd fields"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Diana","after":"Akali"},
+    {"layer":"content","path":"win[0]","before":"Akali","after":"Akali"},
+    {"layer":"full","path":"phases[1].side","before":"Diana","after":"Akali"},
+    {"layer":"content","path":"win[1]","before":"Akali","after":"Akali"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Skill"},
+    {"layer":"content","path":"win[2]","before":"Akali","after":"Skill"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Diana"},
+    {"layer":"content","path":"win[3]","before":"Diana","after":"Diana"},
+    {"layer":"full","path":"phases[4].side","before":"Diana","after":"Diana"},
+    {"layer":"content","path":"win[4]","before":"Skill","after":"Diana"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Skill"},
+    {"layer":"content","path":"win[5]","before":"Akali","after":"Skill"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Akali"},
+    {"layer":"content","path":"win[6]","before":"Akali","after":"Akali"},
+
+    {"layer":"full","path":"phases[3].rating","before":"5/10","after":"4/10"},
+    {"layer":"full","path":"phases[4].rating","before":"6/10","after":"4/10"},
+    {"layer":"full","path":"phases[5].rating","before":"6/10","after":"5/10"},
+
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q the wave edge and his toes — the energy crunch is real, so every kama needs to farm AND poke at once.",
+      "after": "Crescent Strike is 8s at rank 1 and your Q is 1.5s — sidestep the arc and the level 1 exchange is free."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "More Q pressure — hold the energy bar above 100 so a real trade window never finds you broke.",
+      "after": "Without Moonlight on you, Lunar Rush costs 22 seconds — she cannot chase a trade she did not start."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Shroud online: the trade pattern is Q-auto, shroud the answer, Q again from the smoke. Most mids lose this exchange.",
+      "after": "Shroud online: Crescent Strike does not reveal stealth, so the smoke breaks her Moonlight-Lunar Rush chain cold."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Passive-weave every trade: spell, walk out of the ring, auto the edge — the energy refunds pay the whole lane.",
+      "after": "Pale Cascade is down to 10.5s and its third sphere doubles the shield — extended trades now pay her, not you."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Perfect Execution online — the double-dash R turns half-health mages into clean-up duty. Look for the all-in.",
+      "after": "Moonfall reveals and drags you out of the shroud, and it is 100s to your 120s — she owns the level 6 race."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "First item spike: shroud trades become kill threats. Force the wave contact and punish every spell he whiffs.",
+      "after": "First item evens it: your burst beats her shield, her Moonfall still beats your smoke. Whoever opens, wins."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late Akali erases carries: R in through the front line, shroud the response, E-reset out with the kill.",
+      "after": "Flank late: Moonfall is only 475 range, so R in from an angle, shroud, and E-reset out before she can pull."
+    },
+
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Her engage requires landing a skillshot first, and a whiff gives you a free E flip-in punish",
+      "after": "Akali: Crescent Strike is 8s at rank 1 — sidestep it and Lunar Rush has no Moonlight to reset off"
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "She has no reliable gap-close once her sphere misses, keeping the trade in your favor",
+      "after": "Akali: with no Moonlight on you, Lunar Rush costs a full 22 seconds — she cannot chase"
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Same read continues into level 5 as her all-in tools stay conditional on landing Q",
+      "after": "Skill: Crescent Strike cannot reveal stealth, but Pale Cascade's shield blanks your burst"
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Her new ultimate pull lets her force a fight on her terms before your own combo is ready",
+      "after": "Diana: Pale Cascade hits 10.5s and its third sphere doubles the shield — she wins long trades"
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Item-timing engage race is genuinely coinflip — neither kit has a clean structural edge here",
+      "after": "Diana: Moonfall reveals and pulls you straight out of Twilight Shroud, and it is 100s to your 120s"
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "Your isolate-and-burst pattern out-values her AoE-reliant ultimate in skirmish situations",
+      "after": "Skill: your burst beats her shield, her Moonfall beats your smoke — whoever opens the fight wins"
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Shroud flanking lets you dictate engage angle, keeping late skirmishes in your favor",
+      "after": "Akali: Moonfall is only 475 range — flank and she never gets you inside the pull at all"
+    },
+
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Diana Crescent Strike: matchup-defining — Moonlight marks reset her dash — sidestep the arc and her dive has no follow-up. Read it like a second minimap. - Guard your W Twilight Shroud like a fifth summoner spell. - Ultimate goes to kill windows only.",
+      "after": "- Diana Crescent Strike (8s at rank 1): Moonlight makes Lunar Rush free — sidestep the arc and her dash costs 22s instead. - Casting Lunar Rush at anything else strips Moonlight off you. - Moonfall reveals and pulls: never sit in shroud inside 475 of her."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Moonlight marks reset her dash — sidestep the arc and her dive has no follow-up. Commit on its cooldown, never into it.",
+      "after": "Moonlight makes Lunar Rush free — sidestep Crescent Strike and her dash costs 22 seconds. Commit inside that gap."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Diana whiffs Crescent Strike and the lane briefly belongs to you.",
+      "after": "Crescent Strike whiffed means Lunar Rush is on full cooldown — go."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Diana’s whole plan in one window — decline politely and watch it retire.",
+      "after": "Her R is 100s and reveals you; yours is 120s and does not. She wins that race."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "The shroud spent farming is the dive you can't answer — W is your Flash, your Zhonya's, and your opening all at once.",
+      "after": "You need the E re-cast as your exit — Pale Cascade's shield can eat a full commit and leave you standing in melee."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through deletions — one carry per fight, every fight; the shroud buys the time and the resets pay the exit.",
+      "after": "Diana is a shield, not a wall — burst through Pale Cascade in one window, then shroud the answer and E-reset out."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Diana takes first blood, tighten up: Crescent Strike is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q range and stay relevant through shroud picks.",
+      "after": "If Diana takes first blood, never stand within Moonfall's 475 range — the pull drags you straight out of the shroud. Farm at Q range, dodge every arc, and stay relevant through shroud picks."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Diana wins by landing Crescent Strike, denying your pattern, and front-loading the violence while your kit is still stretching.",
+      "after": "Diana wins by marking you with Moonlight for a free Lunar Rush, shielding through your burst, and pulling you out of the smoke."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land Crescent Strike sphere for the guaranteed follow-up gap-close",
+      "after": "Land Crescent Strike so Lunar Rush costs her nothing to follow"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "You out-trade Diana early because her Crescent Strike (Q) sphere requires a hit before she can safely engage, and your Shuriken Flip punishes her for whiffing it at close range.",
+      "after": "You out-trade Diana early because Lunar Rush only resets on a Moonlight-marked target — sidestep Crescent Strike and her 22-second dash is her entire engage plan."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Diana's ultimate pull comes online and flips the all-in dynamic — she can now yank you into range and combo before your own Perfect Execution finishes its cooldown, making this her strongest single level of the lane.",
+      "after": "Moonfall comes online and flips the all-in: it reveals you and drags you out of Twilight Shroud, and at 100 seconds it is up far more often than your 120-second Perfect Execution. Her strongest level of the lane."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "This is genuine 50/50 skill-matchup territory once both sides hit core items: whoever lands their engage first (your E-flip vs her Q-sphere gap-close) usually wins the fight outright.",
+      "after": "Genuine 50/50 once both sides hit core items: your burst beats Pale Cascade's shield, her Moonfall beats your smoke, and whoever opens the fight usually finishes it outright."
+    }
+  ],
+  "notes": "Crescent Strike's 'revealsStealth' derived flag is a tooltip-parse misfire — Riot's text reveals targets 'if they are not stealthed', so it does not break Twilight Shroud. Only Moonfall does, and that was missing from the whole page. Also killed the repeated 'Crescent Strike sphere' wording; the spheres are Pale Cascade. All seven chart rows disagreed between layers, so the full chart is reproposed in matched pairs (rows 0, 1, 2-full, 3-content, 4-full, 5-full, 6-content are no-ops included to keep the atomic group complete). Left breakdown.wave, breakdown.early, breakdown.mid, tradeGood, tradeBad and ahead templated."
+}

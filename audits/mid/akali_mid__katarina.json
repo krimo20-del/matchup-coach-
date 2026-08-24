@@ -1,0 +1,119 @@
+{
+  "ownerKey": "akali_mid",
+  "enemy": "katarina",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer chart read Skill on six of seven rows while the content layer (matching packet.levelChart) read Katarina, Katarina, Katarina, Katarina, Akali, Akali, Akali.",
+      "why": "Two layers rendering different answers to who wins each stage. The content layer matches the packet and the 51.9% Akali win rate — a lane Akali loses early and wins from 6.",
+      "corrected": "phases[0..3].side to Katarina, phases[5..6].side to Akali (phases[4] already Akali). Every phase why rewritten to match its new owner and Katarina's actual cooldowns.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2] claimed Perfect Execution adds 'true damage'.",
+      "why": "Akali's R deals damage and executes; nothing in the kit makes it true damage. A player itemising against a false true-damage claim builds wrong.",
+      "corrected": "Rewritten to the real reason the first-item spike wins: the second R cast is an execute she cannot blink out of.",
+      "confidence": "High",
+      "sources": ["ownerKit R text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page never stated the decisive interaction, and named an ability that does not exist ('Bouncing Blade-Sinister Blade combo'). It also justified the late game with 'Shroud denies the reset vision she needs', which is not how Voracity works.",
+      "why": "Katarina's W is Preparation, not Sinister Blade. Voracity resets her cooldowns when a champion she damaged dies — it is a kill trigger, not a vision mechanic, so Shroud does not deny it. The decisive facts are: Shunpo (725 range, 12s at rank 1, 8s maxed) is her only exit and it can target her own daggers, so a dropped dagger is a free step onto you; and Death Lotus is a 550-range channel, which you leave by walking rather than by racing.",
+      "corrected": "Fight away from her daggers; commit inside the 12s after Shunpo; step outside 550 when Death Lotus starts; kill the target she wants Voracity to fire off.",
+      "confidence": "High",
+      "sources": ["enemyKit P/Q/E/R text, ranges and cds", "packet.suspectNames"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns named Shunpo but gave no numbers and told you to 'hard CC during her resets'.",
+      "why": "Akali has no hard CC — her Q is a slow. Advice she cannot execute is worse than no advice. The usable number is that Shunpo leaves her without an exit for up to 12s.",
+      "corrected": "Shunpo 12s/8s, Bouncing Blade 11s at zero cost, Death Lotus 75s and 550 range, all written in with the sequencing they imply.",
+      "confidence": "High",
+      "sources": ["enemyKit cds", "ownerKit Q flags: slow only"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The kit file's derived flags list 'grounding' on Bouncing Blade and 'knockup' on Preparation.",
+      "why": "Riot's own descriptions say only that Q bounces between enemies and ricochets onto the ground, and that W gives move speed and tosses a dagger above herself. Neither text supports grounding or a displacement, so these read as tooltip-parse misfires. Per the brief's rule I trusted the description and asserted neither — an Akali told her E and R are grounded by Q would misplay every trade.",
+      "corrected": "Nothing written about grounding or knockups anywhere in the proposal.",
+      "confidence": "High",
+      "sources": ["enemyKit Q text vs flags", "enemyKit W text vs flags"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Katarina"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Katarina"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Katarina"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Katarina"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Akali"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Akali"},
+
+    {"layer":"full","path":"tldr","before":"A reset duel — your shroud out-stalls his window, and the one who picks the second fight usually wins it.","after":"A reset duel where her resets cost nothing — survive levels 1-5, then punish the 12s after every Shunpo."},
+    {"layer":"full","path":"report[0].t","before":"A reset duel — your shroud out-stalls his window, and the one who picks the second fight usually wins it.","after":"A reset duel where her resets cost nothing — survive levels 1-5, then punish the 12s after every Shunpo."},
+
+    {"layer":"full","path":"winCon","before":"Out-stall the mirror-class duel and counter-kill the first commitment. Keep one eye on Shunpo and one on the wave, in that order.","after":"Survive the early levels, then kill her in the window after Shunpo. Death Lotus is a 550-range channel — back out of it, don't trade in it."},
+    {"layer":"full","path":"report[1].t","before":"Out-stall the mirror-class duel and counter-kill the first commitment. Keep one eye on Shunpo and one on the wave, in that order.","after":"Survive the early levels, then kill her in the window after Shunpo. Death Lotus is a 550-range channel — back out of it, don't trade in it."},
+
+    {"layer":"full","path":"enemyWin","before":"Katarina wins by landing Shunpo, denying your pattern, and starting the fight your kit wanted ten seconds later.","after":"Katarina wins by chaining free Bouncing Blade daggers into Shunpo before your first item, then letting Voracity reset her."},
+
+    {"layer":"full","path":"tradeGood","before":"Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in.","after":"Q her toes on a last-hit, weave the passive ring auto, step back — she has to Shunpo to answer, and that is the cooldown you want spent."},
+    {"layer":"full","path":"dosFull[1].d","before":"Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in.","after":"Q her toes on a last-hit, weave the passive ring auto, step back — she has to Shunpo to answer, and that is the cooldown you want spent."},
+
+    {"layer":"full","path":"tradeBad","before":"Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Trading while standing on one of her daggers — she Shunpos to it for free and it is over before your E returns."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Trading while standing on one of her daggers — she Shunpos to it for free and it is over before your E returns."},
+
+    {"layer":"full","path":"ahead","before":"Ahead, erase the lane: shroud every contact, all-in the whiffs, and roam with R banked — fed Akali turns mid into a no-cast zone for Katarina.","after":"Ahead, take the daggers away: fight off the wave where she has nothing to blink to, and all-in every time her 12s Shunpo is down."},
+    {"layer":"full","path":"report[13].t","before":"Ahead, erase the lane: shroud every contact, all-in the whiffs, and roam with R banked — fed Akali turns mid into a no-cast zone for Katarina.","after":"Ahead, take the daggers away: fight off the wave where she has nothing to blink to, and all-in every time her 12s Shunpo is down."},
+
+    {"layer":"full","path":"loading","before":"- Akali vs Katarina - Track: Katarina Shunpo. - Trade only with shroud available — the smoke is the matchup. - Fights start when Shunpo ends. - The R is for endings, not openings.","after":"- Akali vs Katarina - Track: Shunpo, 12s at rank 1. - Never trade standing on a dagger. - Death Lotus is 550 range — walk out, don't tank it. - The R is for endings, not openings."},
+
+    {"layer":"full","path":"phases[0].why","before":"Q the wave edge and his toes — the energy crunch is real, so every kama needs to farm AND poke at once.","after":"Q the wave edge and her toes — her daggers cost nothing, so the only limit on Bouncing Blade is its 11s."},
+    {"layer":"full","path":"phases[1].why","before":"More Q pressure — hold the energy bar above 100 so a real trade window never finds you broke.","after":"Her window: the daggers are free and yours are not. Don't stand on one, and don't trade while Shunpo is up."},
+    {"layer":"full","path":"phases[2].why","before":"Shroud online: the trade pattern is Q-auto, shroud the answer, Q again from the smoke. Most mids lose this exchange.","after":"Shroud online, but she still out-tempos you: Q, dagger, Shunpo. Farm at range and wait for her to blink in first."},
+    {"layer":"full","path":"phases[3].why","before":"Passive-weave every trade: spell, walk out of the ring, auto the edge — the energy refunds pay the whole lane.","after":"Still hers while your item is missing. Every dagger on the ground is a Shunpo target — step off them before trading."},
+    {"layer":"full","path":"phases[4].why","before":"Perfect Execution online — the double-dash R turns half-health mages into clean-up duty. Look for the all-in.","after":"Perfect Execution online — Death Lotus is a 550-range channel, so walk out of it or execute her mid-flurry."},
+    {"layer":"full","path":"phases[5].why","before":"First item spike: shroud trades become kill threats. Force the wave contact and punish every spell he whiffs.","after":"First item spike: your burst beats her chain. Commit the moment Shunpo goes and she has 12s with no exit."},
+    {"layer":"full","path":"phases[6].why","before":"Late Akali erases carries: R in through the front line, shroud the response, E-reset out with the kill.","after":"Late Akali erases carries: R in past Katarina, take the target she was going to reset off, E out clean."},
+
+    {"layer":"full","path":"breakdown.early","before":"Farm with Q range, bank energy, and pick one shrouded trade per wave cycle — the lane tilts one exchange at a time.","after":"Farm at Q range, stay off her daggers, and take no trade until she has spent Shunpo — levels 1-5 are hers."},
+    {"layer":"full","path":"breakdown.mid","before":"First item onward, hunt: shroud the river fights, R the chipped, and E-reset out. Your roams hit harder than your pings suggest.","after":"First item onward, hunt her before Voracity ever fires: fight away from her daggers, R the chipped, and E-reset out clean."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a frozen wave near his tower with W down — walking up energy-broke is the only way most lanes ever kill you. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.","after":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a wave sitting in her daggers, where every bounce of Bouncing Blade hands Shunpo another free step onto you. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a frozen wave near his tower with W down — walking up energy-broke is the only way most lanes ever kill you. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.","after":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a wave sitting in her daggers, where every bounce of Bouncing Blade hands Shunpo another free step onto you. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Katarina Shunpo: matchup-defining — Her blink to daggers and targets — hard CC during her resets and she folds. Count it out loud if you must. - Your W Twilight Shroud has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Shunpo: 12s at rank 1, 8s maxed — her only exit, and once it is spent she cannot leave your combo. - Bouncing Blade: 11s at rank 1 and it costs her nothing, so expect it every wave. - Death Lotus: 75s at rank 1, and only 550 range."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in. Bad trade: Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Good trade: Q her toes on a last-hit, weave the passive ring auto, step back — she must Shunpo to answer, and that is the cooldown you want spent. Bad trade: Trading on top of one of her daggers — she blinks to it free and it ends before your E returns."},
+    {"layer":"full","path":"breakdown.spikes","before":"Level 3 shroud trades tilt the lane; level 6 adds the execute; first item makes shrouded windows lethal.","after":"Levels 1-5 are hers; level 6 hands you the execute; first item is when her chain stops out-trading you."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Katarina gets a kill, the lane gets honest — give Shunpo extra room and farm it back. Two kills: stop dueling your tilt — farm with Q range and stay relevant through shroud picks.","after":"If Katarina gets a kill, Voracity refunds her cooldowns on the next one — never fight beside a dying ally. Two kills: farm at Q range, stay off her daggers, take your value from shroud picks."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through deletions — one carry per fight, every fight; the shroud buys the time and the resets pay the exit.","after":"Carry through deletions — take the target she wants Voracity to fire off first, and her reset chain never starts."},
+    {"layer":"full","path":"breakdown.late","before":"You are the carry-eraser: R through the front line, shroud their answer, execute, E out. One deletion per fight is the contract.","after":"You are the carry-eraser: R in past Katarina, take the carry she was going to reset off, shroud the answer, E out."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"Her blink to daggers and targets — hard CC during her resets and she folds. Until it’s spent, every commit is a coin flip.","after":"Shunpo is her only exit, 725 range on a 12s at rank 1 — until she spends it, every commit of yours is a coin flip."},
+    {"layer":"full","path":"dosFull[2].d","before":"Katarina spends Shunpo early — the closest thing this matchup has to a guarantee.","after":"Katarina blinks in first — that is 12 seconds with no exit, and your whole all-in."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Katarina’s rehearsed moment — don’t audition for it.","after":"Death Lotus reaches 550 — walk out of it instead of racing it."},
+
+    {"layer":"full","path":"report[3].t","before":"Good trade: Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in. Great trade: Katarina wastes Shunpo — commit immediately. Bad trade: Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Good trade: Q her toes on a last-hit, weave the passive ring auto, step back — she must Shunpo to answer, and that is the cooldown you want spent. Great trade: Katarina blinks in first — commit immediately. Bad trade: Trading on top of one of her daggers — she blinks to it free and it ends before your E returns."},
+    {"layer":"full","path":"report[5].t","before":"Track Katarina’s Shunpo: Her blink to daggers and targets — hard CC during her resets and she folds. Forward steps wait for its downtime.","after":"Track Katarina’s Shunpo: 725 range, 12s at rank 1, and it can target her own daggers. Your forward steps wait on its downtime."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Shunpo’s cooldown, on your first item spike, and with your jungler’s setup. Bait the answer, then sign.","after":"Commit inside the 12s after Shunpo, on your first item spike, and with your jungler’s setup. Bait it, then sign."},
+
+    {"layer":"content","path":"whys[0]","before":"Them favoured: dagger resets let Katarina outtrade your unenabled early combo.","after":"Them favoured: her daggers cost nothing while every Q drains your energy bar."},
+    {"layer":"content","path":"whys[6]","before":"You favoured: Shroud denies the reset vision she needs, reversing the duel late.","after":"You favoured: kill her before Voracity fires and her 45s Death Lotus is spent."},
+
+    {"layer":"content","path":"spikes[0].text","before":"Katarina's Death Lotus isn't up yet but her Bouncing Blade-Sinister Blade combo out-trades your early poke, since she resets off any dagger and punishes you for standing near minions to farm.","after":"Katarina's Death Lotus isn't up yet, but Bouncing Blade into a Shunpo off the dropped dagger out-trades your early poke at zero mana cost, and she punishes you for standing near the minions she bounced it through."},
+    {"layer":"content","path":"spikes[2].text","before":"Once you finish a burst item your Shroud-into-execute combo out-trades her dagger resets, because she needs several auto procs to match the true damage your R adds.","after":"Once you finish a burst item your Shroud-into-execute combo out-trades her chain, because Perfect Execution's second cast lands as an execute she cannot blink out of once Shunpo is down."},
+    {"layer":"content","path":"spikes[3].text","before":"In late fights you pick her off before she can reset off a low-health target, since Shroud denies the vision she needs to find a reset chain, flipping the assassin-versus-assassin duel in your favor.","after":"In late fights you pick her off before Voracity ever triggers, since her only exit is a 12s Shunpo and Death Lotus is a 550-range channel you can simply walk out of, which flips the assassin duel in your favour."},
+
+    {"layer":"content","path":"early","before":"Levels 1-5 favour Katarina hard — her dagger resets from Bouncing Blade let her chain damage across minions and you far faster than your combo can answer, and she doesn't need to commit her ultimate to win these trades.","after":"Levels 1-5 favour Katarina hard — Bouncing Blade costs nothing and the dagger it drops gives Shunpo a free step onto you, so she chips faster than your energy bar can answer, and she never needs her ultimate to win these trades."},
+    {"layer":"content","path":"late","before":"By the late game you're the stronger duelist since Shroud denies the reset vision she depends on, letting you burst her down before she can chain off a low-health ally or ward, reversing the early lane deficit completely.","after":"By the late game you're the stronger duelist: her only escape is Shunpo on a 12s at rank 1, so the moment it is spent she is standing in your combo, and Death Lotus at 550 range never reaches you if you back off the channel."},
+    {"layer":"content","path":"wants.you[2]","before":"Use Shroud to deny her reset vision once you're ahead on items","after":"Step outside 550 range the moment Death Lotus starts channelling"}
+  ],
+  "notes": "Ability-name error confirmed from packet.suspectNames: spikes[0] said 'Bouncing Blade-Sinister Blade combo'. Sinister Blade is not in her kit — her W is Preparation — so the line was rebuilt around the real interaction (Q drops a dagger, Shunpo can blink to it). Two other false claims removed: Perfect Execution described as true damage, and 'Shroud denies her reset vision' (Voracity is a champion-death cooldown reset, not vision). Derived-flag misfires NOT written to the page: the kit file tags Bouncing Blade with 'grounding' and Preparation with 'knockup', neither of which appears in Riot's descriptions; asserting grounding would tell an Akali her E and R are shut off by a Q that does not do that. Also removed 'hard CC during her resets' — Akali has no hard CC, only the Q slow."
+}

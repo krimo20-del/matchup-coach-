@@ -1,0 +1,120 @@
+{
+  "ownerKey": "akali_mid",
+  "enemy": "malzahar",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer chart disagreed with the content layer on all seven rows: full read Malzahar, Malzahar, Skill, Skill, Malzahar, Skill, Skill while win[] read Akali, Akali, Malzahar, Malzahar, Akali, Akali, Akali.",
+      "why": "win[] matches packet.levelChart exactly, and its shape is the right one — Akali presses at 1-2 before the silence exists, concedes 3-5, retakes it at 6. The full layer even had level 6 as Malzahar's, which contradicts its own spikes text.",
+      "corrected": "All seven phases[N].side realigned to win[N] as one group, with each phase why rewritten to its new owner.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The spikes never mentioned the state that actually decides whether an all-in works.",
+      "why": "Void Shift gives him massive damage reduction AND crowd-control immunity whenever he hasn't recently taken damage, lingering briefly after he does. An Akali who opens her full combo into an intact Void Shift loses the trade she should have won — the fix is one Q of chip first, which is free.",
+      "corrected": "'Strip Void Shift with a Q before you commit' written into the spikes, tradeGood, breakdown.carry, ahead and the loading screen.",
+      "confidence": "High",
+      "sources": ["enemyKit P text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three attribution errors: the silence was credited to 'Malefic Visions/Nether Grasp setup'; Void Swarm was called 'his passive'; and Void Shift was called a 'passive shield' whose Voidlings give 'passive stacks'.",
+      "why": "The silence is Call of the Void (Q), 900 range on a flat 6s. Void Swarm is W, an 8s summon, not the passive. Void Shift is the passive and it is damage reduction plus CC immunity, not a shield — the difference matters because your Q slow and every form of CC you have simply does not apply to him while it is up. The silence is the other half: a silenced Akali has no shroud, no flip and no exit, which is the real reason levels 3-5 are his.",
+      "corrected": "Every ability put back in its own slot, with the silence's 6s and the passive's condition stated where the advice depends on them.",
+      "confidence": "High",
+      "sources": ["enemyKit P/Q/W text and cds", "ownerKit W and E"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns gave no numbers at all.",
+      "why": "Nether Grasp is 140s at rank 1 — the longest cooldown either champion has, and baiting it once buys more than two minutes. Call of the Void is a flat 6s, so the silence gaps are countable.",
+      "corrected": "Both numbers written in and used as the commit trigger in dosFull[0], dosFull[2], phases[4] and report[5].",
+      "confidence": "High",
+      "sources": ["enemyKit Q cd 6", "enemyKit R cd 140/110/80"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Malefic Visions' behaviour after you disengage was never mentioned.",
+      "why": "Flagged in missingInteractions (execute-threshold). It is a damage-over-time that keeps ticking once you have walked away, and if it kills you it passes to a nearby unit and refunds him mana — so the trade you think you won can still finish you. Track the number, not the bar.",
+      "corrected": "Written into phases[3].why, whys[3], breakdown.wave and mid.",
+      "confidence": "High",
+      "sources": ["missingInteractions: execute-threshold", "enemyKit E text"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Malzahar","after":"Akali"},
+    {"layer":"full","path":"phases[1].side","before":"Malzahar","after":"Akali"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Malzahar"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Malzahar"},
+    {"layer":"full","path":"phases[4].side","before":"Malzahar","after":"Akali"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Akali"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Akali"},
+
+    {"layer":"full","path":"tldr","before":"He pokes until you shroud, then the lane belongs to the smoke — trade in obscured windows and energy-walk the rest.","after":"Void Shift halves your combo until he has taken damage — land a Q first, then commit, and never inside the silence."},
+    {"layer":"full","path":"report[0].t","before":"He pokes until you shroud, then the lane belongs to the smoke — trade in obscured windows and energy-walk the rest.","after":"Void Shift halves your combo until he has taken damage — land a Q first, then commit, and never inside the silence."},
+
+    {"layer":"full","path":"winCon","before":"Survive the poke, then win every shrouded exchange until one becomes a kill. Keep one eye on Nether Grasp and one on the wave, in that order.","after":"Chip Void Shift off with a Q before you commit, and go while Call of the Void is on its 6s. Nether Grasp is 140s — bait it once and the lane is yours."},
+    {"layer":"full","path":"report[1].t","before":"Survive the poke, then win every shrouded exchange until one becomes a kill. Keep one eye on Nether Grasp and one on the wave, in that order.","after":"Chip Void Shift off with a Q before you commit, and go while Call of the Void is on its 6s. Nether Grasp is 140s — bait it once and the lane is yours."},
+
+    {"layer":"full","path":"enemyWin","before":"Malzahar wins by landing Nether Grasp, denying your pattern, and renting you the lane at a range markup.","after":"Malzahar wins by silencing your shroud away, suppressing you with Nether Grasp, and letting Malefic Visions finish it."},
+
+    {"layer":"full","path":"tradeGood","before":"Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in.","after":"Q his toes on a last-hit and weave the passive ring auto — that chip also strips Void Shift, so the passive is down when you want the all-in."},
+    {"layer":"full","path":"dosFull[1].d","before":"Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in.","after":"Q his toes on a last-hit and weave the passive ring auto — that chip also strips Void Shift, so the passive is down when you want the all-in."},
+
+    {"layer":"full","path":"tradeBad","before":"Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Opening into an intact Void Shift — he takes massively reduced damage and your slow does not touch him."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Opening into an intact Void Shift — he takes massively reduced damage and your slow does not touch him."},
+
+    {"layer":"full","path":"ahead","before":"Ahead, erase the lane: shroud every contact, all-in the whiffs, and roam with R banked — fed Akali turns mid into a no-cast zone for Malzahar.","after":"Ahead, erase the lane: strip Void Shift with a Q first, all-in in the 6s after Call of the Void, and roam with R banked for the pick."},
+    {"layer":"full","path":"report[13].t","before":"Ahead, erase the lane: shroud every contact, all-in the whiffs, and roam with R banked — fed Akali turns mid into a no-cast zone for Malzahar.","after":"Ahead, erase the lane: strip Void Shift with a Q first, all-in in the 6s after Call of the Void, and roam with R banked for the pick."},
+
+    {"layer":"full","path":"loading","before":"- Akali vs Malzahar - Track: Malzahar Nether Grasp. - Trade only with shroud available — the smoke is the matchup. - Nether Grasp down is the green light. - Hold the ult for names, not waves.","after":"- Akali vs Malzahar - Track: Void Shift — strip it with a Q before you commit. - Call of the Void silences on a flat 6s. - Nether Grasp is 140s at rank 1. - Hold the ult for names, not waves."},
+
+    {"layer":"full","path":"phases[0].why","before":"Q the wave edge and his toes — the energy crunch is real, so every kama needs to farm AND poke at once.","after":"Q the wave edge and his toes — chip also strips Void Shift, and he pays 60 mana a Call of the Void."},
+    {"layer":"full","path":"phases[1].why","before":"More Q pressure — hold the energy bar above 100 so a real trade window never finds you broke.","after":"More Q pressure — his silence is a flat 6s, so the gaps in it are yours to step into."},
+    {"layer":"full","path":"phases[2].why","before":"Shroud online: the trade pattern is Q-auto, shroud the answer, Q again from the smoke. Most mids lose this exchange.","after":"His level: Call of the Void silences from 900 range, and a silenced Akali has no shroud, no flip and no exit."},
+    {"layer":"full","path":"phases[3].why","before":"Passive-weave every trade: spell, walk out of the ring, auto the edge — the energy refunds pay the whole lane.","after":"Still his: Malefic Visions keeps ticking after you disengage, so trades you thought you won still finish you."},
+    {"layer":"full","path":"phases[4].why","before":"Perfect Execution online — the double-dash R turns half-health mages into clean-up duty. Look for the all-in.","after":"Perfect Execution online — Nether Grasp is 140s at rank 1, so bait it once and the level is yours."},
+    {"layer":"full","path":"phases[5].why","before":"First item spike: shroud trades become kill threats. Force the wave contact and punish every spell he whiffs.","after":"First item spike: your burst beats the damage reduction. Strip Void Shift with a Q, then force wave contact."},
+    {"layer":"full","path":"phases[6].why","before":"Late Akali erases carries: R in through the front line, shroud the response, E-reset out with the kill.","after":"Late Akali erases carries: flank him before he can aim the suppress, execute, and E-reset out."},
+
+    {"layer":"full","path":"breakdown.early","before":"Farm with Q range, bank energy, and pick one shrouded trade per wave cycle — the lane tilts one exchange at a time.","after":"Farm at Q range and keep chipping him — every hit strips Void Shift, and Call of the Void is only a flat 6s."},
+    {"layer":"full","path":"breakdown.mid","before":"First item onward, hunt: shroud the river fights, R the chipped, and E-reset out. Your roams hit harder than your pings suggest.","after":"First item onward, hunt him: strip the passive with a Q, shroud the silence, R the chipped, and E-reset straight out."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a frozen wave near his tower with W down — walking up energy-broke is the only way most lanes ever kill you. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a frozen wave near his tower, where Voidlings chip you every 8s and Malefic Visions keeps ticking after you back off. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a frozen wave near his tower with W down — walking up energy-broke is the only way most lanes ever kill you. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a frozen wave near his tower, where Voidlings chip you every 8s and Malefic Visions keeps ticking after you back off. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Malzahar Nether Grasp: matchup-defining — Point-and-click suppression — never step up solo while his passive shield is intact and R is up. Count it out loud if you must. - Your W Twilight Shroud has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Void Shift: not a cooldown but a state — he holds massive damage reduction and crowd-control immunity until he takes damage, so land a Q before the combo. - Call of the Void: a flat 6s silence at 900 range. - Nether Grasp: 140s at rank 1."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in. Bad trade: Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Good trade: Q his toes on a last-hit and weave the passive ring auto — that chip strips Void Shift, so the passive is down when you want the all-in. Bad trade: Opening into an intact Void Shift — he takes massively reduced damage and your slow does not touch him."},
+    {"layer":"full","path":"breakdown.spikes","before":"Level 3 shroud trades tilt the lane; level 6 adds the execute; first item makes shrouded windows lethal.","after":"Level 3 is his as the silence arrives; level 6 hands you the execute; first item beats the reduction."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Malzahar takes first blood, tighten up: Nether Grasp is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q range and stay relevant through shroud picks.","after":"If Malzahar takes first blood, stop walking into the silence — without shroud or flip you are a melee minion. A second kill means the duel is over and the game isn’t — farm at Q range and take picks elsewhere."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through deletions — one carry per fight, every fight; the shroud buys the time and the resets pay the exit.","after":"Carry through deletions — strip Void Shift first, or the whole combo lands into massive damage reduction."},
+    {"layer":"full","path":"breakdown.late","before":"You are the carry-eraser: R through the front line, shroud their answer, execute, E out. One deletion per fight is the contract.","after":"You are the carry-eraser: kill him before he aims a 700-range suppression at yours — R in, execute, E straight out."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"Point-and-click suppression — never step up solo while his passive shield is intact and R is up. Its cooldown is the green light — wait for it.","after":"Point-and-click suppression at 700 range on a 140s at rank 1 — never step up solo while Void Shift is intact and R is up. Bait it."},
+    {"layer":"full","path":"dosFull[2].d","before":"Malzahar spends Nether Grasp early — the closest thing this matchup has to a guarantee.","after":"Malzahar spends Nether Grasp early — at rank 1 that is a full 140 seconds you own."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That’s Malzahar’s bread-and-butter play — deny it and they run out of answers.","after":"A silenced Akali has no shroud and no flip — that is his entire plan."},
+
+    {"layer":"full","path":"report[3].t","before":"Good trade: Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in. Great trade: Malzahar wastes Nether Grasp — commit immediately. Bad trade: Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Good trade: Q his toes on a last-hit and weave the passive ring auto — that chip strips Void Shift, so the passive is down when you want the all-in. Great trade: Malzahar wastes Nether Grasp — commit immediately. Bad trade: Opening into an intact Void Shift — he takes massively reduced damage and your slow does not touch him."},
+    {"layer":"full","path":"report[5].t","before":"Track Malzahar’s Nether Grasp: Point-and-click suppression — never step up solo while his passive shield is intact and R is up. Forward steps wait for its downtime.","after":"Track Void Shift first: massive damage reduction and crowd-control immunity until he takes damage. Then Nether Grasp — 700 range, 140s at rank 1."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Nether Grasp’s cooldown, on your first item spike, and with your jungler’s setup. Make him flinch first.","after":"Commit with Void Shift stripped, on your first item spike, and with your jungler’s setup. Make him flinch first."},
+
+    {"layer":"content","path":"whys[2]","before":"Malzahar: level 3 gives Malzahar Call of the Void, letting him silence-lock Akali's engage.","after":"Malzahar: Call of the Void silences from 900, and a silenced Akali has no shroud and no flip."},
+    {"layer":"content","path":"whys[3]","before":"Malzahar: levels 4-5 keep favoring Malzahar as voidling poke and silence uptime punish Akali's aggression.","after":"Malzahar: Voidlings chip you on an 8s and Malefic Visions keeps ticking after you disengage the trade."},
+
+    {"layer":"content","path":"spikes[0].text","before":"Once Malzahar hits 3 he can silence-lock you with Malefic Visions/Nether Grasp setup before your combo lands, punishing careless dives.","after":"Once Malzahar hits 3 he can silence you with Call of the Void from 900 range before your combo lands, and a silenced Akali cannot shroud or flip out."},
+    {"layer":"content","path":"spikes[2].text","before":"Burst items let you delete Malzahar quickly, but respect that his Void Swarm/Voidlings still poke you down while you approach.","after":"Burst items let you delete Malzahar quickly, but strip Void Shift with a Q first or the damage reduction eats your opener."},
+
+    {"layer":"content","path":"early","before":"Malzahar's passive Void Swarm summons voidlings that poke you constantly, and his Call of the Void silence can lock down your combo attempts if you engage predictably. At level 1-2 you can still out-trade him since his kit isn't fully online, but once he hits level 3 the silence into Nether Grasp threat becomes real — bait it out with a fake engage or wait for it to be on cooldown before diving fully.","after":"Malzahar's Void Swarm summons Voidlings on an 8s that poke you constantly, and Call of the Void silences from 900 range, which locks down your combo if you engage predictably. At levels 1-2 you can still out-trade him since his kit isn't online, but once he hits level 3 the silence into Nether Grasp threat becomes real — bait it with a fake engage or wait out its flat 6s before diving fully."},
+    {"layer":"content","path":"mid","before":"By level 6 your own ultimate flips the matchup back: stealth into range and burst him down fast so he never gets the chance to land a full-channel Nether Grasp on you. Clear his voidlings quickly when possible to deny his passive scaling, and don't stand still in Malefic Visions' detonation radius. Roaming favors you since Malzahar has strong wave clear but limited early roam threat himself.","after":"By level 6 your own ultimate flips the matchup back: stealth into range and burst him down before he lands a full-channel Nether Grasp. Strip Void Shift with a Q before you commit, or the damage reduction and CC immunity eat the opener. Watch your health after you disengage as well — Malefic Visions keeps ticking, and it passes to a nearby unit if it kills you. Roaming favours you since his own roam threat is limited."},
+    {"layer":"content","path":"late","before":"Malzahar becomes a lockdown nightmare in teamfights, suppressing your carries for a guaranteed kill — flank him first if you can, since his own defenses are thin. In an isolated 1v1 your burst still kills him quickly provided you don't eat the silence into full combo.","after":"Malzahar becomes a lockdown nightmare in teamfights, suppressing your carries for a guaranteed kill — flank him first, but strip Void Shift on the way in or your burst lands into damage reduction. In an isolated 1v1 you still kill him quickly provided you don't eat the silence."},
+    {"layer":"content","path":"wants.you[1]","before":"Kill his Voidlings quickly to deny passive stacks","after":"Kill his Voidlings quickly to cut the chip damage"}
+  ],
+  "notes": "packet.suspectNames flagged 'Nether Grasp's' and 'Land Malefic Visions' as probable wrong names — both are FALSE POSITIVES; those are his real R and E. The genuine name errors were elsewhere and unflagged: spikes[0] credited the silence to 'Malefic Visions/Nether Grasp setup' when it is Call of the Void (Q); early called Void Swarm 'his passive' when Void Swarm is W and Void Shift is the passive; and mid told the reader to kill Voidlings 'to deny his passive scaling' and to avoid 'Malefic Visions' detonation radius', which is a single-target damage-over-time that spreads on the target's death, not a zone. Void Shift itself was described as a 'passive shield' — it is massive damage reduction plus crowd-control immunity, which means your Q slow does nothing to him while it holds, and one Q of chip strips it. That is now the central piece of advice. Full-layer chart disagreed with content on all seven rows, including a level 6 row that contradicted the page's own level 6 spike text."
+}

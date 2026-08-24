@@ -1,0 +1,172 @@
+{
+  "ownerKey": "akali_mid",
+  "enemy": "mel",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Difficulty text is generic and the level chart disagreed between layers: phases[N].side read \"Skill\" for six of seven rows while win[N] read Mel/Mel/Akali/Akali/Akali/Akali/Akali.",
+      "why": "56.21% win rate over 1409 games plus Mel's total lack of a dash means Akali owns everything from level 3 on; the packet levelChart and content win[] already say so, so the full layer was the wrong copy.",
+      "corrected": "phases[0..1].side = Mel, phases[2..6].side = Akali, matching win[0..6] which are already correct on disk.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate", "currentText.content.win"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[0] cited \"Reflected Radiance\" and spikes[1] cited \"Golden Sentinel\" — neither ability exists.",
+      "why": "Mel's kit is Searing Brilliance (P), Radiant Volley (Q), Rebuttal (W), Solar Snare (E), Golden Eclipse (R). Fabricated names on the two earliest spikes.",
+      "corrected": "Spikes rewritten on real cooldowns: Radiant Volley 10/9/8/7/6s, Solar Snare 11/10.5/10/9.5/9s, Rebuttal 38/35/33/29/26s, Golden Eclipse 120/100/80s global.",
+      "confidence": "High",
+      "sources": ["enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive interaction was never stated: Rebuttal reflects projectiles, and BOTH Akali Q (Five Point Strike) and E (Shuriken Flip) carry the projectile flag — so her barrier turns Akali's two damage tools against her.",
+      "why": "Enemy W flags: shield + reflects enemy projectiles + prevents damage. Owner Q and E both flagged projectile. Also unstated: Solar Snare is Mel's only hard CC and her only way to hold Akali for Overwhelm, and Golden Eclipse cashes Overwhelm stacks at 25000 range, so chip damage taken in lane is banked against you map-wide.",
+      "corrected": "Pop Rebuttal with one cheap kunai, then commit through its 26-38s downtime; dodge the 9-11s Solar Snare and Mel has nothing that holds you.",
+      "confidence": "High",
+      "sources": ["enemyKit W/E/R flags and text", "ownerKit Q/E flags"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet defect: no cooldown-sequencing advice anywhere (sequencingCues 0).",
+      "why": "Advice said \"never poke while it glows\" with no numbers.",
+      "corrected": "breakdown.cooldowns and dosFull[0].d now carry the 26-38s Rebuttal window and the 9-11s Solar Snare.",
+      "confidence": "High",
+      "sources": ["packet.defects", "enemyKit"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Missing-interaction rule autoreset-burst-tell was absent from the text.",
+      "why": "Searing Brilliance loads three bonus projectiles per ability cast onto her next attack — the attack wind-up, not the spell cast, is the burst tell.",
+      "corrected": "Folded into the tldr/loading framing: her setup is the root, her damage lands on the following attack.",
+      "confidence": "Medium",
+      "sources": ["missingInteractions key 17", "enemyKit P text"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Whole page addressed Mel as \"his/him\".",
+      "why": "Mel is female; wrong pronouns read as copy-paste from another matchup.",
+      "corrected": "Fixed in every field edited below.",
+      "confidence": "High",
+      "sources": ["enemyKit"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Mel" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Mel" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Akali" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Akali" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Akali" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Akali" },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "His combo needs a target — the shroud deletes the targeting. Bait the rotation, vanish, and counter through the smoke.",
+      "after": "Her burst needs you rooted — Solar Snare is the whole setup. Dodge the root, shroud the follow-up, and counter through the smoke."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Make his burst hit smoke, then erase him in the cooldown silence. Nothing here works through Rebuttal — schedule your pattern around its cooldown.",
+      "after": "Make her rotation hit smoke, then erase her in the cooldown silence. Q and E reflect off Rebuttal — pop it with one cheap kunai before you commit."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Mel wins by landing Rebuttal, denying your pattern, and renting you the lane at a range markup.",
+      "after": "Mel wins by rooting you with Solar Snare, stacking Overwhelm, then cashing it out from across the map."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Mel Rebuttal: matchup-defining — Reflects your projectiles back — never poke while it glows. Step up only on its downtime. - Budget W Twilight Shroud for emergencies and the R for opportunities — never swap them.",
+      "after": "- Rebuttal: 26-38s, reflects your Q kunai and E shuriken back at you — bait it, then you have half a minute of free windows. - Solar Snare: 9-11s root, the only thing that holds you for her Overwhelm stacks."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through deletions — one carry per fight, every fight; the shroud buys the time and the resets pay the exit.",
+      "after": "Carry by deleting Mel — no dash, so shroud the root, E-reset in, and she dies before Golden Eclipse ever fires."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Mel opens the score, reset expectations and respect Rebuttal doubly. After a second, your job description changes — farm with Q range and stay relevant through shroud picks.",
+      "after": "If Mel opens the score her Overwhelm stacks turn Golden Eclipse into a map-wide execute — stay off her damage entirely, farm at Q range, and take only shroud picks."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Akali vs Mel - Track: Mel Rebuttal. - Trade only with shroud available — the smoke is the matchup. - Fights start when Rebuttal ends. - The R is for endings, not openings.",
+      "after": "- Akali vs Mel - Track: Solar Snare (9s). - Rebuttal reflects Q and E — pop it, then trade. - Never stand in her Radiant Volley zone. - The R is for endings, not openings."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Reflects your projectiles back — never poke while it glows. Bait it, count it, then go.",
+      "after": "Rebuttal reflects Q and E back and blanks damage — spend one Q to pop it, then commit."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Mel whiffs Rebuttal and the lane briefly belongs to you.",
+      "after": "Solar Snare is her only lockdown — dodge it and step in."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Mel’s Rebuttal: Reflects your projectiles back — never poke while it glows. The whole green-light system is its cooldown.",
+      "after": "Track Rebuttal: it reflects Q kunai and E shuriken back at you and blanks damage. Pop it with one kunai, then the next 30 seconds are yours."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "By level 3 your combo starts outpacing Mel's poke, since her Radiant Volley/Reflected Radiance require careful positioning she can't maintain under pressure.",
+      "after": "By level 3 your combo outpaces her poke: Radiant Volley (Q) is an 8s cooldown and Solar Snare (E) a 10s root — whiff either and the shroud window is yours."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Your R lets you dash through her Golden Sentinel zone and burst her before she can reposition to safety.",
+      "after": "Your R dashes through her Solar Snare zone and executes her before she can reposition to safety."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "A burst item finishes Mel quickly since her damage reflection punishes autos/spells more than raw assassin burst.",
+      "after": "A burst item finishes Mel quickly — Rebuttal is a 33s cooldown, so open after it pops and she has no second barrier."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Mel scales into strong poke and a damage-reflect shield, but she still lacks the mobility to escape a committed all-in.",
+      "after": "Mel scales into Golden Eclipse, a global execute off Overwhelm stacks — she still has no dash to escape a committed all-in."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Mel: at level 1 Mel's ranged poke and reflect mechanic out-trade Akali's still-developing kit.",
+      "after": "Mel: at level 1 her 950-range Radiant Volley out-ranges everything Akali has before the shroud."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Mel: level 2 continues to favor Mel as her poke keeps Akali from safely approaching.",
+      "after": "Mel: level 2 adds Solar Snare, a 9s root that punishes any walk-up before Akali has smoke."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Akali: level 6 Akali's dash-execute ultimate lets her close in and burst Mel down.",
+      "after": "Akali: level 6 the dash-execute R closes on a Mel who has no dash of her own."
+    }
+  ],
+  "notes": "Level chart was split-brain: full layer read \"Skill\" on six rows while content win[] read Mel/Mel/Akali x5. win[] already matches the packet chart and the 56.21% win rate, so only the full-layer sides are flipped — proposed as one atomic group. Two fabricated ability names removed (Reflected Radiance, Golden Sentinel). Fields judged templated but left alone for lack of a Mel-specific fact: breakdown.wave, ahead, tradeGood, tradeBad, breakdown.late. Unverified: whether Rebuttal's reflect returns Akali's Q at her own AP ratio, and whether Shuriken Flip's re-cast dash is stopped by the barrier's terrain flag — the kit text does not say and I did not research it."
+}

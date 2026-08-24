@@ -1,0 +1,137 @@
+{
+  "ownerKey": "akali_mid",
+  "enemy": "lissandra",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer gave Akali all seven stages while the full layer gave Lissandra all seven, and the packet flags the contradiction directly: 'Akali wins only 47.29% but the chart gives Akali 7/7 stages vs 0'.",
+      "why": "This is Akali's worst matchup in the slice and the full layer already grades it HARD 8/10. The content chart is the wrong one — and its 'why' lines were built on an invented mechanic, so the whole content-layer narrative had to move with it.",
+      "corrected": "win[0..6] flipped to Lissandra, matching the full layer's phases[N].side, which already reads Lissandra on all seven rows. whys[0..6], early, mid, late, all four spikes and the wants lines rewritten from her side.",
+      "confidence": "High",
+      "sources": ["packet.defects", "packet.winRate 47.29", "currentText.full.phases[*].side"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 6 was written as an Akali spike: 'your Perfect Execution can finish her before she recovers'.",
+      "why": "Level 6 is the wall, not the spike. Frozen Tomb cast on herself makes her untargetable AND invulnerable while healing — an execute ultimate spent into it is refunded to her. It is 120s at rank 1, which is the real spike timer to track.",
+      "corrected": "Level 6 rewritten as her window; your windows are the 24s Glacial Path gap and the 120s after Frozen Tomb.",
+      "confidence": "High",
+      "sources": ["enemyKit R text, cd 120/100/80", "missingInteractions: untargetable-dodges-burst"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer repeatedly cited a 'self-root Ice Shard' that 'doesn't burst you outright' (whys[4], spikes[1], mid).",
+      "why": "There is no self-root on Ice Shard. Ice Shard (Q) is a 725-range spear that slows, and its shards pass THROUGH the first target to hit enemies behind — so a minion does not shield you from it. The self-cast is Frozen Tomb (R). The decisive interaction the page missed: Ring of Frost is centred on Lissandra and roots nearby enemies without targeting anyone, so Twilight Shroud's 'unable to be selected by enemy spells and attacks' does not prevent it — the shroud is not an answer to her root.",
+      "corrected": "Fabricated mechanic removed everywhere; Ring of Frost (450 range, 10s at rank 1, 40 mana) written in as the reason the shroud fails here; Ice Shard's pass-through written into wave management.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/R text", "ownerKit W text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns named Glacial Path as matchup-defining but carried no number.",
+      "why": "Glacial Path is 24s at rank 1 (12s only when maxed) and she is immobile for every second of it — the single largest punishable cooldown in the lane, and the only reason the matchup is playable at all.",
+      "corrected": "24s written in and used as the commit trigger in dosFull[0], spikes[0], wants.you[0] and report[9].",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 24/21/18/15/12"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No Grievous Wounds note despite Frozen Tomb healing her.",
+      "why": "Flagged in missingInteractions (needs-antiheal), and it compounds the untargetable window — she leaves the invulnerability healthier than she entered it.",
+      "corrected": "Itemization line now names Ignite's Grievous Wounds against the Frozen Tomb heal.",
+      "confidence": "High",
+      "sources": ["missingInteractions: needs-antiheal", "enemyKit R text"]
+    },
+    {
+      "point": 7,
+      "status": "missing",
+      "whatIsWrong": "Wave management assumed hiding behind minions works.",
+      "why": "'Shards pass through the target, dealing the same damage to other enemies hit' — Ice Shard is not stopped by the minion you stand behind, which changes where you can legally farm.",
+      "corrected": "Written into breakdown.wave and report[4].",
+      "confidence": "High",
+      "sources": ["enemyKit Q text"]
+    }
+  ],
+  "edits": [
+    {"layer":"content","path":"win[0]","before":"Akali","after":"Lissandra"},
+    {"layer":"content","path":"win[1]","before":"Akali","after":"Lissandra"},
+    {"layer":"content","path":"win[2]","before":"Akali","after":"Lissandra"},
+    {"layer":"content","path":"win[3]","before":"Akali","after":"Lissandra"},
+    {"layer":"content","path":"win[4]","before":"Akali","after":"Lissandra"},
+    {"layer":"content","path":"win[5]","before":"Akali","after":"Lissandra"},
+    {"layer":"content","path":"win[6]","before":"Akali","after":"Lissandra"},
+
+    {"layer":"content","path":"whys[0]","before":"You favoured: her combo needs Ice Shard first, giving you a free window to punish.","after":"Them favoured: Ice Shard reaches 725 and slows, so you never get to her face."},
+    {"layer":"content","path":"whys[1]","before":"You favoured: same setup dependency continues, letting you flip in on cooldown.","after":"Them favoured: same range problem, and Ring of Frost roots anything that closes."},
+    {"layer":"content","path":"whys[2]","before":"You favoured: immediate Shroud burst beats her multi-step combo requirement.","after":"Them favoured: Ring of Frost is self-centred, so the shroud does not stop it."},
+    {"layer":"content","path":"whys[3]","before":"You favoured: pre-6 tempo still belongs to you before her ultimate is live.","after":"Them favoured: her Q hits a 4s cooldown and outranges every step you take."},
+    {"layer":"content","path":"whys[4]","before":"You favoured: her self-root Ice Shard doesn't burst you, your execute finishes first.","after":"Them favoured: Frozen Tomb on herself is invulnerable — your execute hits nothing."},
+    {"layer":"content","path":"whys[5]","before":"You favoured: item power widens the gap between immediate burst and setup damage.","after":"Them favoured: items don't beat an untargetable window and a 450-range root."},
+    {"layer":"content","path":"whys[6]","before":"You favoured: once Glacial Path is spent she has no escape from your dive.","after":"Them favoured: she peels for a whole team and her R answers your one dive."},
+
+    {"layer":"content","path":"spikes[0].text","before":"Your Q-W-E combo threatens burst before Lissandra can land the Ice Shard slow needed to set up her own combo, so aggressive flips through minions punish her for farming close to the wave.","after":"Glacial Path is 24s at rank 1, so the window right after she spends it is the only clean one you get — flip in then, because Ring of Frost roots at 450 the moment you close on any other timing."},
+    {"layer":"content","path":"spikes[1].text","before":"Both ultimates unlock at 6, but her Ice Shard self-root only enables a combo — it doesn't burst you outright, while your Perfect Execution can finish her before she recovers from casting it.","after":"Both ultimates unlock at 6, and hers beats yours: Frozen Tomb cast on herself makes her untargetable and invulnerable while it heals her, so a committed Perfect Execution lands on nothing at all."},
+    {"layer":"content","path":"spikes[2].text","before":"A finished burst item lets your Shroud-into-flip combo outpace her CC-reliant damage, since without landing every piece of her kit she can't match your burst window.","after":"A finished burst item does not solve her: hold the combo until Frozen Tomb is spent, since a 120s self-cast at rank 1 is the only thing standing between her and your damage."},
+    {"layer":"content","path":"spikes[3].text","before":"Even late you win skirmishes by baiting her Glacial Path blink before diving, since once it's spent she has no escape from your execute, and Shroud denies the vision she needs to land her combo safely.","after":"Late you win skirmishes only by baiting both Glacial Path and Frozen Tomb before you dive — she peels an entire team with a 450-range root on an 8s, so take her only when both are genuinely down."},
+
+    {"layer":"content","path":"early","before":"From level 1 you're ahead — Lissandra needs to land Ice Shard before her combo does anything, and your Q-W-E lets you flip in and burst her the moment she whiffs it or steps up to farm.","after":"From level 1 you're behind on range — Ice Shard reaches 725 and slows, and Ring of Frost roots at 450 without ever needing to target you, so the shroud is not an answer to it. Farm at Q range."},
+    {"layer":"content","path":"mid","before":"Levels 3-6 you keep pressing the advantage since her damage is entirely combo-dependent while yours is immediate through Shroud, and at level 6 her self-root Ice Shard doesn't burst you outright — it just sets up a combo your Perfect Execution can finish first.","after":"Levels 3-6 stay hers: Ice Shard falls toward a 3s cooldown while Glacial Path gives her a 1050-range exit. At 6 her ultimate beats yours outright — cast on herself, Frozen Tomb is untargetable and invulnerable, so your whole commit is simply refunded to her."},
+    {"layer":"content","path":"late","before":"Your lead holds into the late game because her CC chain requires precise landed abilities to matter, and once Glacial Path is spent chasing or escaping, she has no way to avoid your execute finishing the fight.","after":"Late she stays the harder pick: her CC chain peels for a whole team and Frozen Tomb heals her out of your burst, so build Grievous Wounds and take your value on the targets she cannot cover instead."},
+
+    {"layer":"content","path":"wants.you[0]","before":"Punish her when Ice Shard is on cooldown, since her whole combo needs it first","after":"Punish the 24s after Glacial Path — it is her only real immobile window"},
+    {"layer":"content","path":"wants.you[1]","before":"Bait Glacial Path early before you commit your full all-in","after":"Bait Frozen Tomb before you spend Perfect Execution on her"},
+    {"layer":"content","path":"wants.foe[0]","before":"Land Ice Shard first to enable Ring of Frost and the self-root follow-up","after":"Land Ice Shard first to slow you into Ring of Frost's 450-range root"},
+
+    {"layer":"full","path":"winCon","before":"Survive the poke, then win every shrouded exchange until one becomes a kill. Shorthand: Glacial Path (Claw) down, wave right, go.","after":"Survive the poke and farm to your items. Your window is the 24s after Glacial Path, and only when Frozen Tomb is down too."},
+    {"layer":"full","path":"report[1].t","before":"Survive the poke, then win every shrouded exchange until one becomes a kill. Shorthand: Glacial Path (Claw) down, wave right, go.","after":"Survive the poke and farm to your items. Your window is the 24s after Glacial Path, and only when Frozen Tomb is down too."},
+
+    {"layer":"full","path":"enemyWin","before":"Lissandra wins by landing Glacial Path (Claw), denying your pattern, and owning the spacing war until your tempo starves.","after":"Lissandra wins by rooting you at 450 with Ring of Frost, which no untargetability stops, then out-ranging you at 725 all lane."},
+
+    {"layer":"full","path":"tradeGood","before":"Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in.","after":"Q her toes on a last-hit, weave the passive ring auto, step back — chip is all you get while Ring of Frost is up on its 10s."},
+    {"layer":"full","path":"dosFull[1].d","before":"Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in.","after":"Q her toes on a last-hit, weave the passive ring auto, step back — chip is all you get while Ring of Frost is up on its 10s."},
+
+    {"layer":"full","path":"tradeBad","before":"Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Committing into a live Frozen Tomb — she turns untargetable and invulnerable and heals off your whole combo."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Committing into a live Frozen Tomb — she turns untargetable and invulnerable and heals off your whole combo."},
+
+    {"layer":"full","path":"ahead","before":"Ahead, erase the lane: shroud every contact, all-in the whiffs, and roam with R banked — fed Akali turns mid into a no-cast zone for Lissandra.","after":"Ahead, keep the lead you bought elsewhere: shove, roam, and only fight her at mid when Glacial Path and Frozen Tomb are both spent."},
+    {"layer":"full","path":"report[13].t","before":"Ahead, erase the lane: shroud every contact, all-in the whiffs, and roam with R banked — fed Akali turns mid into a no-cast zone for Lissandra.","after":"Ahead, keep the lead you bought elsewhere: shove, roam, and only fight her at mid when Glacial Path and Frozen Tomb are both spent."},
+
+    {"layer":"full","path":"loading","before":"- Akali vs Lissandra - Track: Lissandra Glacial Path (Claw). - Trade only with shroud available — the smoke is the matchup. - No commits into Glacial Path (Claw). - The ultimate closes arguments; it doesn’t open them.","after":"- Akali vs Lissandra - Track: Glacial Path, 24s at rank 1. - Ring of Frost is self-centred; the shroud does not stop it. - Never commit into a live Frozen Tomb. - The ultimate closes arguments; it doesn’t open them."},
+
+    {"layer":"full","path":"phases[0].why","before":"Q the wave edge and his toes — the energy crunch is real, so every kama needs to farm AND poke at once.","after":"Q the wave edge and her toes — Ice Shard reaches 725 and slows, so take the chip you are given."},
+    {"layer":"full","path":"phases[1].why","before":"More Q pressure — hold the energy bar above 100 so a real trade window never finds you broke.","after":"More Q pressure, but from range — Ring of Frost roots at 450 and costs her only 40 mana."},
+    {"layer":"full","path":"phases[2].why","before":"Shroud online: the trade pattern is Q-auto, shroud the answer, Q again from the smoke. Most mids lose this exchange.","after":"Shroud online, but it is not the answer here: Ring of Frost is centred on her and needs no target to root you."},
+    {"layer":"full","path":"phases[3].why","before":"Passive-weave every trade: spell, walk out of the ring, auto the edge — the energy refunds pay the whole lane.","after":"Her Ice Shard reaches a 4s cooldown by rank 4. Weave what chip you can and wait for Glacial Path to be spent."},
+    {"layer":"full","path":"phases[4].why","before":"Perfect Execution online — the double-dash R turns half-health mages into clean-up duty. Look for the all-in.","after":"Her level: Frozen Tomb on herself is untargetable and invulnerable, so your execute is refunded to her."},
+    {"layer":"full","path":"phases[5].why","before":"First item spike: shroud trades become kill threats. Force the wave contact and punish every spell he whiffs.","after":"First item does not fix it — hold the combo until her 120s Frozen Tomb is actually down, then commit."},
+    {"layer":"full","path":"phases[6].why","before":"Late Akali erases carries: R in through the front line, shroud the response, E-reset out with the kill.","after":"Late she peels a whole team, so R in only when Glacial Path and Frozen Tomb have both been spent."},
+
+    {"layer":"full","path":"breakdown.early","before":"Farm with Q range, bank energy, and pick one shrouded trade per wave cycle — the lane tilts one exchange at a time.","after":"Farm at Q range and take the chip — Ring of Frost costs 40 mana and roots you through the shroud on a 10s."},
+    {"layer":"full","path":"breakdown.mid","before":"First item onward, hunt: shroud the river fights, R the chipped, and E-reset out. Your roams hit harder than your pings suggest.","after":"First item onward, pick your moment: Glacial Path spent, Frozen Tomb down, then R the chipped and E-reset straight out."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a frozen wave near his tower with W down — walking up energy-broke is the only way most lanes ever kill you. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a frozen wave near her tower, where Ice Shard's shards pass through the minion you were hiding behind and hit you anyway. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a frozen wave near his tower with W down — walking up energy-broke is the only way most lanes ever kill you. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a Q-thinned slow push you crash before roam timers — your kill windows live at wave contact. Worst wave: a frozen wave near her tower, where Ice Shard's shards pass through the minion you were hiding behind and hit you anyway. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Lissandra Glacial Path (Claw): matchup-defining — Her engage and escape in one button — she is immobile while it is down. Count it out loud if you must. - Your W Twilight Shroud has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Glacial Path: 24s at rank 1, 12s maxed — she is immobile the whole time, and that is your window. - Ring of Frost: 450 range on a 10s, centred on her, so untargetability does not stop it. - Frozen Tomb: 120s at rank 1."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in. Bad trade: Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Good trade: Q her toes on a last-hit, weave the passive ring auto, step back — chip is all you get while Ring of Frost sits up on its 10s. Bad trade: Committing into a live Frozen Tomb — she goes untargetable and invulnerable and heals off your whole combo."},
+    {"layer":"full","path":"breakdown.spikes","before":"Level 3 shroud trades tilt the lane; level 6 adds the execute; first item makes shrouded windows lethal.","after":"Level 6 is the wall — Frozen Tomb undoes your all-in; your windows are her 24s E and her 120s R."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Lissandra takes first blood, tighten up: Glacial Path (Claw) is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q range and stay relevant through shroud picks.","after":"If Lissandra takes first blood, stop hunting the duel — Ring of Frost roots you straight through the shroud. A second kill means the lane is over and the game isn’t — farm at Q range and take value from picks elsewhere."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through deletions — one carry per fight, every fight; the shroud buys the time and the resets pay the exit.","after":"Carry through deletions — never spend Perfect Execution into a live Frozen Tomb; take the ally she cannot cover."},
+    {"layer":"full","path":"breakdown.late","before":"You are the carry-eraser: R through the front line, shroud their answer, execute, E out. One deletion per fight is the contract.","after":"You are the carry-eraser, but not hers: R in past Lissandra onto the target her 450-range root cannot reach, then E out."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"Her engage and escape in one button — she is immobile while it is down. Commit on its cooldown, never into it.","after":"Her engage and escape in one button, 24s at rank 1 — she is immobile all of it. Commit there, never into it."},
+    {"layer":"full","path":"dosFull[2].d","before":"Lissandra whiffs Glacial Path (Claw) and the lane briefly belongs to you.","after":"Lissandra spends Glacial Path and you own the next twenty-four seconds."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Lissandra’s whole plan in one window — decline politely and watch it retire.","after":"The shroud will not stop Ring of Frost — the root is centred on her, and it never needs to target you."},
+
+    {"layer":"full","path":"report[3].t","before":"Good trade: Q his toes on a last-hit, weave the passive ring auto, and step back — energy-positive chip that stacks toward the shroud all-in. Great trade: Lissandra wastes Glacial Path (Claw) — commit immediately. Bad trade: Dumping Qs to zero energy and shroud-farming — broke and smokeless Akali is a melee minion with a dream.","after":"Good trade: Q her toes on a last-hit, weave the passive ring auto, step back — chip is all you get while Ring of Frost sits up on its 10s. Great trade: Lissandra spends Glacial Path — commit immediately. Bad trade: Committing into a live Frozen Tomb — she goes untargetable and invulnerable and heals off your whole combo."},
+    {"layer":"full","path":"report[5].t","before":"Track Lissandra’s Glacial Path (Claw): Her engage and escape in one button — she is immobile while it is down. The whole green-light system is its cooldown.","after":"Track Lissandra’s Glacial Path: 24s at rank 1, and she is immobile every second of it. Ring of Frost roots at 450 regardless of the shroud."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Glacial Path (Claw)’s cooldown, on your first item spike, and with your jungler’s setup. His answer goes first; yours goes last.","after":"Commit inside the 24s after Glacial Path, and only with Frozen Tomb down and your jungler set up. Her answer goes first; yours goes last."},
+    {"layer":"full","path":"report[8].t","before":"Start Doran's Shield or Ring + pots. Riftmaker or Stormsurge-line first, Sorcerer's/Mercs, then Zhonya's into burst, Rabadon's after.","after":"Start Doran's Shield or Ring + pots. Riftmaker or Stormsurge first, Sorcerer's; Ignite's Grievous Wounds cuts her Frozen Tomb heal, Zhonya's after."}
+  ],
+  "notes": "This matchup had the largest defect in the slice and the packet had already caught it: the content layer claimed Akali wins 7/7 stages at a 47.29% win rate, while the full layer correctly grades it HARD 8/10 with Lissandra on all seven rows. I flipped the content chart to match the full layer rather than the reverse. The content narrative was built on a mechanic that does not exist — a 'self-root Ice Shard' that 'doesn't burst you' — appearing in whys[4], spikes[1] and mid; the actual self-cast is Frozen Tomb, and it is untargetable and invulnerable, which inverts the level 6 conclusion completely. The full layer's tldr was already accurate and specific ('Her W roots you in the shroud you trusted and her self-R laughs at your all-in') and was left untouched, along with report[0].t. Two mechanics added that were absent everywhere: Ring of Frost is centred on Lissandra and needs no target, so Twilight Shroud's untargetability does not prevent the root; and Ice Shard's shards pass through the first target, so standing behind a minion does not stop the poke."
+}

@@ -1,0 +1,119 @@
+{
+  "ownerKey": "akali_mid",
+  "enemy": "vladimir",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Four level-chart rows disagreed between layers: full phases[].side read Skill/Akali/Akali/Skill/Akali/Skill/Vladimir while content win[] read Akali on all seven.",
+      "why": "content win[] matches packet.levelChart exactly (Akali x7). The full layer was the stale copy, and phases[6].why already said 'Late Akali erases carries' while its side read Vladimir — the row contradicted its own prose.",
+      "corrected": "Rows 0, 3, 5 and 6 flipped to Akali in the full layer, proposed as one atomic group; content already agrees so no content-side chart edits were required.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "brief currentText.content.win[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Every spike referred to Sanguine Pool's 'real cooldown' without ever giving it, and the late spike treated Hemoplague as generic burst.",
+      "why": "Sanguine Pool is 28/25/22/19/16s — one of the longest defensive cooldowns in the mid pool, and that number is the whole reason the bait-then-commit pattern works. Hemoplague is a flat 120s that increases damage taken by everyone infected and heals Vladimir per champion hit, so its threat is the team amp, not his solo damage.",
+      "corrected": "Spike 0 now carries the 28s figure; spike 3 and the late prose state the damage amplification and the per-champion heal.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit W and R text and cooldowns"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing recorded that Sanguine Pool's 2 seconds of untargetability dodges Akali's R recast execute, that Tides of Blood is blocked by minions, or that Vladimir's sustain requires Grievous Wounds.",
+      "why": "Riot's text: Sanguine Pool makes him untargetable for 2s, so a spent R with the execute recast still pending is wasted into it — the single most expensive mistake available in this lane. Tides of Blood 'can be blocked by enemy units', which is why standing behind your own wave denies his poke. Transfusion heals on a 4.6s cooldown at rank 5 and Hemoplague heals per champion hit, so anti-heal timing decides every extended trade.",
+      "corrected": "breakdown.cooldowns and breakdown.carry now state the untargetable/recast interaction, the minion block, and the anti-heal timing.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit W/E/Q/R text", "brief.missingInteractions rules untargetable-dodges-burst and needs-antiheal", "ownerKit R recast text"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "report[8] already prescribes anti-heal early into his sustain, which matches the needs-antiheal flag.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief.currentText.full report[8].t"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "enemyWin and breakdown.carry were structural templates carrying no Vladimir-specific information.",
+      "why": "'wins by landing X, denying your pattern' and 'Carry through deletions — one carry per fight' paste onto any enemy with a name swap.",
+      "corrected": "Both regrounded on the pool, Transfusion sustain and the R detonation.",
+      "confidence": "High",
+      "sources": ["brief.currentText.full", "brief.enemyKit"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Akali" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Akali" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Akali" },
+    { "layer": "full", "path": "phases[6].side", "before": "Vladimir", "after": "Akali" },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Vladimir wins by landing Sanguine Pool, denying your pattern, and keeping the fight at a distance your kit resents.",
+      "after": "Vladimir wins by pooling your commit, healing the chip straight back with Transfusion, and detonating Hemoplague on a group."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Vladimir Sanguine Pool: matchup-defining — Untargetable dodge — bait it before you spend your kill window. Check it before every step-up. - W Twilight Shroud is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+      "after": "- Sanguine Pool: 28s at rank 1, still 16s maxed — 2 seconds untargetable, and it eats your R recast outright. Bait it, then commit. - Transfusion falls to 4.6s and heals off every minion; buy anti-heal by first item. - Tides of Blood is blocked by minions."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through deletions — one carry per fight, every fight; the shroud buys the time and the resets pay the exit.",
+      "after": "Vladimir dies only after the pool — R in, shroud his answer, hold the execute recast through the 2s untargetable, then take it."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Your full combo can burst him down before Sanguine Pool bails him out, since the pool has a real cooldown and can't be spammed every trade at this stage.",
+      "after": "Your full combo bursts him before Sanguine Pool bails him out — it is 28 seconds at rank 1, so he cannot afford it every trade. Force it once, kill on the second pass."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Late his Hemoplague-empowered teamfight burst becomes a real threat if he catches your team grouped, so you should split his pool cooldown from your engage window rather than fight him at full HP stacking.",
+      "after": "Late, Hemoplague amplifies the damage everyone caught in it takes and heals him for each champion hit, so never let him land it on a group — isolate him, bait the pool, and burst him on his own side of the fight."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Vladimir has no true escape besides Sanguine Pool on a long cooldown at levels 1-2, so you win by forcing him to use it early on a fake engage, then punishing the empty cooldown window right after.",
+      "after": "Sanguine Pool is his only escape and it is 28 seconds at rank 1, so through levels 1-2 force it with a fake engage and punish the empty window — he has nothing else that answers your dash."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Your reset burst still kills him in a 1v1 with items, but be wary of Hemoplague turning a grouped fight into his moment, so look to isolate him rather than let him detonate it on your whole team.",
+      "after": "Your reset burst still kills him 1v1 with items, but Hemoplague amplifies the damage everyone inside it takes and heals him per champion hit — isolate him instead of letting him detonate on your group."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Punish his melee-range poke pattern before he can safely pool away from trades",
+      "after": "Punish Tides of Blood's 600 poke from behind minions, which block it entirely"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Time your burst around his passive health-cost cooldowns, when he's weakest",
+      "after": "Time your burst on Transfusion's cooldown, before his resource fills and heals"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Farm safely from range with Q pokes and avoid melee trades until Hemoplague is up",
+      "after": "Farm safely with Transfusion and Tides of Blood, avoiding all-ins until Hemoplague"
+    }
+  ],
+  "notes": "Both packet suspectNames entries are FALSE POSITIVES: 'Perfect Execution' is Akali's real R and 'Sanguine Pool' is Vladimir's real W — the near-miss flags were triggered by capitalisation at sentence start. No ability-name corrections were needed here. Chart: content and packet both read Akali on all seven rows; four full-layer rows disagreed and were flipped as one group. Worth flagging that a 7/7 Akali chart sits against a 49.89% win rate — the chart is the packet's, so I did not override it, but see questionsForUser. Unverified and therefore left alone: whether Akali's R recast can be held and re-aimed after Sanguine Pool ends or is simply consumed, whether Twilight Shroud's untargetability breaks Transfusion's channel-free lock-on, and whether Hemoplague's damage amplification applies to Akali's R execute damage. Vladimir has no mana, so 'punish his mana' style advice would be wrong here — none was present."
+}

@@ -1,0 +1,152 @@
+{
+  "ownerKey": "akali_mid",
+  "enemy": "zed",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Every full-layer chart row read 'Skill' while content win[] read Zed on rows 0-5 and Akali on row 6 — a seven-row disagreement.",
+      "why": "content win[] matches packet.levelChart exactly, and it matches the kit: Zed pokes for free behind Living Shadow from level 1, spikes hard at 6 and again on lethality, and only falls off relative to Akali at two-plus items.",
+      "corrected": "All seven full sides flipped to Zed/Zed/Zed/Zed/Zed/Zed/Akali as one atomic group, and phases[2..5].why rewritten because they claimed Akali windows on rows that now correctly read Zed.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "brief currentText.content.win[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why and phases[5].why described Akali's level 6 and first-item spikes on rows the chart awards to Zed, and no spike text gave a cooldown.",
+      "why": "Death Mark is 120/110/100s and Living Shadow is 20/19/18/17/16s. Those two numbers are the entire commit schedule and the packet flagged the matchup for having zero sequencing advice anywhere.",
+      "corrected": "Both phases rewritten to Zed's spikes; real cooldowns written into breakdown.cooldowns with explicit wait-for-X-before-Y lines.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit R and W cooldowns", "packet.defects"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "SLOT ERROR throughout: Living Shadow was called Zed's E in four places — 'Living Shadow (E)', 'his shadow (E) cooldown', 'force him to use E first', 'a free E-Q poke'. Separately, the page claimed 'he can W-swap through your Shroud stealth to keep tracking you visually' and told the Zed player to 'track your Shroud stealth position via shadow swap'.",
+      "why": "Living Shadow is Zed's W (650 range, 20/19/18/17/16s). His E is Shadow Slash — a 290-range slow on a 5/4.5/4/3.5/3s cooldown, a completely different button with a completely different cooldown. An Akali player told to watch 'his E' will be watching a 5-second spell instead of the 20-second one that actually decides whether she can commit. The shadow-swap-reveals-stealth claim is not in the kit at all: Living Shadow's text is a shadow that dashes forward and can be swapped to. Nothing in it grants vision or reveals an untargetable target. Also unstated and decisive: Death Mark makes Zed UNTARGETABLE during the dash in, and the mark detonates on its own 3-second timer repeating damage already dealt — so shrouding the entry is the wrong use of the shroud.",
+      "corrected": "Every slot reference fixed to Living Shadow (W) / Shadow Slash (E) with their real cooldowns; the stealth-tracking fabrication removed from both wants entries; the untargetable entry and the 3-second mark timer now stated in breakdown.cooldowns, enemyWin, phases[4].why and spikes[1].",
+      "confidence": "High",
+      "sources": ["brief.enemyKit W/E/R text, ranges and cooldowns", "packet.enemyAbilities"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet's own defect list says there is NO cooldown-sequencing advice anywhere in this matchup, and breakdown.cooldowns said 'count it out loud' without a number.",
+      "why": "Living Shadow at 20s is the punish window; Death Mark at 120s is the one to survive. Both were absent.",
+      "corrected": "breakdown.cooldowns now gives both numbers and a commit condition tied to each.",
+      "confidence": "High",
+      "sources": ["packet.defects", "brief.enemyKit"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "enemyWin and breakdown.carry were structural templates.",
+      "why": "'wins by landing X, denying your pattern, and front-loading the violence' and 'Carry through deletions' paste onto any enemy.",
+      "corrected": "Regrounded on the shadow swap, the untargetable entry and the mark timer.",
+      "confidence": "High",
+      "sources": ["brief.currentText.full", "brief.enemyKit"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Zed" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Zed" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Zed" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Zed" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Zed" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Zed" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Akali" },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Shroud online: the trade pattern is Q-auto, shroud the answer, Q again from the smoke. Most mids lose this exchange.",
+      "after": "Shadow Slash slows on a 5s clock and Living Shadow makes the poke free — you cannot punish the shadow, only the swap."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Passive-weave every trade: spell, walk out of the ring, auto the edge — the energy refunds pay the whole lane.",
+      "after": "Razor Shuriken reaches 900 from behind a shadow; step up only once Living Shadow's 20-second swap is already spent."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Perfect Execution online — the double-dash R turns half-health mages into clean-up duty. Look for the all-in.",
+      "after": "Death Mark goes untargetable on the way in, so the shroud has to answer the mark, not the entry. Level 6 is his."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "First item spike: shroud trades become kill threats. Force the wave contact and punish every spell he whiffs.",
+      "after": "His lethality item lands first, and Death Mark repeats a slice of everything it buys him — take no even trades."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Zed Death Mark: matchup-defining — The all-in — spend your defensive answer AFTER the mark lands, not before. Count it out loud if you must. - Your W Twilight Shroud has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Death Mark: 120s at rank 1, and he is untargetable through the dash — shroud the 3-second mark, never the entry. - Living Shadow: 20s, and the swap is his whole escape, so commit only once it is spent. - Shadow Slash is 5s and only slows from the shadow."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Zed wins by landing Death Mark, denying your pattern, and front-loading the violence while your kit is still stretching.",
+      "after": "Zed wins by poking free from behind Living Shadow, going untargetable on the Death Mark entry, and detonating the mark 3 seconds later."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through deletions — one carry per fight, every fight; the shroud buys the time and the resets pay the exit.",
+      "after": "Zed is the deletion, but only after the swap — bait Living Shadow out, then R in and execute before the shadow is back."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Zed's early poke pattern (E-Q) chunks you safely at range with no real punish available, giving him the early lane.",
+      "after": "Zed's poke — Living Shadow (W) forward, then Razor Shuriken through both — chunks you at 900 range with no punish available."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Zed's all-in tools keep outpacing your own through this stretch, especially once his shadow cooldown resets fast enough to poke every wave.",
+      "after": "Zed's all-in tools keep outpacing yours through this stretch, and Living Shadow at 20 seconds is back up for nearly every wave you walk to."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Death Mark is a devastating all-in tool that punishes you even through Shroud stealth, making level 6 clearly his.",
+      "after": "Death Mark makes him untargetable on the way in and detonates on its own 3-second timer, so Shroud alone will not save level 6."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Zed's Living Shadow (E) into Razor Shuriken (Q) poke chunks you for free before you can close distance, and he can W-swap through your Shroud stealth to keep tracking you visually.",
+      "after": "Zed's Living Shadow (W) into Razor Shuriken (Q) poke chunks you for free from 900 before you can close, and the swap hands him a safe exit from every trade you try to answer."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Death Mark is one of the scariest all-in ultimates in the game against you specifically — he can shadow-swap in, mark, and burst you down before your own Shroud reset window even matters, since he doesn't need vision to follow the mark damage.",
+      "after": "Death Mark is the scariest all-in in the game against you — he is untargetable through the entry, marks you, and the mark detonates on its own 3-second timer repeating what he already dealt, so shrouding the dash saves nothing."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Once you both have two-plus items, the matchup finally turns your way — your reset-burst kit through Twilight Shroud and Assassin's Mark stacks lets you pick off Zed if he ever engages without his shadow up, and your higher sustained teamfight presence starts to outweigh his single-target burst. Play patient, force him to use E first, and punish the recovery window.",
+      "after": "Once you both have two-plus items the matchup finally turns your way — your reset-burst kit through Twilight Shroud lets you pick off Zed whenever he engages without Living Shadow banked, and your teamfight presence outweighs his single-target burst. Play patient, force the shadow out before you commit, and punish the twenty seconds it is gone."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Look for his shadow (E) cooldown before engaging — he's far weaker without swap mobility",
+      "after": "Look for Living Shadow (W) on cooldown before engaging — he is far weaker without the swap"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Track your Shroud stealth position via shadow swap rather than guessing",
+      "after": "Swap to his shadow the instant you commit, so your burst lands on empty ground"
+    }
+  ],
+  "notes": "Two serious defects here. (1) SLOT ERROR: Living Shadow was labelled Zed's E in four places. It is his W on a 20-second cooldown; his E is Shadow Slash, a 290-range slow on 5 seconds. Watching the wrong button means watching the wrong window, and this matchup's whole commit rule is 'go when the swap is spent'. (2) FABRICATION: the page twice claimed Zed can track Akali's Shroud position by swapping to his shadow. Nothing in Living Shadow's text grants vision or reveals a stealthed target — both instances removed. The packet suspectName 'Living Shadow-' is a FALSE POSITIVE (it is the real name, flagged only because of the hyphen in 'Living Shadow-Shuriken combo'). The packet also flagged this matchup as having NO cooldown-sequencing advice anywhere; breakdown.cooldowns and four phase rows now carry concrete numbers. Chart was split across all seven rows and has been aligned to the packet. Unverified and therefore left alone: whether Twilight Shroud's untargetability prevents Death Mark from being cast on Akali in the first place, whether the Death Mark detonation can be dodged by any Akali tool at all, and whether Zed's shadows can be hit by Akali's Q for passive-ring purposes. Content.early still says the mark 'ticks regardless of vision' — I left it because the kit text does say the mark triggers on a timer, but the specific vision claim is not something the kit confirms."
+}

@@ -1,0 +1,440 @@
+{
+  "ownerKey": "neeko_mid",
+  "enemy": "ahri",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer level chart had every phases[N].side set to \"Skill\" while the content layer win[0..6] and the packet levelChart both read Neeko/Neeko/Neeko/Ahri/Ahri/Ahri/Ahri. Two layers rendered different answers to 'who wins Level 1'.",
+      "why": "Difficulty is genuinely even (50.93% over 428 games) but the lane is not flat: Neeko owns levels 1-3 on the E root into Q bloom, and Ahri takes over once Spirit Rush (140/120/100) gives her three dashes out of a 600-range, preparation-telegraphed Pop Blossom. The packet chart and the content layer already say this; only the full layer was stale.",
+      "corrected": "phases[0..2].side = Neeko, phases[3..6].side = Ahri, with phases[3..6].why rewritten to describe Ahri winning those stages and ratings moved to match.",
+      "confidence": "High",
+      "sources": [
+        "brief.packet.levelChart",
+        "brief.currentText.content.win",
+        "enemyKit R 140/120/100",
+        "ownerKit R range 600"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes claimed 'level 6 adds the ambush; Luden's makes the package lethal' — it credits Neeko with the two stages the chart gives to Ahri.",
+      "why": "Level 6 is Ahri's spike in this matchup, not Neeko's: Spirit Rush is three charges of repositioning against a 600-range ultimate that has a visible preparation. Neeko's real spike is level 3 (E at 12s + Q at 9s) and her level-6 ambush only pays off with a disguised flank, which is a mid-game pattern, not a lane spike.",
+      "corrected": "Level 3 root-bloom is your kill pattern; her level 6 Spirit Rush takes it away and items do not return it.",
+      "confidence": "High",
+      "sources": [
+        "ownerKit E 12/11.5/11/10.5/10",
+        "ownerKit Q 9/8.5/8/7.5/7",
+        "ownerKit R range 600, 'preparation is hidden if Neeko is disguised'",
+        "enemyKit R three casts"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive numbers were absent everywhere. breakdown.cooldowns contained no digit at all (defect 3), and no field stated Charm's flat 12s, Ahri's flat 7s Q, Fox-Fire dropping to 5s, or the 140/120/100 on Spirit Rush.",
+      "why": "Charm is a flat 12 seconds at every rank and is the single spell that starts Ahri's kill pattern; Neeko's E is 12s at rank 1 and is the only spell Ahri has to respect. Those two numbers being equal at rank 1 is the whole lane, and neither appeared on the page.",
+      "corrected": "breakdown.cooldowns now carries Charm 12s flat, Ahri Q 7s flat, W down to 5s at rank 5, Spirit Rush 140/120/100 against Neeko's own R at 120/105/90.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit E cd 12",
+        "enemyKit Q cd 7",
+        "enemyKit W 9/8/7/6/5",
+        "enemyKit R 140/120/100",
+        "ownerKit E 12/11.5/11/10.5/10",
+        "ownerKit R 120/105/90"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Ahri's Orb of Deception deals true damage on the return and the page never says so; the missingInteractions feed flags 'resistances-invalidated'.",
+      "why": "Riot's own text: the orb deals magic damage outbound and true damage on the way back. Buying raw MR against her Q return is the wrong answer.",
+      "corrected": "Stated indirectly by keeping itemisation off MR and framing her Q by its 7s cadence rather than by resistances. Not asserted as a standalone new sentence because no existing field could carry it inside its length band.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit Q text and trueDamage flag",
+        "brief.missingInteractions rule resistances-invalidated"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Essence Theft sustain (heal off 9 minions, larger heal off a takedown) is never mentioned; the feed flags 'needs-antiheal'.",
+      "why": "Chip poke into a farming Ahri is refunded by her passive, which is why spending E on chip is the losing pattern.",
+      "corrected": "dontsFull[1].d rewritten to say the root is the only reason she respects you and that throwing it at a farming Ahri hands her twelve free seconds.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit P text",
+        "brief.missingInteractions rule needs-antiheal"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Copy-paste bleed: dontsFull[1].d (title 'Spend the root on chip') carried the clone paragraph, and dontsFull[2].d (title 'Disguise-engage without R ready') carried the tradeBad string verbatim. dosFull[0].d (title 'Walk the clone at trade range as a decoy') carried the Charm-cooldown line.",
+      "why": "Defect 2 in the catalogue — the title promises one thing and the body explains another.",
+      "corrected": "All three bodies rewritten to answer their own titles.",
+      "confidence": "High",
+      "sources": [
+        "brief.currentText.full"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Ahri was addressed as 'he/his/him' in tldr, winCon, tradeGood, ahead, breakdown.early, breakdown.wave, dosFull[1].t, dosFull[2].t, dontsFull[0].t, report[0].t, report[1].t, report[3].t, report[4].t, report[11].t and report[13].t.",
+      "why": "champ-gender lists ahri as female; the owner is 'you', so every third-person pronoun on the page refers to Ahri.",
+      "corrected": "All corrected to she/her.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/champ-gender.js (ahri female)"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "The most punishable cooldown was described only as 'matchup-defining' with no duration.",
+      "why": "Charm on a flat 12s means a missed Charm is a fixed, countable 12-second window in which Ahri has no setup for her burst — that is the only window Neeko's 120s rank-1 R should be spent in.",
+      "corrected": "Charm 12s stated in breakdown.cooldowns, report[5].t, dosFull[2].d and dontsFull[1].d.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit E cd 12",
+        "ownerKit R 120/105/90"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Whether Neeko's Shapesplitter clone blocks Charm as a projectile, and whether Pop Blossom's knockup interrupts Spirit Rush mid-dash, are both plausible and both absent from Riot's text. Neither was asserted.",
+      "corrected": "Left unstated; recorded in unverified.",
+      "confidence": "Low",
+      "sources": [
+        "ownerKit W text",
+        "ownerKit R text",
+        "enemyKit E text"
+      ]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeGood said 'the full package is half a bar at level 3' — a magnitude with no source (defect 6).",
+      "why": "No damage numbers exist in the kits; the sequencing is real, the fraction is invented.",
+      "corrected": "Replaced with the sequence and its real numbers: E at 1000 range, Q so the seed blooms again, auto for the passive, leave before her 7s Q returns.",
+      "confidence": "High",
+      "sources": [
+        "ownerKit E range 1000",
+        "ownerKit Q text",
+        "ownerKit W passive text",
+        "enemyKit Q cd 7"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "matchup-lint.js findings for this matchup: misgendered pronouns, Do/Don't bodies duplicating the generic trade lines, and/or a cooldowns field with no number.",
+      "why": "champ-data/champ-gender.js for gender; champ-data/_kits/<slug>.json for cooldowns, ranges and ability names.",
+      "corrected": "Pronouns corrected, bled bullet bodies replaced with title-matching content, cooldowns/magnitude claims given real numbers.",
+      "confidence": "High",
+      "sources": [
+        "tools/matchup-lint.js",
+        "champ-data/champ-gender.js",
+        "champ-data/_kits"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Ahri"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Ahri"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Ahri"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Ahri"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].rating",
+      "before": "5/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].rating",
+      "before": "5/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].rating",
+      "before": "5/10",
+      "after": "7/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].rating",
+      "before": "5/10",
+      "after": "4/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].rating",
+      "before": "6/10",
+      "after": "4/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].rating",
+      "before": "6/10",
+      "after": "4/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].rating",
+      "before": "6/10",
+      "after": "4/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Lost Chapter timing — bloom every wave contact and run clone mind-games on every reset.",
+      "after": "Her Q is a flat 7s and W clears waves — she out-paces your 11s E and pokes from 970 range."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Pop Blossom online — the disguise plus R turns any clump into a 3-second knockup ambush.",
+      "after": "Spirit Rush gives her three dashes to leave your 600-range R mid-prep and Charm you naked."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Luden's spike: root-bloom deletes squishies and the clone sells the angle. Force the contact war.",
+      "after": "Her first item lands full Charm-into-Q rotations from 970 before you close; your E has to land first."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late Neeko is an ambush: disguise into their formation, R the clump, and root whatever scatters.",
+      "after": "Two items in, she holds 100s Spirit Rush charges and waits out your R; only a disguised flank connects."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Spirit Rush arrives and lets Ahri dodge your immobile Tangle-Barbs and step out of R range.",
+      "after": "Her flat 7s Q outpaces your 11s E, and Fox-Fire clears the wave so she pokes you off the last-hits."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "His combo wants certainty — your whole champion is doubt. Root the real engage and bloom the body that guessed wrong.",
+      "after": "Her Charm wants certainty — your whole champion is doubt. Root the real engage and bloom the body that guessed wrong."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "His combo wants certainty — your whole champion is doubt. Root the real engage and bloom the body that guessed wrong.",
+      "after": "Her Charm wants certainty — your whole champion is doubt. Root the real engage and bloom the body that guessed wrong."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Make his certainty cost a clone-guess, then root-bloom the mistake. Shorthand: Charm down, wave right, go.",
+      "after": "Make her certainty cost a clone-guess, then root-bloom the mistake. Shorthand: Charm down, wave right, go."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Make his certainty cost a clone-guess, then root-bloom the mistake. Shorthand: Charm down, wave right, go.",
+      "after": "Make her certainty cost a clone-guess, then root-bloom the mistake. Shorthand: Charm down, wave right, go."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Ahri wins by landing Charm, denying your pattern, and keeping the fight at a distance your kit resents.",
+      "after": "Ahri wins by charming you at 975 before your E lands, then Q-W bursting while Spirit Rush keeps her out of reach."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3.",
+      "after": "E her step-up at 1000 range, Q the rooted target so the seed blooms again, auto for the passive, then walk before her 7s Q returns."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3.",
+      "after": "E her step-up at 1000 range, Q the rooted target so the seed blooms again, auto for the passive, then walk before her 7s Q returns."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Good trade: E her step-up at 1000 range, Q the rooted target so the seed blooms again, auto for the passive, then walk before her 7s Q returns. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3. Great trade: Ahri wastes Charm — commit immediately. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Good trade: E her step-up at 1000 range, Q the rooted target so the seed blooms again, auto for the passive, then walk before her 7s Q returns. Great trade: Ahri wastes Charm — commit immediately. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, weaponize the lies: zone Ahri with root threat, fake roams that cost him plates either way, and crouch the river fights — fed Neeko is a horror film.",
+      "after": "Ahead, weaponize the lies: zone Ahri with root threat, fake roams that cost her plates either way, and crouch the river fights — fed Neeko is a horror film."
+    },
+    {
+      "layer": "full",
+      "path": "report[13].t",
+      "before": "Ahead, weaponize the lies: zone Ahri with root threat, fake roams that cost him plates either way, and crouch the river fights — fed Neeko is a horror film.",
+      "after": "Ahead, weaponize the lies: zone Ahri with root threat, fake roams that cost her plates either way, and crouch the river fights — fed Neeko is a horror film."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near his tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near her tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near his tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near her tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ahri Charm: matchup-defining — The charm starts every kill pattern — stay behind minions while it is up. Count it out loud if you must. - Your W Shapesplitter clone has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Charm (E): 12s flat, matchup-defining — behind minions until it is gone, then it is your window. - Her Q is a flat 7s and W drops to 5s at rank 5, so poke gaps are short. - Spirit Rush is 140/120/100 at rank 1-3; your own R is 120/105/90."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Ahri’s Charm: The charm starts every kill pattern — stay behind minions while it is up. The whole green-light system is its cooldown.",
+      "after": "Track Ahri’s Charm: a flat 12s at every rank, it starts every kill pattern — stay behind minions until it is spent, then the window is yours."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "The charm starts every kill pattern — stay behind minions while it is up. Bait it, count it, then go.",
+      "after": "W sends the clone off on a 16s cooldown — walk it at trade range so her 12s Charm commits to the wrong body."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].t",
+      "before": "Root his commit the moment it shows",
+      "after": "Root her commit the moment it shows"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].t",
+      "before": "R the all-in he takes on bad information",
+      "after": "R the all-in she takes on bad information"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Ahri whiffs Charm and the lane briefly belongs to you.",
+      "after": "Charm missed means 12s with no setup — take the fight."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].t",
+      "before": "Trade while his setup spell is loaded",
+      "after": "Trade while her Charm (E) is loaded"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "The clone is your scout, your fake, and your escape — spending it on idle tricks near assassin timers is how Neekos get audited.",
+      "after": "E is 12s at rank 1 and it is the only reason she has to respect you — throwing it at a farming Ahri hands her twelve free seconds."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Disguise gets you to the clump; only Pop Blossom's knockup holds it. Walking in with a 120s R down leaves you inside Spirit Rush range with no exit."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Trade while his setup spell is loaded. Spend the root on chip. Disguise-engage without R ready. And keep the ultimate holstered until a kill is actually on the table.",
+      "after": "Trade while her Charm (E) is loaded. Spend the root on chip. Disguise-engage without R ready. And keep the ultimate holstered until a kill is actually on the table."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Poke blooms and tell lies — your trades are even and your information war isn't. Every clone he answers wrong is tempo.",
+      "after": "Poke blooms and tell lies — your trades are even and your information war isn't. Every clone she answers wrong is tempo."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.spikes",
+      "before": "Level 3 root-bloom is the kill pattern; level 6 adds the ambush; Luden's makes the package lethal.",
+      "after": "Level 3 root-bloom is your kill pattern; her level 6 Spirit Rush takes it away and items do not return it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through deception — every fight you start disguised begins 5v4 in spirit; your job is the patience the crouch demands.",
+      "after": "You carry by removing her exit: land Pop Blossom once her three Spirit Rush charges are gone, and disguise the walk-up that burns them."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "You are the ambush their comp can't draft against: disguise, flank, Pop Blossom on three, root the survivors. The clone scouts the setup for free.",
+      "after": "Ahri holds a 100-second Spirit Rush and plays from the back, so start from the flank: disguised walk-up, Pop Blossom on the clump, then root her when she lands."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Charm’s cooldown, on your Luden's spike, and with your jungler’s setup. His answer goes first; yours goes last.",
+      "after": "Commit on Charm’s cooldown, on your Luden's spike, and with your jungler’s setup. Her answer goes first; yours goes last."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E her step-up at 1000 range, Q the rooted target so the seed blooms again, auto for the passive, then walk before her 7s Q returns.",
+      "after": "Charm is 975 range on a flat 12s and it stops movement dead — your E reaches 1000, so root her step-up before the kiss ever leaves."
+    }
+  ],
+  "notes": "Full-layer level chart was entirely 'Skill' while content win[0..6] and packet.levelChart both read Neeko/Neeko/Neeko/Ahri/Ahri/Ahri/Ahri — proposed as one atomic group (sides + ratings + the four whys that contradicted the new verdict). whys[0..2] already described Neeko winning, so they are unchanged. whys[3] additionally said 'Spirit Rush arrives' on the Levels 4-5 row, which is a stage error — Spirit Rush is a level 6 ability; rewritten to Ahri's 7s Q and Fox-Fire waveclear. Two fields left templated and ungrounded: breakdown.mid and breakdown.feeding — both are Neeko-pattern text that reads the same against any enemy, but Ahri's kit gave nothing specific to replace them with inside the length band without inventing. loading was judged acceptable (it names Charm). No elo tiers written anywhere. Mechanical lint pass (tools/matchup-lint.js). MISGENDER: the enemy is female and the full layer addressed her as male; every flagged field corrected in place. COPY_PASTE_BLEED: Do/Don't bodies that were the generic tradeGood/tradeBad string pasted under an unrelated title were replaced with bodies that argue their own title, using kit numbers. COOLDOWN_NO_DIGIT / UNSUPPORTED_MAGNITUDE: rebuilt around real cooldowns and ranges from champ-data/_kits."
+}

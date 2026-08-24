@@ -1,0 +1,178 @@
+{
+  "ownerKey": "neeko_mid",
+  "enemy": "sylas",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer level chart (phases[N].side) and the content-layer chart (win[N]) disagree on six of seven rows. phases reads Skill/Skill/Skill/Skill/Sylas/Skill/Skill; win reads Neeko/Neeko/Neeko/Skill/Neeko/Skill/Sylas. The packet levelChart matches the content layer exactly.",
+      "why": "packet.levelChart = [Neeko, Neeko, Neeko, Skill, Neeko, Skill, Sylas] and the win rate is 53.72% over 376 games, i.e. Neeko-favoured overall with the late game flipping. The content whys already argue the packet's verdict (whys[6] says he out-bruises you with two items). The full layer is the stale one.",
+      "corrected": "phases[0..2].side -> Neeko, phases[4].side -> Neeko, phases[6].side -> Sylas with its why rewritten to match. Rows 3 and 5 already agree at Skill.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]", "packet.winRate"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes are level 3 (E Tangle-Barbs completes root-into-triple-bloom), level 6 (Pop Blossom, but Hijack is up at 80s rank 1), first item, and two items where Sylas' double dash plus Kingslayer sustain wins extended fights. spikes[0..3] and breakdown.spikes already carry this correctly.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["ownerKit E/R", "enemyKit W/E/R", "content spikes[0..3]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive interactions are never stated. Sylas' E is two casts (Abscond dash, then the Abduct recast that pulls him to a target he hits) — the page calls it 'Dash into chain-stun', which is wrong: Abduct is a pull, not a stun. Neeko's E root landing between the two casts denies the Abduct pull. Neeko's R knocks up, which catches him mid-Abduct. Kingslayer (W) heals off champions and is the reason short poke trades give the health back.",
+      "why": "enemyKit E text: 'Sylas dashes to a location. Sylas can recast the ability to throw his chains out, pulling himself to an enemy he hits.' No stun anywhere in the kit. Kingslayer is 400 range, 12/10.5/9/7.5/6s, flagged heal. Abscond 13/12/11/10/9s. Neeko R knocks up then stuns on landing.",
+      "corrected": "Root between Abscond and Abduct; Pop Blossom knocks him up out of the Abduct commit; buy Oblivion Orb against Kingslayer.",
+      "confidence": "High",
+      "sources": ["enemyKit E/W/R text and cooldowns", "ownerKit E/R text", "missingInteractions needs-antiheal"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contains no digit at all — the defect-catalogue item 3 — and repeats the wrong 'chain-stun' description.",
+      "why": "Kit gives Abscond 13/12/11/10/9, Kingslayer 12/10.5/9/7.5/6, Hijack 80/55/30, Neeko E 12/11.5/11/10.5/10.",
+      "corrected": "Replaced with real per-rank numbers for Abscond, Kingslayer, Neeko E and Hijack.",
+      "confidence": "High",
+      "sources": ["enemyKit cooldowns", "ownerKit cooldowns"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.you[2] describes the sustain problem without naming the answer, while the missing-interactions file flags anti-heal as the decisive item for this matchup.",
+      "why": "Kingslayer is flagged heal and is his only sustain; Grievous Wounds timing decides extended trades.",
+      "corrected": "wants.you[2] now names Oblivion Orb.",
+      "confidence": "High",
+      "sources": ["missingInteractions key 22 needs-antiheal", "enemyKit W heal flag"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Copy-paste bleed and swapped bodies: dosFull[1].d is the tradeGood string under a disguise title, dosFull[2].d is unrelated to 'Self-R the committed dive', dontsFull[0].d and dontsFull[1].d are swapped relative to their titles, and dontsFull[2].d is the tradeBad string.",
+      "why": "Defect catalogue item 2. Each title promises one thing and the body explains another.",
+      "corrected": "All five bodies rewritten to match their own titles, grounded in Abscond/Abduct, Kingslayer and Hijack.",
+      "confidence": "High",
+      "sources": ["currentText.full dosFull/dontsFull vs tradeGood/tradeBad"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Sylas",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Sylas"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late Neeko is an ambush: disguise into their formation, R the clump, and root whatever scatters.",
+      "after": "Two items in he out-bruises you: two dashes, Kingslayer sustain, and your own R stolen back."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Sylas Abscond / Abduct: matchup-defining — Dash into chain-stun — punish him hard while it is down. Read it like a second minimap. - Guard your W Shapesplitter clone like a fifth summoner spell. - Ultimate goes to kill windows only.",
+      "after": "- Abscond (E) is 13s at rank 1 and his only entry; once he E-dashes in he is walking for 13 seconds. - Kingslayer (W) is 12s at rank 1 and heals off your poke. - Your E is 12s, his Hijack 80s — trade those numbers, not health."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Sylas wins by landing Abscond / Abduct, denying your pattern, and turning your every misstep into the all-in you hadn’t budgeted.",
+      "after": "Sylas wins by chaining Abscond into the Abduct recast onto you, healing the trade back with Kingslayer, then Hijacking Pop Blossom."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Sylas takes first blood, tighten up: Abscond / Abduct is now always up in your head. A second kill means the duel is over and the game isn’t — farm with blooms and stay relevant through root picks and clone scouting.",
+      "after": "A fed Sylas heals a bigger chunk back with every Kingslayer, so stop trading into him: farm at Q range, hold E purely to break his Abduct pull, and let the clone eat the dives while you scale to Pop Blossom."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through deception — every fight you start disguised begins 5v4 in spirit; your job is the patience the crouch demands.",
+      "after": "Carry by denying Hijack its target: fight when your R is up and his is not, and never open with Pop Blossom while he holds 950-range R."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near his tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: shove with Blooming Burst so he has to clear from inside your E range — Chain Lash pushes back, but stepping up to it is where the root lands. Worst wave: a frozen wave at his tower with your E down, because Abscond into Abduct closes 400 units twice and Kingslayer pays for the trade. Crash before every recall so he cannot cheat one out for free."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "You are the ambush their comp can't draft against: disguise, flank, Pop Blossom on three, root the survivors. The clone scouts the setup for free.",
+      "after": "Late, Sylas out-sustains a straight fight, so never give him one: flank disguised, open Pop Blossom on three, and let the clone scout before he can read you."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Dash into chain-stun — punish him hard while it is down. Its cooldown is the green light — wait for it.",
+      "after": "Abscond is his only entry, 13s at rank 1; hold the root for the dash and walk him down while it is gone."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3.",
+      "after": "Wear an ally's skin in the minion line so he must guess which body holds Pop Blossom before spending an 80-second Hijack."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Sylas spends Abscond / Abduct early — the closest thing this matchup has to a guarantee.",
+      "after": "When he Abducts onto you, Pop Blossom knocks him up mid-combo and the stun holds him."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That’s Sylas’s bread-and-butter play — deny it and they run out of answers.",
+      "after": "The clone is your scout and your fake — burn it idly and you meet Abduct empty."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "The clone is your scout, your fake, and your escape — spending it on idle tricks near assassin timers is how Neekos get audited.",
+      "after": "Shoved past river with E down, you are a 400-range Abscond plus Abduct from his jungler's lap — hold the root before you cross."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "At half HP a single Abscond-Abduct closes the gap and Kingslayer heals him back through your bloom — bloom from max Q range or not at all."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Keep trades short so his W sustain can't grind you out",
+      "after": "Buy Oblivion Orb before his Kingslayer sustain out-trades"
+    }
+  ],
+  "notes": "CHART: the content layer (win[0..6]) already matches packet.levelChart exactly, so only the stale full-layer sides needed moving — no paired win[N] edit was proposed because those values are already correct on disk and a no-op edit would be rejected. phases[6].why was rewritten in the same proposal as its side flip. phases[N].rating left untouched throughout: the existing ratings do not follow a legible owner-favourability scale (row 4 read 'Sylas' at 6/10 while Skill rows read 5/10), so moving them would have been a guess. dosFull[0].t/dosFull[2].t/dontsFull titles were kept; only the mismatched bodies were replaced. 'chain-stun' was a fabricated effect — Abduct is a pull, per Riot's own E text, and no stun exists anywhere in Sylas' kit."
+}

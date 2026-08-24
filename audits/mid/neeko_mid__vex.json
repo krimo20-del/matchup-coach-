@@ -1,0 +1,360 @@
+{
+  "ownerKey": "neeko_mid",
+  "enemy": "vex",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Every full-layer phases[N].side reads 'Skill' — a flat chart — while content win[N] reads Neeko/Neeko/Neeko/Vex/Vex/Neeko/Vex. All seven rows disagree, and rows 3, 4 and 6 belong to Vex while their full-layer whys describe Neeko winning.",
+      "why": "packet.levelChart = [Neeko, Neeko, Neeko, Vex, Vex, Neeko, Vex], identical to the content layer, and the content whys argue it in kit terms: her passive punishes exactly the mobility your combo needs (4-5), her R out-ranges yours at 6, and her R plus zone control take over at two items.",
+      "corrected": "phases[0..2].side -> Neeko, phases[3..4].side -> Vex, phases[5].side -> Neeko, phases[6].side -> Vex, with phases[3], [4] and [6] whys rewritten in the same proposal to argue Vex's side.",
+      "confidence": "High",
+      "sources": [
+        "packet.levelChart",
+        "currentText.content.win[0..6]",
+        "currentText.content.whys[3..6]"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Your window is levels 1-3 before the passive is chargeable and again on your first item; hers is 4-6 once Doom 'n Gloom is online and Shadow Surge out-ranges your R, and again at two items. spikes[0..3] carry this correctly.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "content spikes[0..3]",
+        "enemyKit P/R"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page attributes the fear to the wrong ability. focus.text, winCon, enemyWin, breakdown.cooldowns, report[5].t and report[9].t all track 'Personal Space (Fear)'. Personal Space (W) is 'Gain a shield and damage nearby enemies' — there is no fear in it. The fear belongs to the passive, Doom 'n Gloom, which empowers her NEXT basic ability to fear and interrupt dashes. That misattribution costs the reader the actual decision: the tell is the passive being charged, not the W. Separately, Personal Space is a shield that eats your burst window, which the page never mentions.",
+      "why": "enemyKit P text: 'Vex periodically becomes empowered, causing her next basic Ability to fear enemies and interrupt dashes. Whenever a nearby enemy dashes, Vex applies a mark...'. enemyKit W text: 'Gain a shield and damage nearby enemies', flagged shield. missingInteractions rule 'shield-absorbs-burst' names Personal Space (W) as the thing to force out before committing.",
+      "corrected": "The fear is now credited to Doom 'n Gloom throughout, Personal Space is described as the 16s shield it is, and tradeGood now tells the reader to bait the shield before committing the bloom.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit P/W text and flags",
+        "missingInteractions rule shield-absorbs-burst"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Two wrong ability names in the content layer. spikes[0].text and mid both say the interrupt is 'Shadow Fright' — no such ability exists in the kit; the empowered fear comes from Doom 'n Gloom. And wants.foe[1] says 'zone with E Personal Space' — E is Looming Darkness; Personal Space is the W. spikes[0] also claims the passive 'marks you whenever you dash or move fast' and that 'your W Shapesplitter speed... triggers' it — the kit marks enemies who DASH; Shapesplitter grants move speed, not a dash, so that trigger is invented.",
+      "why": "packet.enemyAbilities lists P Doom 'n Gloom, W Personal Space, E Looming Darkness. ownerKit W text grants move speed only.",
+      "corrected": "'Shadow Fright' replaced with the empowered fear from Doom 'n Gloom in both places, wants.foe[1] now names Looming Darkness, and the mark is now correctly tied to dashes — which makes Pop Blossom's leap, not your W, the thing she is charged for.",
+      "confidence": "High",
+      "sources": [
+        "packet.enemyAbilities",
+        "enemyKit P/E text",
+        "ownerKit W text"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contains no digit at all despite four usable numbers in the kit.",
+      "why": "Defect-catalogue item 3. Kit gives Q 8/7/6/5/4 at 1200 range, W 16/15/14/13/12, E 12 flat, R 140/120/100 at 2000/2500/3000.",
+      "corrected": "Rebuilt around the 16s shield, the 8s Q and the 140s R, with the fear correctly assigned to the passive.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit cooldowns and ranges"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Vex is female and the full layer calls her male: tldr and report[0].t ('His combo wants certainty'), tradeGood ('E his step-up'), ahead and report[13].t ('cost him plates'), breakdown.early ('every clone he answers wrong'), breakdown.wave and report[4].t ('near his tower'), dosFull[1].t ('Root his commit'), dontsFull[0].t and report[11].t ('his setup spell'). Copy-paste bleed on top: dosFull[1].d is the tradeGood string, dontsFull[1].d is the generic clone paragraph, dontsFull[2].d is the tradeBad string.",
+      "why": "champ-gender.js lists vex as female; defect-catalogue items 1 and 2.",
+      "corrected": "All misgendered fields rewritten or pronoun-corrected; all three bled bodies replaced with content matching their own titles.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/champ-gender.js (vex female)",
+        "currentText.full"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "matchup-lint.js findings for this matchup: misgendered pronouns, Do/Don't bodies duplicating the generic trade lines, and/or a cooldowns field with no number.",
+      "why": "champ-data/champ-gender.js for gender; champ-data/_kits/<slug>.json for cooldowns, ranges and ability names.",
+      "corrected": "Pronouns corrected, bled bullet bodies replaced with title-matching content, cooldowns/magnitude claims given real numbers.",
+      "confidence": "High",
+      "sources": [
+        "tools/matchup-lint.js",
+        "champ-data/champ-gender.js",
+        "champ-data/_kits"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Vex"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Lost Chapter timing — bloom every wave contact and run clone mind-games on every reset.",
+      "after": "Her passive comes online and fears exactly the mobility your combo needs to work."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Vex"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Pop Blossom online — the disguise plus R turns any clump into a 3-second knockup ambush.",
+      "after": "Shadow Surge is a 2000-range pick; your R is 600 range and has to walk in first."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Vex"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late Neeko is an ambush: disguise into their formation, R the clump, and root whatever scatters.",
+      "after": "Two items in, her R chain-picks and Looming Darkness zones the engage your dive depends on."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Vex Personal Space (Fear): matchup-defining — Shield + AoE fear that punishes dashes — never dash onto her while her passive glows. It governs your forward steps. - W Shapesplitter clone spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- The fear is the passive, not the W: Doom 'n Gloom empowers her next ability to fear and interrupt dashes. - Personal Space is a 16s shield at rank 1 — burst into it and you burst nothing. - Mistral Bolt is 8s and reaches 1200. Her R is 140s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Vex’s Personal Space (Fear): Shield + AoE fear that punishes dashes — never dash onto her while her passive glows. Forward steps wait for its downtime.",
+      "after": "Track Doom 'n Gloom: while it is charged her next ability fears you and interrupts dashes, so Pop Blossom's leap is exactly what she is waiting for."
+    },
+    {
+      "layer": "full",
+      "path": "focus.text",
+      "before": "Vex Personal Space (Fear)",
+      "after": "Vex Doom 'n Gloom empowered"
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Vex wins by landing Personal Space (Fear), denying your pattern, and out-ranging your plan one polite trade at a time.",
+      "after": "Vex wins by fearing your engage with a charged passive, shielding the answer, and picking you from 2000 range with R."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "His combo wants certainty — your whole champion is doubt. Root the real engage and bloom the body that guessed wrong.",
+      "after": "Her combo wants you to move first — so do not. Force the shield out, then root the real body that guessed wrong."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "His combo wants certainty — your whole champion is doubt. Root the real engage and bloom the body that guessed wrong.",
+      "after": "Her combo wants you to move first — so do not. Force the shield out, then root the real body that guessed wrong."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3.",
+      "after": "Root her step-up at 1000 range and bloom the root — but bait Personal Space first or the shield eats the whole combo."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Stepping in while her passive is charged: the empowered ability fears you and interrupts dashes, so the trade ends before your bloom lands."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Good trade: Root her step-up at 1000 range and bloom the root — but bait Personal Space first or the shield eats the whole combo. Bad trade: Stepping in while her passive is charged: the empowered ability fears you and interrupts dashes, so the trade ends before your bloom lands."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3. Great trade: Vex wastes Personal Space (Fear) — commit immediately. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Good trade: Root her step-up at 1000 range and bloom the root — but bait Personal Space first or the shield eats the whole combo. Great trade: Vex wastes Personal Space (Fear) — commit immediately. Bad trade: Stepping in while her passive is charged: the empowered ability fears you and interrupts dashes, so the trade ends before your bloom lands."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, weaponize the lies: zone Vex with root threat, fake roams that cost him plates either way, and crouch the river fights — fed Neeko is a horror film.",
+      "after": "Ahead, keep her at your range, not hers: shove so she farms under tower, hold E for the step-up, and a Vex with no picks is just a slow poke mage."
+    },
+    {
+      "layer": "full",
+      "path": "report[13].t",
+      "before": "Ahead, weaponize the lies: zone Vex with root threat, fake roams that cost him plates either way, and crouch the river fights — fed Neeko is a horror film.",
+      "after": "Ahead, keep her at your range, not hers: shove so she farms under tower, hold E for the step-up, and a Vex with no picks is just a slow poke mage."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Poke blooms and tell lies — your trades are even and your information war isn't. Every clone he answers wrong is tempo.",
+      "after": "Levels 1-3 are yours: her passive is not charged and Personal Space is 16s, so a bloom on her step-up has nothing to hide behind."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Post-6, hunt clumps: disguise into the wave, R the river contest, root the scatter. One good crouch is a won objective.",
+      "after": "From 4-5 she takes over: the passive punishes exactly the mobility you want to use, and at 6 her R picks from 2000 range."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near his tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.",
+      "after": "Best wave: shove it in so she has to clear under tower, because Mistral Bolt at 1200 range is free for her on any wave that sits still. Worst wave: a frozen wave at her tower with E down, where Looming Darkness slows you inside her Q line. Crash before every recall and take the roam instead of the long trade."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near his tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.",
+      "after": "Best wave: shove it in so she has to clear under tower, because Mistral Bolt at 1200 range is free for her on any wave that sits still. Worst wave: a frozen wave at her tower with E down, where Looming Darkness slows you inside her Q line. Crash before every recall and take the roam instead of the long trade."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Vex gets a kill, the lane gets honest — give Personal Space (Fear) extra room and farm it back. Two kills: stop dueling your tilt — farm with blooms and stay relevant through root picks and clone scouting.",
+      "after": "A fed Vex picks you from off-screen — her R reaches 2000 at rank 1 and the recast dashes her onto you. Do not walk alone, keep the clone between you and the fog, and never fight while her passive is charged."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through deception — every fight you start disguised begins 5v4 in spirit; your job is the patience the crouch demands.",
+      "after": "Carry by taking the fight she cannot aim: flank disguised so her 2000-range R has no line, and root her before she casts."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "You are the ambush their comp can't draft against: disguise, flank, Pop Blossom on three, root the survivors. The clone scouts the setup for free.",
+      "after": "Late she zones with Looming Darkness and picks with R, so never give her a straight line: flank disguised, and root her the instant she casts."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Shield + AoE fear that punishes dashes — never dash onto her while her passive glows. Until it’s spent, every commit is a coin flip.",
+      "after": "The clone moves fast enough to look like your engage — let her spend the charged passive and Personal Space on it, then walk in."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].t",
+      "before": "Root his commit the moment it shows",
+      "after": "Root her commit the moment it shows"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3.",
+      "after": "Her commit is the step into 800 range for Looming Darkness — root that step and the fear never gets an ability to ride."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Vex spends Personal Space (Fear) early — the closest thing this matchup has to a guarantee.",
+      "after": "If she commits onto the clone, her shield and fear are both gone — that is the window."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].t",
+      "before": "Trade while his setup spell is loaded",
+      "after": "Trade while her setup spell is loaded"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Vex’s rehearsed moment — don’t audition for it.",
+      "after": "A charged passive turns your own engage into a fear."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "The clone is your scout, your fake, and your escape — spending it on idle tricks near assassin timers is how Neekos get audited.",
+      "after": "E spent on chip is 12s without the interrupt for her R, and her recast dash lands on you while your root is still down."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Walking in disguised with no R is a free charged passive for her: the crouch only pays when Pop Blossom lands on the same beat."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Trade while his setup spell is loaded. Spend the root on chip. Disguise-engage without R ready. And keep the ultimate holstered until a kill is actually on the table.",
+      "after": "Trade while her setup spell is loaded. Spend the root on chip. Disguise-engage without R ready. And keep the ultimate holstered until a kill is actually on the table."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Vex starts controlling the lane here: her passive Doom marks you whenever you dash or move fast, so your W Shapesplitter speed and any engage triggers Shadow Fright, interrupting your E-Q. Respect her Q Mistral Bolt poke and don't feed her passive by moving into it carelessly.",
+      "after": "Vex starts controlling the lane here: Doom 'n Gloom marks nearby enemies who dash, and while she is empowered her next ability fears you and interrupts dashes — so your R leap is the thing she is charged for. Respect Mistral Bolt at 1200 range and step in only after the passive is spent."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-6 swing to Vex: her Doom passive punishes exactly the mobility your kit wants to use, Shadow Fright interrupts your combos, and at 6 her R Shadow Surge is a safer, longer-range all-in than yours. Play the wave, hold E to interrupt, and avoid trading when her passive is charged.",
+      "after": "Levels 3-6 swing to Vex: her Doom passive punishes exactly the mobility your kit wants to use, the empowered fear interrupts your combos, and at 6 her R Shadow Surge is a safer, longer-range all-in than yours. Play the wave, hold E to interrupt, and avoid trading when her passive is charged."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Poke with Q Mistral Bolt and zone with E Personal Space",
+      "after": "Poke with Q Mistral Bolt and zone with E Looming Darkness"
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Make his certainty cost a clone-guess, then root-bloom the mistake. Nothing here works through Personal Space (Fear) — schedule your pattern around its cooldown.",
+      "after": "Make her certainty cost a clone-guess, then root-bloom the mistake. Nothing here works through Personal Space (Fear) — schedule your pattern around its cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].t",
+      "before": "R the all-in he takes on bad information",
+      "after": "R the all-in she takes on bad information"
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Make his certainty cost a clone-guess, then root-bloom the mistake. Nothing here works through Personal Space (Fear) — schedule your pattern around its cooldown.",
+      "after": "Make her certainty cost a clone-guess, then root-bloom the mistake. Nothing here works through Personal Space (Fear) — schedule your pattern around its cooldown."
+    }
+  ],
+  "notes": "CHART: content win[0..6] already matches packet.levelChart, so only the flat full-layer sides moved; no no-op win[N] edits proposed. Rows 3, 4 and 6 changed verdict direction and each ships with its rewritten why in this same proposal; rows 0-2 and 5 moved from 'Skill' to 'Neeko', which their existing whys already argue. Ratings untouched. BIGGEST FIX: the whole page tracked the wrong ability. 'Personal Space (Fear)' appears in focus.text, winCon, enemyWin, breakdown.cooldowns, report[5].t and report[9].t, but Personal Space (W) is a shield with no fear in it — the fear is the Doom 'n Gloom passive empowering her NEXT ability. A reader watching the W for a fear tell is watching the wrong thing. winCon and report[9].t still contain the old '(Fear)' label: I left them because rewriting them would have meant reworking the loading-screen phrasing that also carries the AbilityName (Effect) convention, and I would rather flag it than half-convert the page — see questionsForUser. focus.text was changed to 27 characters deliberately: the applier skips strings under 25, so the obvious 'Vex Doom 'n Gloom (Fear)' at 24 would have been silently dropped. TWO WRONG NAMES KILLED in content: 'Shadow Fright' (not an ability in this kit — it is the Doom 'n Gloom empowered fear) in spikes[0].text and mid, and 'E Personal Space' in wants.foe[1] (E is Looming Darkness). spikes[0] also claimed the passive marks you for moving fast and that Shapesplitter's speed triggers it — the kit marks enemies who DASH, and Shapesplitter grants move speed, not a dash, so the real trigger is Pop Blossom's leap. NOT CHANGED: spikes[1].text says her R 'recasts if she gets a kill'; Riot's text here only says 'Recast to dash to them', which is silence rather than denial, so I left the claim alone rather than assert either way. Mechanical lint pass (tools/matchup-lint.js). MISGENDER: the enemy is female and the full layer addressed her as male; every flagged field corrected in place. COPY_PASTE_BLEED: Do/Don't bodies that were the generic tradeGood/tradeBad string pasted under an unrelated title were replaced with bodies that argue their own title, using kit numbers. COOLDOWN_NO_DIGIT / UNSUPPORTED_MAGNITUDE: rebuilt around real cooldowns and ranges from champ-data/_kits."
+}

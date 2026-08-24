@@ -1,0 +1,163 @@
+{
+  "ownerKey": "neeko_mid",
+  "enemy": "akali",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The two layers disagreed. Content win[0..6] and packet.levelChart both read Neeko/Neeko/Neeko/Neeko/Neeko/Akali/Akali, while the full layer read Skill/Skill/Skill/Skill/Akali/Skill/Skill — including a live contradiction at Level 6, where phases[4].side said Akali and win[4] said Neeko.",
+      "why": "Akali's Five Point Strike costs 110 mana at rank 1 and her whole rotation is mana-gated pre-item, so Neeko owns levels 1-5 on the 1000-range E into Q. Level 6 stays Neeko's because Pop Blossom's preparation is hidden while disguised and Perfect Execution only reaches 675, so she has to enter the 600-range knockup to kill you. The lane flips on her first item, when the mana pool arrives.",
+      "corrected": "phases[0..4].side = Neeko, phases[5..6].side = Akali, with every why rewritten to match and ratings moved with them.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content.win", "enemyKit Q cost 110/100/90/80/70", "enemyKit R range 675", "ownerKit R range 600 and hidden preparation"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes said 'level 6 adds the ambush; Luden's makes the package lethal' — it gives Neeko the first-item spike that the chart and the content layer both hand to Akali.",
+      "why": "Akali's first item is the spike in this lane because it fixes the only thing holding her back — mana for a 1.5s-recycling Q. Neeko's Luden's does not change who wins the fight, it just makes her level 3 pattern hurt more.",
+      "corrected": "Level 3 root-bloom is the kill pattern; level 6 answers her dive; her first item takes the lane back.",
+      "confidence": "High",
+      "sources": ["enemyKit Q cd 1.5 and cost 110/100/90/80/70", "brief.currentText.content.spikes[2]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit at all — the catalogue's defect 3. Not one real number appeared anywhere on the page: not Twilight Shroud's 20s, not Q's 1.5s recycle, not Shuriken Flip's 16s/825 range, not the 120/90/60 on Perfect Execution.",
+      "why": "Every timing decision in this matchup is a comparison of two numbers: Neeko's E at 12s against Shuriken Flip at 16s, and Neeko's R at 120/105/90 against Perfect Execution at 120/90/60 — which recycles almost twice as fast as hers by rank 3. Without the numbers the advice is unactionable.",
+      "corrected": "breakdown.cooldowns now carries Twilight Shroud 20s at rank 1, Five Point Strike 1.5s at 110 mana, and Perfect Execution 120/90/60 against Neeko's 120/105/90.",
+      "confidence": "High",
+      "sources": ["enemyKit W 20/19/18/17/16", "enemyKit Q cd 1.5", "enemyKit E 16/14.5/13/11.5/10 range 825", "enemyKit R 120/90/60", "ownerKit E 12/11.5/11/10.5/10", "ownerKit R 120/105/90"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Perfect Execution's execute threshold was never stated, and the page instead told the reader to 'greed blooms at half HP' with a body that talked about something else entirely.",
+      "why": "Riot's text: the re-cast executes all enemies she strikes. Chasing a last bloom at low HP is the exact state that ability is built to punish, and the recast is on 60s at rank 3.",
+      "corrected": "dontsFull[2].d now states the execute threshold and the 60s rank-3 cooldown; enemyWin restates it as her win condition.",
+      "confidence": "High",
+      "sources": ["enemyKit R text and execute flag", "brief.missingInteractions rule execute-threshold"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Assassin's Mark — the auto-attack reset that opens her combo — is not mentioned anywhere on the page.",
+      "why": "The ring appears when she lands spell damage; leaving it empowers her next attack. The tell is the ring, not the ability cast, so the step-back cue is earlier than the page implies.",
+      "corrected": "Not written. No existing field could carry it inside its length band without dropping a number that is doing more work. Recorded here and in notes.",
+      "confidence": "High",
+      "sources": ["enemyKit P text and autoReset flag", "brief.missingInteractions rule autoreset-burst-tell"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t ended 'Add anti-heal early into his sustain.' Akali has no heal or lifesteal anywhere in her kit.",
+      "why": "Grievous Wounds does nothing here. The item advice that does matter is when the Zhonya's lands relative to her ultimate.",
+      "corrected": "Replaced with 'Buy the Zhonya's before her R spike, not after.'",
+      "confidence": "High",
+      "sources": ["enemyKit — no heal flag on any slot"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Copy-paste bleed on four bullets: dosFull[0].d (title 'Hold E strictly for her engage') carried the Shroud line; dosFull[1].d (title 'Disguise in the wave when she hits 6') carried tradeGood; dontsFull[1].d (title 'Shove past river without the root banked') carried the clone paragraph; dontsFull[2].d (title 'Greed blooms at half HP') carried tradeBad verbatim.",
+      "why": "Defect 2 — the title promises one thing and the body explains another.",
+      "corrected": "All four bodies rewritten to answer their own titles from Akali's kit.",
+      "confidence": "High",
+      "sources": ["brief.currentText.full"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Akali was addressed as he/his/him across the entire full layer — tldr, winCon, tradeGood, ahead, breakdown.early, breakdown.wave, dosFull[0].t, dosFull[1].t, dontsFull[0].t, report[0].t, report[1].t, report[3].t, report[4].t, report[8].t, report[9].t, report[11].t, report[13].t — while the content layer had her correctly as she/her.",
+      "why": "champ-gender lists akali as female. The full layer was written from a male-enemy template with only the name swapped.",
+      "corrected": "All corrected to she/her.",
+      "confidence": "High",
+      "sources": ["champ-data/champ-gender.js (akali female)"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Riot's Twilight Shroud text says she is 'unable to be selected by enemy spells and attacks', which is a targeting statement. Whether a Neeko E skillshot still roots her while she is inside the smoke is not answerable from the kit file, and the answer changes the whole matchup.",
+      "corrected": "Left unasserted in both directions — the page now says she is unselectable inside and to hold CC for the exit, which is true either way.",
+      "confidence": "Low",
+      "sources": ["enemyKit W text", "ownerKit E text"]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeGood claimed 'the full package is half a bar at level 3' — a magnitude with no source (defect 6), and phases[2].why repeated it.",
+      "why": "No damage figures exist in the kits. The sequence is real; the fraction is invented.",
+      "corrected": "Replaced with the sequence and its ranges: E at 1000, Q so the seed blooms again, auto for the passive, leave before Shroud drops.",
+      "confidence": "High",
+      "sources": ["ownerKit E range 1000", "ownerKit Q text", "ownerKit W passive text", "enemyKit W 20/19/18/17/16"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Neeko" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Neeko" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Neeko" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Neeko" },
+    { "layer": "full", "path": "phases[4].side", "before": "Akali", "after": "Neeko" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Akali" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Akali" },
+
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "3/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10" },
+
+    { "layer": "full", "path": "phases[0].why", "before": "Q-poke the last-hits — the triple bloom on a rooted or low target already stings at one.", "after": "Her Q costs 110 mana at rank 1 — poke the last-hits and she cannot answer without going dry." },
+    { "layer": "full", "path": "phases[2].why", "before": "E completes the kill pattern: root into full bloom is half a health bar with ignite from level 3.", "after": "E completes the kill pattern at 1000 range: root first, then Q blooms twice and ignite closes it." },
+    { "layer": "full", "path": "phases[3].why", "before": "Lost Chapter timing — bloom every wave contact and run clone mind-games on every reset.", "after": "She still cannot burst you outright — keep shoving so her Q never gets a free wave to clear." },
+    { "layer": "full", "path": "phases[4].why", "before": "Pop Blossom online — the disguise plus R turns any clump into a 3-second knockup ambush.", "after": "Pop Blossom answers her dive — hold the 120s R for the moment she re-casts Perfect Execution." },
+    { "layer": "full", "path": "phases[5].why", "before": "Luden's spike: root-bloom deletes squishies and the clone sells the angle. Force the contact war.", "after": "Her first item fills the mana bar — Q spam plus Twilight Shroud lets her combo through your HP." },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Neeko is an ambush: disguise into their formation, R the clump, and root whatever scatters.", "after": "Two items in she picks you from Shroud, and her 60s Perfect Execution recycles faster than your R." },
+
+    { "layer": "full", "path": "tldr", "before": "He dives a champion who might be a minion — the clone and root buy the seconds his combo can't afford to lose.", "after": "She dives a champion who might be a minion — the clone and root buy the seconds her combo can't afford to lose." },
+    { "layer": "full", "path": "report[0].t", "before": "He dives a champion who might be a minion — the clone and root buy the seconds his combo can't afford to lose.", "after": "She dives a champion who might be a minion — the clone and root buy the seconds her combo can't afford to lose." },
+
+    { "layer": "full", "path": "winCon", "before": "Lie until he commits wrong, then root-R the dive into a counter-kill. Nothing here works through Twilight Shroud — schedule your pattern around its cooldown.", "after": "Lie until she commits wrong, then root-R the dive into a counter-kill. Nothing here works through Twilight Shroud — schedule your pattern around its 20s cooldown." },
+    { "layer": "full", "path": "report[1].t", "before": "Lie until he commits wrong, then root-R the dive into a counter-kill. Nothing here works through Twilight Shroud — schedule your pattern around its cooldown.", "after": "Lie until she commits wrong, then root-R the dive into a counter-kill. Nothing here works through Twilight Shroud — schedule your pattern around its 20s cooldown." },
+
+    { "layer": "full", "path": "enemyWin", "before": "Akali wins by landing Twilight Shroud, denying your pattern, and cashing the all-in before your pattern matures.", "after": "Akali wins by vanishing into Twilight Shroud, marking you with Shuriken Flip, then executing you under the R threshold." },
+
+    { "layer": "full", "path": "tradeGood", "before": "E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3.", "after": "E her step-up at 1000 range, Q the rooted target so the seed blooms again, auto for the passive, then walk before Shroud drops." },
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.", "after": "Good trade: E her step-up at 1000 range, Q the rooted target so the seed blooms again, auto for the passive, then walk before Shroud drops. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt." },
+    { "layer": "full", "path": "report[3].t", "before": "Good trade: E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3. Great trade: Akali wastes Twilight Shroud — commit immediately. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.", "after": "Good trade: E her step-up at 1000 range, Q the rooted target so the seed blooms again, auto for the passive, then walk before Shroud drops. Great trade: Akali wastes Twilight Shroud — commit immediately. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt." },
+
+    { "layer": "full", "path": "ahead", "before": "Ahead, weaponize the lies: zone Akali with root threat, fake roams that cost him plates either way, and crouch the river fights — fed Neeko is a horror film.", "after": "Ahead, weaponize the lies: zone Akali with root threat, fake roams that cost her plates either way, and crouch the river fights — fed Neeko is a horror film." },
+    { "layer": "full", "path": "report[13].t", "before": "Ahead, weaponize the lies: zone Akali with root threat, fake roams that cost him plates either way, and crouch the river fights — fed Neeko is a horror film.", "after": "Ahead, weaponize the lies: zone Akali with root threat, fake roams that cost her plates either way, and crouch the river fights — fed Neeko is a horror film." },
+
+    { "layer": "full", "path": "breakdown.wave", "before": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near his tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.", "after": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near her tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks." },
+    { "layer": "full", "path": "report[4].t", "before": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near his tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.", "after": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near her tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks." },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Akali Twilight Shroud: matchup-defining — Untargetable inside — hold your CC and burst for when she exits. It governs your forward steps. - W Shapesplitter clone spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Twilight Shroud: 20s at rank 1, matchup-defining — she is unselectable inside, so hold CC and burst for the exit. - Five Point Strike recycles every 1.5s but costs 110 mana at rank 1. - Perfect Execution is 120/90/60; your R is 120/105/90." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Akali’s Twilight Shroud: Untargetable inside — hold your CC and burst for when she exits. Forward steps wait for its downtime.", "after": "Track Akali’s Twilight Shroud: 20s at rank 1, she is unselectable inside — hold CC and burst for the exit, then step forward." },
+
+    { "layer": "full", "path": "dosFull[0].t", "before": "Hold E strictly for his engage", "after": "Hold E strictly for her engage" },
+    { "layer": "full", "path": "dosFull[0].d", "before": "Untargetable inside — hold your CC and burst for when she exits. Bait it, count it, then go.", "after": "E is 12s at rank 1 — it is your only answer to a 675-range leap, so never spend it clearing a wave." },
+    { "layer": "full", "path": "dosFull[1].t", "before": "Disguise in the wave when he hits 6", "after": "Disguise in the wave when she hits 6" },
+    { "layer": "full", "path": "dosFull[1].d", "before": "E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3.", "after": "Your R preparation is hidden while disguised, so the 675-range Perfect Execution leap arrives into a stun she never saw wind up." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Akali spends Twilight Shroud early — the closest thing this matchup has to a guarantee.", "after": "Once she leaps in, your 600-range R has her inside it — that is the whole counter-play." },
+
+    { "layer": "full", "path": "dontsFull[0].t", "before": "Spend the clone on idle fakes near his timers", "after": "Spend the clone on idle fakes near her timers" },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Akali’s bread-and-butter play — deny it and they run out of answers.", "after": "W is 16s at rank 1 — burn it on a fake and you have no decoy when she opens." },
+    { "layer": "full", "path": "dontsFull[1].d", "before": "The clone is your scout, your fake, and your escape — spending it on idle tricks near assassin timers is how Neekos get audited.", "after": "Shoving without E banked means her 16s Shuriken Flip marks you at 825 range and the leap arrives with nothing in your hands." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.", "after": "Perfect Execution executes below a threshold — chasing one more bloom at low HP hands her the recast kill, and hers is 60s at rank 3." },
+    { "layer": "full", "path": "report[11].t", "before": "Spend the clone on idle fakes near his timers. Shove past river without the root banked. Greed blooms at half HP. And keep the ultimate holstered until a kill is actually on the table.", "after": "Spend the clone on idle fakes near her timers. Shove past river without the root banked. Greed blooms at half HP. And keep the ultimate holstered until a kill is actually on the table." },
+
+    { "layer": "full", "path": "report[8].t", "before": "Start Doran's Ring + 2 pots. Luden's into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — cast it mid-Pop Blossom for maximum comedy. Add anti-heal early into his sustain.", "after": "Start Doran's Ring + 2 pots. Luden's into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — cast it mid-Pop Blossom for maximum comedy. Buy it before her R spike, not after." },
+    { "layer": "full", "path": "report[9].t", "before": "Commit on Twilight Shroud’s cooldown, on your Luden's spike, and with your jungler’s setup. Make him flinch first.", "after": "Commit on Twilight Shroud’s cooldown, on your Luden's spike, and with your jungler’s setup. Make her flinch first." },
+
+    { "layer": "full", "path": "breakdown.early", "before": "Poke blooms and tell lies — your trades are even and your information war isn't. Every clone he answers wrong is tempo.", "after": "Poke blooms and tell lies — your trades are even and your information war isn't. Every clone she answers wrong is tempo." },
+    { "layer": "full", "path": "breakdown.spikes", "before": "Level 3 root-bloom is the kill pattern; level 6 adds the ambush; Luden's makes the package lethal.", "after": "Level 3 root-bloom is the kill pattern; level 6 answers her dive; her first item takes the lane back." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through deception — every fight you start disguised begins 5v4 in spirit; your job is the patience the crouch demands.", "after": "You carry by holding the root for her leap: Perfect Execution has to enter your 600-range R, and disguise hides the wind-up." },
+    { "layer": "full", "path": "breakdown.late", "before": "You are the ambush their comp can't draft against: disguise, flank, Pop Blossom on three, root the survivors. The clone scouts the setup for free.", "after": "Akali picks the immobile target, so never be the one alone: hold E as self-peel, keep vision on her Shroud, and let her leap into your R." }
+  ],
+  "notes": "packet.defects flagged 'Her Perfect Execution' in spikes[1].text as a probable wrong ability name — it is a FALSE POSITIVE. Perfect Execution is the correct name of Akali's R per the kit file; the possessive pronoun in front of it tripped the near-miss check. No edit made there. Full layer was written from a male-enemy template throughout while the content layer had Akali correctly female — 17 fields corrected. Level chart: phases[4].side said Akali while win[4] said Neeko, a live two-answer row on the page; the whole chart is proposed as one atomic group. report[8].t told the reader to buy anti-heal 'into his sustain' — Akali has no heal in her kit at all, so that was a fabricated interaction and is replaced. Assassin's Mark (the auto-reset burst tell) is still missing from the page: no field could carry it inside its band without dropping a cooldown that earns its space more. Fields left templated and ungrounded: breakdown.mid, breakdown.feeding, loading, tradeBad. No elo tiers written."
+}

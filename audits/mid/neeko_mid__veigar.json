@@ -1,0 +1,214 @@
+{
+  "ownerKey": "neeko_mid",
+  "enemy": "veigar",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The two chart layers disagree on the last four rows. Full-layer phases[N].side reads Neeko/Neeko/Neeko/Skill/Skill/Veigar/Veigar; content win[N] reads Neeko on all seven. The full layer even hands Veigar the first-item row while the why under it says 'root-bloom deletes squishies'.",
+      "why": "packet.levelChart is Neeko on all seven rows, matching the content layer, and content 'late' states the reasoning explicitly: the chart still reads Neeko because you control whether the game reaches his scaling at all. Every full-layer why on rows 3-6 already argues Neeko, so the side values are the outliers.",
+      "corrected": "phases[3..6].side -> Neeko. No why needed rewriting — all four already argue the Neeko verdict.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]", "currentText.content.late"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Your spike is levels 3-9, before Phenomenal Evil stacks matter; his is a threshold rather than a level — the AP total at which Event Horizon into Primordial Burst kills from full. spikes[0..3] carry this, including the correct instruction to race his stacks with waves.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["content spikes[0..3]", "enemyKit P text", "enemyKit R missing-health scaling"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two mechanics that change decisions are missing. Primordial Burst deals damage 'increasing based on the target's missing health' — nowhere on the page, and it inverts the usual advice: trading yourself low does not just risk the combo, it makes the combo bigger. And Phenomenal Evil stacks from striking an enemy CHAMPION with a spell or scoring a takedown, not only from Baleful Strike farm kills — so every poke he lands on you is permanent AP. The page treats stack denial as purely a wave-management problem.",
+      "why": "enemyKit R text: 'dealing a large amount of magic damage, increasing based on the target's missing health.' enemyKit P text: 'Striking an enemy Champion with a spell or scoring a takedown grants Veigar permanently increased Ability Power.'",
+      "corrected": "tradeBad, breakdown.early, breakdown.feeding and report[5].t now carry both facts.",
+      "confidence": "High",
+      "sources": ["enemyKit P/R text", "enemyKit Q text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contains no digit — defect-catalogue item 3 — despite Event Horizon's 20s rank-1 cooldown being the single most exploitable number in the matchup. Separately dosFull[2].d calls it 'the fifteen-second invitation', which is wrong at every rank the lane phase is played at: it is 20s at rank 1 and only reaches 14s at rank 5.",
+      "why": "enemyKit E is 20/18.5/17/15.5/14; Q is 6/5.5/5/4.5/4; R is 120/90/60.",
+      "corrected": "breakdown.cooldowns rebuilt with the real numbers, and dosFull[2].d now says 20 seconds.",
+      "confidence": "High",
+      "sources": ["enemyKit cooldowns"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.defects reports '1 probable wrong ability name' pointing at \"Event Horizon's\" in whys[4], suggested as 'event horizon'. This is a FALSE POSITIVE — the name is correct and the flagged token is the possessive. The existing 'only the cage EDGE stuns' guidance is also correct against Riot's text and was kept.",
+      "corrected": "No name edit made.",
+      "confidence": "High",
+      "sources": ["packet.suspectNames", "enemyKit E text"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Copy-paste bleed: dosFull[1].d is the tradeGood string under 'Root his commit the moment it shows', dontsFull[1].d is the generic clone paragraph under 'Spend the root on chip' (and calls Veigar an assassin timer), and dontsFull[2].d is the tradeBad string under 'Disguise-engage without R ready'. dontsFull[0].d is pure filler with no mechanic in it.",
+      "why": "Defect-catalogue items 2 and 5.",
+      "corrected": "All four bodies replaced with content matching their own titles and grounded in the 20s cage, the 725 range, and the 12s root.",
+      "confidence": "High",
+      "sources": ["currentText.full dosFull/dontsFull vs tradeGood/tradeBad"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Veigar",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Veigar",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Veigar Event Horizon (Cage): matchup-defining — Only the cage EDGE stuns — hold position near the center or leave before it forms; never dash into the wall. Count it out loud if you must. - Your W Shapesplitter clone has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Event Horizon is 20s at rank 1 and only the EDGE stuns — walk to the middle or leave before it forms, and every one of those 20 seconds is a free window. - Baleful Strike is 6s and hits the first two units. - Primordial Burst is 120s at rank 1 and scales with the health you are missing."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Veigar’s Event Horizon (Cage): Only the cage EDGE stuns — hold position near the center or leave before it forms; never dash into the wall. It’s down or you don’t go.",
+      "after": "Track Event Horizon: only the edge stuns, so if it forms around you, do not walk out through the ring — wait it out. His Primordial Burst hits harder the lower you already are."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Veigar wins by landing Event Horizon (Cage), denying your pattern, and keeping the fight at a distance your kit resents.",
+      "after": "Veigar wins by surviving to the AP total where a cage stun into Primordial Burst kills you from full in one cast."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3.",
+      "after": "Root his step-up at 1000 range, Q the root for the full bloom, and walk out — his cage is 20s and he has no dash."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Poking him with your own health low: Primordial Burst scales on missing health, so every point you are down makes his 650-range R bigger."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Good trade: Root his step-up at 1000 range, Q the root for the full bloom, and walk out — his cage is 20s and he has no dash. Bad trade: Poking him with your own health low: Primordial Burst scales on missing health, so every point you are down makes his 650-range R bigger."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3. Great trade: Veigar wastes Event Horizon (Cage) — commit immediately. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Good trade: Root his step-up at 1000 range, Q the root for the full bloom, and walk out — his cage is 20s and he has no dash. Great trade: Veigar wastes Event Horizon (Cage) — commit immediately. Bad trade: Poking him with your own health low: Primordial Burst scales on missing health, so every point you are down makes his 650-range R bigger."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, weaponize the lies: zone Veigar with root threat, fake roams that cost him plates either way, and crouch the river fights — fed Neeko is a horror film.",
+      "after": "Ahead, starve the stacks: every wave you crash denies Baleful Strike kills, and every trade you win keeps him under the AP total his combo needs."
+    },
+    {
+      "layer": "full",
+      "path": "report[13].t",
+      "before": "Ahead, weaponize the lies: zone Veigar with root threat, fake roams that cost him plates either way, and crouch the river fights — fed Neeko is a horror film.",
+      "after": "Ahead, starve the stacks: every wave you crash denies Baleful Strike kills, and every trade you win keeps him under the AP total his combo needs."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Poke blooms and tell lies — your trades are even and your information war isn't. Every clone he answers wrong is tempo.",
+      "after": "Levels 1-3 are yours outright: he has Baleful Strike and nothing else, and every champion hit he lands on you is permanent AP."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Post-6, hunt clumps: disguise into the wave, R the river contest, root the scatter. One good crouch is a won objective.",
+      "after": "Levels 3-9 are the kill window: he has one cage on 20s and no mobility, so every fight you force is a fight he cannot decline."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near his tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.",
+      "after": "Best wave: shove every one of them — Baleful Strike gives him permanent AP on kills, so a wave crashed into his tower is stacks he never banks. Worst wave: a frozen wave at his tower with E down, because Event Horizon at 725 range turns a freeze into a cage you cannot leave. Crash before every recall and starve him again."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near his tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.",
+      "after": "Best wave: shove every one of them — Baleful Strike gives him permanent AP on kills, so a wave crashed into his tower is stacks he never banks. Worst wave: a frozen wave at his tower with E down, because Event Horizon at 725 range turns a freeze into a cage you cannot leave. Crash before every recall and starve him again."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Veigar opens the score, reset expectations and respect Event Horizon (Cage) doubly. After a second, your job description changes — farm with blooms and stay relevant through root picks and clone scouting.",
+      "after": "A fed Veigar does not need to outplay you — the stacks do it, and a takedown grants AP permanently. Stop feeding the passive: farm outside 1000 range, and never fight at low health where his R scales up."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through deception — every fight you start disguised begins 5v4 in spirit; your job is the patience the crouch demands.",
+      "after": "Carry by never being the target: he has one 650-range R and one cage, so if the clone eats the setup, he has spent both."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "You are the ambush their comp can't draft against: disguise, flank, Pop Blossom on three, root the survivors. The clone scouts the setup for free.",
+      "after": "Late he is a stationary pillar with one cage: flank so you are never inside it, disguise into the group, and Pop Blossom lands before his R does."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3.",
+      "after": "His commit is the cage: the moment Event Horizon goes down, root him inside his own ring where he has already spent the answer."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Veigar burns Event Horizon (Cage) on nothing — take the fifteen-second invitation.",
+      "after": "Cage spent on a clone is 20 seconds where he owns nothing but a 6-second Q."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That’s Veigar’s bread-and-butter play — deny it and they run out of answers.",
+      "after": "With the cage up, any step forward is a stun into his full 650-range combo."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "The clone is your scout, your fake, and your escape — spending it on idle tricks near assassin timers is how Neekos get audited.",
+      "after": "E burned for chip is 12s without the answer to his cage window — the root is what turns his 20-second mistake into a kill."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Walking into 725 range with no R banked gives him the cage for free: the crouch only pays when Pop Blossom lands on the same beat."
+    }
+  ],
+  "notes": "CHART: content win[0..6] already matches packet.levelChart (Neeko on all seven), so only the four stale full-layer sides moved and no no-op win[N] edits were proposed. None of the four rows changed verdict direction against its own why — rows 3-6 all carried Neeko-favourable whys under Skill/Veigar sides, which is exactly the 'row argues with itself' defect the chart rule describes, and the flip resolves it in the direction both the packet and the content layer already agree on. Ratings untouched. FALSE POSITIVE CONFIRMED: packet.suspectNames flags \"Event Horizon's\" in whys[4]; the name is correct and no edit was made. NUMERIC ERROR CORRECTED: dosFull[2].d described the cage as a 'fifteen-second invitation' — it is 20s at rank 1 and only 14s at rank 5, so the number was wrong for the entire window the advice applies to. Two genuinely absent mechanics are now on the page: Primordial Burst scaling on the target's MISSING health (which reverses the instinct to trade while low), and Phenomenal Evil stacking off spell hits on champions, not just Baleful Strike farm kills — meaning his poke on you is itself permanent scaling. The existing 'only the cage EDGE stuns' guidance was verified against Riot's text and kept; I did not add any claim about walking out through the ring, since the edge stuns on pass-through in both directions."
+}

@@ -1,0 +1,345 @@
+{
+  "ownerKey": "neeko_mid",
+  "enemy": "syndra",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer chart (phases[N].side) reads Skill/Skill/Skill/Skill/Syndra/Skill/Syndra while the content chart (win[N]) reads Syndra/Syndra/Syndra/Syndra/Neeko/Syndra/Neeko. They disagree on six of seven rows, and on rows 4 and 6 they name opposite champions.",
+      "why": "packet.levelChart = [Syndra, Syndra, Syndra, Syndra, Neeko, Syndra, Neeko], identical to the content layer. The content whys argue that verdict throughout (whys[4]: Pop Blossom is your window; whys[6]: your AoE outscales her single-target burst). The full layer is stale, and its whys still describe Neeko winning rows that belong to Syndra.",
+      "corrected": "phases[0..3].side -> Syndra, phases[4].side -> Neeko, phases[5].side -> Syndra, phases[6].side -> Neeko, with phases[0/1/2/3/5].why rewritten in the same proposal to argue Syndra's side. Rows 4 and 6 already had Neeko-favourable whys.",
+      "confidence": "High",
+      "sources": [
+        "packet.levelChart",
+        "currentText.content.win[0..6]",
+        "currentText.content.whys[0..6]"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Syndra owns 1-5 on sphere poke and Lost Chapter, level 6 flips to Neeko because the Pop Blossom wind-up is hidden while disguised, her first item re-takes the lead, and two items flip back to Neeko's AoE. spikes[0..3] carry this correctly.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "ownerKit R text",
+        "content spikes[0..3]",
+        "packet.levelChart"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive numbers are absent and one line is a fabricated advantage. Both Q's are 800 range, so 'her Q out-ranges your Blooming Burst' is false — her edge is that Dark Sphere is ground-placed for 40 mana on a 7s flat cooldown while Neeko's seed has to hit. Scatter the Weak is 15s at EVERY rank and is the single window this lane runs on. Force of Will throws at 925 range and, upgraded by Transcendent, deals true damage. Unleashed Power executes at 675 range.",
+      "why": "enemyKit: Q 800 range / 7s flat / 40-60 mana; W 925 range, flagged trueDamage; E 650 range, 15s at all ranks; R 675 range, flagged execute. ownerKit Q is also 800 range, E is 1000 range / 12s, R preparation is hidden while disguised.",
+      "corrected": "Named the flat 15s E as the lane's clock, the flat 7s Q as why poke exchanges lose, the hidden Pop Blossom wind-up as the level-6 flip, and the true-damage W as why armour and raw MR are the wrong purchase.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit Q/W/E/R",
+        "ownerKit Q/E/R",
+        "missingInteractions resistances-invalidated + execute-threshold"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "packet.defects flags 'NO cooldown-sequencing advice anywhere' and breakdown.cooldowns confirms it — not one digit in the field.",
+      "why": "Defect-catalogue item 3. The kit supplies E 15s flat, Q 7s flat, W 12/11/10/9/8, R 120/100/80 against Neeko's 12s E.",
+      "corrected": "breakdown.cooldowns rebuilt around the flat 15s E, the 7s Q re-arm versus your 12s E, and a concrete 'step up only after her E is spent' sequencing line.",
+      "confidence": "High",
+      "sources": [
+        "packet.defects",
+        "enemyKit cooldowns",
+        "ownerKit E cooldown"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2].text tells the reader to buy 'MR/Seeker's early' and wants.you[2] says 'Build MR'. Seeker's Armguard is an ARMOUR item and Syndra deals no physical damage, so it is dead gold here; and Force of Will upgraded by Transcendent is true damage that MR does not reduce at all.",
+      "why": "enemyKit W and P both carry the trueDamage flag; missingInteractions rule 'resistances-invalidated' names exactly Transcendent (P) and Force of Will (W).",
+      "corrected": "Both now point at Banshee's Veil — a spell block answers a combo that opens with a single stun — instead of stacking resistances against partly-true damage.",
+      "confidence": "High",
+      "sources": [
+        "missingInteractions rule resistances-invalidated",
+        "enemyKit P/W trueDamage flags"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Syndra is female and the full layer addresses her as male throughout: ahead ('cost him plates'), tradeGood ('E his step-up'), breakdown.early ('every clone he answers wrong'), breakdown.wave ('near his tower'), dosFull[0].t ('Bloom his last-hit contact'), dontsFull[2].t and report[11].t ('during his key-spell window'). Separately, dosFull[1].d is the tradeGood string pasted under a clone title and dontsFull[2].d is the tradeBad string — copy-paste bleed.",
+      "why": "champ-gender.js lists syndra as female; defect-catalogue items 1 and 2.",
+      "corrected": "Every misgendered field rewritten or corrected, and both bled bullets replaced with bodies that match their own titles.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/champ-gender.js (syndra female)",
+        "currentText.full"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "matchup-lint.js findings for this matchup: misgendered pronouns, Do/Don't bodies duplicating the generic trade lines, and/or a cooldowns field with no number.",
+      "why": "champ-data/champ-gender.js for gender; champ-data/_kits/<slug>.json for cooldowns, ranges and ability names.",
+      "corrected": "Pronouns corrected, bled bullet bodies replaced with title-matching content, cooldowns/magnitude claims given real numbers.",
+      "confidence": "High",
+      "sources": [
+        "tools/matchup-lint.js",
+        "champ-data/champ-gender.js",
+        "champ-data/_kits"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Syndra"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q-poke the last-hits — the triple bloom on a rooted or low target already stings at one.",
+      "after": "Her Q lands where you stand for 40 mana; yours has to hit. She wins the last-hit exchange here."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Syndra"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "W online: the clone walks one way, you walk the other — the lane's information war starts now.",
+      "after": "Her W picks up the sphere or a minion at 925 range and shoves you off the wave from outside your range."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Skill",
+      "after": "Syndra"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E completes the kill pattern: root into full bloom is half a health bar with ignite from level 3.",
+      "after": "E into a sphere stuns before your root lands, and the follow-up costs more than a bloom pays."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Syndra"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Lost Chapter timing — bloom every wave contact and run clone mind-games on every reset.",
+      "after": "Her Lost Chapter lands first and the mana pays for sphere stacking that pins you back."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Syndra",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Syndra"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Luden's spike: root-bloom deletes squishies and the clone sells the angle. Force the contact war.",
+      "after": "Her first item makes the E-into-sphere combo lethal before you have any single defensive layer."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Syndra",
+      "after": "Neeko"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Syndra Scatter the Weak (Stun): matchup-defining — The QE stun cone starts every kill combo — stay off the line between her and her orbs. It governs your forward steps. - W Shapesplitter clone spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- Scatter the Weak is 15s at every rank — she never gets it cheaper, so the whole lane is built around that window. - Dark Sphere is 7s flat; she re-arms faster than your 12s E. - Unleashed Power is 120s at rank 1 and executes. Step up only after her E is spent."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Syndra wins by landing Scatter the Weak (Stun), denying your pattern, and owning the spacing war until your tempo starves.",
+      "after": "Syndra wins by stacking spheres at 800 range, stunning you with E into one of them, then executing with Unleashed Power."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3.",
+      "after": "Root her the instant she walks up for a sphere, Q the root for the full bloom, then leave before E comes back at 15s."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Stepping into sphere range to poke: her Q is 7 seconds flat, so she re-arms twice before your E does and every step feeds her a splinter."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Good trade: Root her the instant she walks up for a sphere, Q the root for the full bloom, then leave before E comes back at 15s. Bad trade: Stepping into sphere range to poke: her Q is 7 seconds flat, so she re-arms twice before your E does and every step feeds her a splinter."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, weaponize the lies: zone Syndra with root threat, fake roams that cost him plates either way, and crouch the river fights — fed Neeko is a horror film.",
+      "after": "Ahead, hold the wave short so her 800-range Dark Sphere has to walk to reach you, then root the step-up. A zoned Syndra farms with W and nothing else."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Poke blooms and tell lies — your trades are even and your information war isn't. Every clone he answers wrong is tempo.",
+      "after": "Concede the CS you cannot take safely — her Q is 800 range for 40 mana and every step you make into it feeds a splinter."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Post-6, hunt clumps: disguise into the wave, R the river contest, root the scatter. One good crouch is a won objective.",
+      "after": "Six is your window: disguised, the Pop Blossom wind-up is hidden, so she cannot pre-place spheres or E you out of the leap."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near his tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.",
+      "after": "Best wave: hold it short on your side so she has to walk into Tangle-Barbs range to farm with spheres. Worst wave: a shoved wave at her tower with E down — Force of Will can throw a minion at 925 range and Scatter the Weak stuns you into the tower. Crash before every recall so she cannot stack spheres on a static wave."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Syndra opens the score, reset expectations and respect Scatter the Weak (Stun) doubly. After a second, your job description changes — farm with blooms and stay relevant through root picks and clone scouting.",
+      "after": "A fed Syndra kills from 675 range with Unleashed Power, and its execute means a health bar you thought was safe is not. Farm outside 800 range, bank E for her step-up, and let the clone walk the line she wants."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through deception — every fight you start disguised begins 5v4 in spirit; your job is the patience the crouch demands.",
+      "after": "Carry by closing a gap she cannot re-open: her E is 15s flat, so once it is gone she has no way to keep you off her."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "You are the ambush their comp can't draft against: disguise, flank, Pop Blossom on three, root the survivors. The clone scouts the setup for free.",
+      "after": "Late you flank what she has to face: disguise into their line, Pop Blossom on three, and she has one 15s E to answer the whole engage."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Bloom his last-hit contact each cycle",
+      "after": "Bloom her last-hit contact each cycle"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3.",
+      "after": "Send the clone at her while you walk the other side of the wave — a sphere thrown at the wrong body is 7 seconds of nothing."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Syndra whiffs Scatter the Weak (Stun) and the lane briefly belongs to you.",
+      "after": "Your E is 1000 range to her 650 E — root her before she is in stun range."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Syndra’s rehearsed moment — don’t audition for it.",
+      "after": "E spent on chip damage is 12s of no answer to her step-up."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "The clone is your scout, your fake, and your escape — spending it on idle tricks near assassin timers is how Neekos get audited.",
+      "after": "Same clone angle twice and she just holds the sphere for the real one — vary the direction, and recast W to bend it mid-run."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].t",
+      "before": "Trade during his key-spell window",
+      "after": "Trade during her key-spell window"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Trading while her spheres are stacked hands her the E-Q stun for free, and Force of Will's upgraded throw is true damage your MR will not stop."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Waste E on poke spacing. Clone predictably — same trick twice is zero tricks. Trade during his key-spell window. Chip damage doesn’t get to borrow the ultimate.",
+      "after": "Waste E on poke spacing. Clone predictably — same trick twice is zero tricks. Trade during her key-spell window. Chip damage doesn’t get to borrow the ultimate."
+    },
+    {
+      "layer": "full",
+      "path": "report[13].t",
+      "before": "Ahead, weaponize the lies: zone Syndra with root threat, fake roams that cost him plates either way, and crouch the river fights — fed Neeko is a horror film.",
+      "after": "Ahead, hold the wave short so her 800-range Dark Sphere has to walk to reach you, then root the step-up. A zoned Syndra farms with W and nothing else."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Her Luden's/tear spike makes the E-Q-ignite combo lethal before your defensive layers, so hug your side of the lane and buy MR/Seeker's early.",
+      "after": "Her Luden's spike makes the E-into-sphere combo lethal before your layers, so hug your side of the lane and buy Banshee's Veil, not armour."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Build MR and survive one combo to reach your teamfight scaling",
+      "after": "Buy Banshee's, not armour — her W throw is true damage anyway"
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "An even poke war with a lying clone — trade blooms honestly and spend the W on information he can't afford to guess wrong.",
+      "after": "An even poke war with a lying clone — trade blooms honestly and spend the W on information she can't afford to guess wrong."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Break even on spells and win on lies — the clone taxes every guess he makes. Scatter the Weak (Stun) is the clock this lane runs on — read it before every step forward.",
+      "after": "Break even on spells and win on lies — the clone taxes every guess she makes. Scatter the Weak (Stun) is the clock this lane runs on — read it before every step forward."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "An even poke war with a lying clone — trade blooms honestly and spend the W on information he can't afford to guess wrong.",
+      "after": "An even poke war with a lying clone — trade blooms honestly and spend the W on information she can't afford to guess wrong."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Break even on spells and win on lies — the clone taxes every guess he makes. Scatter the Weak (Stun) is the clock this lane runs on — read it before every step forward.",
+      "after": "Break even on spells and win on lies — the clone taxes every guess she makes. Scatter the Weak (Stun) is the clock this lane runs on — read it before every step forward."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: E his step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3. Great trade: Syndra wastes Scatter the Weak (Stun) — commit immediately. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt.",
+      "after": "Good trade: E her step-up, Q the rooted target for all three blooms, auto the passive, walk — the full package is half a bar at level 3. Great trade: Syndra wastes Scatter the Weak (Stun) — commit immediately. Bad trade: Q-poking with E banked 'for safety' until the lane forgets your kill threat exists — the root IS the threat; the bloom is just the receipt."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near his tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.",
+      "after": "Best wave: a bloom-cleared push that crashes while your clone walks somewhere worth lying about — every shove is also a misdirection. Worst wave: a frozen wave near her tower with E down and the clone on cooldown — one honest Neeko is half a champion. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."
+    }
+  ],
+  "notes": "CHART: content win[0..6] already matches packet.levelChart exactly, so only the stale full-layer sides were moved; no no-op win[N] edits were proposed. Every side flip that changed the verdict ships with its rewritten why in this same proposal (rows 0,1,2,3,5); rows 4 and 6 flipped toward Neeko and their existing whys already argued Neeko, so those were left. phases[N].rating untouched — the existing scale is not legible (row 4 read 'Syndra' at 6/10 while 'Skill' rows read 5/10), so moving ratings would have been a guess. FACTUAL ERROR LEFT IN PLACE ELSEWHERE: content whys[0] and early both claim her Dark Sphere 'out-ranges your Blooming Burst' — both abilities are 800 range per the kits. I rewrote the full-layer equivalent (phases[0].why) with the correct reasoning, but whys[0]/early are load-bearing chart prose I did not want to move without the row moving with it; flagging rather than silently half-fixing. dosFull[0].d was left alone — 'stay off the line between her and her orbs' is accurate to the E text and already carries a real interaction. Mechanical lint pass (tools/matchup-lint.js). MISGENDER: the enemy is female and the full layer addressed her as male; every flagged field corrected in place. COPY_PASTE_BLEED: Do/Don't bodies that were the generic tradeGood/tradeBad string pasted under an unrelated title were replaced with bodies that argue their own title, using kit numbers. COOLDOWN_NO_DIGIT / UNSUPPORTED_MAGNITUDE: rebuilt around real cooldowns and ranges from champ-data/_kits."
+}

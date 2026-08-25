@@ -38,7 +38,7 @@ const LIVE_PATCH = '26.15';
 // win rates were sampled. These are CONTENT facts, not build facts — never wire
 // them to TODAY. A dateModified/lastmod that moves on every rebuild is a false
 // freshness signal to search engines and a false "Updated <date>" to readers.
-const DATA_MODIFIED = '2026-08-19';
+const DATA_MODIFIED = '2026-08-24';
 const WR_SAMPLED = 'July 2026';
 const STAGES = ['Level 1', 'Level 2', 'Level 3', 'Levels 4-5', 'Level 6', 'First item', 'Two+ items'];
 

@@ -1,0 +1,85 @@
+{
+  "ownerKey": "cassiopeia_mid",
+  "enemy": "karma",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Lane-difficulty prose treated Karma as a burst combo champion ('his combo chunks', 'while his combo is loaded') and misgendered her throughout.",
+      "why": "Karma's kit is one damage spell (Inner Flame, 9/8/7/6/5s, 950 range) plus Mantra empowerment; she is a poke-and-shield laner, not a burst combo. Difficulty is genuinely even (50.81% over 1293 games): she wins the level 1-2 range war, Cassiopeia wins from level 4 on.",
+      "corrected": "Reframed the early lane as a range deficit (950 vs 850) and the mid/late as a sustained-DPS win once Mantra is spent.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit", "brief.packet.winRate"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart disagreed across layers: phases[0..4].side and phases[6].side all read 'Skill' while win[0..6] read Karma/Karma/Skill/Cassiopeia x4, matching the packet levelChart.",
+      "why": "The content layer and the packet agree with each other and with the kit: Karma's 950-range Q and free level-1 Mantra own levels 1-2; Cassiopeia's Q-poison into Twin Fang out-damages a single 5-9s cooldown from level 4. The full layer was stale.",
+      "corrected": "Moved phases[0].side and phases[1].side to Karma, phases[3].side, phases[4].side and phases[6].side to Cassiopeia, and rewrote each why to match the new verdict. win[N] already holds these exact values on disk, so no content-layer chart edit is possible (before would equal after) — the pair is already in agreement after these edits.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content.win"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[1], early and wants.foe[1] attributed Karma's root to 'RQ'. Mantra-Q is the delayed cataclysm; the root is Focused Resolve (W), and Mantra-W extends it and heals her.",
+      "why": "Riot text: Q Mantra Bonus creates 'a cataclysm which deals damage after a short delay'; W creates the tether that roots, and its Mantra Bonus heals Karma and extends the root.",
+      "corrected": "Named Focused Resolve (W, 12s flat, 675 range) as the root/gank setup and Mantra-Q as the cataclysm. Also added the anti-heal note from missingInteractions: Mantra-W heals her through an extended Twin Fang stream, so Oblivion Orb timing decides long fights. Petrifying Gaze only stuns enemies facing you — she must be stepping up, not retreating.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit", "brief.missingInteractions"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that carries real numbers.",
+      "corrected": "Focused Resolve 12s flat, Inner Flame 9s to 5s, Mantra 40/38/36/34, Petrifying Gaze 120/100/80.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was the tradeGood string verbatim; dontsFull[2].d was the tradeBad string verbatim (lint COPY_PASTE_BLEED).",
+      "why": "Body did not match the title's promise.",
+      "corrected": "Replaced both with content matching their titles, grounded in Petrifying Gaze's facing requirement and Twin Fang's poison prerequisite.",
+      "confidence": "High",
+      "sources": ["brief.lintFindings", "brief.ownerKit"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"tldr","before":"His combo chunks, your stream kills — survive the rotation, then fang him down in the fifteen seconds he has nothing.","after":"Her Mantra poke chunks, your stream kills — survive the cataclysm, then fang her down while Mantra sits on 40 seconds."},
+    {"layer":"full","path":"winCon","before":"Make his burst hit a Petrifying Gaze, then DPS the fifteen-second gap where he is a minion. Focused Resolve (Tether) is the clock this lane runs on — read it before every step forward.","after":"Make her spend Mantra on poke, then DPS the gap where her Q is a 5-second nuisance. Focused Resolve (Tether) is the root that starts every gank — read it before every step forward."},
+    {"layer":"full","path":"enemyWin","before":"Karma wins by landing Focused Resolve (Tether), denying your pattern, and out-ranging your plan one polite trade at a time.","after":"Karma wins by rooting you with Focused Resolve, then shielding with Inspire through the Twin Fang stream that should have killed her."},
+    {"layer":"full","path":"ahead","before":"Ahead, suffocate: poison every last-hit, zone Karma off the wave with fang threat, and call your jungler — your W makes every gank a guaranteed kill.","after":"Ahead, suffocate: poison every last-hit, zone Karma off the wave with fang threat, and call your jungler — Miasma's slow beats the Inspire speed boost."},
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Karma"},
+    {"layer":"full","path":"phases[0].why","before":"Q poke on his last-hits — the poison-into-E pattern starts at level 1 and your DPS already out-trades most mids.","after":"Inner Flame outranges you 950 to 850 and Mantra is free at level 1, so she pokes your last-hits for nothing."},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Karma"},
+    {"layer":"full","path":"phases[1].why","before":"W changes the geometry: miasma GROUNDS dashes. Drop it on his engage path and the lane's mobility advantage evaporates.","after":"Mantra-Q adds a delayed cataclysm on top of the poke, and two of your spells cannot answer that yet — hold Miasma."},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Cassiopeia"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Cassiopeia"},
+    {"layer":"full","path":"phases[4].why","before":"Petrifying Gaze online — the all-in answer. Face-stun his engage or slow his retreat; either way the fangs finish it.","after":"Petrifying Gaze online — Mantra is 40s at rank 1, so stun her while she steps up to Q and Twin Fang finishes it."},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Cassiopeia"},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Karma Focused Resolve (Tether): matchup-defining — The root tether — break it with range or line of sight. It governs your forward steps. - R Petrifying Gaze spent on poke is a death you scheduled. - Hold the R for the fight that decides something.","after":"- Focused Resolve is 12s flat: leave 675 range before the tether expires and the root never lands. - Inner Flame is 9s at rank 1 and 5s at rank 5 — step up on the miss. - Mantra is 40/38/36/34; your Petrifying Gaze is 120/100/80, so spend it on her commit, not the wave."},
+    {"layer":"full","path":"breakdown.mid","before":"From Seraph's your DPS leads the game: force extended trades, ground every gank, and rotate to rivers where your R flips 2v2s. Buy the slot item your missing boots refund.","after":"From Seraph's your DPS leads the game: force extended trades, and buy Oblivion Orb before Mantra-W's heal decides an extended fight. Spend the boots slot her passive frees on damage."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry by DPS — no mid matches your damage-per-second from two items; your job is staying alive long enough to prove it.","after":"Carry by DPS — Karma has one damage spell on a 5-second cooldown; outlast the Inspire shield and Twin Fang wins the long fight."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a frozen wave at his tower while an assassin roams — you have no boots (passive) but no dash either; warded rivers or no shoves. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a frozen wave at her tower while an assassin roams — you have no boots (passive) but no dash either; warded rivers or no shoves. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"dosFull[1].t","before":"R-stun his engage commit face-on","after":"R-stun her Mantra step-up face-on"},
+    {"layer":"full","path":"dosFull[1].d","before":"Q the last-hit window, E-E-E while the poison ticks, and walk back as it fades — three fangs and out, repeat until Karma is executable.","after":"Petrifying Gaze only stuns enemies facing you, so catch her as she steps up to cast Inner Flame — from behind she is merely slowed and walks out."},
+    {"layer":"full","path":"dontsFull[0].t","before":"Stand mid-range while his combo is loaded","after":"Stand mid-range while her Mantra is loaded"},
+    {"layer":"full","path":"dontsFull[0].d","before":"That’s Karma’s bread-and-butter play — deny it and they run out of answers.","after":"Mantra-Q drops a delayed cataclysm on that spot — step off it and it is a plain Q again."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Spamming unpoisoned fangs at full mana cost, or holding W so long the dash you were saving it for already happened.","after":"Twin Fang without poison on the target burns 40 mana for scraps while her Inspire shield eats it — land Q first, always."},
+    {"layer":"full","path":"report[0].t","before":"His combo chunks, your stream kills — survive the rotation, then fang him down in the fifteen seconds he has nothing.","after":"Her Mantra poke chunks, your stream kills — survive the cataclysm, then fang her down while Mantra sits on 40 seconds."},
+    {"layer":"full","path":"report[1].t","before":"Make his burst hit a Petrifying Gaze, then DPS the fifteen-second gap where he is a minion. Focused Resolve (Tether) is the clock this lane runs on — read it before every step forward.","after":"Make her spend Mantra on poke, then DPS the gap where her Q is a 5-second nuisance. Focused Resolve (Tether) is the root that starts every gank — read it before every step forward."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a frozen wave at his tower while an assassin roams — you have no boots (passive) but no dash either; warded rivers or no shoves. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a frozen wave at her tower while an assassin roams — you have no boots (passive) but no dash either; warded rivers or no shoves. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Focused Resolve (Tether)’s cooldown, on your Seraph's spike, and with your jungler’s setup. Make him flinch first.","after":"Commit on Focused Resolve (Tether)’s 12-second cooldown, on your Seraph's spike, and with your jungler’s setup. Make her flinch first."},
+    {"layer":"full","path":"report[11].t","before":"Stand mid-range while his combo is loaded. Petrify defensively when it can win the fight. Trade fang-for-burst at half HP. Chip damage doesn’t get to borrow the ultimate.","after":"Stand mid-range while her Mantra is loaded. Petrify defensively when it can win the fight. Trade fang-for-burst at half HP. Chip damage doesn’t get to borrow the ultimate."},
+    {"layer":"content","path":"whys[1]","before":"Level 2 still favors Karma as she can layer RQ's root for extra poke and lane pressure.","after":"Level 2 still favors Karma as Mantra-Q lays a delayed cataclysm on top of free Inner Flame poke."},
+    {"layer":"content","path":"early","before":"Karma out-ranges and out-sustains you in the poke war at levels 1-2 thanks to cheap Q spam and mana efficiency, so avoid trading Q for Q in neutral positions. Farm with Q only when she's used hers, and watch for RQ giving her a root that can set up a jungler gank on your immobile self. Don't waste Miasma early just to threaten trades — save it to punish her when she pushes past minions to poke.","after":"Karma out-ranges you 950 to 850 in the poke war at levels 1-2 with Inner Flame on a 9-second cooldown, so avoid trading Q for Q in neutral positions. Farm with Q only when she's used hers, and watch for Focused Resolve rooting you for a jungler gank on your immobile self. Don't waste Miasma early just to threaten trades — save it to punish her when she steps past minions to poke."},
+    {"layer":"content","path":"wants.foe[1]","before":"Use RQ root to set up jungler ganks","after":"Root with Focused Resolve for ganks"},
+    {"layer":"content","path":"spikes[1].text","before":"Her R-shield (RW) lets her tank a full combo and disengage, but your R lands a much bigger stun-punish window if she overextends her poke.","after":"Mantra-E shields her through your burst and Mantra-W heals her mid-tether, so bait Mantra out — it is 40 seconds at rank 1 and your R punishes the gap."}
+  ],
+  "notes": "Level chart: the full layer read 'Skill' on rows 0,1,3,4,6 while win[0..6] on disk already matched the packet levelChart (Karma/Karma/Skill/Cassiopeia x4). I moved the full-layer sides onto the content-layer values, so no paired win[N] edit exists to propose — before would equal after. After these edits the two layers agree on all seven rows. Mantra-W's heal (missingInteractions needs-antiheal) is now stated in breakdown.mid and spikes[1].text. Miasma's grounding is near-worthless against Karma specifically — she has no dash — so I removed the grounding claim from phases[1].why and the gank line in 'ahead' and replaced them with the slow, which is what actually applies."
+}

@@ -1,0 +1,87 @@
+{
+  "ownerKey": "karma_mid",
+  "enemy": "vladimir",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer read Skill for rows 0-4 while the content layer read Karma/Karma/Karma/Karma/Vladimir, and content win[5] gave the First-item row back to Karma while the full layer gave it to Vladimir. Two layers, two answers.",
+      "why": "Karma genuinely owns levels 1-5: Inner Flame reaches 950 against Transfusion's 600, and Vladimir pays his own health for Tides of Blood. He takes over at 6 and does not give it back — Crimson Pact converts AP into health, so the poke war he was losing stops mattering once he has an item.",
+      "corrected": "Rows 0-3 to Karma, rows 4-6 to Vladimir, in both layers, with every why rewritten to match. This also resolves packet.defects' complaint that the chart handed Karma 5 of 7 stages in a matchup she wins 47.2%.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.defects", "ownerKit Q range 950", "enemyKit Q range 600, E cost = own health, P Crimson Pact"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spikes claimed Karma's first item restores the poke war and lets her 'threaten his HP bar directly again'.",
+      "why": "Crimson Pact gives 1.6 health per point of AP, so every item he buys widens the bar your chip has to move. His first item is his spike, not yours.",
+      "corrected": "spikes[2], mid and whys[5] rewritten on Crimson Pact; Hemoplague's flat 120s and Sanguine Pool's 28s rank-1 cooldown added to the level-6 spike.",
+      "confidence": "High",
+      "sources": ["enemyKit P text", "enemyKit R cd 120", "enemyKit W cd 28/25/22/19/16"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The two decisive interactions were absent: Sanguine Pool's 2 seconds of untargetability eating a Mantra commit, and Vladimir's Transfusion/Hemoplague sustain needing Grievous Wounds. breakdown.cooldowns contained no number (lintFindings COOLDOWN_NO_DIGIT).",
+      "why": "Sanguine Pool is 28s at rank 1 down to 16s maxed and grants 2 seconds untargetable, so a Mantra-Q fired into it is spent on empty ground. Transfusion is 0 mana on a 4.6s cooldown maxed and heals him; Hemoplague heals him per champion hit. Anti-heal timing decides every extended trade.",
+      "corrected": "breakdown.cooldowns now carries all three numbers; tradeBad, dos/donts and wants.you[2] state the pool-bait and the Grievous Wounds requirement.",
+      "confidence": "High",
+      "sources": ["enemyKit W/Q/R text and cooldowns", "missingInteractions untargetable-dodges-burst and needs-antiheal"]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "Trading rules were the generic Karma template with no reference to this enemy.",
+      "why": "The trade rule here is entirely gated on Sanguine Pool's cooldown.",
+      "corrected": "tradeGood/tradeBad/breakdown.trading now key the commit to Sanguine Pool being down.",
+      "confidence": "High",
+      "sources": ["enemyKit W cd"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "packet.suspectNames flags wants.foe[1] 'Use Sanguine Pool' as a probable wrong name.",
+      "why": "Sanguine Pool is the correct Riot name for Vladimir's W. This is a false positive and was not 'fixed'.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["enemyKit W"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Karma"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Karma"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Karma"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Karma"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Vladimir"},
+    {"layer":"content","path":"win[5]","before":"Karma","after":"Vladimir"},
+    {"layer":"full","path":"phases[0].why","before":"Q-poke wins level 1 against nearly everyone — the lane starts as your spam war; respect only mana.","after":"Transfusion reaches 600 and Inner Flame reaches 950 — poke him off the wave; only your mana argues back."},
+    {"layer":"full","path":"phases[1].why","before":"Mantra online from level 1 means RQ is already a third of a health bar — spend it on real windows, not waves.","after":"Mantra is up at level 1 while Tides of Blood costs him health — RQ him and his own farming pays you back."},
+    {"layer":"full","path":"phases[2].why","before":"Full kit: W tether roots overstayers and E speeds every trade exit. Your early is the best in the utility class.","after":"Sanguine Pool arrives at 3 on a 28s cooldown — that is 28 seconds where your W tether roots him with no exit."},
+    {"layer":"full","path":"phases[3].why","before":"Lost Chapter timing — the RQ chunk cycles every 30 seconds. Chip him below half and hold the kill window.","after":"He pays health for Tides of Blood at 13s rank 1 — RQ that self-damage and Grievous Wounds seals the bar."},
+    {"layer":"full","path":"phases[4].why","before":"No new ult — your 6 is a Mantra rank: faster cycles, bigger RQs. Press the early lead before scaling lanes wake up.","after":"Hemoplague on 120s plus Sanguine Pool's untargetable 2 seconds gives him an all-in your burst cannot answer."},
+    {"layer":"full","path":"phases[5].why","before":"Blackfire/Luden's spike: RQ-W chains threaten kills outright. The lane is now or never — you fall off politely.","after":"His first item plus Crimson Pact stacks health from AP — your RQ chip stops threatening the bar it used to."},
+    {"layer":"content","path":"whys[5]","before":"Karma's item lead restores the poke-war advantage after the level-6 window passes","after":"Vladimir's first item and Crimson Pact turn your poke into health he out-sustains"},
+    {"layer":"full","path":"enemyWin","before":"Vladimir wins by landing Sanguine Pool, denying your pattern, and renting you the lane at a range markup.","after":"Vladimir wins by pooling out your commit, healing your poke back off Transfusion, and landing Hemoplague."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Vladimir Sanguine Pool: matchup-defining — Untargetable dodge — bait it before you spend your kill window. Read it like a second minimap. - Guard your RE shield-speed like a fifth summoner spell. - Ultimate goes to kill windows only.","after":"- Vladimir Sanguine Pool: 28s at rank 1, 16s maxed, 2 seconds untargetable — bait it, then spend your kill window. - Tides of Blood is 13s at rank 1 and costs him health. - Hemoplague is a flat 120s at every rank."},
+    {"layer":"full","path":"tradeGood","before":"Q the last-hit, and on real windows RQ-W: the chunk plus tether-root turns a poke trade into a kill setup — E out before the answer.","after":"Q the last-hit from 950, and once Sanguine Pool is down, RQ-W: the chunk plus tether-root is a kill setup — E out after."},
+    {"layer":"full","path":"tradeBad","before":"Spending Mantra on wave-clear while behind on poke — Karma without RQ banked is a support who took mid's farm.","after":"Committing Mantra into Sanguine Pool — 2 seconds untargetable and your whole window is spent on empty ground."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: Q the last-hit, and on real windows RQ-W: the chunk plus tether-root turns a poke trade into a kill setup — E out before the answer. Bad trade: Spending Mantra on wave-clear while behind on poke — Karma without RQ banked is a support who took mid's farm.","after":"Good trade: Q the last-hit from 950, and once Sanguine Pool is down, RQ-W: the chunk plus tether-root is a kill setup — E out after. Bad trade: committing Mantra into Sanguine Pool — 2 seconds untargetable and your whole window is spent on empty ground."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry early or enable late — RQ chips win lanes; RE + roots win the teamfights your early lead bought.","after":"Carry before he stacks Crimson Pact — RQ chips win the lane; later RE and roots keep you useful."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a Q-thinned slow push you RQ-crash on roam timers — your E speeds the whole team's rotations, not just yours. Worst wave: a frozen wave at his tower post-two-items — your kill window died there and the lane just hasn't noticed yet. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.","after":"Best wave: a Q-thinned slow push you RQ-crash on roam timers — your E speeds the whole team's rotations, not just yours. Worst wave: a wave frozen at his tower, where Transfusion heals every point of chip you land straight back off the minions. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores."},
+    {"layer":"full","path":"ahead","before":"Ahead, sprint: RQ Vladimir off every wave, take plates with the lead, and W-root river picks — Karma leads are sprints, not marathons.","after":"Ahead, sprint: RQ Vladimir off every wave, buy Grievous Wounds early, take plates, and W-root river picks — his comeback is time."},
+    {"layer":"full","path":"dosFull[0].d","before":"Untargetable dodge — bait it before you spend your kill window. Its cooldown is the green light — wait for it.","after":"Sanguine Pool is 28s at rank 1 and 16s maxed — bait it with a plain Q, then RQ his step-up while it is down."},
+    {"layer":"full","path":"dosFull[1].d","before":"Q the last-hit, and on real windows RQ-W: the chunk plus tether-root turns a poke trade into a kill setup — E out before the answer.","after":"Inner Flame reaches 950 to Transfusion's 600, so every CS he steps for is free damage — poke the wind-up, not the wave."},
+    {"layer":"full","path":"dosFull[2].d","before":"Vladimir spends Sanguine Pool early — the closest thing this matchup has to a guarantee.","after":"Plates and roams while Tides of Blood costs him health — two items later that cost stops mattering."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Vladimir’s rehearsed moment — don’t audition for it.","after":"Even farm hands Vladimir the game — Crimson Pact scales for free."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Your tether breaks if YOU walk away — holding the root means holding your ground for two seconds you must plan for.","after":"Mantra spent on a wave is an RQ not spent on Vladimir, and he only grows stronger while your kill window closes."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Spending Mantra on wave-clear while behind on poke — Karma without RQ banked is a support who took mid's farm.","after":"Inside 600 Transfusion heals him back on a 4.6s cooldown and Tides of Blood follows — trade at 950 or not at all."},
+    {"layer":"content","path":"spikes[0].text","before":"Vladimir has no real burst before his passive scales and Sanguine Pool is on a long cooldown, so your Inner Flame poke and Inspire shield let you outtrade him consistently while denying his safe farm.","after":"Vladimir has no burst before Crimson Pact scales and Sanguine Pool is 28 seconds at rank 1, so Inner Flame at 950 and the Inspire shield let you outtrade him and deny him safe farm."},
+    {"layer":"content","path":"spikes[1].text","before":"Hemoplague at 6 gives Vladimir a strong all-in and wave-clear spike that punishes any overextension, and his Pool dodge negates your poke burst windows during the combo.","after":"Hemoplague at 6 is a flat 120-second all-in that punishes any overextension, and Sanguine Pool's 2 untargetable seconds swallow the Mantra-Q you answer it with."},
+    {"layer":"content","path":"spikes[2].text","before":"With your first completed item your poke damage and mana efficiency outpace his health-cost scaling, letting you push the lane and threaten his HP bar directly again.","after":"Vladimir's first item ends the poke war — Crimson Pact turns his AP into health, so your Inner Flame chip stops threatening a bar that regrows off Transfusion."},
+    {"layer":"content","path":"mid","before":"Hemoplague at 6 briefly flips the lane since it enables a real all-in and his Pool avoids your reactive shield timing, but once you finish your first item your damage output and mana sustain let you resume winning the poke war comfortably.","after":"Hemoplague at 6 flips the lane for good — it enables a real all-in and Sanguine Pool's 2 untargetable seconds eat your commit, and once his first item lands Crimson Pact turns AP into health faster than your poke removes it."},
+    {"layer":"content","path":"wants.you[2]","before":"Snowball your item lead into more aggressive wave control after your first back","after":"Buy Grievous Wounds early — Transfusion sustain decides every long trade"}
+  ],
+  "notes": "CHART: both layers disagreed and both disagreed with the 47.2% win rate. Settled as Karma rows 0-3, Vladimir rows 4-6, proposed as one group with every why rewritten; the only content twin that needed moving was win[5] (Karma -> Vladimir), the rest already matched. UNVERIFIED: I did not write that Sanguine Pool's untargetability breaks an active Focused Resolve tether — untargetability normally clears tethers but Riot's text does not say so and the kit file cannot confirm it, so the advice is phrased as 'do not spend Mantra into the pool' instead. FALSE POSITIVE: packet.suspectNames flagged wants.foe[1] 'Use Sanguine Pool' — that is the correct Riot name, left alone. report[] left alone per the sweep exclusion."
+}

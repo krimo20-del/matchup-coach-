@@ -1,0 +1,91 @@
+{
+  "ownerKey": "karma_mid",
+  "enemy": "galio",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer said 'Skill' on all seven rows while the content layer read Karma/Karma/Karma/Karma/Galio/Karma/Galio, and the content whys[] were misaligned against their own rows — whys[2] (Level 3) described 'the instant he hits 6' and whys[3] (Levels 4-5) described him 'starting to use his ultimate'.",
+      "why": "The packet levelChart matches the content layer, and Galio's kit supports it: no engage until Justice Punch, an 825-range damage-over-time Q that never kills, a 275-range taunt, and a 180s ult that decides fights rather than lanes.",
+      "corrected": "Full sides moved onto the content values, and every why plus the misaligned whys[2] and whys[3] rewritten to describe the level they actually sit on.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.enemyKit Galio Q range 825, W range 275, E cd 11/10/9/8/7"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why said 'No new ult... press the early lead before scaling lanes wake up' on the Level 6 row, and the ult itself was named 'Idol of Durand' in whys[2], spikes[1].text, mid and wants.foe[1].",
+      "why": "Hero's Entrance is 180/160/140s and lands from 4000/4750/5500 range, shielding allies in the area and knocking up on impact. Idol of Durand is Galio's pre-rework ultimate name and does not exist in the current kit — Shield of Durand is his W.",
+      "corrected": "phases[4].why now states the 4000-range, shield-and-knockup ult, and every Idol of Durand reference is replaced with Hero's Entrance.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Galio R = Hero's Entrance, cd 180/160/140, range 4000/4750/5500", "brief.enemyKit Galio W = Shield of Durand", "brief.packet suspectNames"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet's headline defect: the page never named a single Galio ability beyond Justice Punch. breakdown.cooldowns also held no digit (lint COOLDOWN_NO_DIGIT), and the brief's Colossal Smash auto-reset interaction was absent.",
+      "why": "Justice Punch is 11/10/9/8/7s and is his only engage. Shield of Durand is 18/17/16/15/14s and taunts at 275 range, but it is a charged stance — Galio moves slowly while charging, which is the visible tell Karma needs since her Soul Shield speed is what walks her out of the radius. Colossal Smash empowers his next basic attack every few seconds for area damage, so the attack wind-up is the cue to step out.",
+      "corrected": "breakdown.cooldowns, tradeGood, tradeBad, dosFull[1].d, dosFull[2].d, dontsFull[0].d and report[5].t now name Colossal Smash, Winds of War, Shield of Durand, Justice Punch and Hero's Entrance with their real numbers.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Galio W cd/range and charge text", "brief.enemyKit Galio P text and autoReset flag", "brief.missingInteractions rule autoreset-burst-tell"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "missingInteractions asked for 'Galio can cut your retreat with Justice Punch (E) and you have no dash — hold Flash for the wall, not the damage.'",
+      "why": "Justice Punch carries a derived 'terrain' flag, but Riot's description is a step-back charge that knocks up the first champion hit — it creates no terrain. Per the standing rule I trusted the description and did not write the retreat-cutting claim. The flag looks like a tooltip-parsing misfire and is worth fixing upstream.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Galio E text"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Galio" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Galio" },
+
+    { "layer": "full", "path": "phases[0].why", "before": "Q-poke wins level 1 against nearly everyone — the lane starts as your spam war; respect only mana.", "after": "Winds of War is a slow tornado at 825 and he has no engage yet — your 950 poke is uncontested." },
+    { "layer": "full", "path": "phases[1].why", "before": "Mantra online from level 1 means RQ is already a third of a health bar — spend it on real windows, not waves.", "after": "Mantra is up from level 1 while Justice Punch is not yet ranked — RQ him whenever he steps up to farm." },
+    { "layer": "full", "path": "phases[2].why", "before": "Full kit: W tether roots overstayers and E speeds every trade exit. Your early is the best in the utility class.", "after": "Justice Punch arrives on an 11s cooldown, and your W roots him at 675 the moment he lands the knockup." },
+    { "layer": "full", "path": "phases[3].why", "before": "Lost Chapter timing — the RQ chunk cycles every 30 seconds. Chip him below half and hold the kill window.", "after": "Your Q outranges his 825 tornado and Shield of Durand only taunts at 275 — chip him and step back out." },
+    { "layer": "full", "path": "phases[4].why", "before": "No new ult — your 6 is a Mantra rank: faster cycles, bigger RQs. Press the early lead before scaling lanes wake up.", "after": "Hero's Entrance drops in from 4000 range with a team shield and a knockup — your 6 is only a Mantra rank." },
+    { "layer": "full", "path": "phases[5].why", "before": "Blackfire/Luden's spike: RQ-W chains threaten kills outright. The lane is now or never — you fall off politely.", "after": "His items buy tankiness rather than kill threat, so your poke keeps pace and the plates stay yours." },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Karma is a utility engine: RE shields the team, W roots the diver, and RQ pokes the objective setup.", "after": "One well-timed Hero's Entrance saves a fight your shields could not — focus his carries, never him." },
+
+    { "layer": "full", "path": "tldr", "before": "He runs at a tether that roots and a shield that speeds — the run-down never quite arrives if you space it right.", "after": "He walks at you behind an 825-range tornado with one 11s engage — root that engage and he never arrives." },
+    { "layer": "full", "path": "winCon", "before": "Root the run-down, speed the exit, and bill him a health bar per attempt. Keep one eye on Justice Punch and one on the wave, in that order.", "after": "Root the engage, speed the exit, and bill him a health bar per attempt. Every step-up asks one thing: is Justice Punch on its 11 seconds?" },
+    { "layer": "full", "path": "enemyWin", "before": "Galio wins by landing Justice Punch, denying your pattern, and cashing the all-in before your pattern matures.", "after": "Galio wins by landing Justice Punch into the Shield of Durand taunt, then dropping Hero's Entrance on top of it." },
+    { "layer": "full", "path": "tradeGood", "before": "Q the last-hit, and on real windows RQ-W: the chunk plus tether-root turns a poke trade into a kill setup — E out before the answer.", "after": "Q him from 950 while Justice Punch is down. If he charges Shield of Durand, walk out of the 275 — the taunt then hits nothing." },
+    { "layer": "full", "path": "tradeBad", "before": "Spending Mantra on wave-clear while behind on poke — Karma without RQ banked is a support who took mid's farm.", "after": "Trading inside 275 while he is charging Shield of Durand — the taunt holds you still for the knockup after it." },
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Q the last-hit, and on real windows RQ-W: the chunk plus tether-root turns a poke trade into a kill setup — E out before the answer. Bad trade: Spending Mantra on wave-clear while behind on poke — Karma without RQ banked is a support who took mid's farm.", "after": "Good trade: Q him from 950 while Justice Punch is down. If he charges Shield of Durand, walk out of the 275 — the taunt then hits nothing. Bad trade: Trading inside 275 while he is charging Shield of Durand — the taunt holds you still for the knockup after it." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Galio Justice Punch: matchup-defining — His dash knockup — he has no engage while it is down. Check it before every step-up. - RE shield-speed is the lifeline; chip damage never gets it. - The ult answers fights, not waves.", "after": "- Justice Punch is 11s at rank 1, 7s at rank 5, and it is his only engage — step up while it is down. - Shield of Durand is 18s and taunts at 275: it is a charge, so him slowing to a walk is the tell. - Hero's Entrance is 180s at rank 1." },
+    { "layer": "full", "path": "breakdown.mid", "before": "Convert before the curve flips: plates, roams, river picks with W roots. Every minute past your spike is a minute rented from his.", "after": "Convert before the curve flips: plates, roams, river picks with W roots. Every minute past level 5 is a minute rented from his." },
+    { "layer": "full", "path": "breakdown.feeding", "before": "If Galio takes first blood, tighten up: Justice Punch is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q and stay relevant through shields and roots.", "after": "If Galio takes first blood he reaches his tank items sooner and your kill window narrows to nothing. Farm with Q at 950, stay outside the 275 taunt, and stay relevant by shielding and rooting for your jungler." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry early or enable late — RQ chips win lanes; RE + roots win the teamfights your early lead bought.", "after": "Carry with poke, enable in fights — you will never burst him, so bill him and kill the carries he saves." },
+    { "layer": "full", "path": "breakdown.late", "before": "You are the team's engine room: RE the engage, W-root the diver, RQ the siege — Karma late wins by making four teammates faster and safer.", "after": "You are the counter-play to his ult: RE the target he lands on, W-root him at 675, and burn the carries he came to save." },
+    { "layer": "full", "path": "ahead", "before": "Ahead, sprint: RQ Galio off every wave, take plates with the lead, and W-root river picks — Karma leads are sprints, not marathons.", "after": "Ahead, sprint: RQ him off the wave every cycle, take plates before his tank item, and W-root him whenever Justice Punch is down." },
+
+    { "layer": "full", "path": "dosFull[0].d", "before": "His dash knockup — he has no engage while it is down. Bait it, count it, then go.", "after": "Justice Punch is 11s at rank 1 and his only engage — root him after it lands." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q the last-hit, and on real windows RQ-W: the chunk plus tether-root turns a poke trade into a kill setup — E out before the answer.", "after": "Soul Shield's move speed is what walks you out of the 275 taunt radius — spend it as he starts the charge, not after it releases." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Galio spends Justice Punch early — the closest thing this matchup has to a guarantee.", "after": "Colossal Smash empowers an attack every few seconds — the wind-up is your cue to step out." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Galio’s bread-and-butter play — deny it and they run out of answers.", "after": "Holding the root inside 275 just hands him the taunt — root him, then walk." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Spending Mantra on wave-clear while behind on poke — Karma without RQ banked is a support who took mid's farm.", "after": "Past the root his tankiness wins the long trade — you chip, he charges, and Hero's Entrance is still coming." },
+
+    { "layer": "full", "path": "report[0].t", "before": "He runs at a tether that roots and a shield that speeds — the run-down never quite arrives if you space it right.", "after": "He walks at you behind an 825-range tornado with one 11s engage — root that engage and he never arrives." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Galio’s Justice Punch: His dash knockup — he has no engage while it is down. Forward steps wait for its downtime.", "after": "Track Justice Punch: 11s at rank 1, 7s at rank 5, and his only engage. While it is down he cannot reach you at all." },
+
+    { "layer": "content", "path": "whys[2]", "before": "Idol of Durand gives Galio game-changing disruption the instant he hits 6.", "after": "Justice Punch is 11s at rank 1 and your W roots him the moment he lands." },
+    { "layer": "content", "path": "whys[3]", "before": "Karma's poke still edges the lane even as Galio starts using his ultimate.", "after": "Karma's poke still edges it — his 825-range Q chips but never kills you." },
+    { "layer": "content", "path": "whys[4]", "before": "Galio's tank item completion and W taunt make him much harder to punish now.", "after": "Hero's Entrance lands from 4000 range and knocks up — his 6 beats yours." },
+    { "layer": "content", "path": "whys[5]", "before": "Karma's poke and utility keep pace with Galio's growing tankiness here.", "after": "Your poke keeps pace while his items buy tankiness, not kill threat." },
+    { "layer": "content", "path": "spikes[1].text", "before": "Idol of Durand is a game-swinging global-ish taunt ult that can save an ally or flip a fight elsewhere on the map, so respect his roam and teamfight power the instant he hits 6.", "after": "Hero's Entrance is a 180-second ult that lands from 4000 range, shielding his allies in the zone and knocking up on impact, so respect his map presence and fight power the instant he hits 6." },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Land Idol of Durand to save allies or flip a losing fight", "after": "Land Hero's Entrance to save allies or flip a losing fight" },
+    { "layer": "content", "path": "mid", "before": "The instant Galio hits level 6 you need to respect him — Idol of Durand can bail out a losing ally or flip a fight anywhere near the map, making him a serious threat in skirmishes even if his lane damage is still low. Once he finishes a tank-support item his passive shield and W taunt make him considerably tankier and harder to punish in an all-in, shrinking your kill windows further. Keep poking but don't expect to burst through his defenses solo — his value now comes from disruption rather than raw damage, so ward for his roams and play safer around skirmishes. This stretch starts favoring him as his utility comes online.", "after": "The instant Galio hits level 6 you need to respect him — Hero's Entrance lands from 4000 range to shield a losing ally and knock up everyone around them, making him a serious threat in skirmishes even if his lane damage is still low. Once he finishes a tank item the Shield of Durand taunt at 275 makes him considerably harder to punish in an all-in, shrinking your kill windows further. Keep poking but don't expect to burst through him solo — his value is disruption rather than damage, so ward for his roams and play safer around skirmishes. This stretch starts favoring him as his utility comes online." }
+  ],
+  "notes": "CHART: full layer said 'Skill' on all seven rows; content and the packet levelChart both read Karma/Karma/Karma/Karma/Galio/Karma/Galio. Full sides moved onto that, all seven whys rewritten. No paired win[N] edits — win[0..6] already hold the target values, so a pair would be before==after.\n\nMISALIGNED whys[]: whys[2] sits on the Level 3 row but described 'the instant he hits 6', and whys[3] on Levels 4-5 described him using his ultimate. Both rewritten to describe the level they actually render under. Worth checking whether the same off-by-one exists on other Karma matchups.\n\nFABRICATED ABILITY: 'Idol of Durand' appeared four times (whys[2], spikes[1].text, mid, wants.foe[1]). That is Galio's pre-rework ultimate; the current one is Hero's Entrance and Shield of Durand is his W. All four replaced.\n\nPACKET DEFECT ADDRESSED: 'never names any of Galio's abilities'. Colossal Smash, Winds of War, Shield of Durand, Justice Punch and Hero's Entrance now all appear with real numbers.\n\nDERIVED-FLAG MISFIRE: Justice Punch carries a 'terrain' flag and missingInteractions asked for a retreat-cutting line. Riot's text is a step-back charge that knocks up the first champion hit — no terrain. Claim not written.\n\nSCOPE: two report[] edits only (report[0].t, report[5].t). report[1].t and report[3].t still carry the old winCon / tradeGood / tradeBad strings verbatim and will read stale.\n\nUNVERIFIED, left alone: whether Shield of Durand's taunt is reduced by tenacity, whether Karma's Q projectile is blocked by anything in Galio's kit, and whether the Hero's Entrance knockup can be avoided by being airborne on arrival. None are in Riot's text."
+}

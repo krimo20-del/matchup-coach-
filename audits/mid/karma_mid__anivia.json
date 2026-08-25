@@ -1,0 +1,124 @@
+{
+  "ownerKey": "karma_mid",
+  "enemy": "anivia",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer read Skill on rows 0-5 while the content layer and packet levelChart read Karma / Karma / Karma / Karma / Anivia / Anivia / Anivia. Separately, the page called this EVEN at 5.5/10 against a 39.13% win rate over 46 games.",
+      "why": "Karma's early edge is real — Flash Frost is 11s and 80 mana at rank 1 and travels slowly enough to sidestep, so levels 1-5 belong to her. From 6 the lane inverts hard: Glacial Storm is a 4/3/2s toggle that doubles Frostbite inside it, Crystallize walls the exit on 17s, and Frostbite itself returns every 4 seconds. A 39% win rate is not an even matchup.",
+      "corrected": "Full-layer sides realigned to the content layer: Karma rows 0-3, Anivia rows 4-6, with each why rewritten to match. diff moved EVEN to TRICKY, diffRating 5.5/10 to 7/10, carry threat 6/10 to 7/10, and both copies of the rating sentence updated.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate 39.13 over 46 games", "champ-data/_kits/anivia.json", "champ-data/_kits/karma.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The content whys were index-shifted, so whys[4] said \"Level 5 is your last strong phase\" on a row whose verdict is Anivia at Level 6 — the row argued with its own sentence.",
+      "why": "The phase labels are Level 1 / 2 / 3 / Levels 4-5 / Level 6 / First item / 2+ items. whys[3] described level 4 and whys[5] described level 6, both one slot late.",
+      "corrected": "whys[3], whys[4] and whys[5] rewritten onto their actual labels, with the level-6 spike carrying Glacial Storm and the first-item spike carrying the wall-stun-Frostbite chain.",
+      "confidence": "High",
+      "sources": ["currentText.full phases labels", "currentText.content whys[]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The single most important number in this lane never appeared: Frostbite is a flat 4-second cooldown, and it doubles against a target recently hit by Flash Frost or standing in a fully formed Glacial Storm. The range gap was also unstated.",
+      "why": "Riot's text on Frostbite: damage is doubled if the target was recently hit by Flash Frost or damaged by a fully formed Glacial Storm. Flash Frost is 1075 range against Karma's 950 Inner Flame, so once Anivia is itemised she pokes from outside Karma's answer.",
+      "corrected": "The doubling condition and the 4s cooldown are now in breakdown.cooldowns and enemyWin; the 1075-vs-950 range gap is in dontsFull[2].d and phases[0].why. breakdown.cooldowns previously contained no digit at all.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/anivia.json (E 4s, doubling condition; Q 1075)", "champ-data/_kits/karma.json (Q 950)"]
+    },
+    {
+      "point": 11,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[0].text said Rebirth makes \"early kill pressure nearly impossible for her\", which is backwards, and spikes[2].text called Karma's utility \"melee-range\".",
+      "why": "Rebirth reverts Anivia to an egg on fatal damage and she is reborn at full health, which makes killing Anivia cost two health bars — it says nothing about her own kill pressure. Karma's shortest ability is the 675 W tether; nothing in her kit is melee range.",
+      "corrected": "Rewrote both. spikes[0] now frames Rebirth as the reason to trade for tempo rather than kills; spikes[2] drops the melee claim.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/anivia.json (P)", "champ-data/_kits/karma.json (ranges 950/675/800/1100)"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Ten fields called Anivia \"he/his\"; dosFull[1].d and dontsFull[2].d were the tradeGood and tradeBad strings pasted under unrelated titles; dontsFull[1].d explained the W tether under a title about spending Mantra on waves.",
+      "why": "Anivia is she/her per champ-gender.js. Three bullet bodies answered a different question than their titles asked.",
+      "corrected": "All pronouns fixed; the three mismatched bodies rewritten to answer their own titles.",
+      "confidence": "High",
+      "sources": ["lintFindings", "champ-data/champ-gender.js"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Karma"},
+    {"layer":"full","path":"phases[0].rating","before":"5/10","after":"6/10"},
+    {"layer":"full","path":"phases[0].why","before":"Q-poke wins level 1 against nearly everyone — the lane starts as your spam war; respect only mana.","after":"Flash Frost reaches 1075 but costs 80 mana and crawls — sidestep it and poke her down from 950."},
+
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Karma"},
+    {"layer":"full","path":"phases[1].rating","before":"5/10","after":"6/10"},
+    {"layer":"full","path":"phases[1].why","before":"Mantra online from level 1 means RQ is already a third of a health bar — spend it on real windows, not waves.","after":"Mantra needs no skill point, so RQ is live at level 2 while her only answer is Flash Frost on 11s."},
+
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Karma"},
+    {"layer":"full","path":"phases[2].rating","before":"5/10","after":"6/10"},
+    {"layer":"full","path":"phases[2].why","before":"Full kit: W tether roots overstayers and E speeds every trade exit. Your early is the best in the utility class.","after":"Full kit: W tethers at 675 and roots her if she holds ground, E speeds you out of the Flash Frost line."},
+
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Karma"},
+    {"layer":"full","path":"phases[3].rating","before":"5/10","after":"6/10"},
+    {"layer":"full","path":"phases[3].why","before":"Lost Chapter timing — the RQ chunk cycles every 30 seconds. Chip him below half and hold the kill window.","after":"Lost Chapter timing — Mantra cycles fast off your damage. Chip her below half and hold the kill window."},
+    {"layer":"content","path":"whys[3]","before":"Level 4 remains your window — she has no wall or ultimate yet to threaten you.","after":"Levels 4-5 stay yours — no Glacial Storm yet, and Crystallize is 17s and 70 mana."},
+
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Anivia"},
+    {"layer":"full","path":"phases[4].rating","before":"6/10","after":"3/10"},
+    {"layer":"full","path":"phases[4].why","before":"No new ult — your 6 is a Mantra rank: faster cycles, bigger RQs. Press the early lead before scaling lanes wake up.","after":"You get no ultimate at 6; Glacial Storm doubles Frostbite inside it and parks the wave wherever she wants it."},
+    {"layer":"content","path":"whys[4]","before":"Level 5 is your last strong phase before her power spike changes everything at 6.","after":"At 6 Glacial Storm doubles Frostbite and zones the wave — your poke stops paying."},
+
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Anivia"},
+    {"layer":"full","path":"phases[5].rating","before":"6/10","after":"3/10"},
+    {"layer":"full","path":"phases[5].why","before":"Blackfire/Luden's spike: RQ-W chains threaten kills outright. The lane is now or never — you fall off politely.","after":"Her first item makes wall-into-Flash-Frost-into-Frostbite lethal, and Frostbite returns every 4 seconds."},
+    {"layer":"content","path":"whys[5]","before":"At 6 Anivia's Glacial Storm and wall combo give her zone control and burst that beats your poke-and-shield kit.","after":"With her first item the wall-stun-Frostbite chain kills you from full, and Frostbite is only a 4s cooldown."},
+
+    {"layer":"full","path":"phases[6].why","before":"Late Karma is a utility engine: RE shields the team, W roots the diver, and RQ pokes the objective setup.","after":"Late she permafreezes the map with Glacial Storm; you shield through it and never stand in the wall's path."},
+
+    {"layer":"full","path":"diff","before":"EVEN","after":"TRICKY"},
+    {"layer":"full","path":"tone","before":"#e8b84b","after":"#ff8b3d"},
+    {"layer":"full","path":"diffRating","before":"5.5/10","after":"7/10"},
+    {"layer":"full","path":"carryRating","before":"6/10","after":"7/10"},
+    {"layer":"full","path":"breakdown.difficulty","before":"Even matchup — difficulty 5.5/10, Anivia carry threat 6/10.","after":"Tricky matchup — difficulty 7/10, Anivia carry threat 7/10."},
+    {"layer":"full","path":"report[14].t","before":"Even matchup — difficulty 5.5/10, Anivia carry threat 6/10.","after":"Tricky matchup — difficulty 7/10, Anivia carry threat 7/10."},
+
+    {"layer":"full","path":"tldr","before":"You own the first ten minutes against scalers — RQ the lane into submission before his items vote.","after":"You own the first ten minutes — RQ her off the wave before Glacial Storm makes the lane hers."},
+    {"layer":"full","path":"report[0].t","before":"You own the first ten minutes against scalers — RQ the lane into submission before his items vote.","after":"You own the first ten minutes — RQ her off the wave before Glacial Storm makes the lane hers."},
+
+    {"layer":"full","path":"winCon","before":"Cash the early lead into plates and roams before his scaling forecloses on you. Flash Frost (Stun) is the clock this lane runs on — read it before every step forward.","after":"Cash the early lead into plates and roams before her scaling forecloses on you. Flash Frost (Stun) is the clock this lane runs on — read it before every step forward."},
+    {"layer":"full","path":"report[1].t","before":"Cash the early lead into plates and roams before his scaling forecloses on you. Flash Frost (Stun) is the clock this lane runs on — read it before every step forward.","after":"Cash the early lead into plates and roams before her scaling forecloses on you. Flash Frost (Stun) is the clock this lane runs on — read it before every step forward."},
+
+    {"layer":"full","path":"enemyWin","before":"Anivia wins by landing Flash Frost (Stun), denying your pattern, and keeping the fight at a distance your kit resents.","after":"Anivia wins by walling your exit, landing Flash Frost, then doubling Frostbite on a target that cannot walk out."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Anivia Flash Frost (Stun): matchup-defining — The slow-moving stun starts every Anivia kill — sidestep it and her E never doubles. Check it before every step-up. - RE shield-speed is the lifeline; chip damage never gets it. - The ult answers fights, not waves.","after":"- Flash Frost (Q): 11s at rank 1, 7s at rank 5 and 80 mana — sidestep it and Frostbite never doubles. - Frostbite (E): a flat 4s, so it is never the ability you wait out. - Crystallize (W): a 17s wall. - Glacial Storm: a 4/3/2s toggle, so her mana bar is the real limit."},
+
+    {"layer":"full","path":"breakdown.mid","before":"Convert before the curve flips: plates, roams, river picks with W roots. Every minute past your spike is a minute rented from his.","after":"Convert before the curve flips: plates, roams, river picks with W roots. Every minute past your spike is a minute rented from hers."},
+
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a Q-thinned slow push you RQ-crash on roam timers — your E speeds the whole team's rotations, not just yours. Worst wave: a frozen wave at his tower post-two-items — your kill window died there and the lane just hasn't noticed yet. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a Q-thinned slow push you RQ-crash on roam timers — your E speeds the whole team's rotations, not just yours. Worst wave: a frozen wave at her tower post-two-items — your kill window died there and the lane just hasn't noticed yet. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a Q-thinned slow push you RQ-crash on roam timers — your E speeds the whole team's rotations, not just yours. Worst wave: a frozen wave at his tower post-two-items — your kill window died there and the lane just hasn't noticed yet. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a Q-thinned slow push you RQ-crash on roam timers — your E speeds the whole team's rotations, not just yours. Worst wave: a frozen wave at her tower post-two-items — your kill window died there and the lane just hasn't noticed yet. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+
+    {"layer":"full","path":"report[9].t","before":"Commit on Flash Frost (Stun)’s cooldown, on your Blackfire Torch spike, and with your jungler’s setup. His answer goes first; yours goes last.","after":"Commit on Flash Frost (Stun)’s 11s cooldown, on your Blackfire Torch spike, and with your jungler’s setup. Her answer goes first; yours last."},
+
+    {"layer":"full","path":"report[11].t","before":"Coast on even farm — you LOSE even. Spend Mantra on waves pre-spike. Trade at his range once items arrive. Save the R for moments with names on them.","after":"Coast on even farm — you LOSE even. Spend Mantra on waves pre-spike. Trade at her range once items arrive. Save the R for moments with names on them."},
+
+    {"layer":"full","path":"breakdown.carry","before":"Carry early or enable late — RQ chips win lanes; RE + roots win the teamfights your early lead bought.","after":"Carry early — RQ chips her before Glacial Storm; after that you shield and root for the team."},
+
+    {"layer":"full","path":"breakdown.late","before":"You are the team's engine room: RE the engage, W-root the diver, RQ the siege — Karma late wins by making four teammates faster and safer.","after":"Late you are a shield on legs: RE whoever stands in Glacial Storm, W-root her when she overextends the zone, and RQ from outside it."},
+
+    {"layer":"full","path":"dosFull[0].t","before":"RQ his step-ups every Mantra cycle","after":"RQ her step-ups every Mantra cycle"},
+    {"layer":"full","path":"dosFull[1].d","before":"Q the last-hit, and on real windows RQ-W: the chunk plus tether-root turns a poke trade into a kill setup — E out before the answer.","after":"Inner Flame is 950 and 40 mana at rank 1 — poke every time she steps up to last-hit, and Mantra comes back faster for it."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Anivia’s whole plan in one window — decline politely and watch it retire.","after":"Even farm is a loss here — Rebirth means she survives to the items that beat you."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Your tether breaks if YOU walk away — holding the root means holding your ground for two seconds you must plan for.","after":"Mantra spent on a wave is a kill window you gave back — RQ her face instead, and your damage refunds the cooldown."},
+    {"layer":"full","path":"dontsFull[2].t","before":"Trade at his range once items arrive","after":"Trade at her range once items arrive"},
+    {"layer":"full","path":"dontsFull[2].d","before":"Spending Mantra on wave-clear while behind on poke — Karma without RQ banked is a support who took mid's farm.","after":"Flash Frost reaches 1075 against your 950, so once she is itemised she pokes you at a range you cannot answer."},
+
+    {"layer":"content","path":"spikes[0].text","before":"Anivia's egg passive makes early kill pressure nearly impossible for her, so use Mantra-Q poke freely to zone her off farm while she's fragile and slow to punish.","after":"Rebirth means a kill costs you two health bars, so trade for tempo instead: Mantra-Q chip and CS denial while Flash Frost sits on 11s and she cannot walk you down."},
+
+    {"layer":"content","path":"spikes[2].text","before":"With Rod of Ages or Liandry's rolling, her wall-flash-ult combo starts one-shotting squishies and her waveclear lets her permafreeze the lane against your melee-range utility.","after":"With Rod of Ages or Liandry's rolling, her wall-into-Flash-Frost-into-Frostbite combo starts killing squishies outright, and her waveclear lets her hold the lane wherever she likes."}
+  ],
+  "notes": "CHART: full layer read Skill on six of seven rows while the content layer and the packet levelChart agreed on Karma / Karma / Karma / Karma / Anivia / Anivia / Anivia. I moved the full layer onto that verdict and rewrote every why alongside. Rows 0-5 therefore carry full-layer side edits with no paired win[N] edit, because win[0..5] was already correct.\n\nDIFFICULTY: EVEN at 5.5/10 against a 39.13% win rate was the page contradicting its own data. Moved to TRICKY / 7-of-10 with the tone colour and both rating sentences.\n\nCONTENT whys[] INDEX DRIFT — THIRD OCCURRENCE. whys[4] read \"Level 5 is your last strong phase\" while win[4] read Anivia, so that row shipped arguing with itself. Same one-slot shift found on akali and akshan. This looks systemic across the karma content file rather than per-matchup; worth checking every karma matchup, not only the ones in this slice.\n\nUnverified, so not asserted: whether Karma's W root can hold Anivia through the Rebirth egg transition, whether Frostbite's doubling window has a stated duration (Riot's text says only \"recently hit\"), and whether Crystallize can be walked through by any Karma tool — she has no dash, so I made no claim either way."
+}

@@ -1,0 +1,92 @@
+{
+  "ownerKey": "karma_mid",
+  "enemy": "ekko",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Packet-flagged: Karma wins 41.18% over 68 games while the content chart gave her 6 of 7 stages. The full layer said Skill/Skill/Skill/Skill/Ekko/Skill/Ekko, so the two layers also disagreed on four rows.",
+      "why": "Karma's edge is levels 1-3, where Ekko has one 9s Timewinder and a 325-range Phase Dive. From level 4 his Timewinder actually out-ranges her — 1075 against her 950 — so that row is a genuine skill window, and from 6 onward Chronobreak, then his item spike, then a 50s rank-3 Chronobreak decide it.",
+      "corrected": "Both layers now read Karma/Karma/Karma/Skill/Ekko/Ekko/Ekko, with the whys and whys[] on every moved row rewritten to match.",
+      "confidence": "High",
+      "sources": ["brief.packet winRate 41.18 / 68 games and the levelChart defect", "brief.enemyKit Ekko Q range 1075 cd 9/8.5/8/7.5/7, E range 325", "brief.ownerKit Karma Q range 950"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why read 'No new ult — your 6 is a Mantra rank... press the early lead before scaling lanes wake up' on a row already marked Ekko, and two content fields hedged with 'generally'.",
+      "why": "Chronobreak is 110s at rank 1 but 50s at rank 3 — an unusually steep rank curve, and the reason the late game runs away from Karma rather than staying even.",
+      "corrected": "phases[4].why, phases[6].why, spikes[2].text and spikes[3].text now state the 110s-to-50s curve with no hedge.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Ekko R cd 110/80/50"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns held no digit (lint COOLDOWN_NO_DIGIT) and described Chronobreak only as 'erases your kill and bursts back'. All three of the brief's missingInteractions were absent from the page.",
+      "why": "Chronobreak makes Ekko untargetable and heals him for a percentage of the damage received in that window — so a commit dumped into it is refunded twice over, and Grievous Wounds is what makes chip stick. Phase Dive is an auto-attack reset that teleports him to the target, so the attack wind-up is the tell, not the cast. Parallel Convergence is 22/20/18/16/14s at 1600 range and its anomaly appears seconds before it stuns, which is the dodge.",
+      "corrected": "breakdown.cooldowns, tradeBad, dosFull[1].d, report[5].t, breakdown.feeding and breakdown.late now carry the untargetable-plus-heal behaviour, the anti-heal timing, the Phase Dive wind-up tell, and the real numbers.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Ekko R text and flags untargetable/heal", "brief.enemyKit Ekko E autoReset flag and text", "brief.enemyKit Ekko W cd 22/20/18/16/14 range 1600", "brief.missingInteractions rules untargetable-dodges-burst, needs-antiheal, autoreset-burst-tell"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "Packet flagged wants.foe[1] 'Use Chronobreak' and wants.foe[2] 'Drive Resonance' as probable wrong names.",
+      "why": "Chronobreak is the correct name for Ekko's R, and wants.foe[2] already reads 'Z-Drive Resonance' in full — the matcher clipped the string. Both are false positives; no edits made.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Ekko P = Z-Drive Resonance, R = Chronobreak"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Karma" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ekko" },
+    { "layer": "content", "path": "win[3]", "before": "Karma", "after": "Skill" },
+    { "layer": "content", "path": "win[4]", "before": "Karma", "after": "Ekko" },
+    { "layer": "content", "path": "win[6]", "before": "Karma", "after": "Ekko" },
+
+    { "layer": "full", "path": "phases[0].why", "before": "Q-poke wins level 1 against nearly everyone — the lane starts as your spam war; respect only mana.", "after": "Timewinder is 9s at rank 1 and Phase Dive reaches only 325 — nothing here punishes your level 1 poke." },
+    { "layer": "full", "path": "phases[1].why", "before": "Mantra online from level 1 means RQ is already a third of a health bar — spend it on real windows, not waves.", "after": "Mantra is up from level 1, so RQ chunks him while his damage is still one grenade on a 9s cooldown." },
+    { "layer": "full", "path": "phases[2].why", "before": "Full kit: W tether roots overstayers and E speeds every trade exit. Your early is the best in the utility class.", "after": "Focused Resolve roots him if Phase Dive brings him to 325, and Soul Shield covers the Z-Drive hit behind it." },
+    { "layer": "full", "path": "phases[3].why", "before": "Lost Chapter timing — the RQ chunk cycles every 30 seconds. Chip him below half and hold the kill window.", "after": "Skill window: Timewinder reaches 1075 against your 950, but the 22s anomaly is visible before it stuns." },
+    { "layer": "full", "path": "phases[4].why", "before": "No new ult — your 6 is a Mantra rank: faster cycles, bigger RQs. Press the early lead before scaling lanes wake up.", "after": "Chronobreak is 110s and untargetable — it erases the kill you earned and heals him back. Your 6 is a Mantra rank." },
+    { "layer": "full", "path": "phases[5].why", "before": "Blackfire/Luden's spike: RQ-W chains threaten kills outright. The lane is now or never — you fall off politely.", "after": "His first item turns the anomaly stun into a full combo, and you own no dash — one 10s shield is the answer." },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Karma is a utility engine: RE shields the team, W roots the diver, and RQ pokes the objective setup.", "after": "Chronobreak drops to 50s at rank 3 — he resets fights faster than you can shield them. You peel and ward." },
+
+    { "layer": "full", "path": "tldr", "before": "He dives a shield, a root tether, and a speed boost — annoying, but your damage falls off before his patience does.", "after": "He rewinds on a 110s Chronobreak and heals back what you dealt — bully levels 1-3, then stop paying for his ult." },
+    { "layer": "full", "path": "winCon", "before": "Win early, frustrate the dives, and out-utility his snowball with shields and roots. Nothing here works through Chronobreak — schedule your pattern around its cooldown.", "after": "Win levels 1-3, then stop paying for the rewind: chip him freely, but never spend your last spell into Chronobreak — 110s at rank 1 and only 50s at rank 3." },
+    { "layer": "full", "path": "enemyWin", "before": "Ekko wins by landing Chronobreak, denying your pattern, and turning your every misstep into the all-in you hadn’t budgeted.", "after": "Ekko wins by baiting your commit into Chronobreak, going untargetable, healing back what you dealt, and returning on top of you." },
+    { "layer": "full", "path": "tradeGood", "before": "Q the last-hit, and on real windows RQ-W: the chunk plus tether-root turns a poke trade into a kill setup — E out before the answer.", "after": "Q him from 950 and step clear of the Timewinder return path — the grenade damages twice, on the way out and on the rewind back." },
+    { "layer": "full", "path": "tradeBad", "before": "Spending Mantra on wave-clear while behind on poke — Karma without RQ banked is a support who took mid's farm.", "after": "Dumping your last spell as he ults — Chronobreak turns him untargetable and heals a share of what you just dealt." },
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Q the last-hit, and on real windows RQ-W: the chunk plus tether-root turns a poke trade into a kill setup — E out before the answer. Bad trade: Spending Mantra on wave-clear while behind on poke — Karma without RQ banked is a support who took mid's farm.", "after": "Good trade: Q him from 950 and step clear of the Timewinder return path — the grenade damages twice, on the way out and on the rewind back. Bad trade: Dumping your last spell as he ults — Chronobreak turns him untargetable and heals a share of what you just dealt." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Ekko Chronobreak: matchup-defining — Erases your kill and bursts back — track the hologram and save final damage for after it. It governs your forward steps. - RE shield-speed spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Chronobreak is 110s at rank 1 but only 50s at rank 3: he goes untargetable and heals a share of the damage you just dealt, so hold your last spell until he lands. - Parallel Convergence is 22s at rank 1 and the anomaly appears seconds before it stuns — walk out of the circle." },
+    { "layer": "full", "path": "breakdown.mid", "before": "Convert before the curve flips: plates, roams, river picks with W roots. Every minute past your spike is a minute rented from his.", "after": "Convert before the curve flips: plates, roams, river picks with W roots. Every minute past level 3 is a minute rented from his." },
+    { "layer": "full", "path": "breakdown.feeding", "before": "If Ekko opens the score, reset expectations and respect Chronobreak doubly. After a second, your job description changes — farm with Q and stay relevant through shields and roots.", "after": "If Ekko opens the score he trades knowing Chronobreak undoes it, and at rank 2 that is only 80s. Farm with Q at 950, buy Grievous Wounds, and stay relevant by shielding and rooting." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry early or enable late — RQ chips win lanes; RE + roots win the teamfights your early lead bought.", "after": "Carry in the first three levels — after that you shield the target he stuns and root him off the reset." },
+    { "layer": "full", "path": "breakdown.late", "before": "You are the team's engine room: RE the engage, W-root the diver, RQ the siege — Karma late wins by making four teammates faster and safer.", "after": "You are the peel: shield whoever he stuns, W-root him the moment he lands, and hold anti-heal so Chronobreak returns him low." },
+    { "layer": "full", "path": "ahead", "before": "Ahead, sprint: RQ Ekko off every wave, take plates with the lead, and W-root river picks — Karma leads are sprints, not marathons.", "after": "Ahead, sprint: RQ him off the wave every cycle, take plates before his first item, and W-root him whenever Phase Dive is down." },
+
+    { "layer": "full", "path": "dosFull[0].t", "before": "Bully levels 1-5 — it's your whole window", "after": "Bully levels 1-3 — it's your whole window" },
+    { "layer": "full", "path": "dosFull[0].d", "before": "Erases your kill and bursts back — track the hologram and save final damage for after it. Bait it, count it, then go.", "after": "Before he ranks Parallel Convergence he has one 9s grenade and a 325-range roll — take every plate and every trade." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q the last-hit, and on real windows RQ-W: the chunk plus tether-root turns a poke trade into a kill setup — E out before the answer.", "after": "Phase Dive ends in an attack that teleports him to you — the wind-up is the cue: shield first, then W-root him on arrival." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Ekko burns Chronobreak on nothing — take the fifteen-second invitation.", "after": "A Chronobreak spent on nothing is 110 seconds at rank 1 — go now." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Ekko’s bread-and-butter play — deny it and they run out of answers.", "after": "Post-item his stun combo beats your shield — peel him off, do not duel." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Spending Mantra on wave-clear while behind on poke — Karma without RQ banked is a support who took mid's farm.", "after": "Without Soul Shield you have no answer to Phase Dive — hold the wave back until it is off its 10s cooldown." },
+
+    { "layer": "full", "path": "report[0].t", "before": "He dives a shield, a root tether, and a speed boost — annoying, but your damage falls off before his patience does.", "after": "He rewinds on a 110s Chronobreak and heals back what you dealt — bully levels 1-3, then stop paying for his ult." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Ekko’s Chronobreak: Erases your kill and bursts back — track the hologram and save final damage for after it. It’s down or you don’t go.", "after": "Track Chronobreak: 110s at rank 1, 50s at rank 3. He is untargetable through it and heals a share of your damage — hold the last spell." },
+
+    { "layer": "content", "path": "whys[3]", "before": "Karma's range and shields still outpace Ekko's growing combo threat.", "after": "His 1075 Timewinder answers your 950, but the stun zone is visible." },
+    { "layer": "content", "path": "whys[5]", "before": "Karma's disengage and range still generally beat his stun-combo attempt.", "after": "His first item turns the anomaly stun into a combo one shield can't cover." },
+    { "layer": "content", "path": "whys[6]", "before": "Karma's poke and peel keep this teamfight phase close to even overall.", "after": "Chronobreak at 50s resets fights faster than you can shield them." },
+    { "layer": "content", "path": "spikes[2].text", "before": "Once he completes his burst item his W-stun into full combo threatens real damage, but your range and shields generally still let you disengage before he closes the full combo.", "after": "Once he completes his burst item the Parallel Convergence stun into a full combo kills you outright, and your only answer is a 10s Soul Shield spent before he arrives rather than after." },
+    { "layer": "content", "path": "spikes[3].text", "before": "Ekko's late-game teamfight combo and reset potential off his ult are strong, but your poke and peel keep this lane close to even rather than clearly losing.", "after": "Chronobreak falls to 50s at rank 3, so he re-enters every fight he loses and heals a share of the damage he took — Grievous Wounds is what makes your chip stick." },
+    { "layer": "content", "path": "mid", "before": "Right at level 6 you need to be careful — Chronobreak lets him rewind out of a bad trade and punish you if you overextend chasing what looks like a kill, so don't get greedy the moment he hits his ultimate. Past that single spike, though, your range and shields still let you control the pace even once he completes his first item; his stun-into-combo is real damage but you can disengage before he lands the full sequence if you're not caught out of position. Keep playing at range and punish his short trading windows rather than letting him dictate the fight. This phase stays broadly in your favor outside that level 6 window.", "after": "Right at level 6 the lane changes hands — Chronobreak is 110s at rank 1 and makes him untargetable while it heals a share of the damage you just dealt, so a commit that looked lethal simply refunds him. Never spend your last spell into the rewind; wait for him to land and W-root him there. Once he completes his first item the Parallel Convergence stun into a full combo is lethal rather than painful, and you own no dash to leave it — only a 10s Soul Shield, which has to be up before he arrives. Play at 950, punish the 22s anomaly window, and take plates instead of duels." },
+    { "layer": "content", "path": "late", "before": "The late game stays close to even — Ekko's teamfight combo and ability to reset a fight with his ult give him real threat potential, but your poke and Mantra shields keep you from ever being clearly outclassed. Play around cooldowns, hold shields for his stun attempt, and don't isolate yourself where his combo can catch you alone. This is a lane where careful play keeps you ahead rather than one you can coast through on stats alone.", "after": "Late, Chronobreak drops to 50s at rank 3 and he re-enters every fight he loses, healing a share of what he took — so chip damage alone never finishes him. Buy Grievous Wounds and hold it for the rewind. Play as pure peel: shield whoever he stuns, W-root him the instant he lands, and never stand alone where Phase Dive reaches you with nobody to root him off. This phase is his unless your team punishes the window while his ult is down." }
+  ],
+  "notes": "CHART: packet-flagged — 41.18% over 68 games against a content chart giving Karma 6 of 7 stages, and the two layers disagreed on four rows. Both now read Karma/Karma/Karma/Skill/Ekko/Ekko/Ekko. Rows 0,1,2,5 were full-side edits (content already held the value or was moved alongside); rows 3,4,6 were content win[N] edits where the full side already held the target. Every why and whys[] on a moved row was rewritten in the same proposal.\n\nNOTABLE: Ekko's Timewinder is 1075 range against Karma's 950 Q. The page repeatedly claimed Karma out-ranges him. She does not from level 4 on, and that is why row 3 is a skill window rather than hers.\n\nAll three missingInteractions landed: the untargetable-plus-heal Chronobreak (do not dump the last spell), Grievous Wounds timing, and the Phase Dive attack wind-up as the tell.\n\nSuspectNames: both flags are false positives — 'Chronobreak' is correct and wants.foe[2] already reads 'Z-Drive Resonance' in full.\n\nSCOPE: I held to two report[] edits (report[0].t and report[5].t). That leaves report[1].t and report[3].t still carrying the old winCon / tradeGood / tradeBad strings verbatim, so they will read stale against the rewritten versions. They are the next two to sync if the cap is lifted.\n\nUNVERIFIED, left alone: whether Karma's Focused Resolve tether breaks when Ekko becomes untargetable through Chronobreak, and whether Parallel Convergence's stun is reduced by tenacity. Neither is in Riot's text."
+}

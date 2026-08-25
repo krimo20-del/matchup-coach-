@@ -1,0 +1,105 @@
+{
+  "ownerKey": "hwei_mid",
+  "enemy": "swain",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer chart read 'Skill' on all seven rows; content and packet read Hwei/Hwei/Hwei/Hwei/Skill/Hwei/Hwei.",
+      "why": "Death's Hand reaches 750 and Nevermove 850, both shorter than Hwei's paint range, so 1-5 belong to Hwei. Level 6 is the one contested row because Demonic Ascension's 650 drain runs indefinitely while it feeds.",
+      "corrected": "Sides moved to match the packet and content chart; level 6 stays Skill.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "champ-data/_kits/swain.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No Swain cooldown appeared anywhere, and Demonic Ascension was described as a fixed-duration burst window.",
+      "why": "Riot's R text: the form is indefinite as long as Swain drains enemy champions. That changes the advice from 'wait it out' to 'leave the 650 circle so it stops feeding'. Death's Hand also falls from 7s to 3s across ranks — that is his real lane spike.",
+      "corrected": "breakdown.cooldowns, dosFull[0].d, spikes[1].text and report[5].t rewritten with 120s, 650, and the feeding condition.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/swain.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two errors on the same ability: Swain's E is called 'Torment' (its name is Nevermove), and the PULL is credited to his ultimate ('Demonic Ascension pulls in a wide radius', 'the pull radius').",
+      "why": "Riot's E text: he launches a wave forward, it returns to Swain and roots enemies it hits, and he can then pull all rooted champions closer. The root lands on the RETURN pass, and the pull is E's recast — the ultimate only drains and slows. For an immobile champion that distinction is the entire dodge: you are safe walking through the outbound wave and get rooted by the one coming back.",
+      "corrected": "Name fixed everywhere in scope; the return-pass root and the E recast pull are now stated in winCon, tradeBad, cooldowns and spikes[0].",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/swain.json"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Ravenous Flock heals him off collected Soul Fragments and permanently raises his max health, so report[8]'s existing early anti-heal line is right for this matchup. I left it alone and grounded the reason in dosFull[1].d instead.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/swain.json", "_missing/hwei_mid.json"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Two COPY_PASTE_BLEED bullets and breakdown.cooldowns with no digit.",
+      "why": "Both bled bullets restate tradeGood/tradeBad under unrelated titles.",
+      "corrected": "Rewritten to match their titles; real cooldowns written in.",
+      "confidence": "High",
+      "sources": ["lintFindings"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Hwei"},
+
+    {"layer":"full","path":"tldr","before":"A painter's duel at max range — your palette out-options his kit, but only the mage who dodges gets to keep painting.","after":"A painter's duel at max range — Death's Hand stops at 750 and Nevermove at 850; live outside both and he has no answer."},
+    {"layer":"full","path":"report[0].t","before":"A painter's duel at max range — your palette out-options his kit, but only the mage who dodges gets to keep painting.","after":"A painter's duel at max range — Death's Hand stops at 750 and Nevermove at 850; live outside both and he has no answer."},
+
+    {"layer":"full","path":"winCon","before":"Out-option the poke war and detonate marks he cannot afford to keep eating. Demonic Ascension is the clock this lane runs on — read it before every step forward.","after":"Out-option the poke war and detonate marks he cannot afford to keep eating. Nevermove roots on the RETURN pass — watch the wave come back, not go out."},
+    {"layer":"full","path":"report[1].t","before":"Out-option the poke war and detonate marks he cannot afford to keep eating. Demonic Ascension is the clock this lane runs on — read it before every step forward.","after":"Out-option the poke war and detonate marks he cannot afford to keep eating. Nevermove roots on the RETURN pass — watch the wave come back, not go out."},
+
+    {"layer":"full","path":"enemyWin","before":"Swain wins by landing Demonic Ascension, denying your pattern, and owning the spacing war until your tempo starves.","after":"Swain wins by rooting you on Nevermove's return, pulling you in, and draining inside 650 while his passive heals it all back."},
+
+    {"layer":"full","path":"tradeGood","before":"QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending.","after":"QQ his last-hit, weave any second spell for the mark, detonate, and reset outside 850 — that is Nevermove's reach and the only thing that holds you."},
+    {"layer":"full","path":"tradeBad","before":"Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Standing still while the Nevermove wave comes back — it roots on the return pass, and the recast pull drops you inside a 650 drain you cannot walk out of."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending. Bad trade: Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset outside 850 — that is Nevermove's reach and the only thing that holds you. Bad trade: Standing still while the Nevermove wave comes back — it roots on the return pass, and the recast pull drops you inside a 650 drain you cannot walk out of."},
+    {"layer":"full","path":"report[3].t","before":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending. Great trade: Swain wastes Demonic Ascension — commit immediately. Bad trade: Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset outside 850 — that is Nevermove's reach and the only thing that holds you. Great trade: Swain wastes Demonic Ascension — commit immediately. Bad trade: Standing still while the Nevermove wave comes back — it roots on the return pass, and the recast pull drops you inside a 650 drain you cannot walk out of."},
+
+    {"layer":"full","path":"ahead","before":"Ahead, paint the prison: mark-detonate Swain on every last-hit, shove with QA, and rotate first to every river — your R range means you join fights he can't even see.","after":"Ahead, paint the prison: mark-detonate Swain on every last-hit, shove with QA, and rotate first to every river — deny the soul fragments his passive heals off."},
+    {"layer":"full","path":"report[13].t","before":"Ahead, paint the prison: mark-detonate Swain on every last-hit, shove with QA, and rotate first to every river — your R range means you join fights he can't even see.","after":"Ahead, paint the prison: mark-detonate Swain on every last-hit, shove with QA, and rotate first to every river — deny the soul fragments his passive heals off."},
+
+    {"layer":"full","path":"phases[0].why","before":"QQ out-ranges almost everything mid — paint his last-hits from angles he can't answer. Watch mana; art is expensive.","after":"QQ out-ranges Death's Hand's 750 — paint his last-hits from outside it. Watch mana; art is expensive at 80 a cast."},
+    {"layer":"full","path":"phases[2].why","before":"Full palette: EE fear or EQ root into QQ is a genuine kill threat. He has to respect every brush-stroke from here.","after":"Full palette: EE fear or EQ root into QQ is a genuine kill threat. Nevermove is 11s at rank 3 — punish the return pass."},
+
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a QA-cleared slow push that crashes on your roam timer — your wave-clear is elite and your map poke (R) travels with you. Worst wave: a frozen wave near his tower with EE down — the immobile artist walking up to last-hit is mid lane's most gankable picture. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a QA-cleared slow push that crashes on your roam timer — your wave-clear is elite and your map poke (R) travels with you. Worst wave: a frozen wave near his tower with EE down — Nevermove reaches 850 and roots on the way back with a jungler behind it. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a QA-cleared slow push that crashes on your roam timer — your wave-clear is elite and your map poke (R) travels with you. Worst wave: a frozen wave near his tower with EE down — the immobile artist walking up to last-hit is mid lane's most gankable picture. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a QA-cleared slow push that crashes on your roam timer — your wave-clear is elite and your map poke (R) travels with you. Worst wave: a frozen wave near his tower with EE down — Nevermove reaches 850 and roots on the way back with a jungler behind it. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. It governs your forward steps. - E fear paint spent on poke is a death you scheduled. - Hold the R for the fight that decides something.","after":"- Swain Demonic Ascension (R): 120s, and it drains inside 650 for as long as it keeps feeding — leave the circle, do not out-trade it. - Nevermove (E) is 12s and roots on the RETURN pass. - Death's Hand (Q) falls from 7s to 3s."},
+
+    {"layer":"full","path":"dosFull[0].t","before":"Open trades with the spell his spacing least expects","after":"Open trades the moment Nevermove has passed you"},
+    {"layer":"full","path":"dosFull[0].d","before":"His drain mode — disengage and reset the fight when it starts. Commit on its cooldown, never into it.","after":"Demonic Ascension drains inside 650 and lasts while it feeds — walk out of the circle instead of trading in it."},
+    {"layer":"full","path":"dosFull[1].d","before":"QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending.","after":"Ravenous Flock heals him off every soul fragment, so a half-finished rotation gives it all back — land the second paint and detonate, or don't start."},
+    {"layer":"full","path":"dosFull[2].d","before":"Swain spends Demonic Ascension early — the closest thing this matchup has to a guarantee.","after":"Swain spends Demonic Ascension early — 120 seconds where his all-in has no engine."},
+
+    {"layer":"full","path":"dontsFull[0].d","before":"That’s Swain’s bread-and-butter play — deny it and they run out of answers.","after":"Nevermove roots on the return — a repeated pattern walks you into it."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"A wave painted while he is missing is how Vision of Empire lands on you — the eye reaches 7500 at rank 5, slows you, and reveals you for the collapse."},
+
+    {"layer":"full","path":"report[5].t","before":"Track Swain’s Demonic Ascension: His drain mode — disengage and reset the fight when it starts. Forward steps wait for its downtime.","after":"Track Swain’s Demonic Ascension: 120s, a 650-radius drain that lasts as long as it feeds. Forward steps wait for its downtime."},
+
+    {"layer":"full","path":"breakdown.feeding","before":"If Swain takes first blood, tighten up: Demonic Ascension is now always up in your head. A second kill means the duel is over and the game isn’t — farm with QA clears and stay relevant through max-range poke.","after":"If Swain takes first blood, tighten up: never let the Nevermove wave return through you, because that root is what starts the drain. A second kill means the duel is over and the game isn’t — QA-clear and paint from beyond 850."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through range — no mid pool champion paints a teamfight from further away; your R + QQ decides objectives before they start.","after":"Carry from beyond 850: Nevermove is his only lockdown and the drain needs 650, so a QQ thrown from outside both decides fights he cannot join."},
+
+    {"layer":"content","path":"whys[4]","before":"His ultimate's AoE drain-heal is a real threat if you get caught, roughly even if he lands the engage","after":"Demonic Ascension drains everything inside 650, so 6 is even if he ever gets you into that circle"},
+    {"layer":"content","path":"spikes[0].text","before":"Swain's Death's Hand (Q) has a slow cast animation and Torment (E) roots you only from short range, so your longer Q fire form and E poke punish him before his kit can lock you down.","after":"Death's Hand stops at 750 and Nevermove roots only on its return from 850, so your QQ into the mark detonation punishes him from outside both before he can lock you down."},
+    {"layer":"content","path":"spikes[1].text","before":"Demonic Ascension pulls in a wide radius and heals him massively, so respect the drain zone — you want to stay at the edge of your own range, not inside his ult radius, when it goes off.","after":"Demonic Ascension drains everything inside 650 and stays up for as long as it keeps feeding, so respect the circle — poke from the edge of your own range and never step into his."},
+    {"layer":"content","path":"early","before":"Swain's kit is slow and telegraphed — Death's Hand travels in a line and Torment has short root range, both of which your longer Q/E poke punishes cleanly. He can't out-trade you level 1-2 without landing that root first, and even then your damage output is higher per rotation. Keep your distance, poke every time his root is down, and you win nearly every extended trade through level 5.","after":"Swain's kit is slow and telegraphed — Death's Hand pierces in a line from 750 and Nevermove roots only on its return from 850, both of which your longer paint range punishes cleanly. He can't out-trade you level 1-2 without landing that root first, and even then your damage per rotation is higher. Keep your distance, poke every time the root is down, and you win nearly every trade through 5."},
+    {"layer":"content","path":"mid","before":"You continue winning trades level 3-5 with the same range advantage, but respect his level 6 Demonic Ascension — it's a big AoE drain-heal zone that can turn a losing fight around if he catches you or your teammates inside it. As long as you play the edges of engagements and don't stand in the pull radius, his ultimate does little more than heal him back to full without netting a kill. Keep poking outside the zone and disengage if he commits the ult early.","after":"You continue winning trades level 3-5 with the same range advantage, but respect his level 6 Demonic Ascension — a 650-radius drain that runs indefinitely while it feeds and turns a losing fight around if it catches you. As long as you play the edges and stay out of Nevermove's return pass, his ultimate does little more than heal him back to full. Keep poking outside the circle and disengage if he commits it early."},
+    {"layer":"content","path":"wants.foe[0]","before":"Wants to land Torment root to set up Vision of Empire poke or team dive","after":"Wants Nevermove's return root so the recast pull sets up a dive"}
+  ],
+  "notes": "Chart: full layer read \"Skill\" on all seven rows; content win[N] and packet.levelChart both read Hwei/Hwei/Hwei/Hwei/Skill/Hwei/Hwei. Six full-layer sides moved to Hwei (level 6 already Skill). No paired win[N] edits are included because win[N] is already correct on disk.\n\nFabricated ability name killed: Swain's E was called \"Torment\" twice. It is Nevermove.\n\nThe pull was credited to Demonic Ascension in two places. The pull is Nevermove's recast on rooted champions; the ultimate only drains and slows. The root also lands on the RETURN pass, which is the actual dodge and was never stated anywhere on the page.\n\nDemonic Ascension has no fixed duration — Riot's text says the form is indefinite as long as Swain drains champions. The advice changed from 'wait it out' to 'leave the 650 circle'.\n\nEarly anti-heal in report[8].t is correct here and I left it."
+}

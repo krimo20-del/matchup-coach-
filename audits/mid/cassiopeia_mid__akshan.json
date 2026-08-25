@@ -1,0 +1,179 @@
+{
+ "ownerKey": "cassiopeia_mid",
+ "enemy": "akshan",
+ "lane": "mid",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The full layer read Skill on rows 0,1,3,4,6 while the content layer read Akshan, Akshan, Cassiopeia, Cassiopeia, Cassiopeia. Five rows rendered two different answers.",
+   "why": "The content chart matches the data (52.55% to Cassiopeia over 666 games) and matches the kit: Avengerang matches your 850 range on a 9s cooldown and Dirty Fighting shields every third hit, so he owns levels 1-2; from 4 onward Twin Fang's 0.75s cycle and its heal off poisoned targets out-sustain a 70-mana Heroic Swing.",
+   "corrected": "Full layer moved onto the content verdicts on all five rows, each with a rewritten why.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akshan.json",
+    "champ-data/_kits/cassiopeia.json",
+    "packet.winRate",
+    "packet.levelChart"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns contained no number at all, and dosFull[2].d invented a 'fifteen-second' Heroic Swing window.",
+   "why": "Heroic Swing is 18/16.5/15/13.5/12s, Avengerang 9/8/7/6/5s, Comeuppance 100/85/70s. Fifteen seconds is the rank-3 number, not the lane number.",
+   "corrected": "Real per-rank cooldowns written into breakdown.cooldowns, dosFull[0].d and dosFull[2].d.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akshan.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[1] called Comeuppance an execute you dodge as a skillshot. It is neither: it locks on, scales with missing health, and stops on the first thing it hits. That body-block is the decisive interaction and it was never stated. Also unstated: Dirty Fighting shields him every third hit, so your burst window is smaller than it looks.",
+   "why": "Riot text: 'locks onto an enemy champion and starts storing bullets... dealing damage based on missing health to the first champion, minion, or structure hit.' Passive text: 'Every three hits... grants him a Shield if the target was a champion.' Both flagged in _missing for this pair.",
+   "corrected": "Comeuppance rewritten around the minion body-block and missing-health scaling; the shield folded into phases[1].why, report[8] and dontsFull[2].d.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/akshan.json",
+    "champ-data/_kits/_missing/cassiopeia_mid.json"
+   ]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "Two copy-paste bleeds (dosFull[1].d was tradeGood verbatim, dontsFull[2].d was tradeBad verbatim), one cooldowns field with no digit, and report[8] telling you to buy anti-heal 'into his sustain' when Akshan has a shield and no heal.",
+   "why": "Dirty Fighting grants a shield, not healing, so Grievous Wounds is the wrong first response.",
+   "corrected": "All fixed below.",
+   "confidence": "High",
+   "sources": [
+    "lintFindings",
+    "champ-data/_kits/akshan.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Q poke on his last-hits — the poison-into-E pattern starts at level 1 and your DPS already out-trades most mids.",
+   "after": "Avengerang matches your 850 range on a 9s cooldown and hits going out and back — he pokes free before Twin Fang."
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Akshan"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "W changes the geometry: miasma GROUNDS dashes. Drop it on his engage path and the lane's mobility advantage evaporates.",
+   "after": "W changes the geometry: Miasma slows anything crossing it. But Dirty Fighting shields him every third hit, so chip does not stick yet."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Tear stacking quietly while your E heals off poisoned targets — you win every extended trade from here.",
+   "after": "Tear stacking while Twin Fang heals off poisoned targets — a 70-mana Heroic Swing cannot out-sustain that."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Cassiopeia"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Petrifying Gaze online — the all-in answer. Face-stun his engage or slow his retreat; either way the fangs finish it.",
+   "after": "Petrifying Gaze online. Comeuppance stops on the first minion it hits, so keep the wave on the line and fang him down."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Cassiopeia"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].why",
+   "before": "Late-game Cass is a hyper-carry: ground their divers, petrify their engage, and machine-gun whoever is closest.",
+   "after": "Late he needs terrain for Heroic Swing and a clear line for Comeuppance — deny both angles and you out-tick him."
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Cassiopeia"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Akshan Heroic Swing: matchup-defining — His swing engage/escape — fight only while it is down. Step up only on its downtime. - Budget R Petrifying Gaze for emergencies and the R for opportunities — never swap them.",
+   "after": "- Heroic Swing is 18s at rank 1 and 12s at rank 5 — that downtime is your entire step-up window. - Avengerang is 9s at rank 1 and 5s at rank 5. - Comeuppance is 100s at rank 1 and stops on the first minion it hits."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "His swing engage/escape — fight only while it is down. Commit on its cooldown, never into it.",
+   "after": "Heroic Swing is 18 seconds at rank 1 — commit inside that gap, never into the swing itself."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the last-hit window, E-E-E while the poison ticks, and walk back as it fades — three fangs and out, repeat until Akshan is executable.",
+   "after": "Petrifying Gaze only stuns enemies facing you — turn to meet his swing instead of running, or all you land is the slow and he keeps his angle."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Akshan burns Heroic Swing on nothing — take the fifteen-second invitation.",
+   "after": "Akshan burns Heroic Swing on nothing — that is 18 seconds of open lane."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "Your miasma is the anti-dive — spending it on poke means the next engage arrives ungrounded and you have no boots to run.",
+   "after": "You have no dash: once he swings off a wall behind you the retreat is cut, so hold Flash for the geometry, not the damage."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Spamming unpoisoned fangs at full mana cost, or holding W so long the dash you were saving it for already happened.",
+   "after": "Past your cloud he has terrain to swing off and you have no boots — and his passive shields the burst you chased with."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.carry",
+   "before": "Carry by DPS — no mid matches your damage-per-second from two items; your job is staying alive long enough to prove it.",
+   "after": "Carry by DPS — Akshan needs terrain to swing and a clear line to ult; deny both and he is left holding Avengerang."
+  },
+  {
+   "layer": "full",
+   "path": "ahead",
+   "before": "Ahead, suffocate: poison every last-hit, zone Akshan off the wave with fang threat, and call your jungler — your W makes every gank a guaranteed kill.",
+   "after": "Ahead, suffocate: poison every last-hit, zone Akshan off the wave, and call your jungler — he needs terrain to swing away and mid gives him little of it."
+  },
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "Start Doran's Ring + 2 pots (Tear first back). Seraph's into Liandry's, then Rabadon's; Zhonya's vs dive. No boots — her passive replaces them; spend the slot on damage. Add anti-heal early into his sustain.",
+   "after": "Start Doran's Ring + 2 pots (Tear first back). Seraph's into Liandry's, then Rabadon's; Zhonya's vs dive. No boots — her passive replaces them; spend the slot on damage. His passive shields, so burst past it."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "His Comeuppance can execute you from range if you're caught out low, but it's a skillshot with a long cast — dodging it or forcing him to use it on a minion swings the trade back to you.",
+   "after": "Comeuppance locks on from 2500 range and scales with your missing health, but it stops on the first champion, minion or structure hit — keep a minion on the line and the bullets never reach you."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Snipe you with Comeuppance if you're ever caught low",
+   "after": "Snipe you with Comeuppance on a clear line while low"
+  }
+ ],
+ "notes": "Both packet suspectNames entries are FALSE POSITIVES: Comeuppance and Twin Fang are the real names. IMPORTANT UNVERIFIED: several inherited strings imply Miasma's grounding shuts off Heroic Swing. Heroic Swing carries no 'dash' flag in the kit (it is flagged projectile + terrain, a grapple swing), and whether grounding prevents it is not in Riot's text. I did NOT assert it either way and rewrote phases[1].why to avoid the claim; tldr/winCon/loading still speak of 'grounding the dash' generically and were left alone rather than guessed at. Rows 2 and 5 already agreed across layers and were untouched. | COHERENCE: 1 chart edit(s) withdrawn — they moved the row to the enemy while leaving the phase why describing the owner winning it. Chart authority is an open question, so the label was reverted rather than the prose rewritten. Re-propose only as a side+why pair."
+}

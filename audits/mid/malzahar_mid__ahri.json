@@ -1,0 +1,101 @@
+{
+  "ownerKey": "malzahar_mid",
+  "enemy": "ahri",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer level chart disagreed with the content layer on 6 of 7 rows, so the page rendered two different answers to 'who wins Level 1'.",
+      "why": "packet.levelChart (Skill, Skill, Ahri, Ahri, Malzahar, Ahri, Skill) matches content win[0..6] and whys[0..6]; the full layer carried a different set of sides entirely.",
+      "corrected": "phases[N].side moved to match win[N] on rows 0-5, with each why rewritten to argue the new verdict. Row 6 already agreed.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[]", "currentText.content.whys[]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spikes prose was fine, but phases[4] and phases[5] argued the wrong owner of the spike.",
+      "why": "Level 6 is Malzahar's: Nether Grasp is point-and-click suppression on a 12s Charm cooldown window. First item is Ahri's: Spirit Rush gives three dashes to leave the 700 R range.",
+      "corrected": "phases[4] -> Malzahar naming Charm's flat 12s; phases[5] -> Ahri naming the three dashes vs 700 R range.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 12", "enemyKit R dash flag", "ownerKit R range 700"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Ahri was described as having a shield ('poke his shield off', 'the purple bubble', 'spell shield (Iron Boundary)'). Ahri has no shield, and 'Iron Boundary' is not a Malzahar ability.",
+      "why": "ownerKit P is Void Shift-style damage reduction plus CC immunity that lapses on damage taken; enemyKit has no shield in any slot. Ahri's Q returns as true damage, so stacking MR is the wrong answer — this was absent from the page entirely.",
+      "corrected": "Every 'shield' reference re-pointed at Malzahar's own passive; tradeBad now states the true-damage return; Essence Theft's per-9-minion heal added to breakdown.mid as the anti-heal note.",
+      "confidence": "High",
+      "sources": ["ownerKit P text", "enemyKit Q trueDamage flag", "enemyKit P heal flag", "missingInteractions rules needs-antiheal and resistances-invalidated"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "breakdown.cooldowns contained no digit at all (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the one field that exists to hold real numbers.",
+      "corrected": "Charm 12s flat, Fox-Fire 9s to 5s across ranks, Nether Grasp 140/110/80.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 12", "enemyKit W cd 9/8/7/6/5", "ownerKit R cd 140/110/80"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Two Do's/Don'ts bodies were the tradeGood/tradeBad strings pasted under unrelated titles (lint COPY_PASTE_BLEED), and ten fields called Ahri 'he/his/him'.",
+      "why": "champ-gender: ahri is she/her.",
+      "corrected": "All flagged pronouns fixed; dosFull[1].d and dontsFull[2].d rewritten to match their own titles.",
+      "confidence": "High",
+      "sources": ["lintFindings"]
+    },
+    {
+      "point": 13,
+      "status": "correct",
+      "whatIsWrong": "packet flagged wants.foe[1] 'Use Spirit Rush' as a probable wrong ability name.",
+      "why": "Spirit Rush is Ahri's real R in enemyKit. False positive.",
+      "corrected": "No change.",
+      "confidence": "High",
+      "sources": ["enemyKit R name"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Ahri","after":"Skill"},
+    {"layer":"full","path":"phases[0].why","before":"E a caster minion and let the visions farm for you — your lane is a macro pattern, not a duel, from the first wave.","after":"Even: E a caster minion and let Malefic Visions farm for you — her Orb pokes, but neither of you can commit at one point."},
+    {"layer":"full","path":"phases[1].side","before":"Ahri","after":"Skill"},
+    {"layer":"full","path":"phases[1].why","before":"Q online: the silence is your trade answer. Use it on his engage spell, not on poke he can walk around.","after":"Even: Q online and its silence answers Charm — hold the 6s cast for her step-up, not an Orb thrown from 970."},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Ahri"},
+    {"layer":"full","path":"phases[2].why","before":"W voidlings turn your shove permanent — the wave hits his tower while you ward, roam-shadow, or just exist safely.","after":"Ahri's turn: Charm into Fox-Fire and Orb out-trades you at 150 W range — shove with voidlings and take the wave instead."},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Ahri"},
+    {"layer":"full","path":"phases[3].why","before":"Lost Chapter and the machine is complete: E-hops fund themselves, the wave is always crashing, and his tower is always bleeding.","after":"Still Ahri: her Charm all-in threatens you and you have no answer until 6, so let Lost Chapter fund E-hops and shove from max range."},
+    {"layer":"full","path":"phases[4].side","before":"Ahri","after":"Malzahar"},
+    {"layer":"full","path":"phases[4].why","before":"Nether Grasp online — with ANY jungle presence you now have a guaranteed kill button. The lane bends around your 6.","after":"Nether Grasp online: her Charm is a 12s cooldown, and any whiff is a point-and-click suppress kill with jungle help."},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Ahri"},
+    {"layer":"full","path":"phases[5].why","before":"Liandry's spike: visions melt waves AND health bars. Suppress-into-burn kills through most defensive answers.","after":"Her spike: Spirit Rush's three dashes dodge your Q and leave 700 R range. Liandry's burn only lands on a caught Ahri."},
+
+    {"layer":"full","path":"tldr","before":"His combo through a broken shield kills you — so the shield is the matchup. Guard it like a third summoner.","after":"Her Charm into Orb kills you once Void Shift is stripped — so Void Shift is the matchup. Guard it like a summoner."},
+    {"layer":"full","path":"enemyWin","before":"Ahri wins by landing Charm, denying your pattern, and keeping the fight at a distance your kit resents.","after":"Ahri wins by landing Charm at 975 range, then Orb and Fox-Fire, and by dashing outside your 700 R."},
+    {"layer":"full","path":"tradeGood","before":"Pop-and-punish: poke his shield off with a cheap E-tick, then Q-W-E the gap before it rebuilds — full rotations only ever land on shieldless targets.","after":"Punish the whiff: when Charm misses she is defenceless for 12 seconds — E her, Q to silence Fox-Fire, and let voidlings finish while Void Shift holds."},
+    {"layer":"full","path":"tradeBad","before":"Trading into him with YOUR shield down — you are the squishiest scaling mage in the pool the moment the purple bubble disappears.","after":"Trading with Void Shift already broken — her Q returns as true damage, so no amount of MR saves you once Charm connects."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Ahri Charm: matchup-defining — The charm starts every kill pattern — stay behind minions while it is up. Check it before every step-up. - spell shield (Iron Boundary) is the lifeline; chip damage never gets it. - The ult answers fights, not waves.","after":"- Charm (E) is a flat 12s at every rank — that window is your green light. - Fox-Fire drops from 9s to 5s by rank 5, so late-lane poke never stops. - Void Shift needs you undamaged; chip breaks it. - Nether Grasp is 140/110/80s: spend it on her, not a wave."},
+    {"layer":"full","path":"breakdown.early","before":"Set the metronome: E the wave, shield-manage the poke, and silence only what matters. You are not dueling anyone — you are billing them for tempo.","after":"Set the metronome: E the wave, keep Void Shift intact vs Orb poke, and save Q's silence for Charm. You are not dueling her — you are billing her for tempo."},
+    {"layer":"full","path":"breakdown.mid","before":"Post-6 every lane state includes the Grasp threat: shove, ward, and punish anyone who walks into point-and-click range. With a jungler nearby, your R is a written guarantee.","after":"Post-6 every lane state includes the Grasp threat: shove, ward, and punish any step into 700 range. Essence Theft heals her every 9 minions, so Liandry's chip alone never wins."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a permanently crashing E-W shove — his tower bleeds plates, his roams cost waves, and your visions did all the work. Worst wave: a frozen wave near his tower with no voidlings up — walking to it is the only time Malzahar is ever actually alone. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a permanently crashing E-W shove — her tower bleeds plates, her roams cost waves, and your visions did all the work. Worst wave: a frozen wave near her tower with no voidlings up — walking to it is a free Charm at 975 range. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: Pop-and-punish: poke his shield off with a cheap E-tick, then Q-W-E the gap before it rebuilds — full rotations only ever land on shieldless targets. Bad trade: Trading into him with YOUR shield down — you are the squishiest scaling mage in the pool the moment the purple bubble disappears.","after":"Good trade: Punish the whiff: when Charm misses she is defenceless for 12 seconds — E her, Q to silence Fox-Fire, and let voidlings finish while Void Shift holds. Bad trade: Trading with Void Shift already broken — her Q returns as true damage, so no amount of MR saves you once Charm connects."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry by subtraction — every fight starts 4v5 when your R lands; your job is the wave control that makes the fight happen on your timer.","after":"Carry by subtraction — Nether Grasp removes Ahri for its whole channel, and she is the one champion their team cannot fight without."},
+    {"layer":"full","path":"breakdown.late","before":"You are a suppression delivery system: shield up, hold a flank, and Grasp their carry the moment the fight breathes. The visions and burn do the rest.","after":"You are a suppression delivery system: Void Shift up, hold a flank, and Grasp Ahri before Spirit Rush's three dashes put her behind their front line."},
+    {"layer":"full","path":"dosFull[0].t","before":"Track your shield rebuild timer out loud","after":"Track Charm's 12-second cooldown out loud"},
+    {"layer":"full","path":"dosFull[1].t","before":"Q-silence his setup spell on cast","after":"Q-silence her Fox-Fire on cast"},
+    {"layer":"full","path":"dosFull[1].d","before":"Pop-and-punish: poke his shield off with a cheap E-tick, then Q-W-E the gap before it rebuilds — full rotations only ever land on shieldless targets.","after":"Your Q's silence denies casts on a 6s cooldown — fire it as she steps up so Charm and Fox-Fire never leave her hands, then walk out before it returns."},
+    {"layer":"full","path":"dosFull[2].t","before":"Suppress his aggression the moment 6 lands","after":"Suppress her aggression the moment 6 lands"},
+    {"layer":"full","path":"dosFull[2].d","before":"Ahri whiffs Charm and the lane briefly belongs to you.","after":"Charm whiffs, and for 12 seconds the lane belongs to you."},
+    {"layer":"full","path":"dontsFull[0].t","before":"Stand in cheap-spell range with shield down","after":"Stand inside 975 range with Void Shift down"},
+    {"layer":"full","path":"dontsFull[1].d","before":"Your Q is the only interrupt you own — silencing poke instead of his engage spell is how Malzahars get dove.","after":"Your Q is the only interrupt you own — silencing her Orb instead of her Charm is how Malzahars get dove."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Trading into him with YOUR shield down — you are the squishiest scaling mage in the pool the moment the purple bubble disappears.","after":"A silence only matters before the cast — Q her as she steps into 975 Charm range, never after the kiss is already in the air."},
+    {"layer":"full","path":"report[0].t","before":"His combo through a broken shield kills you — so the shield is the matchup. Guard it like a third summoner.","after":"Her Charm into Orb kills you once Void Shift is stripped — so Void Shift is the matchup. Guard it like a summoner."},
+    {"layer":"full","path":"report[3].t","before":"Good trade: Pop-and-punish: poke his shield off with a cheap E-tick, then Q-W-E the gap before it rebuilds — full rotations only ever land on shieldless targets. Great trade: Ahri wastes Charm — commit immediately. Bad trade: Trading into him with YOUR shield down — you are the squishiest scaling mage in the pool the moment the purple bubble disappears.","after":"Good trade: Punish the whiff: when Charm misses she is defenceless for 12 seconds — E her, Q to silence Fox-Fire, and let voidlings finish while Void Shift holds. Great trade: Ahri wastes Charm — commit immediately. Bad trade: Trading with Void Shift already broken — her Q returns as true damage, so no amount of MR saves you once Charm connects."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a permanently crashing E-W shove — his tower bleeds plates, his roams cost waves, and your visions did all the work. Worst wave: a frozen wave near his tower with no voidlings up — walking to it is the only time Malzahar is ever actually alone. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a permanently crashing E-W shove — her tower bleeds plates, her roams cost waves, and your visions did all the work. Worst wave: a frozen wave near her tower with no voidlings up — walking to it is a free Charm at 975 range. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"report[7].t","before":"Flash + Teleport standard — TP doubles your shove-tax map game. Ghost-cleanse setups exist into hard dive; Ignite pairs with R kill threats if you want lane blood.","after":"Flash + Teleport standard — TP turns every shove into map presence. Ghost-cleanse setups exist into hard dive; Ignite pairs with R kill threats if you want lane blood."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Charm’s cooldown, on your Liandry's spike, and with your jungler’s setup. His answer goes first; yours goes last.","after":"Commit on Charm’s cooldown, on your Liandry's spike, and with your jungler’s setup. Her answer goes first; yours goes last."}
+  ],
+  "notes": "Chart: the content layer (win[] and whys[]) already matched packet.levelChart exactly, so all six chart edits are full-layer side+why pairs with no win[N] edit — win[N] was already the target value and a no-op edit would take the group down. phases[N].rating left untouched: the ratings read as per-stage difficulty for the owner and nothing in the brief tells me the scale, so I did not want to guess and break a group. The page repeatedly described Ahri as having a spell shield ('the purple bubble', 'shieldless targets') and named it 'Iron Boundary' — neither champion has that ability; I re-pointed every reference at Malzahar's own passive (Void Shift). packet suspectName wants.foe[1] 'Use Spirit Rush' is a FALSE POSITIVE — Spirit Rush is Ahri's real R. Left alone as templated but true: 'ahead' and breakdown.spikes/feeding, which already name Ahri specifics."
+}

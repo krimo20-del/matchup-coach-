@@ -1,0 +1,64 @@
+{
+  "ownerKey": "aurelionsol_mid",
+  "enemy": "vladimir",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The two layers rendered different level charts: every phases[N].side read 'Skill' while win[] read Aurelion Sol / Skill / Skill / Aurelion Sol / Vladimir / Aurelion Sol / Aurelion Sol.",
+      "why": "The content-layer chart matches packet.levelChart and the 49.51% winrate over 814 games. Vladimir has no level-1 kill pressure, the lane flattens 2-3, and level 6 is his one clear window because Sanguine Pool's 2 untargetable seconds dodge Falling Star.",
+      "corrected": "Adopt the content chart and flip phases[0], [3], [4], [5], [6].side to match, proposed as an atomic group with the win[] rows.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate", "enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spikes and prose referenced 'Starsurge' and 'Comet of Legend' — neither is an Aurelion Sol ability.",
+      "why": "His kit is Breath of Light (Q), Astral Flight (W), Singularity/black hole (E) and Falling Star, which upgrades into The Skies Descend once enough Stardust is banked.",
+      "corrected": "All references rewritten to the real abilities and to Stardust as the scaling resource.",
+      "confidence": "High",
+      "sources": ["ownerKit", "packet.suspectNames"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Neither the untargetability window nor the anti-heal requirement was stated with real numbers, and Tides of Blood's minion-block was absent entirely.",
+      "why": "Sanguine Pool is 28/25/22/19/16s for 2 seconds of untargetable, which dodges Falling Star's stun and the black hole's execute outright. Transfusion is free-cost and near-spammable and Hemoplague heals per champion hit, so Grievous Wounds timing decides every extended trade. Riot's own text says Tides of Blood 'can be blocked by enemy units', so standing behind your wave denies it.",
+      "corrected": "Written into breakdown.cooldowns, whys[4], spikes[1], mid and dontsFull[0].",
+      "confidence": "High",
+      "sources": ["enemyKit", "missingInteractions (untargetable-dodges-burst, needs-antiheal)"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Aurelion Sol"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Aurelion Sol"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Vladimir"},
+    {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Aurelion Sol"},
+    {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Aurelion Sol"},
+    {"layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10"},
+    {"layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "7/10"},
+
+    {"layer": "content", "path": "whys[4]", "before": "Sanguine Pool at 6 dodges your CC and lets Vladimir all-in and sustain through the fight", "after": "Sanguine Pool's 2s untargetable dodges Falling Star, and Hemoplague heals off the fight"},
+    {"layer": "content", "path": "whys[6]", "before": "Full stacks and Comet of Legend give you a global execute threat his sustain scaling can't match", "after": "Full Stardust and The Skies Descend give you a fight-flipping threat his sustain can't match"},
+
+    {"layer": "content", "path": "spikes[1].text", "before": "Sanguine Pool grants him near-total immunity to your Starsurge and Comet of Legend engage during his all-in window, letting him dive onto your stacks and heal off the trade even if you land your kit.", "after": "Sanguine Pool gives him two untargetable seconds through your Falling Star and black hole during his all-in window, letting him dive onto your stacks and heal off the trade even if you land your kit."},
+    {"layer": "content", "path": "spikes[3].text", "before": "Once you're fully stacked and running Comet of Legend, your global execute threat and burst finally outpace his sustain-heavy scaling, since Vlad's damage caps out on HP ratios while your Q keeps growing indefinitely.", "after": "Once you're deep in Stardust with The Skies Descend online, your zone-and-execute threat finally outpaces his sustain-heavy scaling, since Vlad caps out on HP ratios while Breath of Light keeps growing indefinitely."},
+
+    {"layer": "content", "path": "mid", "before": "Levels 4-5 stay close to even as both champions are mostly farming and looking for poke windows, but the moment he hits 6, Sanguine Pool becomes a real problem — it dodges your Starsurge and Comet of Legend engage entirely, letting him all-in and sustain through your damage even while you're ahead on stacks.", "after": "Levels 4-5 stay close to even as both champions are mostly farming and hunting poke windows, but the moment he hits 6, Sanguine Pool becomes a real problem — two untargetable seconds dodge Falling Star and the black hole's execute entirely, letting him all-in and sustain through your damage even while you're ahead on stacks."},
+    {"layer": "content", "path": "late", "before": "Your first item swings the lane back your way since your range and burst start punishing his approach, but he's still dangerous in this window off his own first item's sustained damage — it isn't until you're fully stacked with Comet of Legend online that your global execute threat and scaling burst clearly outpace his HP-ratio sustain for good.", "after": "Your first item swings the lane back your way since your range and burst start punishing his approach, but he's still dangerous in this window off his own first item's sustained damage — it isn't until you're fully stacked with The Skies Descend online that your zone threat and scaling burst clearly outpace his HP-ratio sustain for good."},
+
+    {"layer": "content", "path": "wants.you[2]", "before": "Bank Comet of Legend for a guaranteed kill window instead of forcing it into his pool", "after": "Bank Falling Star for a guaranteed kill window instead of forcing it into his pool"},
+    {"layer": "content", "path": "wants.foe[2]", "before": "Use Sanguine Pool to dodge your Starsurge and force a favorable all-in", "after": "Use Sanguine Pool to dodge your Falling Star and force a favorable all-in"},
+
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Vladimir Sanguine Pool: matchup-defining — Untargetable dodge — bait it before you spend your kill window. Count it out loud if you must. - Your W Astral Flight has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.", "after": "- Sanguine Pool: 28s at rank 1, still 16s maxed, two untargetable seconds — count it out, then spend Falling Star. - Tides of Blood is blocked by minions: stand behind your wave. - Transfusion costs him nothing, so anti-heal it rather than out-chipping it."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry by scaling honestly — every stardust stack is permanent, and the 30-minute version of you wins fights your laning self cannot imagine.", "after": "Carry by scaling honestly — Stardust is permanent, and Vladimir's HP-ratio damage caps out where your Breath of Light simply does not."},
+    {"layer": "full", "path": "ahead", "before": "Ahead, compound it: shove with E executes, burn Vladimir on every W rotation, and group early — your beam turns small mid-game leads into unanswerable objective control.", "after": "Ahead, deny the stack: shove with E, then W over the wall and burn him off the side wave — a Vladimir with no CS is a health bar with no damage, and anti-heal keeps him there."},
+    {"layer": "full", "path": "enemyWin", "before": "Vladimir wins by landing Sanguine Pool, denying your pattern, and out-ranging your plan one polite trade at a time.", "after": "Vladimir wins by pooling out of your commit, healing it straight back, and Hemoplague-amplifying the fight he chose."},
+    {"layer": "full", "path": "dosFull[0].d", "before": "Untargetable dodge — bait it before you spend your kill window. Until it’s spent, every commit is a coin flip.", "after": "Every second of beam on him is permanent Stardust — bait Sanguine Pool first, or two seconds erase your commit."},
+    {"layer": "full", "path": "dosFull[2].d", "before": "Vladimir burns Sanguine Pool on nothing — take the fifteen-second invitation.", "after": "Vladimir burns Sanguine Pool on nothing — that is a 28-second invitation at rank 1."},
+    {"layer": "full", "path": "dontsFull[0].d", "before": "That is Vladimir’s whole plan in one window — decline politely and watch it retire.", "after": "Transfusion heals him back for free — chip trades pre-item pay his health bar, not yours."}
+  ],
+  "notes": "Fabricated names killed: 'Starsurge' and 'Comet of Legend' are not Aurelion Sol abilities in the current kit; replaced with Falling Star / The Skies Descend / Stardust. The full and content layers shipped two different level charts here (all-Skill vs the packet chart) — proposed as matched pairs on the content-layer version. Tides of Blood's minion block is taken from Riot's own description ('can be blocked by enemy units'), not from a derived flag."
+}

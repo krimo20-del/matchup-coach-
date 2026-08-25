@@ -1,0 +1,104 @@
+{
+  "ownerKey": "hwei_mid",
+  "enemy": "veigar",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[3..6].side read Skill/Skill/Skill/Veigar while content win[3..6] all read Hwei.",
+      "why": "packet.levelChart is Hwei on all seven rows and matches the content layer exactly; win rate 52.58% over 1879 games. Every phases[N].why on those rows already describes Hwei winning.",
+      "corrected": "Four rows moved to Hwei as one atomic group so the chart stops arguing with its own captions.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text labels Event Horizon as (R) and tells you Veigar's level 6 adds no burst. Primordial Burst is not mentioned anywhere on the page.",
+      "why": "Event Horizon is E (20/18.5/17/15.5/14s, 725 range, stun only, no damage). Primordial Burst is R (120/90/60s, 650 range) and its damage increases based on the target's missing health — it is the single most dangerous thing in his kit and the reason the cage exists.",
+      "corrected": "Level 6 spike rewritten around Primordial Burst scaling off missing health, and the same fact carried into enemyWin, dosFull[2].d and dontsFull[2].d.",
+      "confidence": "High",
+      "sources": ["enemyKit E text and cd", "enemyKit R text, cd and range"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[3].text and content late tell you to rely on \"(E stun, W fear)\". spikes[0].text says Veigar farms \"with W stacks in melee range\". whys[0] calls his stacking \"melee-reliant\". wants.foe[0] says he stacks the passive off minion damage.",
+      "why": "Hwei's W form is Fleeting Current, Pool of Reflection and Stirring Lights — the shield form; the crowd control including the fear is the E form. Dark Matter is a 950-range delayed drop, nothing about it is melee. Phenomenal Evil Power stacks from striking champions with spells or scoring takedowns; the permanent AP from farming comes from Baleful Strike (Q) kills, a different mechanic.",
+      "corrected": "Fear returned to the E form, the melee claims removed, and the stacking attributed to Baleful Strike kills and champion hits.",
+      "confidence": "High",
+      "sources": ["ownerKit W and E text", "enemyKit P text", "enemyKit Q text", "enemyKit W range 950"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns has no digit (lintFindings) and winCon promises a \"fifteen-second gap\".",
+      "why": "Event Horizon is 20s at rank 1 falling to 14s at rank 5 — the gap is twenty seconds early, not fifteen. Baleful Strike reaches 4s at rank 5 and Primordial Burst 60s at rank 3.",
+      "corrected": "Real numbers written into breakdown.cooldowns, winCon, tradeGood and dosFull[1].d.",
+      "confidence": "High",
+      "sources": ["enemyKit per-rank cooldowns", "lintFindings"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d is tradeGood verbatim and dontsFull[2].d is tradeBad verbatim (lintFindings).",
+      "why": "Titles promise the cooldown gap and the half-HP mistake; the pasted bodies address neither.",
+      "corrected": "Rewritten to the 20-second cage gap and to Primordial Burst's missing-health scaling, which is exactly why standing at half health is the mistake the title names.",
+      "confidence": "High",
+      "sources": ["lintFindings", "enemyKit R text"]
+    },
+    {
+      "point": 12,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flags \"Stack Phenomenal Evil Power\" in wants.foe[0]. The name is right; what was wrong is the mechanic attached to it, which is corrected under point 4.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet.suspectNames", "enemyKit P text"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[6].side","before":"Veigar","after":"Hwei"},
+
+    {"layer":"full","path":"winCon","before":"Make the setup spell miss, then paint the fifteen-second gap where he has nothing. Event Horizon (Cage) is the clock this lane runs on — read it before every step forward.","after":"Make the cage miss, then paint the twenty seconds where he has nothing but Baleful Strike. Event Horizon is the clock this lane runs on — read it before every step forward."},
+    {"layer":"full","path":"report[1].t","before":"Make the setup spell miss, then paint the fifteen-second gap where he has nothing. Event Horizon (Cage) is the clock this lane runs on — read it before every step forward.","after":"Make the cage miss, then paint the twenty seconds where he has nothing but Baleful Strike. Event Horizon is the clock this lane runs on — read it before every step forward."},
+
+    {"layer":"full","path":"enemyWin","before":"Veigar wins by landing Event Horizon (Cage), denying your pattern, and owning the spacing war until your tempo starves.","after":"Veigar wins by catching you on the cage edge, dropping Dark Matter onto the stun, and finishing with missing-health Primordial Burst."},
+
+    {"layer":"full","path":"tradeGood","before":"QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending.","after":"QQ his last-hit, weave any second spell for the mark, detonate, and reset — with the cage down for 20 seconds he cannot hold you still for anything."},
+    {"layer":"full","path":"tradeBad","before":"Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Standing mid-cast-animation on the edge of Event Horizon with the fear already spent — the stun lands, Dark Matter is already falling, and R finishes it."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending. Bad trade: Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset — with the cage down for 20 seconds he cannot hold you still for anything. Bad trade: Standing mid-cast-animation on the edge of Event Horizon with the fear already spent — the stun lands, Dark Matter is already falling, and R finishes it."},
+
+    {"layer":"full","path":"ahead","before":"Ahead, paint the prison: mark-detonate Veigar on every last-hit, shove with QA, and rotate first to every river — your R range means you join fights he can't even see.","after":"Ahead, starve the stacks: mark-detonate Veigar on every last-hit, deny him the Baleful Strike kills, and shove with QA — his power is a number he still has to earn."},
+    {"layer":"full","path":"report[13].t","before":"Ahead, paint the prison: mark-detonate Veigar on every last-hit, shove with QA, and rotate first to every river — your R range means you join fights he can't even see.","after":"Ahead, starve the stacks: mark-detonate Veigar on every last-hit, deny him the Baleful Strike kills, and shove with QA — his power is a number he still has to earn."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Veigar Event Horizon (Cage): matchup-defining — Only the cage EDGE stuns — hold position near the center or leave before it forms; never dash into the wall. Check it before every step-up. - E fear paint is the lifeline; chip damage never gets it. - The ult answers fights, not waves.","after":"- Event Horizon: 20s at rank 1, 14s at rank 5 — only the EDGE stuns, so stand near the centre or leave before it forms. - Baleful Strike is 4s at rank 5 and pays him permanent AP for every kill. - Primordial Burst is 60s at rank 3 and grows with your missing health."},
+
+    {"layer":"full","path":"breakdown.early","before":"Out-range the lane from level 1 but respect mana — paint last-hits, bank Manaflow, and treat the fear as your Flash until 6.","after":"Out-range him from level 1 but respect mana — his Q costs 30 to your 80, so paint last-hits, bank Manaflow, and deny his Q farm."},
+    {"layer":"full","path":"breakdown.mid","before":"Lost Chapter onward you own the poke war: mark-detonate every wave contact, shove with QA, and rotate to rivers where R + QE turns skirmishes into murals.","after":"Lost Chapter onward you own the poke war: the cage is 20 seconds and does no damage, so shove with QA, punish every cast, and never last-hit standing on its edge."},
+    {"layer":"full","path":"breakdown.late","before":"You are the siege and the opener: R their carry at max range, wall the choke with fear paint, and QQ whatever the slow catches. Position two brush-lengths behind your front line.","after":"You are the siege and the opener: R their carry at 1300 while Veigar needs 650 for his, wall the choke with fear paint, and never finish a fight standing on a cage edge."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through range — no mid pool champion paints a teamfight from further away; your R + QQ decides objectives before they start.","after":"Carry through range: his cage reaches 725 and his ultimate 650, so open at 1300 and the fight starts outside everything he owns."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Veigar takes first blood, tighten up: Event Horizon (Cage) is now always up in your head. A second kill means the duel is over and the game isn’t — farm with QA clears and stay relevant through max-range poke.","after":"If Veigar takes first blood, tighten up: every spell he lands on you is permanent AP he keeps. A second kill means the duel is over and the game isn't — QA the wave from range and never stand on the cage edge."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"Only the cage EDGE stuns — hold position near the center or leave before it forms; never dash into the wall. Commit on its cooldown, never into it.","after":"Only the cage EDGE stuns, so walk to the centre and stand there — you have no dash to be caught by, and the wall is down 20 seconds afterwards."},
+    {"layer":"full","path":"dosFull[1].d","before":"QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending.","after":"Once Event Horizon is spent you have up to 20 seconds in which nothing in his kit holds you still — two paints, mark, detonate, walk out."},
+    {"layer":"full","path":"dosFull[2].d","before":"Veigar whiffs Event Horizon (Cage) and the lane briefly belongs to you.","after":"The shield paint eats Primordial Burst — that is his one kill button."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Veigar’s whole plan in one window — decline politely and watch it retire.","after":"Cage, then Dark Matter onto the stun, then R — let that whole window expire."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Primordial Burst grows with the health you are missing, so half-HP inside 650 is not a risk you are taking — it is the exact condition his ultimate is built for."},
+
+    {"layer":"full","path":"report[3].t","before":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending. Great trade: Veigar wastes Event Horizon (Cage) — commit immediately. Bad trade: Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset — with the cage down for 20 seconds he cannot hold you still for anything. Great trade: Veigar wastes Event Horizon — you have up to 20 seconds, commit immediately. Bad trade: Standing mid-cast-animation on the edge of Event Horizon with the fear already spent — the stun lands, Dark Matter is already falling, and R finishes it."},
+
+    {"layer":"content","path":"spikes[0].text","before":"Your E-Q combo out-ranges Veigar's Dark Matter tell and punishes him for farming with W stacks in melee range of your zones.","after":"Your two-paint mark out-ranges the Dark Matter tell — it falls on a delay, so step off the marker and punish him through the cast animation."},
+    {"layer":"content","path":"spikes[1].text","before":"Event Horizon (R) is a cage, not a burst tool, so your Level 6 R just adds another layer of poke/burst that Veigar can't answer with equal damage yet.","after":"Event Horizon is his E and deals no damage, but Primordial Burst (R) lands at 6 and scales with your missing health — the cage exists to hold you still for it."},
+    {"layer":"content","path":"spikes[3].text","before":"Veigar's stacked AP eventually threatens one-shot potential, but your kit's disengage (E stun, W fear) and range keep you safe from ever standing in his cage.","after":"Veigar's stacked AP eventually threatens a one-shot, but the E form's crowd control and your range keep you from ever standing on the edge of his cage."},
+    {"layer":"content","path":"late","before":"Even once Veigar's stacks give him real burst threat, your longer range and disengage tools (E stun, W fear) mean you rarely have to stand inside his cage, so Hwei keeps the lane and skirmish edge the whole game.","after":"Even once Veigar's stacks give him real burst threat, your longer range and the E form's crowd control mean you rarely have to stand inside his cage, so Hwei keeps the lane and skirmish edge the whole game."},
+    {"layer":"content","path":"whys[0]","before":"Hwei's poke and range dominate Veigar's melee-reliant stacking from the very first level","after":"Hwei's poke and range dominate Veigar's slow, farm-dependent stacking from the very first level"},
+    {"layer":"content","path":"wants.foe[0]","before":"Stack Phenomenal Evil Power off safe minion damage","after":"Farm Baleful Strike kills for the permanent bonus AP"},
+    {"layer":"content","path":"wants.foe[1]","before":"Land Event Horizon to trap you for a follow-up cage stun","after":"Land the cage edge to hold you still for Dark Matter and R"}
+  ],
+  "notes": "MISSING THE ACTUAL KILL BUTTON: Primordial Burst appeared nowhere on this page. spikes[1].text called Event Horizon the ultimate and then reassured the reader that level 6 adds nothing Veigar can answer — the opposite of true, since his R scales with the health you are missing and is 60s at rank 3. That is now stated in five fields. CHART: phases[3..6].side read Skill/Skill/Skill/Veigar against a content layer and packet chart that are Hwei on all seven rows; four rows realigned as one atomic group, with no paired win[N] edits because win[N] already holds the correct token. RATINGS left untouched. DARK MATTER COOLDOWN: the kit file lists W as cd 0, which is a parse artefact — Riot's text only says Phenomenal Evil stacks reduce it. I wrote no number for W anywhere rather than invent one. wants.foe[0]'s ability name was flagged by the packet but was correct; the mechanic attached to it was not, and that is what I fixed."
+}

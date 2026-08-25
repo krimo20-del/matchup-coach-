@@ -1,0 +1,122 @@
+{
+  "ownerKey": "ekko_mid",
+  "enemy": "aurelionsol",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The entire content layer describes the PRE-REWORK Aurelion Sol. It names 'Starsurge' (whys[1], spikes[0], spikes[2], early, wants.you[1], wants.foe[1]) and 'Voice of Light' (whys[4], spikes[1], mid, wants.foe[2]) — neither ability exists — and it calls Singularity his Q when it is his E.",
+      "why": "The kit file is authoritative: P Cosmic Creator, Q Breath of Light, W Astral Flight, E Singularity, R Falling Star / The Skies Descend. Every one of those fields sends a paying reader looking for a spell that is not on the champion.",
+      "corrected": "Starsurge -> Falling Star (R), Voice of Light -> Falling Star, Singularity relabelled (E) throughout.",
+      "confidence": "High",
+      "sources": ["enemyKit ability names", "packet.enemyAbilities"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Three interactions that decide this lane were absent. (a) Breath of Light and Astral Flight are both CHANNELS — Ekko's Parallel Convergence stun cancels either one outright, and cancelling the flight strands him. (b) Singularity executes enemies below a health percentage — the threshold, not the bar, is what you track. (c) Singularity grants Stardust for each second an enemy champion is caught inside it, and Stardust permanently improves every one of his abilities, so farming inside the black hole pays him forever.",
+      "why": "All three are in Riot's own text and all three are in this matchup's missingInteractions list.",
+      "corrected": "Written into winCon, enemyWin, tradeGood, tradeBad, report[5], breakdown.cooldowns, breakdown.wave, dontsFull[2], phases[0..2].why, whys[1], early and mid.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W channel flags", "enemyKit E text (execute, percentHealth)", "enemyKit P text", "missingInteractions x3"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer phases[].side read Skill/Ekko/Ekko/Skill/Skill/Skill/Aurelion Sol while content win[] and packet.levelChart both read Ekko/Skill/Skill/Ekko/Ekko/Ekko/Ekko — all seven rows disagreed, including the last row flipping the winner outright.",
+      "why": "Two sources agree against the full layer. Level 1 is Ekko's on range (1075 to 750) against a champion with no dash; 2-3 are even once Singularity holds ground; from 4 on, Astral Flight at 22s is his only exit.",
+      "corrected": "Full layer moved onto the content layer with every why rewritten and the ratings moved with the verdicts.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[]", "enemyKit W cd", "ownerKit Q range"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes was the generic three-clause template and named level 6 as the aggression spike; nothing recorded that his level 6 costs him 120s.",
+      "why": "Falling Star is 120/110/100 — the longest cooldown in the lane. Chronobreak at 110s answers it and comes back sooner.",
+      "corrected": "Spikes rewritten to 2-3 his zone / 4-5 yours on his 22s exit / first item the string; phases[4].why now carries the 120-vs-110 comparison.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd", "ownerKit R cd"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit in it (lint COOLDOWN_NO_DIGIT) and closed on two near-identical filler clauses about R.",
+      "why": "It is the field that carries the numbers.",
+      "corrected": "Astral Flight 22s to 16s, Singularity 12s, Breath of Light 3s, Chronobreak 110s.",
+      "confidence": "High",
+      "sources": ["enemyKit", "ownerKit"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Lint: dosFull[1].d was tradeGood verbatim under 'String trades only with E available', dontsFull[2].d was tradeBad verbatim under 'Save R so long it expires unused', and breakdown.cooldowns had no number.",
+      "why": "Deterministic detections.",
+      "corrected": "Both bullets replaced with bodies that answer their own titles.",
+      "confidence": "High",
+      "sources": ["lintFindings"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "tldr", "before": "He pokes a champion with an undo button — trade Q passes, blink the gaps, and rewind the lane's one mistake.", "after": "He is a channel with a health bar — trade Q passes, stun the channel to end it, and never stand in the black hole." },
+    { "layer": "full", "path": "winCon", "before": "Tax the lane in strings and let the rewind underwrite the all-in. Keep one eye on Astral Flight and one on the wave, in that order.", "after": "Tax the lane in strings and let the rewind underwrite the all-in. His Q and W are channels — your W stun ends either outright." },
+    { "layer": "full", "path": "enemyWin", "before": "Aurelion Sol wins by landing Astral Flight, denying your pattern, and owning the spacing war until your tempo starves.", "after": "Aurelion Sol wins by owning space: Singularity pulls you in, executes below a health percentage, and feeds him Stardust." },
+    { "layer": "full", "path": "tradeGood", "before": "Q through him, E the gap, passive third hit, walk out through the slow — the full string chunks and the return pass pays the exit.", "after": "Q through him, E the gap, passive third hit, walk out — and time W onto Breath of Light: the channel dies the moment the stun lands." },
+    { "layer": "full", "path": "tradeBad", "before": "Blinking in with R down against a loaded kit — Ekko without the rewind is a mid laner doing parkour at a funeral.", "after": "Standing in Singularity to trade — it pulls, it executes on a health percentage, and every second feeds his Stardust." },
+    { "layer": "full", "path": "ahead", "before": "Ahead, compound the tempo: string Aurelion Sol off every contact, dive the rivers insured, and rewind the audits — fed Ekko makes time a one-way argument.", "after": "Ahead, deny the ramp: cancel his channels with W, string him off every Astral Flight, and never trade a second inside the black hole he stacks from." },
+    { "layer": "full", "path": "loading", "before": "- Ekko vs Aurelion Sol - Track: Aurelion Sol Astral Flight. - String with E available, dive with R available — never neither. - Fights start when Astral Flight ends. - The R is for endings, not openings.", "after": "- Ekko vs Aurelion Sol - Track: Astral Flight, 22s at rank 1. - String with E up, dive with R up — never neither. - Your W stun cancels his channels. - The R is for endings, not openings." },
+
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Ekko" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[0].why", "before": "Q the wave and his toes — the return pass chunks; learn the slow zone's drag on his dodge patterns.", "after": "Q the wave and his toes at 1075 to his 750 — Breath of Light is a channel, and stepping out of it ends it." },
+    { "layer": "full", "path": "phases[1].side", "before": "Ekko", "after": "Skill" },
+    { "layer": "full", "path": "phases[1].rating", "before": "6/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[1].why", "before": "E blink-strike window opens: Q-E-auto is your first real trade and the third passive hit stings already.", "after": "Singularity arrives: it pulls, it banks Stardust for every second you stay, and it beats a two-ability string." },
+    { "layer": "full", "path": "phases[2].side", "before": "Ekko", "after": "Skill" },
+    { "layer": "full", "path": "phases[2].rating", "before": "6/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[2].why", "before": "W zone games begin: drop it on his retreat line BEFORE trading and the stun finds him mid-regret.", "after": "W stun online and it cancels a channel — but the black hole is 12s and holds the ground you want." },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Ekko" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].why", "before": "Three-hit trades on cooldown — Q in, E the gap, passive proc, walk. Bank the tempo for 6.", "after": "Three-hit trades on cooldown — Astral Flight is 22s at rank 1 and it is his only exit." },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Ekko" },
+    { "layer": "full", "path": "phases[4].why", "before": "Chronobreak online — your aggression gets a save file. Trade like the rewind exists, because it does.", "after": "Chronobreak online: Falling Star stuns, but it costs him 120s and your rewind undoes it for 110." },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ekko" },
+    { "layer": "full", "path": "phases[5].why", "before": "First item spike: the full string deletes half bars and the rewind erases the counter-argument.", "after": "First item spike: the full string kills before the black hole's execute threshold ever matters." },
+    { "layer": "full", "path": "phases[6].side", "before": "Aurelion Sol", "after": "Ekko" },
+    { "layer": "full", "path": "phases[6].rating", "before": "7/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Ekko picks and survives: dive the carry, W the peel, and Chronobreak out of whatever they answered with.", "after": "Late Ekko picks and survives: dive the carry, W the peel, and Chronobreak out of the black hole's pull." },
+
+    { "layer": "full", "path": "breakdown.early", "before": "String what's free and bank what isn't — your early is honest until 6 makes it dishonest in your favor.", "after": "String what's free — he has no dash and Breath of Light is a channel, so stepping out of it is a free answer." },
+    { "layer": "full", "path": "breakdown.mid", "before": "First item onward, trade like the rewind exists: dive the chipped, W the peel, R the answer. Your tempo compounds.", "after": "First item onward, hunt the channel: W his Breath of Light, E past the black hole, and finish before he lands." },
+    { "layer": "full", "path": "breakdown.spikes", "before": "Level 3 strings set the pattern; level 6 underwrites the aggression; first item makes strings lethal.", "after": "Levels 2-3 are his on Singularity's zone; 4-5 are yours on his 22s exit; first item makes strings lethal." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Aurelion Sol Astral Flight: matchup-defining — His reposition and escape — he is a stationary battery while it is down. Count it out loud if you must. - Your R Chronobreak has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.", "after": "- Astral Flight: 22s at rank 1 and 16s at rank 5, it flies over terrain, and it is his only exit — commit while it is down. - Singularity is 12s and executes below a health percentage. - Breath of Light is 3s, but it is a channel your W stun ends. - Chronobreak is 110s at rank 1." },
+    { "layer": "full", "path": "breakdown.wave", "before": "Best wave: a Q-cleared push that crashes while your hologram bank stays healthy — tempo with insurance. Worst wave: a frozen wave near his tower with E down — no blink, no string, no business being there. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.", "after": "Best wave: a Q-cleared push that crashes while your hologram bank stays healthy — tempo with insurance. Worst wave: one you have to farm from inside Singularity, where every second in the black hole is Stardust he keeps permanently. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores." },
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Q through him, E the gap, passive third hit, walk out through the slow — the full string chunks and the return pass pays the exit. Bad trade: Blinking in with R down against a loaded kit — Ekko without the rewind is a mid laner doing parkour at a funeral.", "after": "Good trade: Q through him, E the gap, passive third hit, walk out — and time W onto Breath of Light: the channel dies the moment the stun lands. Bad trade: Standing in Singularity to trade — it pulls, it executes on a health percentage, and every second feeds his Stardust." },
+    { "layer": "full", "path": "breakdown.feeding", "before": "If Aurelion Sol gets a kill, the lane gets honest — give Astral Flight extra room and farm it back. Two kills: stop dueling your tilt — farm with Q passes and stay relevant through W stuns and R picks.", "after": "If Aurelion Sol gets a kill, the lane gets honest — give Astral Flight extra room and farm it back. Two kills: stop dueling — Q the wave from 1075, never stand in Singularity, and play W stuns onto his channels." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through insured dives — one carry per rewind cycle; your job is spending R as a weapon, not an apology.", "after": "Carry through insured dives — spend R as a weapon, and remember Singularity executes on a health percentage." },
+    { "layer": "full", "path": "breakdown.late", "before": "You are the pick that survives the response: dive their carry, Chronobreak the collapse, and W-stun the chase that follows you out.", "after": "You are the pick that survives the response: dive their carry, Chronobreak the collapse, and stun the channel he answers with." },
+
+    { "layer": "full", "path": "dosFull[0].d", "before": "His reposition and escape — he is a stationary battery while it is down. Commit on its cooldown, never into it.", "after": "Astral Flight is 22s at rank 1 and flies over terrain — while it is down he is a stationary battery, so commit then." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q through him, E the gap, passive third hit, walk out through the slow — the full string chunks and the return pass pays the exit.", "after": "Without E you cannot cross his black hole and you cannot close his 750 — the string only exists while the dash is up." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Aurelion Sol spends Astral Flight early — the closest thing this matchup has to a guarantee.", "after": "Aurelion Sol spends Astral Flight early and you get 22 seconds against a champion with no exit." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Aurelion Sol’s rehearsed moment — don’t audition for it.", "after": "Falling Star stuns on impact and it opens his whole rotation." },
+    { "layer": "full", "path": "dontsFull[1].d", "before": "The rewind heals off the hologram's path — diving away from your own past is how Ekkos die with R up.", "after": "Breath of Light is 3s and burns harder the longer it stays on you — walking inside 750 pre-3 is a free trade." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Blinking in with R down against a loaded kit — Ekko without the rewind is a mid laner doing parkour at a funeral.", "after": "An R that expires is an R you never spent — and Singularity's execute does not care how full the bar looked." },
+
+    { "layer": "full", "path": "report[5].t", "before": "Track Aurelion Sol’s Astral Flight: His reposition and escape — he is a stationary battery while it is down. Forward steps wait for its downtime.", "after": "Breath of Light and Astral Flight are both channels: your W stun ends either one outright, and Singularity executes below a health percentage." },
+
+    { "layer": "content", "path": "whys[1]", "before": "His growing black hole zone starts to punish careless engages, though you can still play around Starsurge cooldowns", "after": "Singularity (E) arrives, it pulls you toward the centre, and every second inside is permanent Stardust for him" },
+    { "layer": "content", "path": "whys[2]", "before": "Same even footing continues as his zone control grows but still can't fully answer your engage timing", "after": "Still even: your W cancels his channels, but the black hole holds the ground you need to stand on" },
+    { "layer": "content", "path": "whys[4]", "before": "His added poke from Voice of Light doesn't solve his lack of escape, so your all-in window remains strong at level 6", "after": "Falling Star stuns but costs him 120s at rank 1, and it still does not give him any escape from your engage" },
+    { "layer": "content", "path": "spikes[0].text", "before": "Aurelion Sol is clunky and immobile at level 1-2, but by level 3-5 his stacked Singularity (Q) black hole and Starsurge stun start punishing your approach if you walk into his zone carelessly.", "after": "Aurelion Sol is clunky and immobile at level 1-2, but by 3-5 his Singularity (E) black hole pulls you toward its centre and Falling Star stuns on impact — walking into that zone carelessly is how this lane flips." },
+    { "layer": "content", "path": "spikes[1].text", "before": "Voice of Light (R) gives him a long-range poke-and-slow that pairs with his black hole zone, but he still lacks a hard escape, so your engage windows stay strong even after 6.", "after": "Falling Star (R) reaches 1250 and stuns everything it lands on, pairing with the black hole, but it costs 120s at rank 1 and gives him no escape — your engage windows stay strong after 6." },
+    { "layer": "content", "path": "spikes[2].text", "before": "With a completed item your combo burst punishes his lack of mobility hard — he has no way to disengage a committed Ekko dive once Starsurge is down.", "after": "With a completed item your combo burst punishes his immobility hard — with Astral Flight down he has no way at all to disengage a committed Ekko dive." },
+    { "layer": "content", "path": "early", "before": "Aurelion Sol is slow to ramp and has zero mobility at level 1-2, so you can bully him hard with your dash-based engage before his Singularity stacks get big enough to zone you out — look for all-in windows whenever Starsurge (Q) is down since he has no escape otherwise. By level 3-5 his growing black hole makes him harder to just walk into, so time your engages around his stun cooldown.", "after": "Aurelion Sol is slow to ramp and has zero mobility at level 1-2, so bully him with the dash before Singularity (E) is big enough to zone you out — Breath of Light is a channel, and simply stepping out of it ends the damage. Look for all-in windows whenever Astral Flight is down, since at 22s it is his only escape. By level 3-5 the black hole makes him harder to walk into, so time your engages around its 12s instead." },
+    { "layer": "content", "path": "mid", "before": "Voice of Light adds real poke range at level 6, but it doesn't give him any way to disengage — he's still rooted in place if you commit past his zone, so your all-in potential remains strong through this window as long as you dodge or bait his Starsurge stun first. This stays one of your more comfortable matchups into the mid-game.", "after": "Falling Star adds a 1250-range stun at level 6, but it costs 120s and gives him no way to disengage — he is still rooted in place if you commit past his zone, so your all-in stays strong through this window as long as you bait the stun first. Better still, hold W for a channel: Breath of Light and Astral Flight both die to a stun, and cancelling the flight strands him exactly where you want him." },
+    { "layer": "content", "path": "wants.you[1]", "before": "Dodge Starsurge before committing to your all-in", "after": "Dodge Falling Star before committing to your all-in" },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Land Starsurge to set up burst combos", "after": "Land Falling Star to set up his combos" },
+    { "layer": "content", "path": "wants.foe[2]", "before": "Poke from range with Voice of Light once you're near", "after": "Poke with Breath of Light the moment you step near" }
+  ],
+  "notes": "BIGGEST FINDING: the whole content layer for this matchup was written against the PRE-REWORK Aurelion Sol. 'Starsurge' appears in whys[1], spikes[0], spikes[2], early, wants.you[1] and wants.foe[1]; 'Voice of Light' appears in whys[4], spikes[1], mid and wants.foe[2]. Neither ability exists on the champion. Singularity was also labelled (Q) when it is his E. All corrected against the kit file: P Cosmic Creator, Q Breath of Light, W Astral Flight, E Singularity, R Falling Star / The Skies Descend.\n\nCHART: full-layer sides read Skill/Ekko/Ekko/Skill/Skill/Skill/Aurelion Sol against content win[] and packet.levelChart, which both read Ekko/Skill/Skill/Ekko/Ekko/Ekko/Ekko — all seven rows disagreed and the last row named a different winner. Full layer moved onto the content layer, so no win[N] edits were possible (before would equal after). Every side edit carries a rewritten why.\n\nADDED: all three missingInteractions entries. Breath of Light and Astral Flight are channels that Ekko's W stun cancels outright (cancelling the flight strands him); Singularity executes below a health percentage, so the threshold matters more than the bar; and Singularity banks Stardust for every second a champion stands in it, which permanently improves his whole kit — that is why farming inside the black hole is the worst wave in the matchup.\n\nREPORT SWEEP: one substantive rewrite (report[5]). report[3] still carries the old tradeGood/tradeBad strings verbatim and is now out of step with the rewritten trading fields — left alone to respect the two-entry report cap; flagging it for QA.\n\nLEFT ALONE (templated, nothing groundable without inventing): report[9], report[10], report[12], content late (already accurate), spikes[3].text, whys[0]/[3]/[5]/[6].\n\nUNVERIFIED, not written: The Skies Descend's Stardust requirement and its behaviour are truncated in the kit text, so I referred only to Falling Star; Singularity's exact execute percentage; and whether Ekko's E dash can cross or is dragged by the black hole's pull. None claimed anywhere."
+}

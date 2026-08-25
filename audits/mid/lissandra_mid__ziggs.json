@@ -1,0 +1,76 @@
+{
+  "ownerKey": "lissandra_mid",
+  "enemy": "ziggs",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "early claimed 'Ziggs out-ranges your E with bouncing Q'. Bouncing Bomb is 850; Glacial Path is 1050. The ability he actually out-ranges is Ice Shard, 850 to 725. Nothing in the matchup mentioned Short Fuse or that Satchel Charge scales on health.",
+      "why": "The claw is the one tool that reaches further than his poke, so telling the player it is out-ranged removes their only plan. Short Fuse periodically arms an empowered auto and its cooldown drops every time he casts — the wind-up is the tell that he is about to be in range, which is the exact autoreset entry in the missing-interactions file. Satchel Charge is flagged percentHealth, so building raw health does not blunt it.",
+      "corrected": "Range claim fixed to Q-vs-Q; Short Fuse's wind-up stated as the step-back cue; the health-stacking point folded into whys[3].",
+      "confidence": "High",
+      "sources": ["ownerKit E range 1050", "ownerKit Q range 725", "enemyKit Q range 850", "enemyKit P text", "missingInteractions rules resistances-invalidated, autoreset-burst-tell"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer phases[N].side read Ziggs/Ziggs/Skill/Skill/Skill/Skill/Skill; content win[N] and the packet levelChart both read Skill/Skill/Skill/Skill/Lissandra/Lissandra/Lissandra. Five rows disagreed.",
+      "why": "Levels 1-2 are even — his Q is 850 to your 725 but costs 50-70 mana a throw and cannot kill, and Satchel Charge does not exist until 3. From 6 a 550-range point-and-click stun beats a champion whose only escape is a 20s knockback.",
+      "corrected": "Full chart moved to match content and packet, every side edit paired with its rewritten why.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[]", "enemyKit Q cost", "enemyKit W cd", "ownerKit R"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The first-item and late phases said nothing specific to Ziggs.",
+      "why": "Frozen Tomb goes 120/100/80 while Mega Inferno Bomb goes 120/95/70 — on Malignance your lock cycles faster than his bomb, but his 5000 range means the late game is a flank problem, not a duel problem.",
+      "corrected": "phases[5] and phases[6] rewritten around those two cooldowns and his 5000-range siege.",
+      "confidence": "High",
+      "sources": ["ownerKit R cd", "enemyKit R cd and range"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "lintFindings COOLDOWN_NO_DIGIT — breakdown.cooldowns held no number.",
+      "why": "Satchel Charge falling from 20s to 12s is the number that decides when he is catchable at all.",
+      "corrected": "Satchel Charge 20s/12s, Hexplosive Minefield a flat 16s, Frozen Tomb 120s/80s written in.",
+      "confidence": "High",
+      "sources": ["enemyKit W/E cd", "ownerKit R cd"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "lintFindings COPY_PASTE_BLEED on dosFull[1].d and dontsFull[2].d.",
+      "why": "Both bodies were the trade strings under unrelated titles.",
+      "corrected": "dosFull[1].d rewritten around E's 24s/1050 against Satchel's 20s; dontsFull[2].d around Frozen Tomb's 120s.",
+      "confidence": "High",
+      "sources": ["ownerKit E/R", "enemyKit W", "lintFindings"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Ziggs", "after": "Skill" },
+    { "layer": "full", "path": "phases[0].why", "before": "Q-shatter the wave and chip his melee step-ups — your early Q harass is better than the lane gives it credit for.", "after": "Even: Bouncing Bomb reaches 850 against your 725, but it costs 50 mana a throw and there is no level 1 kill here." },
+    { "layer": "full", "path": "phases[1].side", "before": "Ziggs", "after": "Skill" },
+    { "layer": "full", "path": "phases[1].why", "before": "W online: anyone who closes onto you eats a root. The anti-engage layer is already real at level 2.", "after": "Even at 2: W roots at 450, and until Satchel Charge exists he has no way to push you back out." },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Lissandra" },
+    { "layer": "full", "path": "phases[4].why", "before": "Frozen Tomb online — you are now the best anti-assassin and anti-dive mid in the game. Self-R turns every dive into a counter-kill.", "after": "Frozen Tomb online — a 550 point-and-click on a Ziggs whose only escape is a 20s Satchel. Self-R also eats the Mega Inferno Bomb." },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Lissandra" },
+    { "layer": "full", "path": "phases[5].why", "before": "Malignance spike: your R comes back absurdly fast and every tomb chains into the slow field. Force picks with E-W-R.", "after": "Malignance spike: your 80s R returns faster than his 95s bomb, and E-W-R reaches him before Satchel is back." },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Lissandra" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Liss opens every fight: claw in, tomb the carry, root the peel, and walk out through the panic.", "after": "Late you open every fight — but you must flank: he sits behind the frontline throwing a 5000-range bomb." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Ziggs Satchel Charge: matchup-defining — His knockback escape — he is catchable only while it is down. It governs your forward steps. - R Frozen Tomb (self-cast) spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Satchel Charge is 20s at rank 1 and 12s at rank 5 — it knocks him away, so he is catchable only while it is down. It governs your forward steps. - Hexplosive Minefield is a flat 16s. - Frozen Tomb is 120s at rank 1, 80s at rank 3: spend it on a kill, never on poke." },
+    { "layer": "full", "path": "dosFull[0].d", "before": "His knockback escape — he is catchable only while it is down. Until it’s spent, every commit is a coin flip.", "after": "Ice Shard's shards pass through the target, so a single 725 spear pays twice through his wave line." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q-shatter his wave contact, and when he steps to punish, W-root into full rotation and walk — the root tax makes every aggressive step expensive.", "after": "Your E is 24s at rank 1 and reaches 1050 — further than anything he throws but the bomb. Take the window while Satchel's 20s is ticking." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Ziggs whiffs Satchel Charge and the lane briefly belongs to you.", "after": "Inside 550 the tomb is point-and-click and Satchel is his only out." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Clawing in with W on cooldown 'to poke' — an engage tool spent on chip damage is a Lissandra standing in melee range with no ice left.", "after": "Frozen Tomb is 120 seconds; spend it eating Bouncing Bomb chip and the 550-range lock you needed for the catch is simply gone." },
+    { "layer": "full", "path": "enemyWin", "before": "Ziggs wins by landing Satchel Charge, denying your pattern, and out-ranging your plan one polite trade at a time.", "after": "Ziggs wins by Satchel-punting you out of your own commit, then chipping from 850 while your 24s claw sits down." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through picks — claw-root-tomb converts vision into kills better than any control mage; the map shrinks every time your E is up.", "after": "Carry through picks — a claw onto a Ziggs whose Satchel is down converts vision into kills; the map shrinks every time your E is up." },
+    { "layer": "content", "path": "whys[3]", "before": "Levels 4-5 are skill-dependent as you manage his minefield and pick safe walk-up windows.", "after": "Levels 4-5 stay skill-based: stacking health won't blunt Satchel, so dodge and pick your walk-up." },
+    { "layer": "content", "path": "spikes[0].text", "before": "Early it's a skill test that leans annoying: Ziggs out-ranges you with Q bounces and Satchel-clears the wave faster than you shove, so you have to sidestep Q and walk up under it to threaten your E. His W knockback and minefield keep you off him, so pick your engage windows and don't take free poke.", "after": "Early it's a skill test that leans annoying: Ziggs out-ranges you with Q bounces and Satchel-clears the wave faster than you shove, so sidestep the Q and walk up under it to threaten your E. Short Fuse arms an empowered auto — that wind-up, not the cast, is your cue to step out of his W." },
+    { "layer": "content", "path": "early", "before": "Levels 1-5 are a skill matchup that tilts uncomfortable for you: Ziggs out-ranges your E with bouncing Q and shoves faster than you with Satchel, so you eat poke walking up. Dodge his Q, use minions as cover, and don't int into his W minefield trying to force something you can't reach yet.", "after": "Levels 1-5 are a skill matchup that tilts uncomfortable for you: Ziggs out-ranges your Q 850 to 725 and shoves faster with Satchel, so you eat poke walking up. Dodge his Q, use minions as cover, and don't int into his minefield trying to force something you can't reach yet." },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Use W knockback and minefield to keep you outside E range", "after": "Satchel-punt you out of your combo and mine the walk-up" }
+  ],
+  "notes": "Range error fixed: the matchup said Bouncing Bomb out-ranges Glacial Path. It is 850 against 1050 — the claw is the longest reach in the lane apart from his ultimate; what he out-ranges is Ice Shard, 850 to 725. Chart: full layer disagreed with content on five of seven rows; content already matched the packet, so only the full layer moved, each side edit paired with its why. No win[N] edits were possible — content already holds the correct values. Both missingInteractions entries are now stated: Short Fuse's empowered-auto wind-up as the step-back cue, and Satchel Charge scaling on health so stacking HP is not the answer. Not asserted (kit silent): whether Satchel Charge's knockback can displace Lissandra out of Ring of Frost's cast or interrupt the claw recast, and whether the Satchel knock is reduced by tenacity. spikes[1], whys[5] and mid reference an 'E-Flash' gap-close; Flash-buffering is not in Riot's text and I did not verify it, so those strings were left as written. Ziggs is male; pronouns unchanged."
+}

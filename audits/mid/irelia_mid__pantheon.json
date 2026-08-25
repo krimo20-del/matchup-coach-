@@ -1,0 +1,84 @@
+{
+  "ownerKey": "irelia_mid",
+  "enemy": "pantheon",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "All seven level-chart rows disagreed across layers. phases[0..3].side read 'Pantheon' while win[0..3] read 'Irelia'; phases[4..6].side read 'Skill' while win[4..6] read 'Pantheon'.",
+      "why": "The content layer matches the packet levelChart exactly (Irelia x4 then Pantheon x3), and the full-layer whys under rows 0-3 all describe Irelia winning those stages — so the full-layer sides are the corrupted copy. Rows 4-6 also had the reverse defect: side said Skill but the why described Irelia winning.",
+      "corrected": "phases[0..3].side moved to Irelia and phases[4..6].side moved to Pantheon, matching win[] and the packet. Every why in rows 4-6 rewritten to describe Pantheon winning that stage.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText full/content"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level 6 spike was written around 'Grand Skyfall' — a fabricated name — with no cooldown or range.",
+      "why": "The ability is Grand Starfall: 5500 range on 180/165/150s. Range and cooldown are exactly what make it a map-wide spike rather than a lane one, and both were missing.",
+      "corrected": "Named and costed in whys[4], spikes[1], mid, wants.foe[1], phases[4].why and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/pantheon.json (R)"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The decisive interaction of the matchup was never stated: Aegis Assault is a channel that blocks damage only from the front.",
+      "why": "Riot's text says he becomes invulnerable to damage from the front; the kit carries channel (interruptible — any CC cancels it) and untargetable flags. Irelia's E stun therefore cancels it outright, and walking behind him beats it without spending anything. Equally unstated: Shield Vault is a dash, so Irelia's E grounding denies it, and it carries an auto-attack reset which is the real burst tell.",
+      "corrected": "Written into phases[2].why, phases[3].why, whys[2], early, mid, dosFull[1].d and breakdown.carry.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/pantheon.json (W/E)", "champ-data/_kits/irelia.json (E grounding/hardCC)", "_missing rules untargetable-dodges-burst, autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no number at all.",
+      "why": "Shield Vault 13/12/11/10/9s is the punishable window this whole lane is built around, and Aegis Assault's 22-to-18s is the second one.",
+      "corrected": "Real cooldowns written into breakdown.cooldowns and dosFull[0].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/pantheon.json"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Two copy-paste bleeds (dosFull[1].d and dontsFull[2].d carried the tradeGood/tradeBad strings under unrelated titles).",
+      "why": "Lint findings, deterministic.",
+      "corrected": "Both replaced with bodies that match their titles.",
+      "confidence": "High",
+      "sources": ["lintFindings"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Pantheon","after":"Irelia"},
+    {"layer":"full","path":"phases[1].side","before":"Pantheon","after":"Irelia"},
+    {"layer":"full","path":"phases[2].side","before":"Pantheon","after":"Irelia"},
+    {"layer":"full","path":"phases[3].side","before":"Pantheon","after":"Irelia"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Pantheon"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Pantheon"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Pantheon"},
+    {"layer":"full","path":"phases[0].why","before":"Q the low minions and keep the blade moving — your level 1 reset dance already out-trades careless mages.","after":"Q the low minions and keep the blade moving — his Comet Spear poke costs mana you can simply heal off."},
+    {"layer":"full","path":"phases[1].why","before":"W joins: the channel shreds incoming damage — hold it for his trade spell, not his autos.","after":"W joins: the channel cuts physical damage — hold it for the Shield Vault burst, not his poke."},
+    {"layer":"full","path":"phases[2].why","before":"E completes the engine: the stun into stacked-passive autos is half a health bar at 3. Mid lane rarely budgets for it.","after":"E completes the engine and grounds Shield Vault: stun him mid-Aegis Assault and the channel simply stops dead."},
+    {"layer":"full","path":"phases[3].why","before":"Reset-dance the wave into his face: four stacks, E-stun, Q the kill threat. The lane is a minion-count quiz.","after":"Reset-dance the wave into his face and stun before Aegis Assault turns on — the front-block does nothing from behind."},
+    {"layer":"full","path":"phases[4].why","before":"Vanguard's Edge online — the all-in caps with a wall of disengage-proof marks. Dive with the wave as your fuel.","after":"Grand Starfall lands at 5500 range on 180 seconds — he can leave, kill elsewhere, and be back before you are."},
+    {"layer":"full","path":"phases[5].why","before":"First item spike: stacked trades delete mages and your sustain mocks their poke math.","after":"His first item lands before yours: lethality plus Aegis Assault beats a half-stacked trade."},
+    {"layer":"full","path":"phases[6].why","before":"Late Irelia surfs the fight: Q-reset through their line, stun the carry pair, and shred whoever peels.","after":"Late you still win a clean 1v1, but Grand Starfall means the fight rarely starts clean or where you chose."},
+    {"layer":"full","path":"enemyWin","before":"Pantheon wins by landing Shield Vault (Stun), denying your pattern, and starting the fight your kit wanted ten seconds later.","after":"Pantheon wins by Shield Vault stunning you into Aegis Assault, then picking every later fight with a 5500-range Grand Starfall."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Pantheon Shield Vault (Stun): matchup-defining — Point-and-click stun — respect the all-in any time it is up. Count it out loud if you must. - Your W Defiant Dance has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Shield Vault: 13s at rank 1, 9s at rank 5 — a point-and-click dash stun, so respect the all-in whenever it is up. - Aegis Assault: 22s down to 18s, a channel that blocks only from the front. - Grand Starfall: 180/165/150 at 5500 range."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Pantheon gets a kill, the lane gets honest — give Shield Vault (Stun) extra room and farm it back. Two kills: stop dueling your tilt — farm with Q resets and stay relevant through stacked windows.","after":"If Pantheon gets a kill, the lane gets honest — give Shield Vault an extra step of room and farm it back. Two kills: stop dueling, farm with Q resets, and ping his 150-second Grand Starfall for every other lane."},
+    {"layer":"full","path":"ahead","before":"Ahead, dance louder: crash waves into Pantheon's face, stun the answers, and surf resets through every river fight.","after":"Ahead, take his wave and his flanks — but ward for Grand Starfall; a 150-second global undoes a lead you left unguarded."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the dance — the wave funds dives no cooldown can, and your R turns skirmishes into no-exit interviews.","after":"Carry by stunning the channel: Aegis Assault dies to your E, and Vanguard's Edge grounds the Shield Vault he leaves on."},
+    {"layer":"full","path":"dosFull[0].d","before":"Point-and-click stun — respect the all-in any time it is up. Commit on its cooldown, never into it.","after":"Shield Vault is a point-and-click dash stun on 9s at rank 5 — commit on its cooldown, never into it."},
+    {"layer":"full","path":"dosFull[1].d","before":"Q-reset through two low minions onto his chest, four-stack autos, E-stun the retreat — the wave-funded all-in he budgeted zero for.","after":"Aegis Assault blocks only from the front and it is a channel — stun him out of it, or step around behind him and it stops mattering."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Dashing in under-stacked with W down — Irelia without the engine is a melee minion with a famous haircut.","after":"He walks out of a telegraphed E, then Shield Vaults straight back onto you with the stun still loaded."},
+    {"layer":"content","path":"whys[0]","before":"Pantheon lacks a hard engage before level 2 and his stun requires landing Shield Vault, so your melee trading wins early exchanges","after":"Pantheon has no engage before level 2, and Shield Vault is point-and-click once he has it, so take your trades while it is unlearned"},
+    {"layer":"content","path":"whys[2]","before":"Level 3 you still out-trade him since his combo needs precise sequencing you can interrupt","after":"Level 3 your E-stun cancels Aegis Assault outright — it is a channel, and any crowd control ends it"},
+    {"layer":"content","path":"whys[4]","before":"Level 6 Grand Skyfall gives him a global stun-and-burst combo that flips the duel in his favor, since he can now execute a full engage you can't preemptively dodge","after":"Level 6 Grand Starfall is a 5500-range leap on a 180-second cooldown, so he chooses the ground for every fight from here and you cannot pre-dodge the landing"},
+    {"layer":"content","path":"spikes[1].text","before":"Grand Skyfall gives him a global execute-dive tool that flips the matchup — he can drop in from anywhere to burst you down or turn a skirmish, and your kit has no answer to the sudden stun-into-burst once he commits.","after":"Grand Starfall is a 5500-range leap on 180/165/150 that flips the matchup — he drops in from anywhere to burst you or turn a skirmish elsewhere, and once he lands, Shield Vault into Aegis Assault arrives with no warning."},
+    {"layer":"content","path":"wants.foe[1]","before":"Save Grand Skyfall to snipe an isolated Irelia or turn a skirmish elsewhere on the map","after":"Save Grand Starfall to snipe an isolated Irelia or turn a skirmish elsewhere on the map"},
+    {"layer":"content","path":"early","before":"Pantheon needs to land Shield Vault to open a real trade, and before he has points in Aegis Assault his damage output is fairly manageable, so at levels 1-2 your melee pressure and dash punish can win short trades if you avoid his stun. He has no passive shield or sustain to fall back on, meaning a clean dodge of his engage leaves him vulnerable. You should look to punish him whenever his stun is down.","after":"Pantheon opens trades with Shield Vault, and before he has points in Aegis Assault his damage is manageable, so at levels 1-2 your melee pressure and dash punish win short trades if you dodge the stun. Aegis Assault blocks damage only from the front and it is a channel, so your E cancels it and walking around him beats it — and he has no sustain, so a spent Shield Vault leaves him nothing. Punish him whenever it is on cooldown."},
+    {"layer":"content","path":"mid","before":"Levels 3-5 remain close to even-to-favored for you since his combo requires precise execution and enough points in Aegis Assault to truly threaten your HP bar, but the moment he hits level 6, Grand Skyfall changes everything. He can now drop in from anywhere on the map, stun you with the landing, and combo into a burst that you have no way to preemptively avoid, flipping lane and skirmish dynamics sharply in his favor. You need to respect his ultimate range and avoid overextending once he's 6.","after":"Levels 3-5 stay favoured for you: Aegis Assault blocks only from the front and it is a channel, so your E-stun cancels it outright and stepping behind him beats it for free. The moment he hits level 6, Grand Starfall changes everything — a 5500-range leap on 180 seconds that drops him in from anywhere, followed by Shield Vault's point-and-click stun into a burst you cannot pre-dodge. Respect that range and don't overextend once he is 6."}
+  ],
+  "notes": "This matchup was the worst chart corruption in my slice: all seven rows disagreed across layers, and rows 4-6 additionally had a side that argued with its own why. I aligned the full layer to the content layer because the content layer matches the packet levelChart exactly and because the rows 0-3 whys all described Irelia winning. No win[N] edits were needed — the content values were already correct — so every side edit here resolves a disagreement rather than creating one. UNVERIFIED AND LEFT ALONE: whys[5], spikes[2], spikes[3] and wants.foe[2] all assert that Aegis Assault deals true damage. Riot's description in the kit says only that he becomes invulnerable to damage from the front and strikes repeatedly with his spear — it says nothing about true damage, and the kit's needsResearch is empty, which means unknown rather than no. I did not edit those four fields in either direction. The suspectNames hit on \"Aegis Assault's\" is a FALSE POSITIVE — that is the real ability name. Also flagged for the user: diff reads TRICKY 7/10 and carryRating 7.5/10, but the win rate is 55.66% over 848 games and the chart now says Irelia wins levels 1 through 5. Those three numbers do not tell one story; I did not change diff or diffRating because that is a judgement about the whole matchup rather than a kit fact."
+}

@@ -1,0 +1,143 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "ekko",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer said Ekko on all seven rows while the content layer and the packet read Ekko, Ekko, Ekko, Ekko, Skill, Lux, Lux. Worse, rows 0-3 said Ekko while their whys described Lux chipping him down and winning the trade.",
+      "why": "Phase Dive (325 range, auto reset) plus the Parallel Convergence stun beats an immobile Lux through the early levels; once Zhonya's is up she stalls the Chronobreak return burst and out-ranges him at 1175/3340.",
+      "corrected": "phases[4].side = Skill, phases[5..6].side = Lux; phases[0..5].why rewritten so every row's sentence matches its verdict. Content win[0..6] already matched the packet, so no win[] edits were needed.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[0..6]", "champ-data/_kits ekko.json", "champ-data/_kits lux.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[] had 3 entries where 4 are expected, and no entry covered the anti-heal timing the missing-interactions file flags.",
+      "why": "Chronobreak heals Ekko for a percentage of the damage he took in the rewound window, so Grievous Wounds is a real power spike for Lux in this matchup.",
+      "corrected": "Added spikes[3] for the Oblivion Orb timing.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits ekko.json", "_missing/lux_mid.json rule needs-antiheal"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three applicable interactions were absent: Chronobreak's healing, Parallel Convergence's shield-on-entry, and Phase Dive being an auto-attack reset whose wind-up is the tell.",
+      "why": "Riot's text gives all three. Parallel Convergence is 22/20/18/16/14s and 1600 range, arming after a delay; entering it shields Ekko and stuns anyone inside. Phase Dive is 9/8.5/8/7.5/7s at only 325 range and empowers his next attack. Chronobreak is 110/80/50s and makes him untargetable.",
+      "corrected": "breakdown.cooldowns, enemyWin, dosFull[0], dosFull[1], dontsFull[2] and breakdown.carry now state these with numbers.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits ekko.json", "_missing/lux_mid.json rules shield-absorbs-burst, autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT); dosFull[2].d called Chronobreak a \"fifteen-second\" cooldown.",
+      "why": "Chronobreak is 110/80/50s — nowhere near fifteen.",
+      "corrected": "Both rewritten with real values.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits ekko.json"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was the tradeGood string and dontsFull[2].d the tradeBad string, both under unrelated titles (lint COPY_PASTE_BLEED x2).",
+      "why": "The titles asked about wave/ward discipline and about greeding the detonation; the bodies answered neither.",
+      "corrected": "Both rewritten to their own titles using Phase Dive's 325 range and Chronobreak's healing.",
+      "confidence": "High",
+      "sources": ["lintFindings", "champ-data/_kits ekko.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "E-poke from max range on his last-hits — the slow zone plus passive auto is your chip engine from level 1.",
+      "after": "His Timewinder returns through you for a second hit at 1075 units, and you have no dash to leave the field."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Q joins: the root threat re-prices every step he takes past the wave's midline.",
+      "after": "Phase Dive at 325 range is an auto reset — the wind-up is the tell, not the cast."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit: Q-E-auto with the passive detonations is a real chunk. Shield his answer and walk.",
+      "after": "Parallel Convergence stuns and shields him if he steps into it — never fight on his anomaly."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Lost Chapter timing — E every wave contact. Bank Manaflow and hold Q for his aggression, not yours.",
+      "after": "His W is 22s at rank 1, so those are the only seconds you get to shove and step up safely."
+    },
+    { "layer": "full", "path": "phases[4].side", "before": "Ekko", "after": "Skill" },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Final Spark online — anything the root catches dies to the laser math. The lane becomes a geometry quiz.",
+      "after": "Final Spark answers his dive, but Chronobreak is 110s of untargetable rewind — land the root first."
+    },
+    { "layer": "full", "path": "phases[5].side", "before": "Ekko", "after": "Lux" },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Luden's spike: Q-E-R deletes squishies from root range. Force him to dodge or die on every contact.",
+      "after": "Zhonya's online: stall the Chronobreak return burst, then out-poke him from 1175 units all game."
+    },
+    { "layer": "full", "path": "phases[6].side", "before": "Ekko", "after": "Lux" },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ekko Chronobreak: matchup-defining — Erases your kill and bursts back — track the hologram and save final damage for after it. It governs your forward steps. - W Prismatic Barrier spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- Chronobreak (R): 110s at rank 1, 50s at rank 3 — he goes untargetable and heals, so hold your last damage until the rewind lands. - Parallel Convergence (W) is 22s and shields him on entry. - Phase Dive (E) is 9s and reaches only 325 units, so he must commit close."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Ekko wins by landing Chronobreak, denying your pattern, and front-loading the violence while your kit is still stretching.",
+      "after": "Ekko wins by stunning you on Parallel Convergence, bursting with the Phase Dive reset, and rewinding out on Chronobreak."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.",
+      "after": "Carry by rooting him before Phase Dive closes: at 325 units he has to be inside your E slow, and a rooted Ekko never reaches the rewind."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Erases your kill and bursts back — track the hologram and save final damage for after it. Commit on its cooldown, never into it.",
+      "after": "Chronobreak rewinds him to where he stood seconds ago and heals him — hold Final Spark until after the rewind has resolved."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.",
+      "after": "A centered wave keeps you outside Phase Dive's 325 units, and a warded flank means Parallel Convergence never blooms behind you."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Ekko burns Chronobreak on nothing — take the fifteen-second invitation.",
+      "after": "Ekko burns Chronobreak on nothing — that is 50 to 110 seconds of free lane."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.",
+      "after": "Holding the detonation at half health is the window Phase Dive wants; and without Grievous Wounds, Chronobreak heals it back."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": null,
+      "after": "Chronobreak heals Ekko for a share of the damage he just took, so an early Oblivion Orb decides whether the rewind saves him or not."
+    },
+    { "layer": "content", "path": "spikes[3].when", "before": null, "after": "Oblivion Orb (Lux)" }
+  ],
+  "notes": "The full layer disagreed with content win[] and packet.levelChart on all seven rows; content already matched the packet, so the three side edits are one atomic group and no win[] twins were needed. Rows 0-3 already said Ekko but their whys described Lux winning the trade — those four whys are rewritten here even though the side did not move. Left `ahead`, breakdown.wave, breakdown.late and breakdown.feeding templated: I could not ground an Ekko-specific replacement without inventing. Unverified and therefore not written: whether Prismatic Barrier's shield or Light Binding's root can interrupt Chronobreak's channel, and whether Lucent Singularity's stealth reveal shows the Chronobreak hologram — neither is in Riot's text."
+}

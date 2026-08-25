@@ -1,0 +1,106 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "galio",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer carried a blanket \"Skill\" on all seven phase rows while the content layer (and the packet levelChart) read Lux/Lux/Skill/Skill/Skill/Lux/Skill. The page rendered two different answers to who wins Levels 1, 2 and First item.",
+      "why": "Lux Q reaches 1175 and E 1100; Galio's Q is 825 and Justice Punch 650, so at levels 1-2 she chips outside everything he owns. At Luden's her Q-E-R burst outruns his early MR stacking.",
+      "corrected": "full phases[0].side, phases[1].side and phases[5].side set to Lux to match win[0], win[1], win[5], which were already correct. Rows 2,3,4,6 left as Skill.",
+      "confidence": "High",
+      "sources": ["brief.currentText.content.win[0..6]", "brief.packet.levelChart", "brief.ownerKit ranges", "brief.enemyKit ranges"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[] had 3 entries where 4 are expected; Lux's own level 6 spike was absent, so the only level-6 note on the page was Galio's Hero's Entrance.",
+      "why": "Final Spark is 60/50/40s at 3340 range and refreshes Illumination; it is the single largest change in Lux's lane pattern and it belongs in the spike list.",
+      "corrected": "Added spikes[3].text and spikes[3].when with before:null.",
+      "confidence": "High",
+      "sources": ["brief.ownerKit R (cd 60/50/40, range 3340)", "brief.packet.defects"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit at all (lint COOLDOWN_NO_DIGIT), and the decisive interaction — Justice Punch knockup chaining into the Shield of Durand taunt — was never stated. The missing-interactions file also flags that Justice Punch cuts a dashless Lux's retreat.",
+      "why": "Justice Punch is 11/10/9/8/7 at 650 range; Shield of Durand is 18/17/16/15/14 at 275 range; Hero's Entrance is 180/160/140. Those numbers are what make the advice concrete: with E down he has no engage on Lux at all.",
+      "corrected": "Rewrote breakdown.cooldowns with real per-rank numbers, put the E-into-W chain into enemyWin and dosFull[1].d, and put the cut-retreat point into dontsFull[2].d.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Q/W/E/R cooldowns and ranges", "brief.missingInteractions terrain-cuts-retreat", "brief.lintFindings"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was the tradeGood string verbatim under \"Shield the all-in's biggest hit\", and dontsFull[2].d was the tradeBad string verbatim under \"Stand at the wave's edge unshielded\" (lint COPY_PASTE_BLEED x2).",
+      "why": "The title promises one thing and the body explains another.",
+      "corrected": "Both bodies rewritten to answer their own titles from Galio's kit.",
+      "confidence": "High",
+      "sources": ["brief.lintFindings"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Colossal Smash is an auto-attack reset; the wind-up, not a cast, is the tell that the combo has started.",
+      "why": "Flagged in missingInteractions (autoreset-burst-tell) and confirmed by the kit's autoReset flag on Galio's passive.",
+      "corrected": "Not written to the page — no field of the right length was free without displacing grounded text. Recorded here and in notes.",
+      "confidence": "Medium",
+      "sources": ["brief.missingInteractions autoreset-burst-tell", "brief.enemyKit P"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Lux" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Lux" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Lux" },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Galio Justice Punch: matchup-defining — His dash knockup — he has no engage while it is down. Count it out loud if you must. - Your W Prismatic Barrier has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Justice Punch (E): 11s at rank 1, 7s at rank 5 — he has no engage while it is down. - Shield of Durand (W) taunts on an 18s cooldown at rank 1. - Hero's Entrance is 180s at rank 1 — when it flies, that fight was decided elsewhere."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.",
+      "after": "Prismatic Barrier eats one hit, so hold it for the Justice Punch knockup into the Shield of Durand taunt — not for Winds of War chip."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.",
+      "after": "Justice Punch covers 650 units and knocks you up, and you have no dash — at the wave's edge with W spent, he taunts you for free."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Galio’s rehearsed moment — don’t audition for it.",
+      "after": "Bait Justice Punch first; a Q into his held dash just feeds it."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Galio wins by landing Justice Punch, denying your pattern, and front-loading the violence while your kit is still stretching.",
+      "after": "Galio wins by knocking you up with Justice Punch into the Shield of Durand taunt, holding you still through every follow-up."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.",
+      "after": "Carry by punishing Hero's Entrance: he lands on your team, so bind him on arrival and laser the clump he shielded before the taunt lands."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": null,
+      "after": "Final Spark comes up every 60s at rank 1 and reaches 3340 units — one landed Light Binding converts into a laser Galio cannot body-block."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].when",
+      "before": null,
+      "after": "Level 6 (Lux)"
+    }
+  ],
+  "notes": "phases[0/1/5].side moved to Lux; win[0], win[1], win[5] already read Lux, so no paired content edit was written (a no-op edit would fail the applier). The existing whys on those three rows already describe Lux winning the stage, so side and why now agree without a rewrite. spikes[2].when reads 'Rod of Ages / tank items (Galio)' — I could not verify from the kits whether Rod of Ages is still a live item on 26.15, so I left it alone. Colossal Smash's auto-reset tell is real but did not fit any field within the length band; it remains unwritten."
+}

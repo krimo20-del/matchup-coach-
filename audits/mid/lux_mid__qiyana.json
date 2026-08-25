@@ -1,0 +1,69 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "qiyana",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer gives Qiyana all seven chart rows and calls the matchup HARD 8/10, while the content layer already flips to Skill at 6 and Lux at first item — and Lux wins 53.56% over 1111 games.",
+      "why": "Two layers rendering different answers to 'who wins Level 6' is the exact defect regression-check fails on. The content layer matches the win rate and the kit: Audacity is 650 range, Light Binding is 1175.",
+      "corrected": "phases[4].side Skill, phases[5].side Lux, phases[6].side Lux — matching win[4..6], which were already correct. diff EVEN, diffRating 6/10.",
+      "confidence": "High",
+      "sources": ["packet winRate 53.56 / 1111 games", "packet levelChart", "currentText content win[4..6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The four spikes are already accurate in shape: her window is 3-5, level 6 is a coin-flip of ults, first item and late are Lux. Supreme Display of Talent in spikes[1] is the real Riot name — the suspectNames hit is a false positive.",
+      "corrected": "phases[4..6].why rewritten with real numbers (R 120s, Audacity 650, Light Binding 1175) to match the moved sides.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd 120 range 950", "enemyKit E range 650"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page never states the two numbers that decide the lane: Audacity's range/cooldown and Terrashape's 7s re-element dash off any wall. breakdown.cooldowns had no digit at all.",
+      "why": "Audacity is 650 range on 11/10/9/8/7s and is her only way onto you; Terrashape is a 7s, 1100-range dash that also charges her element, so a wall near the wave means she arrives already empowered. Her R is 120s flat at every rank and creates terrain plus a knockup.",
+      "corrected": "Numbers written into breakdown.cooldowns, dosFull[0].d, dosFull[2].d, dontsFull[2].d, breakdown.feeding and enemyWin.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E/R cooldowns, ranges and flags"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was tradeGood verbatim; dontsFull[2].d was tradeBad verbatim; dosFull[0].d and dosFull[2].d were name-swap templates.",
+      "why": "lintFindings COPY_PASTE_BLEED plus the template sweep — each body must explain its own title.",
+      "corrected": "All four bodies rewritten to their titles using Qiyana's actual ranges and cooldowns.",
+      "confidence": "High",
+      "sources": ["lintFindings", "enemyKit"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[4].side","before":"Qiyana","after":"Skill"},
+    {"layer":"full","path":"phases[5].side","before":"Qiyana","after":"Lux"},
+    {"layer":"full","path":"phases[6].side","before":"Qiyana","after":"Lux"},
+
+    {"layer":"full","path":"phases[4].why","before":"Final Spark online — anything the root catches dies to the laser math. The lane becomes a geometry quiz.","after":"Final Spark online — her R is 120s flat; if she spends it and misses, the laser answers from 3340 range."},
+    {"layer":"full","path":"phases[5].why","before":"Luden's spike: Q-E-R deletes squishies from root range. Force her to dodge or die on every contact.","after":"Luden's spike: Q-E-R deletes her from 1175 while Audacity only reaches 650. She has to come to you."},
+    {"layer":"full","path":"phases[6].why","before":"Late Lux decides fights from a screen away: root the entry, slow the pit, and laser the clump your team froze.","after":"Late Lux decides fights from a screen away: root her Audacity entry, slow the pit, and laser the clump held still."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Qiyana Audacity: matchup-defining — Her stick dash — once spent she cannot reach you; kite the cooldown. Check it before every step-up. - W Prismatic Barrier is the lifeline; chip damage never gets it. - The ult answers fights, not waves.","after":"- Qiyana Audacity: 11s at rank 1, 7s at rank 5, and only 650 range — step up on its downtime. - Terrashape is a 7s dash she uses to re-element, so it is not a reliable escape. - Her R is 120s flat: bait it, then commit."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"Her stick dash — once spent she cannot reach you; kite the cooldown. Its cooldown is the green light — wait for it.","after":"Audacity is 650 range on an 11s cooldown at rank 1 — once spent, your 1175 Light Binding is uncontested."},
+    {"layer":"full","path":"dosFull[1].d","before":"E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.","after":"She re-elements off any wall with a 7s Terrashape, so a flank bush or wall lets her arrive already empowered — ward both sides."},
+    {"layer":"full","path":"dosFull[2].d","before":"Qiyana spends Audacity early — the closest thing this matchup has to a guarantee.","after":"Shoved waves cost her the roam; her R is 120s and she wants it for your team."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.","after":"Lucent Singularity is 10s at rank 1 and it is your slow — burn it for a detonation and her 650-range Audacity has nothing to cross."},
+
+    {"layer":"full","path":"enemyWin","before":"Qiyana wins by landing Audacity, denying your pattern, and cashing the all-in before your pattern matures.","after":"Qiyana wins by dashing Audacity into you with an element charged, then stunning you off a wall with her R."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.","after":"Carry by punishing her approach: she must close 650 with Audacity, and Light Binding into Final Spark converts that dash into a corpse."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Qiyana gets a kill, the lane gets honest — give Audacity extra room and farm it back. Two kills: stop dueling your tilt — farm with E clears and stay relevant through root picks.","after":"If Qiyana gets a kill, stop standing anywhere a wall is within 650 of you — that is her Terrashape into Audacity entry. Farm with E from 1100 and hold Q purely as peel."},
+
+    {"layer":"full","path":"diff","before":"HARD","after":"EVEN"},
+    {"layer":"full","path":"diffRating","before":"8/10","after":"6/10"},
+    {"layer":"full","path":"breakdown.difficulty","before":"Hard matchup — difficulty 8/10, Qiyana carry threat 8.5/10.","after":"Even matchup — difficulty 6/10, Qiyana carry threat 8.5/10."},
+    {"layer":"full","path":"report[14].t","before":"Hard matchup — difficulty 8/10, Qiyana carry threat 8.5/10.","after":"Even matchup — difficulty 6/10, Qiyana carry threat 8.5/10."}
+  ],
+  "notes": "suspectNames flagged 'Her Supreme Display of Talent' in spikes[1] — FALSE POSITIVE, that is the correct Riot name for Qiyana's R. No win[N] edits were written because content win[4..6] were already Skill/Lux/Lux and only the full layer disagreed; a no-op win edit would have taken the whole chart group down. Templates I judged but could not ground without inventing: breakdown.wave (the 'bus tickets' crash line is generic but nothing in the kit makes Qiyana's wave state distinctive), ahead, breakdown.late, tradeGood/tradeBad. report[10].t contains 'ping your jungler every Mantra... every laser cycle' — 'Mantra' is a Karma term leaking in from another matchup's template; left alone as report[] is out of sweep scope."
+}

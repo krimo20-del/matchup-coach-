@@ -1,0 +1,107 @@
+{
+  "ownerKey": "hwei_mid",
+  "enemy": "sylas",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Every phases[N].side reads \"Sylas\" while every content win[N] reads Hwei/Hwei/Hwei/Skill/Skill/Hwei/Hwei and every phases[N].why describes Hwei winning that stage. The page renders two different answers to who wins each level.",
+      "why": "packet.levelChart is [Hwei, Hwei, Hwei, Skill, Skill, Hwei, Hwei] and matches the content layer exactly; the full layer is the outlier. Win rate 52.16% over 4444 games supports Hwei-favoured early rows.",
+      "corrected": "All seven phases[N].side values realigned to the content layer as one atomic group. No paired win[N] edit is possible because win[N] already holds the correct token.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]", "currentText.full.phases[N].why"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2] and late attribute Sylas's sustain to Petricite Burst.",
+      "why": "Petricite Burst is a charge-based on-attack magic damage and attack speed passive with no healing. The heal is Kingslayer (W), 12/10.5/9/7.5/6s, which heals against enemy champions. Hijack is 80/55/30s.",
+      "corrected": "Sustain re-attributed to Kingslayer (W); anti-heal timing named; Hijack cooldown numbers stated.",
+      "confidence": "High",
+      "sources": ["enemyKit P/W/R text", "missingInteractions: needs-antiheal"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[0] calls the chain-strike ability \"Kingslayer (Q)\"; mid and whys[3] claim Sylas gets \"Q resets from minion waves\"; wants.you[0] and wants.foe[0] call Q a dash.",
+      "why": "Chain Lash is Q (775 range, 10/9/8/7/6s, slow); Kingslayer is W (400 range, dash + heal); Abscond/Abduct is E (400 range, 13/12/11/10/9s), the dash-then-chain-pull. Sylas has no Q reset mechanic anywhere in his kit.",
+      "corrected": "Real slot names and ranges used; the reset claim removed and replaced with the true rank-5 cooldown compression on Q and W.",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E text, ranges and per-rank cooldowns"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contains no digit (lintFindings COOLDOWN_NO_DIGIT); dosFull[2].d asserts a \"fifteen-second\" window.",
+      "why": "Abscond/Abduct is 13s at rank 1 falling to 9s at rank 5 — fifteen seconds is a magnitude with no source.",
+      "corrected": "Real per-rank numbers written into breakdown.cooldowns and the do's bullet.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 13/12/11/10/9", "lintFindings"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "report[8] already names Grievous Wounds timing against his sustain, which is the applicable missing interaction.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["missingInteractions"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d is the tradeGood string verbatim; dontsFull[2].d is the tradeBad string verbatim (lintFindings COPY_PASTE_BLEED); dosFull[0].d and dontsFull[0].d are name-swap templates.",
+      "why": "Titles promise one thing and the bodies explain another.",
+      "corrected": "Both bodies rewritten to match their titles using Abscond/Abduct range and cooldown.",
+      "confidence": "High",
+      "sources": ["lintFindings", "enemyKit"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Sylas","after":"Hwei"},
+    {"layer":"full","path":"phases[1].side","before":"Sylas","after":"Hwei"},
+    {"layer":"full","path":"phases[2].side","before":"Sylas","after":"Hwei"},
+    {"layer":"full","path":"phases[3].side","before":"Sylas","after":"Skill"},
+    {"layer":"full","path":"phases[4].side","before":"Sylas","after":"Skill"},
+    {"layer":"full","path":"phases[5].side","before":"Sylas","after":"Hwei"},
+    {"layer":"full","path":"phases[6].side","before":"Sylas","after":"Hwei"},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Sylas Abscond / Abduct: matchup-defining — Dash into chain-stun — punish him hard while it is down. Read it like a second minimap. - Guard your E fear paint like a fifth summoner spell. - Ultimate goes to kill windows only.","after":"- Abscond / Abduct: 13s at rank 1, 9s at rank 5 — the dash-then-chain that starts every Sylas kill. While it is down he cannot reach you. - Kingslayer heals off you every 12s early. - Hijack is 80s at rank 1."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"Dash into chain-stun — punish him hard while it is down. Until it’s spent, every commit is a coin flip.","after":"A wave he can Abduct you over is a wave too far up; ward both bushes so the 13s dash never starts unseen."},
+
+    {"layer":"full","path":"dosFull[1].d","before":"QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending.","after":"Abduct is his only way in and the fear paint answers it. Spend E on poke and his 13-second dash arrives with nothing to stop it."},
+
+    {"layer":"full","path":"dosFull[2].d","before":"Sylas burns Abscond / Abduct on nothing — take the fifteen-second invitation.","after":"Sylas spends Abscond on nothing — that is a 13-second window, take it."},
+
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Sylas’s whole plan in one window — decline politely and watch it retire.","after":"You have no dash; Abscond into Abduct is two moves at you — never walk home unpainted."},
+
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"A third paint locks you in animation inside 400-range Abduct with E spent — that is the exact frame Sylas dashes, chains, and Kingslayers off you."},
+
+    {"layer":"full","path":"enemyWin","before":"Sylas wins by landing Abscond / Abduct, denying your pattern, and front-loading the violence while your kit is still stretching.","after":"Sylas wins by Absconding onto you mid-paint, chaining you still, and healing the trade back with Kingslayer before your mark detonates."},
+
+    {"layer":"full","path":"breakdown.carry","before":"Carry through range — no mid pool champion paints a teamfight from further away; your R + QQ decides objectives before they start.","after":"Carry through range: Sylas must cross 400 units of Abduct to touch you, so R their engage at 1300 and let QQ finish what the slow holds."},
+
+    {"layer":"full","path":"breakdown.feeding","before":"If Sylas gets a kill, the lane gets honest — give Abscond / Abduct extra room and farm it back. Two kills: stop dueling your tilt — farm with QA clears and stay relevant through max-range poke.","after":"One kill and Kingslayer heals him through your chip — stand a screen back and farm with QA. Two kills and his 13s Abduct reaches you through minions, so buy Zhonya's early and paint only from behind the wave."},
+
+    {"layer":"full","path":"ahead","before":"Ahead, paint the prison: mark-detonate Sylas on every last-hit, shove with QA, and rotate first to every river — your R range means you join fights he can't even see.","after":"Ahead, deny the heal: mark-detonate him on every last-hit so Kingslayer never catches up, buy Grievous Wounds early, and shove with QA to roam while his 80s Hijack is down."},
+
+    {"layer":"content","path":"spikes[0].text","before":"Sylas has to close the gap through your Q/E poke zone before Kingslayer (Q) chain-strikes land, so you punish every approach and keep him below 60% before he can start a trade.","after":"Sylas has to cross your Q and E zones before Chain Lash (Q) lands at 775 range, and his only gap-closer is Abscond into Abduct (E) — punish every step-up and keep him low before he starts a trade."},
+
+    {"layer":"content","path":"spikes[2].text","before":"Your burst combo comes online slightly ahead of his all-in threshold, letting you punish any dive attempt before his sustain from Petricite Burst kicks in.","after":"Your first-item burst lands ahead of his all-in threshold — detonate the mark before Kingslayer (W) heals him back, since that heal is his only sustain in the trade."},
+
+    {"layer":"content","path":"late","before":"Once your first item comes online your burst combo punishes his all-in attempts before his healing from Petricite Burst can offset the damage. Track his ultimate charge and whatever he's stolen recently — a well-timed Hijack can flip a fight, so keep E ready to interrupt his dive and don't commit without vision on his position.","after":"Once your first item comes online your burst punishes his all-in attempts before Kingslayer (W) heals the damage back, so Grievous Wounds keeps the maths yours. Track Hijack — 80s at rank 1, 30s at rank 3 — and whatever he last stole, keep E ready to interrupt his dive, and don't commit without vision on his position."},
+
+    {"layer":"content","path":"mid","before":"Levels 3-5 you keep winning the poke war, but respect that his all-in burst gets scarier once he has more Q resets from minion waves. Level 6 Hijack is the real inflection point — he can steal a nearby ultimate (including yours or an ally's engage), so be aware of what's on cooldown before grouping for objectives. If he doesn't get a clean stolen-ult engage, you're still ahead on trades and can keep poking him down safely.","after":"Levels 3-5 you keep winning the poke war, but respect that Chain Lash (Q) falls to 6 seconds and Kingslayer (W) to 6 by rank 5, so his sustained trade gets real. Level 6 Hijack is the real inflection point — he can steal your R or an ally's engage, so know what is off cooldown before grouping for objectives. If he doesn't get a clean stolen-ult engage, you're still ahead on trades and can keep poking him down safely."},
+
+    {"layer":"content","path":"early","before":"Sylas has to walk through real damage to reach you — your Q fire form and E poke chip him hard before he ever gets a Kingslayer chain off, and his short dash range means levels 1-2 favor you clearly. He's built to snowball off successful all-ins, so denying him easy trades early keeps him weak the whole game. Stay at range, poke on cooldown, and punish overextensions.","after":"Sylas has to walk through real damage to reach you — your Q fire form and E poke chip him hard before Kingslayer (W) ever heals him back, and 400-range Abscond means levels 1-2 favor you clearly. He's built to snowball off successful all-ins, so denying him easy trades early keeps him weak the whole game. Stay at range, poke on cooldown, and punish overextensions."},
+
+    {"layer":"content","path":"whys[3]","before":"Roughly even here since he's building toward a stronger all-in with more Q resets available","after":"Even here — Chain Lash and Kingslayer both fall toward 6 seconds, so his trade sustains"},
+
+    {"layer":"content","path":"wants.you[0]","before":"Poke him down before he closes distance with Q dashes","after":"Poke him down before Abscond (E) closes the 400-unit gap"},
+
+    {"layer":"content","path":"wants.foe[0]","before":"Wants to dash in with Q chain-strikes to force a short trade","after":"Wants to Abscond in and Kingslayer you to force a healing trade"}
+  ],
+  "notes": "CHART: all seven phases[N].side read 'Sylas' while content win[N] already reads Hwei/Hwei/Hwei/Skill/Skill/Hwei/Hwei — matching packet.levelChart and every phases[N].why. The full layer was the wrong side of the disagreement, so the seven side edits are proposed as one atomic group and NO paired win[N] edit exists to propose: win[N] is already the correct token and a before==after edit is invalid. This is the one legitimate case of side-without-win[N] and it removes a disagreement rather than creating one. RATINGS: phases[N].rating left untouched (7/10-8/10 reads as Hwei-favour and is consistent with the corrected sides). DIFF: 'HARD' / 8-10 difficulty sits oddly against a 52.16% win rate over 4444 games; left alone rather than guessed at — see questionsForUser. Sylas is male, pronouns verified correct throughout."
+}

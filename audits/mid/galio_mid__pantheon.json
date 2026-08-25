@@ -1,0 +1,181 @@
+{
+  "ownerKey": "galio_mid",
+  "enemy": "pantheon",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "diff reads TRICKY at 7/10 with Pantheon carry threat 7.5/10, but the matchup is 50.96% over 1566 games and the content-layer chart hands Galio five of seven stages. The rating and the chart argue opposite cases.",
+      "why": "50.96% is a coin flip, not a 7/10 problem lane. I did not move diff or diffRating because they are part of the same unresolved chart conflict described in notes — changing the rating without the chart would deepen the disagreement rather than fix it.",
+      "corrected": "Needs a ruling: either diff drops toward EVEN/5.5 or the content chart is wrong. See questionsForUser.",
+      "confidence": "Medium",
+      "sources": ["packet.winRate 50.96", "packet.games 1566", "currentText.full.diff", "currentText.content.win"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level-6 spike is attributed to 'Grand Skyfall' in whys[4], spikes[1].text, mid, wants.foe[2] and wants.you[3]. No such ability exists.",
+      "why": "Pantheon's R is Grand Starfall: 180/165/150s, 5500 range, 'composes himself and then leaps into the air, landing at a chosen location as a comet'. packet.suspectNames flags the name at edit distance 3. spikes[0].text also says 'he has no shield until W is up' — W is Shield Vault, the 600-range dash-stun; the shield is Aegis Assault (E), 22s at rank 1.",
+      "corrected": "Level 6 = Grand Starfall, 5500 range on 180s at rank 1 — the same reach as Galio's rank-3 Hero's Entrance. His defensive spike is Aegis Assault (E) on 22s, not W.",
+      "confidence": "High",
+      "sources": ["packet.enemyAbilities.R", "packet.suspectNames", "enemyKit R cd/range/text", "enemyKit W text", "enemyKit E cd/text"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The page never states that Aegis Assault is a channel, or that it only blocks damage from the front — both decide every all-in in this lane.",
+      "why": "enemyKit E carries the channel flag ('interruptible — any CC cancels it') and Riot's text is explicit: 'Pantheon sets his shield, becoming invulnerable to damage from the front and striking repeatedly with his spear.' Galio's W is hard CC and his E is a knockup on an 11s cooldown, so either one ends a 22s ability. missingInteractions also flags that Shield Vault is an auto-attack reset, so the wind-up is the tell rather than the cast.",
+      "corrected": "Taunt or knockup cancels Aegis Assault; if you cannot, get behind him rather than pushing damage into the front. Trading his 22s E for your 11s E is the best cooldown swap in the lane.",
+      "confidence": "High",
+      "sources": ["enemyKit E flags/text", "ownerKit W/E flags", "missingInteractions key 22"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns held no digit (lint COOLDOWN_NO_DIGIT) despite being the field that governs when you may step forward.",
+      "why": "Shield Vault 13/12/11/10/9 at 600 range, Aegis Assault 22/21/20/19/18, Comet Spear 11/10.25/9.5/8.75/8 at 575 — all in the kit.",
+      "corrected": "Written in with the behaviour each number gates.",
+      "confidence": "High",
+      "sources": ["enemyKit W/E/Q cd and range"]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d and dontsFull[2].d were the tradeGood / tradeBad strings pasted under unrelated titles (lint COPY_PASTE_BLEED).",
+      "why": "The titles promise wave-and-R timing and dash discipline; the bodies described a trade rotation.",
+      "corrected": "Both rewritten to their own titles using Grand Starfall's 5500/180s and Justice Punch's 11s against Shield Vault's 600 range.",
+      "confidence": "High",
+      "sources": ["lintFindings", "enemyKit R", "enemyKit W", "ownerKit E"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "An honest brawl your taunt referees — trade rotations behind the shield and let the W decide who commits on whose terms.",
+      "after": "An honest brawl your taunt referees — Aegis Assault is a channel, so a taunt or a knockup ends it before it ends you."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Pantheon wins by landing Shield Vault (Stun), denying your pattern, and starting the fight your kit wanted ten seconds later.",
+      "after": "Pantheon wins by opening Shield Vault from 600 range, holding Aegis Assault through your rotation, and leaving on Grand Starfall."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield.",
+      "after": "Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — the taunt cancels Aegis Assault outright."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+      "after": "Charging W at his front while Aegis Assault is set — it blocks damage from the front, so walk around him or wait the 22s out."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield. Bad trade: Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+      "after": "Good trade: Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — the taunt cancels Aegis Assault outright. Bad trade: Charging W at his front while Aegis Assault is set — it blocks damage from the front, so walk around him or wait the 22s out."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Pantheon Shield Vault (Stun): matchup-defining — Point-and-click stun — respect the all-in any time it is up. It governs your forward steps. - W Shield of Durand spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- Shield Vault: 13s at rank 1, 600 range, point-and-click stun — his all-in exists whenever it is up. - Aegis Assault: 22s at rank 1 and it is a channel — your taunt or E ends it. - Comet Spear: 11s, 575 range, his only ranged poke."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, tax both maps: zone Pantheon with taunt threat, keep the wave middle, and R every skirmish — fed Galio makes the enemy jungler unemployed.",
+      "after": "Ahead, tax both maps: hold the wave middle, punish the 22 seconds after Aegis Assault, and R the side lane his Starfall was aiming at."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through arrivals — Hero's Entrance turns every losing skirmish your team starts into a 5v4 with a knockup.",
+      "after": "Carry through arrivals — your R answers Grand Starfall: both reach 5500, but only yours lands with a shield."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "You are the anti-dive: taunt their engage off your carry, shield the magic, and R the flank their comp built around.",
+      "after": "You are the anti-dive: taunt the Shield Vault the instant it lands, and R the carry his Starfall dropped onto."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Point-and-click stun — respect the all-in any time it is up. Until it’s spent, every commit is a coin flip.",
+      "after": "Shield Vault is point-and-click from 600 range on a 13s cooldown — until it is spent, every commit is a coin flip."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield.",
+      "after": "Grand Starfall reaches 5500 units on a 180s cooldown — a middle wave lets you answer his arrival with your own R instead of a recall."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That’s Pantheon’s bread-and-butter play — deny it and they run out of answers.",
+      "after": "Aegis Assault blocks damage from the front only — walk around it or wait 22s."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+      "after": "Justice Punch is 11s at rank 1 and it is your exit from a 600-range Shield Vault — burning it to enter leaves you stuck in his combo."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield. Great trade: Pantheon wastes Shield Vault (Stun) — commit immediately. Bad trade: Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+      "after": "Good trade: Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — the taunt cancels Aegis Assault outright. Great trade: Pantheon wastes Shield Vault (Stun) — commit immediately. Bad trade: Charging W at his front while Aegis Assault is set — it blocks damage from the front, so walk around him or wait the 22s out."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "Grand Skyfall gives Pantheon a global-threat window that can win fights elsewhere on the map",
+      "after": "Grand Starfall gives Pantheon a 5500-range window that can win fights elsewhere on the map"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Once you have Justice Punch you can trade into Pantheon's Comet Spear pokes and win the exchange, since your E-Q combo out-damages his spear throw at close range and he has no shield until W is up.",
+      "after": "Once you have Justice Punch you can trade into Pantheon's Comet Spear pokes and win the exchange, since your E-Q combo out-damages his spear throw at 575 range and Aegis Assault is 22s at rank 1."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Pantheon's Grand Skyfall lets him drop in from anywhere on the map for a burst all-in or a roam, and this global-threat window is genuinely his strongest against you since he can bypass your lane presence entirely.",
+      "after": "Pantheon's Grand Starfall lets him drop in from 5500 range for a burst all-in or a roam on a 180s cooldown, and this window is genuinely his strongest against you since he can bypass your lane presence entirely."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-5 you're clearly ahead, punishing his spear pokes with all-ins the moment his shield is down; keep pressuring the wave and don't let him free-farm from range. Level 6 flips the momentum his way — Grand Skyfall lets Pantheon disappear from lane and reappear on the map for a global play, meaning he can win the game elsewhere even if he's losing the 1v1 against you, so ward and communicate his ultimate cooldown to your team.",
+      "after": "Levels 3-5 you're clearly ahead, punishing his spear pokes with all-ins the moment his shield is down; keep pressuring the wave and don't let him free-farm from range. Level 6 flips the momentum his way — Grand Starfall lets Pantheon disappear from lane and reappear on the map for a global play, meaning he can win the game elsewhere even if he's losing the 1v1 against you, so ward and count the 180 seconds for your team."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Roam with Grand Skyfall to collapse on a side lane or steal an objective",
+      "after": "Roam with Grand Starfall to collapse on a side lane or steal an objective"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[3]",
+      "before": "Ward the jungle to avoid getting caught by a surprise Skyfall dive",
+      "after": "Ward the jungle to avoid getting caught by a surprise Starfall dive"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Punish his Aegis Assault shield cooldown with a follow-up all-in",
+      "after": "Cancel his Aegis Assault with the taunt — it is a channel"
+    }
+  ],
+  "notes": "CHART LEFT ALONE, DELIBERATELY: full phases[].side reads Pantheon/Pantheon/Pantheon/Pantheon/Skill/Skill/Skill while content win[] reads Skill/Galio/Galio/Galio/Galio/Pantheon/Galio (the latter matches packet.levelChart). Rows 1-4 are outright inverted between the two layers — the full layer says Pantheon wins levels 2 through 5 while the content layer says Galio does, and the full-layer .why text for those rows ('Full kit: E-dash into W-taunt is the lane's rudest counter-engage', 'Trade into AP freely') describes GALIO winning them, so the full-layer sides contradict their own whys. I could not decide the correct verdict from the kits, so I moved no row. This is the single largest defect left on this matchup and it needs a human ruling. RELATED: diff TRICKY / 7.0 and carryRating 7.5 sit on a 50.96% matchup — see audit point 2. NOT FIXED: breakdown.spikes and phases[3]/[5].why sell the 'MR makes AP trades a subscription' line on Pantheon, whose kit is spear-and-shield; Riot's text does not state damage type so I would not assert it, but if he is physical those two fields are actively misleading here. Report edits held to one (report[3].t) so the trading strings stay consistent; report[0].t still carries the old TL;DR wording."
+}

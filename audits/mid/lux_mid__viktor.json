@@ -1,0 +1,113 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "viktor",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart disagreed across layers: content win[] read Lux/Lux/Skill/Skill/Skill/Skill/Viktor (matching the packet levelChart) while every full-layer phases[N].side read 'Skill'. Rows 0, 1 and 6 rendered two different answers.",
+      "why": "Lux Q reaches 1175 and E 1100; Viktor's Q is 600 and his E cast range 525, so levels 1-2 are hers on range alone. Late, augmented Hextech Ray plus Arcane Storm (120/100/80s) hold zones a single 60/50/40s Final Spark cannot, which is why the packet chart and content layer both give 2+ items to Viktor.",
+      "corrected": "phases[0].side and phases[1].side moved to 'Lux', phases[6].side moved to 'Viktor', each with its why rewritten in the same proposal. No content-layer win[N] edit is proposed because win[0]='Lux', win[1]='Lux' and win[6]='Viktor' ALREADY hold the target values — a before==after edit would be rejected. After these edits the two layers agree on all seven rows.",
+      "confidence": "High",
+      "sources": ["brief ownerKit", "brief enemyKit", "packet.levelChart", "currentText.content.win"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes and spikes[] described Viktor's scaling with the wrong ability names and no reference to his actual spike mechanism.",
+      "why": "Viktor's power steps come from Glorious Evolution: every 100 Hex Fragments permanently augments one ability. His first augment is the real lane spike, not an item timing. Lux's spikes stay Lost Chapter, level 6 (Final Spark 60s at rank 1) and Luden's.",
+      "corrected": "breakdown.spikes now names the 100-Fragment augment; spikes[0..3] use Hextech Ray and Arcane Storm and carry real cooldowns.",
+      "confidence": "High",
+      "sources": ["brief enemyKit P/Q/W/E/R", "brief ownerKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Both of Viktor's key abilities were named wrong throughout the content layer: 'Death Ray' for E (really Hextech Ray) and 'Chaos Storm' for R (really Arcane Storm). The auto-attack-reset tell on Siphon Power was absent entirely.",
+      "why": "Riot's kit file gives Q Siphon Power (9/8/7/6/5s, 600 range, shield + empowered next attack = an auto reset), W Gravity Field (17/16/15/14/13s, 800, slow into stun), E Hextech Ray (12/11/10/9/8s, 525 cast, line), R Arcane Storm (120/100/80s, 700, redirectable zone). Lux answers with Q 10s/1175 root, E 10/9.5/9/8.5/8s/1100 slow zone, W 12/11.5/11/10.5/10s shield, R 60/50/40s at 3340. The decisive interaction is range: every trade Viktor wants requires him to walk from 800 into Lux's 1100-1175 band, and his combo opens with the Siphon Power auto-reset wind-up, which is the visible cue to step back.",
+      "corrected": "All 'Death Ray' and 'Chaos Storm' references replaced; dosFull[1].d now states the Illumination passive weave; breakdown.cooldowns now carries Gravity Field 17s->13s, Siphon Power 9s, Lux Q 10s and R 60s.",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "brief ownerKit", "missingInteractions rule autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit at all (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that exists to hold real numbers.",
+      "corrected": "Rewritten with Gravity Field 17s rank 1 / 13s rank 5, Siphon Power 9s, Lux Q 10s and Final Spark 60s.",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "brief ownerKit", "lintFindings"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was the tradeGood string verbatim and dontsFull[2].d was the tradeBad string verbatim, both under unrelated titles (lint COPY_PASTE_BLEED). dosFull[0].d and dontsFull[0].d were likewise bodies that did not answer their own titles.",
+      "why": "The title promises one thing and the body explains another.",
+      "corrected": "All four bodies rewritten to match their titles, grounded in this matchup's ranges and cooldowns.",
+      "confidence": "High",
+      "sources": ["lintFindings", "brief enemyKit"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "report[10].t contained 'ping your jungler every Mantra' — Mantra is Karma's mechanic, a template leak from another champion's page.",
+      "why": "Lux has no Mantra; the cycle in question is Final Spark's 60s.",
+      "corrected": "Replaced with the 60-second laser cycle.",
+      "confidence": "High",
+      "sources": ["brief ownerKit"]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Nothing in the brief indicates a 26.15 change to either kit; live patch is 26.15 and no patch-sensitivity claim is written into the page.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["brief"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Lux"},
+    {"layer":"full","path":"phases[0].rating","before":"5/10","after":"6/10"},
+    {"layer":"full","path":"phases[0].why","before":"E-poke from max range on his last-hits — the slow zone plus passive auto is your chip engine from level 1.","after":"Level 1 is yours: E reaches 1100 and his Q only 600, so you chip his last-hits with no answer available."},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Lux"},
+    {"layer":"full","path":"phases[1].rating","before":"5/10","after":"6/10"},
+    {"layer":"full","path":"phases[1].why","before":"Q joins: the root threat re-prices every step he takes past the wave's midline.","after":"Q joins at 1175 — the root re-prices every step he takes toward his 600-range Q."},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Viktor"},
+    {"layer":"full","path":"phases[6].rating","before":"6/10","after":"4/10"},
+    {"layer":"full","path":"phases[6].why","before":"Late Lux decides fights from a screen away: root the entry, slow the pit, and laser the clump your team froze.","after":"Viktor edges it: augmented Hextech Ray and Arcane Storm hold zones your one R cannot, so fight from max range."},
+
+    {"layer":"content","path":"spikes[0].text","before":"The lane is even through the mid-levels: your Q outranges his Q (Siphon Power) shield-poke but his E (Death Ray) is a fast long-range line that punishes you for stepping to farm, so trade Q for E and use your own E to clear from safety.","after":"The lane is even through the mid-levels: your Q reaches 1175 to his Q (Siphon Power) at 600, but his E (Hextech Ray) is a fast line that punishes you for stepping to farm, so clear with your own E and hold Q for his step-up."},
+    {"layer":"content","path":"spikes[1].text","before":"Level 6 stays even because Viktor's Chaos Storm is a huge zoning threat but you can Final Spark him from equal range; the fight is decided by who lands their skillshot first, so bait his E before committing.","after":"Level 6 stays even: Arcane Storm zones hard on a 120-second cooldown at rank 1, but Final Spark answers from 3340 range, so the fight goes to whoever lands first — bait his E before you commit."},
+    {"layer":"content","path":"spikes[2].text","before":"After Luden's it remains a skill lane: your combo can burst him if you snare first, but his augmented E and Storm out-DPS you in extended trades, so only all-in when his Death Ray is on cooldown.","after":"After Luden's it remains a skill lane: your combo bursts him if the Q root lands first, but his augmented Hextech Ray and Storm out-DPS you in extended trades, so all-in only while his E is down (9s at rank 3)."},
+    {"layer":"content","path":"spikes[3].text","before":"Late game favours Viktor: a fully evolved Chaos Storm plus Death Ray gives him relentless zone control and waveclear that outscales your single-target burst, and he pushes you off objectives from range.","after":"Late game favours Viktor: a fully augmented Arcane Storm plus Hextech Ray gives him relentless zone control and waveclear that outscales your single-target burst, and he pushes you off objectives from range."},
+    {"layer":"content","path":"whys[2]","before":"At 3 it evens into a Q-versus-Death-Ray skillshot lane.","after":"At 3 it evens into a Q-versus-Hextech-Ray skillshot lane."},
+    {"layer":"content","path":"whys[4]","before":"Level 6 is even: your R and his Chaos Storm cancel at equal range.","after":"Level 6 is even: your R and his Arcane Storm cancel at equal range."},
+    {"layer":"content","path":"whys[6]","before":"Late game is Viktor's: evolved E and Storm outscale your single-target kit.","after":"Late game is Viktor's: augmented Hextech Ray and Storm outscale your kit."},
+    {"layer":"content","path":"early","before":"Levels 1-2 are yours: you outrange his early kit and can snare-poke him before Death Ray and his shield make trades safe for him.","after":"Levels 1-2 are yours: your 1175 Q outranges his whole kit — snare-poke before Hextech Ray and his shield make trades safe."},
+    {"layer":"content","path":"mid","before":"Levels 3-6 settle into a skillshot duel, Q versus E, where landing your snare first is the only way through his poke and shield.","after":"Levels 3-6 settle into a skillshot duel, Q versus Hextech Ray, where landing the snare first is the only way through his poke and shield."},
+    {"layer":"content","path":"late","before":"By second item Viktor pulls ahead, his evolved Death Ray and Chaos Storm giving him waveclear and zone control that eclipse your burst.","after":"By second item Viktor pulls ahead, his augmented Hextech Ray and Arcane Storm giving him waveclear and zone control that eclipse your burst."},
+    {"layer":"content","path":"wants.you[1]","before":"Snaring him before he can weave E Death Ray poke","after":"Snaring him before he can weave Hextech Ray poke"},
+    {"layer":"content","path":"wants.foe[0]","before":"Landing Death Ray on you every time you last-hit","after":"Landing Hextech Ray on you every time you last-hit"},
+    {"layer":"content","path":"wants.foe[1]","before":"Completing his evolved E and Chaos Storm powerspike","after":"Completing his augmented Hextech Ray and Storm spike"},
+    {"layer":"content","path":"wants.foe[2]","before":"Zoning you off waves and objectives with Chaos Storm","after":"Zoning you off waves and objectives with Arcane Storm"},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Viktor Gravity Field: matchup-defining — The stun zone owns every all-in — walk out the moment it drops or fight outside it. Count it out loud if you must. - Your W Prismatic Barrier has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Gravity Field: 17s at rank 1, 13s at rank 5 — the stun zone owns every all-in, so walk out the moment it drops and fight in the 13+ seconds after. - Siphon Power is 9s early: his shield-poke window. - Your Q is 10s and Final Spark 60s at rank 1 — spend both on his commit."},
+    {"layer":"full","path":"dosFull[0].d","before":"The stun zone owns every all-in — walk out the moment it drops or fight outside it. Bait it, count it, then go.","after":"His Q reaches only 600, so drop E on his farm spot from outside it — the slow plus an Illumination auto is free chip."},
+    {"layer":"full","path":"dosFull[1].d","before":"E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.","after":"Every spell charges Illumination; the follow-up auto ignites it for bonus magic damage, so take one auto after each E detonation."},
+    {"layer":"full","path":"dosFull[2].d","before":"Viktor burns Gravity Field on nothing — take the fifteen-second invitation.","after":"Gravity Field on nothing is a 13-to-17 second invitation — walk up and trade."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Viktor’s whole plan in one window — decline politely and watch it retire.","after":"Q is 10 seconds; missing it hands him a free step-up with your only root gone."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.","after":"Final Spark is 60 seconds at rank 1 — spend it clearing and the next skirmish arrives with your only screen-range answer still down."},
+    {"layer":"full","path":"enemyWin","before":"Viktor wins by landing Gravity Field, denying your pattern, and renting you the lane at a range markup.","after":"Viktor wins by farming Hex Fragments safely, augmenting Hextech Ray, and zoning you off waves you can't contest."},
+    {"layer":"full","path":"ahead","before":"Ahead, own the geometry: E Viktor off every contact, root the answers, and laser the river fights from fog — fed Lux turns vision lines into kill lines.","after":"Ahead, take the map: he cannot contest your 1175 range, so shove, E the wave before Hextech Ray does, and roam on his recall — his Q only reaches 600."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.","after":"Carry by out-ranging him: 1175 Q and 3340 R beat every part of Viktor's 600-800 kit, so pick your fights from where his Hextech Ray cannot reach."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Viktor gets a kill, the lane gets honest — give Gravity Field extra room and farm it back. Two kills: stop dueling your tilt — farm with E clears and stay relevant through root picks.","after":"If Viktor gets a kill he banks Hex Fragments toward an augment, so deny the shutdown: farm from 1100 with E and never step inside 800 while Gravity Field is up. Two kills: play for root picks elsewhere."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: an E-cleared slow push that crashes on your roam-or-recall timer — the slow zone makes the crash safe to set up. Worst wave: a frozen wave near his tower with Q down — the immobile root-bot walking up to farm is mid's most quoted death. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.","after":"Best wave: an E-cleared slow push crashed on your recall timer — Hextech Ray clears as fast as you do, so racing him with autos only walks you into 525 range. Worst wave: frozen near his tower with Q down, where Gravity Field turns one step forward into a stun. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores."},
+    {"layer":"full","path":"breakdown.early","before":"Chip with E and the passive weave — your poke is honest and your root threat is the law. Bank Manaflow; the laser runs on it.","after":"Chip with E from 1100 and weave the Illumination auto — his Q needs 600 and E 525, so every trade starts with him walking at you."},
+    {"layer":"full","path":"breakdown.spikes","before":"Lost Chapter steadies the chip; level 6 turns roots into kills; Luden's makes Q-E-R a deletion.","after":"Lost Chapter steadies mana; 6 turns roots into kills; his 100-Fragment augment out-trades your poke."},
+    {"layer":"full","path":"breakdown.late","before":"You are the longest 'no' in the game: root the engage, slow the pit, and laser whatever your team's front line holds still.","after":"Late, Arcane Storm chases and your R doesn't, so fight from 3340 — root whoever steps at your carry, laser the clump held still."},
+    {"layer":"full","path":"report[10].t","before":"Q-E on arrival is a guaranteed gank: root, slow, detonate. Post-6 your R cleans the Flash they burn — ping your jungler every Mantra... every laser cycle.","after":"Q-E on arrival is a guaranteed gank: root, slow, detonate. Post-6 your R cleans the Flash they burn — ping your jungler on every 60-second laser cycle."}
+  ],
+  "notes": "Chart: win[0]/win[1]/win[6] in the content layer already read Lux/Lux/Viktor and matched the packet levelChart, while all seven full-layer sides read 'Skill'. I moved the three full-layer sides to match rather than the reverse; no paired win[N] edit exists because the content values are already correct (a before==after edit would be refused). After application the layers agree on all seven rows. Derived-flag warning: the brief tags Viktor's R with 'channel: interruptible', but Riot's own description says only that Arcane Storm INTERRUPTS enemy channels — it does not say the Storm itself is channelled. Per the brief's own rule I trusted the description and wrote no 'root cancels his R' claim anywhere. Whether Lux's Final Spark gather counts as a channel that Arcane Storm can interrupt is not answerable from the kits, so I left it out entirely."
+}

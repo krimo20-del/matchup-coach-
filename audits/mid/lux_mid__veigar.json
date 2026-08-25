@@ -1,0 +1,55 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "veigar",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "CROSS-LAYER DISAGREEMENT on rows 4-5 and Level 6: content win[3] and win[4] read \"Lux\" while full-layer phases[3].side and phases[4].side read \"Skill\".",
+      "why": "The packet levelChart reads Lux, Lux, Lux, Lux, Lux, Skill, Veigar — it matches the content layer exactly, and both full-layer whys for those rows describe Lux poking freely and Final Spark coming online. Lux Q 1175 / E 1100 against Baleful Strike's 1000 backs the early-to-mid lead; Veigar's Phenomenal Evil scaling is what takes the late game.",
+      "corrected": "phases[3].side and phases[4].side moved to Lux; rows 0-2 (Lux), 5 (Skill) and 6 (Veigar) already agreed across both layers and were left alone.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content", "brief.ownerKit", "brief.enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The spike ladder is right and unusually well grounded already: Lux leads to first item, Veigar's Phenomenal Evil (permanent AP on champion hits and takedowns) plus a 120/90/60s Primordial Burst that scales on missing health takes the late game. Dark Matter having no base cooldown and shrinking with stacks is why his clear and chip get better with every stack.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[3].text claimed you must respect Veigar's \"2200+ range stun\". Event Horizon's range is 725. breakdown.cooldowns also carried no number.",
+      "why": "Event Horizon is a 725-range, 20/18.5/17/15.5/14s cage whose EDGE is the stunning part — Veigar has to be within 725 of you to place it at all, which is the entire reason Lux's 1175 Q wins the spacing. Inflating it to 2200 tells the player to give up ground she does not need to give.",
+      "corrected": "spikes[3].text now states the real 725 cast range; cooldowns now carries 20s Event Horizon, Dark Matter's stack-scaling cooldown, and the 120s Primordial Burst.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit"]
+    },
+    {
+      "point": 12,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The edge-only stun warning is already on the page in dosFull[0].d and report[5].t and is correct — walking out through the wall is the classic death, and Lux has no dash to be denied by it.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Lux"},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Lux"},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Veigar Event Horizon (Cage): matchup-defining — Only the cage EDGE stuns — hold position near the center or leave before it forms; never dash into the wall. Check it before every step-up. - W Prismatic Barrier is the lifeline; chip damage never gets it. - The ult answers fights, not waves.", "after": "- Event Horizon is 20s at rank 1 and only the cage EDGE stuns — stand near the centre or leave before it forms, and take your step-up in that 20s window. - Dark Matter has no cooldown of its own and shrinks as he stacks. - Primordial Burst is 120s at rank 1 and grows with your missing health."},
+    {"layer": "full", "path": "dosFull[1].d", "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.", "after": "Dark Matter telegraphs with a sky marker before it lands — shield on that marker, not on the Baleful Strike chip that comes after it."},
+    {"layer": "full", "path": "dontsFull[2].d", "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.", "after": "Light Binding is a flat 10s and Event Horizon is 20s — hold the root for the cage window, not for spacing him off a wave."},
+    {"layer": "full", "path": "enemyWin", "before": "Veigar wins by landing Event Horizon (Cage), denying your pattern, and owning the spacing war until your tempo starves.", "after": "Veigar wins by walking his 725-range cage over you and finishing with a point-and-click Primordial Burst while you are stunned."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.", "after": "Carry by farming his 1000-range Baleful Strike from 1175: deny the stacks, root his step-up, and laser him before the cage forms."},
+    {"layer": "full", "path": "breakdown.mid", "before": "Luden's onward, every root is a kill: shove, hover the river, and Q-R the first contest. Your range decides objective setups alone.", "after": "Luden's onward the lane evens: deny Baleful Strike stacks, shove, and contest only the fights where his 725 cage cannot reach you."},
+    {"layer": "content", "path": "spikes[3].text", "before": "Late game flips to Veigar because his infinite AP and point-click R (Primordial Burst) delete you the instant his cage lands, while you must respect his 2200+ range stun on any engage.", "after": "Late game flips to Veigar because his infinite AP and point-click R (Primordial Burst) delete you the instant his cage lands; Event Horizon only casts 725 out, so hold that gap and never facecheck him."}
+  ],
+  "notes": "The false \"2200+ range stun\" in spikes[3].text was the worst thing in this matchup — Event Horizon casts at 725, and the inflated figure tells the player to concede spacing she owns. Rows 4-5 and Level 6 were the cross-layer split (full said Skill, content and packet said Lux); I moved the full-layer sides to match rather than the other way, because the packet and the full-layer whys both back Lux. Ratings on those two rows left untouched — the rating scale's polarity is not defined in the brief."
+}

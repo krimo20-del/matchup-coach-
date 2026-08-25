@@ -1,0 +1,88 @@
+{
+  "ownerKey": "hwei_mid",
+  "enemy": "brand",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "All seven full-layer phases[N].side read \"Skill\" while content win[] read Hwei/Hwei/Hwei/Skill/Skill/Hwei/Hwei — the two layers disagreed on five of seven rows.",
+      "why": "packet.levelChart matches content win[] exactly, and 53.59% over 1366 games supports Hwei-favoured early (Brand cannot stun without a prior ablaze application) with a genuine skill-check band at 4-6 when both ults are up.",
+      "corrected": "phases[0..2].side = Hwei, phases[3..4].side stay Skill, phases[5..6].side = Hwei. The two Skill rows had Hwei-favoured whys, so both were rewritten to even framing.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[0..6]", "packet.winRate 53.59 / 1366 games"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[5] said the first item scales both champions \"roughly evenly\" while win[5] awarded the row to Hwei — the row argued with the sentence under it. spikes[1] named Brand's ultimate \"Conflagration (his R)\".",
+      "why": "Conflagration is Brand's E (625 range, 13/12/11/10/9). His ultimate is Pyroclasm, 750 range, 100/90/80, bouncing up to 5 times. Hwei's R is 1300 range, so the first-item siege window is genuinely his.",
+      "corrected": "whys[5] now states the range reason the row belongs to Hwei; spikes[1] names Pyroclasm with its real bounce count and 100s rank-1 cooldown.",
+      "confidence": "High",
+      "sources": ["enemyKit R text/cd/range", "enemyKit E range 625", "ownerKit R range 1300"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive interaction was stated only obliquely, and Hwei's own abilities were misnamed throughout: \"EE fear\" (the fear is Grim Visage on EQ), \"W charm/root\" and \"W terrain/zone\" (Hwei's W paints are Fleeting Current, Pool of Reflection and Stirring Lights — no charm, no root, no terrain), \"E-Q poke\" and \"QA\" clears.",
+      "why": "Riot's text: \"If the target is ablaze, Sear will stun the target.\" The stun therefore requires a prior Blaze application — Pillar of Flame (900 range, delayed) or Conflagration (625 range, targeted). Dodge the applier and the stun is only damage. ownerKit lists E sub-abilities Grim Visage / Gaze of the Abyss / Crushing Maw in EQ/EW/EE order and Q sub-abilities Devastating Fire / Severing Bolt / Molten Fissure in QQ/QW/QE order.",
+      "corrected": "Named the real chain: stay unlit and Sear cannot stun; Pillar of Flame is the 10s opener and lands on a delay; Conflagration doubles its spread on a burning target and only reaches 625 units, so he must walk into your paint to use it.",
+      "confidence": "High",
+      "sources": ["enemyKit Q text", "enemyKit P text (4s burn, 3 stacks)", "enemyKit W/E range and cd", "ownerKit Q/W/E text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns held no digit (lint COOLDOWN_NO_DIGIT), and packet.defects flags that this matchup has zero cooldown-sequencing advice anywhere (sequencingCues: 0).",
+      "why": "Brand's whole pattern is cooldown-gated: Sear 8s at rank 1 to 6s at rank 5, Pillar of Flame 10s to 8s, Conflagration 13s to 9s, Pyroclasm 100/90/80.",
+      "corrected": "cooldowns, dosFull[0].d and dosFull[1].d now carry the real numbers and a \"wait for X before you Y\" line: with Pillar of Flame down for 10 seconds he has only a 625-range Conflagration, which is the step-up window.",
+      "confidence": "High",
+      "sources": ["enemyKit cooldowns", "packet.defects"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was tradeGood verbatim and dontsFull[2].d was tradeBad verbatim (lint COPY_PASTE_BLEED). winCon and dosFull[2].d both cited a \"fifteen-second\" window that matches nothing in Brand's kit.",
+      "why": "No Brand ability is on 15 seconds at any rank; his longest non-ultimate is Conflagration at 13s rank 1.",
+      "corrected": "Invented figure removed from both fields; bodies rewritten to match their titles.",
+      "confidence": "High",
+      "sources": ["lintFindings", "enemyKit cooldowns"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[2].why","before":"Full palette: EE fear or EQ root into QQ is a genuine kill threat. He has to respect every brush-stroke from here.","after":"Full palette: Grim Visage (EQ) into Devastating Fire is a genuine kill threat, and he has no dash to leave it."},
+    {"layer":"full","path":"phases[3].why","before":"Lost Chapter timing — the palette stops costing you the lane. Poke the wave contact, mark, detonate, reset.","after":"Lost Chapter ends your mana war, but Sear is 7s here — the lane turns on who lands the first spell."},
+    {"layer":"full","path":"phases[4].why","before":"Spiraling Despair online — the teamfight eye. In lane it's the all-in: R-QQ-QE deletes half bars through the slow.","after":"Both ults land at 6: Pyroclasm bounces five times, yours slows the whole area. Whoever opens cleanly takes it."},
+    {"layer":"full","path":"phases[5].why","before":"Blackfire/Luden's spike: every QQ chunks a quarter bar. Shove with QA and rotate — your siege poke wins rivers.","after":"Blackfire/Luden's lands and every paint chips — shove with Molten Fissure and rotate; his 750 ult cannot siege."},
+    {"layer":"full","path":"phases[6].why","before":"Late Hwei is a fight-opener: R the carry, paint the fear wall behind their front line, and QQ the panic.","after":"You open from 1300 units; Brand needs 750 and a stun. Grim Visage the front line and paint the panic."},
+    {"layer":"full","path":"winCon","before":"Make the setup spell miss, then paint the fifteen-second gap where he has nothing. Keep one eye on Sear (Stun) and one on the wave, in that order.","after":"Dodge Pillar of Flame and the stun never arrives — Sear only stuns you while ablaze. Then paint: his E reaches 625 units, so he has to walk in."},
+    {"layer":"full","path":"enemyWin","before":"Brand wins by landing Sear (Stun), denying your pattern, and renting you the lane at a range markup.","after":"Brand wins by landing Pillar of Flame first, then stunning you with Sear while the burn ticks."},
+    {"layer":"full","path":"tradeBad","before":"Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Standing at 625 units with Grim Visage spent — that is Conflagration's reach, and once you are ablaze his Sear stuns instead of only chipping."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending. Bad trade: Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending. Bad trade: standing at 625 units with Grim Visage spent — that is Conflagration's reach, and ablaze turns Sear into a stun."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Brand Sear (Stun): matchup-defining — Q only stuns when you are ablaze — after eating W or E, the stun line is the dodge that matters. Check it before every step-up. - E fear paint is the lifeline; chip damage never gets it. - The ult answers fights, not waves.","after":"- Sear (Stun): 8s at rank 1, 6s at rank 5 — it only stuns while you are ablaze, so the spell before it is the dodge that matters. - Pillar of Flame is 10s and lands on a delay; walk out of the circle. - Conflagration reaches 625 units on a 13s cooldown."},
+    {"layer":"full","path":"breakdown.mid","before":"Lost Chapter onward you own the poke war: mark-detonate every wave contact, shove with QA, and rotate to rivers where R + QE turns skirmishes into murals.","after":"Lost Chapter onward you own the poke war: complete the signature on every wave contact, shove with Molten Fissure, and rotate — R opens from 1300, his from 750."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a QA-cleared slow push that crashes on your roam timer — your wave-clear is elite and your map poke (R) travels with you. Worst wave: a frozen wave near his tower with EE down — the immobile artist walking up to last-hit is mid lane's most gankable picture. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.","after":"Best wave: a Molten Fissure (QE) slow push that crashes on your roam timer — your clear is elite and R travels 1300 units with you. Worst wave: a freeze near his tower with Grim Visage down — Pillar of Flame covers 900 units and you have no dash out. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Brand gets a kill, the lane gets honest — give Sear (Stun) extra room and farm it back. Two kills: stop dueling your tilt — farm with QA clears and stay relevant through max-range poke.","after":"If Brand gets a kill, stop contesting inside 1050 units — a fed Sear stun ends the trade by itself. Clear with Molten Fissure (QE), hold Grim Visage for his step-up, and farm from max range."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through range — no mid pool champion paints a teamfight from further away; your R + QQ decides objectives before they start.","after":"Carry through range: R reaches 1300 units against his 750, so you open the fight and he has to walk through the slow to answer."},
+    {"layer":"full","path":"dosFull[0].d","before":"Q only stuns when you are ablaze — after eating W or E, the stun line is the dodge that matters. Bait it, count it, then go.","after":"Pillar of Flame is his opener on a 10s cooldown — step out of the circle and Sear lands as damage only, never as a stun."},
+    {"layer":"full","path":"dosFull[1].d","before":"QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending.","after":"With Pillar of Flame down for 10 seconds he has only a 625-range Conflagration — step up, complete the signature, and walk back out."},
+    {"layer":"full","path":"dosFull[2].d","before":"Brand burns Sear (Stun) on nothing — take the fifteen-second invitation.","after":"Save the shield for Pyroclasm and the Blaze detonation, not a stray Sear."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Brand’s whole plan in one window — decline politely and watch it retire.","after":"Ablaze plus Sear is a stun, and Conflagration doubles its spread on a burning target."},
+    {"layer":"full","path":"dontsFull[1].d","before":"The fear paint is your only 'no' button — spending it on poke means the next dive is a portrait of you dying.","after":"Grim Visage (EQ) is your only 'no' button — spend it on poke and his stun chain arrives with no answer."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Half HP inside 900 units is Pillar of Flame range, and Blaze burns for 4 seconds after it — take the poke war back out to max range."},
+    {"layer":"content","path":"whys[5]","before":"First-item power spikes scale both champions' burst combos roughly evenly.","after":"Your first item makes poke a siege tool his 750-range ult cannot contest."},
+    {"layer":"content","path":"spikes[0].text","before":"Your E-Q combo out-ranges Brand's Q (Sear) and punishes his lack of mobility, letting you poke him down before he can stack Blaze passive on you.","after":"Your paints out-range Sear's 1050 units and punish his lack of mobility, so you chip him down before Blaze ever stacks three times on you."},
+    {"layer":"content","path":"spikes[1].text","before":"Both ultimates threaten one-shot potential in a wave-clear or roam scenario, so it's an even skill check on who lands Conflagration (his R) or your R combo first.","after":"Both ults threaten a kill at 6, so it is an even check on who lands first — Pyroclasm bounces five times off nearby enemies and is 100 seconds at rank 1."},
+    {"layer":"content","path":"spikes[3].text","before":"Your kit's disengage (W charm/root, E zone control) and longer effective range let you kite and poke Brand from safety, while he needs to land a full stun-into-burst combo to punish you in fights.","after":"Your disengage — the W serenity paints and Grim Visage (EQ) — plus longer range let you kite Brand from safety, while he needs Pillar of Flame into an ablaze Sear stun to punish you in a fight."},
+    {"layer":"content","path":"early","before":"You hold the range and combo advantage in lane — Brand has no mobility and needs to land a Sear stun to start his combo, so punishing his cooldowns with your own E-Q poke keeps him low without much risk. Watch for all-in windows when he over-extends for CS since your kit answers his engage with a root of your own. Ward river early since Brand loves roaming with Pyroclasm.","after":"You hold the range and combo advantage — Brand has no mobility and needs you ablaze before Sear stuns, so dodge Pillar of Flame and his combo never starts. Poke with Devastating Fire into any second paint and let the signature detonate. Punish him when he walks up for CS: Conflagration reaches only 625 units, so inside that he is committed. Ward river early."},
+    {"layer":"content","path":"late","before":"Your longer effective threat range and disengage tools (W charm, E zone denial) let you poke and kite Brand in extended fights, forcing him to commit fully on a stun to get value. As long as you don't get caught out of position by a landed Sear, you out-duel him in skirmishes and control fights from range.","after":"Your longer threat range and the W serenity paints let you poke and kite Brand in extended fights, forcing him to commit fully on a stun for value. He has to land Pillar of Flame first, because Sear only stuns a burning target — stay unlit, stay outside his 750-unit ult, and you control the fight."},
+    {"layer":"content","path":"wants.you[0]","before":"Poke from max range with E-Q to avoid eating a Sear stun","after":"Poke from max range so Pillar of Flame never lands first"},
+    {"layer":"content","path":"wants.you[3]","before":"Kite in teamfights using W terrain/zone to stay out of stun range","after":"Kite in fights with the W serenity paints, outside his 1050 Sear"}
+  ],
+  "notes": "Chart: full layer was all \"Skill\" while content win[] already read Hwei/Hwei/Hwei/Skill/Skill/Hwei/Hwei and matched packet.levelChart — five live cross-layer disagreements. Sides moved to match; no win[] edits possible because win[] was already correct. Ratings left at 5/5/5/5/6/6/6 — I had no kit-grounded basis to renumber them and the curve does not contradict the new sides. Systemic naming errors on this page: Hwei's fear is Grim Visage (EQ), not \"EE\"; his W paints (Fleeting Current, Pool of Reflection, Stirring Lights) were repeatedly described as a \"charm\", a \"root\" and \"terrain/zone\" — none of which appear in the kit — and \"QA\" was used as a wave-clear token in three fields. Brand's E Conflagration was labelled his R. Did NOT assert whether Hwei's Grim Visage can interrupt Pyroclasm's channel: the kit gives Hwei's E a hardCC flag but says nothing about Pyroclasm being channelled or interruptible, so that stays unverified. packet.defects flagged zero sequencing cues in this matchup; cooldowns, dosFull[0] and dosFull[1] now supply them. Left report[] alone per the sweep exclusion."
+}

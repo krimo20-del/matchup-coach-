@@ -1,0 +1,63 @@
+{
+  "ownerKey": "orianna_mid",
+  "enemy": "ziggs",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer reads Skill on six rows and Orianna on the last; content and packet read Ziggs / Skill / Skill / Ziggs / Orianna / Orianna / Orianna. Four rows render two different answers.",
+      "why": "The content layer's account is the grounded one: Bouncing Bomb is 850 to your 815, so he owns level 1 and the 4-5 zoning phase, and from 6 onward an immobile mage loses to Shockwave plus a jungler.",
+      "corrected": "phases[0].side -> Ziggs, phases[3].side -> Ziggs, phases[4].side -> Orianna, phases[5].side -> Orianna, with each moved row's why rewritten to match the new verdict.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]", "enemyKit Q 850", "ownerKit Q 815"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes listed generic Orianna spikes ('level 6 doubles your lane presence') in the one matchup where level 6 is a concrete kill setup.",
+      "why": "Satchel Charge (20/18/16/14/12s) is his only escape and it knocks him away rather than moving him toward safety; with no dash, Command: Shockwave at 110s plus a gank converts.",
+      "corrected": "breakdown.spikes now names level 6 as the point an immobile Ziggs becomes a kill, and Luden's as roam tempo rather than damage.",
+      "confidence": "High",
+      "sources": ["enemyKit W", "ownerKit R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no number, and the two supplied missingInteractions do not survive a check against Riot's text.",
+      "why": "Kit numbers: Satchel Charge 20s->12s at 1000, Hexplosive Minefield 16s at every rank at 900, Bouncing Bomb 6s->4s at 850, Mega Inferno Bomb 120/95/70 at 5000. On the flags: the 'percentHealth' flag on Satchel Charge is contradicted by Riot's own description, which describes a knockback and a turret hexplode and no percent-health damage — so no 'he bypasses resistances' advice was written. Short Fuse is an empowered basic attack whose cooldown drops when he casts, which is not the same thing as an auto-attack reset; the true version of that tell was used instead.",
+      "corrected": "breakdown.cooldowns rebuilt on Satchel 20s/12s, the flat 16s minefield and your 110s R; dosFull[2].d states that casting speeds up Short Fuse so the empowered auto follows his Q.",
+      "confidence": "High",
+      "sources": ["enemyKit P/Q/W/E/R Riot text", "missingInteractions (rejected on the text)"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Copy-paste bleed: dosFull[0].d and dosFull[2].d carried the Satchel Charge line under ball-placement and auto-weave titles, and dontsFull[2].d carried the tradeBad string under a Shockwave title.",
+      "why": "Defect-catalogue item 2.",
+      "corrected": "Each body rewritten against its own title.",
+      "confidence": "High",
+      "sources": ["currentText.full"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Ziggs" },
+    { "layer": "full", "path": "phases[0].why", "before": "Ball on the wave, autos on his face — your passive-stacked autos win level 1 against almost every mid. Place, don't throw.", "after": "His Bouncing Bomb reaches 850 to your 815, so level 1 he pokes you off the wave and you have no answer. Last-hit safe." },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Ziggs" },
+    { "layer": "full", "path": "phases[3].why", "before": "Lost Chapter timing — Q-W every wave contact now. The Dissonance field controls every step he takes near the ball.", "after": "Q at 4s, minefield at 16s and Satchel at 20s zone you off the wave — take back-edge CS and stop contesting." },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[4].why", "before": "Shockwave online — your lane presence doubles without casting anything. Every wave he contests is a potential flip.", "after": "Shockwave online and he is immobile — his only escape is knocking himself away, so R plus a gank kills him." },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[5].why", "before": "Luden's spike: Q-W chunks a third of his bar. Shove, rotate, and let the ball-delivery threat run the river fights.", "after": "You roam and he cannot follow: shove with Q-W, leave the lane, and all-in him whenever Satchel is on its 20s." },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Ori is the teamfight: protect-ball on your diver, shockwave their clump, and dissonance the choke they retreat through.", "after": "He has zero mobility, so the ball goes on your engage and the Shockwave that lands on his clump ends it before he pokes." },
+    { "layer": "full", "path": "enemyWin", "before": "Ziggs wins by landing Satchel Charge, denying your pattern, and keeping the fight at a distance your kit resents.", "after": "Ziggs wins by poking from 850, mining the ground you farm on, and never letting you inside your own 815." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Ziggs Satchel Charge: matchup-defining — His knockback escape — he is catchable only while it is down. Read it like a second minimap. - Guard your E Command: Protect like a fifth summoner spell. - Ultimate goes to kill windows only.", "after": "- Satchel Charge: 20s at rank 1, 12s at rank 5 — it is his only escape, so he is killable for those 20 seconds. - Hexplosive Minefield: 16s at every rank — that is the zone you wait out. - Your R is 110s: spend it on him, not the wave." },
+    { "layer": "full", "path": "breakdown.spikes", "before": "Lost Chapter steadies the trade game; level 6 doubles your lane presence; Luden's makes Q-W a third of a health bar.", "after": "Lost Chapter steadies your mana; level 6 turns an immobile Ziggs into a kill; Luden's buys you the roam tempo." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through the ball — no champion controls teamfight space like Orianna; one Shockwave on three is a won game, and you decide when it happens.", "after": "Carry through the ball — Ziggs has no dash and one 20-second knockback, so the Shockwave that reaches him is the fight and he cannot leave it." },
+    { "layer": "full", "path": "dosFull[0].d", "before": "His knockback escape — he is catchable only while it is down. Bait it, count it, then go.", "after": "A ball on the wave taxes his last-hits and his passive auto, since Short Fuse needs him close." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Ziggs spends Satchel Charge early — the closest thing this matchup has to a guarantee.", "after": "Short Fuse charges faster every time he casts — expect the empowered auto after his Q." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Ziggs’s bread-and-butter play — deny it and they run out of answers.", "after": "An idle ball at 815 leaves you in his minefield with nothing to shield." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Poking with the ball stranded at max range when his engage is up — an Orianna without her ball is a Doran's Ring with legs.", "after": "Your 110-second R is the answer to an immobile mage — spending it on minions gives back the one edge you actually have." }
+  ],
+  "notes": "packet.games and MC_REAL_GAMES agree here (1516), so no defer question. Two supplied missingInteractions were rejected on Riot's own text rather than written into the page: the 'percentHealth' flag on Satchel Charge is contradicted by its description (knockback plus turret hexplode, no percent-health component), and Short Fuse is an empowered basic attack with a cast-shortened cooldown rather than an auto-attack reset — the true form of that tell was used instead. The content layer for this matchup is already Ziggs-specific and accurate and needed no edits; all repairs were in the full layer. phases[N].rating untouched."
+}

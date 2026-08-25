@@ -1,0 +1,178 @@
+{
+  "ownerKey": "galio_mid",
+  "enemy": "swain",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "EVEN at 5.5/10 against 53.99% over 1341 games. The lane's shape is right on the content layer: yours at 3-5 while his sustain is thin, his from 6 once Demonic Ascension can hold a fight open indefinitely ('This form is indefinite as long as Swain drains enemy champions'). I did not move diff, because packet.defects flags the chart itself as contradicting the win rate and the two are one unresolved unit — see notes.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["packet.winRate 53.99", "packet.defects", "enemyKit R text"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The spike map is sound and the ability name is right — note that packet.suspectNames flags \"Demonic Ascension's\" in whys[4] as a probable wrong name at distance 2; that is a FALSE POSITIVE caused by the possessive apostrophe. Real spikes: Nevermove online early (12s at rank 1, 850 range), Demonic Ascension at 6 on 120s flat, Galio's Justice Punch at 3 (11s) and Hero's Entrance at 6 (180s).",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet.suspectNames", "packet.enemyAbilities.R", "enemyKit E/R cd", "ownerKit E/R cd"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three mechanical errors: (a) Justice Punch is called a stun in whys[2] and early — it knocks up; (b) Ravenous Flock is described as stacked DAMAGE ('before he's stacked ravenous flock damage', 'stack Ravenous Flock damage on you with autos') when it is a heal; (c) nothing on the page says Nevermove roots on the RETURN pass, which is the entire timing of the matchup.",
+      "why": "ownerKit E knocks up the first champion hit. enemyKit P: 'Swain's ravens collect Soul Fragments that heal him and permanently increase his maximum health' — heal and percentHealth flags, no damage stacking. enemyKit E: 'Swain launches a wave of demonic power forward. It then returns to Swain and roots enemies it hits. Swain can then choose to pull all rooted champions closer.' 12/11.5/11/10.5/10, 850 range. missingInteractions flags both needs-antiheal and resistances-invalidated on the passive.",
+      "corrected": "Justice Punch knocks up. Ravenous Flock heals him and grows his max health, so Grievous Wounds — not more MR — is the answer, and his passive punishes flat HP stacking. Nevermove roots on the way back, so the throw is your window to step in and the return is the thing to dodge.",
+      "confidence": "High",
+      "sources": ["ownerKit E text", "enemyKit P text/flags", "enemyKit E text/cd/range", "missingInteractions key 23"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns held no digit (lint COOLDOWN_NO_DIGIT), and packet.defects separately flags 'NO cooldown-sequencing advice anywhere'.",
+      "why": "Nevermove 12/11.5/11/10.5/10 is the punishable cooldown; Demonic Ascension is 120s at every rank; Death's Hand falls to 3s at rank 5 so it is not a window at all.",
+      "corrected": "All three written in, with the 'wait for X before you Y' sequencing the packet asked for: step in on the Nevermove throw, commit on its 12 seconds.",
+      "confidence": "High",
+      "sources": ["enemyKit E/R/Q cd", "packet.defects"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "The itemisation advice on this page is 'MR is your damage' with anti-heal mentioned only once, in report[8].t.",
+      "why": "missingInteractions flags resistances-invalidated: Ravenous Flock's permanent max-health growth and healing mean stacking resistances alone does not solve him, and needs-antiheal makes Grievous Wounds timing the decider in extended trades.",
+      "corrected": "Anti-heal moved up into tldr, dosFull[0].d and wants.you[0]. I did not rewrite report[8].t — it already names anti-heal correctly.",
+      "confidence": "High",
+      "sources": ["missingInteractions key 23", "enemyKit P flags"]
+    },
+    {
+      "point": 5,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d and dontsFull[2].d were the tradeGood / tradeBad strings pasted under unrelated titles (lint COPY_PASTE_BLEED).",
+      "why": "The titles are about taunting the step-up and about not spending E on the wave.",
+      "corrected": "Both rewritten to their own titles on Nevermove's return-root and Justice Punch's 11s.",
+      "confidence": "High",
+      "sources": ["lintFindings", "enemyKit E text", "ownerKit E cd"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "His poke is magic and your passive eats magic — trade Qs behind the shield and taunt the step-up he eventually risks.",
+      "after": "His Q is 3 seconds at rank 5 and his passive heals — bring Grievous Wounds, and taunt the step-up he eventually risks."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Swain wins by landing Demonic Ascension, denying your pattern, and renting you the lane at a range markup.",
+      "after": "Swain wins by rooting you with Nevermove at 850, pulling you in, and draining the fight back with his 120s ult."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield.",
+      "after": "Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — short trades beat a man who heals off long ones."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+      "after": "Charging W inside Nevermove's 850 range — the root lands on a statue that cannot move, and he pulls you into the drain."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield. Bad trade: Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+      "after": "Good trade: Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — short trades beat a man who heals off long ones. Bad trade: Charging W inside Nevermove's 850 range — the root lands on a statue that cannot move, and he pulls you into the drain."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. Count it out loud if you must. - Your W Shield of Durand has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Nevermove: 12s at rank 1, 850 range — it roots on the return, not the throw, so the second pass is the one to dodge. - Demonic Ascension: 120s at every rank and it lasts while he keeps draining. - Death's Hand: 3s at rank 5, 750 range."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, tax both maps: zone Swain with taunt threat, keep the wave middle, and R every skirmish — fed Galio makes the enemy jungler unemployed.",
+      "after": "Ahead, tax both maps: hold the wave middle, force short trades his healing cannot pay for, and R the skirmish before he can drain it back."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through arrivals — Hero's Entrance turns every losing skirmish your team starts into a 5v4 with a knockup.",
+      "after": "Carry through arrivals — R knocks him out of Demonic Ascension's 650-unit drain and shields the ally inside it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "You are the anti-dive: taunt their engage off your carry, shield the magic, and R the flank their comp built around.",
+      "after": "You are the anti-dive: taunt him out of his own drain circle, and R the ally Nevermove just pulled into it."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His drain mode — disengage and reset the fight when it starts. Bait it, count it, then go.",
+      "after": "His drain mode heals off everything nearby — leave the circle, or bring Grievous Wounds."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield.",
+      "after": "Nevermove roots on the way back, so the moment he throws it is the moment to step in — 12 seconds before he gets another."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Swain’s whole plan in one window — decline politely and watch it retire.",
+      "after": "Death's Hand is 3s at rank 5, and every soul fragment he takes heals him."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+      "after": "Justice Punch is 11s and it is how you leave a drain — burn it on the wave and Demonic Ascension has you for the full duration."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield. Great trade: Swain wastes Demonic Ascension — commit immediately. Bad trade: Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+      "after": "Good trade: Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — short trades beat a man who heals off long ones. Great trade: Swain wastes Demonic Ascension — commit immediately. Bad trade: Charging W inside Nevermove's 850 range — the root lands on a statue that cannot move, and he pulls you into the drain."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3-5: once you have your full Q-W-E kit, your burst and stun interrupt his casts and win short trades before Ravenous Flock ramps, flipping this to your favour.",
+      "after": "Level 3-5: once you have your full Q-W-E kit, your burst and knockup win short trades before his soul fragments heal the chip back, flipping this to your favour."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Once you hit your full Q-W-E combo you can punish Swain's Vision of Empire windups and Nevermove root attempts before he's stacked ravenous flock damage.",
+      "after": "Once you hit your full Q-W-E combo you can punish Swain's Vision of Empire windups and Nevermove root attempts before Ravenous Flock has healed him whole."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Levels 1-2 Swain's passive bird stacks and long-range Nevermove punish careless approaches, so you're playing patient and using Winds of War to poke from range rather than walking into root range. Levels 3-5, once your full combo is online, you start winning short trades — Justice Punch stuns interrupt his cast windows and burst him down before Ravenous Flock ramps, giving you a real trading window before he hits his ultimate.",
+      "after": "Levels 1-2 Swain's soul fragments and 850-range Nevermove punish careless approaches, so you're playing patient and using Winds of War to poke from range rather than walking into root range. Levels 3-5, once your full combo is online, you start winning short trades — Justice Punch knockups interrupt his cast windows and burst him down before his fragments heal it back, giving you a real window before he hits his ultimate."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Poke and punish his passive stacking window before he hits 3 (Ravenous Flock)",
+      "after": "Buy Grievous Wounds early — Ravenous Flock heals him through your chip"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Farm safe and stack Ravenous Flock damage on you with autos",
+      "after": "Farm safe and collect Ravenous Flock soul fragments to heal"
+    }
+  ],
+  "notes": "CHART LEFT ALONE, DELIBERATELY: packet.defects flags that the chart contradicts the data (Galio 53.99% but Swain holds 5/7 rows), and the layers also disagree — full phases[0..6].side are all 'Skill' while content win[] reads Swain/Swain/Galio/Galio/Swain/Swain/Swain (matching packet.levelChart). The full-layer .why rows are enemy-agnostic 'vs AP mage' boilerplate that grounds neither verdict, so I moved no row and rewrote no why. FALSE POSITIVE TO IGNORE: packet.suspectNames flags \"Demonic Ascension's\" in whys[4] as a wrong ability name — it is correct; the distance comes from the possessive. Fields judged templated but left in place for lack of Swain-specific grounding: breakdown.wave, breakdown.mid, breakdown.early, breakdown.spikes, breakdown.feeding, and all seven phases[].why. Report edits held to one (report[3].t) so the trading strings stay consistent; report[8].t already names anti-heal correctly for Swain so I left it."
+}

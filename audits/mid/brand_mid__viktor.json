@@ -1,0 +1,157 @@
+{
+  "ownerKey": "brand_mid",
+  "enemy": "viktor",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Even lane at 51.46% over 888 games. Brand out-ranges Viktor (W 900 / Q 1050 vs Siphon Power 600, Hextech Ray 525) and owns levels 1-6; Viktor takes over once augments and items land.",
+      "corrected": "Kept EVEN / 5.5-6/10 difficulty.",
+      "confidence": "High",
+      "sources": ["packet.winRate", "ownerKit", "enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spikes named 'Chaos Storm' and 'Hex Core', and called Siphon Power an E.",
+      "why": "Riot's kit file gives Arcane Storm (R, 120/100/80), Siphon Power (Q, 9/8/7/6/5), and the passive is Glorious Evolution with Hex Fragments.",
+      "corrected": "Rewrote spikes[0], spikes[2], spikes[3] and whys[6] with the real names and cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/viktor.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The page never states that Arcane Storm is a channel, nor that Siphon Power is an auto-attack reset.",
+      "why": "enemyKit flags R as channel (interruptible — any CC cancels it) and Q as autoReset; an ablaze Sear stun therefore cancels his ultimate outright.",
+      "corrected": "Added the R-cancel interaction to report[5].t and dosFull[2].d; the Siphon Power shield/reset now drives dontsFull[2].d.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/viktor.json", "_missing/brand_mid.json rule channel-interruptible"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit at all (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that holds real cooldowns.",
+      "corrected": "Now carries Gravity Field 17s->13s, Sear 8s, Conflagration 13s, Pyroclasm 100s.",
+      "confidence": "High",
+      "sources": ["ownerKit", "enemyKit"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.you[1] claimed his E gets 'bonus true damage procs' inside Gravity Field.",
+      "why": "No true damage anywhere in Viktor's kit text; the real danger is the field's own stun on lingering.",
+      "corrected": "Replaced with the stun-on-lingering fact.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/viktor.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Viktor Gravity Field: matchup-defining — The stun zone owns every all-in — walk out the moment it drops or fight outside it. Step up only on its downtime. - Budget E-Q stun package for emergencies and the R for opportunities — never swap them.",
+      "after": "- Gravity Field (W) is 17s at rank 1 and 13s maxed: outside it he has no lockdown, so step up the moment it expires. - Sear (Q) is 8s and Conflagration (E) 13s at rank 1 — bank both for his walk-up, and spend the 100s Pyroclasm on a commit, never on harassment."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "The stun zone owns every all-in — walk out the moment it drops or fight outside it. Its cooldown is the green light — wait for it.",
+      "after": "Pillar of Flame lands after a delay at 900 range on an 8s cooldown maxed — aim where he must stand to last-hit, not where he is now."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E the instant ablaze, Q the stun, W the stunned body, walk — the full package chunks half a bar and the burn writes the receipt.",
+      "after": "Conflagration (E) is point-and-click inside 625 and applies Blaze on cast — ablaze first and Sear becomes a stun instead of a 70-mana ball."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Viktor whiffs Gravity Field and the lane briefly belongs to you.",
+      "after": "Ablaze first: Q stuns only a burning target, and that stun cancels his R."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Viktor’s rehearsed moment — don’t audition for it.",
+      "after": "Unablazed, Sear (Q) is 70 mana and 8s for no stun at all."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Your stun only exists on ablaze targets — a Q thrown at a clean health bar is the most expensive miss in your kit.",
+      "after": "With E on 13s at rank 1 and W on 10s, a whiffed rotation leaves you immobile at 900 range against a 600-range shield poke."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "W-poking on cooldown with Q unbanked while his engage is loaded — Brand without the stun threat is a bonfire waiting for company.",
+      "after": "Siphon Power (Q) shields him every 9s at rank 1 and resets his auto — dumping the rotation into a fresh shield spends 13s of E for nothing."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Viktor’s Gravity Field: The stun zone owns every all-in — walk out the moment it drops or fight outside it. The whole green-light system is its cooldown.",
+      "after": "Track Gravity Field (W), 17s at rank 1: linger in it and it stuns you. Arcane Storm (R) is a channel, so an ablaze Sear (Q) stun cancels it — bank Q for his ult."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Viktor wins by landing Gravity Field, denying your pattern, and renting you the lane at a range markup.",
+      "after": "Viktor wins by chaining Gravity Field into Hextech Ray, then scaling augments into an Arcane Storm late game."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through AoE math — no burst mage damages three targets like Brand; your job is the spacing that lets the bounces vote.",
+      "after": "Carry by detonating Blaze on the clump Arcane Storm holds still — his own R herds them into your Pyroclasm bounces at 750 range."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Viktor opens the score, reset expectations and respect Gravity Field doubly. After a second, your job description changes — farm with W-E clears and stay relevant through stun-burn peel.",
+      "after": "If Viktor opens the score his Hex Fragments arrive sooner and Gravity Field's 13s cooldown covers more of the lane — farm with W-E from max range, never contest a wave standing inside the zone, and stay useful as stun-burn peel."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Pillar of Flame chunks Viktor before his Siphon Power (E) shield-and-poke combo has the range or damage to match it, letting you dominate the wave.",
+      "after": "Pillar of Flame (W) at 900 range chunks Viktor before Siphon Power (Q) — a 600-range shield poke on 9s — has the reach to answer, so you own the wave."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Your burst combo still edges out his Siphon Power poke damage at this stage, so you keep winning most extended trades.",
+      "after": "Your Liandry's rotation edges out Siphon Power (Q) chip: his shield covers one cast, not four seconds of Blaze ticking through it."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Once Viktor completes his augment/Hex Core upgrades and has full item power, his Chaos Storm (R) plus scaling laser poke output starts exceeding your damage in a straight fight.",
+      "after": "Once Viktor has augmented his abilities with Hex Fragments and has full items, Arcane Storm (R) on an 80s cooldown plus Hextech Ray (E) poke starts exceeding your damage in a straight fight."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "2+ items: his fully-scaled Hex Core kit and Chaos Storm finally out-damage you in a straight fight, flipping the late-game favor to Viktor.",
+      "after": "2+ items: his augmented kit and Arcane Storm (R), 80s maxed, finally out-damage you in a straight fight, flipping the late game to Viktor."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Poke him down early with Q before his Hex Core augments come online",
+      "after": "Poke with Pillar of Flame (W); Sear (Q) only stuns targets already ablaze"
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Avoid standing in Gravity Field zones where his E gets bonus true damage procs",
+      "after": "Leave Gravity Field (W) fast — staying in the zone too long stuns you outright"
+    }
+  ],
+  "notes": "Level chart: full-layer phases[0..6].side all read 'Skill' while content win[0..5] read 'Brand' and win[6] 'Viktor' — a pre-existing cross-layer disagreement. I did NOT propose side flips because the paired win[N] values already hold the correct verdicts, so no matched pair could be written; flag for tools/mirror-fix.js. packet suspectNames flags wants.foe[1] 'Use Gravity Field' as a wrong name — it is a FALSE POSITIVE, Gravity Field is Viktor's real W. Left report[] otherwise untouched per the sweep exclusion."
+}

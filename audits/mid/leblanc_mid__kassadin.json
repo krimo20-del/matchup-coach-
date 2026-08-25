@@ -1,0 +1,88 @@
+{
+  "ownerKey": "leblanc_mid",
+  "enemy": "kassadin",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer declared LeBlanc the winner of all seven stages while the full layer already read LeBlanc/LeBlanc/LeBlanc/Skill/Skill/Kassadin/Kassadin. Four rows rendered contradictory answers, and a 48.47% win rate over 1341 games does not support a LeBlanc sweep.",
+      "why": "Kassadin's scaling is the point of the champion: Riftwalk goes 5s to 3.5s to 2s, Void Stone permanently reduces the magic damage LeBlanc's entire kit deals, and his first big item ends the burst window. Early levels are still LeBlanc's — he has no escape before 6 and Null Sphere is 9s at rank 1.",
+      "corrected": "win[3] -> Skill, win[4] -> Skill, win[5] -> Kassadin, win[6] -> Kassadin, matching the full layer, with each why rewritten to argue its row.",
+      "confidence": "High",
+      "sources": ["brief enemyKit R cooldown 5/3.5/2", "brief enemyKit passive", "brief packet winRate/games", "brief currentText full phases[].side"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spikes were written as though Kassadin never gets a spike. His level 6 is a 5-second 500-range blink for 40 mana, and his first completed item plus Void Stone closes LeBlanc's kill window.",
+      "why": "Enemy R: 'teleports to a nearby location... Multiple Riftwalks in a short period of time cost additional Mana but also deal additional damage.' Passive: 'takes reduced magic damage.'",
+      "corrected": "spikes[0..2] rewritten around the real numbers: 9s Null Sphere shield pre-6, the escalating-mana blink at 6, and Stormsurge as the last clean kill window.",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "brief ownerKit"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Three decisive interactions were absent. Void Stone reduces magic damage, which is LeBlanc's entire damage type. Null Sphere grants a shield that absorbs magic damage specifically, so it eats the burst window. Force Pulse charges from spells cast in his vicinity — LeBlanc's own poke arms his slow.",
+      "why": "Enemy passive, Q and E texts state all three verbatim; none appeared anywhere on the page. The Force Pulse charging interaction in particular reverses the standard 'poke him for free' advice.",
+      "corrected": "tldr, phases[1..4].why, breakdown.cooldowns, mid, early, spikes[0] and both bleed bullets now carry Void Stone, the Null Sphere shield, the 21s Force Pulse charging off your casts, and Nether Blade's 7s mana-restoring auto reset.",
+      "confidence": "High",
+      "sources": ["brief enemyKit passive/Q/W/E", "brief missingInteractions"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit (lint COOLDOWN_NO_DIGIT) and dosFull[2].d invented a 'fifteen-second invitation' for an ability that is 5 seconds at rank 1.",
+      "why": "Riftwalk 5/3.5/2; Null Sphere 9/8.5/8/7.5/7; Force Pulse 21/20/19/18/17; Nether Blade flat 7.",
+      "corrected": "Both rewritten with the real numbers, and the punishable window restated as his mana bar rather than his blink cooldown.",
+      "confidence": "High",
+      "sources": ["brief enemyKit cooldowns"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d and dontsFull[2].d were the tradeGood/tradeBad strings pasted under unrelated titles.",
+      "why": "lintFindings COPY_PASTE_BLEED on both.",
+      "corrected": "Replaced with kit-grounded bodies that match their titles.",
+      "confidence": "High",
+      "sources": ["brief lintFindings"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "tldr", "before": "Bully the shield off him every wave — but the chain feeds his passive; lead with W damage and save Q-E for the popped windows; end before three items.", "after": "Bully the Null Sphere shield off him every wave — but every spell charges Force Pulse, so pop the shield, chain, and leave before three items." },
+    { "layer": "full", "path": "report[0].t", "before": "Bully the shield off him every wave — but the chain feeds his passive; lead with W damage and save Q-E for the popped windows; end before three items.", "after": "Bully the Null Sphere shield off him every wave — but every spell charges Force Pulse, so pop the shield, chain, and leave before three items." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Kassadin Riftwalk: matchup-defining — His mobility spike — the lane is decided before it scales. Count it out loud if you must. - Your W Distortion (return) has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.", "after": "- Riftwalk is 5s at rank 1, 3.5s at 2, 2s at 3, and stacking casts cost escalating mana — his escape is only gone when his mana bar is. - Null Sphere is 9s at rank 1 and shields magic damage, so force it out first. - Force Pulse is 21s but charges off every spell near him." },
+    { "layer": "full", "path": "dosFull[0].d", "before": "His mobility spike — the lane is decided before it scales. Commit on its cooldown, never into it.", "after": "Riftwalk is 500 range and costs 40 mana, escalating per cast — make him spend it farming, not on you." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q the sigil, W the detonation, return before the answer — a half-bar round trip he experienced as weather.", "after": "Null Sphere interrupts channels and shields magic — bait it out, then chain him the instant he blinks in." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Kassadin burns Riftwalk on nothing — take the fifteen-second invitation.", "after": "Riftwalk is 5s, not fifteen — your exit is Mimic W, held for the blink-in." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Staying at the W landing spot for one more auto — the return timer is your champion; outliving it is optional.", "after": "Nether Blade is a 7s auto reset that restores his mana, so an even-HP duel refills the resource you meant to drain." },
+
+    { "layer": "full", "path": "phases[0].why", "before": "Q-auto the trades — the sigil mark is half your damage; never throw Q without the detonation plan.", "after": "Kassadin's Q is 9s at rank 1 and shields magic — trade when it is on cooldown, never into the orb." },
+    { "layer": "full", "path": "phases[1].why", "before": "W online: the Q-W double-proc chunk is live, and the return trip makes it free. The lane flinches now.", "after": "W online: Q-W double-procs and returns free, and his Void Stone passive means you need the full chain, not chip." },
+    { "layer": "full", "path": "phases[2].why", "before": "E joins: Q-E chains hold targets for the full string. Pick one tether window per wave.", "after": "E joins: chain him at 925 and detonate — outside 650 he cannot Null Sphere you back." },
+
+    { "layer": "full", "path": "phases[3].why", "before": "W-poke the wave contacts and return before his answer — distortion math is the whole champion.", "after": "Force Pulse charges off every spell cast near him — poke from 925 with E, not from inside his 400 cone." },
+    { "layer": "content", "path": "win[3]", "before": "LeBlanc", "after": "Skill" },
+    { "layer": "content", "path": "whys[3]", "before": "Levels 4-5 remain LeBlanc-favoured as the mana and damage gap persists right up to his ultimate", "after": "Levels 4-5 are skill: every spell you cast near him charges Force Pulse, so poke buys him his cone slow" },
+
+    { "layer": "full", "path": "phases[4].why", "before": "Mimic online — the double-dash crosses the lane and the burst doubles. Most mids die to the first full chain.", "after": "Mimic doubles the chain, but Riftwalk is 5s at rank 1 and Null Sphere shields magic — pop the shield before you commit." },
+    { "layer": "content", "path": "win[4]", "before": "LeBlanc", "after": "Skill" },
+    { "layer": "content", "path": "whys[4]", "before": "Level 6 favours LeBlanc because a single Riftwalk cast doesn't out-trade her full reset burst combo", "after": "Level 6 is skill: Riftwalk is 5s at rank 1, so he leaves your chain — but Null Sphere still eats your burst" },
+
+    { "layer": "full", "path": "phases[5].why", "before": "First item spike: Q-W-RW deletes squishies. Spend the lane lead before scaling lanes wake.", "after": "His first big item lands and Void Stone blunts you — kill him now or the lane closes for good." },
+    { "layer": "content", "path": "win[5]", "before": "LeBlanc", "after": "Kassadin" },
+    { "layer": "content", "path": "whys[5]", "before": "First item favours LeBlanc as her burst spike lands well before his Force of Nature scaling matters", "after": "First item favours Kassadin: Void Stone cuts your magic damage and Rod of Ages ends your kill window" },
+
+    { "layer": "full", "path": "phases[6].why", "before": "Late LeBlanc picks: W the flank, chain the carry, mimic the exit — and vanish before the obituary prints.", "after": "Riftwalk on 2 seconds means he picks the fight — chain the carry from a flank and be gone before he blinks in." },
+    { "layer": "content", "path": "win[6]", "before": "LeBlanc", "after": "Kassadin" },
+    { "layer": "content", "path": "whys[6]", "before": "2+ items favours LeBlanc because by the time Kassadin's anti-mage identity comes online she should already hold the lead", "after": "2+ items favours Kassadin — Riftwalk drops to 2 seconds and Void Stone plus MR stacking makes your burst a nuisance, not a kill" },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Kassadin is mana-starved and passive before he has Riftwalk, so your full W-E-Q burst chain punishes every farming attempt without him being able to answer back.", "after": "Before level 6 Kassadin has no escape, but Null Sphere shields magic on a 9s cooldown and Void Stone cuts your damage — force the orb out, then run the full Q-W-E chain." },
+    { "layer": "content", "path": "spikes[1].text", "before": "Even with Riftwalk online, one cast doesn't threaten your burst-and-reset kill pressure, and he still has to manage mana carefully or he can't blink away from your follow-up.", "after": "Riftwalk is a 5s, 500-range blink for 40 mana, and repeat casts cost escalating mana — his escape is real but finite, so drain the bar with wave pressure before you commit your chain." },
+    { "layer": "content", "path": "spikes[2].text", "before": "Your burst spike with Luden's arrives well before Kassadin's Riftwalk-into-Force-of-Nature scaling matters, so you can close out lane before his late-game identity kicks in.", "after": "Your Stormsurge spike is the last clean kill window: Void Stone's magic reduction plus his first big item means every later burst arrives blunted, so cash the lead now." },
+    { "layer": "content", "path": "early", "before": "Levels 1-2 Kassadin has almost no way to punish you and burns mana just farming, so you poke freely and look for kill windows whenever he pushes too far.", "after": "Levels 1-2 Kassadin farms with Nether Blade, a 7-second auto reset that restores mana, so chip damage does not starve him — poke only when Null Sphere is down." },
+    { "layer": "content", "path": "mid", "before": "Levels 3 through 5 remain your window since he's still mana-constrained and lacks Riftwalk, and while level 6 gives him a blink to escape or reposition, one cast of Riftwalk doesn't out-damage your reset combo, so you keep the kill threat right through his first ultimate levels.", "after": "Levels 3 to 5 are your window, but every spell you cast near him charges Force Pulse, so poke with E at 925 and stay out of its 400-range cone. At 6, Riftwalk is a 5-second blink for 40 mana — you no longer get to pick the moment, so open on the orb and chain him only when his mana is low." }
+  ],
+  "notes": "The full layer's chart was already correct and the content layer was the wrong half; win[3..6] were moved to match, so no phases[].side edits were needed. The kit file tags Null Sphere with a 'channel' flag, but Riot's description says the ability interrupts channels — it does not say the ability itself is one. Per the brief's rule I trusted the description and did NOT write that Ethereal Chains can interrupt Null Sphere. Whether Kassadin's Null Sphere shield blocks the Sigil detonation specifically, or only the initial damage, is not answerable from the kit text."
+}

@@ -1,0 +1,112 @@
+{
+  "ownerKey": "hwei_mid",
+  "enemy": "taliyah",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "All seven phases[N].side read \"Skill\" while content win[N] reads Hwei/Hwei/Hwei/Skill/Skill/Hwei/Hwei.",
+      "why": "packet.levelChart matches the content layer exactly and every phases[N].why on rows 0-2, 5 and 6 describes Hwei winning that stage. Win rate 53.28% over 792 games supports it.",
+      "corrected": "Rows 0, 1, 2, 5 and 6 moved to Hwei as one atomic group; rows 3 and 4 already read Skill and were left alone.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.mid claims you own the poke war from Lost Chapter with no mention that her level 6 spike takes her out of the lane entirely.",
+      "why": "Weaver's Wall is 180/150/120s with 2500/4500/6500 range — a map-rotation spike, not a lane-kill spike, which the content layer already says and the full layer does not.",
+      "corrected": "Mid and late re-keyed to the roam spike and to the ultimate splitting a teamfight.",
+      "confidence": "High",
+      "sources": ["enemyKit R cd and range", "currentText.content.whys[4]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[0].text labels Unraveled Earth as (W) and calls the Worked Ground her W terrain. Nothing anywhere states the interaction that actually decides the lane.",
+      "why": "Unraveled Earth is E (14s flat, 950 range); Seismic Shove is W (14/12.5/11/9.5/8s, 900 range). Riot's E text is explicit: the mines stun only enemies who dash through them or are knocked through them. Hwei has no dash in any form, so Seismic Shove is the only way Taliyah can ever stun you — dodge the shove and her minefield is a slow.",
+      "corrected": "Slots corrected and the shove-into-mines dependency stated in spikes[0].text, breakdown.cooldowns, dosFull[0].d, tradeBad and breakdown.carry.",
+      "confidence": "High",
+      "sources": ["enemyKit E text and cd 14", "enemyKit W text and per-rank cd", "ownerKit — no dash on any Hwei ability"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns has no digit (lintFindings), and dosFull[2].d asserts a \"fifteen-second\" window.",
+      "why": "Seismic Shove is 14s at rank 1 falling to 8s at rank 5; Threaded Volley falls to 3s at rank 5, so her poke cooldown is never a window.",
+      "corrected": "Real numbers written in, and the fifteen-second claim replaced with the rank-1 14s.",
+      "confidence": "High",
+      "sources": ["enemyKit per-rank cooldowns", "lintFindings"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "24 lint findings: 22 MISGENDER (Taliyah addressed as he/his) plus dosFull[1].d being tradeGood verbatim and dontsFull[2].d being tradeBad verbatim.",
+      "why": "Taliyah is female per champ-gender.js.",
+      "corrected": "Every flagged field corrected; the flagged report[] entries received pronoun-only fixes rather than rewrites.",
+      "confidence": "High",
+      "sources": ["lintFindings", "champ-data/champ-gender.js"]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "No patch-driven claim on the page to correct; nothing in the brief indicates a 26.15 change to either kit.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["brief"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Hwei"},
+
+    {"layer":"full","path":"phases[0].why","before":"QQ out-ranges almost everything mid — paint his last-hits from angles he can't answer. Watch mana; art is expensive.","after":"QQ out-ranges almost everything mid — paint her last-hits from angles she can't answer. Watch mana; art is expensive."},
+    {"layer":"full","path":"phases[2].why","before":"Full palette: EE fear or EQ root into QQ is a genuine kill threat. He has to respect every brush-stroke from here.","after":"Full palette: EE fear or EQ root into QQ is a genuine kill threat. She has to respect every brush-stroke from here."},
+
+    {"layer":"full","path":"tldr","before":"A painter's duel at max range — your palette out-options his kit, but only the mage who dodges gets to keep painting.","after":"A painter's duel at max range — your palette out-options her kit, but only the mage who dodges gets to keep painting."},
+    {"layer":"full","path":"winCon","before":"Out-option the poke war and detonate marks he cannot afford to keep eating. Keep one eye on Seismic Shove and one on the wave, in that order.","after":"Out-option the poke war and detonate marks she cannot afford to keep eating. Keep one eye on Seismic Shove and one on the wave, in that order."},
+    {"layer":"full","path":"enemyWin","before":"Taliyah wins by landing Seismic Shove, denying your pattern, and out-ranging your plan one polite trade at a time.","after":"Taliyah wins by shoving you into her own Unraveled Earth mines, stunning you there, and finishing with the empowered boulder."},
+
+    {"layer":"full","path":"tradeGood","before":"QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending.","after":"QQ her last-hit, weave any second spell for the mark, detonate, and reset — with Seismic Shove down she has no way to punish the step-up."},
+    {"layer":"full","path":"tradeBad","before":"Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Standing still at the edge of Unraveled Earth with your E spent — one Seismic Shove throws you through the mines and the stun does the rest."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending. Bad trade: Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Good trade: QQ her last-hit, weave any second spell for the mark, detonate, and reset — with Seismic Shove down she has no way to punish the step-up. Bad trade: Standing still at the edge of Unraveled Earth with your E spent — one Seismic Shove throws you through the mines and the stun does the rest."},
+
+    {"layer":"full","path":"ahead","before":"Ahead, paint the prison: mark-detonate Taliyah on every last-hit, shove with QA, and rotate first to every river — your R range means you join fights he can't even see.","after":"Ahead, deny the ground: mark-detonate Taliyah on every last-hit, shove with QA, and take every river first — her 180-second Weaver's Wall cannot answer a lost lane."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Taliyah Seismic Shove: matchup-defining — The shove into Unraveled Earth is her whole setup — sidestep it and the burst whiffs. Check it before every step-up. - E fear paint is the lifeline; chip damage never gets it. - The ult answers fights, not waves.","after":"- Seismic Shove: 14s at rank 1, 8s at rank 5 — it is the only way she can put you into Unraveled Earth, and the mines stun nothing that walks in. - Threaded Volley is 3s at rank 5, so her poke never stops being up. - Weaver's Wall is 180s at rank 1."},
+
+    {"layer":"full","path":"breakdown.early","before":"Out-range the lane from level 1 but respect mana — paint last-hits, bank Manaflow, and treat the fear as your Flash until 6.","after":"Out-range her from level 1 but respect mana — her Q reaches 3s by rank 5, so trade on her cast animation, bank Manaflow, and hold E for the shove."},
+    {"layer":"full","path":"breakdown.mid","before":"Lost Chapter onward you own the poke war: mark-detonate every wave contact, shove with QA, and rotate to rivers where R + QE turns skirmishes into murals.","after":"Lost Chapter onward you own the poke war, but she leaves — Weaver's Wall makes her a map threat. Shove with QA, ping her missing, and follow her rotation instead."},
+    {"layer":"full","path":"breakdown.late","before":"You are the siege and the opener: R their carry at max range, wall the choke with fear paint, and QQ whatever the slow catches. Position two brush-lengths behind your front line.","after":"You are the siege and the opener: R their carry at 1300, and remember Weaver's Wall cuts a fight in half — hold the fear paint for whoever it strands on your side of the rock."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through range — no mid pool champion paints a teamfight from further away; your R + QQ decides objectives before they start.","after":"Carry through range: her stun needs a Seismic Shove into her own minefield, so stand where the mines are not and open the fight with R at 1300."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Taliyah gets a kill, the lane gets honest — give Seismic Shove extra room and farm it back. Two kills: stop dueling your tilt — farm with QA clears and stay relevant through max-range poke.","after":"If Taliyah gets a kill, respect Seismic Shove and stop standing beside Unraveled Earth — that pair is her only lockdown. Two kills: QA the wave from range, hold E, and let her 180-second ultimate roam while you farm."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a QA-cleared slow push that crashes on your roam timer — your wave-clear is elite and your map poke (R) travels with you. Worst wave: a frozen wave near his tower with EE down — the immobile artist walking up to last-hit is mid lane's most gankable picture. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.","after":"Best wave: a QA-cleared slow push that crashes on your roam timer — your wave-clear is elite and your map poke (R) travels with you. Worst wave: a frozen wave near her tower with EE down — the immobile artist walking up to last-hit is mid lane's most gankable picture. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores."},
+
+    {"layer":"full","path":"dosFull[0].t","before":"Open trades with the spell his spacing least expects","after":"Open trades with the spell her spacing least expects"},
+    {"layer":"full","path":"dosFull[0].d","before":"The shove into Unraveled Earth is her whole setup — sidestep it and the burst whiffs. Until it’s spent, every commit is a coin flip.","after":"You have no dash, so her mines cannot stun you unless Seismic Shove throws you in — dodge the shove and Unraveled Earth is only a slow."},
+    {"layer":"full","path":"dosFull[1].t","before":"Detonate the mark with QQ before he resets","after":"Detonate the mark with QQ before she resets"},
+    {"layer":"full","path":"dosFull[1].d","before":"QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending.","after":"The signature needs a second spell and fires on a delay, so land it fast — Rock Surfing gives her speed near every wall to walk out of the radius."},
+    {"layer":"full","path":"dosFull[2].d","before":"Taliyah burns Seismic Shove on nothing — take the fifteen-second invitation.","after":"Taliyah spends Seismic Shove on nothing — she cannot stun you for 14 seconds."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Taliyah’s whole plan in one window — decline politely and watch it retire.","after":"She lays Worked Ground where you last stood and the empowered boulder follows it."},
+    {"layer":"full","path":"dontsFull[1].t","before":"Eat his poke while admiring your range","after":"Eat her poke while admiring your range"},
+    {"layer":"full","path":"dontsFull[2].t","before":"Paint waves when his jungler is missing","after":"Paint waves when her jungler is missing"},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Cast animations pin you in place inside her 900-range shove — that is exactly when Seismic Shove throws you into the minefield with a jungler already arriving."},
+
+    {"layer":"full","path":"report[0].t","before":"A painter's duel at max range — your palette out-options his kit, but only the mage who dodges gets to keep painting.","after":"A painter's duel at max range — your palette out-options her kit, but only the mage who dodges gets to keep painting."},
+    {"layer":"full","path":"report[1].t","before":"Out-option the poke war and detonate marks he cannot afford to keep eating. Keep one eye on Seismic Shove and one on the wave, in that order.","after":"Out-option the poke war and detonate marks she cannot afford to keep eating. Keep one eye on Seismic Shove and one on the wave, in that order."},
+    {"layer":"full","path":"report[3].t","before":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending. Great trade: Taliyah wastes Seismic Shove — commit immediately. Bad trade: Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Good trade: QQ her last-hit, weave any second spell for the mark, detonate, and reset — with Seismic Shove down she has no way to punish the step-up. Great trade: Taliyah wastes Seismic Shove — you have 14 seconds, commit immediately. Bad trade: Standing still at the edge of Unraveled Earth with your E spent — one Seismic Shove throws you through the mines and the stun does the rest."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a QA-cleared slow push that crashes on your roam timer — your wave-clear is elite and your map poke (R) travels with you. Worst wave: a frozen wave near his tower with EE down — the immobile artist walking up to last-hit is mid lane's most gankable picture. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.","after":"Best wave: a QA-cleared slow push that crashes on your roam timer — your wave-clear is elite and your map poke (R) travels with you. Worst wave: a frozen wave near her tower with EE down — the immobile artist walking up to last-hit is mid lane's most gankable picture. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Seismic Shove’s cooldown, on your Blackfire Torch spike, and with your jungler’s setup. His answer goes first; yours goes last.","after":"Commit on Seismic Shove’s cooldown, on your Blackfire Torch spike, and with your jungler’s setup. Her answer goes first; yours goes last."},
+    {"layer":"full","path":"report[11].t","before":"Spam the same palette pattern twice. Eat his poke while admiring your range. Paint waves when his jungler is missing. Treat your ultimate as a verdict, never as harassment.","after":"Spam the same palette pattern twice. Eat her poke while admiring your range. Paint waves when her jungler is missing. Treat your ultimate as a verdict, never as harassment."},
+    {"layer":"full","path":"report[13].t","before":"Ahead, paint the prison: mark-detonate Taliyah on every last-hit, shove with QA, and rotate first to every river — your R range means you join fights he can't even see.","after":"Ahead, deny the ground: mark-detonate Taliyah on every last-hit, shove with QA, and take every river first — her 180-second Weaver's Wall cannot answer a lost lane."},
+
+    {"layer":"content","path":"spikes[0].text","before":"Taliyah's Threaded Volley (Q) and Unraveled Earth (W) worked terrain punish overextensions, but your longer poke range and E stun let you win most trades before she gets a full combo off.","after":"Threaded Volley (Q) leaves Worked Ground and Unraveled Earth (E) mines the space, but you have no dash — only Seismic Shove (W) can knock you into the mines, so dodge that one spell and the combo never lands."},
+    {"layer":"content","path":"wants.you[0]","before":"Poke her down before she can set up Unraveled Earth terrain","after":"Stand clear of Unraveled Earth so Seismic Shove has nothing to shove you into"}
+  ],
+  "notes": "CHART: all seven phases[N].side read 'Skill' while content win[N] and packet.levelChart both read Hwei/Hwei/Hwei/Skill/Skill/Hwei/Hwei. Five rows moved to Hwei as one atomic group; rows 3 and 4 already agreed. No paired win[N] edits are proposed because win[N] already holds the correct token — a before==after edit is invalid. RATINGS left untouched (5/10-6/10 across rows that now split between Hwei and Skill; the semantics are not determinable from the data). DERIVED FLAG MISFIRE: the kit file marks Threaded Volley (Q) with grounding, but Riot's own description says only that it throws rocks and creates or consumes Worked Ground — no grounding effect. Per the brief's rule I trusted the description and wrote nothing about Q grounding. Seismic Shove carries the same grounding flag and its text is likewise only a knock-back; I left that alone too. UNVERIFIED: content.early asserts your poke out-ranges hers. Her Threaded Volley is 1000 range and the kit file lists every Hwei subspell range as 0 (they are form-swaps), so I could not confirm the comparison from the kits and left the sentence untouched."
+}

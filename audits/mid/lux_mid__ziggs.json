@@ -1,0 +1,106 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "ziggs",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer carried a blanket 'Skill' on all seven rows while the content layer already read Ziggs / Skill / Skill / Skill / Lux / Lux / Skill — rows 0, 4 and 5 rendered two different answers.",
+      "why": "The content chart matches the kits: Ziggs edges level 1 on cooldown and mana (Bouncing Bomb 6s / 50 mana vs Lux E 10s / 70 mana), Lux takes 6 and first item because Final Spark plus a landed Light Binding is single-target kill pressure Mega Inferno Bomb does not answer, and it evens late when Satchel Charge and Hexplosive Minefield zone the fight.",
+      "corrected": "phases[0].side -> Ziggs, phases[4].side and phases[5].side -> Lux. win[N] already held those values, so no paired content edit was written (a no-op would take the chart group down).",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ziggs.json", "champ-data/_kits/lux.json", "packet levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[0].why described Lux out-poking from max range, which contradicted the Ziggs row it now sits under.",
+      "why": "Lux E is 1100 and Q 1175 against Bouncing Bomb's 850, so range is not why he wins level 1 — frequency is. His Q is 6s for 50 mana against her 10s, 70-mana E.",
+      "corrected": "phases[0].why rewritten to the cooldown-and-cost reason. Lux's own spikes (6, first item) left where the content layer already put them.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ziggs.json", "champ-data/_kits/lux.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "No Ziggs ability was ever named (packet defect), breakdown.cooldowns held no digit (lint), and the Short Fuse auto-reset tell was absent entirely.",
+      "why": "Satchel Charge 20/18/16/14/12s is his only escape and knocks him away, so a Light Binding only converts while it is down. Bouncing Bomb 6/5.5/5/4.5/4s is the chip engine. Hexplosive Minefield is a flat 16s. Short Fuse is an empowered-auto reset whose cooldown shortens every time he casts, so the wind-up is the step-back cue, not the spell.",
+      "corrected": "Cooldowns field rebuilt with real numbers; dosFull[1].d now carries the Short Fuse / Illumination auto tell; dontsFull[2].d contrasts Mega Inferno Bomb's 5000 range with Final Spark's 3340.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ziggs.json", "champ-data/_kits/lux.json", "_missing/lux_mid.json key 28"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "The missing-interactions file flags that Satchel Charge carries a percent-health component, so flat MR is not the answer to it.",
+      "why": "The kit's percentHealth flag is a derived flag and Riot's own Satchel Charge text does not describe percent-health damage, so I did not write it into the page.",
+      "corrected": "",
+      "confidence": "Low",
+      "sources": ["champ-data/_kits/ziggs.json", "_missing/lux_mid.json key 28"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Ziggs"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "E-poke from max range on his last-hits — the slow zone plus passive auto is your chip engine from level 1.",
+      "after": "His Bouncing Bomb is a 6s cooldown for 50 mana against your 10s E — he simply gets more level-1 poke than you do."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Lux"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Lux"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ziggs Satchel Charge: matchup-defining — His knockback escape — he is catchable only while it is down. It governs your forward steps. - W Prismatic Barrier spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- Satchel Charge is 20s at rank 1 and 12s at rank 5 — his only escape, so the root only converts while it is down. - Bouncing Bomb is 6s at rank 1, 4s maxed: constant chip. - Hexplosive Minefield is a flat 16s zone, so a dodged minefield is 16 seconds of free walking."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.",
+      "after": "Illumination detonates on your next auto, and Short Fuse does the same for him — his wind-up is the tell to step back, not his cast."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.",
+      "after": "Mega Inferno Bomb clears from 5000 range and yours does not — spend Final Spark on the pick you can see, not on the wave he can push."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Ziggs wins by landing Satchel Charge, denying your pattern, and out-ranging your plan one polite trade at a time.",
+      "after": "Ziggs wins by chipping you with a 4-second Bouncing Bomb, mining the ground you need, and Satchel-jumping out of the root."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.",
+      "after": "Carry by punishing the Satchel: it is 20s early, and every root that lands inside that window converts to a kill his kit cannot answer."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, own the geometry: E Ziggs off every contact, root the answers, and laser the river fights from fog — fed Lux turns vision lines into kill lines.",
+      "after": "Ahead, hunt the Satchel window: bait it with a step-up, root him the moment it is spent, and take the wave and the plates he can no longer defend."
+    }
+  ],
+  "notes": "Row 0 side moved to Ziggs and its why rewritten in the same proposal; rows 4 and 5 moved to Lux with no paired win[N] edit because the content layer already read Lux there. whys[0] on disk claims Ziggs' Q out-ranges Lux level 1 — that is false on the kits (850 vs 1100/1175) but the row's verdict is still right, and the honest reason (6s vs 10s cooldown, 50 vs 70 mana) is now carried by phases[0].why; whys[0] left alone rather than risk a chart-group rejection. Satchel Charge's percentHealth derived flag contradicts Riot's own text and was not written to the page."
+}

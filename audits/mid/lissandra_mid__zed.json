@@ -1,0 +1,76 @@
+{
+  "ownerKey": "lissandra_mid",
+  "enemy": "zed",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Four fields told the player to 'use W to block his Q' and to use 'E to interrupt his all-in dash'. Ring of Frost is a 450-range root that freezes enemies — it blocks nothing, and Glacial Path is a claw Lissandra can travel to, not an interrupt.",
+      "why": "A player told W blocks Razor Shuriken will stand still and press it into a 900-range projectile, which is a free trade for Zed every time. The real interaction is that W's 450 radius covers the spot Death Mark drops him — 625 range, and he is targetable again the moment the dash ends.",
+      "corrected": "W described as a 450 root held for the shadow swap and the R arrival; E kept as the follow-up, not an interrupt.",
+      "confidence": "High",
+      "sources": ["ownerKit W text/range", "ownerKit E text", "enemyKit Q range", "enemyKit R range and untargetable flag"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer phases[N].side gave Lissandra all seven rows; content win[N] and the packet levelChart both read Skill/Skill/Skill/Skill/Lissandra/Lissandra/Lissandra.",
+      "why": "Pre-6 Zed genuinely sets the terms — Razor Shuriken is 900 to Ice Shard's 725, Shadow Slash falls to a 3s cooldown, and his costs are energy rather than a mana bar that runs out. The lane only becomes a counter-pick at 6, when the tomb exists.",
+      "corrected": "Rows 0-3 moved to Skill with rewritten whys; rows 4-6 already agreed and stayed Lissandra, with phases[4].why regrounded.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[]", "enemyKit Q/E cd and range"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level 6 phase said only that Lissandra becomes 'the best anti-dive mid in the game' — no mechanism.",
+      "why": "Death Mark stores a portion of the damage Zed deals over 3 seconds and then repeats it. Self-cast Frozen Tomb makes Lissandra untargetable and invulnerable, so the repeat lands on nothing, and it costs him a 120/110/100s ultimate against her 120/100/80s.",
+      "corrected": "phases[4].why, dosFull[0] and breakdown.cooldowns now carry the 3-second window and both ultimate cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit R text and cd", "ownerKit R text and cd"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "lintFindings COOLDOWN_NO_DIGIT — breakdown.cooldowns had no number.",
+      "why": "The 3-second mark timer and Living Shadow's 20s are the two clocks this lane is played on.",
+      "corrected": "Death Mark 120s/100s and its 3-second delay, Living Shadow 20s, Frozen Tomb 120s written in.",
+      "confidence": "High",
+      "sources": ["enemyKit R/W cd", "ownerKit R cd"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "lintFindings COPY_PASTE_BLEED on dosFull[1].d and dontsFull[2].d.",
+      "why": "Both bodies were the trade strings pasted under unrelated titles.",
+      "corrected": "dosFull[1].d rewritten around Death Mark's 625 arrival against your 450 root; dontsFull[2].d around Living Shadow's 20s swap.",
+      "confidence": "High",
+      "sources": ["enemyKit R/W", "ownerKit W/E", "lintFindings"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Lissandra", "after": "Skill" },
+    { "layer": "full", "path": "phases[0].why", "before": "Q-shatter the wave and chip his melee step-ups — your early Q harass is better than the lane gives it credit for.", "after": "Even: Razor Shuriken reaches 900 against your 725, so he pokes first — but neither of you converts at level 1." },
+    { "layer": "full", "path": "phases[1].side", "before": "Lissandra", "after": "Skill" },
+    { "layer": "full", "path": "phases[1].why", "before": "W online: anyone who closes onto you eats a root. The anti-engage layer is already real at level 2.", "after": "Even at 2: your W roots at 450, but Living Shadow lets him poke from 650 and never stand there." },
+    { "layer": "full", "path": "phases[2].side", "before": "Lissandra", "after": "Skill" },
+    { "layer": "full", "path": "phases[2].why", "before": "E claw completes the kit — you now have the lane's strangest engage and a guaranteed exit. Greed carefully; the claw is slow.", "after": "Still even: your E completes the kit, but his level-3 all-in is real once Shadow Slash is on 5s and his energy allows." },
+    { "layer": "full", "path": "phases[3].side", "before": "Lissandra", "after": "Skill" },
+    { "layer": "full", "path": "phases[3].why", "before": "Lost Chapter timing — Q spam stops hurting your mana. Chip Zed every time he touches the wave.", "after": "Even: Lost Chapter frees your Q, but Living Shadow's 20s still lets him pick when the poke war happens." },
+    { "layer": "full", "path": "phases[4].why", "before": "Frozen Tomb online — you are now the best anti-assassin and anti-dive mid in the game. Self-R turns every dive into a counter-kill.", "after": "Frozen Tomb online — self-R goes untargetable and invulnerable, so Death Mark's stored damage repeats onto nothing. He is 120s poorer." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Zed Death Mark: matchup-defining — The all-in — spend your defensive answer AFTER the mark lands, not before. Count it out loud if you must. - Your R Frozen Tomb (self-cast) has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.", "after": "- Death Mark is 120s at rank 1 and still 100s at rank 3 — spend your answer AFTER the mark lands, not before, and count its 3 seconds out loud. - Living Shadow is 20s and it is his only real exit. - Frozen Tomb is 120s: the moment it all goes wrong, or the moment it all goes right." },
+    { "layer": "full", "path": "dosFull[0].t", "before": "Self-R the Death Mark instantly", "after": "Self-R inside the 3-second mark" },
+    { "layer": "full", "path": "dosFull[0].d", "before": "The all-in — spend your defensive answer AFTER the mark lands, not before. Its cooldown is the green light — wait for it.", "after": "The mark detonates after 3 seconds — tomb yourself inside that window and you are untargetable and invulnerable when it repeats." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q-shatter his wave contact, and when he steps to punish, W-root into full rotation and walk — the root tax makes every aggressive step expensive.", "after": "Death Mark drops him at 625 and puts him right behind you — your W covers 450 in every direction, so root the moment he is targetable." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Zed whiffs Death Mark and the lane briefly belongs to you.", "after": "A 120s ultimate spent on a failed dive is two wave cycles." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Clawing in with W on cooldown 'to poke' — an engage tool spent on chip damage is a Lissandra standing in melee range with no ice left.", "after": "Living Shadow is 20s and swaps him back the way he came — a claw thrown at the shadow leaves you 1050 from safety with nothing." },
+    { "layer": "full", "path": "enemyWin", "before": "Zed wins by landing Death Mark, denying your pattern, and cashing the all-in before your pattern matures.", "after": "Zed wins by baiting the tomb with a Living Shadow feint, then marking you at 625 with nothing left to answer." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through picks — claw-root-tomb converts vision into kills better than any control mage; the map shrinks every time your E is up.", "after": "Carry through picks — a Zed with Living Shadow spent has no exit from your 450 root; the map shrinks every time your claw is up." },
+    { "layer": "content", "path": "whys[1]", "before": "Level 2 stays a skill check as Zed's poke trades against your W block and E interrupt.", "after": "Level 2 stays a skill check as his 900-range Q trades against your 450-range root." },
+    { "layer": "content", "path": "spikes[0].text", "before": "The early game is a skill check: Zed shoves with W-Q-E and looks to land his poke, while you use W to block a Q and E to interrupt his all-in. Respect his level-3 all-in window when he has energy, but every time he commits without ult you can W his damage and E-Q him back.", "after": "The early game is a skill check: Zed shoves with W-Q-E and looks to land his poke, while you hold W to root anything that closes to 450. Respect his level-3 all-in when his energy is full, but every time he commits without ult you root him and E-Q him back." },
+    { "layer": "content", "path": "early", "before": "Levels 1-5 are a genuine skill matchup. Zed wants to poke with Q and shove you in with W to set up roams, so track his energy and use W to block the key Q while keeping E up to punish any dash-in; if you play the wave even and dodge his poke, neither of you gets ahead.", "after": "Levels 1-5 are a genuine skill matchup. Zed wants to poke with Q and shove you in with W to set up roams, so track his energy and hold W to root him the moment he closes to 450, keeping E for the punish after; if you play the wave even and dodge his poke, neither of you gets ahead." },
+    { "layer": "content", "path": "wants.you[1]", "before": "Use W to block his Q and E to interrupt his all-in dash", "after": "Root with W at 450 the moment his shadow swap lands" }
+  ],
+  "notes": "Main fix: four fields claimed Ring of Frost 'blocks' Razor Shuriken and that Glacial Path 'interrupts' his dash. W is a 450 root, E is a claw she can travel to; neither blocks or interrupts anything in Riot's text. Rewritten around the real geometry — Death Mark lands him at 625, W covers 450 around her, and self-cast Frozen Tomb's untargetable/invulnerable window covers the mark's 3-second repeat. Chart: full layer gave Lissandra all seven rows while content matched the packet; rows 0-3 moved to Skill with paired why rewrites, rows 4-6 already agreed. No win[N] edits were possible — content already holds the correct values. Not asserted (kit silent): whether the Death Mark repeat is prevented outright or merely mistimed by the tomb, whether Zed can Living Shadow out of Ring of Frost's root, and whether Zhonya's stasis and Frozen Tomb behave identically against the mark — the existing Zhonya's text was left as written. Zed is male; pronouns unchanged."
+}

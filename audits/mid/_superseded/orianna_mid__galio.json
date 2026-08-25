@@ -1,0 +1,296 @@
+{
+  "ownerKey": "orianna_mid",
+  "enemy": "galio",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Four chart rows disagreed between layers: content win[0], win[1], win[2] and win[5] all read Orianna while the matching phases[N].side read \"Skill\". The packet levelChart agrees with content on all four.",
+      "why": "Levels 1-3 are Orianna's — Galio is melee with a 275-range taunt, she pokes from 815 with a stacking passive, and his kit returns no health. Levels 4-5 even out once Shield of Durand (18s) and Justice Punch (11s) are both live. Level 6 goes back to her because Hero's Entrance is a 180-second roaming ultimate rather than a lane-kill button, so shoving and punishing the side he leaves is free.",
+      "corrected": "phases[0..2].side = Orianna at 6/10 and phases[5].side = Orianna; rows 3 and 4 already agreed as Skill and were left untouched.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/galio.json",
+        "champ-data/_kits/orianna.json",
+        "packet.levelChart"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes named no Galio spike and carried an unsourced magnitude (\"Luden's makes Q-W a third of a health bar\").",
+      "why": "His spikes are Justice Punch falling from 11s to 7s across ranks and Hero's Entrance at 180/160/140 with 4000-5500 range — a map spike, not a lane one.",
+      "corrected": "Spike line rebuilt on those two numbers, with the point that his 6 buys him the map rather than the lane.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/galio.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Six fields credit Galio with healing or sustain: spikes[0].text (\"Shield of Durand passive and Q's healing tick\"), whys[1] (\"faster than his sustain refills\"), whys[3] (\"Shield of Durand sustain\"), content.early (\"Winds of War heal give him sustain\"), content.mid (\"his sustain refills whatever you poke\") and wants.foe[0] (\"Sustain through poke with Shield of Durand and Q heal\").",
+      "why": "Nothing in Galio's kit heals. Winds of War is a tornado that deals damage over time; Shield of Durand is a charged stance that ends in a taunt; neither the text nor the derived flags carry a heal. The whole 'do not try to out-poke his sustain' plan is built on an ability he does not have — and it is the opposite of the truth, because poke is exactly what works into him.",
+      "corrected": "Every sustain claim removed and replaced with the real reason to be careful: the 825-range Winds of War return trade and the 275-range taunt.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/galio.json (no heal flag on any slot; Q and W text)"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2].text and wants.you[2] say Justice Punch \"can interrupt your ult\".",
+      "why": "Command: Shockwave is a command to the Ball that resolves after a short delay — it carries no channel flag and the shockwave happens at the Ball, not at Orianna. A knockup can stop the cast; it cannot stop a Shockwave that has already been commanded. The actionable version is a distance instruction: cast from outside his 650.",
+      "corrected": "\"knocks you up mid-cast, so cast from range and out of its 650\" replaces the interrupt claim.",
+      "confidence": "Medium",
+      "sources": [
+        "champ-data/_kits/orianna.json (R text, no channel flag)",
+        "champ-data/_kits/galio.json (E: 650, knocking up)"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Neither of the two interactions flagged in _missing for this matchup appeared anywhere on the page.",
+      "why": "First, Colossal Smash makes his next basic attack an area hit every few seconds — the burst opens with an auto wind-up, not a visible cast, so the wind-up is the cue. Second, Orianna owns no Movement ability, so a 650-range Justice Punch closing on her has no kit answer at all — Flash is the only out, and it has to be held for the gap-close rather than spent on the damage.",
+      "corrected": "The auto tell written into breakdown.cooldowns; the no-dash point written into dontsFull[1].d.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/galio.json (P: autoReset)",
+        "champ-data/_kits/orianna.json (no dash on any slot)",
+        "champ-data/_kits/_missing/orianna_mid.json"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit, dosFull[2].d invented a \"fifteen-second\" Justice Punch, and the packet reports zero sequencing cues on the matchup.",
+      "why": "Justice Punch is 11/10/9/8/7 — never fifteen. Winds of War 11/10/9/8/7, Shield of Durand 18/17/16/15/14, Hero's Entrance 180/160/140; Command: Protect 9s, Command: Shockwave 110/95/80.",
+      "corrected": "Real numbers written into breakdown.cooldowns, report[5].t, report[9].t, ahead and the do's/don'ts.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/galio.json",
+        "champ-data/_kits/orianna.json"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "report[8].t tells an Orianna facing Galio to \"buy the stopwatch the moment Zed hits 6\".",
+      "why": "Zed is not in this matchup — a template leak.",
+      "corrected": "Pointed at Galio's own level 6.",
+      "confidence": "High",
+      "sources": [
+        "currentText.full"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d and dontsFull[2].d were the tradeGood/tradeBad strings pasted under unrelated titles, and dosFull[0].d and dosFull[2].d both explained Justice Punch under titles about ball placement and ult timing.",
+      "why": "Copy-paste bleed — \"W the ground he must dash across\" was explained with a farm-path trade rule.",
+      "corrected": "Every body rewritten to answer its own title.",
+      "confidence": "High",
+      "sources": [
+        "currentText.full"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Orianna"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].rating",
+      "before": "5/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Orianna"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].rating",
+      "before": "5/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Skill",
+      "after": "Orianna"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].rating",
+      "before": "5/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Orianna"
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Galio wins by landing Justice Punch, denying your pattern, and cashing the all-in before your pattern matures.",
+      "after": "Galio wins by closing 650 with Justice Punch, then taunting you with Shield of Durand while you cannot act."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Galio Justice Punch: matchup-defining — His dash knockup — he has no engage while it is down. Check it before every step-up. - E Command: Protect is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+      "after": "- Galio Justice Punch: 11s at rank 1, 7s at rank 5 — a 650 dash knockup, and he has no engage while it is down. - Colossal Smash is the tell: his next auto, not a cast. - Command: Protect is a 9s lifeline; chip never gets it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Win the auto-weave levels: passive stacks hurt, ball placement zones, and Q-W trades punish every wave contact. Mana is the only brake.",
+      "after": "Levels 1-2 are yours on autos and passive stacks: he is melee at 275, and nothing in his kit heals back the chip you put on him."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.spikes",
+      "before": "Lost Chapter steadies the trade game; level 6 doubles your lane presence; Luden's makes Q-W a third of a health bar.",
+      "after": "Lost Chapter steadies the trades; his 6 is a 180s roam ult, not a lane kill; Justice Punch falls to 7s at rank 5."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Galio gets a kill, the lane gets honest — give Justice Punch extra room and farm it back. Two kills: stop dueling your tilt — farm with Q-W clears and stay relevant through Shockwave threat.",
+      "after": "If Galio gets a kill, stay outside 650 and make Justice Punch come to you. Two kills: stop dueling your tilt — farm with Q-W clears and stay relevant through Shockwave threat."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the ball — no champion controls teamfight space like Orianna; one Shockwave on three is a won game, and you decide when it happens.",
+      "after": "Carry off his engage: the taunt bunches your enemies for you, so hold Shockwave until Shield of Durand has already pulled them together."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, run the clock: shove with Q-W, zone Galio off every contact with ball threat, and rotate first to rivers — your Shockwave makes every skirmish a 5v4 audition.",
+      "after": "Ahead, tax the roams: shove with Q-W, ping the moment he leaves, and fight while Justice Punch sits on its 11s — a Galio with no dash cannot start anything."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His dash knockup — he has no engage while it is down. Bait it, count it, then go.",
+      "after": "Keep the sphere between you and his 650 line — Command: Protect only casts from the ball."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Ball on his farm path, Q-W the last-hit contact, auto-weave once, and recall the ball — three-second trades his combo math can't answer.",
+      "after": "Justice Punch travels 650 in a straight line — drop Dissonance across that lane and he arrives slowed, with nothing behind the knockup."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Galio burns Justice Punch on nothing — take the fifteen-second invitation.",
+      "after": "Shockwave is 110s at rank 1 — spend it on his commit, not on his poke."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Galio’s whole plan in one window — decline politely and watch it retire.",
+      "after": "Colossal Smash lands every few seconds and his taunt is 18s — short trades only."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Ball-on-self is your Flash — stranding the sphere at poke range with his engage loaded is the only way this lane kills you.",
+      "after": "Ball-on-self is the only answer you own — there is no dash in your kit, so a 650 Justice Punch with the sphere out is a free kill."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Poking with the ball stranded at max range when his engage is up — an Orianna without her ball is a Doran's Ring with legs.",
+      "after": "His minions plus the damage-over-time of Winds of War beat your bar at even health — take that fight only with a lead."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Galio’s Justice Punch: His dash knockup — he has no engage while it is down. It’s down or you don’t go.",
+      "after": "Track Galio’s Justice Punch, 11s at rank 1 and 7s at rank 5: a 650 dash knockup, and no engage at all without it."
+    },
+    {
+      "layer": "full",
+      "path": "report[8].t",
+      "before": "Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — buy the stopwatch the moment Zed hits 6.",
+      "after": "Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — buy the stopwatch the moment he hits 6."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Justice Punch’s cooldown, on your Luden's spike, and with your jungler’s setup. His answer goes first; yours goes last.",
+      "after": "Commit on Justice Punch’s 11s cooldown, on your Luden's spike, and with your jungler’s setup. His answer goes first; yours last."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Your Command Attack range lets you poke before Galio can retaliate at level 1.",
+      "after": "Your Command: Attack plus stacking passive autos beat a melee Galio at 1."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "At level 2 you keep chunking him faster than his sustain refills.",
+      "after": "At level 2 you keep chunking him — Galio's kit heals nothing back."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Levels 4-5 even out as his Shield of Durand sustain and Justice Punch answer back.",
+      "after": "Levels 4-5 even out as Shield of Durand's taunt and Justice Punch answer back."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Galio out-sustains poke with his Shield of Durand passive and Q's healing tick, so don't try to out-DoT him; instead ball-Q and back off before he lands Winds of War for a return trade.",
+      "after": "Galio heals nothing back — Shield of Durand ends in a taunt, it does not sustain him — so poke freely, but ball-Q and step out before Winds of War lands its 825-range return trade."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "With his taunt and Winds of War Galio is a great Shockwave enabler for you, but on his side his Justice Punch knockup can interrupt your ult, so cast from range and angle.",
+      "after": "With his taunt and Winds of War Galio is a great Shockwave enabler for you, but Justice Punch knocks you up mid-cast, so cast from range and out of its 650."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "You hold levels 1-3: your Command Attack range lets you land ball-Q pokes before Galio can retaliate, and while his Shield of Durand and Winds of War heal give him sustain, you can chunk him and step out before his return trade connects.",
+      "after": "You hold levels 1-3: Command: Attack reaches 815 and your passive stacks on repeat hits, and Galio's kit heals nothing back — Winds of War is a damage-over-time tornado — so chunk him and step out before the return trade connects."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 4-5 even out as his sustain refills whatever you poke and his Justice Punch threatens to interrupt your combo, then at 6 the lane tilts back to you in a way — his Hero's Entrance is a roaming ult, so shove hard, deny his gank timers, and punish the side he abandons.",
+      "after": "Levels 4-5 even out as Shield of Durand's taunt lands on 18s and Justice Punch closes 650 with a knockup, then at 6 the lane tilts back to you — Hero's Entrance is a 180-second roaming ult, so shove hard, deny his gank timers, and punish the side he abandons."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[2]",
+      "before": "Angle your Shockwave so his Justice Punch can't interrupt it",
+      "after": "Cast Shockwave from outside the 650 of his Justice Punch"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Sustain through poke with Shield of Durand and Q heal",
+      "after": "Taunt you into the full combo with Shield of Durand"
+    }
+  ],
+  "notes": "The big one: six separate fields told the reader Galio out-sustains poke and heals through chip — spikes[0].text even named \"Q's healing tick\". Nothing in his kit heals. Winds of War is a damage-over-time tornado and Shield of Durand is a charged stance ending in a taunt; galio.json carries no heal flag on any slot. This looks like leftover text from a much older version of the champion, and it is worse than a template because it tells the reader to abandon the plan (poking him) that actually works. All six fields rewritten. Second correction: two fields said Justice Punch \"interrupts your ult\" — Command: Shockwave is a command to the Ball with no channel flag, so a knockup can stop the cast but not a Shockwave already commanded; replaced with the distance instruction, which is what the reader can actually act on. Both _missing interactions added (Colossal Smash's auto tell, and the fact that Orianna owns no Movement ability so Flash is her only answer to a 650 gap-close). NOTE ON A FLAG I DID NOT USE: galio.json marks Justice Punch with \"terrain: creates terrain, blocks paths and dashes\", and the _missing rule fired on it as terrain-cuts-retreat — but Riot's text for the ability describes only a step-back charge and a knockup, no terrain. Per the brief I trusted the description and wrote the no-dash point without claiming a wall."
+}

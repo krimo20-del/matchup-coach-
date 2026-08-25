@@ -1,0 +1,98 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "mel",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The content-layer level chart gives Mel 7/7 stages while Lux wins 53.85% over 1547 games, and the full layer already reads 'Skill' on all seven rows. The page renders two different answers to every stage.",
+      "why": "Lux out-ranges Mel on every spell (Q 1175 / W 1150 / E 1100 vs Radiant Volley 950 / Solar Snare 1000). Rebuttal is a real counter but it is a 250-range self-cast on a 38s-to-26s cooldown, so it gates timing, not the whole lane. A 53.85% win rate with a skill-expressive gate is 'Skill', not a 7/7 sweep.",
+      "corrected": "All seven content win[] rows moved to Skill to match the full-layer phases[].side, with whys[] rewritten to state the range gap and the Rebuttal timer instead of a flat loss.",
+      "confidence": "High",
+      "sources": ["packet.defects", "ownerKit ranges", "enemyKit Rebuttal cd 38/35/33/29/26"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spike text framed level 6 and first item as Mel's, contradicting the corrected chart; mid/late prose said Lux is 'reduced to waiting'.",
+      "why": "Final Spark at 3340 range and 60/50/40 cooldown is a lane-decider once Rebuttal (26s at rank 5) is spent. Mel's Golden Eclipse is 120/100/80 and scales off Overwhelm stacks she has to build first.",
+      "corrected": "mid/late reframed around burning Rebuttal with an auto or E tick and firing into its 26-second gap; whys[4] and whys[5] restated as conditional, not lost.",
+      "confidence": "High",
+      "sources": ["ownerKit R 60/50/40 range 3340", "enemyKit R 120/100/80", "enemyKit W 38/35/33/29/26"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive interactions were named but never stated mechanically: Rebuttal reflecting Light Binding roots Lux herself, Mel's passive loads bonus projectiles on her NEXT attack (the wind-up is the tell), and Rebuttal creating terrain can cut a dashless Lux's retreat.",
+      "why": "All three come from missingInteractions for this exact matchup plus Riot's own text ('reflects enemy projectiles back at the attacker'; 'gains three bonus projectiles on her next attack'; W flags terrain).",
+      "corrected": "tradeBad now states the reflected root; dosFull[1].d now teaches the auto wind-up as the shield cue; breakdown.cooldowns now carries the real 38s/26s, 6s and 11s numbers.",
+      "confidence": "High",
+      "sources": ["missingInteractions rules shield-absorbs-burst, autoreset-burst-tell, terrain-cuts-retreat", "enemyKit P/Q/W/E text and cooldowns"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "breakdown.cooldowns contained no digit at all (lint COOLDOWN_NO_DIGIT).",
+      "why": "Rebuttal is 38s at rank 1 and 26s at rank 5; Radiant Volley falls to 6s at rank 5; Solar Snare is 11s at rank 1. Those numbers are what make 'commit on its cooldown' actionable.",
+      "corrected": "Rewritten with all three real cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit cooldown strings"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Two bullets were the tradeGood/tradeBad strings pasted under unrelated titles (lint COPY_PASTE_BLEED), and eleven fields called Mel 'he/his/him'.",
+      "why": "Mel is female per champ-gender.js; the bodies contradicted their own titles.",
+      "corrected": "Pronouns fixed throughout; dosFull[1].d and dontsFull[2].d rewritten to match their titles with Mel-specific mechanics.",
+      "confidence": "High",
+      "sources": ["lintFindings", "champ-data/champ-gender.js"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "tldr", "before": "His combo wants him close, yours works from a postcode away — keep the fight at YOUR range and the trade never gets fair.", "after": "Her Q reaches 950, yours 1175 — poke from that gap, and only commit when Rebuttal's 26-second reflect is actually down." },
+    { "layer": "full", "path": "winCon", "before": "Deny his range, shield his window, and laser the half-health retreat. Shorthand: Rebuttal down, wave right, go.", "after": "Bait Rebuttal with an auto or E tick, then Q-R the 26-second window. Shorthand: Rebuttal down, wave right, go." },
+    { "layer": "full", "path": "enemyWin", "before": "Mel wins by landing Rebuttal, denying your pattern, and owning the spacing war until your tempo starves.", "after": "Mel wins by catching Q or R in Rebuttal, stacking Overwhelm off Radiant Volley, then executing with her R." },
+    { "layer": "full", "path": "tradeGood", "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.", "after": "E her from 1100 while she farms at 950, detonate, and weave the Illumination auto — she has to walk into your Q to answer." },
+    { "layer": "full", "path": "tradeBad", "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.", "after": "Firing Q into a lit Rebuttal — it comes back rooting you, and Solar Snare plus stacked Overwhelm turns that into her execute." },
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning. Bad trade: Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.", "after": "Good trade: E her from 1100 while she farms at 950, detonate, and weave the Illumination auto — she has to walk into your Q to answer. Bad trade: Firing Q into a lit Rebuttal — it comes back rooting you, and Solar Snare plus stacked Overwhelm turns that into her execute." },
+    { "layer": "full", "path": "ahead", "before": "Ahead, own the geometry: E Mel off every contact, root the answers, and laser the river fights from fog — fed Lux turns vision lines into kill lines.", "after": "Ahead, hold the range gap: E her off every contact so she cannot farm at 950, and time your Q-R for the 26 seconds Rebuttal sits on cooldown." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Mel Rebuttal: matchup-defining — Reflects your projectiles back — never poke while it glows. Read it like a second minimap. - Guard your W Prismatic Barrier like a fifth summoner spell. - Ultimate goes to kill windows only.", "after": "- Mel Rebuttal (W): 38s at rank 1, 26s at rank 5 — reflects your projectiles, so bait it with an auto. - Radiant Volley drops to 6s at rank 5. - Solar Snare (E) is 11s at rank 1: that gap is your walk-up window." },
+    { "layer": "full", "path": "phases[0].why", "before": "E-poke from max range on his last-hits — the slow zone plus passive auto is your chip engine from level 1.", "after": "E-poke from max range on her last-hits — your 1100 beats her 950 Radiant Volley, and Rebuttal is 38s at rank 1." },
+    { "layer": "full", "path": "phases[1].why", "before": "Q joins: the root threat re-prices every step he takes past the wave's midline.", "after": "Q joins: 1175 root range re-prices every step she takes past the wave's midline." },
+    { "layer": "full", "path": "phases[2].why", "before": "Full kit: Q-E-auto with the passive detonations is a real chunk. Shield his answer and walk.", "after": "Full kit: Q-E-auto with Illumination is a real chunk — but bait her Rebuttal with the auto first." },
+    { "layer": "full", "path": "phases[3].why", "before": "Lost Chapter timing — E every wave contact. Bank Manaflow and hold Q for his aggression, not yours.", "after": "Lost Chapter timing — E every wave contact. Bank Manaflow and hold Q for her Solar Snare, not your poke." },
+    { "layer": "full", "path": "phases[5].why", "before": "Luden's spike: Q-E-R deletes squishies from root range. Force him to dodge or die on every contact.", "after": "Luden's spike: Q-E-R deletes squishies from root range. Open with the auto so her Rebuttal is gone." },
+    { "layer": "full", "path": "breakdown.wave", "before": "Best wave: an E-cleared slow push that crashes on your roam-or-recall timer — the slow zone makes the crash safe to set up. Worst wave: a frozen wave near his tower with Q down — the immobile root-bot walking up to farm is mid's most quoted death. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.", "after": "Best wave: an E-cleared slow push that crashes on your roam-or-recall timer — the slow zone makes the crash safe to set up. Worst wave: a frozen wave near her tower with Q down — the immobile root-bot walking up to farm is mid's most quoted death. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because." },
+    { "layer": "full", "path": "dosFull[0].t", "before": "Poke the approach before his range exists", "after": "Poke the approach before her range exists" },
+    { "layer": "full", "path": "dosFull[1].t", "before": "W-shield his combo on the tell", "after": "W-shield her combo on the tell" },
+    { "layer": "full", "path": "dosFull[1].d", "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.", "after": "Her passive loads three bonus projectiles on the next attack — that wind-up, not the ability cast, is when your Prismatic Barrier goes out." },
+    { "layer": "full", "path": "dontsFull[0].t", "before": "Trade inside his combo range", "after": "Trade inside her combo range" },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Mel’s bread-and-butter play — deny it and they run out of answers.", "after": "Inside 950 she gets Radiant Volley plus the Overwhelm stacks her R cashes in." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.", "after": "Q spent on a farming Mel is a 10-second window where Solar Snare walks at you and you have no binding and no dash to answer it." },
+    { "layer": "full", "path": "report[0].t", "before": "His combo wants him close, yours works from a postcode away — keep the fight at YOUR range and the trade never gets fair.", "after": "Her Q reaches 950, yours 1175 — poke from that gap, and only commit when Rebuttal's 26-second reflect is actually down." },
+    { "layer": "full", "path": "report[1].t", "before": "Deny his range, shield his window, and laser the half-health retreat. Shorthand: Rebuttal down, wave right, go.", "after": "Bait Rebuttal with an auto or E tick, then Q-R the 26-second window. Shorthand: Rebuttal down, wave right, go." },
+    { "layer": "full", "path": "report[4].t", "before": "Best wave: an E-cleared slow push that crashes on your roam-or-recall timer — the slow zone makes the crash safe to set up. Worst wave: a frozen wave near his tower with Q down — the immobile root-bot walking up to farm is mid's most quoted death. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.", "after": "Best wave: an E-cleared slow push that crashes on your roam-or-recall timer — the slow zone makes the crash safe to set up. Worst wave: a frozen wave near her tower with Q down — the immobile root-bot walking up to farm is mid's most quoted death. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because." },
+    { "layer": "full", "path": "report[9].t", "before": "Commit on Rebuttal’s cooldown, on your Luden's spike, and with your jungler’s setup. Make him flinch first.", "after": "Commit on Rebuttal’s cooldown, on your Luden's spike, and with your jungler’s setup. Make her flinch first." },
+    { "layer": "full", "path": "report[11].t", "before": "Trade inside his combo range. Hold the shield too long to use it. Waste the root on chip spacing. Chip damage doesn’t get to borrow the ultimate.", "after": "Trade inside her combo range. Hold the shield too long to use it. Waste the root on chip spacing. Chip damage doesn’t get to borrow the ultimate." },
+
+    { "layer": "content", "path": "win[0]", "before": "Mel", "after": "Skill" },
+    { "layer": "content", "path": "win[1]", "before": "Mel", "after": "Skill" },
+    { "layer": "content", "path": "win[2]", "before": "Mel", "after": "Skill" },
+    { "layer": "content", "path": "win[3]", "before": "Mel", "after": "Skill" },
+    { "layer": "content", "path": "win[4]", "before": "Mel", "after": "Skill" },
+    { "layer": "content", "path": "win[5]", "before": "Mel", "after": "Skill" },
+    { "layer": "content", "path": "win[6]", "before": "Mel", "after": "Skill" },
+    { "layer": "content", "path": "whys[0]", "before": "Mel's Radiant Volley out-pokes your level 1 and Rebuttal threatens your spells immediately.", "after": "Your E reaches 1100 to her 950, but Rebuttal is up and reflects anything you throw at her." },
+    { "layer": "content", "path": "whys[1]", "before": "Her reflect and superior early range keep you from trading freely at 2.", "after": "Q at 1175 answers her walk-up, but a lit Rebuttal sends the root back." },
+    { "layer": "content", "path": "whys[2]", "before": "At 3 Rebuttal can turn your full combo back on you.", "after": "At 3 bait Rebuttal with an auto, then land Q-E-auto." },
+    { "layer": "content", "path": "whys[3]", "before": "Through 4-5 she farms safely and punishes every predictable cast.", "after": "Through 4-5 Lost Chapter carries your E poke; hold Q for her Snare." },
+    { "layer": "content", "path": "whys[4]", "before": "Her level 6 doesn't help you - Final Spark is exactly what Rebuttal reflects.", "after": "Final Spark kills from 3340, but only fire it while her 26s Rebuttal is down." },
+    { "layer": "content", "path": "whys[5]", "before": "First-item Radiant Volley poke plus Snare-into-execute keeps power with her.", "after": "Luden's makes Q-E-R lethal, but her Snare-into-execute answers it if you miss." },
+    { "layer": "content", "path": "whys[6]", "before": "Late, her execute R and reflect W punish your immobile, telegraphed kit all game.", "after": "Late, you root the engage from 1175 while her R needs Overwhelm stacks to matter." },
+    { "layer": "content", "path": "early", "before": "Mel starts ahead: her Radiant Volley pokes from range and the mere threat of Rebuttal means you can't freely fire Q or E without risking it being reflected into your own face.", "after": "Neither side runs away with it: your E reaches 1100 to her 950, but the threat of Rebuttal means you can't fire Q or E on a cadence without it coming back at you." },
+    { "layer": "content", "path": "mid", "before": "At 6 nothing changes in your favour - Final Spark is the perfect projectile for her to reflect, so you're reduced to waiting out her W before committing, which hands her lane tempo.", "after": "At 6 the lane becomes a timer: Final Spark is the perfect projectile for her to reflect, so open with an auto or E tick to burn Rebuttal, then fire into its 26-second gap." },
+    { "layer": "content", "path": "late", "before": "Her Overwhelm execute and constant reflect threat keep you on the back foot; as an immobile skillshot mage you're the ideal victim, so play for team peel rather than solo duels.", "after": "Her Overwhelm execute punishes you at low health, but from 1175 you root the engage before she is in her 950 range; play the back line, not solo duels, and R the retreat." }
+  ],
+  "notes": "Chart fixed by moving content win[] to Skill to agree with the full layer's existing phases[].side (all seven were already 'Skill'), which also clears packet defect 'chart gives Mel 7/7 vs 0' against a 53.85% Lux win rate. No phases[].side edits were needed, so no unpaired side edit exists. Left templated but ungroundable: breakdown.carry and breakdown.feeding are Lux-generic rather than Mel-specific and I had no Mel-specific fact to replace them with. report[3].t and report[13].t duplicate tradeGood/tradeBad and ahead verbatim and are now slightly out of sync with those fields, but the sweep caps report rewrites at two non-lint entries so I left them; worth a mechanical resync pass. Unverified and therefore not written: whether Rebuttal's reflected Light Binding roots Lux for the full duration or a reduced one, and whether Rebuttal's terrain component actually blocks movement or is only a tooltip-derived flag."
+}

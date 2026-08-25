@@ -1,0 +1,247 @@
+{
+  "ownerKey": "irelia_mid",
+  "enemy": "lissandra",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "EVEN at 5.5/10 fits 48.64% over 1548 games — Irelia holds the pre-6 levels, Lissandra's chain owns the level 6 window.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet.winRate", "packet.levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No real cooldowns anywhere. Glacial Path is 24s at rank 1 falling to 12s at rank 5 — the single number that decides whether she can leave — and Frozen Tomb is 120s at rank 1.",
+      "why": "Her immobility while the claw is down is the whole reason Irelia wins levels 3-5.",
+      "corrected": "breakdown.cooldowns, dosFull[0].d, ahead, early, spikes[0].text and wants.you[0] now carry the numbers.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 24/21/18/15/12", "enemyKit R cd 120/100/80", "enemyKit W cd 10/9.5/9/8.5/8", "enemyKit Q cd 7/6/5/4/3"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Frozen Tomb self-cast makes Lissandra untargetable and invulnerable while healing her — dumping your combo into it wastes everything. Also unstated: Ring of Frost is only 450 range, so your 850-range stun beats it outright, and Iceborn Subjugation leaves slowing thralls on corpses.",
+      "why": "The untargetable window is the most common way an Irelia loses this fight, and it also sets the Grievous Wounds timing.",
+      "corrected": "Added to dosFull[1].d, phases[4].why, dontsFull[0].d and dontsFull[2].d.",
+      "confidence": "High",
+      "sources": ["missingInteractions untargetable-dodges-burst", "missingInteractions needs-antiheal", "enemyKit R text", "enemyKit W range 450", "enemyKit P text"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer repeatedly calls Glacial Path a root and claims it self-roots Lissandra on cast (whys[0], early, wants.you[0], spikes[0].text). Riot's text gives Glacial Path damage and a recast teleport — no root, on her or on you. Her root is Ring of Frost (W).",
+      "why": "Advising the reader to wait for a self-root that the ability does not have would have them commit into a mobile Lissandra.",
+      "corrected": "All four rewritten around the real 24s claw cooldown and Ring of Frost as the root.",
+      "confidence": "High",
+      "sources": ["enemyKit E text", "enemyKit W text"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "All seven phases[N].side read 'Skill' while content win[] reads Irelia ×4, Lissandra at level 6, then Irelia ×2.",
+      "why": "Packet levelChart matches the content layer exactly; the full-layer side tokens were stale.",
+      "corrected": "Sides aligned with ratings and whys rewritten in the same proposal; win[N] already matches so no content chart edit is needed.",
+      "confidence": "High",
+      "sources": ["packet.levelChart"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Irelia" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Irelia" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Irelia" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Irelia" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Lissandra" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Irelia" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Irelia" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "4/10" },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q the low minions and keep the blade moving — your level 1 reset dance already out-trades careless mages.",
+      "after": "Q the low minions and keep moving — Ice Shard is 7s at rank 1 and its chip never beats your reset dance."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "W joins: the channel shreds incoming damage — hold it for his trade spell, not his autos.",
+      "after": "W joins: the charge cuts her damage — hold Defiant Dance for her step-up, not for Ice Shard."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E completes the engine: the stun into stacked-passive autos is half a health bar at 3. Mid lane rarely budgets for it.",
+      "after": "E completes the engine: Ring of Frost only reaches 450, so stun her from 850 and the root never gets cast."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Reset-dance the wave into his face: four stacks, E-stun, Q the kill threat. The lane is a minion-count quiz.",
+      "after": "Reset-dance the wave into her face: four stacks, E-stun, Q the kill threat. Frozen Tomb is not online yet."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Vanguard's Edge online — the all-in caps with a wall of disengage-proof marks. Dive with the wave as your fuel.",
+      "after": "Frozen Tomb online — on you it is a hard stun into Ring of Frost, on herself it is untargetable healing."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "First item spike: stacked trades delete mages and your sustain mocks their poke math.",
+      "after": "First item spike: on-hit stacked trades delete her whenever the CC chain is spent."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late Irelia surfs the fight: Q-reset through their line, stun the carry pair, and shred whoever peels.",
+      "after": "Late you outlast her: Q-reset through their line, stun the carry, and fight again once Frozen Tomb drops."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "He needs minions to hide behind and you eat minions for movement — dance the wave into his face and stun the apology.",
+      "after": "She needs minions to hide behind and you eat minions for movement — dance the wave into her face and stun the apology."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Lissandra wins by landing Glacial Path (Claw), denying your pattern, and owning the spacing war until your tempo starves.",
+      "after": "Lissandra wins by rooting you in Ring of Frost, chaining Frozen Tomb, then going untargetable the second you answer."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Q-reset through two low minions onto his chest, four-stack autos, E-stun the retreat — the wave-funded all-in he budgeted zero for.",
+      "after": "Q-reset through two low minions onto her chest, four-stack autos, E-stun the retreat — the wave-funded all-in she budgeted zero for."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Q-reset through two low minions onto his chest, four-stack autos, E-stun the retreat — the wave-funded all-in he budgeted zero for. Bad trade: Dashing in under-stacked with W down — Irelia without the engine is a melee minion with a famous haircut.",
+      "after": "Good trade: Q-reset through two low minions onto her chest, four-stack autos, E-stun the retreat — the wave-funded all-in she budgeted zero for. Bad trade: Dashing in under-stacked with W down — Irelia without the engine is a melee minion with a famous haircut."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Lissandra Glacial Path (Claw): matchup-defining — Her engage and escape in one button — she is immobile while it is down. Count it out loud if you must. - Your W Defiant Dance has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Glacial Path is 24s at rank 1 and still 12s at rank 5 — with the claw spent she has no exit at all. - Ring of Frost is 10s but only reaches 450, so land your 850 stun first. - Ice Shard is 7s at rank 1. - Frozen Tomb is 120s at rank 1 and her whole all-in waits on it."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "First item onward, the wave is a weapon: crash it into all-ins, R the disengage, and surf the side-lane resets between objectives.",
+      "after": "Her chain needs Ring of Frost inside 450 — stun her from 850 first, charge W through Ice Shard, and she never starts the fight."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Lissandra opens the score, reset expectations and respect Glacial Path (Claw) doubly. After a second, your job description changes — farm with Q resets and stay relevant through stacked windows.",
+      "after": "If Lissandra opens the score, respect the chain: Ring of Frost into Frozen Tomb is a guaranteed stun sequence — farm with Bladesurge resets and step up only while her 120s ult is down."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the dance — the wave funds dives no cooldown can, and your R turns skirmishes into no-exit interviews.",
+      "after": "Carry through the dance — Flawless Duet grounds Glacial Path, and Vanguard's Edge walls the ground her claw wants to land on."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, dance louder: crash waves into Lissandra's face, stun the answers, and surf resets through every river fight.",
+      "after": "Ahead, crash the wave into her: Glacial Path is 24s at rank 1, so a spent claw leaves her standing still in your stun."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Q-reset the wave into his face",
+      "after": "Q-reset the wave into her face"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Her engage and escape in one button — she is immobile while it is down. Commit on its cooldown, never into it.",
+      "after": "Glacial Path is 24s at rank 1 — while the claw is down she is immobile, so commit on its cooldown, never into it."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q-reset through two low minions onto his chest, four-stack autos, E-stun the retreat — the wave-funded all-in he budgeted zero for.",
+      "after": "Frozen Tomb on herself makes her untargetable and heals her — hold the rest of your damage until the ice breaks, not into it."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].t",
+      "before": "E-stun the disengage he attempts",
+      "after": "E-stun the disengage she attempts"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Lissandra’s rehearsed moment — don’t audition for it.",
+      "after": "Ring of Frost roots at 450 — never stand inside that circle."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Your dashes live in the wave's health bar — shoving mindlessly is deleting your own mobility.",
+      "after": "Ice Shard is 3s at rank 5 and passes through the target — do not eat it while your Q is down."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Dashing in under-stacked with W down — Irelia without the engine is a melee minion with a famous haircut.",
+      "after": "Her Frozen Thralls slow and then shatter around a corpse — never chase a kill through that field."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "He needs minions to hide behind and you eat minions for movement — dance the wave into his face and stun the apology.",
+      "after": "She needs minions to hide behind and you eat minions for movement — dance the wave into her face and stun the apology."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Q-reset through two low minions onto his chest, four-stack autos, E-stun the retreat — the wave-funded all-in he budgeted zero for. Great trade: Lissandra wastes Glacial Path (Claw) — commit immediately. Bad trade: Dashing in under-stacked with W down — Irelia without the engine is a melee minion with a famous haircut.",
+      "after": "Good trade: Q-reset through two low minions onto her chest, four-stack autos, E-stun the retreat — the wave-funded all-in she budgeted zero for. Great trade: Lissandra wastes Glacial Path — commit immediately, it is 24s. Bad trade: Dashing in under-stacked with W down — Irelia without the engine is a melee minion with a famous haircut."
+    },
+    {
+      "layer": "full",
+      "path": "report[13].t",
+      "before": "Ahead, dance louder: crash waves into Lissandra's face, stun the answers, and surf resets through every river fight.",
+      "after": "Ahead, crash the wave into her: Glacial Path is 24s at rank 1, so a spent claw leaves her standing still in your stun."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Irelia's early trades and dash pressure keep this close-to-favored despite Lissandra's poke and self-root risk on Glacial Path",
+      "after": "Irelia's early trades and dash pressure keep this close-to-favored despite Ice Shard poke, since Glacial Path is 24s at rank 1"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Bladesurge lets you close on Lissandra before she can safely poke with Ice Shard, and her Glacial Path self-root on cast means committing to it early leaves her exposed to your follow-up.",
+      "after": "Bladesurge lets you close on Lissandra before she can safely poke with Ice Shard, and with Glacial Path on 24s at rank 1 a claw spent early leaves her with nothing to answer your follow-up."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Levels 1-2 are close-ish since Lissandra's Ice Shard poke and Glacial Path root threaten careless positioning, but her self-root on Glacial Path's initial cast is a real punish window — if she over-commits to poke you, Bladesurge lets you close and capitalize immediately.",
+      "after": "Levels 1-2 are close-ish since Lissandra's Ice Shard poke and her Ring of Frost root threaten careless positioning, but Glacial Path is 24s at rank 1 — if she spends the claw to poke or reposition, Bladesurge lets you close and capitalize immediately."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Bait Glacial Path's self-root by threatening a trade, then punish the moment she commits",
+      "after": "Bait out Glacial Path by threatening a trade, then punish the 24s she has no claw"
+    }
+  ],
+  "notes": "Corrected a repeated kit error: the content layer treated Glacial Path as a root and as self-rooting Lissandra on cast. Riot's text gives it damage plus a recast teleport only; her root is Ring of Frost (450 range). Also added the Frozen Tomb self-cast interaction (untargetable, invulnerable, heals) which was flagged in _missing and appeared nowhere on the page — it is the main way an Irelia wastes a full combo here. breakdown.wave and breakdown.early left templated; the kit gives no Lissandra-specific wave hook."
+}

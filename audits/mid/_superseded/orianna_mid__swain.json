@@ -1,0 +1,291 @@
+{
+  "ownerKey": "orianna_mid",
+  "enemy": "swain",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer sides read Skill on rows 0, 1 and 2 while the content layer and packet levelChart all read Orianna.",
+      "why": "50.1% over 962 games. The first three levels are Orianna's on reach — Command: Attack is 815 against Death's Hand at 750, and Nevermove is a 12-second cooldown he cannot spam. From level 4 the root-and-pull all-in arrives and the lane is even until two items.",
+      "corrected": "phases[0..2].side set to Orianna with all three whys rewritten in the same group.",
+      "confidence": "High",
+      "sources": [
+        "packet.levelChart",
+        "currentText.content.win[]",
+        "ownerKit.Q range 815",
+        "enemyKit.Q range 750"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[4].why claimed your level 6 doubles your lane presence; the row is Skill and the actual level 6 event is his.",
+      "why": "Demonic Ascension is a flat 120 seconds at every rank, drains health from nearby champions and minions at 650 range, and lasts indefinitely while he keeps draining champions — that is what flattens your poke advantage at 6, and it is why the row is Skill rather than yours.",
+      "corrected": "phases[4].why and breakdown.spikes rewritten around the flat 120-second drain that outlasts chip damage.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit.R cd 120, range 650, text",
+        "content.spikes[1]"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The page never says how Nevermove actually works, and treats Demonic Ascension as the lane's timer when it is not.",
+      "why": "Nevermove (E, 12/11.5/11/10.5/10, 850) launches forward and roots on the RETURN trip, after which he can pull every rooted champion toward him — so the dodge is about where you stand when it comes back, not when it is thrown, and its cooldown is shorter during Demonic Ascension. Vision of Empire (W, 22/21/20/19/18) reaches 5500 units at rank 1 and 7500 at rank 5, slows, reveals, and feeds him a Soul Fragment off any champion it hits, which is why a frozen wave on his side is dangerous from off-screen. Ravenous Flock (P) converts those fragments into healing and permanent maximum health.",
+      "corrected": "breakdown.cooldowns, report[5].t, winCon and the do/don't bodies now carry the return-trip root, the 12-second cooldown, the 5500-unit W and the flat 120-second ultimate.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit E/W/P/R text, cooldowns and ranges"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no number and pointed at the wrong ability as the lane's clock.",
+      "why": "Nevermove at 12s rank 1 is what gates every step forward in lane; the ultimate is a fight-level timer, not a step-up one.",
+      "corrected": "Rewritten with Nevermove's 12s, Death's Hand's 7s and the flat 120s ultimate.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit cooldowns"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "report[8].t already says to add anti-heal early into his sustain, and Ravenous Flock explicitly heals him off Soul Fragments, so that advice stands and I left it.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "enemyKit.P text",
+        "missingInteractions needs-antiheal"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The missing-interactions feed asks for a 'bypasses stacking resistances — raw armour or MR is the wrong answer' line off a percentHealth flag on Ravenous Flock.",
+      "why": "Riot's text for Ravenous Flock says the fragments heal him and permanently increase his maximum health. That is health gain on his side, not percent-health damage on yours, and nothing in the kit says his damage ignores resistances. Flag misfire — not written.",
+      "corrected": "Not written. Only the healing and the permanent health gain are stated.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit.P text vs enemyKit.P flags"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d and dontsFull[2].d were the tradeGood/tradeBad strings pasted under unrelated titles. suspectNames flagged \"Demonic Ascension's\" in whys[4].",
+      "why": "The flagged string is an ordinary possessive of the correct ability name — a false positive, left alone.",
+      "corrected": "Both bled bullets rewritten to match their titles; the name flag ignored.",
+      "confidence": "High",
+      "sources": [
+        "currentText.full",
+        "packet.suspectNames"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Orianna"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Orianna"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Skill",
+      "after": "Orianna"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Ball on the wave, autos on his face — your passive-stacked autos win level 1 against almost every mid. Place, don't throw.",
+      "after": "Ball on the wave, autos on his face — 815 of reach against a 750 cone, and no Nevermove yet. Place, don't throw."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Q-W online: the classic chunk combo. Trade it on his last-hits and keep the ball where his approach must cross it.",
+      "after": "Q-W online: the classic chunk combo. Trade it on his last-hits and stand where the Nevermove return cannot clip you."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E completes the kit: ball-on-self beats his engage, ball-on-wave farms, ball-on-him threatens. The chess match begins.",
+      "after": "E completes the kit: ball-on-self answers the pull, ball-on-wave farms, ball-on-him threatens. Still yours on reach."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Lost Chapter timing — Q-W every wave contact now. The Dissonance field controls every step he takes near the ball.",
+      "after": "Lost Chapter timing — Q-W every contact, but only with Nevermove spent. The return trip roots you, not the throw."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Shockwave online — your lane presence doubles without casting anything. Every wave he contests is a potential flip.",
+      "after": "Demonic Ascension is a flat 120s of drain that outlasts chip damage. Fight it with your jungler or do not fight it."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Luden's spike: Q-W chunks a third of his bar. Shove, rotate, and let the ball-delivery threat run the river fights.",
+      "after": "Luden's spike, but soul fragments are permanent health — poke alone stops killing him. Shove, rotate, hold the R."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "The cleanest control mirror in the game — ball placement against his cooldowns, and the better-positioned sphere wins.",
+      "after": "A poke lane you win until he touches you — 815 against 750, and one Nevermove return reverses the whole exchange."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Out-position the ball war, win wave contacts, and own every river with Shockwave threat. Demonic Ascension is the clock this lane runs on — read it before every step forward.",
+      "after": "Out-position the ball war, win wave contacts, and own every river with Shockwave threat. Nevermove is the clock this lane runs on — 12 seconds at rank 1, and it roots on the way back."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Swain wins by landing Demonic Ascension, denying your pattern, and renting you the lane at a range markup.",
+      "after": "Swain wins by catching you with the Nevermove return, pulling you in, and draining his health back off your poke."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Ball on his farm path, Q-W the last-hit contact, auto-weave once, and recall the ball — three-second trades his combo math can't answer.",
+      "after": "Ball on his farm path, Q-W the last-hit contact, auto-weave once, and recall the ball — his 750 cone cannot reach you at 815."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Poking with the ball stranded at max range when his engage is up — an Orianna without her ball is a Doran's Ring with legs.",
+      "after": "Poking with the ball stranded while Nevermove is up — the return trip roots you and the pull decides where you die."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Ball on his farm path, Q-W the last-hit contact, auto-weave once, and recall the ball — three-second trades his combo math can't answer. Bad trade: Poking with the ball stranded at max range when his engage is up — an Orianna without her ball is a Doran's Ring with legs.",
+      "after": "Good trade: Ball on his farm path, Q-W the last-hit contact, auto-weave once, and recall the ball — his 750 cone cannot reach you at 815. Bad trade: Poking with the ball stranded while Nevermove is up, because the return trip roots you and the pull decides where you die."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. Check it before every step-up. - E Command: Protect is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+      "after": "- Nevermove: 12s at rank 1, 850 range — it roots on the way back, not the way out, and he pulls you afterwards. - Death's Hand is 7s at rank 1 and reaches 750. - Demonic Ascension is a flat 120s and runs as long as he keeps draining."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.spikes",
+      "before": "Lost Chapter steadies the trade game; level 6 doubles your lane presence; Luden's makes Q-W a third of a health bar.",
+      "after": "Lost Chapter steadies the trade game; level 6 belongs to his drain, not to you; Luden's makes Q-W a third of a bar."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a Q-W slow push you crash on roam timers — your clear is instant from Luden's and the ball travels with the shove. Worst wave: a frozen wave at his tower with the ball behind you — walking up ball-less into gank season is how Ori lanes end. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a Q-W slow push you crash while Nevermove sits on its 12 seconds and cannot hold you. Worst wave: a frozen wave at his tower with the ball behind you — Vision of Empire reaches 5500 units and reveals you for the collapse. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Swain takes first blood, tighten up: Demonic Ascension is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q-W clears and stay relevant through Shockwave threat.",
+      "after": "If Swain takes first blood, tighten up: soul fragments turn that lead into permanent health you cannot poke off. A second kill means the duel is over and the game isn’t — farm from 815 range and buy Grievous Wounds early."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the ball — no champion controls teamfight space like Orianna; one Shockwave on three is a won game, and you decide when it happens.",
+      "after": "Carry through the ball: his ultimate wants bodies inside 650 units, and your Shockwave decides who is standing there — pull his carries, not him."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, run the clock: shove with Q-W, zone Swain off every contact with ball threat, and rotate first to rivers — your Shockwave makes every skirmish a 5v4 audition.",
+      "after": "Ahead, run the clock: shove with Q-W, step up in the 12 seconds Nevermove is down, and deny the wave so his ravens never stack the health that makes him a problem."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "His drain mode — disengage and reset the fight when it starts. Bait it, count it, then go.",
+      "after": "Death's Hand reaches 750 and your ball reaches 815 — hold that gap and he farms under you."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Ball on his farm path, Q-W the last-hit contact, auto-weave once, and recall the ball — three-second trades his combo math can't answer.",
+      "after": "Nevermove is 12 seconds at rank 1, so every wave contact after it is spent is free — Q-W the contact, weave a passive auto, and step out."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Swain whiffs Demonic Ascension and the lane briefly belongs to you.",
+      "after": "Your passive ramps on repeat autos, and his 750 cone has to come to you."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Swain’s whole plan in one window — decline politely and watch it retire.",
+      "after": "A ball left idle out front is no shield when the Nevermove return roots you."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Ball-on-self is your Flash — stranding the sphere at poke range with his engage loaded is the only way this lane kills you.",
+      "after": "Ball-on-self is your Flash — stranding the sphere while Nevermove is up is how a root becomes a pull into his whole team."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Poking with the ball stranded at max range when his engage is up — an Orianna without her ball is a Doran's Ring with legs.",
+      "after": "R is 110s at rank 1 — spend it on a wave and you have no answer when his 120-second Demonic Ascension opens the fight."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "The cleanest control mirror in the game — ball placement against his cooldowns, and the better-positioned sphere wins.",
+      "after": "A poke lane you win until he touches you — 815 against 750, and one Nevermove return reverses the whole exchange."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Out-position the ball war, win wave contacts, and own every river with Shockwave threat. Demonic Ascension is the clock this lane runs on — read it before every step forward.",
+      "after": "Out-position the ball war, win wave contacts, and own every river with Shockwave threat. Nevermove is the clock this lane runs on — 12 seconds at rank 1, and it roots on the way back."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Ball on his farm path, Q-W the last-hit contact, auto-weave once, and recall the ball — three-second trades his combo math can't answer. Great trade: Swain wastes Demonic Ascension — commit immediately. Bad trade: Poking with the ball stranded at max range when his engage is up — an Orianna without her ball is a Doran's Ring with legs.",
+      "after": "Good trade: Ball on his farm path, Q-W the last-hit contact, auto-weave once, and recall the ball — his 750 cone cannot reach you at 815. Great trade: Swain whiffs Nevermove — you have twelve seconds, commit. Bad trade: Poking with the ball stranded while Nevermove is up, because the return trip roots you and the pull decides where you die."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: a Q-W slow push you crash on roam timers — your clear is instant from Luden's and the ball travels with the shove. Worst wave: a frozen wave at his tower with the ball behind you — walking up ball-less into gank season is how Ori lanes end. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a Q-W slow push you crash while Nevermove sits on its 12 seconds and cannot hold you. Worst wave: a frozen wave at his tower with the ball behind you — Vision of Empire reaches 5500 units and reveals you for the collapse. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Swain’s Demonic Ascension: His drain mode — disengage and reset the fight when it starts. The whole green-light system is its cooldown.",
+      "after": "Nevermove roots on the return trip, not the throw, and he pulls you afterwards. Demonic Ascension is a flat 120s and runs while he drains."
+    },
+    {
+      "layer": "full",
+      "path": "report[13].t",
+      "before": "Ahead, run the clock: shove with Q-W, zone Swain off every contact with ball threat, and rotate first to rivers — your Shockwave makes every skirmish a 5v4 audition.",
+      "after": "Ahead, run the clock: shove with Q-W, step up in the 12 seconds Nevermove is down, and deny the wave so his ravens never stack the health that makes him a problem."
+    }
+  ],
+  "notes": "Full-layer chart rows 0, 1 and 2 said Skill against a content layer and packet chart that both say Orianna; content was right and only the full sides move, with all three whys rewritten alongside. The page's biggest gap was Nevermove: it roots on the RETURN trip and he can then pull every rooted champion, and none of that appeared anywhere — the page instead named Demonic Ascension as the lane's clock, which is a fight timer rather than a step-up timer. Flag misfire noted and not written: the feed asked for a 'bypasses stacking resistances' line off a percentHealth flag on Ravenous Flock, but Riot's text describes healing and permanent maximum health, not percent-health damage. The needs-antiheal headline for the same passive IS supported and report[8].t already carries it. suspectNames flagged \"Demonic Ascension's\" in whys[4] — an ordinary possessive, left alone. phases[N].rating untouched: the rating scale is inconsistent across this dataset."
+}

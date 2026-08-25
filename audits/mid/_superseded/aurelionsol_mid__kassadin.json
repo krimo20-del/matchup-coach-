@@ -1,0 +1,102 @@
+{
+  "ownerKey": "aurelionsol_mid",
+  "enemy": "kassadin",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Early-lane text attributed a silence to Force Pulse and placed it at level 1-2.",
+      "why": "Force Pulse (E) is a 400-range cone slow on 21/20/19/18/17s and cannot be levelled before 3. The channel-breaking tool is Null Sphere (Q), 650 range, 9/8.5/8/7.5/7s, which also shields him.",
+      "corrected": "Levels 1-2 are lost to Null Sphere cancelling Breath of Light; Force Pulse only matters from 4-5 as a cone slow.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.packet.suspectNames"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart disagreed between layers on rows 3, 6 and 7: phases[2].side='Skill', phases[5].side='Kassadin', phases[6].side='Kassadin' against win[2]/win[5]/win[6]='Aurelion Sol'.",
+      "why": "packet.levelChart reads Kassadin, Kassadin, Aurelion Sol, Kassadin, Skill, Aurelion Sol, Aurelion Sol — matching the content layer.",
+      "corrected": "Full layer brought to the packet chart as one atomic group.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The two decisive interactions were absent everywhere: Astral Flight's terrain blocks Riftwalk, and Null Sphere interrupts your channels.",
+      "why": "Owner W is flagged 'terrain: creates terrain, blocks paths and dashes'; Riftwalk is flagged as a dash. Owner Q and W are both flagged interruptible channels, and Riot's Null Sphere text explicitly says it interrupts channels while shielding him.",
+      "corrected": "Written into breakdown.cooldowns, tradeBad, dontsFull[0].d, phases[3].why and dosFull[1].d.",
+      "confidence": "High",
+      "sources": ["brief.missingInteractions", "brief.ownerKit", "brief.enemyKit"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Nothing mentioned Void Stone, despite your damage being entirely magic.",
+      "why": "Kassadin's passive reduces magic damage taken. Every point of Breath of Light and Singularity damage is magic.",
+      "corrected": "Recorded in breakdown.carry and dontsFull[2].d — buy penetration rather than raw AP into him.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "No cooldown-sequencing lines existed (packet defect confirmed: sequencingCues 0).",
+      "why": "Null Sphere 7-9s, Force Pulse 17-21s, Riftwalk down to 2s, your Astral Flight 22s at rank 1.",
+      "corrected": "breakdown.cooldowns now gives the concrete bait-then-beam order.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Aurelion Sol" },
+    { "layer": "full", "path": "phases[5].side", "before": "Kassadin", "after": "Aurelion Sol" },
+    { "layer": "full", "path": "phases[6].side", "before": "Kassadin", "after": "Aurelion Sol" },
+
+    { "layer": "full", "path": "enemyWin", "before": "Kassadin wins by landing Riftwalk, denying your pattern, and front-loading the violence while your kit is still stretching.", "after": "Kassadin wins by cancelling your beam with Null Sphere, shrugging off magic damage with Void Stone, and Riftwalking onto you at 6." },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Kassadin Riftwalk: matchup-defining — His mobility spike — the lane is decided before it scales. Read it like a second minimap. - Guard your W Astral Flight like a fifth summoner spell. - Ultimate goes to kill windows only.", "after": "- Riftwalk: 500 range, down to 2s at rank 3 — you never outrun it, so wall it off with Astral Flight terrain instead. - Null Sphere is 7-9s and cancels your channel: bait it out, then beam. - Force Pulse only reaches 400." },
+
+    { "layer": "full", "path": "tradeGood", "before": "W-flyby: fly a lateral arc, drag Q across Kassadin for two seconds of burn + stacks, and land outside his answer range — repeat forever from one item.", "after": "W-flyby: fly a lateral arc, drag Breath of Light across Kassadin for two seconds of burn and Stardust, and land where his 500-range Riftwalk cannot follow." },
+
+    { "layer": "full", "path": "tradeBad", "before": "Channelling Q face-to-face inside his engage range with W down — every champion that touches you wins that exchange pre-items.", "after": "Channelling Q inside 650 with Astral Flight down — Null Sphere cancels the beam, shields him, and Riftwalk closes the rest for free." },
+
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: W-flyby: fly a lateral arc, drag Q across Kassadin for two seconds of burn + stacks, and land outside his answer range — repeat forever from one item. Bad trade: Channelling Q face-to-face inside his engage range with W down — every champion that touches you wins that exchange pre-items.", "after": "Good trade: W-flyby: fly a lateral arc, drag Breath of Light across Kassadin for two seconds of burn and Stardust, and land where his 500-range Riftwalk cannot follow. Bad trade: Channelling Q inside 650 with Astral Flight down — Null Sphere cancels the beam, shields him, and Riftwalk closes the rest for free." },
+
+    { "layer": "full", "path": "ahead", "before": "Ahead, compound it: shove with E executes, burn Kassadin on every W rotation, and group early — your beam turns small mid-game leads into unanswerable objective control.", "after": "Ahead, deny him the wave: E-execute the back line, and drop Astral Flight terrain between him and his Riftwalk exit so a mana-hungry Kassadin has to fight at your beam's range." },
+
+    { "layer": "full", "path": "breakdown.feeding", "before": "If Kassadin gets a kill, the lane gets honest — give Riftwalk extra room and farm it back. Two kills: stop dueling your tilt — farm with E executes and stay relevant through the stardust curve.", "after": "If Kassadin gets a kill, his mana problem eases — never channel Q inside 650 and farm from the back line. Two kills: stop contesting mid, take side waves with black holes, and bank the Stardust curve." },
+
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry by scaling honestly — every stardust stack is permanent, and the 30-minute version of you wins fights your laning self cannot imagine.", "after": "Carry by walling him off: Astral Flight terrain denies Riftwalk, Void Stone means you buy penetration, and every Stardust stack is permanent." },
+
+    { "layer": "full", "path": "dosFull[0].d", "before": "His mobility spike — the lane is decided before it scales. Commit on its cooldown, never into it.", "after": "Null Sphere is his only reach at 650 — hold wave near tower, farm at 750, and make him walk into your beam." },
+
+    { "layer": "full", "path": "dosFull[1].d", "before": "W-flyby: fly a lateral arc, drag Q across Kassadin for two seconds of burn + stacks, and land outside his answer range — repeat forever from one item.", "after": "Falling Star stuns him out of the Riftwalk landing and Astral Flight's terrain denies the second jump — spend a 120s ult on his commit, never on the wave." },
+
+    { "layer": "full", "path": "dosFull[2].d", "before": "Kassadin spends Riftwalk early — the closest thing this matchup has to a guarantee.", "after": "Kassadin burns Riftwalk to farm or roam — that is your window to step up and beam." },
+
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Kassadin’s rehearsed moment — don’t audition for it.", "after": "Null Sphere interrupts channels — the beam dies on cast." },
+
+    { "layer": "full", "path": "dontsFull[1].d", "before": "Your flight is your only escape — a W spent poking is a death sentence against the next gank.", "after": "Astral Flight is 22s and your only wall against Riftwalk — spend it poking and his dive is free." },
+
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Channelling Q face-to-face inside his engage range with W down — every champion that touches you wins that exchange pre-items.", "after": "Void Stone cuts the magic damage you trade with, so a pre-item shove contest just feeds him Nether Blade procs and your health bar." },
+
+    { "layer": "full", "path": "phases[3].why", "before": "W lets you Q while flying — the burn-flyby trade is real now. In-and-out: never land inside his engage range.", "after": "Astral Flight removes the Q cooldown while flying — burn him on the arc, and the terrain it leaves blocks Riftwalk." },
+
+    { "layer": "full", "path": "phases[4].why", "before": "Falling Star online — the self-peel stun your kit was missing. With R up, his dive math suddenly has a second variable.", "after": "Falling Star is the self-peel stun your kit lacked, and it lands on the Riftwalk arrival — hold it for his jump, not the wave." },
+
+    { "layer": "content", "path": "whys[0]", "before": "Force Pulse's silence and poke range outclass your unscaled stars at level 1, he wins the early exchange", "after": "Null Sphere interrupts your Breath of Light channel and shields him, so he wins the level-1 exchange" },
+    { "layer": "content", "path": "whys[1]", "before": "Same poke pattern still favors him at level 2 before your stars carry real weight", "after": "Nether Blade's auto reset plus Null Sphere still out-trades your unstacked beam at 2" },
+    { "layer": "content", "path": "whys[2]", "before": "Your stacked stars and Q comet finally outrange his short trades at level 3, flipping this level to you", "after": "Singularity plus a 750-range beam finally outranges his 650 Null Sphere at 3, flipping the level" },
+    { "layer": "content", "path": "whys[3]", "before": "His damage scaling catches back up by level 4 and the poke advantage returns to him", "after": "Force Pulse arrives and his Nether Blade trades scale faster than your beam at 4-5" },
+    { "layer": "content", "path": "whys[4]", "before": "Both ultimates unlock at 6 with no clean kit edge either way, this window is a genuine skill check", "after": "Riftwalk is 500 range on a 5s cooldown; Falling Star answers it only if you hold R for his jump" },
+    { "layer": "content", "path": "whys[5]", "before": "Your stacked stars and long-range ultimate keep you ahead of his hypercarry scaling into two items", "after": "Astral Flight terrain walls off Riftwalk, so your first-item beam keeps you ahead of his scaling" },
+    { "layer": "content", "path": "whys[6]", "before": "His Riftwalk-chain burst late plus your stacked kit makes the late game a genuine coinflip decided by play", "after": "Void Stone cuts your magic damage, but The Skies Descend hits before Riftwalk-chains ever reach you" },
+
+    { "layer": "content", "path": "early", "before": "Levels 1-2 are close to even-favoring-him since Force Pulse's silence and poke punishes your wide star orbit before it does real damage, though you can flip level 3 hard once your stars stack and your Q comet finally outranges his short trades. Levels 4-5 swing back toward him as his damage scales and your spike cools off, so treat this phase as a back-and-forth rather than a one-sided lane.", "after": "Levels 1-2 favor him: Null Sphere interrupts your Breath of Light channel outright and leaves him shielded, so every beam you start inside 650 is wasted mana. Level 3 flips hard — Singularity on the wave plus a 750-range beam outranges his Q, and he has no answer that reaches you. Levels 4-5 swing back as Force Pulse adds a cone slow and Nether Blade resets his auto into a real trade." },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Kassadin's Nether Blade proc and Force Pulse silence punish your slow star setup early, but by level 3 your stacked stars and Q comet start outranging his short-range poke, flipping that single level in your favor before he catches back up at 4-5.", "after": "Kassadin's Nether Blade auto reset and Null Sphere's channel interrupt punish your beam early, but level 3 flips it: Singularity on the wave plus your 750-range Breath of Light outranges his 650 Null Sphere, until Force Pulse arrives and he trades back." }
+  ],
+  "notes": "Full-layer level chart disagreed with the content layer and with packet.levelChart on three rows; fixed as one group. The derived flag on Kassadin's Null Sphere marks it a 'channel', which contradicts Riot's own text (it interrupts channels, it is not one) — I did not write any claim that your Falling Star cancels his Q. Missing-interactions listed that as a rule and I judged it unsupported. breakdown.wave, report[3].t and report[5].t remain templated; the wave text is owner-generic rather than wrong, and I had nothing Kassadin-specific that fitted the band. Grievous Wounds is irrelevant here; no anti-heal line written."
+}

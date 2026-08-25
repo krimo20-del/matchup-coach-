@@ -1,0 +1,111 @@
+{
+  "ownerKey": "katarina_mid",
+  "enemy": "diana",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "49.9% over 4711 games is a true coin flip and EVEN 5.5/10 matches it. The lane is not uniformly even though: Katarina owns 1-5, Diana owns level 6, and Diana owns 2+ items.",
+      "corrected": "No label change; the chart now shows where the difficulty actually sits instead of reading 'Skill' on every row.",
+      "confidence": "High",
+      "sources": ["packet winRate/games", "packet.levelChart"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Every full-layer phases[N].side read 'Skill' while the content layer and the packet both read Katarina/Katarina/Katarina/Katarina/Diana/Katarina/Diana. The page gave two different answers to who wins Level 6.",
+      "why": "The spikes are real and sourced: Lunar Rush is 22s at rank 1 unless Crescent Strike has marked you, so levels 3-5 are Katarina's; Moonfall at 100s is an on-command pull that ends the Death Lotus channel, so level 6 is Diana's; Pale Cascade (15s down to 9s) plus her passive attack speed win the 2+ item brawl.",
+      "corrected": "phases[0..3].side -> Katarina, phases[4].side -> Diana, phases[5].side -> Katarina, phases[6].side -> Diana, with ratings moved to match and phases[4].why / phases[6].why rewritten in the same proposal because their verdict flipped. win[0..6] already holds these values on disk.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[0..6]", "enemyKit Diana E/R/W cooldowns"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit. dosFull[1].d was tradeGood pasted under 'Blink to daggers, not targets', dontsFull[2].d was tradeBad pasted under 'Fight away from your steel'. Six fields called Diana 'his' or 'him'. dosFull[2].d invented a 'fifteen-second invitation' — Crescent Strike is 8s at rank 1, and the 22s number that matters belongs to Lunar Rush.",
+      "why": "Two interactions decide this matchup and both are in Riot's text. Lunar Rush has no cooldown against a Moonlight-afflicted target, so a dodged 900-range Crescent Strike turns her engage into a 22-second commitment. Moonfall draws in and slows at 475 range; Katarina's R is flagged channel-interruptible, so that pull cancels Death Lotus outright — which is exactly why level 6 belongs to her.",
+      "corrected": "Real numbers now in breakdown.cooldowns (E 22s->14s and free on Moonlight, R 100/90/80, W 15s->9s); the pull-cancels-channel rule stated in tradeBad, dontsFull[2].d and phases[4].why; every misgendered pronoun corrected.",
+      "confidence": "High",
+      "sources": ["enemyKit Diana Q/E/R text and cooldowns", "ownerKit Katarina R channel flag", "champ-gender.js — diana is female"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no number (lint COOLDOWN_NO_DIGIT), and the one number written anywhere near it — 'fifteen-second' in dosFull[2].d — matched no ability in her kit.",
+      "why": "Lunar Rush at 22s rank 1 is the punishable cooldown, and it is only punishable while you are unmarked. Moonfall at 100s is the one that decides when you may use your own 45-75s ultimate.",
+      "corrected": "Both fields rewritten against the kit's numbers.",
+      "confidence": "High",
+      "sources": ["enemyKit Diana E/R"]
+    },
+    {
+      "point": 7,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.wave used the placeholder 'a CC mage's tower' — Diana is not a CC mage and has no stun.",
+      "why": "The actual wave danger is a freeze near her tower where a single Crescent Strike marks you and makes Lunar Rush free.",
+      "corrected": "Rewritten around her 50-mana Q clear and the mark-then-free-dash sequence.",
+      "confidence": "High",
+      "sources": ["enemyKit Diana Q cost/range", "enemyKit Diana E text"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The brief's missingInteractions entry claims Katarina's Q shuts off Lunar Rush. It is built on a 'grounding' derived flag on her Q that contradicts Riot's own description.",
+      "why": "Riot's text for the Q is a dagger thrown at a target that bounces and ricochets to the ground. Nothing in it grounds anyone. Writing 'hold Q for her engage, it stops the dash' would have handed a reader a rule that gets them killed the first time they try it.",
+      "corrected": "Not written. dosFull[0].t already avoids it in this matchup and no new field asserts it.",
+      "confidence": "High",
+      "sources": ["ownerKit Katarina Q text vs flags", "brief missingInteractions enemy-dash-deniable"]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "No patch claim in the text and nothing in the brief points to a recent change.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["brief"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Diana" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[4].why", "before": "Death Lotus online — any 2v2 near your daggers is a blender invoice. The reset engine is armed.", "after": "Moonfall pulls you out of Death Lotus on command — her 6 beats your 6 until her 100s R is spent." },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Diana" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Kata is a chain reaction: enter on daggers, lotus the clump, reset through the wreckage, repeat until silence.", "after": "Pale Cascade and her passive attack speed let her tank a full rotation — stop dueling and take whoever she dove past." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Diana Crescent Strike: matchup-defining — Moonlight marks reset her dash — sidestep the arc and her dive has no follow-up. It governs your forward steps. - E Shunpo (second use) spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Lunar Rush (E): 22s at rank 1, 14s at rank 5 — but free onto anything marked by Crescent Strike, so dodge the 900-range arc and her dive costs 22 seconds. - Moonfall (R): 100/90/80 — the pull ends Death Lotus, so your 45s R waits for hers. - Pale Cascade shield is 15s down to 9s." },
+    { "layer": "full", "path": "tldr", "before": "A reset duel — your daggers out-sustain his windows, and the first kill in any skirmish turns you into the weather.", "after": "A reset duel until 6 — your daggers beat her windows, then Moonfall arrives and the R that fires second wins." },
+    { "layer": "full", "path": "report[0].t", "before": "A reset duel — your daggers out-sustain his windows, and the first kill in any skirmish turns you into the weather.", "after": "A reset duel until 6 — your daggers beat her windows, then Moonfall arrives and the R that fires second wins." },
+    { "layer": "full", "path": "tradeGood", "before": "Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow.", "after": "Q the wave, E to the landed dagger, W out — trade in bursts shorter than her Pale Cascade shield." },
+    { "layer": "full", "path": "tradeBad", "before": "Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Channel Death Lotus with Moonfall available — her 475-range pull drags you in and ends the spin before it pays." },
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow. Bad trade: Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Good trade: Q the wave, E to the landed dagger, W out — trade in bursts shorter than her Pale Cascade shield. Bad trade: Channel Death Lotus with Moonfall available — her 475-range pull drags you in and ends the spin before it pays." },
+    { "layer": "full", "path": "dosFull[0].d", "before": "Moonlight marks reset her dash — sidestep the arc and her dive has no follow-up. Its cooldown is the green light — wait for it.", "after": "In a 2v2 she must spend Moonfall to peel herself or her ally, and a spent 100s R is the only time Death Lotus is safe to channel." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow.", "after": "Her Q marks you and makes Lunar Rush free — stand where the arc has already passed before you commit." },
+    { "layer": "full", "path": "dosFull[2].t", "before": "Lotus after his interrupt, never before", "after": "Lotus after Moonfall, never before" },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Diana burns Crescent Strike on nothing — take the fifteen-second invitation.", "after": "Diana whiffs Crescent Strike and her dash costs 22s — take the window." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Diana’s bread-and-butter play — deny it and they run out of answers.", "after": "Pale Cascade shields her and the passive attack speed wins any even-HP brawl." },
+    { "layer": "full", "path": "dontsFull[1].d", "before": "Your lotus dies to one interrupt — counting their CC before spinning is the entire skill floor of the champion.", "after": "Shunpo is 12s at rank 1; spend it walking in and there is no exit from a 475-range Moonfall pull at all." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Away from a landed dagger you have no repositioning, and her R only needs you inside 475 units to end the fight." },
+    { "layer": "full", "path": "enemyWin", "before": "Diana wins by landing Crescent Strike, denying your pattern, and cashing the all-in before your pattern matures.", "after": "Diana wins by marking you with Crescent Strike for a free Lunar Rush, then holding Moonfall for the moment you channel." },
+    { "layer": "full", "path": "ahead", "before": "Ahead, chain it: zone Diana off daggers, lotus every skirmish, and reset through the map — fed Katarina is a weather event.", "after": "Ahead, punish every whiffed Q: without Moonlight her E is a 22-second commitment, so step up the second the arc misses." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through chain reactions — one kill is three; your job is the first domino and the discipline to wait for it.", "after": "You carry before 6 and after her R: kill Diana while Moonfall is down, or kill everything she dove past instead." },
+    { "layer": "full", "path": "breakdown.wave", "before": "Best wave: a Q-bounced thin push with daggers banked at the river mouth — your roams arrive with luggage. Worst wave: a frozen wave near a CC mage's tower — every pickup walk is a stun audition. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.", "after": "Best wave: shoved thin so she has to walk up into your dagger to farm — her Q clear is 50 mana a cast. Worst wave: frozen near her tower, where one Crescent Strike marks you and Lunar Rush becomes free. Crash timing: crash and roam pre-6; after 6, only crash when her Moonfall is on cooldown." },
+    { "layer": "full", "path": "breakdown.early", "before": "Dagger geometry and patience — chip the no-CC kits, bait the CC ones, and bank patterns for the 6 that changes the lane's species.", "after": "Trade in bursts under her Pale Cascade shield and back out — her passive needs three autos and her Q is awkward inside 625." },
+    { "layer": "full", "path": "breakdown.mid", "before": "First item onward, hunt skirmishes: every 2v2 near your daggers is a reset chain waiting for a signature. Roam when mid stalls.", "after": "Levels 3-5 are yours off every dodged Q; at 6 the lane flips — shove and roam rather than coin-flip an all-in into Moonfall." },
+    { "layer": "full", "path": "breakdown.spikes", "before": "Level 3 dagger strings set the lane; level 6 arms the blender; first item makes resets explosive.", "after": "Level 3 is yours; her 6 beats yours outright; first item you take the duel back until she hits two." },
+    { "layer": "full", "path": "breakdown.late", "before": "You are the cleanup that starts fights: enter on steel, lotus the clump, reset through the kill, and exit through the panic.", "after": "Late you play second: she dives first, you enter after Moonfall is spent and take the carries she left standing behind her." },
+    { "layer": "full", "path": "report[3].t", "before": "Good trade: Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow. Great trade: Diana wastes Crescent Strike — commit immediately. Bad trade: Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Good trade: Q the wave, E to the landed dagger, W out — trade in bursts shorter than her Pale Cascade shield. Great trade: Diana whiffs Crescent Strike — her dash costs 22s, commit immediately. Bad trade: Channel Death Lotus with Moonfall available — her 475-range pull drags you in and ends the spin before it pays." },
+    { "layer": "full", "path": "report[9].t", "before": "Commit on Crescent Strike’s cooldown, on your first item spike, and with your jungler’s setup. Make him flinch first.", "after": "Commit on Crescent Strike’s cooldown, on your first item spike, and with your jungler’s setup. Make her flinch first." }
+  ],
+  "notes": "Chart: the full layer read 'Skill' on all seven rows while the content layer and packet both read Katarina x4 / Diana / Katarina / Diana. I moved the full sides to match; win[0..6] already holds those values on disk so there is no paired content edit to write, and phases[4].why and phases[6].why were rewritten in the same proposal because their verdict flipped to Diana. The packet suspectName 'Crescent Strike's' is a FALSE POSITIVE — it is the possessive of the correct name; left alone. REJECTED the brief's missingInteractions claim that Katarina's Q grounds Lunar Rush: it comes from a derived flag that contradicts Riot's description of the Q, and the same bad flag appeared on the Brand brief, so the rule generator is worth checking. Also fixed dosFull[2].d, which invented a 'fifteen-second' cooldown that matches nothing in Diana's kit."
+}

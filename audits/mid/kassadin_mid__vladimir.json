@@ -1,0 +1,97 @@
+{
+  "ownerKey": "kassadin_mid",
+  "enemy": "vladimir",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Vladimir pays health, not mana: Transfusion, Sanguine Pool, Tides of Blood and Hemoplague all cost 0 mana, so he never runs out of poke against a melee who must walk in. Kassadin has no answer until Riftwalk. 50.41% over 1827 games matches an EVEN 5.5/10 that is lopsided by stage.",
+      "corrected": "Early and mid belong to Vladimir; the game belongs to Kassadin at three items.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit costs", "brief.packet"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Vladimir's spikes are Sanguine Pool rank-ups (28s at rank 1 down to 16s at rank 5) and Hemoplague at 120s flat. Kassadin's are level 6, Rod of Ages, and level 16. The existing spikes[] entries already sit on the right timings.",
+      "corrected": "Left the spike timings; rewrote spikes[0].text to carry the real cooldown instead of an unsourced claim about dodging the whole kit.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit W/R", "brief.ownerKit R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page asserted Sanguine Pool dodges 'your entire kit' and 'your Q/E through the ground'. The kit supports the untargetable dodge of Null Sphere (a targeted orb) but gives no basis for the area claim about Force Pulse.",
+      "why": "Null Sphere 'fires an orb of void energy at a target' — untargetability denies it outright, and it is also your shield, so a poolied Q costs you both halves. The kit does not state how the 2s untargetability interacts with Force Pulse's cone or Riftwalk's on-arrival damage, so I did not assert it.",
+      "corrected": "spikes[0].text now states the targeted-Q denial and the real 9s/4.6s Transfusion cooldowns; the area claim is removed rather than replaced with a guess.",
+      "confidence": "High",
+      "sources": ["brief.ownerKit Q text", "brief.enemyKit W flags: untargetable"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT), and dosFull[2].d called Sanguine Pool a 'fifteen-second invitation'.",
+      "why": "Sanguine Pool is 28/25/22/19/16s — never 15s at any rank. That is a magnitude with no source (defect 6).",
+      "corrected": "Both fields rewritten with the real numbers.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit W"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.you[1] said only 'avoid extended trades', never naming the item answer, despite the missingInteractions entry flagging anti-heal as the deciding factor.",
+      "why": "Transfusion heals on a 4.6s cooldown at rank 5 for zero mana and Hemoplague heals off every champion hit; Grievous Wounds timing is what decides extended trades.",
+      "corrected": "wants.you[1] now names anti-heal.",
+      "confidence": "High",
+      "sources": ["brief.missingInteractions needs-antiheal", "brief.enemyKit Q/R heal flags"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Vladimir Sanguine Pool: matchup-defining — Untargetable dodge — bait it before you spend your kill window. Check it before every step-up. - R Riftwalk is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+      "after": "- Vladimir Sanguine Pool: matchup-defining — 28s at rank 1 down to 16s at rank 5, and only 2s of untargetability; step up on the cooldown, never on his health bar. - Transfusion heals every 4.6s at rank 5 for zero mana — anti-heal or nothing."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q-shield his key spell, W refund the auto, walk — pre-6 trades are accounting; post-6 add a blink and they're arguments you win.",
+      "after": "Nether Blade refunds mana every 7s on the empowered auto, and a farmed lane is what pays for the Riftwalk chains after 6."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Vladimir burns Sanguine Pool on nothing — take the fifteen-second invitation.",
+      "after": "Vladimir burns Sanguine Pool on nothing — that is a 28s window at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Trading like the late game already arrived — a level 5 Kassadin with ambitions is a gold bounty with a shield.",
+      "after": "Transfusion costs no mana and heals every 4.6s at rank 5 — a long trade before items only fills his health bar."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Vladimir wins by landing Sanguine Pool, denying your pattern, and keeping the fight at a distance your kit resents.",
+      "after": "Vladimir wins by healing through your chip with a free Transfusion and pooling out of the one all-in you get before 6."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Vladimir's Transfusion poke plus Sanguine Pool immunity make him nearly unpunishable in early trades, since he can dodge your Q/E through the ground and heal it right back.",
+      "after": "Vladimir's Transfusion costs no mana and heals every 9s at rank 1, and Sanguine Pool's 2s of untargetability eats the targeted Null Sphere you were saving for the shield."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Avoid extended trades where his healing wins the exchange",
+      "after": "Rush anti-heal; his healing wins any extended trade"
+    }
+  ],
+  "notes": "CHART LEFT ALONE ON PURPOSE — pre-existing cross-layer disagreement I did not introduce: all seven phases[N].side read 'Skill' in the full layer while win[0..5] read 'Vladimir' and win[6] reads 'Kassadin' in the content layer. The packet levelChart agrees with the content layer. I could not repair these as matched pairs because the content half already holds the value the full half would move to, leaving no before/after delta on that side of the pair, and an unpaired side edit is exactly what the chart rule forbids. Flagging all seven rows for tools/mirror-fix.js. Templated fields judged and left rather than fabricated: breakdown.carry, breakdown.wave, breakdown.early, ahead, tradeGood, tradeBad — none of them say anything Vladimir-specific, but the kit gives me no Vladimir-specific replacement at that length that I can source. Also note Tides of Blood's Riot text says it 'can be blocked by enemy units' — a real minion-block interaction that no field mentions, but the text does not say whether that means the projectile or the area, so I did not write it."
+}

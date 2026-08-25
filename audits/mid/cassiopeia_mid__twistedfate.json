@@ -1,0 +1,200 @@
+{
+  "ownerKey": "cassiopeia_mid",
+  "enemy": "twistedfate",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full layer read Skill on rows 0-4 and 6 while win[0..6] read Cassiopeia on all seven, and the packet flags a 7/7 sweep against a 47.98% win rate.",
+      "why": "Cassiopeia genuinely owns the lane rows — 850 Q against a champion with no dash before 6 — but the late row is not hers: Destiny reveals from 5500 and Gates him behind a mage with no escape, which is where the win rate leaks.",
+      "corrected": "phases[0..4].side moved to Cassiopeia to match win[N] (already Cassiopeia, so no paired edit needed), and row 6 moved to Twisted Fate on BOTH layers (phases[6].side + win[6]) with phases[6].why and whys[6] rewritten to argue it.",
+      "confidence": "Medium",
+      "sources": ["packet winRate 47.98 / 742 games", "packet defects", "enemyKit R range 5500 / cd 170-110"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[3] and the content 'late' field named 'Gold Card'/'Gold Cards' as if it were an ability.",
+      "why": "The ability is Pick a Card; gold is one of its three card colours.",
+      "corrected": "Both rewritten to Pick a Card, and the level 6 spike reframed around Destiny's 170s cooldown being spent on other lanes.",
+      "confidence": "High",
+      "sources": ["packet suspectNames", "enemyKit W"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The combo tell was never stated. Pick a Card is an auto-attack reset at 200 range on a flat 6s cooldown — the card lock and wind-up is the cue, not the cast — and the page instead sold Miasma's grounding against a champion whose only movement ability is Destiny's Gate.",
+      "why": "Riot text: 'chooses a magic card from his deck, and uses that for his next attack'; the kit flags it autoReset. Destiny is the only dash-flagged ability in his kit.",
+      "corrected": "Stated the reset tell and the step-back timing, and recast Miasma as a slow that pins a champion with no escape.",
+      "confidence": "High",
+      "sources": ["enemyKit W text/flags", "missingInteractions autoreset-burst-tell", "ownerKit W"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns held no digit and the packet flags zero sequencing advice anywhere.",
+      "why": "It is the field that must carry real numbers.",
+      "corrected": "Pick a Card flat 6s, Wild Cards 6s to 5s, Destiny 170s at rank 1, each attached to a decision.",
+      "confidence": "High",
+      "sources": ["enemyKit cooldowns", "packet defects"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Two bullets were verbatim tradeGood/tradeBad pastes under unrelated titles.",
+      "why": "lintFindings COPY_PASTE_BLEED.",
+      "corrected": "Bodies rewritten to match their titles using the R facing rule and the Pick a Card reset.",
+      "confidence": "High",
+      "sources": ["lintFindings"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Cassiopeia" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Cassiopeia" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Cassiopeia" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Cassiopeia" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Cassiopeia" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Twisted Fate" },
+    { "layer": "content", "path": "win[6]", "before": "Cassiopeia", "after": "Twisted Fate" },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late-game Cass is a hyper-carry: ground their divers, petrify their engage, and machine-gun whoever is closest.",
+      "after": "Destiny reveals your team from 5500 and Gates him in behind you in 1.5s — with no dash you are the flank target."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Cassiopeia holds the lane matchup even after he grabs a pick with Destiny since he still loses any direct fight",
+      "after": "Destiny reveals your team and Gates him in behind you, and with no dash you are the easiest flank to catch"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q poke on his last-hits — the poison-into-E pattern starts at level 1 and your DPS already out-trades most mids.",
+      "after": "Wild Cards costs 60 mana at rank 1 and only chips; poison his approach and your 850 Q answers every card."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "W changes the geometry: miasma GROUNDS dashes. Drop it on his engage path and the lane's mobility advantage evaporates.",
+      "after": "Miasma grounds dashes and he has none before 6 — here it is a slow that pins a champion with no escape while fangs tick."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Petrifying Gaze online — the all-in answer. Face-stun his engage or slow his retreat; either way the fangs finish it.",
+      "after": "Petrifying Gaze answers any walk-up, and Destiny is 170s at rank 1 — he would rather spend it on your teammates."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Twisted Fate Pick a Card (Gold): matchup-defining — The locked gold card starts every trade and gank — back off the moment it glows yellow. Count it out loud if you must. - Your R Petrifying Gaze has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Pick a Card is a flat 6s at every rank: the card lock plus its attack reset is the tell, so step back on the wind-up rather than on the cast. - Wild Cards is 6s at rank 1 down to 5s at rank 5, and it pierces the whole minion line. - Destiny is 170s at rank 1 — when it goes, another lane pays for it."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Twisted Fate wins by landing Pick a Card (Gold), denying your pattern, and out-ranging your plan one polite trade at a time.",
+      "after": "Twisted Fate wins by shoving you in with Wild Cards, then cashing a 170-second Destiny into kills in somebody else's lane."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q the last-hit window, E-E-E while the poison ticks, and walk back as it fades — three fangs and out, repeat until Twisted Fate is executable.",
+      "after": "Petrifying Gaze stuns only enemies facing you and slows the rest, so make him walk in at you before you spend a 120-second ultimate."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Twisted Fate whiffs Pick a Card (Gold) and the lane briefly belongs to you.",
+      "after": "His Wild Cards is 6s and Pick a Card 6s — chain fangs through the gap."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Twisted Fate’s rehearsed moment — don’t audition for it.",
+      "after": "The card lock is the wind-up; by the attack it is already too late."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Your miasma is the anti-dive — spending it on poke means the next engage arrives ungrounded and you have no boots to run.",
+      "after": "Petrifying Gaze is 120s at rank 1 — spending it to escape gives up the one thing that stops him kiting you at card range."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Spamming unpoisoned fangs at full mana cost, or holding W so long the dash you were saving it for already happened.",
+      "after": "Pick a Card resets his attack every 6s, so a half-health fang duel hands him exactly the burst window he needs."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Spamming unpoisoned fangs at full mana cost, or holding W so long the dash you were saving it for already happened.",
+      "after": "Spamming unpoisoned fangs at full mana cost, or standing at 700 range while his Pick a Card is already locked."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Q the last-hit window, E-E-E while the poison ticks, and walk back as it fades — three fangs and out, repeat until Twisted Fate is executable. Bad trade: Spamming unpoisoned fangs at full mana cost, or holding W so long the dash you were saving it for already happened.",
+      "after": "Good trade: Q the last-hit window, E-E-E while the poison ticks, and walk back as it fades — three fangs and out, repeat until Twisted Fate is executable. Bad trade: spamming unpoisoned fangs at full mana cost, or standing at 700 range while his 6-second Pick a Card is already locked."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a frozen wave at his tower while an assassin roams — you have no boots (passive) but no dash either; warded rivers or no shoves. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.",
+      "after": "Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a wave pushed to his tower while Destiny is up — you have no boots (passive) and no dash; ward the rivers or do not shove. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a frozen wave at his tower while an assassin roams — you have no boots (passive) but no dash either; warded rivers or no shoves. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.",
+      "after": "Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a wave pushed to his tower while Destiny is up — you have no boots (passive) and no dash; ward the rivers or do not shove. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry by DPS — no mid matches your damage-per-second from two items; your job is staying alive long enough to prove it.",
+      "after": "Carry by uptime: your Q is 3.5s to his 6s Pick a Card, so poison never leaves him and fangs finish what the cards start."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, suffocate: poison every last-hit, zone Twisted Fate off the wave with fang threat, and call your jungler — your W makes every gank a guaranteed kill.",
+      "after": "Ahead, deny the roam: shove the wave with Q-E before he can, poison him off it entirely, and ping every lane the moment Destiny lights up your screen."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Twisted Fate opens the score, reset expectations and respect Pick a Card (Gold) doubly. After a second, your job description changes — farm with Q-E clears and stay relevant through grounded peel.",
+      "after": "If Twisted Fate opens the score, stop contesting the shove and farm safely — his lead turns into roams, not duels. After a second kill, hold the wave near your tower and follow every disappearance he makes on the map."
+    },
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "Cassiopeia's poke range and wave pressure outclass his early Wild Card chip damage, letting you control lane from level 1",
+      "after": "Cassiopeia's poke range and wave pressure outclass his early Wild Cards chip damage, letting you control lane from level 1"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Twisted Fate's global Destiny pressure is his only relevance in the late game, but if he ever shows up mid to fight you directly your full combo deletes him before Gold Card can matter.",
+      "after": "Twisted Fate's global Destiny pressure is his only relevance in the late game, but if he ever shows up mid to fight you directly your full rotation deletes him before a Pick a Card lands."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Twisted Fate's value comes entirely from Destiny picks and teamfight Gold Cards from range, so your job is to shut down his lane presence early enough that his global threat never offsets a dead lane. In any direct 1v1 or skirmish your full rotation output overwhelms his kit — he has no shield, no gap-close, and no sustain to out-damage your DoT stacking.",
+      "after": "Twisted Fate's value comes entirely from Destiny picks and Pick a Card procs at close range, so your job is to shut down his lane presence early enough that his global threat never offsets a dead lane. In any direct 1v1 or skirmish your full rotation overwhelms his kit — he has no shield, no dash outside Destiny, and no sustain to out-damage your DoT stacking."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Land Pick A Card procs to poke you down from a distance you can't punish",
+      "after": "Lock the gold card and attack-reset a stun onto you for his jungler"
+    }
+  ],
+  "notes": "Twisted Fate is male — no pronoun defects. Chart: the full layer said Skill on six rows while win[N] said Cassiopeia on all seven and the packet flagged the 7/7 sweep as too generous for 47.98%. I gave Cassiopeia the lane rows (0-5, matching win[N], no paired edit needed) and moved row 6 to Twisted Fate on BOTH layers with both whys rewritten — that row is where a 47.98% lane actually loses, since Destiny reveals from 5500 and Gates him behind a mage with no dash. Confidence on that specific row is Medium; the reasoning is kit-grounded but the packet chart itself disagrees. 'Gold Card' is a card colour, not an ability — corrected to Pick a Card in the two places it was written as a name. Pick a Card is 200 range and an attack reset, so wants.foe[0] describing it as ranged poke was wrong. Not verifiable from the kit and therefore not written: whether Petrifying Gaze can interrupt the 1.5-second Gate channel."
+}

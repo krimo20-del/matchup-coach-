@@ -1,0 +1,83 @@
+{
+  "ownerKey": "irelia_mid",
+  "enemy": "ryze",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Four of seven chart rows disagreed across layers: phases[3..5].side read 'Skill' and phases[6].side read 'Ryze', while win[3..6] all read 'Irelia'.",
+      "why": "The packet levelChart reads Irelia on all seven rows, the content whys argue Irelia at every stage, and the full-layer whys under those Skill/Ryze sides also described Irelia winning — the sides were the outlier, and row 6 in particular said Ryze above a sentence about Irelia surfing the fight.",
+      "corrected": "phases[3..6].side moved to Irelia, matching win[] and the packet, with each why rewritten to argue that verdict from Ryze's real cooldowns.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText full/content"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Level 6 was described as an 'ult wall locks him down before he can chain snares to escape', implying Realm Warp is an escape.",
+      "why": "Realm Warp is a 3000-range portal on 180/160/140s that teleports allies standing near it after a delay. It repositions his team; it is not a personal escape and it does nothing about a stun that has already landed.",
+      "corrected": "Stated in whys[4], phases[4].why, mid and breakdown.carry.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ryze.json (R)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three mechanical errors. The text repeatedly calls Ryze's E a 'snare' ('his E snare', 'root-snare-root chain', 'once E-snared'). It describes his passive as a 'burn' he 'stacks'. And it tells you to use Defiant Dance to blunt his damage.",
+      "why": "Spell Flux (E) is a debuff on 3.5-to-2.5s; it applies Flux and roots nothing. Rune Prison (W) is the lockdown at 615 range on 11-to-9s, and per Riot's own text it SLOWS unless the target already has Flux, in which case it roots instead. Arcane Mastery is bonus damage from bonus mana, not a burn. And Defiant Dance reduces physical damage — Ryze's damage is magic, so the W does not blunt his burst. That last one is the decisive interaction of the matchup and the page currently advises the opposite.",
+      "corrected": "Flux-then-root sequence named throughout; the physical-only limit on Defiant Dance written into phases[1].why, dosFull[1].d and early.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ryze.json (P/W/E)", "champ-data/_kits/irelia.json (W text)"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[2].d called Rune Prison a 'fifteen-second invitation'; breakdown.cooldowns had no digit at all.",
+      "why": "Rune Prison is 11s at rank 1 and 9s at rank 5. Fifteen seconds would send a player in six seconds late.",
+      "corrected": "Real numbers given in dosFull[2].d, breakdown.cooldowns, breakdown.feeding and mid.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ryze.json (W)"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Two copy-paste bleeds: dosFull[1].d and dontsFull[2].d carried the tradeGood/tradeBad strings under unrelated titles.",
+      "why": "Lint findings, deterministic.",
+      "corrected": "Both replaced with bodies matching their titles.",
+      "confidence": "High",
+      "sources": ["lintFindings"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Irelia"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Irelia"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Irelia"},
+    {"layer":"full","path":"phases[6].side","before":"Ryze","after":"Irelia"},
+    {"layer":"full","path":"phases[0].why","before":"Q the low minions and keep the blade moving — your level 1 reset dance already out-trades careless mages.","after":"Q the low minions and keep the blade moving — Overload poke at 1000 range is all he owns at level 1."},
+    {"layer":"full","path":"phases[1].why","before":"W joins: the channel shreds incoming damage — hold it for his trade spell, not his autos.","after":"W joins, but Defiant Dance cuts physical damage only — it will not blunt an Overload."},
+    {"layer":"full","path":"phases[3].why","before":"Reset-dance the wave into his face: four stacks, E-stun, Q the kill threat. The lane is a minion-count quiz.","after":"Reset-dance the wave into his face: at 615 range Rune Prison needs him standing where your Q already is."},
+    {"layer":"full","path":"phases[4].why","before":"Vanguard's Edge online — the all-in caps with a wall of disengage-proof marks. Dive with the wave as your fuel.","after":"Vanguard's Edge online — Realm Warp is a 3000-range portal, not an escape; the wall still catches him leaving."},
+    {"layer":"full","path":"phases[5].why","before":"First item spike: stacked trades delete mages and your sustain mocks their poke math.","after":"First item: on-hit trades out-damage a mage whose only lockdown is a 9-second Rune Prison."},
+    {"layer":"full","path":"phases[6].why","before":"Late Irelia surfs the fight: Q-reset through their line, stun the carry pair, and shred whoever peels.","after":"Late he scales, but he still owns no dash — one Bladesurge onto a minion and he is inside your stun."},
+    {"layer":"full","path":"tldr","before":"He needs minions to hide behind and you eat minions for movement — dance the wave into his face and stun the apology.","after":"He needs minions to hide behind and you eat minions for movement — dance the wave into his face and stun before Flux lands."},
+    {"layer":"full","path":"enemyWin","before":"Ryze wins by landing Rune Prison (Root), denying your pattern, and renting you the lane at a range markup.","after":"Ryze wins by tagging you with Spell Flux, rooting it with Rune Prison, and Overloading you while you stand still."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Ryze Rune Prison (Root): matchup-defining — Point-blank root — respect the EQ chain that follows it. Check it before every step-up. - W Defiant Dance is the lifeline; chip damage never gets it. - The ult answers fights, not waves.","after":"- Rune Prison: 11s at rank 1, 9s at rank 5, and only 615 range — it roots only if Spell Flux is already on you, otherwise it just slows. - Spell Flux: 3.5s down to 2.5s. - Overload: a 5s base his other casts reset."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Ryze gets a kill, the lane gets honest — give Rune Prison (Root) extra room and farm it back. Two kills: stop dueling your tilt — farm with Q resets and stay relevant through stacked windows.","after":"If Ryze gets a kill, the lane gets honest — dodge Spell Flux and the root never arrives, so farm it back. Two kills: stop dueling, farm with Q resets, and stay outside the 615-range cage."},
+    {"layer":"full","path":"ahead","before":"Ahead, dance louder: crash waves into Ryze's face, stun the answers, and surf resets through every river fight.","after":"Ahead, live on top of him: no dash, no blink, and a 9-second Rune Prison is his only answer to your reset chain."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the dance — the wave funds dives no cooldown can, and your R turns skirmishes into no-exit interviews.","after":"Carry by closing every wave — Ryze owns no dash, and Realm Warp is a delayed portal, not an escape from your stun."},
+    {"layer":"full","path":"dosFull[0].d","before":"Point-blank root — respect the EQ chain that follows it. Bait it, count it, then go.","after":"Rune Prison roots only through Spell Flux — dodge the orb and the cage is just a slow."},
+    {"layer":"full","path":"dosFull[1].d","before":"Q-reset through two low minions onto his chest, four-stack autos, E-stun the retreat — the wave-funded all-in he budgeted zero for.","after":"Four stacks before you go: Defiant Dance cuts physical damage only, so it will not save you from an Overload chain you walked into."},
+    {"layer":"full","path":"dosFull[2].d","before":"Ryze burns Rune Prison (Root) on nothing — take the fifteen-second invitation.","after":"Ryze burns Rune Prison on nothing — that is a 9-to-11-second invitation."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Dashing in under-stacked with W down — Irelia without the engine is a melee minion with a famous haircut.","after":"With the wave gone you have nothing to Bladesurge onto, and Overload still reaches you at 1000 range."},
+    {"layer":"content","path":"whys[1]","before":"Level 2 still favors Irelia as her melee proximity threat outpaces his lane-phase burn stacking.","after":"Level 2 still favors Irelia — Ryze has no burn to stack; his damage scales off mana he does not have yet."},
+    {"layer":"content","path":"whys[4]","before":"Level 6 favors Irelia since her ult wall locks him down before he can chain snares to escape.","after":"Level 6 favors Irelia: Realm Warp is a delayed portal for his team, not a way out of Vanguard's Edge."},
+    {"layer":"content","path":"spikes[0].text","before":"Irelia's Q lets her dash onto minions to close the gap before Ryze can stack his passive damage on her from range.","after":"Irelia's Q lets her dash onto minions to close the gap before Ryze can chain Spell Flux into Rune Prison at 615."},
+    {"layer":"content","path":"spikes[1].text","before":"Vanguard's Edge locks Ryze in place before he can root-snare-root chain her down.","after":"Vanguard's Edge marks and slows Ryze before he can chain Spell Flux into the root."},
+    {"layer":"content","path":"spikes[2].text","before":"Once Irelia closes distance with a completed item she wins the all-in outright since Ryze has no escape once E-snared.","after":"Once Irelia closes with a completed item she wins the all-in outright, since Ryze owns no dash and no blink at all."},
+    {"layer":"content","path":"wants.foe[2]","before":"Land root chains to stack passive","after":"Land Spell Flux, then root with W"},
+    {"layer":"content","path":"early","before":"At level 1-2 Ryze wants to sit at max range poking with Q while stacking his passive burn, so Irelia should shove the wave and use minions to dash into range without eating a free trade. Irelia's early trades are strong once she's on top of him since Ryze has almost nothing to punish melee proximity outside a root. Watch for his E snare in melee range and use W's parry to neutralize a follow-up auto. If Ryze wastes mana poking, punish the lull with a full combo.","after":"At levels 1-2 Ryze sits at max range poking with Overload, so shove the wave and use minions to dash into range without eating a free trade. Your early trades are strong once you are on top of him, since the only thing punishing melee proximity is Rune Prison at 615 — and that cage only roots if Spell Flux is already on you. Dodge the orb and the root is a slow. Defiant Dance cuts physical damage, so don't count on it against his magic; punish the lull once he has burnt mana poking."},
+    {"layer":"content","path":"mid","before":"By level 3-5 Irelia should keep closing the gap every wave since Ryze has no way to disengage once she's stacked passive on him. His level 6 ult lets him reposition but doesn't stop Irelia's dash chain onto minions, and Vanguard's Edge can lock him down before he even roots. Track his snare cooldown carefully — it's his only real defensive tool in melee range, and once it's down he's fully exposed to an all-in.","after":"By levels 3-5 keep closing the gap every wave, since Ryze has no dash and no disengage once you are stacked on him. Realm Warp at level 6 is a 3000-range portal on 180 seconds that repositions his team; it does not stop your dash chain onto minions, and Vanguard's Edge marks him before he can set up the root. Track Rune Prison — 9 seconds at rank 5, his only defensive tool in melee range — and once it is down he is fully exposed."}
+  ],
+  "notes": "The most important correction here is not a name: the page told the reader to use Defiant Dance to absorb Ryze's burst. Irelia's W reduces PHYSICAL damage per Riot's text and Ryze's damage is magic, so that advice actively loses trades. I rewrote phases[1].why, dosFull[1].d and early to say so, but breakdown.wave and the report entries still carry the generic 'W the burst' framing and I left those alone rather than expand scope. Also corrected: Ryze's E was called a snare in four places (Spell Flux is a debuff; Rune Prison is the lockdown, and it only roots when Flux is already applied — otherwise it slows), and his passive was called a stacking burn (Arcane Mastery is bonus damage from bonus mana). Chart: rows 3-6 disagreed across layers and I moved the full-layer sides to Irelia to match win[] and the packet; no win[N] edits were needed because the content values were already right. Not verified from the kits: whether Rune Prison's root can be cleansed or shortened by tenacity, and whether Irelia's Bladesurge dash can be used to leave the Rune Prison root once applied."
+}

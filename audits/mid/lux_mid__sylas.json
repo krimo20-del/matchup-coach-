@@ -1,0 +1,107 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "sylas",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Difficulty HARD 8/10 is consistent with Sylas being a mobile, sustaining diver against an immobile mage; win rate 51.1% over 3552 games is near-even, so the lane is playable but skill-gated on the Q root.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "brief.packet.winRate",
+        "brief.enemyKit"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes on the page match the kits: Lux's Final Spark at 6 (60/50/40s), Luden's first item, and Sylas's Hijack at 6 (80/55/30s) plus Kingslayer scaling (12/10.5/9/7.5/6s) are all real. Sylas's Abscond drops from 13s to 9s across ranks, which is the real mid-lane spike for him.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "brief.ownerKit",
+        "brief.enemyKit"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no cooldown number at all (lint COOLDOWN_NO_DIGIT), and enemyWin was a name-swap template that never stated the actual Abscond -> Abduct recast mechanic.",
+      "why": "Abscond (E) is a 400-range dash on 13/12/11/10/9s that can be RECAST as Abduct to chain-pull onto a champion it hits. The pull only exists while the dash is spent, so the dash going down is the green light. Kingslayer (W, 12/10.5/9/7.5/6s, 400 range) heals him against champions, which is why chip poke alone does not win extended trades.",
+      "corrected": "cooldowns field now names Abscond/Abduct 13s->9s, Kingslayer 12s, and Prismatic Barrier 12s; enemyWin now states the dash-recast-heal sequence.",
+      "confidence": "High",
+      "sources": [
+        "brief.enemyKit",
+        "brief.ownerKit"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "The trading/mid text never told the player to buy Grievous Wounds against Kingslayer.",
+      "why": "brief.missingInteractions flags needs-antiheal: Kingslayer heals Sylas against champions, so anti-heal timing decides extended trades.",
+      "corrected": "breakdown.mid now names Oblivion Orb and the Grievous Wounds requirement.",
+      "confidence": "High",
+      "sources": [
+        "brief.missingInteractions",
+        "brief.enemyKit"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "lint COOLDOWN_NO_DIGIT: the cooldowns field carried no cooldown number.",
+      "why": "An earlier proposal targeted these same fields but its replacement text overshot the +/-10% length rule, so apply-proposals dropped the edit and the defect survived on disk.",
+      "corrected": "Rewritten to the same meaning inside the length budget, grounded in real ability names and cooldowns from champ-data/_kits: breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": [
+        "lintFindings",
+        "champ-data/_kits lux.json",
+        "champ-data/_kits sylas.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Sylas Abscond / Abduct: matchup-defining — Dash into chain-stun — punish him hard while it is down. It governs your forward steps. - W Prismatic Barrier spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- Abscond/Abduct: 13s at rank 1, 9s at rank 5 — his dash into chain-stun; punish him hard while it is down. - Prismatic Barrier is 12s and spending it on poke is a death you scheduled. - Final Spark is 60s: hold it for the fight that decides something."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Sylas wins by landing Abscond / Abduct, denying your pattern, and front-loading the violence while your kit is still stretching.",
+      "after": "Sylas wins by dashing Abscond in, recasting Abduct to chain onto you, then healing the trade back with Kingslayer before your Q returns."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.",
+      "after": "Abscond only reaches 400 units, so a wave held at centre keeps him outside it, and a warded flank removes the angle he needs to open on you."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.",
+      "after": "Holding Lucent Singularity to detonate leaves you standing in Chain Lash range at half HP — pop it early and step back, not late."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.",
+      "after": "Carry by making Abscond a losing button: root the dash on arrival and laser him from 3340 range, never standing as the lone target in W range."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.mid",
+      "before": "Luden's onward, every root is a kill: shove, hover the river, and Q-R the first contest. Your range decides objective setups alone.",
+      "after": "Luden's onward every root is a kill, but grab Oblivion Orb early — Kingslayer heals him out of your chip without Grievous Wounds on him."
+    }
+  ],
+  "notes": "LEVEL CHART CONFLICT LEFT ALONE ON PURPOSE: phases[0..6].side and win[0..6] all read \"Sylas\", and the content whys[] agree, but every full-layer phases[N].why describes LUX winning that stage (\"E-poke from max range...\", \"anything the root catches dies to the laser math\"). The packet levelChart is all-Sylas and the win rate is 51.1% for Lux over 3552 games. I could not decide from the kits which layer is right, so per the chart rule I moved no row and rewrote no why. This needs a human verdict — see questionsForUser. QA re-scope: previous edits to breakdown.cooldowns were rejected for length drift; re-proposed within budget. Cooldowns quoted are Riot per-rank values from the kit files; no spell-shield, cleanse or minion-block behaviour is asserted anywhere, since the kits do not state it."
+}

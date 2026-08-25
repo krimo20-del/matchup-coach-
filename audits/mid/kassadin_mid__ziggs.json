@@ -1,0 +1,94 @@
+{
+  "ownerKey": "kassadin_mid",
+  "enemy": "ziggs",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Bouncing Bomb 850, Hexplosive Minefield 900, Satchel Charge 1000, Mega Inferno Bomb 5000 — against Null Sphere at 650 and Riftwalk at 500. Kassadin cannot contest anything before 6, and after 6 Ziggs has exactly one escape on a 20s cooldown. EVEN 5.5/10 fits 54.13% over 896 games.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief.enemyKit ranges", "brief.ownerKit ranges", "brief.packet"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Ziggs' spikes are Mega Inferno Bomb at 120/95/70s and Satchel Charge scaling 20s to 12s; Kassadin's are 6, Rod of Ages and 16. The four spikes[] timings sit correctly; spikes[3].text was the only one with a factual error.",
+      "corrected": "spikes[3].text rewritten.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit W/R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two things. (a) spikes[3].text tells you to blink 'under his passive turret-shred range' — Short Fuse is an auto-attack reset that does bonus magic damage to a unit, not turret shred. It is Satchel Charge that hexplodes vulnerable turrets. (b) Nothing on the page mentions that Satchel Charge knocks YOU away as well as him, or that Short Fuse is an auto reset whose cooldown drops with every ability he casts.",
+      "why": "Riot's text: Satchel Charge 'deals magic damage to enemies, knocking them away. Ziggs is also knocked away'. Short Fuse: 'Periodically, Ziggs' next basic attack deals bonus magic damage. This cooldown is reduced whenever Ziggs uses an ability.' The missingInteractions entry flags exactly this auto-reset tell — the wind-up is the cue, not the cast.",
+      "corrected": "spikes[3].text corrected; the knockback-on-you and the Short Fuse tell written into breakdown.cooldowns and dontsFull[2].d.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit P/W text", "brief.missingInteractions autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint), and dosFull[2].d told you to take a window without saying how long it is.",
+      "why": "Satchel Charge is 20/18/16/14/12s — the entire green-light system this page describes.",
+      "corrected": "Numbers written into both.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit W"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ziggs Satchel Charge: matchup-defining — His knockback escape — he is catchable only while it is down. It governs your forward steps. - R Riftwalk spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- Ziggs Satchel Charge: matchup-defining — 20s at rank 1 down to 12s at rank 5, and it knocks you away as well as him; step up while it is down. - Mega Inferno Bomb is 120s at rank 1 and reaches 5000 — no wave is far enough back."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q-shield his key spell, W refund the auto, walk — pre-6 trades are accounting; post-6 add a blink and they're arguments you win.",
+      "after": "Nether Blade refunds mana every 7s, and Bouncing Bomb costs him 70 at rank 5 — a farmed lane outlasts his poke bar."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Ziggs spends Satchel Charge early — the closest thing this matchup has to a guarantee.",
+      "after": "Ziggs spends Satchel Charge on nothing — that is a 20s window at rank 1 to walk in."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Trading like the late game already arrived — a level 5 Kassadin with ambitions is a gold bounty with a shield.",
+      "after": "Short Fuse resets his auto and every spell he casts shortens it — the wind-up is your cue to step back, not the cast."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Ziggs wins by landing Satchel Charge, denying your pattern, and renting you the lane at a range markup.",
+      "after": "Ziggs wins by mining your farm, satcheling out of your one blink, and taking the tower while you are still scaling."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "His off-screen poke and escape tools still keep this phase net-favoured for him.",
+      "after": "Mega Inferno Bomb reaches 5000 and Satchel Charge is his exit, so 6 is still his."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Once you can double-blink in under his passive turret-shred range and land Q-W-E before he can space you back out, Ziggs has no answer to sustained magic burst at point-blank.",
+      "after": "Once you double-blink in before Satchel Charge is back up at 12s and land Null Sphere into Force Pulse point-blank, Ziggs has no mobility and no answer to magic burst in his face."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[3]",
+      "before": "Kite backward using W jump to keep permanent distance in skirmishes",
+      "after": "Satchel himself backward to keep permanent distance in skirmishes"
+    }
+  ],
+  "notes": "All three packet.suspectNames entries are FALSE POSITIVES — Mega Inferno Bomb and Satchel Charge are Ziggs' real R and W per the kit; nothing was renamed on that basis. The genuine name error was elsewhere: spikes[3].text credited Short Fuse (an auto-attack reset) with 'turret-shred', which is Satchel Charge's hexplode. The missingInteractions 'resistances-invalidated' entry rests on a percentHealth flag on Satchel Charge that Riot's own description does not support — the text says only 'deals magic damage to enemies, knocking them away', with no percent-health component. Per the brief's rule I trusted the description and did NOT write the resistances claim; flagging the flag as a probable tooltip-parsing misfire. PRE-EXISTING cross-layer chart disagreement, not introduced by me and not repairable as a matched pair from this side: rows 2, 3 and 4 read 'Skill' in phases[N].side against 'Ziggs' in win[2..4], and row 5 reads 'Skill' against 'Kassadin'. Flagged for tools/mirror-fix.js. Templated fields judged and left rather than fabricated: breakdown.carry, breakdown.wave, breakdown.early, ahead, tradeGood, tradeBad."
+}

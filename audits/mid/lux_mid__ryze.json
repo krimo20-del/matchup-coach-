@@ -1,0 +1,72 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "ryze",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer's chart says Skill at Levels 4-5 and at Level 6 while content win[3] and win[4] both say Lux, and the packet levelChart agrees with the content layer.",
+      "why": "Two rows rendering different answers to 'who wins Levels 4-5'. The kit backs Lux: Lucent Singularity is 1100 range and Rune Prison only 615, so Ryze cannot answer the zone he farms in.",
+      "corrected": "phases[3].side and phases[4].side moved to Lux with their whys rewritten to match. win[3]/win[4] already read Lux, so no content edit was written.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText content win[3..4]", "kit ranges 1100 vs 615"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The four spikes correctly place Lux early, even at 6, and Ryze from first item onward — consistent with the 54.4% win rate coming out of lane rather than out of the late game.",
+      "corrected": "phases[3..4].why given the real range numbers so the early advantage has a reason attached.",
+      "confidence": "High",
+      "sources": ["packet winRate 54.4 / 1171 games"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The single decisive interaction in this matchup is absent from every field: Rune Prison only ROOTS if Spell Flux is already on the target. Unfluxed it is a slow.",
+      "why": "Riot's own text on W: 'If the target has Flux on it, they are instead rooted.' Spell Flux is 615 range on 3.5s at rank 1, so the flux debuff landing is the visible warning that the next Rune Prison will hold you. Overload also resets off his other casts and hits harder into Flux, which is what makes the chain lethal.",
+      "corrected": "Stated in breakdown.cooldowns, enemyWin, dosFull[2].d and breakdown.feeding: the flux is the tell, and unfluxed Rune Prison is only a slow.",
+      "confidence": "High",
+      "sources": ["enemyKit W and E text", "enemyKit Q passive text"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "packet defect: 'NO cooldown-sequencing advice anywhere'; breakdown.cooldowns contained no digit (lintFindings COOLDOWN_NO_DIGIT).",
+      "why": "The field exists to carry real numbers and a wait-for-X-before-Y line.",
+      "corrected": "Rune Prison 11s at rank 1, Spell Flux 3.5s at 615 range, Overload 5s at 1000 range, Light Binding 10s flat, Final Spark 60s vs Realm Warp 180s.",
+      "confidence": "High",
+      "sources": ["both kits"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was tradeGood verbatim, dontsFull[2].d was tradeBad verbatim, and dosFull[0]/dosFull[2]/dontsFull[0]/dontsFull[1] bodies were name-swap templates unrelated to their titles.",
+      "why": "lintFindings COPY_PASTE_BLEED plus the template sweep.",
+      "corrected": "Every Do's and Don'ts body rewritten to its own title with numbers from the kits.",
+      "confidence": "High",
+      "sources": ["lintFindings"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Lux"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Lux"},
+    {"layer":"full","path":"phases[3].why","before":"Lost Chapter timing — E every wave contact. Bank Manaflow and hold Q for his aggression, not yours.","after":"Lost Chapter timing — E every wave contact from 1100; Rune Prison reaches 615, so he cannot answer."},
+    {"layer":"full","path":"phases[4].why","before":"Final Spark online — anything the root catches dies to the laser math. The lane becomes a geometry quiz.","after":"Final Spark online — a landed Light Binding into laser beats anything his 615-range root chain starts."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Ryze Rune Prison (Root): matchup-defining — Point-blank root — respect the EQ chain that follows it. Check it before every step-up. - W Prismatic Barrier is the lifeline; chip damage never gets it. - The ult answers fights, not waves.","after":"- Ryze Rune Prison: 11s at rank 1, and it only roots if Spell Flux is already on you — unfluxed it is just a slow. - Spell Flux is 615 range on 3.5s, so the flux is your warning. - Overload is 5s but reaches only 1000."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"Point-blank root — respect the EQ chain that follows it. Commit on its cooldown, never into it.","after":"Lucent Singularity is 1100 range and he farms inside 615 — drop it on the wave, not on him."},
+    {"layer":"full","path":"dosFull[1].d","before":"E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.","after":"Illumination detonates on your next attack, so step in for the auto right after E and step back out before Spell Flux's 3.5s comes up."},
+    {"layer":"full","path":"dosFull[2].d","before":"Ryze spends Rune Prison (Root) early — the closest thing this matchup has to a guarantee.","after":"Unfluxed Rune Prison only slows; the root needs Spell Flux first — that is your cue."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Ryze’s rehearsed moment — don’t audition for it.","after":"Light Binding is 10s flat — a whiff gives him the lane."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Your W answers exactly one combo per fight — shield the spell that kills, not the one that stings.","after":"Lucent Singularity is 10s at rank 1 and it is your only zone — without it, walk back rather than trade."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.","after":"Final Spark is 60s at rank 1 and Realm Warp is 180s — spend yours on the fight his portal creates, not on a caster wave."},
+
+    {"layer":"full","path":"enemyWin","before":"Ryze wins by landing Rune Prison (Root), denying your pattern, and owning the spacing war until your tempo starves.","after":"Ryze wins by fluxing you with Spell Flux so Rune Prison roots instead of slows, then chaining Overload twice."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Ryze gets a kill, the lane gets honest — give Rune Prison (Root) extra room and farm it back. Two kills: stop dueling your tilt — farm with E clears and stay relevant through root picks.","after":"If Ryze gets a kill his mana pool turns into damage through his passive, so stop contesting the wave inside 615. Farm with E from 1100 and hold Q purely as peel for the flux."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.","after":"Carry by punishing his short reach: he must get inside 615 to flux and root, and Light Binding from 1175 ends the walk before it starts."}
+  ],
+  "notes": "diff/diffRating/carryRating left alone — EVEN 5.5/10 already fits the 54.4% win rate and the chart shape (Lux early, Ryze late). No win[N] edits written: content win[3] and win[4] were already 'Lux' and only the full layer disagreed, so a paired edit would have been a no-op and would have taken the chart group down. Templates I judged but could not ground: breakdown.wave, breakdown.late, ahead, tradeGood, tradeBad, loading — nothing in Ryze's kit makes his wave state or the late game distinctive enough to rewrite without inventing. report[10].t contains 'ping your jungler every Mantra... every laser cycle' — 'Mantra' is a Karma term leaking from another matchup's template; left alone as report[] is out of sweep scope, but it is a real defect worth a targeted pass across every Lux matchup."
+}

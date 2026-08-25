@@ -1,0 +1,112 @@
+{
+  "ownerKey": "malzahar_mid",
+  "enemy": "syndra",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "All seven full-layer phases[N].side rows disagreed with content win[N]. Full read Syndra/Syndra/Skill/Skill/Syndra/Skill/Syndra; content read Skill/Skill/Syndra/Syndra/Malzahar/Syndra/Skill, which is exactly the packet levelChart.",
+      "why": "Content layer matches the packet and its whys[] are already grounded (her range wins 3-5, your R wins 6, her first item wins that row). The full layer was the wrong one.",
+      "corrected": "phases side moved to Skill/Skill/Syndra/Syndra/Malzahar/Syndra/Skill, each why rewritten in the same proposal to state the new verdict. win[N] not edited — it already holds the target values.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]", "currentText.content.whys[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[5].why claimed the first-item row for Malzahar's Liandry's while the content layer and packet both give that row to Syndra.",
+      "why": "Syndra's Luden's/Rod spike plus Unleashed Power's execute (Transcendent upgrades R to execute low-health targets) is the larger first-item swing; Unleashed Power is 120s at rank 1.",
+      "corrected": "phases[5].why now names her burst spike; her spike cadence also recorded in cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit P and R", "currentText.content.spikes[2].text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The full layer never gave a Syndra cooldown, invented \"Iron Boundary\" for Malzahar's passive (real name Void Shift), and its trade lines described poking a shield Syndra does not have.",
+      "why": "Kit authority: Scatter the Weak is 15s at every rank, 650 range, stuns only when it passes through a Dark Sphere; Dark Sphere is 7s at 800 range; Force of Will is 12/11/10/9/8s at 925 and carries true damage via Transcendent; Unleashed Power is 120/100/80 at 675 and executes. Syndra has no dash in her kit, which is why Nether Grasp is lethal on her.",
+      "corrected": "Cooldowns, trade lines, don'ts and carry all rewritten around those numbers.",
+      "confidence": "High",
+      "sources": ["ownerKit", "enemyKit"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "COOLDOWN_NO_DIGIT on breakdown.cooldowns.",
+      "why": "Scatter the Weak's flat 15s is the single most punishable window in the matchup and was never stated.",
+      "corrected": "Rewritten with 15s E, 7s Q, 12s W early, 120s R.",
+      "confidence": "High",
+      "sources": ["enemyKit"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "missingInteractions flags resistances-invalidated: Transcendent gives Force of Will bonus true damage, so stacking MR is the wrong answer, and the itemization entry did not say so.",
+      "why": "True damage ignores MR by definition; the kit flag and Riot's passive text agree.",
+      "corrected": "report[8].t now points at Banshee's over raw MR and says why.",
+      "confidence": "High",
+      "sources": ["enemyKit P/W trueDamage", "missingInteractions rule resistances-invalidated"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "21 fields addressed Syndra as he/his/him.",
+      "why": "champ-gender lists syndra as female; every lint MISGENDER entry in this brief is one of these.",
+      "corrected": "All flagged fields rewritten with she/her.",
+      "confidence": "High",
+      "sources": ["lintFindings", "champ-data/champ-gender.js"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Syndra","after":"Skill"},
+    {"layer":"full","path":"phases[1].side","before":"Syndra","after":"Skill"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Syndra"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Syndra"},
+    {"layer":"full","path":"phases[4].side","before":"Syndra","after":"Malzahar"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Syndra"},
+    {"layer":"full","path":"phases[6].side","before":"Syndra","after":"Skill"},
+
+    {"layer":"full","path":"phases[0].why","before":"E a caster minion and let the visions farm for you — your lane is a macro pattern, not a duel, from the first wave.","after":"E a caster minion and farm — Dark Sphere is 7s and neither of you can force anything yet. Even, and quiet by design."},
+    {"layer":"full","path":"phases[1].why","before":"Q online: the silence is your trade answer. Use it on his engage spell, not on poke he can walk around.","after":"Q online, but her 800-range Dark Sphere out-ranges your step-up. Even — silence only what she commits with."},
+    {"layer":"full","path":"phases[2].why","before":"W voidlings turn your shove permanent — the wave hits his tower while you ward, roam-shadow, or just exist safely.","after":"Voidlings shove for you, but Scatter the Weak through a sphere stuns from 650 and her Q-W poke out-ranges all of it."},
+    {"layer":"full","path":"phases[3].why","before":"Lost Chapter and the machine is complete: E-hops fund themselves, the wave is always crashing, and his tower is always bleeding.","after":"Lost Chapter funds your E-hops, but she zones you off the wave with spheres and chips you toward her level-6 execute."},
+    {"layer":"full","path":"phases[5].why","before":"Liandry's spike: visions melt waves AND health bars. Suppress-into-burn kills through most defensive answers.","after":"First item is her spike, not yours — sphere burst into Unleashed Power one-shots squishies. Farm safe, hold Void Shift."},
+    {"layer":"full","path":"phases[6].why","before":"Late Malz is a number: one suppression on their carry equals one won teamfight. Shield up, flank smart, press R.","after":"Even late: she has no escape from your R, but a sphere stun into her ult deletes you first if you get caught out."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Syndra Scatter the Weak (Stun): matchup-defining — The QE stun cone starts every kill combo — stay off the line between her and her orbs. Read it like a second minimap. - Guard your spell shield (Iron Boundary) like a fifth summoner spell. - Ultimate goes to kill windows only.","after":"- Scatter the Weak is 15s at every rank — the longest window in her kit and the one your step-ups are timed to. - Dark Sphere is 7s so the poke never stops; Force of Will is 12s early. - Unleashed Power is 120s at rank 1, and Void Shift covers you until it comes back."},
+
+    {"layer":"full","path":"tldr","before":"His poke pops your shield, your shove pops his tempo — the lane is a war between his range and your metronome.","after":"Her poke pops your shield, your shove pops her tempo — the lane is a war between her 800 range and your metronome."},
+    {"layer":"full","path":"winCon","before":"Out-shove his tempo, shield-manage his poke, and convert 6 into point-and-click kills. Every commit starts with one question: is Scatter the Weak (Stun) down?","after":"Out-shove her tempo, shield-manage her poke, and convert 6 into point-and-click kills. Every commit starts with one question: is Scatter the Weak (Stun) down? It is 15s."},
+    {"layer":"full","path":"enemyWin","before":"Syndra wins by landing Scatter the Weak (Stun), denying your pattern, and out-ranging your plan one polite trade at a time.","after":"Syndra wins by stunning you off a sphere, chipping with Force of Will's true damage, and executing you under her ult threshold."},
+
+    {"layer":"full","path":"tradeGood","before":"Pop-and-punish: poke his shield off with a cheap E-tick, then Q-W-E the gap before it rebuilds — full rotations only ever land on shieldless targets.","after":"Poke with E from max range and let it tick — Scatter the Weak is 15s at every rank, so the moment she spends it on the wave you own the next fifteen seconds."},
+    {"layer":"full","path":"tradeBad","before":"Trading into him with YOUR shield down — you are the squishiest scaling mage in the pool the moment the purple bubble disappears.","after":"Trading with Void Shift down — Dark Sphere at 800 range and Force of Will's true damage mean resistances do not save you from her chip."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: Pop-and-punish: poke his shield off with a cheap E-tick, then Q-W-E the gap before it rebuilds — full rotations only ever land on shieldless targets. Bad trade: Trading into him with YOUR shield down — you are the squishiest scaling mage in the pool the moment the purple bubble disappears.","after":"Good trade: poke with E from max range and let it tick — Scatter the Weak is 15s at every rank, so the moment she spends it on the wave you own the next fifteen seconds. Bad trade: stepping up with Void Shift down — Dark Sphere at 800 range and Force of Will's true damage mean resistances do not save you."},
+
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a permanently crashing E-W shove — his tower bleeds plates, his roams cost waves, and your visions did all the work. Worst wave: a frozen wave near his tower with no voidlings up — walking to it is the only time Malzahar is ever actually alone. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a permanently crashing E-W shove — her tower bleeds plates, her roams cost waves, and your visions did all the work. Worst wave: a frozen wave near her tower with no voidlings up — walking to it is the only time Malzahar is ever actually alone. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+
+    {"layer":"full","path":"breakdown.carry","before":"Carry by subtraction — every fight starts 4v5 when your R lands; your job is the wave control that makes the fight happen on your timer.","after":"Carry by subtraction — Syndra owns no dash, so a landed Nether Grasp is simply her death. Make the fight happen on your crash timer."},
+
+    {"layer":"full","path":"dosFull[0].d","before":"The QE stun cone starts every kill combo — stay off the line between her and her orbs. Until it’s spent, every commit is a coin flip.","after":"Void Shift is your only answer to a sphere stun, so take her poke on the wave and step up only while the purple is still up."},
+    {"layer":"full","path":"dosFull[1].d","before":"Pop-and-punish: poke his shield off with a cheap E-tick, then Q-W-E the gap before it rebuilds — full rotations only ever land on shieldless targets.","after":"Voidlings do the shoving so you never walk into Dark Sphere range for a last hit — the wave crashes and her tower pays for her poke every wave."},
+    {"layer":"full","path":"dosFull[2].t","before":"Grasp him the moment your jungler shadows","after":"Grasp her the moment your jungler shadows"},
+    {"layer":"full","path":"dosFull[2].d","before":"Syndra spends Scatter the Weak (Stun) early — the closest thing this matchup has to a guarantee.","after":"With Scatter the Weak on cooldown for 15s, Nether Grasp on her step-up is a guaranteed kill."},
+
+    {"layer":"full","path":"dontsFull[0].d","before":"That’s Syndra’s bread-and-butter play — deny it and they run out of answers.","after":"Void Shift will not be back before her next Dark Sphere at 7 seconds."},
+    {"layer":"full","path":"dontsFull[1].t","before":"Q-silence on poke instead of his key spell","after":"Q-silence on poke instead of her key spell"},
+    {"layer":"full","path":"dontsFull[1].d","before":"Your Q is the only interrupt you own — silencing poke instead of his engage spell is how Malzahars get dove.","after":"Your Q is the only interrupt you own — spend it on Scatter the Weak, not on a sphere you could have sidestepped."},
+    {"layer":"full","path":"dontsFull[2].t","before":"Step up at half shield and full his-mana","after":"Step up at half shield and her mana full"},
+    {"layer":"full","path":"dontsFull[2].d","before":"Trading into him with YOUR shield down — you are the squishiest scaling mage in the pool the moment the purple bubble disappears.","after":"With Void Shift down she can stun you off a sphere and follow with Unleashed Power — its execute means low health is not survivable."},
+
+    {"layer":"full","path":"report[0].t","before":"His poke pops your shield, your shove pops his tempo — the lane is a war between his range and your metronome.","after":"Her poke pops your shield, your shove pops her tempo — the lane is a war between her 800 range and your metronome."},
+    {"layer":"full","path":"report[1].t","before":"Out-shove his tempo, shield-manage his poke, and convert 6 into point-and-click kills. Every commit starts with one question: is Scatter the Weak (Stun) down?","after":"Out-shove her tempo, shield-manage her poke, and convert 6 into point-and-click kills. Every commit starts with one question: is Scatter the Weak (Stun) down? It is 15s."},
+    {"layer":"full","path":"report[3].t","before":"Good trade: Pop-and-punish: poke his shield off with a cheap E-tick, then Q-W-E the gap before it rebuilds — full rotations only ever land on shieldless targets. Great trade: Syndra wastes Scatter the Weak (Stun) — commit immediately. Bad trade: Trading into him with YOUR shield down — you are the squishiest scaling mage in the pool the moment the purple bubble disappears.","after":"Good trade: poke with E from max range and let it tick — Scatter the Weak is 15s at every rank, so the moment she spends it you own the next fifteen seconds. Great trade: Syndra wastes Scatter the Weak (Stun) — commit immediately. Bad trade: stepping up with Void Shift down — Dark Sphere at 800 range and Force of Will's true damage mean resistances do not save you."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a permanently crashing E-W shove — his tower bleeds plates, his roams cost waves, and your visions did all the work. Worst wave: a frozen wave near his tower with no voidlings up — walking to it is the only time Malzahar is ever actually alone. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: a permanently crashing E-W shove — her tower bleeds plates, her roams cost waves, and your visions did all the work. Worst wave: a frozen wave near her tower with no voidlings up — walking to it is the only time Malzahar is ever actually alone. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."},
+    {"layer":"full","path":"report[7].t","before":"Flash + Teleport standard — TP doubles your shove-tax map game. Ghost-cleanse setups exist into hard dive; Ignite pairs with R kill threats if you want lane blood.","after":"Flash + Teleport standard — TP turns every crash into a map play. Cleanse answers a hard dive; Ignite pairs with R kill threats if you want lane blood."},
+    {"layer":"full","path":"report[8].t","before":"Start Doran's Ring + 2 pots. Liandry's Torment rush into Sorcerer's, then Rylai's and Rabadon's. Banshee's into pick comps — a second spell shield on the spell-shield champion.","after":"Start Doran's Ring + 2 pots. Liandry's rush into Sorcerer's, then Rylai's and Rabadon's. Banshee's over raw MR — Force of Will's true damage goes straight through resistances."},
+    {"layer":"full","path":"report[9].t","before":"Commit on Scatter the Weak (Stun)’s cooldown, on your Liandry's spike, and with your jungler’s setup. Make him flinch first.","after":"Commit on Scatter the Weak (Stun)’s 15-second cooldown, on your Liandry's spike, and with your jungler’s setup. Make her flinch."},
+    {"layer":"full","path":"report[11].t","before":"Eat shield-pop poke twice in one wave. Q-silence on poke instead of his key spell. Step up at half shield and full his-mana. Save the R for moments with names on them.","after":"Eat shield-pop poke twice in one wave. Q-silence on poke instead of her key spell. Step up at half shield and her mana full. Save the R for moments with names on them."}
+  ],
+  "notes": "phases[N].rating left as-is (5-6/10 across the rows); the rating scale's referent is not derivable from the brief and guessing it would have risked a chart group. Sides and whys were the load-bearing half and are now internally consistent with content win[N] and the packet. report[] edits: five of the seven were mandated pronoun fixes from lintFindings, only report[7] (unsupported magnitude, lint-flagged) and report[8] (anti-resistance itemization, from missingInteractions) are discretionary rewrites."
+}

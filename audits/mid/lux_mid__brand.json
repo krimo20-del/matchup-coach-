@@ -1,0 +1,136 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "brand",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Both layers read Skill on all seven rows and the packet levelChart agrees; both are 1050-1175 range skillshot mages with no mobility, so no stage has a structural owner. Nothing in either kit justifies moving a row.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "packet.levelChart",
+        "content win[0..6]",
+        "champ-data/_kits brand.json",
+        "champ-data/_kits lux.json"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[] had 3 entries where 4 are expected, and nothing covered Brand's Pillar of Flame max — the point where his stun setup becomes repeatable.",
+      "why": "Pillar of Flame drops from 10s to 8s across its ranks and is the ability that applies Blaze so Sear can stun; that cadence, not an item, is his lane spike.",
+      "corrected": "Added spikes[3] for the W-max window.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits brand.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page repeats that Sear only stuns when you are ablaze but never gives a cooldown, and never states that Prismatic Barrier's job here is the Pillar-into-Sear window specifically.",
+      "why": "Sear is 8/7.5/7/6.5/6s and stuns only against a target carrying Blaze; Pillar of Flame (10/9.5/9/8.5/8s, 900 range) is the applier; Conflagration is only 625 range, so his stun chain needs him to step in. Pyroclasm is 100/90/80s at 750 range and prioritises stacking Blaze to max.",
+      "corrected": "breakdown.cooldowns, dosFull[1].d, dontsFull[2].d, enemyWin and breakdown.carry now carry the real numbers and the burn-before-stun dependency.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits brand.json",
+        "champ-data/_kits lux.json"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that holds real cooldowns.",
+      "corrected": "Rewritten with Sear 8s/6s, Pillar of Flame 10s/8s and Pyroclasm 100s.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits brand.json"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was the tradeGood string verbatim under \"W-shield his combo on the tell\"; dontsFull[2].d was the tradeBad string verbatim under \"Waste the root on chip spacing\" (lint COPY_PASTE_BLEED x2).",
+      "why": "Both bodies answered a different question than their titles asked.",
+      "corrected": "Rewritten to their own titles using Prismatic Barrier's 12s and Light Binding's flat 10s.",
+      "confidence": "High",
+      "sources": [
+        "lintFindings",
+        "champ-data/_kits lux.json"
+      ]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "packet.suspectNames flags \"Lux Light Binding\" in spikes[0].text as a probable wrong name. It is not — Light Binding is Lux's real Q. False positive; no edit made.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits lux.json"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "lint COPY_PASTE_BLEED: the body was the tradeBad string verbatim under an unrelated title.",
+      "why": "An earlier proposal targeted these same fields but its replacement text overshot the +/-10% length rule, so apply-proposals dropped the edit and the defect survived on disk.",
+      "corrected": "Rewritten to the same meaning inside the length budget, grounded in real ability names and cooldowns from champ-data/_kits: dontsFull[2].d.",
+      "confidence": "High",
+      "sources": [
+        "lintFindings",
+        "champ-data/_kits lux.json",
+        "champ-data/_kits brand.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Brand Sear (Stun): matchup-defining — Q only stuns when you are ablaze — after eating W or E, the stun line is the dodge that matters. Read it like a second minimap. - Guard your W Prismatic Barrier like a fifth summoner spell. - Ultimate goes to kill windows only.",
+      "after": "- Sear (Q): 8s at rank 1, 6s at rank 5, and it only stuns if Blaze is already on you — clean of the burn, it is just damage. - Pillar of Flame (W) is 10s down to 8s, the setup he needs first. - Pyroclasm is 100s at rank 1: after it, he is a farmer."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.",
+      "after": "Prismatic Barrier is 12s at rank 1 — spend it on the Pillar-into-Sear window, not on a burn tick, and the stun half of his combo does nothing."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.",
+      "after": "Light Binding is your only stop button on a 10s cooldown — throw it for chip and Pyroclasm bounces through you unanswered."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Brand wins by landing Sear (Stun), denying your pattern, and renting you the lane at a range markup.",
+      "after": "Brand wins by putting Blaze on you first so Sear stuns, then bouncing Pyroclasm off you from 750 range."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.",
+      "after": "Carry by keeping Blaze off you: with no burn on you his Q cannot stun, and a Lux who never gets stunned lasers him from 3340 units all game."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": null,
+      "after": "Pillar of Flame maxed drops to an 8-second cooldown, so Brand can keep Blaze applied and his Sear stun becomes available on nearly every trade."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].when",
+      "before": null,
+      "after": "Level 9 (Brand W max)"
+    }
+  ],
+  "notes": "packet.suspectNames flags \"Lux Light Binding\" as a probable wrong ability name — it is correct (Lux Q is Light Binding) and was left alone. Level chart is Skill across all seven rows in both layers and in the packet, and the kits give no reason to move a row, so no chart edits. Left `ahead`, breakdown.wave and breakdown.late templated: both champions are immobile ranged mages and I could not ground a Brand-specific replacement without inventing an interaction — the Blaze-detonation timing (3 stacks, 2 second fuse) is in Riot's text but I could not verify whether it applies spell effects to Lux's shield or interacts with her passive, so I did not write it. QA re-scope: previous edits to dontsFull[2].d were rejected for length drift; re-proposed within budget. Cooldowns quoted are Riot per-rank values from the kit files; no spell-shield, cleanse or minion-block behaviour is asserted anywhere, since the kits do not state it."
+}

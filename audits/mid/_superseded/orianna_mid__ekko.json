@@ -1,0 +1,111 @@
+{
+  "ownerKey": "orianna_mid",
+  "enemy": "ekko",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Six of seven chart rows disagreed between layers. phases[0].side read Ekko while the sentence under it said \"your passive-stacked autos win level 1\". Rows 1, 2, 5 and 6 read Skill in full against Orianna/Ekko/Orianna in content, and row 4 read Ekko in full against Skill in content — while content's own whys[4] said \"Chronobreak at 6 makes his all-in low-risk and gives him the kill window\".",
+      "why": "Levels 1-3 are Orianna's: Timewinder costs 50-90 mana a throw and Parallel Convergence needs seconds to form before it can stun. Level 6 is his — Chronobreak is 110s at rank 1 but only 50s at rank 3, and it refunds a failed dive. At 2+ items he has to land inside your team and Command: Shockwave answers the landing.",
+      "corrected": "phases[0..2].side = Orianna, phases[3] stays Skill, phases[4] stays Ekko with content win[4] flipped from Skill to Ekko to match it and to match content's own whys[4], phases[5].side = Ekko, phases[6].side = Orianna — every flipped row's why rewritten to match.",
+      "confidence": "Medium",
+      "sources": ["champ-data/_kits/ekko.json", "champ-data/_kits/orianna.json", "packet.levelChart", "packet.winRate 47.49 over 1175 games"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes named no Ekko spike and carried an unsourced magnitude (\"Luden's makes Q-W a third of a health bar\").",
+      "why": "Ekko's spike is not an item, it is Chronobreak's rank curve: 110s at rank 1 down to 50s at rank 3. Nothing else in the game moves that far.",
+      "corrected": "Spike line rebuilt on the Chronobreak cooldown curve.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ekko.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[3].text promises Command: Shockwave catches his dive \"before he can rewind\".",
+      "why": "Command: Shockwave launches enemies after a short delay, and Chronobreak makes Ekko untargetable while it resolves — the delay is exactly what the untargetability window is for. The honest version is to spend the ult while the rewind is on cooldown, not to race it.",
+      "corrected": "The delay-versus-untargetability trade is now stated, with the instruction to ult once the rewind is spent.",
+      "confidence": "Medium",
+      "sources": ["champ-data/_kits/orianna.json (R: after a short delay)", "champ-data/_kits/ekko.json (R: untargetable flag)"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[2] calls Ekko's kit melee and whys[0]/early call his poke \"clunky\".",
+      "why": "Timewinder reaches 1075 against Command: Attack's 815 — he out-ranges Orianna's poke. What he cannot do cheaply is repeat it: the Q costs 50 mana at rank 1 rising to 90. Phase Dive is the melee part, at 325 range. \"Clunky\" is also a hedge that tells the reader nothing.",
+      "corrected": "Replaced with the real early-game brake — his mana and the 325-range dash he has to walk in to use.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ekko.json (Q: 1075, 50/60/70/80/90; E: 325)", "champ-data/_kits/orianna.json (Q: 815)"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Anti-heal appears nowhere on the page, and report[8].t tells an Orianna facing Ekko to \"buy the stopwatch the moment Zed hits 6\".",
+      "why": "Chronobreak heals Ekko for a percentage of the damage he received during the rewind window, so Grievous Wounds timing decides every extended fight — this is the needs-antiheal interaction flagged in _missing for this matchup. The Zed reference is a template leak naming a champion who is not in this matchup.",
+      "corrected": "Anti-heal added to the item line, tied to Chronobreak by name, and the stopwatch timing pointed at Ekko.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ekko.json (R: heal flag)", "champ-data/_kits/_missing/orianna_mid.json (needs-antiheal)"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing on the page tells the reader what Ekko's combo looks like before it lands.",
+      "why": "Phase Dive is an auto-attack reset: he rolls first, and the teleport comes on the next attack. The roll is the cue to step back — by the time the teleport resolves the decision is already made. Flagged as autoreset-burst-tell in _missing.",
+      "corrected": "\"the roll is the tell, not the teleport\" written into breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ekko.json (E: autoReset flag, text)", "champ-data/_kits/_missing/orianna_mid.json (autoreset-burst-tell)"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit, and the packet reports zero sequencing cues across the whole matchup.",
+      "why": "Chronobreak 110/80/50, Timewinder 9/8.5/8/7.5/7, Parallel Convergence 22/20/18/16/14, Phase Dive 9/8.5/8/7.5/7; Command: Protect 9s, Command: Shockwave 110/95/80.",
+      "corrected": "Real numbers written into breakdown.cooldowns, report[5].t, report[9].t and the do's/don'ts, each with a concrete wait-for-X instruction.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ekko.json", "champ-data/_kits/orianna.json"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[0].d, dosFull[1].d and dontsFull[2].d were all pasted from elsewhere — two of them the tradeGood/tradeBad strings — under titles they do not explain.",
+      "why": "Copy-paste bleed: \"Slow-field his exit path mid-dive\" was explained with a ball-placement trade rule.",
+      "corrected": "Each body rewritten to answer its own title.",
+      "confidence": "High",
+      "sources": ["currentText.full"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Ekko", "after": "Orianna" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[4].why", "before": "Shockwave online — your lane presence doubles without casting anything. Every wave he contests is a potential flip.", "after": "His window: Chronobreak makes a failed dive free, and by rank 3 it is back every 50 seconds. Fight it, not him." },
+    { "layer": "content", "path": "win[4]", "before": "Skill", "after": "Ekko" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Ekko" },
+    { "layer": "full", "path": "phases[5].why", "before": "Luden's spike: Q-W chunks a third of his bar. Shove, rotate, and let the ball-delivery threat run the river fights.", "after": "First item makes the dash-stun-burst lethal, and the rewind still pays for it. Hold the ball on the ally he wants." },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "enemyWin", "before": "Ekko wins by landing Chronobreak, denying your pattern, and turning your every misstep into the all-in you hadn’t budgeted.", "after": "Ekko wins by diving on a Chronobreak that is only 50s at rank 3 — he takes the risk because the rewind refunds it." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Ekko Chronobreak: matchup-defining — Erases your kill and bursts back — track the hologram and save final damage for after it. Step up only on its downtime. - Budget E Command: Protect for emergencies and the R for opportunities — never swap them.", "after": "- Ekko Chronobreak: 110s at rank 1 but 50s at rank 3 — he goes untargetable and heals a share of the damage you just did, so save the last hit for after the hologram. - Phase Dive is 9s: the roll is the tell, not the teleport. - Command: Protect is 9s." },
+    { "layer": "full", "path": "breakdown.early", "before": "Win the auto-weave levels: passive stacks hurt, ball placement zones, and Q-W trades punish every wave contact. Mana is the only brake.", "after": "Levels 1-2 are yours on autos: Timewinder costs 50 mana a throw and Parallel Convergence takes seconds to form. Punish the setup." },
+    { "layer": "full", "path": "breakdown.spikes", "before": "Lost Chapter steadies the trade game; level 6 doubles your lane presence; Luden's makes Q-W a third of a health bar.", "after": "Lost Chapter steadies the trades; 6 is his spike, and Chronobreak falls from 110s to 50s by rank 3 — that is the curve." },
+    { "layer": "full", "path": "breakdown.feeding", "before": "If Ekko opens the score, reset expectations and respect Chronobreak doubly. After a second, your job description changes — farm with Q-W clears and stay relevant through Shockwave threat.", "after": "If Ekko opens the score, buy anti-heal — Chronobreak returns a share of everything you land. After a second, your job changes: farm with Q-W clears and stay relevant through Shockwave threat." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through the ball — no champion controls teamfight space like Orianna; one Shockwave on three is a won game, and you decide when it happens.", "after": "Carry off his rewind: Chronobreak heals off the damage he took, so spend Shockwave once it is gone — 110s at rank 1 is a whole fight of downtime." },
+    { "layer": "full", "path": "ahead", "before": "Ahead, run the clock: shove with Q-W, zone Ekko off every contact with ball threat, and rotate first to rivers — your Shockwave makes every skirmish a 5v4 audition.", "after": "Ahead, take the downtime: shove with Q-W, ping the second he leaves, and fight only while Chronobreak is spent — at rank 1 that is 110 seconds of Ekko with no exit." },
+    { "layer": "full", "path": "dosFull[0].d", "before": "Erases your kill and bursts back — track the hologram and save final damage for after it. Its cooldown is the green light — wait for it.", "after": "Command: Protect only casts from the ball, on 9s — leave the sphere out at 815 and Phase Dive arrives with nothing in its way." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Ball on his farm path, Q-W the last-hit contact, auto-weave once, and recall the ball — three-second trades his combo math can't answer.", "after": "The instant Phase Dive lands, drop Dissonance under him — the slow field taxes the walk out while Chronobreak is still winding up." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Ekko whiffs Chronobreak and the lane briefly belongs to you.", "after": "A crashed wave is a roam he can't make — ping when he leaves." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Ekko’s rehearsed moment — don’t audition for it.", "after": "At 6 he dives knowing Chronobreak undoes it — hold the ball." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Poking with the ball stranded at max range when his engage is up — an Orianna without her ball is a Doran's Ring with legs.", "after": "Phase Dive is 9s at rank 1 and resets his auto — the third cast is the one he answers, and your W is 7s behind it." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Ekko’s Chronobreak: Erases your kill and bursts back — track the hologram and save final damage for after it. The whole green-light system is its cooldown.", "after": "Track Ekko’s Chronobreak, 110s at rank 1 and 50s at rank 3: he goes untargetable, rewinds and heals, so save your last damage for after the hologram lands." },
+    { "layer": "full", "path": "report[8].t", "before": "Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — buy the stopwatch the moment Zed hits 6.", "after": "Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's the moment he hits 6, and anti-heal to cut the Chronobreak heal." },
+    { "layer": "full", "path": "report[9].t", "before": "Commit on Chronobreak’s cooldown, on your Luden's spike, and with your jungler’s setup. Bait the answer, then sign.", "after": "Commit on Chronobreak’s 110s cooldown, on your Luden's spike, and with your jungler’s setup. Bait the rewind, then sign." },
+    { "layer": "content", "path": "whys[0]", "before": "Ekko's poke is clunky at level 1, so your ball-Q leads the trades.", "after": "Timewinder is his only level 1 tool and it costs 50 mana a throw." },
+    { "layer": "content", "path": "whys[2]", "before": "Level 3 you still out-range his melee combo setup.", "after": "Level 3 he must walk into 325 Phase Dive range." },
+    { "layer": "content", "path": "spikes[3].text", "before": "In grouped fights Ekko dashes into your clump to combo, and your Command: Shockwave answers that dive with a multi-man catch before he can rewind, tilting 2-item fights to you.", "after": "In grouped fights Ekko dives your clump and Command: Shockwave answers — but its short delay is what Chronobreak's untargetability dodges, so spend the ult once the rewind is gone." },
+    { "layer": "content", "path": "early", "before": "You control levels 1-3: Ekko's poke is clunky before his W stun is charged, so you land Command Attack pokes as he walks up and hold the wave to stop him detonating Parallel Convergence on you for a free trade.", "after": "You control levels 1-3: Timewinder reaches 1075 but costs him 50 mana a throw, so land Command: Attack pokes as he walks up and hold the wave so he cannot set Parallel Convergence where you are standing." }
+  ],
+  "notes": "Two things the page had backwards. First, it treated Ekko as a short-range champion who pokes clumsily — Timewinder is 1075 range against Command: Attack's 815, so he out-ranges you; the real early brake is his mana (50 rising to 90 per Q) and the 325-range Phase Dive he has to walk in to use. Second, spikes[3].text promised Shockwave beats the rewind: Command: Shockwave resolves after a short delay and Chronobreak grants untargetability, so racing it is the losing plan and spending the ult during its downtime is the winning one. report[8].t contained a template leak naming Zed in an Ekko matchup — replaced, and anti-heal added there and in breakdown.feeding since Chronobreak's heal is the needs-antiheal interaction flagged in _missing. Chart handled the same way as the diana matchup: content win[4] flipped from Skill to Ekko so it agrees with phases[4].side and with content's own whys[4], which already described level 6 as his kill window. Left alone: content.late (its claim about catching him before the rewind is achievable if the ult is timed on downtime, which the spikes edit now explains), breakdown.mid, breakdown.late and breakdown.wave (Orianna-generic, nothing Ekko-specific fit the length band)."
+}

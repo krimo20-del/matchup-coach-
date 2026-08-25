@@ -1,0 +1,68 @@
+{
+  "ownerKey": "cassiopeia_mid",
+  "enemy": "kassadin",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "FAVOURED at 4/10 matches the kit and the 49.75% figure is a lane-agnostic average dragged by Kassadin's scaling, not by lane. Cassiopeia's 850-range Q against a 650-range Null Sphere with no ranged wave clear is a genuine early stomp.",
+      "corrected": "Left the difficulty rating alone; sharpened the early prose with the real range gap.",
+      "confidence": "High",
+      "sources": ["brief.ownerKit", "brief.enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[6].side read 'Skill' while win[6] read 'Cassiopeia' and the packet levelChart reads Cassiopeia on all seven rows — a cross-layer disagreement on the last row.",
+      "why": "Two layers, two answers to 'who wins with two items'. The content layer agrees with the packet.",
+      "corrected": "Moved phases[6].side to Cassiopeia. win[6] already holds 'Cassiopeia' on disk, so there is no paired content edit to make — before would equal after. The row now agrees across both layers. Spike structure otherwise correct: Kassadin's real spike is banked Riftwalk stacks, not an item.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content.win"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Three content fields (mid, late, spikes[2].text) describe Null Sphere as a silence — 'walking into silence range', 'his silence-burst combo', 'his silence-Q combo'. Riot's own description says it deals damage and interrupts channels; it says nothing about a silence.",
+      "why": "The kit file is the authority on what an ability does, and a player who plays around a silence that is not there will misplay every trade.",
+      "corrected": "Rewrote those three to name Null Sphere's 650 range and its magic-damage shield as the actual constraints. Also added the Nether Blade auto-reset tell (7s) to dosFull[2].d, and corrected the Riftwalk cooldown framing: at 5/3.5/2 seconds you cannot wait it out — the mana cost of stacked Riftwalks is the real limiter, and Miasma's grounding is what actually denies it.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.missingInteractions"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint) and told the reader to 'step up only on Riftwalk's downtime' — advice that is unusable against a 2-second cooldown.",
+      "why": "The packet also flags 'NO cooldown-sequencing advice anywhere'.",
+      "corrected": "Riftwalk 5/3.5/2 with stacking mana cost, Null Sphere 9/8.5/8/7.5/7, Force Pulse 21/20/19/18/17 — with what to do on each.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.packet.defects"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was tradeGood verbatim and dontsFull[2].d was tradeBad verbatim (lint COPY_PASTE_BLEED); dontsFull[1].d carried the anti-dive Miasma line under a title about turning your back.",
+      "why": "Body contradicted title in all three.",
+      "corrected": "All three replaced with text matching their titles, built on Petrifying Gaze's facing requirement and Riftwalk's 500-range blink.",
+      "confidence": "High",
+      "sources": ["brief.lintFindings", "brief.ownerKit", "brief.enemyKit"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Cassiopeia"},
+    {"layer":"full","path":"enemyWin","before":"Kassadin wins by landing Riftwalk, denying your pattern, and starting the fight your kit wanted ten seconds later.","after":"Kassadin wins by surviving to banked Riftwalk stacks and blinking out of every Miasma you place late, before Twin Fang can ramp."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Kassadin Riftwalk: matchup-defining — His mobility spike — the lane is decided before it scales. Step up only on its downtime. - Budget R Petrifying Gaze for emergencies and the R for opportunities — never swap them.","after":"- Riftwalk is 5s at rank 1 and 2s at rank 3, so waiting it out never works — the stacking mana cost is the real clock, and Miasma is the real answer. - Null Sphere is 9s at rank 1: step up on the miss. - Force Pulse is 21s and needs charges."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry by DPS — no mid matches your damage-per-second from two items; your job is staying alive long enough to prove it.","after":"Carry by DPS — Void Stone cuts the magic damage you are built out of, so Liandry's and Void Staff come before you count on the kill."},
+    {"layer":"full","path":"dosFull[0].d","before":"His mobility spike — the lane is decided before it scales. Commit on its cooldown, never into it.","after":"Riftwalk is a 500-range blink — Miasma grounds it, so drop the cloud where he lands, not where he stands."},
+    {"layer":"full","path":"dosFull[1].d","before":"Q the last-hit window, E-E-E while the poison ticks, and walk back as it fades — three fangs and out, repeat until Kassadin is executable.","after":"Petrifying Gaze stuns only enemies facing you — turn to meet the Riftwalk as it lands, or a back-turned Kassadin takes a slow and leaves."},
+    {"layer":"full","path":"dosFull[2].d","before":"Kassadin whiffs Riftwalk and the lane briefly belongs to you.","after":"His Nether Blade wind-up is the tell — step back on it."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Kassadin’s rehearsed moment — don’t audition for it.","after":"Miasma is the only thing that stops a 2-second Riftwalk."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Your miasma is the anti-dive — spending it on poke means the next engage arrives ungrounded and you have no boots to run.","after":"Petrifying Gaze only stuns enemies facing you; back-turned they take a slow, and a slowed Kassadin still has Riftwalk to leave with."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Spamming unpoisoned fangs at full mana cost, or holding W so long the dash you were saving it for already happened.","after":"Outside your own poison cloud he blinks 500 units a chase, and with no boots and no dash you were never going to catch that."},
+    {"layer":"content","path":"mid","before":"From levels 3-6 keep abusing his lack of range; he simply cannot answer Q poke without walking into silence range, which you should never allow. His level 6 Riftwalk only grants mobility, not real burst, so an all-in blink-in from him is still a bad trade for him into your R stun and E execute. Keep denying waves with Miasma zoning so his mana stays drained and he can't safely farm, let alone roam. Your goal the whole phase is to keep him so far behind in gold/XP that his eventual scaling never matters.","after":"From levels 3-6 keep abusing his lack of range; Null Sphere reaches 650 to your 850, so he cannot answer Q poke without stepping inside Twin Fang range. His level 6 Riftwalk only grants mobility, not real burst, so an all-in blink-in from him is still a bad trade for him into your R stun and E execute. Keep denying waves with Miasma zoning so his mana stays drained and he can't safely farm, let alone roam. Your goal the whole phase is to keep him so far behind in gold/XP that his eventual scaling never matters."},
+    {"layer":"content","path":"late","before":"Liandry's into Rabadon's snowballs a lead you should already have from lane dominance — his one counterplay is out-scaling you with banked Riftwalk stacks around level 11-13, so don't let the game drag if you're up. If he does reach his power spike, a well-timed Zhonya's or MR item (Abyssal Mask) neutralizes his silence-burst combo. Your R still threatens to delete him even scaled, since his kit lacks a hard escape from a landed stun.","after":"Liandry's into Rabadon's snowballs a lead you should already have from lane dominance — his one counterplay is out-scaling you with banked Riftwalk stacks around level 11-13, so don't let the game drag if you're up. If he does reach his power spike, a well-timed Zhonya's or MR item (Abyssal Mask) blunts the Null Sphere burst combo. Your R still threatens to delete him even scaled, since his kit lacks a hard escape from a landed stun."},
+    {"layer":"content","path":"spikes[2].text","before":"Even with a Sheen/Lich Bane component his silence-Q combo doesn't out-trade your poison ramp, and Miasma's ground effect denies his short-range engage.","after":"Even with a Lich Bane, Null Sphere's shield only eats magic damage once and doesn't out-trade your poison ramp — and Miasma grounds the 500-range blink he needs."}
+  ],
+  "notes": "missingInteractions claims 'Kassadin's Null Sphere (Q) is a channel — your Petrifying Gaze (R) cancels it outright.' Riot's own description says the opposite direction: Null Sphere deals damage and INTERRUPTS channels. The kit's 'channel' derived flag has misfired on that sentence. Per the brief's rule I trusted the description and did not write the R-cancels-Q claim anywhere. Recorded in unverified. Separately: three content fields called Null Sphere a silence; current Riot text has no silence on it, so I corrected all three rather than leave a mechanic on the page that does not exist. Also left the Riftwalk-cooldown green-light framing out of the new cooldowns field — at 2s late it is not a window, and Miasma's grounding is the real answer; report[5].t still carries the old 'the whole green-light system is its cooldown' line but I left the report array alone per the two-entry cap."
+}

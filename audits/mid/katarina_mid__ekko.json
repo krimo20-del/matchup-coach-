@@ -1,0 +1,108 @@
+{
+  "ownerKey": "katarina_mid",
+  "enemy": "ekko",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "EVEN 5.5/10 fits 52.19% over 2964 games. The difficulty is not flat across the game: Katarina holds levels 1 through first item because Parallel Convergence telegraphs for three seconds and Phase Dive is only 325 range, and loses the 2+ item duel because Chronobreak re-rolls it.",
+      "corrected": "Label unchanged; the chart now shows the single flip instead of reading 'Skill' seven times.",
+      "confidence": "High",
+      "sources": ["packet winRate/games", "enemyKit Ekko W/E/R"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "All seven full-layer sides read 'Skill'; the content layer and the packet both read Katarina on six rows and Ekko at 2+ items.",
+      "why": "Chronobreak at 110s rank 1 down to 50s rank 3 is the whole curve of this matchup — early it is a one-per-two-waves escape you can force with a half-commit, late it is a duel re-roll on a short cooldown. That is why exactly one row flips.",
+      "corrected": "phases[0..5].side -> Katarina, phases[6].side -> Ekko, ratings moved with them, and phases[6].why rewritten in the same proposal because its verdict flipped. win[0..6] already holds these values on disk.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[0..6]", "enemyKit Ekko R cooldown"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit; dosFull[1].d was tradeGood pasted under 'Blink to daggers, not targets'; dontsFull[2].d was tradeBad pasted under 'Fight away from your steel'; and dosFull[2].d invented a 'fifteen-second invitation' when Chronobreak is 110/80/50.",
+      "why": "The interaction that actually kills Katarina here is Parallel Convergence: Ekko entering his own anomaly gains a shield AND stuns everyone inside, and Katarina's R is flagged channel-interruptible, so that stun ends Death Lotus. The second one, absent from the page entirely, is that Phase Dive is an auto-attack reset — his combo opens on a charge-up, so the wind-up is the tell, not the cast.",
+      "corrected": "breakdown.cooldowns now carries R 110/80, W 22s with its three-second tell and E 9s at 325 range; the stun-ends-channel rule is in tradeBad and dontsFull[2].d; the auto-reset tell is in dosFull[1].d and report[5].t.",
+      "confidence": "High",
+      "sources": ["enemyKit Ekko W/E/R text and flags", "ownerKit Katarina R channel flag", "brief missingInteractions autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no number, and two other fields carried numbers that do not exist in his kit: 'fifteen-second invitation' in dosFull[2].d, and '100+ seconds' for a forced Chronobreak in whys[5] and spikes[2].text.",
+      "why": "Chronobreak is 110/80/50. '100+ seconds' is only true at rank 1; by the first-item timing the field describes, it is usually 80s. Directionally right is not right, and a reader who plans two waves off a wrong number gets caught.",
+      "corrected": "'100+ seconds' -> '80-110 seconds' in both content fields; 'fifteen-second invitation' -> '110 seconds at rank 1'.",
+      "confidence": "High",
+      "sources": ["enemyKit Ekko R cooldown"]
+    },
+    {
+      "point": 7,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.wave used the placeholder 'a CC mage's tower'.",
+      "why": "The concrete wave trap is a freeze near his tower where the W anomaly can arm on top of the dagger you must walk onto to reset.",
+      "corrected": "Rewritten around his slower pre-3 clear and the anomaly-on-your-dagger trap.",
+      "confidence": "High",
+      "sources": ["enemyKit Ekko W", "ownerKit Katarina passive"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The brief's missingInteractions offers two rules; one is good and one is false. 'Ekko's combo opens with an auto-attack reset (Phase Dive)' is supported by Riot's text and the autoReset flag. 'Your Bouncing Blade (Q) shuts off Ekko's Phase Dive' is not.",
+      "why": "Katarina's Q grounding flag contradicts Riot's description of the ability, which is a thrown dagger that bounces and ricochets to the ground. This is the third brief in this slice carrying that same bad flag.",
+      "corrected": "The auto-reset tell is written into dosFull[1].d and report[5].t. The grounding claim is not written anywhere.",
+      "confidence": "High",
+      "sources": ["ownerKit Katarina Q text vs flags", "enemyKit Ekko E autoReset flag and text"]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "No patch claim appears in the text and the brief indicates no recent change.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["brief"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Ekko" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Kata is a chain reaction: enter on daggers, lotus the clump, reset through the wreckage, repeat until silence.", "after": "Chronobreak re-rolls any duel he loses, and his W stun punishes the channel — two items is where he takes the lane." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Ekko Chronobreak: matchup-defining — Erases your kill and bursts back — track the hologram and save final damage for after it. It governs your forward steps. - E Shunpo (second use) spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Chronobreak (R): 110s at rank 1, 80s at rank 2 — force it with a half-commit and he is a wave-clear bot until it returns. - Parallel Convergence (W): 22s at rank 1, and the anomaly is visible for three seconds before it stuns. - Phase Dive (E) is 9s at 325 range." },
+    { "layer": "full", "path": "tradeGood", "before": "Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow.", "after": "Q the wave, E to the landed dagger, W out — trade while Timewinder is out and only its return can hit." },
+    { "layer": "full", "path": "tradeBad", "before": "Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Shunpo into his W anomaly — he enters it, gets a shield and a stun, and your channel ends before the blades land." },
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow. Bad trade: Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Good trade: Q the wave, E to the landed dagger, W out — trade while Timewinder is out and only its return can hit. Bad trade: Shunpo into his W anomaly — he enters it, gets a shield and a stun, and your channel ends before the blades land." },
+    { "layer": "full", "path": "dosFull[0].d", "before": "Erases your kill and bursts back — track the hologram and save final damage for after it. Until it’s spent, every commit is a coin flip.", "after": "In a 2v2 he must Chronobreak early to survive, and the rewind heals off the health he had four seconds ago — chunk him first." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow.", "after": "Phase Dive is an auto-attack reset at 325 range — the wind-up is the tell, not the cast. Step off it." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Ekko burns Chronobreak on nothing — take the fifteen-second invitation.", "after": "Ekko burns Chronobreak on nothing — that is 110 seconds at rank 1." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Ekko’s whole plan in one window — decline politely and watch it retire.", "after": "An even-HP brawl is his: W shields him, and Chronobreak un-loses the trade." },
+    { "layer": "full", "path": "dontsFull[1].d", "before": "Your lotus dies to one interrupt — counting their CC before spinning is the entire skill floor of the champion.", "after": "Shunpo is 12s at rank 1; spend it on the way in and you cannot leave his W zone once the anomaly arms." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Off your daggers you cannot reposition, and his W anomaly stuns the moment he steps into it — that ends Death Lotus." },
+    { "layer": "full", "path": "enemyWin", "before": "Ekko wins by landing Chronobreak, denying your pattern, and front-loading the violence while your kit is still stretching.", "after": "Ekko wins by surviving your opening with his W shield, then rewinding the trade away and taking it again with a stun." },
+    { "layer": "full", "path": "ahead", "before": "Ahead, chain it: zone Ekko off daggers, lotus every skirmish, and reset through the map — fed Katarina is a weather event.", "after": "Ahead, force Chronobreak with a half-commit — 110 seconds at rank 1 is two waves, a plate and a roam that he watches." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through chain reactions — one kill is three; your job is the first domino and the discipline to wait for it.", "after": "You carry by making him spend R early: chunk, back off, and take the kill on the next wave while it is still down." },
+    { "layer": "full", "path": "breakdown.wave", "before": "Best wave: a Q-bounced thin push with daggers banked at the river mouth — your roams arrive with luggage. Worst wave: a frozen wave near a CC mage's tower — every pickup walk is a stun audition. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.", "after": "Best wave: shoved thin — you clear faster than Ekko pre-3 and he hates farming on the back foot. Worst wave: frozen near his tower, where his W anomaly can arm on the dagger you have to walk onto. Crash timing: crash after he uses Timewinder, and roam while his Q is on its 9s." },
+    { "layer": "full", "path": "breakdown.early", "before": "Dagger geometry and patience — chip the no-CC kits, bait the CC ones, and bank patterns for the 6 that changes the lane's species.", "after": "His pattern needs three passive stacks and your resets never give them — trade whenever Timewinder is out and step off his E wind-up." },
+    { "layer": "full", "path": "breakdown.mid", "before": "First item onward, hunt skirmishes: every 2v2 near your daggers is a reset chain waiting for a signature. Roam when mid stalls.", "after": "Damage first, ult second: his rewind heals off four-second-old health, so chunk him over two passes and then commit." },
+    { "layer": "full", "path": "breakdown.spikes", "before": "Level 3 dagger strings set the lane; level 6 arms the blender; first item makes resets explosive.", "after": "Level 3 beats his 3s W tell; level 6 your R kills while his only escapes; two items flip it." },
+    { "layer": "full", "path": "breakdown.late", "before": "You are the cleanup that starts fights: enter on steel, lotus the clump, reset through the kill, and exit through the panic.", "after": "Late, stop dueling him: track the R hologram, take the carries behind him, and touch Ekko only once Chronobreak is spent." },
+    { "layer": "full", "path": "report[3].t", "before": "Good trade: Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow. Great trade: Ekko wastes Chronobreak — commit immediately. Bad trade: Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Good trade: Q the wave, E to the landed dagger, W out — trade while Timewinder is out and only its return can hit. Great trade: Ekko burns Chronobreak on nothing — that is 110s at rank 1, commit immediately. Bad trade: Shunpo into his W anomaly — he enters it, gets a shield and a stun, and your channel ends before the blades land." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Ekko’s Chronobreak: Erases your kill and bursts back — track the hologram and save final damage for after it. It’s down or you don’t go.", "after": "Track two things: Chronobreak's hologram, and Phase Dive's wind-up — his combo opens on an auto-attack reset, so step back on the charge, not the cast." },
+    { "layer": "content", "path": "whys[5]", "before": "First item Katarina: your Lich Bane rotation lands first, and a forced Chronobreak leaves him killable for 100+ seconds.", "after": "First item Katarina: your Lich Bane rotation lands first, and a forced Chronobreak leaves him killable for 80-110 seconds." },
+    { "layer": "content", "path": "spikes[2].text", "before": "Lich Bane Kat one-rotations Ekko before his Lich Bane/Protobelt pattern comes back around, and if he R's out on cooldown he's just a wave-clear bot for 100+ seconds. Force Chronobreak with a half-combo, then kill him for free on the next wave.", "after": "Lich Bane Kat one-rotations Ekko before his Lich Bane/Protobelt pattern comes back around, and if he R's out on cooldown he's just a wave-clear bot for 80-110 seconds. Force Chronobreak with a half-combo, then kill him for free on the next wave." }
+  ],
+  "notes": "Chart: full layer read 'Skill' on all seven rows against a content layer and packet that both read Katarina x6 then Ekko. Sides moved to match; win[0..6] is already correct on disk so there is no paired content edit, and phases[6].why was rewritten in the same proposal since its verdict flipped. Two number defects fixed beyond the lint: dosFull[2].d claimed a 'fifteen-second' Chronobreak (it is 110/80/50) and the content layer twice said a forced R leaves him down '100+ seconds', which is only true at rank 1 — changed to 80-110s. Accepted the brief's auto-reset interaction (Phase Dive) and REJECTED its claim that Katarina's Q grounds Phase Dive — same bad grounding flag seen on the Brand and Diana briefs."
+}

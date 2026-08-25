@@ -1,0 +1,100 @@
+{
+  "ownerKey": "galio_mid",
+  "enemy": "fizz",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "phases[0..6].side all read Galio and win[0..6] all read Galio, matching packet.levelChart exactly — the only matchup in this slice whose chart layers already agree. Difficulty FAVOURED at 4/10 is consistent with the 51.87% figure over 3736 games.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The spike fields never carried Fizz's real timings — Playful / Trickster falling from 16s at rank 1 to 8s at rank 5 is the only spike that changes the lane.",
+      "why": "His threat window is a cooldown window: at rank 5 the untargetable hop is up almost every trade, while Chum the Waters stays at 120s at rank 1.",
+      "corrected": "breakdown.cooldowns, dosFull[1].d and dontsFull[0].d now carry those numbers.",
+      "confidence": "High",
+      "sources": ["enemyKit E cd 16/14/12/10/8", "enemyKit R cd 120/100/80", "enemyKit Q cd 8/7.5/7/6.5/6"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT) and the page never stated the two decisive interactions: your W keeps charging while he is untargetable, and Justice Punch's knockup is the answer to Urchin Strike.",
+      "why": "Playful / Trickster makes him untargetable, so burst spent into it is wasted, but Shield of Durand is a charge-then-release taunt — starting it during the hop lands it on his return. Galio's E knocks up the first champion it reaches, and Urchin Strike (550 range) is Fizz's only way in.",
+      "corrected": "Stated in breakdown.cooldowns, dosFull[0].d and dontsFull[2].d.",
+      "confidence": "Medium",
+      "sources": ["enemyKit E untargetable flag", "ownerKit W text", "ownerKit E knockup", "missingInteractions enemy-dash-deniable"]
+    },
+    {
+      "point": 11,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.carry, breakdown.late and ahead were champion-generic Galio boilerplate that would read identically against any enemy.",
+      "why": "Against Fizz the specific fact is Chum the Waters: a 1300-range fish that commits him to the target it sticks to, and a knockup that fights your own R knockup.",
+      "corrected": "All three rewritten around the shark's travel time and his commit.",
+      "confidence": "High",
+      "sources": ["enemyKit R text and range 1300", "missingInteractions knockup-enabler"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Fizz Playful / Trickster: matchup-defining — The untargetable hop dodges your whole combo — bait it before spending your burst. Step up only on its downtime. - Budget W Shield of Durand for emergencies and the R for opportunities — never swap them.",
+      "after": "- Playful / Trickster: 16s at rank 1, 8s at rank 5 — the hop is untargetable, so anything you spend during it is wasted. - Chum the Waters: 120s at rank 1, and it knocks up. - Urchin Strike is 8s at 550 range; that is his only way in."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "The untargetable hop dodges your whole combo — bait it before spending your burst. Commit on its cooldown, never into it.",
+      "after": "He has to land next to you to slam — hold the W charge through the untargetable window and taunt him on the way down."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield.",
+      "after": "Playful / Trickster is 16s at rank 1 — when the second hop puts him back at range, Winds of War is the only thing that still reaches him."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Fizz’s whole plan in one window — decline politely and watch it retire.",
+      "after": "A feint pulls the W charge, then Urchin Strike arrives on an 8-second cooldown."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+      "after": "Justice Punch is your knockup answer to Urchin Strike — leave with it on cooldown and Fizz dives the wave you left behind."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Fizz wins by landing Playful / Trickster, denying your pattern, and starting the fight your kit wanted ten seconds later.",
+      "after": "Fizz wins by dodging your W inside Playful / Trickster, sticking Chum the Waters on you, and killing you during the knockup."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through arrivals — Hero's Entrance turns every losing skirmish your team starts into a 5v4 with a knockup.",
+      "after": "Carry by punishing the fish: Chum the Waters is 1300 range, and once it is on you, Fizz commits — taunt him as he lands."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.late",
+      "before": "You are the anti-dive: taunt their engage off your carry, shield the magic, and R the flank their comp built around.",
+      "after": "You are the anti-dive: taunt Fizz off your carry, and never spend the R while the shark is still travelling toward someone."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, tax both maps: zone Fizz with taunt threat, keep the wave middle, and R every skirmish — fed Galio makes the enemy jungler unemployed.",
+      "after": "Ahead, deny the reset: Fizz needs Chum the Waters to start a fight, so hold the wave middle and taunt him the moment the fish is airborne."
+    }
+  ],
+  "notes": "No chart edits: this is the one matchup in the slice where phases[N].side and win[N] already agree with packet.levelChart (Galio 7/7). missingInteractions asserts Playful / Trickster and Chum the Waters can deny Justice Punch via grounding; Riot's own text for both abilities never mentions grounding, so per the kit rule I treated the derived 'grounding' flag as suspect and did NOT write that claim anywhere. Chum the Waters' knockup vs Hero's Entrance knockup (whoever lands first owns the trade) is reflected in breakdown.late."
+}

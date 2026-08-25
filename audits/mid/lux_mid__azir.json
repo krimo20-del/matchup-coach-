@@ -1,0 +1,175 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "azir",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer level chart said \"Skill\" on all seven rows while the content layer (win[0..6]) and the packet levelChart both read Lux, Lux, Lux, Lux, Lux, Azir, Azir. The page rendered two different answers to who wins each stage.",
+      "why": "Lux out-ranges Azir before Arise! soldiers are stacked (Q 1175 / E 1100 / R 3340 vs a 525 soldier-summon range), so the early rows belong to her; once Azir's first item lands, soldiers he refreshes every 1.5s out-DPS her 10s Q cycle.",
+      "corrected": "phases[0..4].side = Lux, phases[5].side = Azir (matching win[5], already Azir), phases[6] stays Azir; phases[5].why and phases[6].why rewritten so the sentence agrees with the new verdict.",
+      "confidence": "High",
+      "sources": [
+        "packet.levelChart",
+        "content win[0..6]",
+        "champ-data/_kits azir.json",
+        "champ-data/_kits lux.json"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[] had only 3 entries and nothing described Emperor's Divide as a late spike; breakdown.cooldowns carried no cooldown number at all.",
+      "why": "Azir's real spikes are rank-5 Conquering Sands (14s down to 6s), his first item, and rank-3 Emperor's Divide at 90s. Lux's are Final Spark at 60/50/40 and her first item.",
+      "corrected": "Added spikes[3] for Emperor's Divide and put real cooldown numbers into breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits azir.json",
+        "champ-data/_kits lux.json"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Nothing on the page states that Shifting Sands (E) shields Azir as it dashes him, so it eats the burst window Lux opens with; the cooldowns field described it without a number.",
+      "why": "Azir's E is 22/20.5/19/17.5/16s and grants a shield plus a dash to a Sand Soldier, and it halts on champion contact. It is both his escape from Light Binding and his damage absorb, so it is the single cooldown that decides every all-in.",
+      "corrected": "Cooldowns, dosFull, enemyWin and breakdown.carry now name Shifting Sands with its 22s/16s numbers and tie the commit to it being spent.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits azir.json",
+        "_missing/lux_mid.json rule shield-absorbs-burst"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that exists to hold real cooldowns.",
+      "corrected": "Rewritten with Shifting Sands 22s/16s, Prismatic Barrier 12s and Final Spark 60s.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits azir.json",
+        "champ-data/_kits lux.json"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was the tradeGood string verbatim and dontsFull[2].d was the tradeBad string verbatim, both under unrelated titles (lint COPY_PASTE_BLEED x2).",
+      "why": "The title promised passive weaving and R discipline; the body explained something else.",
+      "corrected": "Both bodies rewritten to match their own titles, grounded in Illumination and Final Spark's 60s cooldown.",
+      "confidence": "High",
+      "sources": [
+        "lintFindings",
+        "champ-data/_kits lux.json"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "lint COPY_PASTE_BLEED: the body was the tradeGood string verbatim under an unrelated title.",
+      "why": "An earlier proposal targeted these same fields but its replacement text overshot the +/-10% length rule, so apply-proposals dropped the edit and the defect survived on disk.",
+      "corrected": "Rewritten to the same meaning inside the length budget, grounded in real ability names and cooldowns from champ-data/_kits: dosFull[1].d.",
+      "confidence": "High",
+      "sources": [
+        "lintFindings",
+        "champ-data/_kits lux.json",
+        "champ-data/_kits azir.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Lux"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Lux"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Skill",
+      "after": "Lux"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Lux"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Lux"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Azir"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Luden's spike: Q-E-R deletes squishies from root range. Force him to dodge or die on every contact.",
+      "after": "His first item flips it: soldiers out-DPS your poke and Shifting Sands eats the burst you open with."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late Lux decides fights from a screen away: root the entry, slow the pit, and laser the clump your team froze.",
+      "after": "Emperor's Divide is a 90-second wall at rank 3 that knocks your line back — land the root before it, or get nothing."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Azir Shifting Sands: matchup-defining — His shield-dash to a soldier — engage the window after he burns it. Count it out loud if you must. - Your W Prismatic Barrier has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Shifting Sands (E): 22s at rank 1, 16s at rank 5 — his shield and his only escape in one button. The moment he burns it, Q him. - Prismatic Barrier (W) is a 12s answer to exactly one combo. - Final Spark is 60s at rank 1, so spend it on his commit, not the wave."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.",
+      "after": "Illumination charges on every damaging spell — land Q or E, then step in for the auto that ignites it. That free chunk is your trade."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.",
+      "after": "Final Spark is 60s at rank 1 — dumped on a wave it is missing for the pick that starts the objective fight, and Azir walks over you."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Azir wins by landing Shifting Sands, denying your pattern, and owning the spacing war until your tempo starves.",
+      "after": "Azir wins by scaling to his first item, then out-ranging you with Arise! soldiers refreshed every 1.5s while your Q sits on 10s."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.",
+      "after": "Carry by rooting Azir himself: with Shifting Sands down he has no escape, and Final Spark reaches 3340 units to finish him before soldiers land."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": null,
+      "after": "Emperor's Divide at rank 3 is a 90-second wall of soldiers that knocks your team back and creates terrain — hold Final Spark until it is spent."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].when",
+      "before": null,
+      "after": "Level 16 (Azir)"
+    }
+  ],
+  "notes": "Chart: full layer read \"Skill\" on all seven rows while content win[0..6] and packet.levelChart both read Lux x5 then Azir x2 — the full layer was the wrong one, so the six side edits are proposed as one atomic group and win[] needs no change (it already matches). phases[5].why and phases[6].why were rewritten in the same proposal because their sides now say Azir. Left phases[].rating alone: the rating scale's owner-vs-enemy polarity is not stated anywhere in the data, and guessing it would risk contradicting the side. Did not assert whether Emperor's Divide's wall blocks Light Binding or Final Spark projectiles — the kit text only gives the terrain flag, and it is not verified. QA re-scope: previous edits to dosFull[1].d were rejected for length drift; re-proposed within budget. Cooldowns quoted are Riot per-rank values from the kit files; no spell-shield, cleanse or minion-block behaviour is asserted anywhere, since the kits do not state it."
+}

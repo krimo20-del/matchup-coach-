@@ -1,0 +1,88 @@
+{
+  "ownerKey": "kassadin_mid",
+  "enemy": "yasuo",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Yasuo pays zero mana on all four abilities and dashes through the wave on a 0.5s Sweeping Blade, so he chooses every early engagement while Kassadin's only pre-6 tool is a 650-range projectile Wind Wall deletes. TRICKY 7/10 is right for the lane even at a 54.6% overall win rate over 2511 games — the number comes from the scaling half.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief.enemyKit costs and cooldowns", "brief.packet"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level 6 material framed Last Breath as the thing that kills you, without stating its precondition.",
+      "why": "Riot's text: Last Breath 'Blinks to an Airborne enemy champion'. Kassadin brings no knockup, so the only way Yasuo reaches his own ultimate solo is Steel Tempest's second Gathering Storm stack. The cooldown that actually kills you is a 4s Q, not a 70s R.",
+      "corrected": "mid and spikes[1].text rewritten to name the Airborne precondition and point at Steel Tempest.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Q and R text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page says Wind Wall counters your engage and never states the one thing that makes this matchup survivable: Wind Wall does not stop Riftwalk.",
+      "why": "Wind Wall 'blocks all enemy projectiles for 4 seconds'. Null Sphere is flagged projectile and is blocked. Riftwalk's text is 'Kassadin teleports to a nearby location' — a teleport, not a projectile, so the wall does not deny the blink itself, only the orb you follow it with. The derived 'terrain' flag on Wind Wall contradicts Riot's own description, which describes no terrain, so I trusted the description.",
+      "corrected": "Written into breakdown.cooldowns, dosFull[1].d and mid.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit W text", "brief.ownerKit R text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint), and dosFull[2].d gave no number for the window it tells you to take.",
+      "why": "Wind Wall is 25/23/21/19/17s with a 4s duration — a 21-second hole at rank 1, which is the entire basis of the advice.",
+      "corrected": "Both fields carry the real numbers.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit W"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Yasuo Wind Wall: matchup-defining — Blocks every projectile for its duration — hold your poke until it is spent. Count it out loud if you must. - Your R Riftwalk has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Yasuo Wind Wall: matchup-defining — 25s at rank 1 down to 17s at rank 5 and it stands 4s; hold Null Sphere until it expires. - Riftwalk is a teleport, not a projectile — the wall never stops the blink, only the orb you follow it with."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q-shield his key spell, W refund the auto, walk — pre-6 trades are accounting; post-6 add a blink and they're arguments you win.",
+      "after": "Riftwalk is a teleport — Wind Wall cannot stop it, so blink out straight through the wall he dropped to pin you on the wave."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Yasuo spends Wind Wall early — the closest thing this matchup has to a guarantee.",
+      "after": "Wind Wall is down for 25s at rank 1 — that whole gap is when your Q exists again."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Trading like the late game already arrived — a level 5 Kassadin with ambitions is a gold bounty with a shield.",
+      "after": "Riftwalk is your exit until 11 — spend it toward him and Steel Tempest's second stack knocks you up for free."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Yasuo wins by landing Wind Wall, denying your pattern, and front-loading the violence while your kit is still stretching.",
+      "after": "Yasuo wins by walling the orb, dashing the wave to reach you, and landing the second Steel Tempest before you own Riftwalk."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "His Last Breath knock-up combo is a legitimate all-in kill threat right as he hits 6, and Wind Wall still blocks your Null Sphere engage at this exact power spike, so even with fresh Riftwalk mobility the matchup favors him.",
+      "after": "Last Breath only blinks to an Airborne target, so the kill threat at 6 is really Steel Tempest's second stack, and Wind Wall still eats Null Sphere at this spike — but Riftwalk is a teleport the wall cannot block, and that is your one new answer."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Last Breath knock-up all-in threatens to delete you if he lands a knock-up first, and Wind Wall can flat-out negate your Null Sphere engage tool at this exact spike.",
+      "after": "Last Breath only fires at an Airborne target, so it is Steel Tempest's second stack on a 4s cooldown that kills you, and Wind Wall still eats the Null Sphere you wanted to answer with."
+    }
+  ],
+  "notes": "packet.suspectNames flagged 'His Last Breath' in mid — FALSE POSITIVE, Last Breath is Yasuo's real R per the kit; the field is rewritten anyway for the Airborne precondition. Wind Wall's derived 'terrain: blocks paths and dashes' flag contradicts Riot's description ('Creates a moving wall that blocks all enemy projectiles'), which describes no terrain and no dash denial — I trusted the description, per the brief's instruction, and wrote that Riftwalk passes it. PRE-EXISTING cross-layer chart disagreement, not introduced by me: rows 4, 5 and 6 read 'Skill' in phases[N].side against 'Yasuo', 'Yasuo' and 'Kassadin' in win[4..6]. Not repairable as a matched pair from this side because the content half already holds the target value, leaving no delta; flagged for tools/mirror-fix.js. Also note packet.defects says the chart gives Yasuo 6/7 stages against a 54.6% win rate — I did not move rows on win-rate alone, since a Kassadin chart legitimately looks like that. Templated fields judged and left rather than fabricated: breakdown.carry, breakdown.wave, breakdown.early, ahead, tradeGood, tradeBad."
+}

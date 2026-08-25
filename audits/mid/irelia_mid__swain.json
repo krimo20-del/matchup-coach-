@@ -1,0 +1,87 @@
+{
+  "ownerKey": "irelia_mid",
+  "enemy": "swain",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "All seven phases[N].side read 'Skill' while win[] read Irelia, Irelia, Irelia, Irelia, Swain, Irelia, Irelia.",
+      "why": "The content layer matches the packet levelChart row for row, including the level 6 dip to Swain, and the content whys argue exactly that shape. The full-layer sides were a flat template that erased a real swing point.",
+      "corrected": "phases[0..3].side to Irelia, phases[4].side to Swain, phases[5..6].side to Irelia, with every why rewritten to match — including phases[4].why, which previously described Irelia's own level 6 under a row that now correctly says Swain.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText full/content"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Not a single cooldown appeared anywhere in the matchup — the packet's defect list flags exactly this.",
+      "why": "Demonic Ascension is a flat 120s at 650 range and lasts as long as he keeps draining a champion; Nevermove is 12-to-10s and gets shorter while he is ascended; Death's Hand falls to 3s at rank 5. Those numbers are what turn 'fight before 6' into an actual instruction.",
+      "corrected": "Numbers written into breakdown.cooldowns, dosFull[0].d, spikes[1], mid, phases[3].why and phases[4].why.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/swain.json"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The decisive detail of Nevermove was never stated, and Irelia's W was again described as a 'parry' that heals.",
+      "why": "Riot's text: the wave travels out, THEN returns to Swain and roots enemies it hits — so the outgoing pass is harmless and stepping toward him beats the root that stepping back walks into. Its cooldown also shortens during Demonic Ascension. Separately, Defiant Dance reduces physical damage and does not heal; Bladesurge is the heal, and Swain's damage is magic.",
+      "corrected": "Return-pass mechanic written into phases[2].why, phases[3].why, whys[1], dosFull[1].d and early; the parry/heal claim removed from early.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/swain.json (E)", "champ-data/_kits/irelia.json (Q/W)"]
+    },
+    {
+      "point": 10,
+      "status": "needs-correction",
+      "whatIsWrong": "Anti-heal appeared only as a trailing clause in report[8]; the lane text told the reader to 'burst through his sustain' with no item named.",
+      "why": "Ravenous Flock heals him and permanently raises his maximum health off Soul Fragments, and Demonic Ascension drains on top of that. Grievous Wounds timing is what decides every extended trade, and the missing-interaction file flags it.",
+      "corrected": "Grievous Wounds named in whys[5], spikes[2], phases[5].why, breakdown.carry and breakdown.feeding.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/swain.json (P/R)", "_missing rules needs-antiheal, resistances-invalidated"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Two copy-paste bleeds (dosFull[1].d, dontsFull[2].d) and breakdown.cooldowns with no digit.",
+      "why": "Lint findings, deterministic.",
+      "corrected": "All three fixed below.",
+      "confidence": "High",
+      "sources": ["lintFindings"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Irelia"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Irelia"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Irelia"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Irelia"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Swain"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Irelia"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Irelia"},
+    {"layer":"full","path":"phases[0].why","before":"Q the low minions and keep the blade moving — your level 1 reset dance already out-trades careless mages.","after":"Q the low minions and keep the blade moving — Swain's level 1 is Death's Hand and no way to stop you."},
+    {"layer":"full","path":"phases[1].why","before":"W joins: the channel shreds incoming damage — hold it for his trade spell, not his autos.","after":"W joins, but Defiant Dance cuts physical damage — it does nothing about Death's Hand."},
+    {"layer":"full","path":"phases[2].why","before":"E completes the engine: the stun into stacked-passive autos is half a health bar at 3. Mid lane rarely budgets for it.","after":"E completes the engine: stun him before Nevermove returns, because the root lands on the way back, not the way out."},
+    {"layer":"full","path":"phases[3].why","before":"Reset-dance the wave into his face: four stacks, E-stun, Q the kill threat. The lane is a minion-count quiz.","after":"Reset-dance the wave into his face: four stacks, E-stun, Q the kill threat, all before Nevermove is back in 12s."},
+    {"layer":"full","path":"phases[4].why","before":"Vanguard's Edge online — the all-in caps with a wall of disengage-proof marks. Dive with the wave as your fuel.","after":"Demonic Ascension drains for as long as he holds a target, so a long fight at 650 range is his, not yours."},
+    {"layer":"full","path":"phases[5].why","before":"First item spike: stacked trades delete mages and your sustain mocks their poke math.","after":"First item: burst plus Grievous Wounds finally out-paces the Soul Fragment healing."},
+    {"layer":"full","path":"phases[6].why","before":"Late Irelia surfs the fight: Q-reset through their line, stun the carry pair, and shred whoever peels.","after":"Late you pick where to fight: reset off his front line and never stand inside the 650-range drain."},
+    {"layer":"full","path":"tldr","before":"He needs minions to hide behind and you eat minions for movement — dance the wave into his face and stun the apology.","after":"He heals off everything you leave alive — dance the wave into his face, stun before Nevermove returns, and bring anti-heal."},
+    {"layer":"full","path":"enemyWin","before":"Swain wins by landing Demonic Ascension, denying your pattern, and keeping the fight at a distance your kit resents.","after":"Swain wins by rooting you with Nevermove's return pass, pulling you in, and draining the long fight with his ultimate."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. Step up only on its downtime. - Budget W Defiant Dance for emergencies and the R for opportunities — never swap them.","after":"- Demonic Ascension: a flat 120s at 650 range, and it lasts as long as he keeps draining a champion. - Nevermove: 12s at rank 1, 10s at rank 5, and shorter still while he is ascended. - Death's Hand: 7s down to 3s at rank 5."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Swain takes first blood, tighten up: Demonic Ascension is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q resets and stay relevant through stacked windows.","after":"If Swain takes first blood, tighten up: every Soul Fragment he collects is permanent maximum health, so the gap widens on its own. A second kill means the duel is over and the game isn’t — farm with Q resets and buy Grievous Wounds early."},
+    {"layer":"full","path":"ahead","before":"Ahead, dance louder: crash waves into Swain's face, stun the answers, and surf resets through every river fight.","after":"Ahead, deny the fragments: take his wave, take his health bar, and never let a long fight start at 650 range."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the dance — the wave funds dives no cooldown can, and your R turns skirmishes into no-exit interviews.","after":"Carry by ending fights fast — Grievous Wounds plus four stacks beats a drain that needs time he does not get."},
+    {"layer":"full","path":"dosFull[0].d","before":"His drain mode — disengage and reset the fight when it starts. Its cooldown is the green light — wait for it.","after":"Demonic Ascension is a flat 120s at 650 range — leave the circle rather than trading inside it, then come back."},
+    {"layer":"full","path":"dosFull[1].d","before":"Q-reset through two low minions onto his chest, four-stack autos, E-stun the retreat — the wave-funded all-in he budgeted zero for.","after":"Four stacks first: Nevermove roots on its return pass, so step toward him as the wave goes out and the root misses behind you."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Dashing in under-stacked with W down — Irelia without the engine is a melee minion with a famous haircut.","after":"An empty lane leaves you no Q resets, and every minion he kills is a Soul Fragment healing him back up."},
+    {"layer":"content","path":"whys[1]","before":"Level 2 still favors Irelia as she can shove and poke before his root comes online.","after":"Level 2 still favors Irelia — Nevermove roots on its return, so walking at him beats it."},
+    {"layer":"content","path":"whys[4]","before":"Level 6 favors Swain since Demonic Ascension's drain turns extended fights into an attrition war he wins.","after":"Level 6 favors Swain: Demonic Ascension lasts as long as he keeps draining, so an extended fight is his."},
+    {"layer":"content","path":"whys[5]","before":"On a first item Irelia regains the edge by bursting through his sustain before it can offset her damage.","after":"On a first item Grievous Wounds plus four stacked autos beat the drain before it offsets her damage."},
+    {"layer":"content","path":"spikes[0].text","before":"Irelia's dash-reset trades punish Swain before his root-DoT combo has the damage to threaten a real all-in.","after":"Irelia's dash-reset trades punish Swain before Nevermove into Death's Hand has the damage for a real all-in."},
+    {"layer":"content","path":"spikes[1].text","before":"Swain's Demonic Ascension turns any extended fight into sustained-damage-plus-drain territory that outlasts Irelia's burst window.","after":"Demonic Ascension is a flat 120s that lasts as long as he keeps draining a champion, so any extended fight inside 650 outlasts your burst."},
+    {"layer":"content","path":"spikes[2].text","before":"Irelia regains the edge once she can burst through his ult sustain before the drain fully offsets her damage.","after":"Irelia regains the edge with Grievous Wounds and a completed item, killing him before the drain offsets the damage."},
+    {"layer":"content","path":"wants.foe[0]","before":"Land root to set up E-Q combo","after":"Root with Nevermove, then pull"},
+    {"layer":"content","path":"early","before":"At level 1-2 Swain has no reliable engage or root ready, so Irelia can shove and trade freely without much punishment. Irelia should look to poke down his HP with Q-ins before he lands his root, since a rooted Irelia eats a nasty E-Q-passive stack. Use W's parry to block his key auto or root follow-up and heal the trade back. Keep trades short and decisive rather than extended.","after":"At levels 1-2 Swain has no engage, so shove and trade freely without much punishment. Poke his health down with Q-ins before Nevermove is up, since a rooted Irelia eats the pull and a full Death's Hand. The root lands on the wave's return pass, so step toward him rather than backing away from it. Defiant Dance cuts physical damage and will not blunt his magic — keep trades short and decisive rather than extended."},
+    {"layer":"content","path":"mid","before":"Through levels 3-5 Irelia still wins short trades off her stacking passive and Q resets, staying ahead in lane pressure. At level 6 the matchup flips hard: Swain's Demonic Ascension grants a life-draining zone that turns any prolonged fight into a war of attrition he wins, since Irelia's damage gets sustained back. Avoid fighting him inside his ult radius after level 6 — disengage or force him to walk into your minion wave instead.","after":"Through levels 3-5 you still win short trades off the stacking passive and Q resets, staying ahead on lane pressure. At level 6 the matchup flips: Demonic Ascension is a flat 120 seconds, drains everything within 650, and lasts as long as he keeps a champion inside it, so a prolonged fight is his. Wait out Nevermove's 10-to-12 seconds before you step in, and after 6 either leave the drain radius or make him walk into your minion wave."}
+  ],
+  "notes": "The suspectNames hit on \"Demonic Ascension's\" is a FALSE POSITIVE — that is the real ability name and the possessive is correct. Chart: all seven full-layer sides read Skill while win[] carried a real shape (Irelia x4, Swain at level 6, Irelia x2) that matches the packet exactly; I moved the full sides onto the content values and rewrote phases[4].why, which had been describing Irelia's own Vanguard's Edge under what is now correctly a Swain row. No win[N] edits were needed. Third matchup in this slice where the page told the reader to use Defiant Dance against magic damage — Irelia's W reduces physical damage only, and Swain, Ryze and Mel are all magic. That pattern is worth a sweep across the whole champion rather than the three fields I fixed here. Not verified from the kits: whether Nevermove's root can be dodged by Bladesurge during the return travel, how much the ascended cooldown reduction on Nevermove actually is, and whether Demonflare's slow is separate from the drain."
+}

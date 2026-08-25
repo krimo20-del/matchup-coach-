@@ -1,0 +1,241 @@
+{
+  "ownerKey": "cassiopeia_mid",
+  "enemy": "mel",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Lane difficulty text was generic and misgendered Mel throughout ('his combo', 'his tower', 'his engage'). Mel is female per champ-gender.js.",
+      "why": "Mel out-ranges Cassiopeia early (Radiant Volley 950 vs Noxious Blast 850) so the first levels are hers, but Cassiopeia's sustained poison out-scales a shield tuned against burst. Difficulty 5.5/10 matches the 52.93% win rate over 427 games.",
+      "corrected": "Early lane belongs to Mel on range; from level 3 Cassiopeia's Q-into-Twin-Fang pattern takes it back, and every commit is gated on Rebuttal (38/35/33/29/26s).",
+      "confidence": "High",
+      "sources": ["brief.ownerKit", "brief.enemyKit", "brief.packet", "champ-gender.js"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[].side read Skill on six of seven rows while content win[] read Mel, Skill, Cassiopeia x5 — the two layers rendered different answers to 'who wins this level'.",
+      "why": "packet.levelChart and the content layer agree (Mel level 1, Skill level 2, Cassiopeia from level 3), and the whys[] already describe exactly that progression. The full layer was stale.",
+      "corrected": "phases[0].side Mel, [1] Skill, [2..6] Cassiopeia, with each why rewritten to match the new verdict. No win[N] edit is needed because the content layer was already correct on every row.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content.win[0..6]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive interaction was stated only as 'reflects your projectiles back' with no cooldown, and Miasma advice was written for an enemy with a dash. Mel has no dash in her kit.",
+      "why": "Twin Fang (E) carries the projectile flag and is Cassiopeia's entire damage output, so Rebuttal reflecting it is matchup-defining — and it is a 38s cooldown at rank 1, 26s at rank 5, the longest window in the lane. Miasma's grounding has no dash to shut off against Mel; its value here is the slow zone on a 24s cooldown at rank 1. Searing Brilliance (P) executes off Overwhelm stacks and Golden Eclipse (R) hits at 25000 range, so Mel can finish you from off-screen.",
+      "corrected": "Poke only on Rebuttal's downtime; use Miasma as a slow zone under her Solar Snare step-up rather than as an anti-dash tool; track your HP against the Overwhelm execute rather than the health bar.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit", "brief.missingInteractions"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "breakdown.cooldowns contained no digit at all (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that exists to hold real numbers.",
+      "corrected": "Rebuttal 38/35/33/29/26s, Solar Snare 11s at rank 1, Petrifying Gaze 120/100/80s.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was the tradeGood string pasted under an R-stun title and dontsFull[2].d was the tradeBad string pasted under a half-HP title (lint COPY_PASTE_BLEED x2).",
+      "why": "The title promised one thing and the body explained another.",
+      "corrected": "dosFull[1].d now explains the facing requirement on Petrifying Gaze; dontsFull[2].d now explains the Searing Brilliance execute threshold.",
+      "confidence": "High",
+      "sources": ["brief.lintFindings", "brief.enemyKit"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "His combo chunks, your stream kills — survive the rotation, then fang him down in the fifteen seconds he has nothing.",
+      "after": "Her burst chunks, your stream kills — eat the rotation behind Miasma, then fang her down while Rebuttal is dead."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Make his burst hit a Petrifying Gaze, then DPS the fifteen-second gap where he is a minion. Every commit starts with one question: is Rebuttal down?",
+      "after": "Make her commit hit a Petrifying Gaze, then DPS her while Rebuttal is dead — 26 seconds even at rank 5. Every step forward asks: is Rebuttal up?"
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Mel wins by landing Rebuttal, denying your pattern, and owning the spacing war until your tempo starves.",
+      "after": "Mel wins by stacking Overwhelm, reflecting your fangs with Rebuttal, and executing you from off-screen with R."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Q the last-hit window, E-E-E while the poison ticks, and walk back as it fades — three fangs and out, repeat until Mel is executable.",
+      "after": "Q the last-hit window, E-E-E while the poison ticks, and walk back as it fades — three fangs and out, and her Rebuttal fixes none of it."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Spamming unpoisoned fangs at full mana cost, or holding W so long the dash you were saving it for already happened.",
+      "after": "Spamming unpoisoned fangs into a lit Rebuttal — it reflects them back at you — or trading while Solar Snare is up."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, suffocate: poison every last-hit, zone Mel off the wave with fang threat, and call your jungler — your W makes every gank a guaranteed kill.",
+      "after": "Ahead, suffocate: poison every last-hit, zone Mel off the wave with fang threat, and gank-assist with Miasma's slow — she has no dash to break it."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Mel"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q poke on his last-hits — the poison-into-E pattern starts at level 1 and your DPS already out-trades most mids.",
+      "after": "Radiant Volley outranges you 950 to 850 and chips your last-hits; her poke wins level 1 before your poison pattern exists."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "W changes the geometry: miasma GROUNDS dashes. Drop it on his engage path and the lane's mobility advantage evaporates.",
+      "after": "Miasma grounds dashes, but Mel has none — at level 2 it is a 24s slow zone, so save it for her Solar Snare step-up."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Skill",
+      "after": "Cassiopeia"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit: Q-poison into spammable E twin fangs is real sustained damage. Trade anyone who steps into Q range.",
+      "after": "Q-poison into 0.75s Twin Fang spam out-ticks her 8s Radiant Volley; you own the wave and the trade from here."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Cassiopeia"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Tear stacking quietly while your E heals off poisoned targets — you win every extended trade from here.",
+      "after": "Your E heals off every poisoned target while Rebuttal sits on a 29s cooldown — extended trades are all yours."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].side",
+      "before": "Skill",
+      "after": "Cassiopeia"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Petrifying Gaze online — the all-in answer. Face-stun his engage or slow his retreat; either way the fangs finish it.",
+      "after": "Petrifying Gaze answers her commit: face-stun the Solar Snare step-up, or slow her walk-back and fang her down."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Cassiopeia"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late-game Cass is a hyper-carry: ground their divers, petrify their engage, and machine-gun whoever is closest.",
+      "after": "Full-build Cass out-damages Mel: Miasma grounds her escape, Petrifying Gaze catches her, and Twin Fang melts."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Mel Rebuttal: matchup-defining — Reflects your projectiles back — never poke while it glows. Step up only on its downtime. - Budget R Petrifying Gaze for emergencies and the R for opportunities — never swap them.",
+      "after": "- Rebuttal (W): 38/35/33/29/26s — it reflects Twin Fang and blocks damage for its duration; poke only after it drops. - Solar Snare (E): 11s at rank 1 — her root window. - Petrifying Gaze: 120/100/80s, spend it on her commit."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a frozen wave at his tower while an assassin roams — you have no boots (passive) but no dash either; warded rivers or no shoves. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a frozen wave at her tower while Radiant Volley chips you — you have no boots (passive) and no dash; warded rivers or no shoves. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Q the last-hit window, E-E-E while the poison ticks, and walk back as it fades — three fangs and out, repeat until Mel is executable. Bad trade: Spamming unpoisoned fangs at full mana cost, or holding W so long the dash you were saving it for already happened.",
+      "after": "Good trade: Q the last-hit window, E-E-E while the poison ticks, and walk back as it fades — three fangs and out, and her Rebuttal fixes none of it. Bad trade: Spamming unpoisoned fangs into a lit Rebuttal — it reflects them back at you — or trading while Solar Snare is up."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry by DPS — no mid matches your damage-per-second from two items; your job is staying alive long enough to prove it.",
+      "after": "Carry by DPS, but stay clean of Overwhelm: Golden Eclipse strikes you anywhere, so heal off poisoned targets between fights."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Reflects your projectiles back — never poke while it glows. Commit on its cooldown, never into it.",
+      "after": "Rebuttal reflects your Twin Fangs back — 38s at rank 1, 26s at rank 5. Step in only on its downtime."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].t",
+      "before": "R-stun his engage commit face-on",
+      "after": "R-stun her Snare step-up face-on"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q the last-hit window, E-E-E while the poison ticks, and walk back as it fades — three fangs and out, repeat until Mel is executable.",
+      "after": "Petrifying Gaze stuns only enemies facing you — hit her mid-Snare when she is turned your way, and the fangs finish it."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].t",
+      "before": "Stand mid-range while his combo is loaded",
+      "after": "Stand mid-range while her combo is loaded"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Spamming unpoisoned fangs at full mana cost, or holding W so long the dash you were saving it for already happened.",
+      "after": "Below half, Searing Brilliance turns her Overwhelm stacks into an execute — back off at a health number, not a health bar."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "His combo chunks, your stream kills — survive the rotation, then fang him down in the fifteen seconds he has nothing.",
+      "after": "Her burst chunks, your stream kills — eat the rotation behind Miasma, then fang her down while Rebuttal is dead."
+    },
+    {
+      "layer": "full",
+      "path": "report[1].t",
+      "before": "Make his burst hit a Petrifying Gaze, then DPS the fifteen-second gap where he is a minion. Every commit starts with one question: is Rebuttal down?",
+      "after": "Make her commit hit a Petrifying Gaze, then DPS her while Rebuttal is dead — 26 seconds even at rank 5. Every step forward asks: is Rebuttal up?"
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a frozen wave at his tower while an assassin roams — you have no boots (passive) but no dash either; warded rivers or no shoves. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a fast Q-E shove that crashes and funds Tear stacks — your DPS clears faster than most control mages from level 5 on. Worst wave: a frozen wave at her tower while Radiant Volley chips you — you have no boots (passive) and no dash; warded rivers or no shoves. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Rebuttal’s cooldown, on your Seraph's spike, and with your jungler’s setup. His answer goes first; yours goes last.",
+      "after": "Commit on Rebuttal’s cooldown, on your Seraph's spike, and with your jungler’s setup. Her answer goes first; yours goes last."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Stand mid-range while his combo is loaded. Petrify defensively when it can win the fight. Trade fang-for-burst at half HP. Treat your ultimate as a verdict, never as harassment.",
+      "after": "Stand mid-range while her combo is loaded. Petrify defensively when it can win the fight. Trade fang-for-burst at half HP. Treat your ultimate as a verdict, never as harassment."
+    }
+  ],
+  "notes": "Level chart: full-layer phases[].side disagreed with content win[] on five of seven rows; packet.levelChart and win[] agreed with each other and with the whys[], so the full layer was moved to match. No win[N] edits were needed — the content layer was already correct on every row. Mel's W (Rebuttal) carries a derived 'terrain' flag and _missing suggests she can cut your retreat with it; Riot's own description says only that it is a barrier around herself that reflects, blocks damage and grants move speed, so I did not write any wall/retreat-cutting claim — per the brief, trust the description over the flag. Build advice is internally inconsistent on this page and I left it alone: content spikes[2]/late recommend Rylai's and Void Staff while full report[8] recommends Seraph's into Liandry's into Rabadon's. Someone should pick one line."
+}

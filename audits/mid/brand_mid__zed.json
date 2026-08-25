@@ -1,0 +1,260 @@
+{
+  "ownerKey": "brand_mid",
+  "enemy": "zed",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "content win[0..6] gave Brand all seven stages while the matchup wins 47.78% over 653 games, the full layer is labelled HARD 8/10, and all seven phases[N].side read 'Zed'. The packet raises this itself as a defect.",
+      "why": "Here the CONTENT layer is the outlier, the reverse of the other Brand matchups. The underlying content error is that six fields describe Zed as having no ranged tool; Razor Shuriken is 900 range on a 6s cooldown, longer than Pillar of Flame.",
+      "corrected": "Flipped win[0..6] to Zed as one atomic group, and rewrote every whys[N] and every phases[N].why to match. phases[N].side already reads 'Zed', so each pair now agrees.",
+      "confidence": "High",
+      "sources": ["packet.defects", "packet.winRate", "champ-data/_kits/zed.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[2].d claimed a 'fifteen-second' Death Mark window.",
+      "why": "Death Mark is 120/110/100. Living Shadow is 20s at rank 1, Shadow Slash 5s down to 3s.",
+      "corrected": "Real numbers in breakdown.cooldowns, dosFull[0].d, dosFull[2].d and the phase whys.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zed.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text and mid said 'Conflagration's stun' catches him mid-combo, and nothing mentioned that Death Mark is untargetable.",
+      "why": "Brand's stun is on Sear (Q) and only against an ablaze target. Zed's R is flagged untargetable — a player holding E-Q for the dash gets nothing, because the punish window is the 3 seconds the mark is applied. Both _missing entries (enemy-dash-deniable, untargetable-dodges-burst) go here.",
+      "corrected": "Restated as ablaze-then-Sear inside the mark window, plus the pillar denying the Living Shadow dash.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/_missing/brand_mid.json", "champ-data/_kits/zed.json", "ownerKit"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "The 120s Death Mark and 20s Living Shadow are the two timers the lane runs on.",
+      "corrected": "Both now stated, with Shadow Slash 5s/3s.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zed.json"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "wants.foe[0] said shadow clones 'soak Q pokes'.",
+      "why": "Riot's text gives Living Shadow no damage-absorption property; it dashes, holds position and swaps. Asserting it eats your Q is invented.",
+      "corrected": "Replaced with his actual farming pattern.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zed.json"]
+    }
+  ],
+  "edits": [
+    {"layer":"content","path":"win[0]","before":"Brand","after":"Zed"},
+    {"layer":"content","path":"win[1]","before":"Brand","after":"Zed"},
+    {"layer":"content","path":"win[2]","before":"Brand","after":"Zed"},
+    {"layer":"content","path":"win[3]","before":"Brand","after":"Zed"},
+    {"layer":"content","path":"win[4]","before":"Brand","after":"Zed"},
+    {"layer":"content","path":"win[5]","before":"Brand","after":"Zed"},
+    {"layer":"content","path":"win[6]","before":"Brand","after":"Zed"},
+    {
+      "layer": "content",
+      "path": "whys[0]",
+      "before": "You out-poke his melee kit completely pre-6 with zero ranged answer available to him.",
+      "after": "Razor Shuriken reaches 900 on a 6s cooldown, so he chips you for free at level 1."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Same dynamic holds — he can't approach without eating free Pillar of Flame damage.",
+      "after": "Same shape at 2: his shuriken costs energy you cannot punish, and you are immobile."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3-5 skirmishes still favor your ranged trades since his energy-based combo can't out-damage your poke.",
+      "after": "Levels 3-5: Shadow Slash every 4s plus a shadow swap on 20s beats a Brand who stands still to cast."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Cooldowns favor you further into the level 4-5 window, extending the free-damage phase.",
+      "after": "Living Shadow on 20s at rank 1 lets him step in and out of your 900-range pillar at will."
+    },
+    {
+      "layer": "content",
+      "path": "whys[4]",
+      "before": "His all-in requires committing to melee range, which is where your stun punishes hardest.",
+      "after": "Death Mark goes untargetable on the way in, so it skips the Sear you were saving for it."
+    },
+    {
+      "layer": "content",
+      "path": "whys[5]",
+      "before": "Your burst item spike outpaces his lethality/energy scaling at the first back.",
+      "after": "His first lethality item outpaces your Liandry's on a single squishy target."
+    },
+    {
+      "layer": "content",
+      "path": "whys[6]",
+      "before": "Late-game your AoE burst and DoT shred him before his flank pattern can pay off.",
+      "after": "Late he picks you off the flank before a fight starts, where AoE burn never helps."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "W-poke his last-hits from max range — the pillar chunks early and the lane learns to flinch by level 2.",
+      "after": "Razor Shuriken chips you from 900 range on a 6s cooldown, and you cannot step out of the line."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "E joins: the point-and-click ablaze into Q-stun threat is already a kill pattern with jungle help.",
+      "after": "Level 2: Shadow Slash lands every 5s and his energy refunds itself when a shadow hits too."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "Full kit: E-Q stun into W is half a health bar at level 3. He respects every cast from here or pays.",
+      "after": "Level 3: Living Shadow on 20s gives him an in-and-out your immobile cast times cannot answer."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Lost Chapter timing — rotation poke on every wave contact. Blaze stacks make even chip trades unfair.",
+      "after": "Levels 4-5: Shadow Slash falls to 3.5s and its slow makes leaving the pillar his choice, not yours."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Pyroclasm online — any clumped trade is now a detonation chain. Lane all-ins favor the arsonist.",
+      "after": "Death Mark is untargetable on the way in — the Sear you banked for it has nothing to hit."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Liandry's spike: the burn makes every rotation percent-health math. Force extended exchanges.",
+      "after": "First item: his lethality spike kills one squishy faster than your burn ticks for four seconds."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late Brand is a teamfight detonator: spread Blaze, R the clump, and watch three health bars argue with physics.",
+      "after": "Late, he opens from a flank at 625 range and the fight is over before your AoE ever has a clump."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Zed Death Mark: matchup-defining — The all-in — spend your defensive answer AFTER the mark lands, not before. Count it out loud if you must. - Your E-Q stun package has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Death Mark (R): 120s at rank 1, and he is untargetable on the way in — spend your answer AFTER the mark lands, never into the dash. - Living Shadow (W) is 20s at rank 1 and your pillar denies that dash. - Shadow Slash runs 5s down to 3s."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "The all-in — spend your defensive answer AFTER the mark lands, not before. Its cooldown is the green light — wait for it.",
+      "after": "Death Mark is 120s at rank 1 and untargetable on entry — hold E-Q for the three seconds of mark, not for the dash."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "E the instant ablaze, Q the stun, W the stunned body, walk — the full package chunks half a bar and the burn writes the receipt.",
+      "after": "Living Shadow throws a shadow 650 units ahead and swaps him to it — a ward on the flank turns that swap from a kill into a walk."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Zed burns Death Mark on nothing — take the fifteen-second invitation.",
+      "after": "Zed spends Death Mark and you own the next 120 seconds at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Zed’s whole plan in one window — decline politely and watch it retire.",
+      "after": "E spent on poke leaves nothing for the dive, and it is 13 seconds at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Your stun only exists on ablaze targets — a Q thrown at a clean health bar is the most expensive miss in your kit.",
+      "after": "Past the river he swaps to a Living Shadow behind you and Death Mark opens from the side you were not watching."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "W-poking on cooldown with Q unbanked while his engage is loaded — Brand without the stun threat is a bonfire waiting for company.",
+      "after": "A third pillar costs 100 mana and roots you in place for the cast — that is exactly the window Living Shadow was thrown for."
+    },
+    {
+      "layer": "full",
+      "path": "report[5].t",
+      "before": "Track Zed’s Death Mark: The all-in — spend your defensive answer AFTER the mark lands, not before. It’s down or you don’t go.",
+      "after": "Track Death Mark: 120s at rank 1, untargetable on entry, repeating his damage after 3 seconds. Answer the mark, not the dash."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Zed wins by landing Death Mark, denying your pattern, and turning your every misstep into the all-in you hadn’t budgeted.",
+      "after": "Zed wins by chipping you with Razor Shuriken, then opening untargetable with Death Mark from a flank you cannot see."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through AoE math — no burst mage damages three targets like Brand; your job is the spacing that lets the bounces vote.",
+      "after": "Carry by making the fight bigger than one target — his mark repeats damage onto one body, your bounces answer the other four."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Zed gets a kill, the lane gets honest — give Death Mark extra room and farm it back. Two kills: stop dueling your tilt — farm with W-E clears and stay relevant through stun-burn peel.",
+      "after": "If Zed gets a kill his lethality arrives early and one rotation kills you — hold Pillar of Flame for the Living Shadow dash, keep a ward on both flanks, and buy Zhonya's before a second damage item."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Zed can't approach through minions without eating a Pillar of Flame proc, and every W Shadow he throws in to poke gets punished by your longer-ranged Q if he over-commits to farm under it.",
+      "after": "Razor Shuriken hits from 900 without approaching at all, so this phase is about denying the step-up: hold the pillar for his Living Shadow dash rather than spending it on the wave."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "His Death Mark all-in requires him to stand in melee range, which is exactly when Conflagration's stun locks him down for a full Q+E+auto combo before his shadow swap even resets.",
+      "after": "Death Mark is untargetable on the way in, so your window is the three seconds after the mark lands: ablaze with Conflagration, then Sear stuns him before the shadow swap resets."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Your AoE burst and Conflagration DoT shred through his shield/energy-based kit, and he has zero way to survive a poke war since he has no ranged wave-clear answer to Pillar of Flame.",
+      "after": "Late you beat him only in a real teamfight, where Blaze spreads across five bodies while Death Mark repeats damage onto one — never in the poke war, since Razor Shuriken clears from 900."
+    },
+    {
+      "layer": "content",
+      "path": "early",
+      "before": "Zed has no ranged tool to fight your Pillar of Flame poke, so every trade before level 6 is free damage for you — he either eats Q on cooldown or gives up CS entirely. His W shadow throw doesn't stop your zoning since it doesn't threaten burst damage, meaning you can chip his HP bar down all through levels 1-5 with almost no risk.",
+      "after": "Zed pokes back from 900 with Razor Shuriken for 75 energy, so the free-damage phase people expect never arrives — you trade pillar for shuriken, and he refunds energy whenever a shadow lands the same cast. Levels 1-5 are about holding Pillar of Flame for his Living Shadow step-up instead of spending it on the wave, and never standing still to cast with his Shadow Slash up."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "At 6 his Death Mark is a real threat, but it forces him into your stun range to land it — Conflagration catches him mid-combo and turns his all-in into a trade you win, since your burst plus DoT outpaces his mark-detonation math once you've got any HP lead from the early poke phase. He has to time his engage around dodging your E, which most Zeds can't consistently do.",
+      "after": "At 6 Death Mark is untargetable on the entry, so nothing you hold answers the dash — the window is the three seconds the mark sits on you. Ablaze with Conflagration, Sear the stun, and drop the pillar under his feet so the Living Shadow swap has nowhere clean to land. With a health lead from the early phase, that sequence turns his all-in into a trade you win."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "Once Luden's or Liandry's is online you threaten to burst him from range before he ever gets a shadow swap off, and his kit has no sustained answer to your zone-denial playstyle in teamfights. He has to flank from an angle you can't punish, but Brand's AoE ult and DoT make even a clean flank risky since your team can follow up the burn.",
+      "after": "Once Luden's or Liandry's is online you threaten him in a group fight, where Blaze spreads across bodies and Death Mark only repeats damage onto one. Alone you are the target he wants: Living Shadow on 20s and a 625-range untargetable entry mean he picks the angle, so keep a ward on both flanks and Zhonya's in the build."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[0]",
+      "before": "Poke with Q every time he steps up near minions to farm",
+      "after": "Hold Pillar of Flame for his step-up, not for the wave"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[0]",
+      "before": "Farm safely from max range and let shadow clones soak Q pokes when possible",
+      "after": "Poke from 900 with Razor Shuriken and wait for a step-up to punish"
+    }
+  ],
+  "notes": "This is the mirror image of the yasuo/yone problem in my slice: here the CONTENT layer was the wrong one. The packet flags it explicitly ('Brand wins only 47.78% but the chart gives Brand 7/7'), and the root cause is a content page that describes Zed six times as a melee champion with no ranged tool, when Razor Shuriken is 900 range on a 6s cooldown — longer reach than Pillar of Flame. I flipped win[0..6] to Zed to match the already-correct phases[N].side, and rewrote all seven whys plus all seven phases[N].why so no row argues with its own sentence. Note that packet.levelChart itself reads Brand 7/7 and is therefore also stale here; I trusted the win rate and the packet's own defect line over it."
+}

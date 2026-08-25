@@ -1,0 +1,80 @@
+{
+  "ownerKey": "lissandra_mid",
+  "enemy": "vladimir",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer phases[N].side read Skill/Lissandra/Lissandra/Skill/Lissandra/Skill/Vladimir; content win[N] and the packet levelChart both read Lissandra/Skill/Skill/Lissandra/Lissandra/Lissandra/Lissandra. Six rows disagreed across layers. Also, tldr and report[0] claimed 'He out-ranges you' — Transfusion is 600, Ice Shard is 725.",
+      "why": "Vladimir's laning weakness is real and mechanical: Q/W/E all cost 0 mana, and Tides of Blood is paid for in his own health, so his early damage is low and self-taxing. The lane is even only where Sanguine Pool's 28s covers a commit; everywhere else it is Lissandra's.",
+      "corrected": "Full chart moved to match content and packet; tldr rewritten around the 725-vs-600 range edge.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[]", "ownerKit Q range", "enemyKit Q range/cost"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Vladimir described twice as 'mana-starved' / 'mana-hungry'.",
+      "why": "Every Vladimir ability costs 0 in Riot's text; his resource is health on Tides of Blood and the Crimson Rush charge on Transfusion. Calling him mana-starved sends the player to punish a bar that does not exist.",
+      "corrected": "Replaced with the real cost — he pays health to cast Tides of Blood — in whys[0], early and wants.you[2].",
+      "confidence": "High",
+      "sources": ["enemyKit Q/W/E cost fields", "enemyKit E text"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[0] warned he could 'pool your Ice Shard stun'. Ice Shard (Q) slows; the root is Ring of Frost (W).",
+      "why": "Sanguine Pool grants 2 seconds untargetable on a 28/25/22/19/16s cooldown, so it does dodge Ring of Frost's root and Frozen Tomb's stun — but not a Q that has already landed its slow. The missing-interactions file flags exactly this untargetable-dodges-burst case, plus his Transfusion/Hemoplague sustain making Grievous Wounds timing decisive.",
+      "corrected": "Corrected to 'he can pool out of your W root'; anti-heal and the Pool cooldown folded into breakdown.cooldowns and breakdown.carry.",
+      "confidence": "High",
+      "sources": ["ownerKit Q/W text", "enemyKit W text/cd", "missingInteractions rules untargetable-dodges-burst, needs-antiheal"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "lintFindings COOLDOWN_NO_DIGIT — breakdown.cooldowns had no number.",
+      "why": "The whole lane is a Pool-cooldown timing game and the field never said what that cooldown is.",
+      "corrected": "Pool 28s/16s, Transfusion 4.6s at rank 5, Frozen Tomb 120s/80s.",
+      "confidence": "High",
+      "sources": ["enemyKit W/Q cd", "ownerKit R cd"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "lintFindings COPY_PASTE_BLEED on dosFull[1].d and dontsFull[2].d.",
+      "why": "Both were the tradeGood/tradeBad strings pasted under unrelated titles.",
+      "corrected": "Rewritten to their titles, grounded in E's 24s and R's 120s.",
+      "confidence": "High",
+      "sources": ["ownerKit E/R cd", "lintFindings"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Lissandra" },
+    { "layer": "full", "path": "phases[0].why", "before": "Q-shatter the wave and chip his melee step-ups — your early Q harass is better than the lane gives it credit for.", "after": "Yours: your 725 Q out-ranges Transfusion's 600 and he pays health for every E — level 1 is free harass." },
+    { "layer": "full", "path": "phases[1].side", "before": "Lissandra", "after": "Skill" },
+    { "layer": "full", "path": "phases[1].why", "before": "W online: anyone who closes onto you eats a root. The anti-engage layer is already real at level 2.", "after": "Even at 2: Sanguine Pool is 28s at rank 1, so he has one dodge and you have one root to bait it with." },
+    { "layer": "full", "path": "phases[2].side", "before": "Lissandra", "after": "Skill" },
+    { "layer": "full", "path": "phases[2].why", "before": "E claw completes the kit — you now have the lane's strangest engage and a guaranteed exit. Greed carefully; the claw is slow.", "after": "Still even: the E claw completes your kit, but a 28s Pool eats your first commit — feint the claw, then take the real one." },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Lissandra" },
+    { "layer": "full", "path": "phases[3].why", "before": "Lost Chapter timing — Q spam stops hurting your mana. Chip Vladimir every time he touches the wave.", "after": "Yours: Lost Chapter frees your Q, and Pool's 28s cannot cover every step he takes toward the wave." },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Lissandra" },
+    { "layer": "full", "path": "phases[5].why", "before": "Malignance spike: your R comes back absurdly fast and every tomb chains into the slow field. Force picks with E-W-R.", "after": "Malignance spike: your 80s R returns fast and the tomb lands the moment Pool's 16s is spent. Force picks with E-W-R." },
+    { "layer": "full", "path": "phases[6].side", "before": "Vladimir", "after": "Lissandra" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Liss opens every fight: claw in, tomb the carry, root the peel, and walk out through the panic.", "after": "Late you still open every fight: claw in, tomb Vladimir out of his flank, root the peel, walk out." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Vladimir Sanguine Pool: matchup-defining — Untargetable dodge — bait it before you spend your kill window. Step up only on its downtime. - Budget R Frozen Tomb (self-cast) for emergencies and the R for opportunities — never swap them.", "after": "- Sanguine Pool is 28s at rank 1 and 16s at rank 5, two seconds untargetable — bait it, then step up on the downtime. - Transfusion costs him nothing and returns every 4.6s at rank 5. - Frozen Tomb is 120s, 80s at rank 3: emergencies or openings, never both." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q-shatter his wave contact, and when he steps to punish, W-root into full rotation and walk — the root tax makes every aggressive step expensive.", "after": "Your E claw is 24s at rank 1 — one window per wave cycle, taken while Sanguine Pool's 28s is still ticking, not while he is topped off Transfusion." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Vladimir whiffs Sanguine Pool and the lane briefly belongs to you.", "after": "Inside 450 your W roots him; Pool is his only exit and it is 28s." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Clawing in with W on cooldown 'to poke' — an engage tool spent on chip damage is a Lissandra standing in melee range with no ice left.", "after": "Frozen Tomb is 120 seconds at rank 1; spend it healing off Tides of Blood chip and his next Hemoplague commit arrives with your only lock gone." },
+    { "layer": "full", "path": "tldr", "before": "He out-ranges you — close the gap on YOUR timer with E threats, or concede the poke war and win the picks instead.", "after": "You out-range him 725 to 600 and he pays health to answer — poke on your timer, then commit once Sanguine Pool is spent." },
+    { "layer": "full", "path": "report[0].t", "before": "He out-ranges you — close the gap on YOUR timer with E threats, or concede the poke war and win the picks instead.", "after": "You out-range him 725 to 600 and he pays health to answer — poke on your timer, then commit once Sanguine Pool is spent." },
+    { "layer": "full", "path": "enemyWin", "before": "Vladimir wins by landing Sanguine Pool, denying your pattern, and out-ranging your plan one polite trade at a time.", "after": "Vladimir wins by pooling out of your root, healing the chip straight back with Transfusion, and living to his health curve." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through picks — claw-root-tomb converts vision into kills better than any control mage; the map shrinks every time your E is up.", "after": "Carry through picks — E-W-R lands the moment Pool's 16s is spent, and anti-heal makes the kill stick; the map shrinks when your claw is up." },
+    { "layer": "content", "path": "whys[0]", "before": "Level 1 is clearly yours — Vladimir is a famously weak, mana-starved early laner your Q abuses.", "after": "Level 1 is clearly yours — Vladimir is a weak early laner paying health to cast E, and your Q abuses it." },
+    { "layer": "content", "path": "whys[1]", "before": "At level 2 his Pool lets him negate your combo, making trades skill-based.", "after": "At level 2 his 28s Pool negates one combo, so trades come down to timing." },
+    { "layer": "content", "path": "spikes[0].text", "before": "He's weak and mana-starved early — E-Q-W all-in when his Sanguine Pool is down and he can't heal through your burst, but watch that he doesn't pool your Ice Shard stun.", "after": "He's weak early and pays health for E — E-Q-W all-in when Sanguine Pool's 28s is down and he can't heal through your burst, but he can pool straight out of your W root." },
+    { "layer": "content", "path": "early", "before": "Level 1 is clearly yours — Vladimir is one of the weakest early laners in the game, low base damage and mana-starved, while your Q pokes him for free. Levels 2-3 skill out around his Pool: if you dump your combo he can Sanguine Pool the stun and negate it, so the trade becomes about timing his cooldown, not raw stats.", "after": "Level 1 is clearly yours — Vladimir is one of the weakest early laners, low base damage and paying his own health to cast Tides of Blood, while your 725 Q pokes him for free. Levels 2-3 skill out around his Pool: if you dump your combo he can Sanguine Pool out of the root and negate it, so the trade becomes about timing his 28s, not raw stats." },
+    { "layer": "content", "path": "wants.you[2]", "before": "Punish his weak, mana-hungry early levels hard", "after": "Punish his weak, health-cost early levels hard" }
+  ],
+  "notes": "Two factual errors fixed: Vladimir called 'mana-starved' (all his abilities cost 0; Tides of Blood costs health), and 'He out-ranges you' (Transfusion 600 vs Ice Shard 725). Chart: full layer disagreed with content on six of seven rows; content already matched the packet, so only full-layer sides moved, each with its why rewritten in the same proposal — no win[N] edit was possible since the correct value is already on disk. Both missingInteractions entries are now stated: Sanguine Pool's 2s untargetable dodging your commit, and Grievous Wounds timing against Transfusion/Hemoplague sustain. Not asserted (kit silent): whether Sanguine Pool cast during Frozen Tomb's stun escapes it, and whether Hemoplague's damage amp applies to the Frozen Thrall shatter. Vladimir is male; pronouns unchanged."
+}

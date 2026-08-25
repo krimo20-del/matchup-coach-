@@ -1,0 +1,95 @@
+{
+  "ownerKey": "leblanc_mid",
+  "enemy": "malzahar",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer gave LeBlanc all seven stages — the packet itself flags this as a defect ('LeBlanc wins only 46.65% but the chart gives LeBlanc 7/7'). The full layer already read Skill/Skill/Skill/Skill/Malzahar/Skill/Malzahar. whys[2] even argued that the phase 'favors him' while win[2] said LeBlanc.",
+      "why": "Malzahar's Void Shift gives damage reduction and CC immunity until he takes damage, Call of the Void is a 900-range silence on a flat 6s, and Nether Grasp is a 700-range suppression. None of that loses a lane 7/7.",
+      "corrected": "win[0..3] -> Skill, win[4] -> Malzahar, win[5] -> Skill, win[6] -> Malzahar, matching the full layer, with all seven whys rewritten to argue their rows.",
+      "confidence": "High",
+      "sources": ["brief packet defects", "brief packet winRate/games", "brief currentText full phases[].side", "brief enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level 6 spike named 'Netherworld ult'. His ultimate is Nether Grasp. The first-item and late spikes also treated his scaling as irrelevant when Nether Grasp drops from 140 seconds to 80.",
+      "why": "Enemy R: Nether Grasp, 140/110/80s, 700 range.",
+      "corrected": "spikes[1], whys[4..6], phases[4].why and phases[6].why rewritten with the real name and the 140-to-80 second curve.",
+      "confidence": "High",
+      "sources": ["brief enemyKit R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Call of the Void was called a root in five places. It is a SILENCE. Against LeBlanc that distinction is the entire matchup: a root still lets you press Distortion's return, a silence does not — you die on the spot he landed you. Separately, Nether Grasp is a channel that Ethereal Chains cancels, and Void Shift is damage reduction plus CC immunity, not a 'passive shield'.",
+      "why": "Enemy Q text: 'deal Magic Damage and silence enemy champions'. Enemy R is flagged channel. Enemy passive: 'massive damage reduction and crowd control immunity'. missingInteractions lists silence-denies-answer and channel-interruptible.",
+      "corrected": "early, mid, spikes[1], phases[0..3].why, breakdown.cooldowns, dosFull[0].d, dosFull[1].d and wants.you[2] all now say silence, name Void Shift correctly, and tell you to hold E to break the channel.",
+      "confidence": "High",
+      "sources": ["brief enemyKit passive/Q/R", "brief missingInteractions", "brief ownerKit W and E"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT), and early claimed a whiffed Call of the Void leaves him 'defenseless until it's back up nearly ten seconds later'. It is a flat 6 seconds.",
+      "why": "Enemy Q cooldown 6, flat. E 11/10/9/8/7. W 8. R 140/110/80.",
+      "corrected": "Both corrected; the punishable window is now stated as the 6-second Q and the 140-second rank-1 ultimate.",
+      "confidence": "High",
+      "sources": ["brief enemyKit cooldowns"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d and dontsFull[2].d were the tradeGood/tradeBad strings pasted under unrelated titles, and dontsFull[1].t called his kit 'his one CC spell' when he has two distinct forms of it.",
+      "why": "lintFindings COPY_PASTE_BLEED on both bullets; enemy Q silences and enemy R suppresses.",
+      "corrected": "Both bullets replaced with kit-grounded bodies; the don't title now names the 900-range Q.",
+      "confidence": "High",
+      "sources": ["brief lintFindings", "brief enemyKit"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Malzahar Nether Grasp: matchup-defining — Point-and-click suppression — never step up solo while his passive shield is intact and R is up. Step up only on its downtime. - Budget W Distortion (return) for emergencies and the R for opportunities — never swap them.", "after": "- Nether Grasp is 140s at rank 1, 80s at rank 3, and it is a channel: Ethereal Chains or a mimicked chain breaks the suppression. - Call of the Void is a flat 6s silence at 900 range — if it lands first, your W return does not exist. - Malefic Visions is 11s down to 7s." },
+    { "layer": "full", "path": "dosFull[0].d", "before": "Point-and-click suppression — never step up solo while his passive shield is intact and R is up. Until it’s spent, every commit is a coin flip.", "after": "Void Shift is damage reduction and CC immunity, not a shield — it drops once he takes damage, so open with Q and chain on the second beat." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q the sigil, W the detonation, return before the answer — a half-bar round trip he experienced as weather.", "after": "Nether Grasp is a channel — Ethereal Chains or Mimic-E breaks the suppression, so hold E for his R at 6." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Malzahar spends Nether Grasp early — the closest thing this matchup has to a guarantee.", "after": "He has no dash: shove, take the plate, and leave — Nether Grasp cannot follow you to another lane." },
+    { "layer": "full", "path": "dontsFull[1].t", "before": "Trade into his one CC spell", "after": "Trade into the 900-range Q" },
+    { "layer": "full", "path": "report[11].t", "before": "Linger past the W return window. Trade into his one CC spell. Coast — your lead has a sell-by date. The R buys fights, not poke — spend it like the last one in stock.", "after": "Linger past the W return window. Trade into the 900-range Q. Coast — your lead has a sell-by date. The R buys fights, not poke — spend it like the last one in stock." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Staying at the W landing spot for one more auto — the return timer is your champion; outliving it is optional.", "after": "Nether Grasp goes from 140 seconds to 80 as he ranks it, so every minute you coast his answer comes back faster." },
+
+    { "layer": "full", "path": "phases[0].why", "before": "Q-auto the trades — the sigil mark is half your damage; never throw Q without the detonation plan.", "after": "Call of the Void is 6s and silences — if it lands, your W return is gone, so trade around it." },
+    { "layer": "content", "path": "win[0]", "before": "LeBlanc", "after": "Skill" },
+    { "layer": "content", "path": "whys[0]", "before": "No engage or escape for Malzahar at level 1 lets your trades and clone-bait win the lane", "after": "Level 1 is skill: Void Shift gives him damage reduction and CC immunity until you actually hit him" },
+
+    { "layer": "full", "path": "phases[1].why", "before": "W online: the Q-W double-proc chunk is live, and the return trip makes it free. The lane flinches now.", "after": "W online, but Void Shift makes chip damage worthless — land the full Q-W chain or do not open at all." },
+    { "layer": "content", "path": "win[1]", "before": "LeBlanc", "after": "Skill" },
+    { "layer": "content", "path": "whys[1]", "before": "His passive DOT poke can't outpace your burst once you commit a real trade", "after": "Level 2 is skill: Malefic Visions ticks on 11s and refreshes off his other spells" },
+
+    { "layer": "full", "path": "phases[2].why", "before": "E joins: Q-E chains hold targets for the full string. Pick one tether window per wave.", "after": "E joins: chain him at 925, outside his 900 Q, and the silence never reaches your W." },
+    { "layer": "content", "path": "win[2]", "before": "LeBlanc", "after": "Skill" },
+    { "layer": "content", "path": "whys[2]", "before": "Landing Call of the Void into his ult is a genuine death sentence, so this phase favors him if he lands it", "after": "Level 3 is skill: Call of the Void silences, so it deletes your W return — but it is a 900-range shot you can dodge" },
+
+    { "layer": "full", "path": "phases[3].why", "before": "W-poke the wave contacts and return before his answer — distortion math is the whole champion.", "after": "W-poke the wave and return before his answer — but never W in while Call of the Void is up." },
+    { "layer": "content", "path": "win[3]", "before": "LeBlanc", "after": "Skill" },
+    { "layer": "content", "path": "whys[3]", "before": "Shadowflame/Sigil item spike lets you out-trade his DOT cleanly when Void is down", "after": "Levels 4-5 are skill: his Q is a flat 6s, so the dodge-then-commit window is short" },
+
+    { "layer": "full", "path": "phases[4].why", "before": "Mimic online — the double-dash crosses the lane and the burst doubles. Most mids die to the first full chain.", "after": "Nether Grasp is a channelled suppression at 700 range — hold Ethereal Chains to break it, or do not step up at all." },
+    { "layer": "content", "path": "win[4]", "before": "LeBlanc", "after": "Malzahar" },
+    { "layer": "content", "path": "whys[4]", "before": "Your full combo still kills him faster than his ramping Visions damage in most engages", "after": "Level 6 favours Malzahar — Nether Grasp suppresses at 700 range on a 140s cooldown at rank 1" },
+
+    { "layer": "full", "path": "phases[5].why", "before": "First item spike: Q-W-RW deletes squishies. Spend the lane lead before scaling lanes wake.", "after": "First item: Q-W-RW deletes him if Void Shift is already broken — chip once, then commit." },
+    { "layer": "content", "path": "win[5]", "before": "LeBlanc", "after": "Skill" },
+    { "layer": "content", "path": "whys[5]", "before": "Item timing widens your damage and roam advantage since he has no mobility to contest side lanes", "after": "First item is skill: your burst spike arrives, but Nether Grasp is back every 110 seconds by then" },
+
+    { "layer": "full", "path": "phases[6].why", "before": "Late LeBlanc picks: W the flank, chain the carry, mimic the exit — and vanish before the obituary prints.", "after": "Late, his 80-second suppression picks you out of a flank — chain him first or let someone else start the fight." },
+    { "layer": "content", "path": "win[6]", "before": "LeBlanc", "after": "Malzahar" },
+    { "layer": "content", "path": "whys[6]", "before": "Suppress ult remains dangerous in teamfights but your snowball and pick potential outweighs it 1v1", "after": "2+ items favours Malzahar: an 80-second suppression removes you from any fight you tried to start" },
+
+    { "layer": "content", "path": "spikes[1].text", "before": "Malzahar's Netherworld ult is a hard lockdown that shuts your R engage cold — if he lands Call of the Void first, you cannot flash-combo him without dying to the suppress.", "after": "Nether Grasp is a 140-second suppression at 700 range, and Call of the Void silences rather than roots — if the silence lands first your W return is gone and the suppress finishes you." },
+    { "layer": "content", "path": "early", "before": "Malzahar's Void Swarm minions and Malefic Visions dots make early trading annoying since he can poke you passively while farming, and Call of the Void is a straight skillshot that punishes predictable dashes. Still, he has zero mobility and no way to escape once you're in Sigil range, so patient play — waiting out his poke, then engaging when Void is down — wins trades comfortably. Your clone lets you bait the root safely, and once it whiffs he's defenseless until it's back up nearly ten seconds later.", "after": "Malzahar's Void Swarm minions and Malefic Visions make early trading annoying, since Visions ticks for 11 seconds and refreshes whenever he casts anything else on you. Call of the Void is a 900-range skillshot that silences — not roots — so it does not hold you, it takes your W return away. Void Shift also gives him damage reduction and CC immunity until he has taken damage, so chip first, then commit. His Q is only 6 seconds, so a whiff is a short window, not a free lane." },
+    { "layer": "content", "path": "mid", "before": "Level 6 is the one phase where Malzahar can flip a fight: if he lands Call of the Void into Netherworld suppress, you cannot flash or blink out and he can delete you with allied follow-up. Because of this, never all-in him blind past 6 — bait the root with the clone first, exactly as you would pre-6, and only commit the real combo once it's spent. Outside of that specific root-into-ult window, you still hold every tempo and burst advantage and can freely roam since he has no gap-closer to punish your rotations.", "after": "Level 6 is where Malzahar flips the lane: Nether Grasp is a 700-range suppression on 140 seconds at rank 1, and if Call of the Void silences you first, Distortion's return is unavailable and you die where you landed. Never all-in him blind past 6 — bait the silence with the clone, then commit once it is spent. But Nether Grasp is a channel: Ethereal Chains, or a mimicked chain, breaks it outright, which is the one answer his kit has no reply to. Hold E for that, not for the wave." },
+    { "layer": "content", "path": "wants.you[2]", "before": "Force all-ins only after baiting his Void Swarm minions or his root", "after": "Force all-ins only after baiting the Call of the Void silence" }
+  ],
+  "notes": "The packet itself flagged the content chart as contradicting the win rate, so win[] was moved to match the full layer; no phases[].side edits were needed. The largest correction here is conceptual: five fields called Call of the Void a root. It is a silence, and against LeBlanc specifically that means Distortion's return is unavailable rather than merely delayed — the difference between a survivable trade and a death. Malefic Visions' spread-on-death is in Riot's text but its trigger is the target dying, not an HP threshold, so I did not write the missingInteractions 'execute-threshold' framing as a threshold number."
+}

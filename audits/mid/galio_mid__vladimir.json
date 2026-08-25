@@ -1,0 +1,160 @@
+{
+ "ownerKey": "galio_mid",
+ "enemy": "vladimir",
+ "lane": "mid",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "FAVOURED 4/10 fits an early-lane bully into a scaling drain tank, and the page already concedes the late game. Emerald+ win rate 48.48% over 1747 games is slightly under even, consistent with a lane you win and a game state that drifts.",
+   "corrected": "Difficulty left as-is; the level chart's last row was fixed instead (see point 3).",
+   "confidence": "Medium",
+   "sources": [
+    "packet.winRate",
+    "packet.levelChart"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "The two chart layers disagreed on the final row: phases[6].side said 'Skill' while content win[6] said 'Vladimir', and phases[6].why described GALIO winning late underneath it.",
+   "why": "packet.levelChart's row 7 is Vladimir, and the kit backs it: Crimson Pact converts bonus health into AP both ways, and Sanguine Pool at 16s rank 5 dodges the one lockdown you own. Galio spikes at 3, 6 and first item; Vladimir spikes on item count.",
+   "corrected": "phases[6].side -> Vladimir, rating -> 4/10, why rewritten to describe Vladimir winning. win[6] was already 'Vladimir', so no content edit is possible for that row — the disagreement was entirely in the full layer.",
+   "confidence": "High",
+   "sources": [
+    "packet.levelChart",
+    "champ-data/_kits/vladimir.json"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The decisive interaction was never stated: Sanguine Pool makes Vladimir untargetable for 2 seconds on a 28/25/22/19/16 cooldown, which means a taunt or combo spent into it is refunded to him entirely. Also unstated: Tides of Blood is blocked by enemy units, so standing behind your minions denies his poke.",
+   "why": "Kit text — W: 'becoming untargetable for 2 seconds'; E: 'can be blocked by enemy units'. Galio W is 18s at rank 1, so trading it for a 2s pool is a losing exchange.",
+   "corrected": "Trading rules, cooldowns and mid-game text now say to wait the 2 seconds out and taunt him on surfacing, and to poke from behind the minion line.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/vladimir.json",
+    "champ-data/_kits/galio.json",
+    "_missing rule untargetable-dodges-burst"
+   ]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT), and dosFull[2].d called Sanguine Pool a 'fifteen-second' cooldown.",
+   "why": "Sanguine Pool is 28/25/22/19/16 — fifteen seconds is shorter than it ever gets.",
+   "corrected": "28s at rank 1 stated in both fields; Tides of Blood 13s and Shield of Durand 18s added.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/vladimir.json"
+   ]
+  },
+  {
+   "point": 10,
+   "status": "needs-correction",
+   "whatIsWrong": "Anti-heal timing was mentioned only in passing in the itemization report entry and nowhere in the spike text.",
+   "why": "Transfusion has no cost and reaches 4.6s cooldown at rank 5; Hemoplague heals per champion hit. Grievous Wounds timing decides every extended trade.",
+   "corrected": "spikes[2].text now names the first-back anti-heal buy as the real first-item decision.",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/vladimir.json",
+    "_missing rule needs-antiheal"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[6].rating",
+   "before": "6/10",
+   "after": "4/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].why",
+   "before": "Late Galio is the anti-engage: taunt their dive, shield their magic, and R the teammate they thought was alone.",
+   "after": "Late Vladimir out-duels you 1v1: Crimson Pact turns his health into AP and Sanguine Pool dodges the taunt — group, never isolate."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Vladimir Sanguine Pool: matchup-defining — Untargetable dodge — bait it before you spend your kill window. It governs your forward steps. - W Shield of Durand spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+   "after": "- Vladimir Sanguine Pool: 28s at rank 1, 2 seconds untargetable — bait it, then commit inside that window. - Tides of Blood is 13s at rank 1 and enemy units block it. - Your W Shield of Durand is 18s at rank 1: save it for his surface."
+  },
+  {
+   "layer": "full",
+   "path": "tradeGood",
+   "before": "Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield.",
+   "after": "Q the contact, tornado ticking, E-auto when he steps in, W-taunt on the Transfusion — one rotation faster than his 28s pool can answer."
+  },
+  {
+   "layer": "full",
+   "path": "tradeBad",
+   "before": "Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+   "after": "Dumping the whole combo into a 2-second Sanguine Pool — he surfaces untouched and healed, and your taunt is gone for 18 seconds."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield. Bad trade: Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+   "after": "Good trade: Q the contact, tornado ticking, E-auto when he steps in, W-taunt on the Transfusion — one rotation faster than his 28s pool can answer. Bad trade: dumping the whole combo into a 2-second Sanguine Pool — he surfaces untouched and healed, and your taunt is gone for 18 seconds."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Untargetable dodge — bait it before you spend your kill window. Bait it, count it, then go.",
+   "after": "Colossal Smash and Q chip him free — Tides of Blood is blocked by the minions you stand behind."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the contact, let the tornado tick, E-auto if he answers, W-taunt the commit — a full rotation where his half landed on a shield.",
+   "after": "Taunt as he walks in for Transfusion range; taunting a Vladimir already leaving just buys him a free Sanguine Pool exit."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Vladimir burns Sanguine Pool on nothing — take the fifteen-second invitation.",
+   "after": "Vladimir burns Sanguine Pool on nothing — that is 28 seconds at rank 1."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Charging W through a minion line at a mage holding his answer — the statue mid-charge is the lane's easiest skillshot target.",
+   "after": "Justice Punch is 11s at rank 1 — spend it on the wave and you cannot reach him when Sanguine Pool is finally down."
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Vladimir wins by landing Sanguine Pool, denying your pattern, and keeping the fight at a distance your kit resents.",
+   "after": "Vladimir wins by pooling out of your taunt, healing the trade back with Transfusion, and out-scaling you into a late 1v1."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.carry",
+   "before": "Carry through arrivals — Hero's Entrance turns every losing skirmish your team starts into a 5v4 with a knockup.",
+   "after": "Carry by arriving — Sanguine Pool lasts only 2 seconds, so land the R, wait it out, and taunt him as he surfaces."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.wave",
+   "before": "Best wave: a Q-cleared middle wave that keeps your R timer flexible — Galio waves are about being free to leave. Worst wave: a hard-shoved wave when your bot lane is fighting — the R you couldn't channel is the fight your team lost. Crash timing: shove with a destination in mind; mid waves are bus tickets, not chores.",
+   "after": "Best wave: a middle wave you can leave — Tides of Blood clears fast at 13s rank 1, so match his clear and keep the R timer free. Worst wave: a wave you shove flat while he stands at 600 range healing every Transfusion off it. Crash timing: crash before you roam — he has no way to punish the walk, and your R covers whatever he answers with."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[2].text",
+   "before": "A completed Liandry's or Rylai's spikes Vladimir's sustain and burst hard through his passive healing, making his 1v1 durability the real threat starting here.",
+   "after": "His first item turns Transfusion into real sustain, so buy Grievous Wounds right after it — anti-heal timing, not damage, decides your extended trades from here."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Hemoplague coming online at 6 raises his damage ceiling in fights, but he still has to get in range to use it, and your stun-heavy kit punishes any commitment he makes. Keep forcing trades whenever Pool is down, and don't let him free-scale — his power curve only improves from here, so early aggression matters.",
+   "after": "Hemoplague at 6 raises his damage ceiling, but its 625 range still drags him toward you, and Sanguine Pool only buys 2 untargetable seconds — hold the taunt until he surfaces rather than spending it into the pool. Keep forcing trades whenever Pool is down, and don't let him free-scale; his curve only improves from here."
+  }
+ ],
+ "notes": "Chart fix: phases[6].side was 'Skill' while content win[6] already read 'Vladimir', and the why under it described Galio winning late. I moved the full layer onto Vladimir to match the content layer and the packet, and rewrote the why and rating in the same proposal. No paired win[6] edit is possible because that value is already correct on disk — the disagreement lived entirely in the full layer. packet.suspectNames flagged 'Use Shield of Durand' and 'Use Sanguine Pool' as near-miss names; both are correct as written (the 'Use ' prefix is what tripped the distance check) and were left alone. 'Colossal Smash' and 'Justice Punch' are Galio's real passive and E names and were kept. | COHERENCE: 1 chart edit(s) withdrawn — they moved the row to the enemy while leaving the phase why describing the owner winning it. Chart authority is an open question, so the label was reverted rather than the prose rewritten. Re-propose only as a side+why pair."
+}

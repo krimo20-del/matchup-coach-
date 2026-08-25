@@ -1,0 +1,62 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "twistedfate",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "CROSS-LAYER DISAGREEMENT on four rows: content win[0..3] read \"Lux\" while full-layer phases[0..3].side read \"Skill\". Rows 4-6 already agreed on \"Skill\".",
+      "why": "The packet levelChart reads Lux, Lux, Lux, Lux, Skill, Skill, Skill — it matches the content layer, and all four full-layer whys for those rows describe Lux dictating the trade. The lane flips to even at 6 because Destiny (170/140/110s, 5500 range) makes the game global rather than local.",
+      "corrected": "phases[0..3].side moved to Lux to match win[0..3]; rows 4-6 untouched.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content", "brief.enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The 6 / first-item / late ladder is right: Destiny at 6 converts Twisted Fate's spike from lane damage to map presence, and Lux's Luden's + Final Spark spike is local. The cooldowns field now carries Destiny's 170s rank-1 value so the roam window is countable.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief.ownerKit", "brief.enemyKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two fabricated/garbled ability names flagged by the packet — whys[1] wrote \"Wild Card\" (singular) and spikes[2].text wrote \"Gold Card\" as if it were an ability. More seriously, whys[0] and spikes[0].text both claimed Lux OUT-RANGES Wild Cards. She does not.",
+      "why": "The ability is Wild Cards (Q), 6/5.75/5.5/5.25/5s, and its listed range is 10000 — the three cards travel far past Lux's 1175 Q. Lux's edge is not range, it is that Wild Cards is a dodgeable skillshot on a short cooldown while Pick a Card only reaches 200. Pick a Card is also an AUTO-ATTACK RESET (brief.missingInteractions), so the tell is the attack wind-up, not the spell cast.",
+      "corrected": "Names fixed to Wild Cards and \"Pick a Card's gold lock\"; the out-range claim replaced with the real dodge-and-punish logic; the auto-reset tell now stated in dosFull[1].d.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.packet.suspectNames", "brief.missingInteractions"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "Pick a Card is a flat 6s, Wild Cards 6s falling to 5s, Destiny 170s at rank 1 — all three are the numbers the advice hangs on.",
+      "corrected": "Rewritten with all three.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Lux"},
+    {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Lux"},
+    {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Lux"},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Lux"},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Twisted Fate Pick a Card (Gold): matchup-defining — The locked gold card starts every trade and gank — back off the moment it glows yellow. Count it out loud if you must. - Your W Prismatic Barrier has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.", "after": "- Pick a Card is a flat 6s and the gold lock starts every trade and gank — back off when it glows yellow, and step up in the six seconds after he spends it. - Wild Cards is 6s at rank 1 and 5s maxed, so accept some chip. - Destiny is 170s at rank 1: count it and the map stays yours."},
+    {"layer": "full", "path": "dosFull[1].d", "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.", "after": "Pick a Card resets his attack — the tell is the wind-up, not the cast, so shield on the animation and his gold lock hits an empty burst."},
+    {"layer": "full", "path": "dontsFull[2].d", "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.", "after": "Light Binding is a flat 10s and it is your only answer to the gold lock — spend it on his commit, never on spacing chip."},
+    {"layer": "full", "path": "enemyWin", "before": "Twisted Fate wins by landing Pick a Card (Gold), denying your pattern, and out-ranging your plan one polite trade at a time.", "after": "Twisted Fate wins by locking the gold card into an auto reset, stunning you, then landing Wild Cards while you cannot move."},
+    {"layer": "full", "path": "breakdown.carry", "before": "Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.", "after": "Carry by punishing a 200-range gold card from 1175: root him on the attack wind-up, then Final Spark the retreat before Destiny is back."},
+    {"layer": "content", "path": "whys[0]", "before": "You outrange TF at level 1 with Q and control the first wave.", "after": "Wild Cards is a 6s skillshot — punish the whiff and own wave one."},
+    {"layer": "content", "path": "whys[1]", "before": "Level 2 favours you as E poke and Q threat beat his single Wild Card.", "after": "Level 2 favours you as E poke and the Q root beat his 6s Wild Cards."},
+    {"layer": "content", "path": "spikes[0].text", "before": "This is your window: your Q (Light Binding) outranges his Wild Cards and roots for a full E (Lucent Singularity) plus auto combo before he can farm safely, so shove and poke every time his cards are down.", "after": "This is your window: Wild Cards travels far but is a dodgeable 6s skillshot — sidestep it, then Q (Light Binding) roots for a full E (Lucent Singularity) plus auto combo, so shove and poke on every whiff."},
+    {"layer": "content", "path": "spikes[2].text", "before": "After Luden's your combo bursts him before Gold Card can stun-lock you, but he matches your pressure by ulting to a sidelane, so the item spike is a wash unless you punish him locally.", "after": "After Luden's your combo bursts him before Pick a Card's gold lock can stun you, but he matches your pressure by ulting to a sidelane, so the item spike is a wash unless you punish him locally."},
+    {"layer": "content", "path": "late", "before": "From 6 onward it evens out into a skill matchup, decided by whether you respect his Destiny timers and land Final Spark before Gold Card locks you.", "after": "From 6 onward it evens out into a skill matchup, decided by whether you count his 170s Destiny and land Final Spark before the gold card lands."},
+    {"layer": "content", "path": "wants.foe[1]", "before": "Freezing so you overextend into a Gold Card stun", "after": "Freezing so you overextend into his gold-card stun"},
+    {"layer": "content", "path": "early", "before": "Levels 1-2 are yours because Q outranges his cards and E lets you control the wave while he has no reliable trade back.", "after": "Levels 1-2 are yours because his cards are dodgeable and Pick a Card only reaches 200, so he has no reliable trade back at your range."}
+  ],
+  "notes": "The packet's suspectNames were both genuine, not false positives: whys[1] used the singular \"Wild Card\" and spikes[2].text treated \"Gold Card\" as an ability name. Both fixed. Separately, the whys[0]/spikes[0]/early claim that Lux out-ranges Wild Cards was flatly wrong — the kit lists Wild Cards at 10000 range — and had to be replaced with the dodge-and-punish framing rather than left in. I did not change phases[0..3].rating when moving those rows to Lux; the rating scale's polarity is undefined in the brief."
+}

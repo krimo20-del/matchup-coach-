@@ -1,0 +1,158 @@
+{
+  "ownerKey": "aurora_mid",
+  "enemy": "orianna",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Orianna was called 'he/his' throughout, and the difficulty was framed around dodging her as a champion rather than around the ball, which is where every one of her abilities actually originates.",
+      "why": "champ-gender.js lists orianna as female. Command: Attack fires 815 units from the ball's position, not hers ('Her Ball remains at the target location after'), Command: Dissonance pulses 225 around the ball, and Command: Shockwave launches enemies within 410 of the ball toward it. Her threat range is ball position plus range, which is why 'she out-ranges you' felt true even though her Q range (815) is shorter than your Q (900).",
+      "corrected": "Difficulty rewritten around ball position: track the ball as a second enemy, trade when it is behind her, and treat a forward ball as the real range marker.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit Q/W/R", "brief.ownerKit Q", "champ-gender.js"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The spike table had no numbers and one internal contradiction: whys[5] said her first item lets her 'out-value your early lead', while win[5] and the packet levelChart both say Aurora wins the first-item stage.",
+      "why": "packet.levelChart is [Orianna, Orianna, Aurora, Aurora, Aurora, Aurora, Orianna] and content win[] matches it exactly, so row 5 belongs to Aurora and the sentence under it was arguing the opposite. Her R is 110/95/80 at 410 radius, her E shields on a flat 9s, and her Q drops from 7s to 3s by rank 5 — those are the spikes worth naming.",
+      "corrected": "whys[5] and spikes[2].text rewritten to the first-item window Aurora actually owns: Luden's makes the Q-E-Q rotation land faster than a 9s Command: Protect returns. Late-game rows left with Orianna, which both layers and the packet agree on.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.enemyKit Q/E/R"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The one interaction that decides this lane — Command: Protect eating your burst — appeared nowhere on the page, and spikes[0].text used a fabricated Aurora ability name, 'Q Twin Drift'. wants.foe[0] also credited the poke to Command: Dissonance.",
+      "why": "brief.missingInteractions flags shield-absorbs-burst. Command: Protect is a flat 9s cooldown, shields, adds armour and MR, and damages enemies the ball passes through on its way — the shortest-cooldown shield you will trade into. Command: Dissonance is a 225-radius pulse, not a poke tool; the poke is Command: Attack at 815. 'Twin Drift' matches nothing in the kit file.",
+      "corrected": "The 9s shield is now the stated commit condition in winCon, breakdown.carry, whys[3], whys[5], spikes[0].text and spikes[2].text. The fabricated name was removed rather than replaced — the kit file carries no Aurora ability names, so the slot letter and the real 900 range were used instead. wants.foe[0] now credits Command: Attack.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit E/W/Q", "brief.missingInteractions", "brief.ownerKit Q"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns held no digit at all — defect-catalogue item 3.",
+      "why": "It is the field that carries real cooldowns.",
+      "corrected": "R 110/95/80 at 410 radius, E every 9s, Q 7s at rank 1 down to 3s at rank 5, your W 22s. The Q's rank-5 cooldown is worth stating because a 3-second poke tool changes how much a 'cooldown window' is worth late.",
+      "confidence": "High",
+      "sources": ["brief.enemyKit", "brief.ownerKit"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Four bullets were copy-paste bleed: dosFull[0].d (ball tracking under a 'trade Q-E-Q patterns' title), dosFull[1].d (tradeGood under a spirit-haste title), dontsFull[1].d (the W-as-exit line under 'Poke without the recast planned') and dontsFull[2].d (tradeBad under 'Stand in his rotation during E cooldown').",
+      "why": "Defect-catalogue item 2 — the title promises one thing and the body explains another.",
+      "corrected": "All four bodies rewritten to answer their own titles, grounded in the ball, the 9s shield, the 225 slow field and the Q recast.",
+      "confidence": "High",
+      "sources": ["brief.currentText.full"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "LEVEL CHART DISAGREEMENT. phases[0..6].side all read 'Skill' while content win[] reads [Orianna, Orianna, Aurora, Aurora, Aurora, Aurora, Orianna] — seven rows rendering two different answers.",
+      "why": "packet.levelChart matches win[] exactly, so the content layer and the packet agree and only phases[N].side dissents. The kit supports the shape: her Q at 35 mana on 7s owns levels 1-2, your full kit at 3 owns the middle, and a 410-radius launch into her team owns the late game.",
+      "corrected": "All seven phases[N].side proposed as one atomic group to match win[]. phases[0].why, phases[1].why and phases[6].why are rewritten in the SAME proposal because those three rows now belong to Orianna and their old text described Aurora winning. Rows 2-5 keep their existing why, which already reads Aurora-favouring.",
+      "confidence": "High",
+      "sources": ["brief.packet.levelChart", "brief.currentText.content win[]", "brief.enemyKit"]
+    },
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "54.72% over 848 games; diff EVEN, 5.5/10, carry 6/10 all consistent. No edit.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["brief.packet"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[0].why", "before": "Q-poke and recast on his last-hits — the spirit-mark detonation chips harder than the lane expects.", "after": "Her Q is 7s and 35 mana at rank 1 — she pokes the level 1 for free while you pay 60 a cast." },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[1].why", "before": "W online: the hop + brief stealth is your trade exit and your gank insurance in one button.", "after": "Her W adds a slow field around the ball at 2, and your W is an exit rather than an answer." },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Aurora" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Aurora" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Aurora" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Aurora" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Aurora warps teamfight space: drop R on the objective clump and hop through the panic.", "after": "Command: Shockwave decides late fights — one ball into your clump outvalues anything single-target." },
+
+    { "layer": "full", "path": "tldr", "before": "An even spell war you tilt with mobility — trade the full Q-E-Q pattern and hop out before his answer lands.", "after": "Fight the ball, not Orianna — her Q fires 815 units from wherever it sits, so the ball is the range marker." },
+    { "layer": "full", "path": "report[0].t", "before": "An even spell war you tilt with mobility — trade the full Q-E-Q pattern and hop out before his answer lands.", "after": "Fight the ball, not Orianna — her Q fires 815 units from wherever it sits, so the ball is the range marker." },
+
+    { "layer": "full", "path": "winCon", "before": "Trade even and exit free — the hop turns fair exchanges into profitable ones. Track Command: Shockwave before every commit and keep the wave where your pattern works.", "after": "Trade even and exit free — the hop turns fair exchanges into profitable ones. Force Command: Protect out before you commit; a 9s shield eats a full Q-E-Q otherwise." },
+    { "layer": "full", "path": "report[1].t", "before": "Trade even and exit free — the hop turns fair exchanges into profitable ones. Track Command: Shockwave before every commit and keep the wave where your pattern works.", "after": "Trade even and exit free — the hop turns fair exchanges into profitable ones. Force Command: Protect out before you commit; a 9s shield eats a full Q-E-Q otherwise." },
+
+    { "layer": "full", "path": "enemyWin", "before": "Orianna wins by landing Command: Shockwave, denying your pattern, and renting you the lane at a range markup.", "after": "Orianna wins by shielding through your burst on a 9s cooldown, then pulling you into her team with Command: Shockwave." },
+
+    { "layer": "full", "path": "tradeGood", "before": "Q the last-hit, E the step-up, Q-recast the slowed target, hop out — a full pattern he answered with a whiff.", "after": "Q the last-hit, E her step-up, Q-recast the slowed target, hop out — a full pattern she shielded a second too late." },
+
+    { "layer": "full", "path": "tradeBad", "before": "Hopping IN with W and trading while his engage is still loaded — the exit spent as an entrance is how Auroras get coached postmortem.", "after": "Hopping IN with W while the ball sits on her — that is Command: Shockwave at 410 units and your exit is gone for a full 22s." },
+
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Q the last-hit, E the step-up, Q-recast the slowed target, hop out — a full pattern he answered with a whiff. Bad trade: Hopping IN with W and trading while his engage is still loaded — the exit spent as an entrance is how Auroras get coached postmortem.", "after": "Good trade: Q the last-hit, E her step-up, Q-recast the slowed target, hop out — a full pattern she shielded a second too late. Bad trade: Hopping IN with W while the ball sits on her — that is Command: Shockwave at 410 units and your exit is gone for a full 22s." },
+
+    { "layer": "full", "path": "report[3].t", "before": "Good trade: Q the last-hit, E the step-up, Q-recast the slowed target, hop out — a full pattern he answered with a whiff. Great trade: Orianna wastes Command: Shockwave — commit immediately. Bad trade: Hopping IN with W and trading while his engage is still loaded — the exit spent as an entrance is how Auroras get coached postmortem.", "after": "Good trade: Q the last-hit, E her step-up, Q-recast the slowed target, hop out — a full pattern she shielded a second too late. Great trade: Orianna wastes Command: Shockwave — commit immediately. Bad trade: Hopping IN with W while the ball sits on her — that is Command: Shockwave at 410 units and your exit is gone for a full 22s." },
+
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Orianna Command: Shockwave: matchup-defining — The fight-flipping wombo — track the ball position like a second enemy. It governs your forward steps. - W Across the Veil spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Command: Shockwave (R): 110/95/80, 410 radius, and it launches you toward the ball — track the ball, not Orianna. - Command: Protect (E) shields every 9s. - Command: Attack (Q) is 7s at rank 1 and 3s at rank 5. - Your W is the exit at 22s." },
+
+    { "layer": "full", "path": "ahead", "before": "Ahead, pace the lane: pattern Orianna off every contact, hop his answers, and drop R on each river fight — the zone converts leads into routs.", "after": "Ahead, watch where she leaves the ball: Command: Shockwave fires from the ball, so a ball parked in the wave is an R that cannot reach you." },
+    { "layer": "full", "path": "report[13].t", "before": "Ahead, pace the lane: pattern Orianna off every contact, hop his answers, and drop R on each river fight — the zone converts leads into routs.", "after": "Ahead, watch where she leaves the ball: Command: Shockwave fires from the ball, so a ball parked in the wave is an R that cannot reach you." },
+
+    { "layer": "full", "path": "loading", "before": "- Aurora vs Orianna - Track: Orianna Command: Shockwave. - Hold the hop for his engage — the exit is the matchup. - Engage only on Command: Shockwave’s cooldown. - Spend your ultimate on kill windows only.", "after": "- Aurora vs Orianna - Track: Orianna Command: Shockwave, 110s. - Watch the ball, not her — the R fires from it. - Engage only on Command: Shockwave’s cooldown. - Spend your ultimate on kill windows only." },
+
+    { "layer": "full", "path": "breakdown.early", "before": "Trade patterns and exits — your early is honest plus an escape hatch. Bank the haste and the lane stays yours to pace.", "after": "Her Q costs 35 mana on a 7s cooldown, so she can poke forever — trade when the ball is behind her, not sitting between you." },
+
+    { "layer": "full", "path": "breakdown.mid", "before": "Post-6, fight where you dropped the zone: the speed differential turns even skirmishes into chases you win both directions.", "after": "Post-6 the fight is decided by where the ball is: inside your zone she needs 410 units to R, and the slow is what denies her that." },
+
+    { "layer": "full", "path": "breakdown.spikes", "before": "Full kit at 3 sets the pattern; level 6 adds the zone; Luden's makes the rotation half a bar.", "after": "Full kit at 3 sets the pattern; your 6 adds the zone; her 6 pulls you 410 units to the ball." },
+
+    { "layer": "full", "path": "breakdown.feeding", "before": "If Orianna gets one kill, respect Command: Shockwave and reset to farming. Two kills: play for the team, not for solo redemption — farm with Q recasts and stay relevant through zone utility.", "after": "If Orianna gets one kill, her Q at 35 mana never stops and the shield outlasts your burst — stop contesting the ball line, farm with Q recasts, and stay relevant through zone utility." },
+
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through tempo — patterns that exit free compound; your zone turns objective fights into speed checks they fail.", "after": "Carry by forcing Command: Protect out first — it is 9s, so a second pattern inside that window is the one that kills." },
+
+    { "layer": "full", "path": "breakdown.late", "before": "You warp the fight: R the clump, hop through the middle, and pattern whoever the zone slows. The exit portal is your insurance.", "after": "Late she is the teamfight: Command: Shockwave launches your clump toward the ball, so never group tight and take the flank instead." },
+
+    { "layer": "full", "path": "breakdown.wave", "before": "Best wave: a Q-recast cleared push that crashes on your trade timers — your patterns farm and poke in the same cast. Worst wave: a frozen wave near his tower with W down — hop-less Aurora is a skinny mage with a haste passive and regrets. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.", "after": "Best wave: a Q-recast cleared push that crashes on your trade timers — your patterns farm and poke in the same cast. Worst wave: a frozen wave near her tower with W down — her Q reaches 815 from a ball she already parked on you. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks." },
+    { "layer": "full", "path": "report[4].t", "before": "Best wave: a Q-recast cleared push that crashes on your trade timers — your patterns farm and poke in the same cast. Worst wave: a frozen wave near his tower with W down — hop-less Aurora is a skinny mage with a haste passive and regrets. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.", "after": "Best wave: a Q-recast cleared push that crashes on your trade timers — your patterns farm and poke in the same cast. Worst wave: a frozen wave near her tower with W down — her Q reaches 815 from a ball she already parked on you. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks." },
+
+    { "layer": "full", "path": "report[5].t", "before": "Track Orianna’s Command: Shockwave: The fight-flipping wombo — track the ball position like a second enemy. The whole green-light system is its cooldown.", "after": "Track Orianna’s Command: Shockwave: 410 radius, fired from the ball rather than from her, on 110/95/80. Track the ball as a second enemy, always." },
+
+    { "layer": "full", "path": "report[9].t", "before": "Commit on Command: Shockwave’s cooldown, on your Luden's spike, and with your jungler’s setup. His answer goes first; yours goes last.", "after": "Commit on Command: Shockwave’s cooldown, on your Luden's spike, and with your jungler’s setup. Her answer goes first; yours goes last." },
+
+    { "layer": "full", "path": "dosFull[0].d", "before": "The fight-flipping wombo — track the ball position like a second enemy. Bait it, count it, then go.", "after": "Q, E her step-up, recast, hop — the whole rotation fits inside the 9s her shield needs to come back." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q the last-hit, E the step-up, Q-recast the slowed target, hop out — a full pattern he answered with a whiff.", "after": "Three spells of spirit stacks before you step up means the pattern comes back before Command: Protect does." },
+    { "layer": "full", "path": "dosFull[2].t", "before": "Dodge his key line during your recast window", "after": "Dodge her ball line during your recast window" },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Orianna wastes Command: Shockwave — that is your full-commit window.", "after": "Her Q parks the ball where it lands — step off that line first." },
+
+    { "layer": "full", "path": "dontsFull[0].t", "before": "Hop in aggressively with his answer loaded", "after": "Hop in aggressively with her ball on her" },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That is Orianna’s whole plan in one window — decline politely and watch it retire.", "after": "Ball on her body means Command: Shockwave lands on you the moment you arrive." },
+    { "layer": "full", "path": "dontsFull[1].d", "before": "W spent as an entrance is W unavailable as an exit — the whole kit's promise breaks on that one greed.", "after": "A Q with no recast is a curse she walks out of — plan the drag-back before you fire, not after." },
+    { "layer": "full", "path": "dontsFull[2].t", "before": "Stand in his rotation during E cooldown", "after": "Stand in her ball line with your E down" },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Hopping IN with W and trading while his engage is still loaded — the exit spent as an entrance is how Auroras get coached postmortem.", "after": "Her W field slows you inside 225 units of the ball, and without your E hop backward you are still in it when the Q returns." },
+
+    { "layer": "full", "path": "report[11].t", "before": "Hop in aggressively with his answer loaded. Poke without the recast planned. Stand in his rotation during E cooldown. And keep the ultimate holstered until a kill is actually on the table.", "after": "Hop in aggressively with her ball on her. Poke without the recast planned. Stand in her ball line with your E down. And keep the ultimate holstered until a kill is actually on the table." },
+
+    { "layer": "content", "path": "whys[0]", "before": "Orianna's ball poke out-ranges your early kit, giving her the level 1 trade", "after": "Her Q fires 815 from the ball, so a ball parked forward out-ranges your 900" },
+    { "layer": "content", "path": "whys[1]", "before": "Same pattern at level 2 — her ball still out-pokes your limited early tools", "after": "Same at 2: her Q is 7s and 35 mana, so she can throw it at every wave" },
+    { "layer": "content", "path": "whys[2]", "before": "Your Q and E come online, letting you dodge her ball and win trades, swinging it to you", "after": "E at 3 hops you out of the W slow field, and the ball cannot chase you backward" },
+    { "layer": "content", "path": "whys[3]", "before": "Continued advantage as your kit fully outpaces her lane pressure", "after": "Lost Chapter online; her shield is 9s and your pattern is faster" },
+    { "layer": "content", "path": "whys[4]", "before": "Your all-in speed at 6 still beats her setup time in a 1v1 lane context", "after": "Her R needs the ball within 410 units of you; your 6 needs nothing" },
+    { "layer": "content", "path": "whys[5]", "before": "Her item scaling and wave clear let her stabilize and out-value your early lead at first item", "after": "First-item Luden's makes the Q-E-Q rotation faster than her 9s Command: Protect can answer" },
+
+    { "layer": "content", "path": "early", "before": "Orianna's ball poke is strong from level 1 and out-ranges your early trades, so you're behind in the level 1-2 poke war until your own kit comes online — play passive and deny her easy ball hits.", "after": "Command: Attack fires 815 units from wherever the ball sits, so her threat range is the ball's position plus 815 — not hers. It costs 35 mana on a 7s cooldown, so deny the ball ground rather than out-poking it." },
+    { "layer": "content", "path": "mid", "before": "From level 3 onward your Q and E let you dodge her ball and punish cooldown windows, keeping the lane and even the 6 all-in in your favour, but her item scaling and wave clear let her stabilize hard once she hits her first back.", "after": "From level 3 your E hops you out of the W slow field and the Q recast drags the curse back through her, so punish every window where Command: Protect is on its 9s. Her ball still gives her the wave, so take the trades and let her have the shove." },
+    { "layer": "content", "path": "late", "before": "Late-game shifts back to her: Shockwave is a game-changing teamfight tool that out-values your single-target kit, so avoid grouping into her ball and look for pick opportunities instead.", "after": "Late-game shifts back to her: Command: Shockwave launches everyone within 410 units of the ball toward it, so never group tight around an objective — flank with W and take picks away from the ball instead." },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Once you have Q Twin Drift and E online you can dodge her Command: Attack poke and punish her ball's cooldown windows with an all-in.", "after": "With Q and E online you sidestep Command: Attack — it fires in a line from the ball — and all-in while Command: Protect is on its 9s." },
+    { "layer": "content", "path": "spikes[1].text", "before": "Her Shockwave is a teamfight-defining pull, but 1v1 in lane your all-in speed at 6 still outpaces her setup unless her ball is perfectly placed.", "after": "Command: Shockwave needs the ball within 410 units of you, so in a 1v1 your 6 beats her 6 unless she has already parked the ball on your feet." },
+    { "layer": "content", "path": "spikes[2].text", "before": "Mid-game items favour her more than you here — Orianna's scaling and wave clear from her ball let her stabilize and out-scale your early lead.", "after": "Luden's into Sorcerer's makes the Q-E-Q rotation land faster than her 9s Command: Protect returns — that gap is your first-item window." },
+    { "layer": "content", "path": "spikes[3].text", "before": "Late-game teamfights are her domain: Shockwave into her team's follow-up out-values your single-target burst, so look to split pressure instead of grouping into her ball.", "after": "Late-game teamfights are her domain: everyone inside 410 units of the ball gets launched into her follow-up, so split pressure and never walk into the ball as a group." },
+
+    { "layer": "content", "path": "wants.foe[0]", "before": "Poke with Command: Dissonance before you hit level 3", "after": "Poke with Command: Attack from a ball parked forward" },
+    { "layer": "content", "path": "wants.foe[1]", "before": "Land ball attaches to slow and zone you", "after": "Drop the W slow field right on top of you" }
+  ],
+  "notes": "CHART: phases[0..6].side all read 'Skill' while content win[] reads [Orianna, Orianna, Aurora, Aurora, Aurora, Aurora, Orianna] — and packet.levelChart matches win[] exactly. Resolved toward win[]/packet, proposed as one atomic group. Because rows 0, 1 and 6 now belong to Orianna, I rewrote phases[0].why, phases[1].why and phases[6].why in the SAME proposal so no row argues with the sentence under it. Rows 2-5 keep their existing why, which already reads Aurora-favouring. Ratings were deliberately left untouched — I had no grounded basis to move a number, and moving one on a guess is worse than leaving it. INTERNAL CONTRADICTION FIXED: content whys[5] said Orianna out-values your lead at first item while win[5] said Aurora — the sentence contradicted its own row. Rewritten Aurora-favouring on the 9s shield window. THE CENTRAL MECHANIC WAS MISSING: nothing on the page said that every Orianna ability originates from the ball, not from Orianna. Her Q travels 815 from the ball's resting position, her W pulses 225 around it, and her R launches everyone within 410 of it toward it. That is why 'she out-ranges you' reads true even though her Q range (815) is shorter than your Q (900). It is now the tldr and the cooldown field. SHIELD INTERACTION ADDED: Command: Protect is a flat 9s shield with armour and MR attached, and the missing-interactions file flagged it. It is now the stated commit condition in six places. FABRICATION KILLED: spikes[0].text used 'Q Twin Drift' for Aurora's Q. Removed, not replaced with a guess — the kit file has no Aurora ability names. This is the third matchup in my slice carrying that same invented name, so it is almost certainly across the whole aurora file and worth a global sweep. SELF-CAST NOT ASSERTED: Riot's text for Command: Protect says 'attach to an allied champion'. Whether she can shield herself is not in the text, so nothing on the page now claims she can or cannot — the advice is written as 'force the shield out', which holds either way.",
+  "sectionsMissing": ["wants.you[0], wants.you[1], wants.you[2] and wants.foe[2] read as templates but are all factually correct and I had no more specific grounded phrasing that fit their very short length bands."]
+}

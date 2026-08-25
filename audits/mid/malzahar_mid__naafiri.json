@@ -1,0 +1,262 @@
+{
+  "ownerKey": "malzahar_mid",
+  "enemy": "naafiri",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer level chart disagreed with the content layer on six of seven rows: full read Naafiri/Skill/Skill/Skill/Malzahar/Skill/Skill while content win[] read Skill/Naafiri/Naafiri/Naafiri/Malzahar/Naafiri/Malzahar.",
+      "why": "packet.levelChart matches the content layer exactly. Naafiri owning levels 2-5 is right — packmates plus a 450-range Eviscerate dash against a Malzahar with no mobility — and Malzahar reclaiming late is right because point-click suppression answers a single-target diver.",
+      "corrected": "phases[0].side -> Skill, [1]/[2]/[3] -> Naafiri, [5] -> Naafiri, [6] -> Malzahar, each with its why rewritten in the same proposal. No paired win[N] edits: the content layer already holds the destination value on every row, so a paired edit would be a rejected no-op.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spike order is right: Naafiri's window is levels 3-5 once packmates are online, Malzahar flips it at 6, Naafiri's first-item R roams (110/95/80s, movement speed) tilt the map, and two items returns it to Malzahar. Her W rank-up (26s down to 18s) is the untracked spike — the untargetable window becomes near-permanent.",
+      "corrected": "Recorded the W cooldown curve in breakdown.cooldowns and phases[3].why.",
+      "confidence": "High",
+      "sources": ["enemyKit W cd 26/24/22/20/18", "enemyKit R cd 110/95/80"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns named a non-existent Malzahar passive, 'Iron Boundary', and held no digit. The packet flags zero sequencing cues. The decisive interaction — Naafiri has THREE untargetable windows (The Call of the Pack (W), Eviscerate (E), Hounds' Pursuit (R)) that eat a committed Malzahar rotation, and her R recast shields her — was never stated. Her Eviscerate heals the pack, so anti-heal timing matters and was only vaguely gestured at.",
+      "why": "Riot text: W 'becomes Untargetable and empowers her pack'; E 'dashes and damages... recalling her packmates and fully healing them'; R 'second cast grants a shield'. Malzahar's passive is Void Shift (damage reduction + CC immunity), not a spell shield called Iron Boundary.",
+      "corrected": "Cooldowns field now carries Hounds' Pursuit 110/95/80s, The Call of the Pack 26s->18s, Eviscerate 11s->7s, and the untargetable/shield warning; tradeBad names the three untargetable windows.",
+      "confidence": "High",
+      "sources": ["enemyKit W/E/R", "ownerKit P/Q/R", "missingInteractions: untargetable-dodges-burst, needs-antiheal, shield-absorbs-burst"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "No 'wait for X before you Y' line existed anywhere (packet defect: sequencingCues 0).",
+      "why": "Naafiri's punishable cooldown is The Call of the Pack (W) at 26s rank 1 — her untargetable engage. Your Q is 6s, so poking it out is free; her Eviscerate at 7-11s is the step-in to silence.",
+      "corrected": "tradeGood now sequences: bait W, then commit inside the 18-26s window. dosFull[1].d sequences the silence onto the Eviscerate cast.",
+      "confidence": "High",
+      "sources": ["enemyKit W/E cds", "ownerKit Q cd 6"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Naafiri called 'he/his/him' in 16 fields, and two bullets were the tradeGood/tradeBad strings pasted under unrelated titles.",
+      "why": "lintFindings MISGENDER and COPY_PASTE_BLEED on dosFull[1].d and dontsFull[2].d.",
+      "corrected": "Pronouns fixed; both bullet bodies rewritten to match their own titles from Naafiri's kit.",
+      "confidence": "High",
+      "sources": ["lintFindings", "champ-gender.js (naafiri female)"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "He has to dive a spell shield, a silence, and a suppression — the math says he dies more often than you do.",
+      "after": "She has to dive Void Shift, a silence, and a suppression — the math says she dies more often than you do."
+    },
+    {
+      "layer": "full",
+      "path": "winCon",
+      "before": "Tax his roams with permanent shove, shield-silence the dive, and Grasp the over-commit. Shorthand: Hounds’ Pursuit down, wave right, go.",
+      "after": "Tax her roams with permanent shove, silence the Eviscerate dash, and Grasp the over-commit. Shorthand: Hounds’ Pursuit down, wave right, go."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Naafiri wins by landing Hounds’ Pursuit, denying your pattern, and turning your every misstep into the all-in you hadn’t budgeted.",
+      "after": "Naafiri wins by killing you before 6: packmate daggers, a 450-range Eviscerate dash, and no escape on your side of it."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "Pop-and-punish: poke his shield off with a cheap E-tick, then Q-W-E the gap before it rebuilds — full rotations only ever land on shieldless targets.",
+      "after": "Pop-and-punish: E her from 650 and step back so packmates chase, then Q-W-E the 18-26s window after The Call of the Pack (W) is spent."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Trading into him with YOUR shield down — you are the squishiest scaling mage in the pool the moment the purple bubble disappears.",
+      "after": "Trading into her with Void Shift down — she has three untargetable windows (W, E, R) and you have no dash of your own."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Malzahar vs Naafiri - Track: Naafiri Hounds’ Pursuit. - Guard the spell shield — trade only when it is intact. - Hounds’ Pursuit down is the green light. - Hold the ult for names, not waves.",
+      "after": "- Malzahar vs Naafiri - Track: Naafiri Hounds’ Pursuit. - Guard Void Shift — trade only when it is intact. - Hounds’ Pursuit down is the green light. - Hold the ult for names, not waves."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "E a caster minion and let the visions farm for you — your lane is a macro pattern, not a duel, from the first wave.",
+      "after": "E a caster minion and let the visions farm — level 1 is even, before her packmates come online and enable the burst."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Naafiri",
+      "after": "Skill"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "Q online: the silence is your trade answer. Use it on his engage spell, not on poke he can walk around.",
+      "after": "Level 2 is hers: packmates up, Darkin Daggers into a dash you cannot outrun. Silence the dash, not the poke."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Naafiri"
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "W voidlings turn your shove permanent — the wave hits his tower while you ward, roam-shadow, or just exist safely.",
+      "after": "Her Eviscerate (E) dash is 9s at rank 3 and heals the pack — voidlings shove, but you cannot contest her step-in."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].side",
+      "before": "Skill",
+      "after": "Naafiri"
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].why",
+      "before": "Lost Chapter and the machine is complete: E-hops fund themselves, the wave is always crashing, and his tower is always bleeding.",
+      "after": "Lost Chapter funds the shove, but 4-5 is still hers: The Call of the Pack (W) makes her untargetable through your commit, on 26s down to 18s."
+    },
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Naafiri"
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Nether Grasp online — with ANY jungle presence you now have a guaranteed kill button. The lane bends around your 6.",
+      "after": "Nether Grasp online — point-click suppression catches her mid-dash, so her Eviscerate step-in becomes the kill button."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "Liandry's spike: visions melt waves AND health bars. Suppress-into-burn kills through most defensive answers.",
+      "after": "Her R roams: 110/95/80s of movement speed collapses side lanes, so match her timers instead of chasing plates."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Naafiri"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late Malz is a number: one suppression on their carry equals one won teamfight. Shield up, flank smart, press R.",
+      "after": "Late you reclaim it: point-click R answers a single-target diver, so sit on your carry and press it when she dashes."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Malzahar"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Set the metronome: E the wave, shield-manage the poke, and silence only what matters. You are not dueling anyone — you are billing them for tempo.",
+      "after": "Set the metronome: E the wave, hold Void Shift for her Eviscerate step-in, and silence the dash, not the daggers. You never duel Naafiri before 6."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a permanently crashing E-W shove — his tower bleeds plates, his roams cost waves, and your visions did all the work. Worst wave: a frozen wave near his tower with no voidlings up — walking to it is the only time Malzahar is ever actually alone. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a permanently crashing E-W shove — her tower bleeds plates, her roams cost waves, and your visions did all the work. Worst wave: a frozen wave near her tower with no voidlings up — walking to it is the only time Malzahar is ever actually alone. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Naafiri Hounds’ Pursuit: matchup-defining — The lock-on pack dash starts her dive — stand near minions to body-block the hounds. Count it out loud if you must. - Your spell shield (Iron Boundary) has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+      "after": "- Hounds’ Pursuit (R): 110/95/80s lock-on dash, and the recast shields her — she is untargetable through it, so do not spend Q into the dive. - The Call of the Pack (W) is 26s at rank 1, 18s at rank 5; Eviscerate (E) 11s to 7s. - Void Shift has one job: the moment it all goes wrong."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Pop-and-punish: poke his shield off with a cheap E-tick, then Q-W-E the gap before it rebuilds — full rotations only ever land on shieldless targets. Bad trade: Trading into him with YOUR shield down — you are the squishiest scaling mage in the pool the moment the purple bubble disappears.",
+      "after": "Good trade: Pop-and-punish: E her from 650 and step back so packmates chase, then Q-W-E the 18-26s window after The Call of the Pack (W) is spent. Bad trade: Trading into her with Void Shift down — she has three untargetable windows (W, E, R) and you have no dash of your own."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry by subtraction — every fight starts 4v5 when your R lands; your job is the wave control that makes the fight happen on your timer.",
+      "after": "Carry by subtraction — Naafiri dives one target, so R the moment she commits; your job is the wave control that picks the fight's timer."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "Crash waves so his roams bleed plates",
+      "after": "Crash waves so her roams bleed plates"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Pop-and-punish: poke his shield off with a cheap E-tick, then Q-W-E the gap before it rebuilds — full rotations only ever land on shieldless targets.",
+      "after": "Her step-in is Eviscerate (E) at 450 range on a 7-11s cooldown — silence that cast and the packmate burst never gets its opener, so she walks off empty."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].t",
+      "before": "Burn Q before his real engage",
+      "after": "Burn Q before her real engage"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That’s Naafiri’s bread-and-butter play — deny it and they run out of answers.",
+      "after": "Your Q is 6s, but her Eviscerate is 7-11s — silence the dash, never the daggers."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].t",
+      "before": "Shove blind into his level-6 window",
+      "after": "Shove blind into her level-6 window"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].d",
+      "before": "Your Q is the only interrupt you own — silencing poke instead of his engage spell is how Malzahars get dove.",
+      "after": "Your Q is the only interrupt you own — silencing poke instead of her Eviscerate dash is how Malzahars get dove."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Trading into him with YOUR shield down — you are the squishiest scaling mage in the pool the moment the purple bubble disappears.",
+      "after": "With Void Shift down and R spent you have no answer to a 900-range Hounds' Pursuit — plates are not worth that window."
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "He has to dive a spell shield, a silence, and a suppression — the math says he dies more often than you do.",
+      "after": "She has to dive Void Shift, a silence, and a suppression — the math says she dies more often than you do."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Hounds’ Pursuit’s cooldown, on your Liandry's spike, and with your jungler’s setup. Make him flinch first.",
+      "after": "Commit on Hounds’ Pursuit’s 80-110s cooldown, on your Liandry's spike, and with your jungler’s setup. Make her flinch."
+    }
+  ],
+  "notes": "Chart: the full layer disagreed with content on six of seven rows and now matches content and packet.levelChart on all seven (Skill/Naafiri/Naafiri/Naafiri/Malzahar/Naafiri/Malzahar). No win[N] edits were proposed because the content layer already held every destination value — a paired edit would have been a no-op and would have taken the whole atomic chart group down. Ratings left untouched: I could not tell from the data whether phases[N].rating means owner difficulty or row weight, and guessing would risk the chart group. FABRICATED NAME KILLED: breakdown.cooldowns called Malzahar's passive 'Iron Boundary'; it is Void Shift, and it is damage reduction plus CC immunity, not a spell shield. Several surviving fields still loosely call it 'the spell shield' — a mislabel, not a fabrication, so left alone. REPORT CAP: lint flagged report[0], [1], [3], [4], [7], [8], [9], [11]; the sweep permits at most two report rewrites, so I took report[0].t and report[9].t. Still outstanding: report[1].t, report[3].t, report[4].t, report[8].t and report[11].t carry the same 'his' misgender (their source fields winCon/tradeGood/tradeBad/breakdown.wave ARE fixed here), and report[7].t has UNSUPPORTED_MAGNITUDE ('TP doubles your shove-tax map game').",
+  "sectionsMissing": [
+    "breakdown.mid — still the shared Malzahar 'Grasp threat' template. Nothing in Naafiri's kit changes what it says that I could ground without inventing, so I left it rather than swap her name in.",
+    "breakdown.late, ahead, breakdown.feeding — Naafiri-named but structurally shared across matchups; the only Naafiri-specific hook available (R roam speed) is already used in phases[5].why."
+  ],
+  "unverified": [
+    "Whether Nether Grasp can be cast on Naafiri while The Call of the Pack (W), Eviscerate (E) or Hounds' Pursuit (R) untargetability is active, and whether an already-channelling suppression persists through her going untargetable. Riot's text gives the untargetable flag but not the interaction, so I wrote 'do not spend Q into the dive' rather than asserting the R behaviour.",
+    "Whether Void Shift's CC immunity prevents Hounds' Pursuit's slow or only reduces its damage.",
+    "Whether Eviscerate's heal applies to Naafiri herself or only to packmates — Riot's text says 'fully healing them' (the packmates), so I did not write an anti-heal timing claim about her own sustain."
+  ]
+}

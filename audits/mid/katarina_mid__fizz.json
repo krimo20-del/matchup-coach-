@@ -1,0 +1,120 @@
+{
+  "ownerKey": "katarina_mid",
+  "enemy": "fizz",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "50.64% over 4433 games is a true even lane and the difficulty label matches. The shape is a bow: Katarina bullies a pre-3 Fizz, Fizz owns levels 6 through first item, and Katarina takes the game back in 2+ item teamfights.",
+      "corrected": "Label unchanged; the chart now carries that shape instead of reading 'Skill' on all seven rows.",
+      "confidence": "High",
+      "sources": ["packet winRate/games", "packet.levelChart", "enemyKit Fizz E/R"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Every full-layer phases[N].side read 'Skill' while the content layer and packet both read Katarina/Katarina/Katarina/Katarina/Fizz/Fizz/Katarina.",
+      "why": "Playful / Trickster is 16s at rank 1 and only 8s at rank 5, so the early punish window is enormous and shrinks as the game goes; Chum the Waters at 120s rank 1 and 1300 range is what makes levels 6 through first item his; his single-target pattern is what gives the 2+ item fights back to Katarina.",
+      "corrected": "phases[0..3].side -> Katarina, phases[4..5].side -> Fizz, phases[6].side -> Katarina, ratings moved with them, and phases[4].why / phases[5].why rewritten in the same proposal because their verdict flipped. win[0..6] already holds these values on disk.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[0..6]", "enemyKit Fizz E/R cooldowns"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit; dosFull[1].d was tradeGood pasted under 'Blink to daggers, not targets'; dontsFull[2].d was tradeBad pasted under 'Fight away from your steel'; dosFull[2].d invented a 'fifteen-second invitation' when E is 16/14/12/10/8.",
+      "why": "Two interactions decide the matchup and both are in Riot's text. Playful / Trickster makes Fizz untargetable, so it does not merely dodge burst — it eats an entire Death Lotus while the channel keeps running. Chum the Waters knocks the target up, and Katarina's R is flagged channel-interruptible, so the shark ends the spin outright. The third, missing entirely, is that Seastone Trident empowers his NEXT attack, making the wind-up the burst tell rather than the cast.",
+      "corrected": "All three written: the untargetable-eats-Lotus rule in tradeBad and report[5].t, the shark knockup in breakdown.cooldowns and dontsFull[2].d, the W wind-up tell in dosFull[1].d and report[5].t.",
+      "confidence": "High",
+      "sources": ["enemyKit Fizz E/W/R text and flags", "ownerKit Katarina R channel flag", "brief missingInteractions autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no number, and three fields understated the punish window as '8 seconds' or 'fifteen seconds' when Playful / Trickster is 16s at rank 1.",
+      "why": "The whole early game is 'how long is he defenceless after E'. At rank 1 that is 16 seconds, not 8 — the page was telling a reader to take half the window they actually have.",
+      "corrected": "breakdown.cooldowns, dosFull[2].d, whys[2], spikes[0].text and the content mid field all now carry 16s at rank 1 / 8s at rank 5.",
+      "confidence": "High",
+      "sources": ["enemyKit Fizz E cooldown"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Two fields claimed E costs him 'half his damage' — a magnitude with no source in the kit.",
+      "why": "Riot's text does not quantify how much of his damage sits in E. Directionally right is not right, and the real, checkable fact — that a spent E leaves him with no dodge and no escape for up to 16 seconds — is stronger advice anyway.",
+      "corrected": "'half damage' / 'half his damage' replaced with the cooldown fact in whys[2] and spikes[0].text.",
+      "confidence": "High",
+      "sources": ["enemyKit Fizz E text"]
+    },
+    {
+      "point": 7,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.wave used the placeholder 'a CC mage's tower'; Fizz is not a CC mage.",
+      "why": "The real wave rule is that a pre-3 Fizz cannot contest a shoved wave at all, and that after 6 a freeze near his tower gives him a shark angle onto a stationary target.",
+      "corrected": "Rewritten around both.",
+      "confidence": "High",
+      "sources": ["enemyKit Fizz R range", "content early"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "The brief's missingInteractions claims 'Both sides carry displacement (Preparation (W) vs Chum the Waters (R))'. Katarina's W does not displace anyone.",
+      "why": "Riot's text for Katarina's W is a burst of move speed and a dagger tossed into the air above herself. The knockup flag on it is a tooltip-parsing misfire, and writing 'whoever lands the displacement first owns the trade' would tell a reader Katarina has a knockup she does not have. Also note the 'grounding' flags on Fizz's E and R are unsupported by Riot's text and were not written.",
+      "corrected": "Only Fizz's knockup is claimed, and only as the thing that ends Death Lotus.",
+      "confidence": "High",
+      "sources": ["ownerKit Katarina W text vs flags", "enemyKit Fizz E/R text vs flags"]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "No patch claim in the text; the brief indicates no recent change.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["brief"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Fizz" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[4].why", "before": "Death Lotus online — any 2v2 near your daggers is a blender invoice. The reset engine is armed.", "after": "Chum the Waters from 1300 range starts a burst you cannot interact with, and E exits your Lotus free." },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Fizz" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[5].why", "before": "First item spike: full dagger strings delete squishies and one kill opens the chain reaction.", "after": "His point-and-click burst is faster than a channel he can hop out of — first item stays his." },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Fizz Playful / Trickster: matchup-defining — The untargetable hop dodges your whole combo — bait it before spending your burst. It governs your forward steps. - E Shunpo (second use) spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Playful / Trickster (E): 16s at rank 1, 8s at rank 5 — untargetable, so it eats a full Death Lotus. Everything you do waits on it. - Chum the Waters (R): 120/100/80, thrown from 1300 — the knockup ends your channel. - Urchin Strike (Q) is 8s at 550 range." },
+    { "layer": "full", "path": "tradeGood", "before": "Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow.", "after": "Q the wave, E to the landed dagger, W out — take the full trade only while Playful / Trickster is down." },
+    { "layer": "full", "path": "tradeBad", "before": "Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Burst him while his E is up — he hops untargetable, your whole rotation hits nothing, and the 16s belongs to him." },
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow. Bad trade: Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Good trade: Q the wave, E to the landed dagger, W out — take the full trade only while Playful / Trickster is down. Bad trade: Burst him while his E is up — he hops untargetable, your whole rotation hits nothing, and the 16s belongs to him." },
+    { "layer": "full", "path": "dosFull[0].d", "before": "The untargetable hop dodges your whole combo — bait it before spending your burst. Bait it, count it, then go.", "after": "In a 2v2 he has to spend E to survive your support's CC, and a spent E is 16 seconds of a melee with no exits." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow.", "after": "Seastone Trident empowers his next attack — the wind-up is the tell, so step off the charge, not the cast." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Fizz burns Playful / Trickster on nothing — take the fifteen-second invitation.", "after": "Fizz burns Playful / Trickster on nothing — that is 16 seconds at rank 1." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Fizz’s bread-and-butter play — deny it and they run out of answers.", "after": "His passive cuts a flat amount off every source of damage you land." },
+    { "layer": "full", "path": "dontsFull[1].d", "before": "Your lotus dies to one interrupt — counting their CC before spinning is the entire skill floor of the champion.", "after": "Shunpo is 12s at rank 1; spend it entering and his 550-range Q dash takes the exit you no longer have." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Off your daggers you cannot reposition, and his 1300-range shark lands the knockup that ends Death Lotus outright." },
+    { "layer": "full", "path": "enemyWin", "before": "Fizz wins by landing Playful / Trickster, denying your pattern, and turning your every misstep into the all-in you hadn’t budgeted.", "after": "Fizz wins by holding E through your commit, then landing the shark from 1300 range and finishing with Q into an empowered W." },
+    { "layer": "full", "path": "ahead", "before": "Ahead, chain it: zone Fizz off daggers, lotus every skirmish, and reset through the map — fed Katarina is a weather event.", "after": "Ahead, punish the ground: every E he spends is 16 seconds where Fizz is a melee with no dodge and no way out of a dagger." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through chain reactions — one kill is three; your job is the first domino and the discipline to wait for it.", "after": "You carry into 2+ item fights: he gets one shark and one target, and your resets get the other four bodies." },
+    { "layer": "full", "path": "breakdown.wave", "before": "Best wave: a Q-bounced thin push with daggers banked at the river mouth — your roams arrive with luggage. Worst wave: a frozen wave near a CC mage's tower — every pickup walk is a stun audition. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.", "after": "Best wave: shoved thin so he must farm under tower — Fizz pre-3 is one of the weakest melees in the game. Worst wave: frozen near his tower after 6, where any shark angle is a one-shot start. Crash timing: crash and roam post-6 rather than duel him at even health." },
+    { "layer": "full", "path": "breakdown.early", "before": "Dagger geometry and patience — chip the no-CC kits, bait the CC ones, and bank patterns for the 6 that changes the lane's species.", "after": "His W trades lose to your reset daggers before 3, so auto him off last hits and shove — he wants to reach 3 at even health." },
+    { "layer": "full", "path": "breakdown.mid", "before": "First item onward, hunt skirmishes: every 2v2 near your daggers is a reset chain waiting for a signature. Roam when mid stalls.", "after": "Levels 3-5 is cooldown chess: poke until E is spent, then take the full trade. At 6 the maths invert and you stop duelling." },
+    { "layer": "full", "path": "breakdown.spikes", "before": "Level 3 dagger strings set the lane; level 6 arms the blender; first item makes resets explosive.", "after": "Level 3 punishes every spent E; his 6 beats yours; 2+ item fights hand the game back to you." },
+    { "layer": "full", "path": "breakdown.late", "before": "You are the cleanup that starts fights: enter on steel, lotus the clump, reset through the kill, and exit through the panic.", "after": "Late you take over: bait the shark onto your frontline, watch the E land, then Shunpo the backline and spin through it." },
+    { "layer": "full", "path": "report[3].t", "before": "Good trade: Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow. Great trade: Fizz wastes Playful / Trickster — commit immediately. Bad trade: Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Good trade: Q the wave, E to the landed dagger, W out — take the full trade only while Playful / Trickster is down. Great trade: Fizz spends E on nothing — that is 16s at rank 1, commit immediately. Bad trade: Burst him while his E is up — he hops untargetable, your whole rotation hits nothing, and the 16s belongs to him." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Fizz’s Playful / Trickster: The untargetable hop dodges your whole combo — bait it before spending your burst. It’s down or you don’t go.", "after": "Track E and W both: the hop is untargetable and eats a whole Death Lotus, and Seastone Trident empowers his next attack, so the wind-up is the tell." },
+    { "layer": "content", "path": "whys[2]", "before": "Level 3 Katarina: once E is baited or spent, he has an 8-second window with no dodge, no escape, and half damage.", "after": "Level 3 Katarina: once E is baited or spent, he has up to 16 seconds with no dodge, no escape, and no reset." },
+    { "layer": "content", "path": "spikes[0].text", "before": "Pre-6 you're the bully: his E Playful/Trickster is his everything — dodge, escape, and half his damage on one cooldown. Poke with Q daggers, and the instant E is spent (watch for the pole vault), Shunpo on and take a full trade he cannot answer. Never full-commit while E is up.", "after": "Pre-6 you're the bully: his E Playful/Trickster is his dodge, his escape and his damage on one 16-second cooldown at rank 1. Poke with Q daggers, and the instant E is spent (watch for the pole vault), Shunpo on and take a full trade he cannot answer. Never full-commit while E is up." },
+    { "layer": "content", "path": "mid", "before": "Levels 3-5 the lane is a cooldown chess game you're favored in: E Playful/Trickster is his trade, his dodge, and his escape all at once. Never engage into it — poke until he uses it to dodge a Q or farm, then Shunpo and unload the full 8-ish seconds it's down. At 6 the maths invert hard: Chum the Waters starts a burst you don't get to interact with, and his E blanks your Lotus. Post-6, stand behind minions and daggers, respect every shark angle, and shove-roam rather than duel — bot lane can't dodge the shark either, but you decide where the fight happens.", "after": "Levels 3-5 the lane is a cooldown chess game you're favored in: E Playful/Trickster is his trade, his dodge, and his escape all at once. Never engage into it — poke until he uses it to dodge a Q or farm, then Shunpo and unload the 16 seconds it is down at rank 1. At 6 the maths invert hard: Chum the Waters starts a burst you don't get to interact with, and his E blanks your Lotus. Post-6, stand behind minions and daggers, respect every shark angle, and shove-roam rather than duel — bot lane can't dodge the shark either, but you decide where the fight happens." }
+  ],
+  "notes": "Chart: full layer read 'Skill' on all seven rows against a content layer and packet that agree on Katarina x4 / Fizz / Fizz / Katarina. Sides moved to match; win[0..6] already correct on disk, and phases[4].why and phases[5].why were rewritten in the same proposal because they flipped to Fizz. Number defects fixed beyond the lint: the punish window after Playful / Trickster was written as '8 seconds' or 'fifteen seconds' in four places when it is 16s at rank 1, and 'half his damage' was a magnitude with no source in Riot's text. REJECTED the brief's 'both sides carry displacement' interaction — Katarina's W has a knockup derived flag that contradicts Riot's description (move speed plus a dagger tossed above herself), so she has no displacement here; likewise the 'grounding' flags on Fizz's E and R are unsupported by his ability text and nothing was written from them."
+}

@@ -1,0 +1,97 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "vladimir",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 0-3 of the level chart disagreed across layers: content win[0..3] read 'Lux' (matching packet.levelChart) while full-layer phases[0..3].side all read 'Skill'. Worse, phases[5].why and phases[6].why both described LUX winning those stages while phases[5].side and phases[6].side read 'Vladimir'.",
+      "why": "Vladimir has no dash and both Transfusion and Tides of Blood stop at 600, against Lux's 1100 E and 1175 Q — levels 1-5 are hers on range and on his health-cost trading. From his first item Crimson Pact (30 bonus HP = 1 AP, 1 AP = 1.6 HP) converts every health item into damage, and Sanguine Pool's 2 seconds of untargetability negates the single commit Lux gets per cycle.",
+      "corrected": "phases[0..3].side moved to 'Lux' with ratings and whys rewritten in the same proposal; phases[5].why and phases[6].why rewritten to describe VLADIMIR winning, matching the sides already on disk. No content win[N] edit is proposed because win[0..3] already read 'Lux' and win[5]/win[6] already read 'Vladimir' — a before==after edit would be refused. All seven rows agree across layers after application.",
+      "confidence": "High",
+      "sources": ["brief ownerKit", "brief enemyKit", "packet.levelChart", "currentText.content.win"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.spikes and the phase whys described Lux's spikes only and never named Vladimir's, which is the reason the lane flips.",
+      "why": "Vladimir's spike is not an ability rank, it is Crimson Pact: his first big health/AP item converts both ways, so poke that mattered at level 5 stops sticking. Lux's spikes stay Lost Chapter, level 6 (Final Spark 60s at rank 1) and Luden's.",
+      "corrected": "breakdown.spikes, phases[5].why, phases[6].why, enemyWin and breakdown.carry now name Crimson Pact as the flip point.",
+      "confidence": "High",
+      "sources": ["brief enemyKit passive", "brief ownerKit"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The two decisive interactions were absent: Sanguine Pool's untargetability eating a committed combo, and the fact that Vladimir's whole kit is health-costed and mana-free.",
+      "why": "Sanguine Pool is 2 seconds untargetable on 28/25/22/19/16s at 350 range and 0 cost. Transfusion is 9/7.9/6.8/5.7/4.6s, 600 range, 0 cost, and heals off minions as well as champions. Tides of Blood is 13/11/9/7/5s at 600 and costs his own health. Hemoplague is a flat 120s at 625, amplifies damage taken and heals him per champion hit. Lux answers with Q 10s/1175 root, E 10/9.5/9/8.5/8s at 1100, W 12/11.5/11/10.5/10s, R 60/50/40s at 3340. The lane is decided by whether Lux's commit lands on the 20+ seconds when Sanguine Pool is down, and by whether Grievous Wounds is on him before extended trades.",
+      "corrected": "breakdown.cooldowns now carries Sanguine Pool 28s->16s, Transfusion 9s->4.6s and Lux's W/R; the do's and don'ts bodies now state the 600-versus-1100 range gap and the health-cost trading.",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "brief ownerKit", "missingInteractions untargetable-dodges-burst", "missingInteractions needs-antiheal"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "The most punishable cooldown in this matchup is a number — Sanguine Pool at 28s rank 1 is a 26-second window where he has no escape at all.",
+      "corrected": "Rewritten with real per-rank cooldowns.",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "lintFindings"]
+    },
+    {
+      "point": 10,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "report[8].t already says 'Add anti-heal early into his sustain', which is the correct answer to the needs-antiheal interaction; I reinforced it in the ahead field rather than duplicating it.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["missingInteractions needs-antiheal"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was tradeGood verbatim, dontsFull[2].d was tradeBad verbatim (lint COPY_PASTE_BLEED); dosFull[0].d, dosFull[2].d, dontsFull[0].d and dontsFull[1].d were bodies that did not answer their titles, and dontsFull[0].d used 'they' for a single male enemy. report[10].t contained 'ping your jungler every Mantra' — Mantra is Karma's mechanic, a leak from another champion's page.",
+      "why": "Each is a template or a bleed, not a fact about this matchup.",
+      "corrected": "All six bullet bodies rewritten to match their titles and grounded in Vladimir's ranges and cooldowns; the Mantra reference replaced with Final Spark's 60-second cycle.",
+      "confidence": "High",
+      "sources": ["lintFindings", "brief enemyKit", "brief ownerKit"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Lux"},
+    {"layer":"full","path":"phases[0].rating","before":"5/10","after":"7/10"},
+    {"layer":"full","path":"phases[0].why","before":"E-poke from max range on his last-hits — the slow zone plus passive auto is your chip engine from level 1.","after":"Level 1 is yours: Tides of Blood and Transfusion both stop at 600, so E him from 1100 while he pays health to farm."},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Lux"},
+    {"layer":"full","path":"phases[1].rating","before":"5/10","after":"7/10"},
+    {"layer":"full","path":"phases[1].why","before":"Q joins: the root threat re-prices every step he takes past the wave's midline.","after":"Q joins at 1175 — he has no dash, so a root at that range is a free full combo."},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Lux"},
+    {"layer":"full","path":"phases[2].rating","before":"5/10","after":"7/10"},
+    {"layer":"full","path":"phases[2].why","before":"Full kit: Q-E-auto with the passive detonations is a real chunk. Shield his answer and walk.","after":"Full kit: Q-E-auto with Illumination is a real chunk while Transfusion is still 9 seconds."},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Lux"},
+    {"layer":"full","path":"phases[3].rating","before":"5/10","after":"6/10"},
+    {"layer":"full","path":"phases[3].why","before":"Lost Chapter timing — E every wave contact. Bank Manaflow and hold Q for his aggression, not yours.","after":"Lost Chapter timing — E every contact and keep him low; Sanguine Pool is 28 seconds at rank 1."},
+    {"layer":"full","path":"phases[4].why","before":"Final Spark online — anything the root catches dies to the laser math. The lane becomes a geometry quiz.","after":"Final Spark online, but Hemoplague heals him for each champion hit and Sanguine Pool can eat the laser."},
+    {"layer":"full","path":"phases[5].why","before":"Luden's spike: Q-E-R deletes squishies from root range. Force him to dodge or die on every contact.","after":"His first item flips it: Crimson Pact turns every health item into AP, so your poke heals off."},
+    {"layer":"full","path":"phases[6].why","before":"Late Lux decides fights from a screen away: root the entry, slow the pit, and laser the clump your team froze.","after":"Vladimir's game: he pools your commit, dives your backline, and Hemoplague amps the damage that kills you."},
+
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Vladimir Sanguine Pool: matchup-defining — Untargetable dodge — bait it before you spend your kill window. Step up only on its downtime. - Budget W Prismatic Barrier for emergencies and the R for opportunities — never swap them.","after":"- Sanguine Pool: 28s at rank 1, 16s at rank 5 — 2 seconds untargetable eats your whole combo, so bait it and commit in the 20+ seconds after. - Transfusion is 9s at rank 1 but 4.6s maxed: his sustain doubles as he levels it. - Your W is 12s, R 60s."},
+    {"layer":"full","path":"dosFull[0].d","before":"Untargetable dodge — bait it before you spend your kill window. Until it’s spent, every commit is a coin flip.","after":"Tides of Blood and Transfusion both stop at 600, so E his farm spot from 1100 and he pays health or gives up CS."},
+    {"layer":"full","path":"dosFull[1].d","before":"E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.","after":"Every spell charges Illumination; the follow-up auto ignites it for bonus magic damage, so take one auto after each E detonation."},
+    {"layer":"full","path":"dosFull[2].d","before":"Vladimir spends Sanguine Pool early — the closest thing this matchup has to a guarantee.","after":"Root him the moment he steps to 600 for Transfusion — no dash means the binding is unavoidable."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That’s Vladimir’s bread-and-butter play — deny it and they run out of answers.","after":"Q is 10 seconds and 50 mana; miss it and he walks in with your only lockdown gone."},
+    {"layer":"full","path":"dontsFull[1].d","before":"Your W answers exactly one combo per fight — shield the spell that kills, not the one that stings.","after":"Tides of Blood costs him health, not mana, so he throws it forever — stay outside 600 while your E is down."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.","after":"Final Spark is 60 seconds at rank 1 — spend it on the wave and the next fight starts with Hemoplague up and your answer down."},
+    {"layer":"full","path":"enemyWin","before":"Vladimir wins by landing Sanguine Pool, denying your pattern, and out-ranging your plan one polite trade at a time.","after":"Vladimir wins by surviving the early game, then letting Crimson Pact turn health items into AP until your poke heals off."},
+    {"layer":"full","path":"ahead","before":"Ahead, own the geometry: E Vladimir off every contact, root the answers, and laser the river fights from fog — fed Lux turns vision lines into kill lines.","after":"Ahead, keep him under tower: his only escape is a 28-second pool, so root the moment it is spent, buy anti-heal early, and never let him farm back to his items."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through the root-laser pipeline — one binding per fight, converted at screen range; your job is owning the geometry that makes it land.","after":"Carry by killing him before Crimson Pact does its work — 1175 root into Q-E-R while his health pool is small; after two items he outlasts the combo."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: an E-cleared slow push that crashes on your roam-or-recall timer — the slow zone makes the crash safe to set up. Worst wave: a frozen wave near his tower with Q down — the immobile root-bot walking up to farm is mid's most quoted death. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.","after":"Best wave: an E-cleared slow push crashed on your recall timer — he clears with Tides of Blood at 600, so make him step into your 1100 to do it. Worst wave: a frozen wave near his tower with Q down, where Transfusion tops him up off every minion you leave. Crash timing: every crash should buy something — a reset, a plate, a roam."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Vladimir takes first blood, tighten up: Sanguine Pool is now always up in your head. A second kill means the duel is over and the game isn’t — farm with E clears and stay relevant through root picks.","after":"If Vladimir takes first blood, tighten up: every gold he gets becomes health and health becomes AP through Crimson Pact. A second kill means the duel is over and the game isn't — E-farm and play for root picks."},
+    {"layer":"full","path":"breakdown.early","before":"Chip with E and the passive weave — your poke is honest and your root threat is the law. Bank Manaflow; the laser runs on it.","after":"Chip with E from 1100 and weave the Illumination auto — Transfusion needs 600, so every heal he takes off you costs a step forward."},
+    {"layer":"full","path":"breakdown.mid","before":"Luden's onward, every root is a kill: shove, hover the river, and Q-R the first contest. Your range decides objective setups alone.","after":"Luden's onward you are racing his sustain: shove, roam, and take fights where anti-heal is already applied — extended trades belong to him."},
+    {"layer":"full","path":"breakdown.spikes","before":"Lost Chapter steadies the chip; level 6 turns roots into kills; Luden's makes Q-E-R a deletion.","after":"Lost Chapter steadies mana; 6 turns roots into kills; his first item is when your poke stops sticking."},
+    {"layer":"full","path":"breakdown.late","before":"You are the longest 'no' in the game: root the engage, slow the pit, and laser whatever your team's front line holds still.","after":"Late he dives your backline out of the pool, so hold Q for his landing and let anti-heal, not damage, decide whether he lives."},
+    {"layer":"full","path":"report[10].t","before":"Q-E on arrival is a guaranteed gank: root, slow, detonate. Post-6 your R cleans the Flash they burn — ping your jungler every Mantra... every laser cycle.","after":"Q-E on arrival is a guaranteed gank: root, slow, detonate. Post-6 your R cleans the Flash they burn — ping your jungler on every 60-second laser cycle."}
+  ],
+  "notes": "Chart: content win[] already matched packet.levelChart exactly; only the full layer was stuck on 'Skill' for rows 0-3, so I moved the full layer to match rather than the reverse. No paired win[N] edits exist because the content values are already correct. Separately, phases[5].why and phases[6].why were instances of the known 'side says enemy, why says owner' defect — both rewritten to agree with the sides already on disk. I did not edit spikes[0..3] or the early/mid/late content strings: they are factually accurate about Vladimir and already name the real abilities, so there was nothing to correct."
+}

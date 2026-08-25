@@ -1,0 +1,77 @@
+{
+  "ownerKey": "ekko_mid",
+  "enemy": "twistedfate",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer chart says Ekko wins all seven rows; content win[] and packet.levelChart both say Skill/Skill/Skill/Skill/Ekko/Ekko/Ekko. Rows 0-3 render two different answers.",
+      "why": "At 50.37% over 1475 games the lane is not a four-row Ekko stomp early. Pick a Card is a flat 6s at every rank and Wild Cards 6s falling to 5s, so TF has an answer available in every trade window before Ekko's ultimate exists. The flip is at 6 and item one, exactly where the content layer puts it.",
+      "corrected": "Full phases[0..3].side -> Skill with ratings 7/7/7/8 -> 5/10, whys rewritten in the same group. Rows 4-6 already read Ekko in both layers and are left alone.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "packet.winRate", "currentText.content.win[]", "enemyKit"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "No cooldown appeared anywhere; packet reports zero sequencing cues in the matchup.",
+      "why": "Destiny is 170/140/110 and Chronobreak is 110/80/50 — Ekko banks two rewinds in the time TF gets one reveal, which is the concrete reason the post-6 rows are his.",
+      "corrected": "Put the 170s vs 110s comparison into phases[4].why and breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["enemyKit R", "ownerKit R"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Pick a Card is an auto-attack reset and the page never said so — it told the reader to react to the card lock.",
+      "why": "missingInteractions autoreset-burst-tell: the wind-up is the cue, not the cast. Reacting to the glow is reacting too late, because the reset means the attack lands immediately after the lock. Destiny also reveals stealth (revealsStealth flag) and Wild Cards is a projectile that minions eat.",
+      "corrected": "Stated the reset and the wind-up cue in breakdown.cooldowns, enemyWin, phases[2].why and phases[0].why.",
+      "confidence": "High",
+      "sources": ["enemyKit W flags", "missingInteractions autoreset-burst-tell"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lintFindings).",
+      "why": "It is the field that carries real cooldowns.",
+      "corrected": "Pick a Card flat 6s, Wild Cards 6s->5s, Destiny 170s, Chronobreak 110s.",
+      "confidence": "High",
+      "sources": ["enemyKit", "ownerKit"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "COPY_PASTE_BLEED on dosFull[1].d and dontsFull[2].d. Separately, the two layers contradict each other on WHICH card stuns: the full layer says gold throughout, the content layer says blue in whys[2], spikes[0].text, early, wants.you[0] and wants.foe[0].",
+      "why": "Riot's ability text for Pick a Card says only 'chooses a magic card... causing bonus effects' and names no colours, so the kit file cannot settle it. Per the do-not-speculate rule I left every blue/gold sentence untouched and raised it instead.",
+      "corrected": "Both bleeds rewritten. Card-colour contradiction left alone and recorded in unverified and questionsForUser.",
+      "confidence": "High",
+      "sources": ["lintFindings", "enemyKit W text"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Ekko","after":"Skill"},
+    {"layer":"full","path":"phases[1].side","before":"Ekko","after":"Skill"},
+    {"layer":"full","path":"phases[2].side","before":"Ekko","after":"Skill"},
+    {"layer":"full","path":"phases[3].side","before":"Ekko","after":"Skill"},
+    {"layer":"full","path":"phases[0].rating","before":"7/10","after":"5/10"},
+    {"layer":"full","path":"phases[1].rating","before":"7/10","after":"5/10"},
+    {"layer":"full","path":"phases[2].rating","before":"7/10","after":"5/10"},
+    {"layer":"full","path":"phases[3].rating","before":"8/10","after":"5/10"},
+    {"layer":"full","path":"phases[0].why","before":"Q the wave and his toes — the return pass chunks; learn the slow zone's drag on his dodge patterns.","after":"Even start: Q the wave and his toes, and watch the Pick a Card wind-up rather than the card lock."},
+    {"layer":"full","path":"phases[1].why","before":"E blink-strike window opens: Q-E-auto is your first real trade and the third passive hit stings already.","after":"Still even: E opens your blink-strike window, but Pick a Card is a flat 6s at every rank and always ready."},
+    {"layer":"full","path":"phases[2].why","before":"W zone games begin: drop it on his retreat line BEFORE trading and the stun finds him mid-regret.","after":"Even at 3: his card is an auto-attack reset, so step back on the wind-up, not on the card lock."},
+    {"layer":"full","path":"phases[3].why","before":"Three-hit trades on cooldown — Q in, E the gap, passive proc, walk. Bank the tempo for 6.","after":"Even through 5: Wild Cards chips on a 6s cooldown. Farm through it and bank the tempo for 6."},
+    {"layer":"full","path":"phases[4].why","before":"Chronobreak online — your aggression gets a save file. Trade like the rewind exists, because it does.","after":"Chronobreak is 110s and Destiny is 170s — you bank two rewinds before he gets one reveal back."},
+    {"layer":"full","path":"phases[5].why","before":"First item spike: the full string deletes half bars and the rewind erases the counter-argument.","after":"First item: the string deletes half his bar, and he has no dash in lane to leave your E on."},
+    {"layer":"full","path":"phases[6].why","before":"Late Ekko picks and survives: dive the carry, W the peel, and Chronobreak out of whatever they answered with.","after":"Late you pick and survive: dive the carry, W the peel, and Chronobreak out before the Destiny reveal matters."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Twisted Fate Pick a Card (Gold): matchup-defining — The locked gold card starts every trade and gank — back off the moment it glows yellow. Read it like a second minimap. - Guard your R Chronobreak like a fifth summoner spell. - Ultimate goes to kill windows only.","after":"- Pick a Card is a flat 6s at every rank, so it is never truly down — and it is an auto-attack reset, so retreat on the wind-up, not on the lock. - Wild Cards is 6s falling to 5s. - Destiny is 170s at rank 1 against your 110s Chronobreak."},
+    {"layer":"full","path":"dosFull[1].d","before":"Q through him, E the gap, passive third hit, walk out through the slow — the full string chunks and the return pass pays the exit.","after":"Wild Cards is his only ranged cost and it is 6s at rank 1 — step up in the seconds after it whiffs, never while it is loaded."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Blinking in with R down against a loaded kit — Ekko without the rewind is a mid laner doing parkour at a funeral.","after":"At half HP his card lock plus Wild Cards closes the gap, and Chronobreak is 110s — without it there is no undo."},
+    {"layer":"full","path":"enemyWin","before":"Twisted Fate wins by landing Pick a Card (Gold), denying your pattern, and keeping the fight at a distance your kit resents.","after":"Twisted Fate wins by locking a card off the auto-reset wind-up, chipping you down with Wild Cards, and calling his jungler in on Destiny."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Twisted Fate takes first blood, tighten up: Pick a Card (Gold) is now always up in your head. A second kill means the duel is over and the game isn’t — farm with Q passes and stay relevant through W stuns and R picks.","after":"If Twisted Fate takes first blood, respect the flat 6s card and stop stepping into auto range. A second kill means the duel is over and the game isn’t — farm with Q from 1075 and track his 170s Destiny for the map."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through insured dives — one carry per rewind cycle; your job is spending R as a weapon, not an apology.","after":"Carry by punishing a card he has already spent — one carry per rewind cycle; R is the weapon, not the apology."},
+    {"layer":"full","path":"ahead","before":"Ahead, compound the tempo: string Twisted Fate off every contact, dive the rivers insured, and rewind the audits — fed Ekko makes time a one-way argument.","after":"Ahead, deny him the map: string Twisted Fate off every contact, shove before every Destiny window, and dive insured — he cannot duel a fed Ekko."}
+  ],
+  "notes": "Full chart rows 0-3 were stale; content win[] already matched packet.levelChart so no paired win[N] edits exist to propose (before would equal after). Rows 4-6 already agreed and were not touched. UNRESOLVED FACTUAL CONTRADICTION LEFT ALONE: the full layer names the GOLD card as the stun (focus.text, loading, breakdown.cooldowns, report[5], report[9]) while the content layer names the BLUE card as the stun (whys[2], spikes[0].text, early, wants.you[0], wants.foe[0]). Riot's Pick a Card text names no colours, so the kit cannot settle it and I did not guess — see questionsForUser. suspectNames flagged 'Gold Card' in wants.foe[1] as looking like 'Wild Cards'; FALSE POSITIVE, Gold Card is a distinct real term. Also note Wild Cards' kit range reads 10000, which is a tooltip artifact, not a real cast range — I asserted nothing from it."
+}

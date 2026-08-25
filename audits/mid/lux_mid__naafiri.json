@@ -1,0 +1,106 @@
+{
+  "ownerKey": "lux_mid",
+  "enemy": "naafiri",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The content layer used two fabricated/misassigned ability names. spikes[0] called W 'The Pack dash' that 'closes the gap'; spikes[1] called R 'Call of the Pack' and described it as 'extra dashes, packmates, and healing'. Both are wrong slots.",
+      "why": "Riot's kit: W is The Call of the Pack — 400 range, 26/24/22/20/18s, makes her UNTARGETABLE and empowers the pack; it is not a dash. E is Eviscerate — the 450-range dash on 11/10/9/8/7s that heals her packmates. R is Hounds' Pursuit — a 900-range lock-on dash on 110/95/80s that recasts for a shield. The old text merged W and E into R.",
+      "corrected": "spikes[0] now names E Eviscerate as the 450 dash on 11s; spikes[1] now names R Hounds' Pursuit as the 900 lock-on dash that recasts for a shield; early and wants.foe[1] no longer call W a dash.",
+      "confidence": "High",
+      "sources": ["enemyKit W/E/R text, ranges and cooldowns", "packet.enemyAbilities"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "diff read HARD at 8/10 while the matchup is 49.31% over 2951 games and the level chart itself hands Lux the last two stages. The full-layer phases[].side also read Naafiri on all seven rows while content win[] and the packet chart read Naafiri x4, Skill, Lux, Lux — the page rendered two different answers for levels 6, first item and 2+ items.",
+      "why": "Lux loses the first four levels to Darkin Daggers shove plus free packmate chip at 900, then flips it: Naafiri has to close 900 into a 1175 root and has no hard CC to stop Final Spark. That is an even lane with an early deficit, not an 8/10.",
+      "corrected": "diff EVEN, diffRating 6.5/10 (carry threat left at 8.5/10 — she is still a genuine assassin). phases[4..6].side moved to Skill/Lux/Lux with matching ratings and whys, aligning the full layer to the content layer and the packet.",
+      "confidence": "High",
+      "sources": ["packet.winRate 49.31 over 2951 games", "packet.levelChart", "content win[] currentText", "range comparison 900/450 vs 1175/1100/3340"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Rows 0-3 had side=Naafiri but whys that described Lux dominating ('your chip engine', 'the root threat re-prices every step'). The row said one thing and the sentence under it said the opposite.",
+      "why": "At levels 1-3 Naafiri owns the lane: Darkin Daggers at 900 with packmate chip, then Eviscerate at 450 on an 11s cooldown out-trades a Q-E-auto.",
+      "corrected": "All four early whys rewritten to state Naafiri's advantage and what Lux does about it, matching the unchanged side values.",
+      "confidence": "High",
+      "sources": ["enemyKit Q 900 / cd 9-7", "enemyKit E 450 / cd 11-7", "enemyKit P packmates"]
+    },
+    {
+      "point": 6,
+      "status": "missing",
+      "whatIsWrong": "breakdown.cooldowns contained no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "Hounds' Pursuit is 110s at rank 1 and 80s at rank 3 — the single longest window in the lane and the one that decides when Lux may step up. Eviscerate is 11s to 7s; The Call of the Pack is 26s at rank 1.",
+      "corrected": "Rewritten with all three real cooldowns and the untargetability warning on W.",
+      "confidence": "High",
+      "sources": ["enemyKit cooldown strings"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Nothing on the page said that Naafiri can go untargetable through a committed burst, or that Hounds' Pursuit's recast grants a shield.",
+      "why": "W and E both carry the untargetable flag and R carries both untargetable and shield in Riot's own text; missingInteractions flags all three for this exact matchup.",
+      "corrected": "tradeBad and breakdown.cooldowns now warn against spending R into The Call of the Pack; enemyWin and dontsFull[2].d now state the R recast shield. Anti-heal timing was already present in report[8].t and is kept.",
+      "confidence": "High",
+      "sources": ["missingInteractions rules untargetable-dodges-burst, shield-absorbs-burst, needs-antiheal", "enemyKit W/E/R flags"]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "Eleven fields called Naafiri 'he/his/him', and two bullets were the tradeGood/tradeBad strings pasted under unrelated titles.",
+      "why": "Naafiri is female per champ-gender.js; the bullet bodies contradicted their own titles.",
+      "corrected": "Pronouns fixed; dosFull[1].d rewritten about wave position and flanks, dontsFull[2].d about greeding the detonation at half health.",
+      "confidence": "High",
+      "sources": ["lintFindings", "champ-data/champ-gender.js"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "tldr", "before": "You are the textbook assassin target — the lane is root-or-die, and the root better be banked when he commits.", "after": "You are the textbook assassin target — the lane is root-or-die, and Q better be banked when Hounds' Pursuit locks on." },
+    { "layer": "full", "path": "enemyWin", "before": "Naafiri wins by landing Hounds’ Pursuit, denying your pattern, and front-loading the violence while your kit is still stretching.", "after": "Naafiri wins by locking Hounds’ Pursuit onto you with Q bleed already stacked, then recasting for the shield before your W matters." },
+    { "layer": "full", "path": "diff", "before": "HARD", "after": "EVEN" },
+    { "layer": "full", "path": "tone", "before": "#ff5d6c", "after": "#e8b84b" },
+    { "layer": "full", "path": "diffRating", "before": "8/10", "after": "6.5/10" },
+    { "layer": "full", "path": "tradeGood", "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.", "after": "E her at 1100 and detonate before she is inside 900 — the slow buys the step back, and Q stays loaded for her Eviscerate." },
+    { "layer": "full", "path": "tradeBad", "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.", "after": "Spending Q on poke inside her 900 — Eviscerate closes on 11s, W turns her untargetable through your burst, and you have no dash." },
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning. Bad trade: Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.", "after": "Good trade: E her at 1100 and detonate before she is inside 900 — the slow buys the step back, and Q stays loaded for her Eviscerate. Bad trade: Spending Q on poke inside her 900 — Eviscerate closes on 11s, W turns her untargetable through your burst, and you have no dash." },
+    { "layer": "full", "path": "ahead", "before": "Ahead, own the geometry: E Naafiri off every contact, root the answers, and laser the river fights from fog — fed Lux turns vision lines into kill lines.", "after": "Ahead, hold the 1175 line: E her off every approach, save Q for the Hounds' Pursuit lock, and laser the river fights from fog before her pack arrives." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Naafiri Hounds’ Pursuit: matchup-defining — The lock-on pack dash starts her dive — stand near minions to body-block the hounds. Check it before every step-up. - W Prismatic Barrier is the lifeline; chip damage never gets it. - The ult answers fights, not waves.", "after": "- Naafiri Hounds’ Pursuit (R): 110s at rank 1, 80s at rank 3 — the lock-on dash starts her dive, so step up only in that gap. - Eviscerate (E) is 11s at rank 1, 7s at rank 5. - The Call of the Pack (W) is 26s and makes her untargetable — do not spend R into it." },
+    { "layer": "full", "path": "phases[0].why", "before": "E-poke from max range on his last-hits — the slow zone plus passive auto is your chip engine from level 1.", "after": "Her Darkin Daggers reach 900 and the packmates chip for free — you cannot contest, so hold E for the wave." },
+    { "layer": "full", "path": "phases[1].why", "before": "Q joins: the root threat re-prices every step he takes past the wave's midline.", "after": "Q joins, but at 2 her pack out-damages your chip; bank the root, do not spend it." },
+    { "layer": "full", "path": "phases[2].why", "before": "Full kit: Q-E-auto with the passive detonations is a real chunk. Shield his answer and walk.", "after": "At 3 Eviscerate is a 450 dash on 11s — her gap-close plus packmates beats your Q-E-auto." },
+    { "layer": "full", "path": "phases[3].why", "before": "Lost Chapter timing — E every wave contact. Bank Manaflow and hold Q for his aggression, not yours.", "after": "Lost Chapter timing — E the wave, bank Manaflow, and hold Q for her Eviscerate step, never for poke." },
+    { "layer": "full", "path": "phases[4].side", "before": "Naafiri", "after": "Skill" },
+    { "layer": "full", "path": "phases[4].rating", "before": "7/10", "after": "5/10" },
+    { "layer": "full", "path": "phases[4].why", "before": "Final Spark online — anything the root catches dies to the laser math. The lane becomes a geometry quiz.", "after": "Final Spark evens it: Hounds' Pursuit is a lock-on dash, so root her mid-R and the all-in dies at 900." },
+    { "layer": "full", "path": "phases[5].side", "before": "Naafiri", "after": "Lux" },
+    { "layer": "full", "path": "phases[5].rating", "before": "7/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[5].why", "before": "Luden's spike: Q-E-R deletes squishies from root range. Force him to dodge or die on every contact.", "after": "Luden's spike: she has to close 900 into your 1175 root — Q-E-auto-R deletes her on the way in." },
+    { "layer": "full", "path": "phases[6].side", "before": "Naafiri", "after": "Lux" },
+    { "layer": "full", "path": "phases[6].rating", "before": "7/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Lux decides fights from a screen away: root the entry, slow the pit, and laser the clump your team froze.", "after": "Late you decide fights from 3340: root her entry, slow the pit, and she has no hard CC to stop the laser." },
+    { "layer": "full", "path": "breakdown.wave", "before": "Best wave: an E-cleared slow push that crashes on your roam-or-recall timer — the slow zone makes the crash safe to set up. Worst wave: a frozen wave near his tower with Q down — the immobile root-bot walking up to farm is mid's most quoted death. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.", "after": "Best wave: an E-cleared slow push that crashes on your roam-or-recall timer — the slow zone makes the crash safe to set up. Worst wave: a frozen wave near her tower with Q down — the immobile root-bot walking up to farm is mid's most quoted death. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks." },
+    { "layer": "full", "path": "breakdown.difficulty", "before": "Hard matchup — difficulty 8/10, Naafiri carry threat 8.5/10.", "after": "Even matchup — difficulty 6.5/10, Naafiri carry threat 8.5/10." },
+    { "layer": "full", "path": "dosFull[0].t", "before": "Bank Q exclusively for his engage", "after": "Bank Q exclusively for her engage" },
+    { "layer": "full", "path": "dosFull[1].d", "before": "E the contact, detonate, weave the passive auto, and keep Q visibly loaded — the chip is free and the root threat does the zoning.", "after": "Her packmates and a 450 Eviscerate punish a wave shoved past the midline — hold it centered and ward both flanks before you step up." },
+    { "layer": "full", "path": "dontsFull[0].t", "before": "Q-poke near his engage timers", "after": "Q-poke near her engage timers" },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Naafiri’s bread-and-butter play — deny it and they run out of answers.", "after": "An empty Q slot with Eviscerate up at 11s is how she gets on top of you." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Q-poking on cooldown and facing the dive with an empty root slot — Lux without the binding banked is everyone's favorite snack.", "after": "Walking in to detonate E at half health puts you inside 900, where Hounds' Pursuit locks on and its recast shields her through your answer." },
+    { "layer": "full", "path": "report[0].t", "before": "You are the textbook assassin target — the lane is root-or-die, and the root better be banked when he commits.", "after": "You are the textbook assassin target — the lane is root-or-die, and Q better be banked when Hounds' Pursuit locks on." },
+    { "layer": "full", "path": "report[4].t", "before": "Best wave: an E-cleared slow push that crashes on your roam-or-recall timer — the slow zone makes the crash safe to set up. Worst wave: a frozen wave near his tower with Q down — the immobile root-bot walking up to farm is mid's most quoted death. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.", "after": "Best wave: an E-cleared slow push that crashes on your roam-or-recall timer — the slow zone makes the crash safe to set up. Worst wave: a frozen wave near her tower with Q down — the immobile root-bot walking up to farm is mid's most quoted death. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks." },
+    { "layer": "full", "path": "report[8].t", "before": "Start Doran's Ring + 2 pots. Luden's into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — at the assassin's 6, not after. Add anti-heal early into his sustain.", "after": "Start Doran's Ring + 2 pots. Luden's into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — at the assassin's 6, not after. Add anti-heal early into her sustain." },
+    { "layer": "full", "path": "report[9].t", "before": "Commit on Hounds’ Pursuit’s cooldown, on your Luden's spike, and with your jungler’s setup. Make him flinch first.", "after": "Commit on Hounds’ Pursuit’s cooldown, on your Luden's spike, and with your jungler’s setup. Make her flinch first." },
+    { "layer": "full", "path": "report[11].t", "before": "Q-poke near his engage timers. Shove past river post-6. Greed the E detonation at half HP. Save the R for moments with names on them.", "after": "Q-poke near her engage timers. Shove past river post-6. Greed the E detonation at half HP. Save the R for moments with names on them." },
+    { "layer": "full", "path": "report[14].t", "before": "Hard matchup — difficulty 8/10, Naafiri carry threat 8.5/10.", "after": "Even matchup — difficulty 6.5/10, Naafiri carry threat 8.5/10." },
+
+    { "layer": "content", "path": "spikes[0].text", "before": "Naafiri shoves you in with Q Darkin Daggers and her packmates chip you from range while you farm; her W The Pack dash closes the gap fast, so a missed Light Binding means she's on top of you before your E lands.", "after": "Naafiri shoves you in with Q Darkin Daggers and her packmates chip you from range while you farm; her E Eviscerate is a 450-range dash on an 11-second cooldown, so a missed Light Binding means she is on top of you." },
+    { "layer": "content", "path": "spikes[1].text", "before": "Her R Call of the Pack gives extra dashes, packmates, and healing for a lethal all-in - but Final Spark plus a landed Q root is your equalizer, so this is the level where the lane starts to even out.", "after": "Her R Hounds' Pursuit is a lock-on dash at 900 that recasts for a shield - but Final Spark plus a landed Q root is your equalizer, so this is the level where the lane starts to even out." },
+    { "layer": "content", "path": "early", "before": "Naafiri controls the first four levels: her Darkin Daggers push the wave into you, her packmates poke for free, and her W dash punishes any wasted cooldown - so play safe, hold Q for her engage, and don't greed CS.", "after": "Naafiri controls the first four levels: her Darkin Daggers push the wave into you, her packmates poke for free, and her E Eviscerate dash punishes any wasted cooldown - so play safe, hold Q for her engage, and don't greed CS." },
+    { "layer": "content", "path": "wants.you[0]", "before": "Save Light Binding to root her mid-W dash, not to poke", "after": "Save Light Binding to root her mid-R dash, not to poke" },
+    { "layer": "content", "path": "wants.foe[1]", "before": "All-in with W-E dashes and R the moment your Light Binding is down", "after": "All-in with Eviscerate and R the moment your Light Binding is down" }
+  ],
+  "notes": "Chart: the full layer disagreed with the content layer AND the packet on rows 4, 5 and 6 (full said Naafiri on all seven; content and packet said Naafiri x4 / Skill / Lux / Lux). I moved the full layer to match, because content already holds the correct values — so there is no paired win[] edit to write for those three rows. This is the reverse of the usual failure mode: the fix REMOVES a cross-layer disagreement rather than creating one. If apply-proposals.js holds the chart group for want of a win[] twin, the correct manual action is to accept the three side/rating/why edits as-is; win[4]='Skill', win[5]='Lux', win[6]='Lux' are already on disk. Biggest content win here is the two fabricated ability descriptions: W was described as a gap-closing dash (it is a 400-range untargetable pack empower) and R was named 'Call of the Pack' with W's and E's effects. Left templated but ungroundable: breakdown.carry, breakdown.early and breakdown.mid are Lux-generic; report[3].t and report[13].t now duplicate the old tradeGood/tradeBad and ahead text and are out of sync, but the sweep caps report rewrites so I left them for a mechanical resync. Unverified and not written: whether Light Binding lands on Naafiri mid-Hounds'-Pursuit or is eaten by the dash's untargetability window — the kit flags R as untargetable, which would make 'root her mid-R' unreliable, but Riot's text does not say when that window opens or closes."
+}

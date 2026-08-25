@@ -1,0 +1,90 @@
+{
+  "ownerKey": "hwei_mid",
+  "enemy": "azir",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer level chart read \"Skill\" on all seven rows while the content layer read Hwei/Hwei/Hwei/Hwei/Hwei/Azir/Azir — the page answered \"who wins Level 1\" two different ways.",
+      "why": "packet.levelChart and content win[0..6] agree (Hwei x5, then Azir at first item and 2+ items), and the 56.75% win rate over 800 games supports a Hwei-favoured early game that inverts on Azir's scaling. Difficulty stays EVEN because the late game flips hard.",
+      "corrected": "phases[0..4].side = Hwei, phases[5..6].side = Azir, with whys rewritten for the two flipped rows. Content win[] already held the correct values, so no content-layer chart edit was possible (a before==after edit is refused).",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText.content.win[0..6]", "packet.winRate 56.75 / 800 games"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[2].text used the placeholder phrase \"burst/mobility items\" with no named item and no number; whys[4] claimed level 6 belonged to Azir while win[4] said Hwei; spikes[1] told the reader to hold a non-existent ability (\"W (Severance charm)\").",
+      "why": "Azir's Q Conquering Sands drops from 14s at rank 1 to 10s at rank 3 and 6s at rank 5, which is the concrete reason his poke overtakes yours around the first item. Emperor's Divide is 120/105/90s, so pre-6 and post-ult windows are long.",
+      "corrected": "Spikes now name Conquering Sands' rank-3 10s cooldown, Shifting Sands' 22s rank-1 cooldown, and the 120s Emperor's Divide instead of generic item language.",
+      "confidence": "High",
+      "sources": ["enemyKit Q cd 14/12/10/8/6", "enemyKit E cd 22/20.5/19/17.5/16", "enemyKit R cd 120/105/90"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page repeatedly named Hwei's own abilities wrongly: \"EE fear\" (the fear is Grim Visage on EQ), \"E (Devastating Fire Painting)\" (Devastating Fire is a Q sub-ability), \"W (Severance charm)\" and \"Q root\" (neither exists). spikes[0] also asserted Azir has \"no shield\" — Shifting Sands explicitly shields him.",
+      "why": "ownerKit lists Q sub-abilities in order Devastating Fire / Severing Bolt / Molten Fissure (QQ/QW/QE) and E sub-abilities in order Grim Visage / Gaze of the Abyss / Crushing Maw (EQ/EW/EE). enemyKit E carries both the dash and shield flags and Riot's text says \"Azir shields himself briefly and dashes to one of his Sand Soldiers\".",
+      "corrected": "Grim Visage (EQ) is the fear and the only 'no' button; Molten Fissure (QE) is the clear; Devastating Fire (QQ) opens. Azir's only escape is Shifting Sands (22s at rank 1, 16s at rank 5) and it must land on one of his own Sand Soldiers, so the placed soldier is the tell. Arise! is a 1.5s cooldown, so denying soldiers is not a plan. Emperor's Divide knocks BACK, not up.",
+      "confidence": "High",
+      "sources": ["ownerKit Q/E text", "enemyKit E text + flags", "enemyKit W cd 1.5", "enemyKit R text"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit at all (lint COOLDOWN_NO_DIGIT) — it described Shifting Sands without ever giving its cooldown.",
+      "why": "This is the field that exists to hold real numbers.",
+      "corrected": "Now states Shifting Sands 22s rank 1 / 16s rank 5, Arise! 1.5s, Emperor's Divide 120s rank 1.",
+      "confidence": "High",
+      "sources": ["enemyKit cooldowns"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was the tradeGood string verbatim and dontsFull[2].d was the tradeBad string verbatim (lint COPY_PASTE_BLEED); dosFull[2].d cited a \"fifteen-second invitation\" that matches no cooldown in either kit.",
+      "why": "Shifting Sands is 22/20.5/19/17.5/16 — never 15 seconds at any rank.",
+      "corrected": "Bodies rewritten to match their titles, and the invented 15s figure removed.",
+      "confidence": "High",
+      "sources": ["lintFindings", "enemyKit E cd"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"Hwei"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Azir"},
+    {"layer":"full","path":"phases[2].why","before":"Full palette: EE fear or EQ root into QQ is a genuine kill threat. He has to respect every brush-stroke from here.","after":"Full palette: Grim Visage (EQ) into Devastating Fire is a genuine kill threat. He has to respect every brush-stroke now."},
+    {"layer":"full","path":"phases[5].why","before":"Blackfire/Luden's spike: every QQ chunks a quarter bar. Shove with QA and rotate — your siege poke wins rivers.","after":"His first item makes the soldier line hurt and Conquering Sands hits 10s — the free-poke window closes; farm from range."},
+    {"layer":"full","path":"phases[6].why","before":"Late Hwei is a fight-opener: R the carry, paint the fear wall behind their front line, and QQ the panic.","after":"Emperor's Divide decides late fights: it walls you off objectives and you have no dash out. Open from range."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Azir Shifting Sands: matchup-defining — His shield-dash to a soldier — engage the window after he burns it. Read it like a second minimap. - Guard your E fear paint like a fifth summoner spell. - Ultimate goes to kill windows only.","after":"- Shifting Sands (E): 22s at rank 1, 16s at rank 5 — his only escape; once he spends it on a soldier he is stuck. - Arise! is a 1.5s cooldown, so soldiers never run out — kill the man, not the sand. - Emperor's Divide: 120s at rank 1."},
+    {"layer":"full","path":"enemyWin","before":"Azir wins by landing Shifting Sands, denying your pattern, and owning the spacing war until your tempo starves.","after":"Azir wins by keeping a Sand Soldier between you, chipping with Conquering Sands, and dashing out the moment you commit."},
+    {"layer":"full","path":"tradeBad","before":"Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Standing inside a placed Sand Soldier's reach mid-cast — that soldier is his Shifting Sands landing pad, and the dash lands before your paint finishes."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending. Bad trade: Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"Good trade: QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending. Bad trade: standing inside a placed Sand Soldier's reach mid-cast — that soldier is his Shifting Sands landing pad, and the dash lands first."},
+    {"layer":"full","path":"breakdown.mid","before":"Lost Chapter onward you own the poke war: mark-detonate every wave contact, shove with QA, and rotate to rivers where R + QE turns skirmishes into murals.","after":"Lost Chapter onward you own the poke war: complete the signature on every wave contact, shove with Molten Fissure, and rotate — R opens skirmishes from 1300 units."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a QA-cleared slow push that crashes on your roam timer — your wave-clear is elite and your map poke (R) travels with you. Worst wave: a frozen wave near his tower with EE down — the immobile artist walking up to last-hit is mid lane's most gankable picture. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.","after":"Best wave: a Molten Fissure (QE) slow push that crashes on your roam timer — your clear is elite and R travels 1300 units with you. Worst wave: a freeze near his tower with Grim Visage down — you have no dash, and Azir needs one soldier placed behind you. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Azir opens the score, reset expectations and respect Shifting Sands doubly. After a second, your job description changes — farm with QA clears and stay relevant through max-range poke.","after":"If Azir opens the score, stop contesting the soldier line — he out-ranges you once fed. Clear with Molten Fissure (QE), hold Grim Visage for his dash, and give up the CS you cannot safely reach."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through range — no mid pool champion paints a teamfight from further away; your R + QQ decides objectives before they start.","after":"Carry through range: R reaches 1300 units, so you open fights from outside his soldier line and let the slow hold them in your paint."},
+    {"layer":"full","path":"dosFull[0].d","before":"His shield-dash to a soldier — engage the window after he burns it. Commit on its cooldown, never into it.","after":"Shifting Sands is 22s at rank 1 — when he dashes it to farm or dodge, that is your all-in window, not a poke one."},
+    {"layer":"full","path":"dosFull[1].d","before":"QQ his last-hit, weave any second spell for the mark, detonate, and reset to max range — two-spell trades he answers only by overextending.","after":"Two damaging paints complete your signature and it detonates on a delay — open Devastating Fire, add a second spell, then step to max range before he lines up a soldier."},
+    {"layer":"full","path":"dosFull[2].d","before":"Azir burns Shifting Sands on nothing — take the fifteen-second invitation.","after":"Paint the soldier line from max range — each hit banks Manaflow, at no risk."},
+    {"layer":"full","path":"dontsFull[0].d","before":"That’s Azir’s bread-and-butter play — deny it and they run out of answers.","after":"Azir reads a repeated line and steps out of it with Shifting Sands."},
+    {"layer":"full","path":"dontsFull[1].d","before":"The fear paint is your only 'no' button — spending it on poke means the next dive is a portrait of you dying.","after":"Grim Visage (EQ) is your only 'no' button — spend it on poke and his dash-in arrives with nothing to stop it."},
+    {"layer":"full","path":"dontsFull[2].d","before":"Standing mid-cast-animation inside his engage range with the fear already spent — every assassin and fighter in the pool is waiting for exactly that frame.","after":"You have no dash; walking up to clear with Grim Visage down is how a gank ends. Ward the river, then paint the wave from behind your own minions."},
+    {"layer":"content","path":"whys[4]","before":"Azir's Emperor's Divide grants a game-changing all-in and disengage tool at level 6.","after":"You still out-range him at 6 — a 120-second Emperor's Divide cannot answer constant poke."},
+    {"layer":"content","path":"spikes[0].text","before":"Your E (Devastating Fire Painting) into Q combo punishes Azir's fragile HP pool before he has soldiers up to zone you off minions, and his short auto-attack range with no shield means trades favor your longer poke.","after":"Your Devastating Fire (QQ) into a second paint completes the signature and punishes Azir's low base HP before his soldiers zone you off minions; his answer is Shifting Sands, and at rank 1 that is a 22-second cooldown."},
+    {"layer":"content","path":"spikes[1].text","before":"Azir's Emperor's Divide unlocks huge all-in and peel potential; if he lands ult-knockup into a soldier combo he can flip a losing lane, so you need to hold W (Severance charm) or Q root ready to interrupt.","after":"Emperor's Divide unlocks a knockback wall that peels or engages; you have no dash to escape it, so hold Grim Visage (EQ) for the moment he steps up and keep the wave between you until that 120-second ult is spent."},
+    {"layer":"content","path":"spikes[2].text","before":"Azir spikes hard off burst/mobility items that let his soldiers snowball damage from range, closing the gap on your poke advantage.","after":"His first item makes each Conquering Sands pass real damage, and Q at rank 3 is a 10-second cooldown — the free-farm window closes."},
+    {"layer":"content","path":"early","before":"You out-range and out-burst Azir from levels 1-5 — his soldiers need mana and setup to threaten trades, while your E-Q combo punishes his low base HP hard. Push and poke every wave you can before level 6, and watch for his all-in the instant soldiers are up. Deny his CS by clearing minions with E so he can't build a soldier wall to zone you.","after":"You out-range Azir from levels 1-5 — his soldiers cost mana and setup, while two paints and the signature detonation punish his low base HP. Poke every wave contact before 6, and clear with Molten Fissure (QE) so he cannot farm safely behind the wave. His only exit is Shifting Sands, 22 seconds at rank 1: when it is gone, step up."},
+    {"layer":"content","path":"mid","before":"Level 6 flips momentum: Azir's Emperor's Divide knocks you up and lets him combo with a soldier for a burst that can kill you if you're caught out of position. Play back after he hits 6 until you see his ult on cooldown, and use your own W root proactively to interrupt his engage before he channels the wall. Ward your flanks — Azir roams well with soldier repositioning once he has tempo.","after":"Level 6 adds Emperor's Divide: a wall of soldiers that knocks you back and can shove you into his damage if you are caught out of position. Play back until you see that 120-second ult spent, and hold Grim Visage (EQ) for his step-up rather than spending it on poke. Ward your flanks — Azir moves well once he has tempo, and you have no dash to answer a collapse."},
+    {"layer":"content","path":"late","before":"Once Azir gets his item spike he becomes the stronger teamfighter, using his ultimate to wall off your team from objectives while his soldiers poke you down from safety. You have to play for pick potential with E-Q burst before fights start rather than standing in prolonged skirmishes, since his kit outscales yours in extended engagements.","after":"Once Azir has items he is the stronger teamfighter, using Emperor's Divide to wall your team off objectives while soldiers chip from safety. Play for picks before fights start: R reaches 1300 units onto his carry, and Grim Visage (EQ) turns a caught step-up into a kill. Do not stand in extended fights against the soldier line."},
+    {"layer":"content","path":"wants.you[0]","before":"Poke down his HP with E-Q combos before he hits 6 soldiers scaling","after":"Poke with Devastating Fire and a second paint to complete the signature"},
+    {"layer":"content","path":"wants.you[1]","before":"Hold W root to cancel his all-in the moment he ults","after":"Hold Grim Visage (EQ) for his Shifting Sands step-up"},
+    {"layer":"content","path":"wants.you[2]","before":"Deny CS with E zone so he can't stack soldiers off minions","after":"Clear with Molten Fissure so he cannot farm behind soldiers"},
+    {"layer":"content","path":"wants.foe[1]","before":"All-in immediately off Emperor's Divide knockup before you can root","after":"All-in off the Emperor's Divide knockback while you have no dash out"}
+  ],
+  "notes": "Chart: the full layer had all seven sides as \"Skill\" while content win[] already read Hwei x5 then Azir x2 — a live cross-layer disagreement. Sides moved to match content and packet.levelChart; no paired win[] edit exists because win[] was already correct (a before==after edit is refused by the applier). phases[N].rating left untouched (5/5/5/5/6/6/6) — the rising curve already matches the new verdicts and I had no kit-grounded basis to renumber them. Ability-name errors were systemic on this page, not one-off: Hwei's fear is Grim Visage (EQ), not \"EE\"; \"Devastating Fire Painting\" was attributed to E; \"Severance charm\" and \"Q root\" do not exist in his kit. \"QA\" appeared as a wave-clear token in three fields and is not an ability. Emperor's Divide knocks BACK per Riot's text, not up — corrected in two places. Did NOT assert whether Emperor's Divide's soldier wall blocks Hwei's projectiles: the kit gives it the terrain flag only, and Hwei's spells carry the generic \"blocked by Wind Wall-class effects\" flag, which is not the same thing. Left report[] alone per the sweep exclusion."
+}

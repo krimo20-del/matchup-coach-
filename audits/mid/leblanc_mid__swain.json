@@ -1,0 +1,83 @@
+{
+  "ownerKey": "leblanc_mid",
+  "enemy": "swain",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Every full-layer row read 'Skill' while the content layer read LeBlanc for rows 0-5 and Swain for row 6 — seven rows of cross-layer disagreement.",
+      "why": "53.31% over 1300 games with a clear shape: LeBlanc bursts him before Ravenous Flock and sustain items matter, and Swain takes over once his ultimate is draining a whole fight. The content layer and the packet already agreed on that shape; the full layer was the stale one.",
+      "corrected": "phases[0-5].side set to LeBlanc, phases[6].side to Swain, and phases[6].why rewritten so the row and its sentence agree.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "currentText both layers"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Swain's spikes are 6 (Demonic Ascension, flat 120s) and sustain items; LeBlanc's are 3, 6 and first item. spikes[2] now names the anti-heal timing that decides the first-item window.",
+      "corrected": "Grievous Wounds folded into spikes[2] and the late text.",
+      "confidence": "High",
+      "sources": ["enemyKit P/R", "missingInteractions needs-antiheal"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The root was attributed to Vision of Empire (W). Vision of Empire is the global eye — 22/21/20/19/18s, 5500 to 7500 range — that damages, slows and reveals. The root is Nevermove (E), 12/11.5/11/10.5/10s at 850. The page also called Demonic Ascension a channel to outlast.",
+      "why": "Nevermove roots on the wave's RETURN trip, not the outgoing throw, and Swain can then pull every rooted champion toward him — into the 650 drain. That two-beat timing is the whole dodge, and the page never mentioned it. Demonic Ascension has no duration to wait out: it persists as long as he keeps draining champions.",
+      "corrected": "Root reattributed to Nevermove with the return-trip timing and the pull; Vision of Empire restated; the 'ult channel completes' advice replaced.",
+      "confidence": "High",
+      "sources": ["enemyKit W/E/R text and cooldowns", "packet.suspectNames"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint).",
+      "why": "Nevermove's 12s-to-10s is the step-up clock; R is a flat 120s regardless of rank, which is worth counting exactly.",
+      "corrected": "Numbers written in.",
+      "confidence": "High",
+      "sources": ["enemyKit"]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "Anti-heal appeared only as 'his sustain' in itemization and never in the content layer.",
+      "why": "Ravenous Flock heals him from Soul Fragments and permanently raises his maximum health, so waiting makes the burst maths worse every minute.",
+      "corrected": "Grievous Wounds named in spikes[2] and late.",
+      "confidence": "High",
+      "sources": ["enemyKit P", "missingInteractions"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"LeBlanc"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"LeBlanc"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"LeBlanc"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"LeBlanc"},
+    {"layer":"full","path":"phases[4].side","before":"Skill","after":"LeBlanc"},
+    {"layer":"full","path":"phases[5].side","before":"Skill","after":"LeBlanc"},
+    {"layer":"full","path":"phases[6].side","before":"Skill","after":"Swain"},
+    {"layer":"full","path":"phases[6].why","before":"Late LeBlanc picks: W the flank, chain the carry, mimic the exit — and vanish before the obituary prints.","after":"Late Swain drains a whole fight and heals through the burst — you get the pick beforehand, never the 5v5."},
+
+    {"layer":"full","path":"phases[3].why","before":"W-poke the wave contacts and return before his answer — distortion math is the whole champion.","after":"W-poke the wave contacts and return before Nevermove — Distortion math is the whole champion."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. It governs your forward steps. - W Distortion (return) spent on poke is a death you scheduled. - Hold the R for the fight that decides something.","after":"- Nevermove (E): 12s at rank 1, 10s at rank 5 — the wave roots on the way back, not on the way out, so watch the return. - Vision of Empire (W): 22s to 18s, global from 5500 to 7500. - Demonic Ascension (R): a flat 120s."},
+    {"layer":"full","path":"report[5].t","before":"Track Swain’s Demonic Ascension: His drain mode — disengage and reset the fight when it starts. Forward steps wait for its downtime.","after":"Track Swain’s Demonic Ascension: a flat 120s drain form that lasts while champions stay near him — leave, don't out-damage it."},
+    {"layer":"full","path":"dosFull[0].d","before":"His drain mode — disengage and reset the fight when it starts. Commit on its cooldown, never into it.","after":"The drain form has no timer while champions stay in range — leave the 650 radius instead of trading through it."},
+    {"layer":"full","path":"dosFull[1].d","before":"Q the sigil, W the detonation, return before the answer — a half-bar round trip he experienced as weather.","after":"At 6 the mimicked chain doubles the root — spend it while Nevermove sits on its 12-second cooldown."},
+    {"layer":"full","path":"dontsFull[1].t","before":"Trade into his one CC spell","after":"Trade into Nevermove's return"},
+    {"layer":"full","path":"dontsFull[2].d","before":"Staying at the W landing spot for one more auto — the return timer is your champion; outliving it is optional.","after":"Ravenous Flock heals him and raises his maximum health permanently — every minute you wait makes him harder to burst."},
+    {"layer":"full","path":"report[11].t","before":"Linger past the W return window. Trade into his one CC spell. Coast — your lead has a sell-by date. And keep the ultimate holstered until a kill is actually on the table.","after":"Linger past the W return window. Trade into Nevermove's return. Coast — your lead has a sell-by date. And keep the ultimate holstered until a kill is actually on the table."},
+    {"layer":"full","path":"enemyWin","before":"Swain wins by landing Demonic Ascension, denying your pattern, and owning the spacing war until your tempo starves.","after":"Swain wins by rooting you with Nevermove, pulling you into the drain, and healing through everything you had left."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry through picks — one chained carry per objective; your job is the flank angle and the discipline to leave after.","after":"Carry through picks — chain the carry outside Swain's 650 drain radius; anything inside it just feeds his health bar."},
+
+    {"layer":"content","path":"spikes[0].text","before":"Full combo LeBlanc bursts Swain down before his Vision of Empire ever roots you, since he has no early kill pressure without landing that root first.","after":"Full combo LeBlanc bursts Swain down before Nevermove roots you — and it roots on the wave's return trip, not the throw, so step out as it comes back."},
+    {"layer":"content","path":"spikes[1].text","before":"Mimic-doubled Chain punishes him hard, but his own Demonic Ascension ult can turn a losing trade into a stall if he lands root beforehand.","after":"Mimic-doubled Chain punishes him hard, but Demonic Ascension turns a losing trade into a stall if Nevermove landed first — 120 seconds, so count it."},
+    {"layer":"content","path":"spikes[2].text","before":"Sustain items start letting Swain out-heal your poke damage during extended trades, so short burst windows matter more than prolonged fights.","after":"Ravenous Flock plus sustain items out-heals your poke in extended trades — buy Grievous Wounds at this spike and keep the windows short."},
+    {"layer":"content","path":"early","before":"Levels 1-2 you control the lane — Swain has no way to punish you without landing his skillshot root first, so play around dodging it and poke him down with Sigil range. He's passive until he gets picks.","after":"Levels 1-2 you control the lane — Swain needs Nevermove first, and it only roots as the wave returns to him, so keep moving through that second beat and poke with Sigil. Death's Hand reaches 750, so trade from the edge of it."},
+    {"layer":"content","path":"mid","before":"Levels 3-6 your full combo still kills him outright if you avoid his root, and Mimic-Chain plus a well-timed all-in denies him the setup he needs entirely. Watch for his ultimate stacking though — landing root into R can turn a bad fight for him into a stall.","after":"Levels 3-6 your full combo still kills him outright if you dodge Nevermove's return, and Mimic-Chain plus a well-timed all-in denies him the setup entirely. Respect the pull, though: rooted champions get dragged toward him, and Demonic Ascension keeps running as long as a champion stays inside its 650 radius."},
+    {"layer":"content","path":"late","before":"Once Swain has sustain items and his ultimate draining a full teamfight, he becomes extremely hard to actually kill — the healing outpaces your burst and he anchors fights from the backline. Focus picks before teamfights start, or burn him down before his ult channel completes.","after":"Once Swain has sustain items and his ultimate draining a full teamfight, he is extremely hard to kill — the healing outpaces your burst and he anchors the fight. Demonic Ascension is not a channel you can outlast: it runs as long as he drains champions, so take the pick before the fight starts and bring Grievous Wounds."},
+    {"layer":"content","path":"wants.you[0]","before":"Bait his root with movement rather than eating it in lane","after":"Sidestep Nevermove's return, not just the outgoing wave"},
+    {"layer":"content","path":"wants.foe[0]","before":"Land Vision of Empire root to set up any trade or all-in","after":"Land the Nevermove root to set up any trade or all-in"}
+  ],
+  "notes": "Full layer read 'Skill' on all seven rows while content read LeBlanc x6 + Swain; aligned the full layer to the content layer and the packet, so no win[N] edits were needed (proposing them would have been no-ops with before == after). Main kit fix: the root is Nevermove (E), not Vision of Empire (W), and it roots on the return trip with a follow-up pull. Also removed 'before his ult channel completes' — Demonic Ascension has no fixed duration while he is draining champions. Note for the data owner: the Ravenous Flock kit entry carries a percentHealth flag, but Riot's description only mentions healing and permanent max-health growth, so I wrote only the anti-heal case and did not assert percent-health damage."
+}

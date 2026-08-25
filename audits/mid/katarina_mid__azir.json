@@ -1,0 +1,110 @@
+{
+  "ownerKey": "katarina_mid",
+  "enemy": "azir",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Lane difficulty is genuinely EVEN at 55.24% over 963 games: Katarina owns levels 1-5 against Azir's worst-in-class base stats and expensive Conquering Sands (70/80/90/100/110 mana), then loses the matchup from first item onward as soldier range and Emperor's Divide take over.",
+      "corrected": "Early lane Katarina, side lane and teamfights Azir. Snowball window is levels 3-6 only.",
+      "confidence": "High",
+      "sources": ["brief packet winRate/games", "enemyKit Azir Q cost", "enemyKit Azir R"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The full-layer level chart read Skill for Levels 1-3, 4-5, First item and 2+ items while the content layer read Katarina/Katarina/Azir/Azir and the packet chart read Katarina x5 then Azir x2. Two layers rendered different answers.",
+      "why": "Katarina's real spike is Level 3 (Shunpo online) through Level 6 Death Lotus; Azir's is his first item, where soldier DPS out-ranges the gap-close, and 2+ items where Emperor's Divide gates every entry. The content layer and packet agree; the full layer was stale.",
+      "corrected": "phases[0..3].side -> Katarina, phases[5..6].side -> Azir, with ratings and whys moved in the same proposal to match. win[0..6] already holds the correct values on disk, so no content-layer chart edit is required.",
+      "confidence": "High",
+      "sources": ["brief packet.levelChart", "currentText.content win[0..6]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive interaction — Emperor's Divide knocking Katarina back and cancelling the Death Lotus channel — was never stated. breakdown.cooldowns contained no cooldown number at all, and dosFull[1].d / dontsFull[2].d were the tradeGood / tradeBad strings pasted under unrelated titles.",
+      "why": "Katarina's R carries the 'channel — interruptible, any CC cancels it' flag; Azir's R is a knockback that creates terrain. That single interaction decides every fight after level 6, and its cooldown (120/105/90) versus hers (75/60/45) is the whole timing question. Shifting Sands at 22/20.5/19/17.5/16 is the other real number: it is his only escape and shields him on the dash.",
+      "corrected": "breakdown.cooldowns now carries Shifting Sands 22s->16s, Emperor's Divide 120/105/90 and Conquering Sands down to 6s at rank 5; the R-cancels-R interaction is stated in dontsFull[2].d, report[5].t, breakdown.late and phases[6].why.",
+      "confidence": "High",
+      "sources": ["ownerKit Katarina R channel flag", "enemyKit Azir R terrain/knockback", "enemyKit Azir E cooldowns"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit in it (lint COOLDOWN_NO_DIGIT).",
+      "why": "Shifting Sands is the punishable cooldown early — 22s at rank 1 against Katarina's 12s Shunpo, so a burned E leaves a window of roughly twenty seconds.",
+      "corrected": "Rewritten with real per-rank numbers.",
+      "confidence": "High",
+      "sources": ["enemyKit Azir E", "ownerKit Katarina E"]
+    },
+    {
+      "point": 7,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.wave named 'a CC mage's tower' — placeholder phrasing with no Azir content.",
+      "why": "The real wave problem is Conquering Sands at 740 range poking you off last hits under his tower.",
+      "corrected": "Rewritten around soldier expiry and the 740-range poke.",
+      "confidence": "High",
+      "sources": ["enemyKit Azir Q range"]
+    },
+    {
+      "point": 13,
+      "status": "missing",
+      "whatIsWrong": "Katarina's Q carries a 'grounding' derived flag in the kit file that contradicts Riot's own description (the dagger bounces and ricochets to the ground; nothing in the text grounds anyone).",
+      "why": "Per the brief's own rule, when a derived flag contradicts the description, trust the description. The old dosFull[0].t said 'Trade through grounded daggers only', which would have taught a reader that Katarina denies Shifting Sands. She does not.",
+      "corrected": "Title changed to 'Trade only through landed daggers' and no grounding claim is made anywhere.",
+      "confidence": "High",
+      "sources": ["ownerKit Katarina Q text vs flags"]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Nothing in the brief indicates a 26.15 change to either kit; no patch claim is made in the text.",
+      "corrected": "",
+      "confidence": "Medium",
+      "sources": ["brief"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Katarina" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Azir" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[5].why", "before": "First item spike: full dagger strings delete squishies and one kill opens the chain reaction.", "after": "First item Azir: Liandry-line soldiers out-DPS your burst window and Shifting Sands buys the reset." },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Azir" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Kata is a chain reaction: enter on daggers, lotus the clump, reset through the wreckage, repeat until silence.", "after": "Emperor's Divide knocks you out of Death Lotus — enter on a flank dagger, never through him, lotus once his 90s R is spent." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Azir Shifting Sands: matchup-defining — His shield-dash to a soldier — engage the window after he burns it. Read it like a second minimap. - Guard your E Shunpo (second use) like a fifth summoner spell. - Ultimate goes to kill windows only.", "after": "- Shifting Sands (E): 22s at rank 1, 16s at rank 5 — his shield-dash out. Once it is burned you have a 20-second window to commit. - Emperor's Divide: 120/105/90 — it knocks you out of Death Lotus. - Conquering Sands drops to 6s at rank 5, so poke never stops." },
+    { "layer": "full", "path": "dosFull[0].t", "before": "Trade through grounded daggers only", "after": "Trade only through landed daggers" },
+    { "layer": "full", "path": "dosFull[0].d", "before": "His shield-dash to a soldier — engage the window after he burns it. Until it’s spent, every commit is a coin flip.", "after": "Q bounces off the wave and ricochets to the ground; E to that dagger, not to Azir, so his soldiers never get a free line." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow.", "after": "Shifting Sands (E) is his only escape — 22s at rank 1. Make him burn it onto a soldier, then commit." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Azir spends Shifting Sands early — the closest thing this matchup has to a guarantee.", "after": "Death Lotus is a channel; his R knockback ends it. Spend yours only when his is down." },
+    { "layer": "full", "path": "dontsFull[0].t", "before": "Shunpo into a held stun — ever", "after": "Shunpo in while his R is held" },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Azir’s bread-and-butter play — deny it and they run out of answers.", "after": "He E-dashes to a soldier, shields, and his wall answers your follow-up." },
+    { "layer": "full", "path": "dontsFull[2].t", "before": "All-in into spell-shield kits unbroken", "after": "Commit while Emperor's Divide is up" },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "His R knocks you back and cancels Death Lotus outright — 90s at rank 3. Check it before you spend a 45s ultimate on him." },
+    { "layer": "full", "path": "tradeGood", "before": "Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow.", "after": "Q the wave so the dagger lands behind him, E to it, W for the speed, and leave before he re-summons." },
+    { "layer": "full", "path": "tradeBad", "before": "Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Shunpo onto Azir with Emperor's Divide up — his wall knocks you back out of everything, and 550-range Lotus never gets to start." },
+    { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Q the bounce, E to the landed dagger, W as you spin out — steel-routed trades his aim can't follow. Bad trade: Shunpo onto a face with the CC still loaded — Katarina dies to held buttons, not skill, and everyone holding one knows it.", "after": "Good trade: Q the wave so the dagger lands behind him, E to it, W for the speed, and walk out before a soldier re-summons. Bad trade: Shunpo onto Azir with Emperor's Divide up — his wall knocks you out of everything and Lotus never starts." },
+    { "layer": "full", "path": "enemyWin", "before": "Azir wins by landing Shifting Sands, denying your pattern, and out-ranging your plan one polite trade at a time.", "after": "Azir wins by holding Emperor's Divide for your Lotus and farming behind soldiers until you cannot enter." },
+    { "layer": "full", "path": "ahead", "before": "Ahead, chain it: zone Azir off daggers, lotus every skirmish, and reset through the map — fed Katarina is a weather event.", "after": "Ahead, tax the wave: Conquering Sands costs 70-110 mana, so shove and step up every time his soldiers expire, then reset off it." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through chain reactions — one kill is three; your job is the first domino and the discipline to wait for it.", "after": "Carry early: kill Azir off his 22s E and convert to plates — after two items you only kill what stands behind his wall." },
+    { "layer": "full", "path": "breakdown.wave", "before": "Best wave: a Q-bounced thin push with daggers banked at the river mouth — your roams arrive with luggage. Worst wave: a frozen wave near a CC mage's tower — every pickup walk is a stun audition. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.", "after": "Best wave: shoved thin so you step up the moment his soldiers expire — Azir cannot contest a fast wave without spending mana. Worst wave: frozen under his tower, where Conquering Sands pokes you off every last hit at 740 range. Crash timing: crash before his E is back up so the plate or roam is free." },
+    { "layer": "full", "path": "breakdown.late", "before": "You are the cleanup that starts fights: enter on steel, lotus the clump, reset through the kill, and exit through the panic.", "after": "Azir's wall gates your entry: wait for Emperor's Divide, then flank to a dagger behind him and lotus what his soldiers hold still." },
+    { "layer": "full", "path": "breakdown.early", "before": "Dagger geometry and patience — chip the no-CC kits, bait the CC ones, and bank patterns for the 6 that changes the lane's species.", "after": "Chip him whenever his soldiers expire — Conquering Sands is 14s at rank 1 and 70 mana, so his answer to a step-up is expensive and slow." },
+    { "layer": "full", "path": "breakdown.mid", "before": "First item onward, hunt skirmishes: every 2v2 near your daggers is a reset chain waiting for a signature. Roam when mid stalls.", "after": "Mid game his soldier range starts beating your entry — roam instead, and take Azir only when Shifting Sands and his wall are both spent." },
+    { "layer": "full", "path": "breakdown.spikes", "before": "Level 3 dagger strings set the lane; level 6 arms the blender; first item makes resets explosive.", "after": "Level 3 all-in beats him; level 6 Lotus outduels him with his R down; his first item turns the lane." },
+    { "layer": "full", "path": "tldr", "before": "No-CC mages are lunch and CC mages are landlords — know which one he is before the first dagger drops.", "after": "Azir has one button that beats you and it is Emperor's Divide — everything else is a soldier you walk around." },
+    { "layer": "full", "path": "report[0].t", "before": "No-CC mages are lunch and CC mages are landlords — know which one he is before the first dagger drops.", "after": "Azir has one button that beats you and it is Emperor's Divide — everything else is a soldier you walk around." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Azir’s Shifting Sands: His shield-dash to a soldier — engage the window after he burns it. Forward steps wait for its downtime.", "after": "Track Emperor's Divide: 120/105/90 knockback that ends Death Lotus mid-channel. Never open R through Azir while his ult is available." }
+  ],
+  "notes": "Chart: the full layer disagreed with both the content layer and the packet on six of seven rows. I moved the full-layer sides to match what win[0..6] already says on disk, so no paired content edit exists to make (win[N] is already correct); phases[5].why and phases[6].why were rewritten in the same proposal because their verdict flipped. packet suspectName 'Keep Emperor's Divide' in wants.foe[1] is a FALSE POSITIVE — Emperor's Divide is the correct name per the kit; left alone. Katarina's Q carries a 'grounding' derived flag that contradicts Riot's description (bounce/ricochet only) — treated as a tooltip-parsing misfire and no grounding claim is written. Azir E halting on champion contact and re-arming a soldier is taken from Riot's own text."
+}

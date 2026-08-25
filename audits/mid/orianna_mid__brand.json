@@ -1,0 +1,58 @@
+{
+  "ownerKey": "orianna_mid",
+  "enemy": "brand",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full layer read \"Skill\" on rows 0 and 3 where the content layer and packet levelChart read Orianna and Brand.",
+      "why": "Level 1 Orianna's 815-range Q plus passive-stacked autos beat Brand before Blaze can be applied twice; levels 4-5 are his kill window because Pillar of Flame (W, 10s) applies Blaze and Sear then stuns.",
+      "corrected": "phases[0].side -> Orianna, phases[3].side -> Brand, with phases[3].why rewritten to describe him winning that stage.",
+      "confidence": "High",
+      "sources": ["packet.levelChart", "content win[0], win[3]", "enemyKit Q/W text"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spike sequence is sound: his 4-5 stun combo, both ults at 6, an even first-item damage race, and Orianna pulling ahead at two items on Shockwave setup.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["content spikes[0..3]", "packet.levelChart"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive interaction was stated only vaguely and breakdown.cooldowns carried no number (lint COOLDOWN_NO_DIGIT).",
+      "why": "Sear (Q, 8/7.5/7/6.5/6) only stuns a target already ablaze. Blaze comes from Pillar of Flame (W, 10/9.5/9/8.5/8) or Conflagration (E, 13/12/11/10/9). Dodge the Pillar and the stun cannot exist. Pyroclasm is 100/90/80 against your 110/95/80 Shockwave, so his ult returns first.",
+      "corrected": "Cooldowns, dos/donts bullets and report[5] rebuilt on those numbers and on the Blaze prerequisite.",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "brief ownerKit"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Copy-paste bleed in dosFull[1].d and dontsFull[2].d; unsupported magnitude in breakdown.mid; dosFull[2].d claimed a \"fifteen-second\" window that matches no ability in either kit.",
+      "why": "Sear is 8s at rank 1, not 15s. Lint findings otherwise deterministic.",
+      "corrected": "All four fields rewritten to match their titles and the real timers.",
+      "confidence": "High",
+      "sources": ["brief lintFindings", "enemyKit Q cd"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Brand" },
+    { "layer": "full", "path": "phases[3].why", "before": "Lost Chapter timing — Q-W every wave contact now. The Dissonance field controls every step he takes near the ball.", "after": "Levels 4-5 are his kill window: Pillar of Flame sets Blaze, then Sear stuns. Never stand in the pillar with the ball away." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Brand Sear (Stun): matchup-defining — Q only stuns when you are ablaze — after eating W or E, the stun line is the dodge that matters. It governs your forward steps. - E Command: Protect spent on poke is a death you scheduled. - Hold the R for the fight that decides something.", "after": "- Sear (Q) is 8s at rank 1 and only stuns a target already ablaze, so dodging Pillar of Flame (W, 10s) deletes the stun outright. - Conflagration (E) is 13s at rank 1 and is his other Blaze source. - Pyroclasm is 100s against your 110s Shockwave: his ult returns first, so never trade ults on his clock." },
+    { "layer": "full", "path": "breakdown.mid", "before": "From Luden's you run rivers: shove the wave, hover the ball at the choke, and Shockwave the first clump that contests. Protect-ball on your jungler doubles every gank.", "after": "From Luden's you run rivers: shove, hover the ball at the choke, and Shockwave the first clump that contests. Protect-ball sends your jungler in shielded with a live R." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Ball on his farm path, Q-W the last-hit contact, auto-weave once, and recall the ball — three-second trades his combo math can't answer.", "after": "Sear is 8s and Conflagration 13s at rank 1 — once he spends both on the wave, step in with Q-W and auto-weave the passive stacks." },
+    { "layer": "full", "path": "dosFull[2].d", "before": "Brand burns Sear (Stun) on nothing — take the fifteen-second invitation.", "after": "Pyroclasm is 100s at rank 1; answer his commit with R, never his poke." },
+    { "layer": "full", "path": "dontsFull[0].d", "before": "That’s Brand’s bread-and-butter play — deny it and they run out of answers.", "after": "His combo needs Blaze on you first — without the Pillar there is no stun." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Poking with the ball stranded at max range when his engage is up — an Orianna without her ball is a Doran's Ring with legs.", "after": "Command: Protect is a 9s shield; Shockwave is 110s. Spend the shield on Conflagration and keep the ult for his commit." },
+    { "layer": "full", "path": "enemyWin", "before": "Brand wins by landing Sear (Stun), denying your pattern, and owning the spacing war until your tempo starves.", "after": "Brand wins by landing Pillar of Flame first, stunning through Blaze with Sear, and burning you down before the shield." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through the ball — no champion controls teamfight space like Orianna; one Shockwave on three is a won game, and you decide when it happens.", "after": "Carry through the ball — you pick the moment, and against Brand that means Shockwave the clump his own Pyroclasm is already bouncing through." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Brand’s Sear (Stun): Q only stuns when you are ablaze — after eating W or E, the stun line is the dodge that matters. It’s down or you don’t go.", "after": "Track Sear (Q, 8s): it only stuns a target already ablaze. Dodge Pillar of Flame (W, 10s) and his stun combo has no opener at all; Conflagration is 13s." }
+  ],
+  "notes": "Cross-layer chart disagreement was only on rows 0 and 3 (full said Skill, content said Orianna and Brand). I moved the full layer onto the content values, which match packet.levelChart, so no win[N] edits were required. dosFull[2].d carried a fabricated 'fifteen-second' window — Sear is 8s at rank 1 — and is replaced. Brand is male; no pronoun defects. Ability names in the file were all correct."
+}

@@ -1,0 +1,76 @@
+{
+  "ownerKey": "orianna_mid",
+  "enemy": "azir",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer level chart read \"Skill\" on all seven rows while the content layer and packet levelChart read Orianna 1-5 and Azir 6-7. Two answers to the same question.",
+      "why": "phases[N].side and win[N] are the same row. Orianna's Command: Attack is 815 range against Azir's 525-range soldier placement, so she owns levels 1-5; from his first item the soldier DPS and Emperor's Divide flip it.",
+      "corrected": "phases[0..4].side -> Orianna, phases[5..6].side -> Azir, matching win[0..6] which already held those values; whys for rows 5 and 6 rewritten to describe Azir winning.",
+      "confidence": "High",
+      "sources": ["brief packet.levelChart", "brief currentText.content win[0..6]", "ownerKit Q range 815", "enemyKit W range 525"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spike order is right: Lost Chapter, level 6 Shockwave, Luden's, then Azir overtaking on soldier DPS. Only the first-item row needed to say the spike belongs to him.",
+      "corrected": "phases[5].why now names the soldier-DPS flip instead of an Orianna Luden's spike.",
+      "confidence": "High",
+      "sources": ["brief currentText", "packet.levelChart"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no cooldown number at all (lint COOLDOWN_NO_DIGIT), and \"Command Attack\" was written for Command: Attack in three places.",
+      "why": "Shifting Sands (E) is 22/20.5/19/17.5/16 and is both Azir's engage and his only escape; Conquering Sands (Q) is 14/12/10/8/6; Emperor's Divide is 120/105/90. Orianna's Q is 7/6/5/4/3, W a flat 7, E 9, R 110/95/80. Those numbers are what make \"step up after he burns it\" actionable.",
+      "corrected": "Cooldowns field rebuilt around the real E, Q and R timers; ability name corrected to Command: Attack.",
+      "confidence": "High",
+      "sources": ["brief enemyKit", "brief ownerKit", "packet.suspectNames"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "No sequencing cues anywhere (packet defect, sequencingCues 0).",
+      "why": "The punishable window is the 16-22s after Shifting Sands is spent.",
+      "corrected": "dosFull[1].d and breakdown.cooldowns now key the Q-W trade to his spent E.",
+      "confidence": "High",
+      "sources": ["brief enemyKit E cd"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Copy-paste bleed in dosFull[1].d and dontsFull[2].d; unsupported magnitude \"doubles every gank\" in breakdown.mid.",
+      "why": "Lint findings, deterministic.",
+      "corrected": "Both bullet bodies rewritten to match their titles; the magnitude replaced with what the ball actually delivers.",
+      "confidence": "High",
+      "sources": ["brief lintFindings"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Orianna" },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Azir" },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Azir" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[5].why", "before": "Luden's spike: Q-W chunks a third of his bar. Shove, rotate, and let the ball-delivery threat run the river fights.", "after": "First item turns his soldier DPS on — he out-ranges your 815 Q from behind them. Take pick angles, not soldier lanes." },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Ori is the teamfight: protect-ball on your diver, shockwave their clump, and dissonance the choke they retreat through.", "after": "Emperor's Divide knocks your line off the ball before you cast — hold R until his 120-second wall is spent, then take the clump." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Azir Shifting Sands: matchup-defining — His shield-dash to a soldier — engage the window after he burns it. Check it before every step-up. - E Command: Protect is the lifeline; chip damage never gets it. - The ult answers fights, not waves.", "after": "- Shifting Sands (E): 22s at rank 1, 16s maxed — his engage and his only escape. Step up the moment it is spent. - Conquering Sands (Q) is 14s at rank 1; once he shoves with it your Q-W contact is free. - Emperor's Divide is 120s. Shockwave is 110s — spend it on a body." },
+    { "layer": "full", "path": "breakdown.mid", "before": "From Luden's you run rivers: shove the wave, hover the ball at the choke, and Shockwave the first clump that contests. Protect-ball on your jungler doubles every gank.", "after": "From Luden's you run rivers: shove, hover the ball at the choke, and Shockwave the first clump that contests. Protect-ball sends your jungler in shielded with a live R." },
+    { "layer": "full", "path": "dosFull[1].d", "before": "Ball on his farm path, Q-W the last-hit contact, auto-weave once, and recall the ball — three-second trades his combo math can't answer.", "after": "Q is 7s at rank 1 and 3s maxed, W a flat 7s — cast the pair on every wave contact, then E the ball home before his Shifting Sands is back." },
+    { "layer": "full", "path": "dontsFull[2].d", "before": "Poking with the ball stranded at max range when his engage is up — an Orianna without her ball is a Doran's Ring with legs.", "after": "Shockwave is 110s at rank 1 — burning it on a wave means the next objective fight starts with your best button dark." },
+    { "layer": "full", "path": "enemyWin", "before": "Azir wins by landing Shifting Sands, denying your pattern, and renting you the lane at a range markup.", "after": "Azir wins by stacking soldiers behind a shoved wave, out-ranging your Q, and walling you off your own Shockwave." },
+    { "layer": "full", "path": "breakdown.carry", "before": "Carry through the ball — no champion controls teamfight space like Orianna; one Shockwave on three is a won game, and you decide when it happens.", "after": "Carry through the ball — you pick the moment, and against Azir that means Shockwave after his 120-second wall is spent, never into a soldier screen." },
+    { "layer": "full", "path": "report[5].t", "before": "Track Azir’s Shifting Sands: His shield-dash to a soldier — engage the window after he burns it. It’s down or you don’t go.", "after": "Track Shifting Sands (E): 22s at rank 1, 16s maxed — his only escape and his only engage. Once it is burned, you can step up." },
+    { "layer": "content", "path": "whys[0]", "before": "Your Command Attack plus ball range out-trades Azir's stubby early soldiers.", "after": "Your Command: Attack plus ball range out-trades Azir's stubby early soldiers." },
+    { "layer": "content", "path": "spikes[0].text", "before": "Your Command Attack into ball-Q trades outrange Azir's short-range soldiers before he stacks his passive; punch him whenever he steps up to last-hit and reset the ball back to yourself.", "after": "Your Command: Attack into ball-Q trades outrange Azir's 525-range soldiers before he stacks passive; punch him when he steps up to last-hit and reset the ball back to yourself." },
+    { "layer": "content", "path": "early", "before": "You out-poke Azir at levels 1-3: your Command Attack range plus the ball carry beats his tiny early soldier reach, and every time he walks up to farm you can land a ball-forward Q and reset it onto yourself for the next trade.", "after": "You out-poke Azir at levels 1-3: your Command: Attack range plus the ball carry beats his 525 soldier reach, and every time he walks up to farm you can land a ball-forward Q and reset it onto yourself for the next trade." }
+  ],
+  "notes": "Chart was cross-layer split: full layer had all seven rows as 'Skill', content win[0..6] and packet.levelChart both had Orianna 1-5 / Azir 6-7. I moved the full layer onto the content values rather than the reverse, so no win[N] edits were needed (before would equal after); the pairing rule is satisfied by the rows now agreeing. packet.suspectNames flagged wants.foe[1] 'Land Emperor's Divide' — that is the correct Riot name and is a false positive; left alone. 'Command Attack' -> 'Command: Attack' was a real name error and is fixed in three places. Azir is male; no pronoun defects found."
+}

@@ -1,0 +1,52 @@
+{
+ "ownerKey": "sivir_bot",
+ "enemy": "lucian",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[4].side and phases[5].side were \"Skill\" while content win[4]/win[5] already say \"Lucian\" (matching packet.levelChart's Lucian-favored rows 1-6). Their .why fields also described Sivir winning, contradicting even the current side value.",
+   "why": "packet.levelChart and content win[] agree Lucian wins levels 1 through first item, Sivir only takes over at two-plus items — matches Lucian's known early-lane-bully identity.",
+   "corrected": "Moved phases[4]/phases[5].side to Lucian with real reasons (The Culling all-in threat, item-spike E resets into double-shot). phases[6].side was already correctly Sivir with a why that already matched, so left untouched.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes already correctly track Lucian's Level 6 Culling all-in and first-item burst spike, with the two-item flip to Sivir's teamfight scaling.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "content whys[6] and spikes[1].text both name Sivir's ultimate \"On the Rift\" — the real ability is \"On the Hunt\" (used correctly elsewhere on the page). missingInteractions flagged two real, unstated facts: Lucian's Lightslinger passive sustains him through chip damage (anti-heal matters), and his combo opens with an auto-attack reset that telegraphs before any spell is cast. breakdown.cooldowns had no digits.",
+   "why": "\"On the Rift\" is not a Sivir ability — fabricated name, same error class as the calibration examples. Lightslinger's healed/shielded proc and the auto-reset tell are both in enemyKit.abilities[0].flags/text and are actionable but absent from every writable field.",
+   "corrected": "Fixed \"On the Rift\" to \"On the Hunt\" in whys[6] and spikes[1].text. Added the anti-heal and auto-reset-tell facts as two new dosFull entries. Rewrote breakdown.cooldowns with Relentless Pursuit's real 16s-to-14s cooldown and The Culling's 110s early cooldown.",
+   "confidence": "High",
+   "sources": ["missingInteractions", "enemyKit.abilities"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Lucian"},
+  {"layer":"full","path":"phases[4].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"phases[4].why","before":"On the Hunt online — the team-speed flips engages both directions; the map plays at your pace.","after":"The Culling gives a lethal all-in with support CC - respect his power spike, don't over-extend."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Lucian"},
+  {"layer":"full","path":"phases[5].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"phases[5].why","before":"First item spike: the ricochet shreds duos and the shove becomes weather.","after":"His item spike chains E resets into double-shot bursts - don't duel him."},
+  {"layer":"content","path":"whys[6]","before":"Two-plus items favour Sivir because On the Rift, Ricochet cleave, and utility scale into teamfights far past Lucian's fall-off.","after":"Two-plus items favour Sivir because On the Hunt, Ricochet cleave, and utility scale into teamfights far past Lucian's fall-off."},
+  {"layer":"content","path":"spikes[1].text","before":"The Culling (R) gives Lucian a huge burst window when paired with support CC; your On the Rift (R) helps you disengage, but with an equal-level Lucian holding E and combo up, you're reacting rather than dictating, so respect his all-in threat around the wave.","after":"The Culling (R) gives Lucian a huge burst window when paired with support CC; your On the Hunt (R) helps you disengage, but with an equal-level Lucian holding E and combo up, you're reacting rather than dictating, so respect his all-in threat around the wave."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Lucian Relentless Pursuit: matchup-defining — His dash — lock him down while it is on cooldown. Read it like a second minimap. - Guard your E Spell Shield like a fifth summoner spell. - Ultimate goes to kill windows only.","after":"- Lucian Relentless Pursuit (E): 16s at rank 1, 14s at rank 5 — lock him down while it's on cooldown. - Guard E Spell Shield for his Q or engage. - R The Culling is 110s early — punish before he has it twice."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the contact both ways, W-bounce the duo, walk — the trade taxed two people and refunded your mana bar.","after":"Lucian's E resets on Lightslinger hits — bait the double-shot proc before he dashes away."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending E on chip damage and eating the engage it existed to eat — the shield is the matchup; spend it like a verdict.","after":"His Relentless Pursuit dash punishes overextension hard — check flanks before you push past his ward line."},
+  {"layer":"full","path":"dosFull[3].t","before":null,"after":"Buy anti-heal for extended trades"},
+  {"layer":"full","path":"dosFull[3].d","before":null,"after":"Lightslinger sustain (P) lets him out-heal chip damage on longer fights — Grievous Wounds timing matters more than raw damage."},
+  {"layer":"full","path":"dosFull[4].t","before":null,"after":"Read the auto-reset, not the cast"},
+  {"layer":"full","path":"dosFull[4].d","before":null,"after":"Lucian's combo opens with a Lightslinger auto-attack reset — the wind-up is your cue to step back, before any spell fires."}
+ ],
+ "notes": "suspectNames flagged 'Spell Shielding' as a possible typo but it's just the correct gerund of 'Spell Shield' — false positive, no action needed. The one real fabricated name, 'On the Rift' (should be 'On the Hunt'), was not in suspectNames but is fixed above in both whys[6] and spikes[1].text."
+}

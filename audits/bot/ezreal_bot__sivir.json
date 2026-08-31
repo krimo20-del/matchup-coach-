@@ -1,0 +1,85 @@
+{
+ "ownerKey": "ezreal_bot",
+ "enemy": "sivir",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "missing",
+   "whatIsWrong": "packet.defects flags: 'level chart contradicts data: Ezreal wins only 46.89% but the chart gives Ezreal 6/7 stages vs 1.'",
+   "why": "packet.levelChart and content win[] already agree with each other (both give Ezreal 6 stages, Sivir 1), and the stage-by-stage prose (whys/spikes) all argue Ezreal poking freely except her 1st-item shove spike — so the two layers are internally consistent, and I cannot tell from the kits alone whether the per-stage calls or the aggregate winrate is the stale one. Nothing in ownerKit/enemyKit resolves which is right.",
+   "corrected": "",
+   "confidence": "Low",
+   "sources": ["brief packet.defects", "brief packet.levelChart", "brief currentText.content.win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly cover level 3-5 (Ezreal poke, bait Spell Shield), level 6 (Trueshot vs Sivir's utility ult), 1st item (On the Hunt shove-and-roam), and late (max-charge Q kiting).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Spell Shield as matchup-defining but has no cooldown number (lint COOLDOWN_NO_DIGIT). dosFull[1].d and dontsFull[2].d are copy-paste bleed: bodies are the tradeGood/tradeBad lines pasted under unrelated titles instead of real E/W content.",
+   "why": "Spell Shield (E) is 24/22.5/21/19.5/18s. Ricochet (W) is a flat 12s CD attack-speed/bounce window.",
+   "corrected": "Added real cooldown numbers to breakdown.cooldowns; replaced dosFull[1].d and dontsFull[2].d with content grounded in Spell Shield's real cooldown and Ricochet's cooldown.",
+   "confidence": "High",
+   "sources": ["brief enemyKit E/W cd fields"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "tradeGood",
+   "before": "W the orb, Q the proc, strafe out — the double-detonation he priced as poke.",
+   "after": "W the orb, Q the proc, strafe out — the double-detonation she priced as poke."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: W the orb, Q the proc, strafe out — the double-detonation he priced as poke. Bad trade: Blinking for chip position with their engage loaded — the E is the whole safety thesis; spending it on style is the obituary.",
+   "after": "Good trade: W the orb, Q the proc, strafe out — the double-detonation she priced as poke. Bad trade: Blinking for chip position with their engage loaded — the E is the whole safety thesis; spending it on style is the obituary."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "W the orb, Q the proc, strafe out — the double-detonation he priced as poke.",
+   "after": "Save Arcane Shift for the moment she has no Spell Shield (24-18s CD) up."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].t",
+   "before": "Double-proc the W on his trades",
+   "after": "Double-proc the W on her trades"
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Blinking for chip position with their engage loaded — the E is the whole safety thesis; spending it on style is the obituary.",
+   "after": "Ricochet (W) is only up every 12s — bait her attack-speed window first before you commit to a stand-and-fire trade."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Sivir Spell Shield: matchup-defining — Eats your key spell and refunds her mana — bait it with a cheap cast first. It governs your forward steps. - E Arcane Shift spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+   "after": "- Sivir Spell Shield (E): 24s at rank 1, 18s at rank 5 — Eats one spell and refunds her mana, bait it with a cheap cast first. - E Arcane Shift spent on poke is a death you scheduled. - Hold the R for the fight that decides something."
+  },
+  {
+   "layer": "full",
+   "path": "report[3].t",
+   "before": "Good trade: W the orb, Q the proc, strafe out — the double-detonation he priced as poke. Great trade: Sivir wastes Spell Shield — commit immediately. Bad trade: Blinking for chip position with their engage loaded — the E is the whole safety thesis; spending it on style is the obituary.",
+   "after": "Good trade: W the orb, Q the proc, strafe out — the double-detonation she priced as poke. Great trade: Sivir wastes Spell Shield — commit immediately. Bad trade: Blinking for chip position with their engage loaded — the E is the whole safety thesis; spending it on style is the obituary."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Spell Shield’s cooldown, on your Trinity / Muramana spike, and with your support’s setup. His answer goes first; yours goes last.",
+   "after": "Commit on Spell Shield’s cooldown, on your Trinity / Muramana spike, and with your support’s setup. Her answer goes first; yours goes last."
+  }
+ ],
+ "notes": "packet.defects flags a level-chart-vs-winrate contradiction (Ezreal 46.89% winrate but chart favors Ezreal 6/7 stages) — but packet.levelChart and content win[] already agree with each other and the per-stage prose is internally consistent, so I left the chart alone per the rule ('if the packet's levelChart disagrees with the page's prose and you cannot tell which is right from the kit, LEAVE THE ROW ALONE') and am flagging it here instead. missingInteractions was empty for this matchup. All lintFindings addressed: MISGENDER on tradeGood/breakdown.trading/dosFull[1].d/dosFull[2].t/report[3].t/report[9].t; COPY_PASTE_BLEED on dosFull[1].d and dontsFull[2].d; COOLDOWN_NO_DIGIT on breakdown.cooldowns."
+}

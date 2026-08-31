@@ -1,0 +1,56 @@
+{
+ "ownerKey": "sivir_bot",
+ "enemy": "draven",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Level 1-3 and Levels 4-5 rows are marked side=Draven while content win[0..3] already say Sivir, and Level 6/First item are marked side=Skill while win[4]/win[5] say Draven; the full-layer why text also argues the wrong direction on rows 4-5.",
+   "why": "Content layer (win[] and whys[]) already matches the packet levelChart (Sivir,Sivir,Sivir,Sivir,Draven,Draven,Sivir); full layer disagreed on 6 of 7 rows.",
+   "corrected": "Full phases[].side realigned to match win[]: rows 0-3 -> Sivir, rows 4-5 -> Draven, row 6 -> Sivir, with why text rewritten to match each verdict.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "content.win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content spikes[] already correctly identify level 6 (Whirling Death execute + axe all-in) and first item (axe+lethality burst, Blood Rush kiting) as Draven's power spikes, and late game as Sivir's teamfight spike.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "No text calls out that Draven's combo opens with the Spinning Axe (Q) auto-attack-reset animation as a readable tell, and breakdown.cooldowns had no real cooldown numbers.",
+   "why": "missingInteractions flags the autoreset-burst-tell as applicable and unmentioned; lintFindings flags COOLDOWN_NO_DIGIT.",
+   "corrected": "breakdown.cooldowns rewritten with real numbers (Spinning Axe 12-8s, Sivir E 24-18s, Stand Aside 16-12s, R 100/90/80s) and dosFull[1] rewritten to key off Stand Aside's cooldown for the Spell Shield bait.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Draven","after":"Sivir"},
+  {"layer":"full","path":"phases[0].rating","before":"7/10","after":"6/10"},
+  {"layer":"full","path":"phases[0].why","before":"Q both passes through the contacts — the boomerang bills twice; stand where the return doubles.","after":"Boomerang's return chunks him twice and W's ricochet punishes his axe catch — Level 1 poke favors you."},
+  {"layer":"full","path":"phases[1].side","before":"Draven","after":"Sivir"},
+  {"layer":"full","path":"phases[1].rating","before":"7/10","after":"6/10"},
+  {"layer":"full","path":"phases[1].why","before":"W-bounce the duo trades: the ricochet taxes his support for standing in formation.","after":"W-bounce taxes the duo and denies him a safe Spinning Axe catch to rebuild stacks."},
+  {"layer":"full","path":"phases[2].side","before":"Draven","after":"Sivir"},
+  {"layer":"full","path":"phases[2].rating","before":"7/10","after":"6/10"},
+  {"layer":"full","path":"phases[2].why","before":"Spell shield games begin: every ability he aims is now a mana refund audition.","after":"Spell Shield blanks Stand Aside — his all-in bait becomes a free mana refund."},
+  {"layer":"full","path":"phases[3].side","before":"Draven","after":"Sivir"},
+  {"layer":"full","path":"phases[3].why","before":"Shove the metronome: your W clears set the lane's tempo — he farms under tower or fights your timing.","after":"Shove the metronome: your W clears set the lane's tempo — he still farms under tower or fights on your terms."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Draven"},
+  {"layer":"full","path":"phases[4].why","before":"On the Hunt online — the team-speed flips engages both directions; the map plays at your pace.","after":"Whirling Death plus full axe stacks flip the 2v2 — his all-in now threatens a real kill."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Draven"},
+  {"layer":"full","path":"phases[5].why","before":"First item spike: the ricochet shreds duos and the shove becomes weather.","after":"His first item spike: axes plus lethality burst hard and Blood Rush lets him kite."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Sivir"},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Draven Spinning Axe: matchup-defining — Two spinning axes is lane-bully damage — stand on his pickup spots and his power halves. It governs your forward steps. - E Spell Shield spent on poke is a death you scheduled. - Hold the R for the fight that decides something.","after":"- Draven Spinning Axe (12-8s CD): two axes up is lane-bully damage — stand on his pickup spots and his power halves; punish the down window. - E Spell Shield (24-18s CD) spent on poke is scheduled death — save it for Stand Aside (16-12s CD). - Hold the 100/90/80s R for a real fight."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the contact both ways, W-bounce the duo, walk — the trade taxed two people and refunded your mana bar.","after":"Bank the E for Stand Aside (16-12s CD) — block the knockup and slow, and he loses his only real engage."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending E on chip damage and eating the engage it existed to eat — the shield is the matchup; spend it like a verdict.","after":"Chasing a kill off your tempo isn't the trade — the shove pays more per second across the lane than one kill skipped."}
+ ],
+ "notes": "Draven's Q (Spinning Axe) auto-attack reset is his combo tell (per missingInteractions) — reflected via the Stand Aside cooldown framing in dosFull[1]. suspectNames flagged 'Spinning Axes' in content.spikes[0].text as a possible wrong name, but it is just the plural of the real ability name (Spinning Axe) — no correction needed, left alone."
+}

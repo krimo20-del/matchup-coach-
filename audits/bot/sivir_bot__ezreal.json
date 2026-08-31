@@ -1,0 +1,40 @@
+{
+ "ownerKey": "sivir_bot",
+ "enemy": "ezreal",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Full phases[].side and content win[] both read 'Skill' for all 7 rows, matching the packet levelChart (all Skill) — the chart already agrees across layers.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.full.phases", "currentText.content.win"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content spikes[] correctly identify level 6 Trueshot Barrage poke, the shared first-item spike, and late-game positioning as the power-spike beats for this even matchup.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real cooldown numbers, and dosFull[1].d / dontsFull[2].d were verbatim copies of tradeGood/tradeBad pasted under unrelated titles instead of content grounded in Ezreal's kit.",
+   "why": "lintFindings flags COOLDOWN_NO_DIGIT and two COPY_PASTE_BLEED entries.",
+   "corrected": "breakdown.cooldowns now cites Arcane Shift (26-14s), Sivir E (24-18s), and R (120/105/90s); dosFull[1].d now keys off Mystic Shot's 5.5-4.5s cooldown for the Spell Shield bait, and dontsFull[2].d now matches its 'Shove without river vision' title.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Ezreal Arcane Shift: matchup-defining — The blink makes him untouchable — punish the nineteen seconds after he burns it. Count it out loud if you must. - Your E Spell Shield has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Ezreal Arcane Shift (26-14s CD): the blink makes him untouchable — punish the window right after he burns it, longest at rank 1. - Your E Spell Shield (24-18s CD) has one job: the moment it all goes wrong. - The 120/105/90s R has one too: the moment it all goes right."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the contact both ways, W-bounce the duo, walk — the trade taxed two people and refunded your mana bar.","after":"Bank the E for a well-timed Mystic Shot (5.5-4.5s CD) — a blocked bolt refunds him nothing and denies the poke."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending E on chip damage and eating the engage it existed to eat — the shield is the matchup; spend it like a verdict.","after":"Shoving without vision into his Arcane Shift range just feeds him a free reposition — check the bush before you push."}
+ ],
+ "notes": "Level chart already agrees full-vs-content (all 'Skill', matches packet). No missingInteractions were flagged for this matchup. phases[0-3].why and several breakdown fields remain structurally templated (identical wording to the Draven matchup) but were left alone since they are not factually wrong and this pass prioritized the flagged lint defects and cooldown-sequencing gap."
+}

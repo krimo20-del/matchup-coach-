@@ -1,0 +1,97 @@
+{
+ "ownerKey": "karthus_bot",
+ "enemy": "sivir",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0-5].side all carry the raw template placeholder \"Skill\" instead of a champion name; content win[] already correctly reads Sivir/Sivir/Sivir/Karthus/Karthus/Karthus/Karthus, matching the packet levelChart, and phases[6].side already correctly says Karthus.",
+   "why": "whys[0-2] describe Sivir's early push tempo and Spell Shield winning the lane, and whys[3-6] describe Karthus's ranked-up Q and Requiem taking over — full.phases[N].why already narrates the same verdict as win[N]; only the .side token on 6 of 7 rows was the unpopulated placeholder.",
+   "corrected": "Set phases[0-2].side to Sivir and phases[3-5].side to Karthus, matching win[N] which was already correct — no win[] edit needed.",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "brief currentText content.win[]", "brief currentText full.phases[N].why"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "First-item spike (Q+E burst out-trading her raw autos) and level-6 spike (Requiem executing a low recall/roam Spell Shield can't stop) are grounded in real kit behavior and cooldowns.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["enemyKit E/R", "currentText spikes[]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns gave no cooldown number for Spell Shield or Requiem.",
+   "why": "Spell Shield (E) is 24-18s by rank and only blocks one targeted ability; Requiem is 200/180/160s. Neither number was present, so the reader can't time a bait-then-burst sequence.",
+   "corrected": "Rewrote breakdown.cooldowns with real E/R numbers.",
+   "confidence": "High",
+   "sources": ["enemyKit E cd", "ownerKit R cd"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Sivir"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Sivir"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Sivir"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Karthus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Karthus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Karthus"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Iso-Q the carry while the aura taxes the support — two bills, one rotation, no apologies.",
+   "after": "She has no dash — Wall of Pain slow denies her Ricochet-boosted chase once it lands."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Walking up to aura a full-HP duo at even cooldowns — the lich is patient; impatience is the only counter.",
+   "after": "On The Hunt shreds her own cooldowns while chasing — respect the speed buff, do not extend past your zone."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Sivir Spell Shield: matchup-defining — Eats your key spell and refunds her mana — bait it with a cheap cast first. Check it before every step-up. - W Wall of Pain is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+   "after": "- Sivir Spell Shield (E): 24-18s cooldown — eats one targeted spell and refunds mana; bait it with a cheap cast first, then land the real one. - Wall of Pain is the lifeline; chip damage never gets it. - Requiem is 200/180/160s."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Spell Shield’s cooldown, on your first item spike, and with your support’s setup. Make him flinch first.",
+   "after": "Commit on Spell Shield’s cooldown, on your first item spike, and with your support’s setup. Make her flinch first."
+  }
+ ],
+ "notes": "Chart repair: phases[0-5].side carried the unpopulated template placeholder 'Skill' while content win[N] was already correct and matched the packet levelChart (Sivir wins 1-3, Karthus wins 4-5-6/first item); phases[6].side was already correctly 'Karthus' so left untouched. Fixed side alone on the 6 stale rows, no win[] edit needed. Lint fixes: 1 misgender correction (Sivir is she/her, report[9].t) and 2 copy-paste-bleed fixes (dosFull[1].d, dontsFull[2].d no longer duplicate tradeGood/tradeBad, now describe walling her dashless chase and not overchasing into her On The Hunt speed respectively), plus real cooldown numbers added to breakdown.cooldowns resolving COOLDOWN_NO_DIGIT. suspectNames 'Spell Shields'/'Spell Shielding' checked against enemyKit — both are verb-conjugated uses of the real ability name Spell Shield (E), not fabricated names; false positives, left as-is. IMPORTANT: the brief's missingInteractions entry (rule terrain-cuts-retreat) claims Spell Shield 'cuts your retreat' as a wall/terrain effect, sourced from an enemyKit E flag of terrain:'creates terrain, blocks paths and dashes'. Riot's own ability description for Spell Shield only says it 'blocks a single enemy ability cast on Sivir' — a personal spell-block, not a terrain wall. Per the flag-misfire rule (trust the description over a contradicting derived flag), this looks like a tooltip-parsing misfire, not a real mechanic — I did NOT write this claim into the page. Flagging for user review: verify whether Sivir's E has ever created terrain (it does not currently, to my knowledge) before this interaction is used anywhere."
+}

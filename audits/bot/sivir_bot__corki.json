@@ -1,0 +1,44 @@
+{
+ "ownerKey": "sivir_bot",
+ "enemy": "corki",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full-layer phases[0].side and phases[1].side both read 'Skill', but content win[0]='Sivir' and win[1]='Sivir' (matching the packet levelChart: Sivir,Sivir,Skill,Skill,Skill,Skill,Skill). Levels 3-7 already agreed as Skill on both layers.",
+   "why": "whys[0]/[1] already on the page (autos+Boomerang out-trading pre-poke Corki, W waveclear denying his shove) support Sivir winning levels 1-2, matching the packet chart.",
+   "corrected": "phases[0].side and phases[1].side -> Sivir with a small rating bump; existing why text for both was already generic Sivir-favoring boilerplate and did not contradict the corrected side, so left as-is.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]", "currentText.content.whys[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes are named concretely and agree with the (corrected) chart: Sivir's early auto/Boomerang edge, an even lvl3-5 Bomb-vs-Spell-Shield skill check, an even level-6 Missile Barrage-vs-On-The-Hunt window, and even scaling through items. No contradiction with the fixed chart.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1] (titled 'Bill the refund in Q passes') and dontsFull[2] (titled 'Shove without river vision') both carried the generic tradeGood/tradeBad sentences verbatim, unrelated to their titles. Also, itemization (report[8].t) never mentions that Corki's Hextech Munitions (P) deals bonus true damage, so armor/MR itemization alone doesn't answer it — flagged in missingInteractions.",
+   "why": "Sivir's Q is a boomerang that hits going out and coming back, which is what 'Bill the refund in Q passes' should describe. Corki's Missile Barrage (R, 1225 range) threatens across the river, which is what 'Shove without river vision' should describe. Corki's passive true damage (flagged in missingInteractions) ignores armor entirely, so raw resistance stacking is the wrong answer and itemization should say so.",
+   "corrected": "dosFull[1].d and dontsFull[2].d rewritten to match their titles; report[8].t updated to note his true damage bypasses armor.",
+   "confidence": "High",
+   "sources": ["lintFindings", "missingInteractions", "ownerKit Q", "enemyKit P", "enemyKit R"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Sivir"},
+  {"layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10"},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Sivir"},
+  {"layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10"},
+  {"layer": "full", "path": "dosFull[1].d", "before": "Q the contact both ways, W-bounce the duo, walk — the trade taxed two people and refunded your mana bar.", "after": "Q hits him going out and coming back — line up the return pass so one throw taxes him for double damage."},
+  {"layer": "full", "path": "dontsFull[2].d", "before": "Spending E on chip damage and eating the engage it existed to eat — the shield is the matchup; spend it like a verdict.", "after": "Corki's Missile Barrage reaches across the river — a blind shove into fog eats a barrage you never saw coming."},
+  {"layer": "full", "path": "report[8].t", "before": "Start Doran's Blade + pot. ER or Statikk first, Berserker's, then IE-Runaan's — the ricochet wants crit volume.", "after": "Start Doran's Blade + pot. ER or Statikk first, Berserker's, IE-Runaan's — his true damage ignores armor, out-race it."}
+ ],
+ "notes": "Chart mismatch was small: only phases[0-1].side disagreed with content win[]/packet chart (levels 3-7 already agreed) — fixed side+rating, left why text alone since it was already Sivir-favoring and didn't contradict. Fixed both COPY_PASTE_BLEED lint hits by writing bodies that actually match their titles. Added the missing true-damage-bypasses-armor note to itemization per missingInteractions. breakdown.cooldowns already contains a number (Big One missile barrage tracked as an objective) so COOLDOWN_NO_DIGIT looks like a false positive here — left alone. tradeGood/tradeBad/breakdown.trading/report[3] are templated boilerplate shared verbatim with other enemies — left alone this pass, outside this pass's edit budget."
+}

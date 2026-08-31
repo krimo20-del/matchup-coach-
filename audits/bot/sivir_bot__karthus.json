@@ -1,0 +1,47 @@
+{
+ "ownerKey": "sivir_bot",
+ "enemy": "karthus",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[3].side and phases[4].side were flattened to \"Skill\" while content win[3]/win[4] already say \"Karthus\" (matching packet.levelChart's 4-5 and 6 rows). phases[5].why and phases[6].why also argued against their own .side field: phases[5].side=\"Karthus\" but the why described Sivir winning the trade, and phases[6].side=\"Karthus\" while win[6]=\"Sivir\" and the why already described Sivir conducting the teamfight.",
+   "why": "packet.levelChart and content win[] agree Sivir wins 1-3 and 2+ items, Karthus wins 4-6 — the full-layer side/why fields didn't match either source.",
+   "corrected": "Moved phases[3].side/phases[4].side to Karthus with real reasons (ranked Lay Waste spam, global Requiem snipe range). Rewrote phases[5].why to match its existing Karthus side. Moved phases[6].side to Sivir to match win[6] and its own already-correct why (no why edit needed there).",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes already correctly track Karthus's Level 6 global Requiem execute and first-item Q/Defile spike, matching enemyKit.abilities.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "content spikes[1].text contains a garbled parenthetical: \"his Wall (E is Defile, Wall is his other slow) plus E aura\" — this misattributes which slot is which. Real kit: W is Wall of Pain (the slow/MR-reduction wall), E is Defile (the mana-draining AoE aura). breakdown.cooldowns also had no real numbers despite Requiem's known 200/180/160s cooldown.",
+   "why": "enemyKit.abilities lists W=\"Wall of Pain\" (slow flag) and E=\"Defile\" (zone flag) distinctly; the shipped text runs them together in a way that reads as a parsing error rather than real advice.",
+   "corrected": "Left the content-layer typo for the QA pass (spikes[N].text is content-layer prose outside the writable full-layer sweep I can safely touch without re-deriving exact before-text risk — flagging in notes instead) and rewrote breakdown.cooldowns with Requiem's real per-rank cooldown plus a note that Lay Waste has no cast cooldown, only a mana cost.",
+   "confidence": "Medium",
+   "sources": ["enemyKit.abilities"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Karthus"},
+  {"layer":"full","path":"phases[3].rating","before":"5/10","after":"7/10"},
+  {"layer":"full","path":"phases[3].why","before":"Shove the metronome: your W clears set the lane's tempo — he farms under tower or fights your timing.","after":"Ranked Lay Waste spam and the Defile aura flip the poke war here — trade only outside Q range."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Karthus"},
+  {"layer":"full","path":"phases[4].why","before":"On the Hunt online — the team-speed flips engages both directions; the map plays at your pace.","after":"Requiem is a global execute that can snipe you low anywhere on the map - don't dive at low HP."},
+  {"layer":"full","path":"phases[5].why","before":"First item spike: the ricochet shreds duos and the shove becomes weather.","after":"His first AP item spikes Q burst and Defile aura — trades turn unfavourable now."},
+  {"layer":"full","path":"phases[6].side","before":"Karthus","after":"Sivir"},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Karthus Requiem: matchup-defining — The global execute — recall above the red line and track it from his level 6 on. Read it like a second minimap. - Guard your E Spell Shield like a fifth summoner spell. - Ultimate goes to kill windows only.","after":"- Karthus Requiem (R): 200s at rank 1, 160s at rank 3 — recall above the red line and track it from level 6 on. - Q Lay Waste has no cooldown but costs mana — spam pressures his bar, not his cast timer. - Guard E Spell Shield for the execute, not chip Q's."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the contact both ways, W-bounce the duo, walk — the trade taxed two people and refunded your mana bar.","after":"Karthus has zero mobility — shove through Lay Waste poke; he can't punish the space you take."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending E on chip damage and eating the engage it existed to eat — the shield is the matchup; spend it like a verdict.","after":"Sieging under Requiem's execute range is a bad trade - check the ult is down before you commit to the turret."}
+ ],
+ "notes": "phases[4].rating edit has before==after (6/10 unchanged) — included only because it was in the same paired-edit group conceptually; applier should treat it as a no-op if it rejects identical before/after (harmless either way since it's an enum field). content spikes[1].text still reads \"his Wall (E is Defile, Wall is his other slow)\" which garbles W vs E — flagging for a content-layer follow-up pass since I could not safely re-derive the exact before-string boundary without risking a stale-copy mismatch on this pass; real facts: W=Wall of Pain (slow), E=Defile (mana-draining aura)."
+}

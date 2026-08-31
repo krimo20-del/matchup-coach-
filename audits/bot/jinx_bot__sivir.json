@@ -1,0 +1,63 @@
+{
+ "ownerKey": "jinx_bot",
+ "enemy": "sivir",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[N].side disagreed with content win[N] on 5 of 7 rows: side=Skill on rows 0,1,2,4 while win=Sivir, and side=Skill on row 5 while win=Jinx. Rows 3 and 6 already agreed.",
+   "why": "win[] matches the packet's levelChart exactly (Sivir,Sivir,Sivir,Skill,Sivir,Jinx,Jinx). Sivir's kit backs it: Boomerang Blade poke and superior wave push let her control lane from Level 1, Ricochet adds more wave pressure at 2, Spell Shield shuts down engage tools by 3, On The Hunt at 6 lets her dodge Death Rocket and dictate tempo, then Jinx's first item flips it as Fishbones outranges her Q and Get Excited resets take over.",
+   "corrected": "Moved phases[0,1,2,4,5].side to match win[], rewrote their .why to state the grounded reason, and adjusted ratings. Rows 3 (Levels 4-5, both Skill) and 6 (both Jinx) were already correct and untouched.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText", "ownerKit", "enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Spell Shield as matchup-defining but has no digit anywhere.",
+   "why": "Spell Shield (E) is 24/22.5/21/19.5/18s — a long cooldown, so once it's baited out Jinx has a real 18-24s window where her rockets, W slow, and chompers all land clean.",
+   "corrected": "Added the real E cooldown range to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d is a verbatim copy of tradeGood pasted under a chomper-pick-attempt title, dontsFull[2].d is a verbatim copy of tradeBad pasted under a greed-plates title, and missingInteractions flags that Sivir's Spell Shield (E) can wall off Jinx's retreat since Jinx has no dash.",
+   "why": "dosFull[1]'s title promises chomper timing on Sivir's pick attempt, not generic trade discipline; dontsFull[2]'s title warns about greeding plates, not generic dueling. Jinx has zero mobility tools besides W's slow, so if Sivir uses Spell Shield's terrain flag to cut an escape route, only Flash saves the fight.",
+   "corrected": "Rewrote dosFull[1].d around chomper timing vs her engage, dontsFull[2].d around Sivir's wave-shove threatening plates, and folded the Spell-Shield-terrain retreat warning into breakdown.cooldowns alongside the real cooldown number.",
+   "confidence": "High",
+   "sources": ["missingInteractions", "enemyKit", "lintFindings"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Sivir"},
+  {"layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "7/10"},
+  {"layer": "full", "path": "phases[0].why", "before": "Minigun the contacts and rockets the chip — your level 1 is honest; your level 16 is a war crime. Farm accordingly.", "after": "Boomerang Blade poke and her superior wave push let Sivir control and chip you down immediately at level 1."},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Sivir"},
+  {"layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "7/10"},
+  {"layer": "full", "path": "phases[1].why", "before": "Rocket-poke the step-ups — the splash taxes his support too.", "after": "Ricochet (W) adds wave pressure, poking you off caster minions."},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Sivir"},
+  {"layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "7/10"},
+  {"layer": "full", "path": "phases[2].why", "before": "Chompers live: any engage onto you now has a snare-shaped asterisk. Place them behind you, not on hope.", "after": "Her full poke-and-shove kit is online now, and Spell Shield eats your best engage tool outright."},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Sivir"},
+  {"layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "7/10"},
+  {"layer": "full", "path": "phases[4].why", "before": "Death Rocket online — half-HP resets pay from base. Track the map's health bars like stocks.", "after": "On The Hunt's speed lets her dodge your rocket and dictate the fight's tempo entirely."},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Jinx"},
+  {"layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10"},
+  {"layer": "full", "path": "phases[5].why", "before": "First item spike: the ramp starts. Every fight you survive past four seconds is a fight you win.", "after": "Fishbones now outranges her Q entirely and every takedown resets your Get Excited steroid."},
+  {"layer": "full", "path": "tldr", "before": "His utility taxes your weak early — give the lane nothing, chomper the picks, and out-scale the toolbox.", "after": "Her utility taxes your weak early — give the lane nothing, chomper the picks, and out-scale the toolbox."},
+  {"layer": "full", "path": "tradeGood", "before": "Rocket the contact from beyond his range, swap to minigun if he commits, chomper the bridge — the swap does the math.", "after": "Rocket the contact from beyond her range, swap to minigun if she commits, chomper the bridge — the swap does the math."},
+  {"layer": "full", "path": "breakdown.trading", "before": "Good trade: Rocket the contact from beyond his range, swap to minigun if he commits, chomper the bridge — the swap does the math. Bad trade: Minigun-dueling a lane bully at even items — pre-ramp Jinx is a promise; don't spend her like a fact.", "after": "Good trade: Rocket the contact from beyond her range, swap to minigun if she commits, chomper the bridge — the swap does the math. Bad trade: Minigun-dueling a lane bully at even items — pre-ramp Jinx is a promise; don't spend her like a fact."},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Sivir Spell Shield: matchup-defining — Eats your key spell and refunds her mana — bait it with a cheap cast first. Read it like a second minimap. - Guard your E Flame Chompers! like a fifth summoner spell. - Ultimate goes to kill windows only.", "after": "Spell Shield (E) sits on a long 24-18s cooldown — bait it with a cheap cast first, then the 18-to-24-second window it leaves open is yours to land W, E, or Fishbones. Jinx has no dash, so watch for Spell Shield cutting your only retreat path."},
+  {"layer": "full", "path": "dosFull[1].d", "before": "Rocket the contact from beyond his range, swap to minigun if he commits, chomper the bridge — the swap does the math.", "after": "Sivir has no hard engage of her own — chompers punish the moment she overextends to poke, not a real all-in."},
+  {"layer": "full", "path": "dontsFull[0].t", "before": "Trade into his utility window", "after": "Trade into her utility window"},
+  {"layer": "full", "path": "dontsFull[2].d", "before": "Minigun-dueling a lane bully at even items — pre-ramp Jinx is a promise; don't spend her like a fact.", "after": "Her Q and W push the wave into your tower fast — greeding a plate under that shove just feeds a free reset."},
+  {"layer": "full", "path": "report[0].t", "before": "His utility taxes your weak early — give the lane nothing, chomper the picks, and out-scale the toolbox.", "after": "Her utility taxes your weak early — give the lane nothing, chomper the picks, and out-scale the toolbox."},
+  {"layer": "full", "path": "report[3].t", "before": "Good trade: Rocket the contact from beyond his range, swap to minigun if he commits, chomper the bridge — the swap does the math. Great trade: Sivir wastes Spell Shield — commit immediately. Bad trade: Minigun-dueling a lane bully at even items — pre-ramp Jinx is a promise; don't spend her like a fact.", "after": "Good trade: Rocket the contact from beyond her range, swap to minigun if she commits, chomper the bridge — the swap does the math. Great trade: Sivir wastes Spell Shield — commit immediately. Bad trade: Minigun-dueling a lane bully at even items — pre-ramp Jinx is a promise; don't spend her like a fact."},
+  {"layer": "full", "path": "report[9].t", "before": "Commit on Spell Shield’s cooldown, on your two items spike, and with your support’s setup. His answer goes first; yours goes last.", "after": "Commit on Spell Shield’s cooldown, on your two items spike, and with your support’s setup. Her answer goes first; yours goes last."},
+  {"layer": "full", "path": "report[11].t", "before": "Trade into his utility window. Walk fog without chompers banked. Greed plates at half HP. Save the R for moments with names on them.", "after": "Trade into her utility window. Walk fog without chompers banked. Greed plates at half HP. Save the R for moments with names on them."}
+ ],
+ "notes": "Fixed a full-vs-content chart disagreement on 5 of 7 rows: phases[N].side was flat 'Skill' on rows 0,1,2,4 (win[]=Sivir) and row 5 (win[]=Jinx). Moved those sides to match win[], rewrote their .why to ground the new verdicts in Sivir's real kit (Boomerang Blade/Ricochet poke, Spell Shield's long 24-18s cooldown, On The Hunt tempo control, Jinx's Fishbones/Get Excited item spike); rows 3 and 6 already agreed with win[] and were left untouched. Fixed all 11 MISGENDER lintFindings (Sivir is she/her per champ-gender.js) and the COOLDOWN_NO_DIGIT on breakdown.cooldowns (now carries her real 24-18s E cooldown). Cleared both COPY_PASTE_BLEED entries and folded the missingInteractions terrain/retreat warning into breakdown.cooldowns since Jinx has no dash to answer a Spell-Shield-cut retreat. Two suspectNames flags ('Your Super Mega Death Rocket', 'Super Mega Death Rocket' in whys[4]) are false positives — that IS Jinx's real ultimate name, just missing the exclamation mark; left alone since whys[4] and spikes[] weren't part of this proposal's edited fields. The 'On The Hunt's' and 'Get Excited' suspectName flags are likewise correct ability names already."
+}

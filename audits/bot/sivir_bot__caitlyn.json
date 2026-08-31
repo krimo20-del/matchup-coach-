@@ -1,0 +1,63 @@
+{
+ "ownerKey": "sivir_bot",
+ "enemy": "caitlyn",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full-layer phases[0-3].side all read 'Caitlyn' and phases[4].side reads 'Skill', but content win[0-3]='Sivir' and win[4]='Caitlyn' (matching the packet levelChart exactly: Sivir,Sivir,Sivir,Sivir,Caitlyn,Skill,Sivir). phases[6].side also read 'Skill' vs win[6]='Sivir'. The chart disagreed with itself on who wins levels 1-6 and 2+ items.",
+   "why": "Content whys[0-3] (Spell Shield blanking her Q, W waveclear starving trap setups) and whys[4] (Ace in the Hole 90s CD + net all-in) already describe the correct sides and match the packet chart; only the full-layer side/rating fields were stale.",
+   "corrected": "phases[0-3].side -> Sivir, phases[4].side -> Caitlyn, phases[6].side -> Sivir, with ratings adjusted and phases[4].why rewritten to match (the existing why text for 0-3 and 6 was already Sivir-favoring and did not need rewriting).",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]", "currentText.content.whys[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Power spikes are named concretely and now agree with the corrected chart: Sivir's early Spell Shield-vs-Peacemaker/shove edge, Caitlyn's level-6 Ace in the Hole (90s CD) + 90-Caliber Net all-in window, an even first-item skill check, and Sivir's late cleave/On The Hunt teamfight spike.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes", "enemyKit R", "enemyKit E"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1] (titled 'Spell-shield his engage tool') carried the tradeGood sentence about Q/W-bounce, unrelated to spell-shielding. dontsFull[2] (titled 'Chase kills off your tempo') carried the tradeBad sentence about E on chip damage, unrelated to chasing kills. Both titles also misgendered Caitlyn as 'his'. suspectNames flagged 'Caliber Net' and 'Yordle Snap Traps' but both instances on the page already read the correct names (90-Caliber Net, Yordle Snap Traps) — false positives, no action needed.",
+   "why": "Sivir's E (24/22.5/21/19.5/18s CD) blocks one targeted cast; Caitlyn's Piltover Peacemaker (Q) is her main poke and the one worth saving the shield for, per spikes[0].text already on the page. Chasing a kill under Caitlyn's tower costs Sivir's shove/tempo plan and risks a trap-headshot reset.",
+   "corrected": "dosFull[1].t/.d and dontsFull[2].d rewritten and regendered; see edits.",
+   "confidence": "High",
+   "sources": ["lintFindings", "ownerKit E", "enemyKit Q"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Caitlyn", "after": "Sivir"},
+  {"layer": "full", "path": "phases[0].rating", "before": "7/10", "after": "6/10"},
+  {"layer": "full", "path": "phases[1].side", "before": "Caitlyn", "after": "Sivir"},
+  {"layer": "full", "path": "phases[1].rating", "before": "7/10", "after": "6/10"},
+  {"layer": "full", "path": "phases[1].why", "before": "W-bounce the duo trades: the ricochet taxes his support for standing in formation.", "after": "W-bounce the duo trades: the ricochet taxes her support for standing in formation."},
+  {"layer": "full", "path": "phases[2].side", "before": "Caitlyn", "after": "Sivir"},
+  {"layer": "full", "path": "phases[2].rating", "before": "7/10", "after": "6/10"},
+  {"layer": "full", "path": "phases[2].why", "before": "Spell shield games begin: every ability he aims is now a mana refund audition.", "after": "Spell shield games begin: every ability she aims is now a mana refund audition."},
+  {"layer": "full", "path": "phases[3].side", "before": "Caitlyn", "after": "Sivir"},
+  {"layer": "full", "path": "phases[3].rating", "before": "7/10", "after": "6/10"},
+  {"layer": "full", "path": "phases[3].why", "before": "Shove the metronome: your W clears set the lane's tempo — he farms under tower or fights your timing.", "after": "Shove the metronome: your W clears set the lane's tempo — she farms under tower or fights your timing."},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Caitlyn"},
+  {"layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "7/10"},
+  {"layer": "full", "path": "phases[4].why", "before": "On the Hunt online — the team-speed flips engages both directions; the map plays at your pace.", "after": "Ace in the Hole (90s CD) plus 90-Caliber Net roots you into a burst combo before your escape matters."},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Sivir"},
+  {"layer": "full", "path": "tldr", "before": "His curve needs waves you intend to delete — shove the metronome, shield the all-in, and out-tempo the scaling.", "after": "Her curve needs waves you intend to delete — shove the metronome, shield the all-in, and out-tempo the scaling."},
+  {"layer": "full", "path": "breakdown.wave", "before": "Best wave: a permanent shove — the metronome IS the champion; his missed CS is your poke ledger. Worst wave: a frozen wave you allowed — Sivir without tempo is a boomerang museum. Crash timing: bot waves answer to drake timers — crash for resets and plates, never into a loaded all-in.", "after": "Best wave: a permanent shove — the metronome IS the champion; her missed CS is your poke ledger. Worst wave: a frozen wave you allowed — Sivir without tempo is a boomerang museum. Crash timing: bot waves answer to drake timers — crash for resets and plates, never into a loaded all-in."},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Caitlyn Yordle Snap Traps: matchup-defining — The trap under your feet starts the headshot chain — never fight standing on one. Check it before every step-up. - E Spell Shield is the lifeline; chip damage never gets it. - The ult answers fights, not waves.", "after": "- Caitlyn's Ace in the Hole (90s CD) headshots the instant it lands — respect the range. - 90-Caliber Net cools down 16s at rank 1, faster each point — track her all-in window. - E Spell Shield is the lifeline; chip damage never gets it."},
+  {"layer": "full", "path": "dosFull[1].t", "before": "Spell-shield his engage tool", "after": "Spell-shield her engage tool"},
+  {"layer": "full", "path": "dosFull[1].d", "before": "Q the contact both ways, W-bounce the duo, walk — the trade taxed two people and refunded your mana bar.", "after": "Save Spell Shield for Piltover Peacemaker — blank her Q and the whole poke pattern disappears fast."},
+  {"layer": "full", "path": "dontsFull[0].t", "before": "Auto-war his spikes at parity", "after": "Auto-war her spikes at parity"},
+  {"layer": "full", "path": "dontsFull[2].d", "before": "Spending E on chip damage and eating the engage it existed to eat — the shield is the matchup; spend it like a verdict.", "after": "A kill under her tower costs the shove and feeds a trap-headshot reset — walk away and farm it back instead."},
+  {"layer": "full", "path": "report[0].t", "before": "His curve needs waves you intend to delete — shove the metronome, shield the all-in, and out-tempo the scaling.", "after": "Her curve needs waves you intend to delete — shove the metronome, shield the all-in, and out-tempo the scaling."},
+  {"layer": "full", "path": "report[4].t", "before": "Best wave: a permanent shove — the metronome IS the champion; his missed CS is your poke ledger. Worst wave: a frozen wave you allowed — Sivir without tempo is a boomerang museum. Crash timing: bot waves answer to drake timers — crash for resets and plates, never into a loaded all-in.", "after": "Best wave: a permanent shove — the metronome IS the champion; her missed CS is your poke ledger. Worst wave: a frozen wave you allowed — Sivir without tempo is a boomerang museum. Crash timing: bot waves answer to drake timers — crash for resets and plates, never into a loaded all-in."},
+  {"layer": "full", "path": "report[9].t", "before": "Commit on Yordle Snap Traps’s cooldown, on your first item spike, and with your support’s setup. His answer goes first; yours goes last.", "after": "Commit on Yordle Snap Traps’s cooldown, on your first item spike, and with your support’s setup. Her answer goes first; yours goes last."},
+  {"layer": "full", "path": "report[11].t", "before": "Auto-war his spikes at parity. Burn E on poke out of boredom. Chase kills off your tempo. Save the R for moments with names on them.", "after": "Auto-war her spikes at parity. Burn E on poke out of boredom. Chase kills off your tempo. Save the R for moments with names on them."}
+ ],
+ "notes": "Chart mismatch was the main defect: full-layer phases[0-4] and [6] disagreed with content win[]/packet levelChart on who wins levels 1-6 and 2+ items — fixed side+rating together per the chart rule; only phase4's why needed rewriting (0-3 and 6 already carried Sivir-favoring generic text that didn't contradict the corrected side). Fixed all MISGENDER and both COPY_PASTE_BLEED lint hits, and added real cooldown numbers to breakdown.cooldowns. Both suspectNames flags (Caliber Net, Yordle Snap Traps) are false positives — current text already uses the correct names. tradeGood/tradeBad/breakdown.trading/report[3] are templated boilerplate shared verbatim with other enemies — left alone this pass as not factually wrong for Caitlyn, outside this pass's edit budget."
+}

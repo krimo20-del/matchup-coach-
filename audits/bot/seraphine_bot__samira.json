@@ -1,0 +1,51 @@
+{
+ "ownerKey": "seraphine_bot",
+ "enemy": "samira",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[4].side and phases[5].side read \"Skill\" while content win[4]/win[5] say Samira; phases[6].side reads \"Skill\" while win[6] says Seraphine. Rows 0-3 already agree (Samira).",
+   "why": "Wild Rush dashes and the melee-Q combo keep Samira ahead through her first item; her W (Blade Whirl) blocking your Q/Encore and Inferno Trigger's execute extend that through level 6. Only at 2+ items does your ranged kit and set-up Encore flip it.",
+   "corrected": "phases[4,5].side -> Samira, phases[6].side -> Seraphine; ratings/whys rewritten to match.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "currentText.content"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns calls Blade Whirl matchup-defining with no cooldown number (lint COOLDOWN_NO_DIGIT).",
+   "why": "Blade Whirl is 30-22s depending on rank; Wild Rush (E) is 20-12s and refreshes on a champion kill; her R has effectively no cooldown (5s, free cast) once she's in combo. These numbers change how a reader times a step-up.",
+   "corrected": "breakdown.cooldowns rewritten with real numbers.",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Blade Whirl (W) destroys enemy missiles including Seraphine's Q and Encore — this is already correctly stated across dosFull/breakdown/report. Samira's E is a dash (deniable by grounding/walls) and her R is a channel with no listed interrupt flag, matching Riot's text of a rapid-fire volley rather than a true channel.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Samira"},
+  {"layer":"full","path":"phases[4].why","before":"Encore online — the cross-map charm extends through your whole team; fights start two screens early.","after":"Inferno Trigger executes and her Blade Whirl (W) blocks your all-in at level 6."},
+  {"layer":"full","path":"phases[4].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Samira"},
+  {"layer":"full","path":"phases[5].why","before":"First item spike: echoed Qs chunk and the note ledger compounds.","after":"Her early snowball spike keeps out-damaging your curve after first item."},
+  {"layer":"full","path":"phases[5].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Seraphine"},
+  {"layer":"full","path":"phases[6].why","before":"Late Seraphine conducts teamfights: charm the formation, echo the heals, and root whatever the wave spares.","after":"Your ranged Q and set-up Encore burst her before her dash-reset chain can start."},
+  {"layer":"full","path":"phases[6].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"winCon","before":"Out-sustain the stream and charm the one fight he saved for. Keep one eye on Blade Whirl and one on the wave, in that order.","after":"Out-sustain the stream and charm the one fight she saved for. Keep one eye on Blade Whirl and one on the wave, in that order."},
+  {"layer":"full","path":"dosFull[1].d","before":"Echoed Q the contact, W the trade-back, E the disengage — the song taxed, healed, and rooted in one verse.","after":"Your W shields and heals for free HP in every duo exchange — cast it before her Wild Rush dash lands, not after."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending the echo on a plain W out of rhythm — the third note is the champion; wasting it is singing scales.","after":"Standing in front lets her dash through you for the style-stacking bonus damage — hold position behind your support."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Samira Blade Whirl: matchup-defining — Deletes every projectile for a second — hold your key shots until the whirl is spent. Check it before every step-up. - E Beat Drop is the lifeline; chip damage never gets it. - The ult answers fights, not waves.","after":"- Blade Whirl (W, 30-22s) destroys your Q and Encore projectiles for its duration — hold key shots until it's spent. - Wild Rush (E, 20-12s) refreshes on a champion kill, so a fed Samira can dash twice in one fight. - Her R (5s CD, free) has no real cooldown once she's in combo — the combo itself is the timer."},
+  {"layer":"full","path":"report[1].t","before":"Out-sustain the stream and charm the one fight he saved for. Keep one eye on Blade Whirl and one on the wave, in that order.","after":"Out-sustain the stream and charm the one fight she saved for. Keep one eye on Blade Whirl and one on the wave, in that order."}
+ ],
+ "notes": "Content layer (win[]/whys[]) was already internally consistent (Samira favored levels 1 through first item, Seraphine favored 2+ items); only the full-layer phases[4-6].side needed to catch up. Fixed 2 MISGENDER, 2 COPY_PASTE_BLEED, 1 COOLDOWN_NO_DIGIT per lintFindings. breakdown.early/mid/wave/spikes/feeding/carry/difficulty/late and ahead/tradeGood/tradeBad remain generically templated but were left alone under this run's time budget."
+}

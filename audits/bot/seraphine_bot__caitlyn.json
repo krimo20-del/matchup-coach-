@@ -1,0 +1,73 @@
+{
+ "ownerKey": "seraphine_bot",
+ "enemy": "caitlyn",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Packet flags 'Seraphine wins 58.51% but chart gives Caitlyn 6/7 stages' as a contradiction, but the other two matchups in this slice show the same pattern (aphelios winRate 57.52 with a late-game shift to Aphelios, ashe winRate 54.8 with a flat chart) suggesting the winRate field tracks the ENEMY's win rate, not Seraphine's — under that reading a high winRate paired with Caitlyn dominating most stages is consistent, not contradictory. I cannot confirm which convention is correct from the kit alone, so per the chart rule I left phases[].side/win[] untouched rather than guess.",
+   "corrected": "",
+   "confidence": "Low",
+   "sources": ["packet.winRate", "packet.levelChart", "packet.defects"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly identify Caitlyn's range/Headshot dominance through 1st item and the late-game flip once she's reachable in teamfights, matching a lane-bully-into-even-late curve.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Caitlyn misgendered as 'he/his' in winCon, report[1].t, and report[9].t. breakdown.cooldowns names Yordle Snap Trap as matchup-defining but has no cooldown number, and omits the missing interaction that Caitlyn's Ace in the Hole (R) is a channel Seraphine's E or R can cancel outright. dosFull[1].d and dontsFull[2].d are verbatim copies of tradeGood/tradeBad under unrelated titles.",
+   "why": "champ-gender.js/lintFindings confirm Caitlyn is she/her. missingInteractions flags the channel-interrupt fact as applicable but absent from the text. Real cooldowns: W 0.5s, R 90s.",
+   "corrected": "Fixed the three pronoun instances, folded the channel-interrupt fact plus real cooldown numbers into breakdown.cooldowns, and rewrote the two copy-paste-bleed bodies to match their titles.",
+   "confidence": "High",
+   "sources": ["lintFindings", "missingInteractions", "enemyKit.abilities"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "winCon",
+   "before": "Out-sustain the stream and charm the one fight he saved for. Nothing here works through Yordle Snap Traps — schedule your pattern around its cooldown.",
+   "after": "Out-sustain the stream and charm the one fight she saved for. Nothing here works through Yordle Snap Traps — schedule your pattern around its cooldown."
+  },
+  {
+   "layer": "full",
+   "path": "report[1].t",
+   "before": "Out-sustain the stream and charm the one fight he saved for. Nothing here works through Yordle Snap Traps — schedule your pattern around its cooldown.",
+   "after": "Out-sustain the stream and charm the one fight she saved for. Nothing here works through Yordle Snap Traps — schedule your pattern around its cooldown."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Yordle Snap Traps’s cooldown, on your first item spike, and with your support’s setup. His answer goes first; yours goes last.",
+   "after": "Commit on Yordle Snap Traps’s cooldown, on your first item spike, and with your support’s setup. Her answer goes first; yours goes last."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Caitlyn Yordle Snap Traps: matchup-defining — The trap under your feet starts the headshot chain — never fight standing on one. It governs your forward steps. - E Beat Drop spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+   "after": "Caitlyn's Yordle Snap Trap (W) is a 0.5s-cd chain-starter — never fight standing on one. Her Ace in the Hole (R, 90s cd) is a channel: your E or R cancels it outright if she tries to snipe first. Hold your own R for the fight that decides something."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Echoed Q the contact, W the trade-back, E the disengage — the song taxed, healed, and rooted in one verse.",
+   "after": "W shields, and only heals once you're already shielded — land both casts every exchange so the free sustain, not raw damage, wins the extended trade."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Spending the echo on a plain W out of rhythm — the third note is the champion; wasting it is singing scales.",
+   "after": "Caitlyn's headshot range and net-trap combo reach your position before your support's — stay behind their body and peel, don't soak range you don't have."
+  }
+ ],
+ "notes": "Left the level chart untouched: packet.defects claims 'Seraphine wins 58.51%' contradicts a Caitlyn-favored chart, but the field's convention is ambiguous across this slice's three matchups (see audit point 2) and I could not confirm from the kit which side the winRate number belongs to. Flagging for a human/QA pass with real-game context rather than guessing and risking a flipped narrative across all 7 rows plus diff/diffRating/tone. Also fixed all lint findings (pronouns, cooldown digit, both copy-paste bleeds) and folded in the missing channel-interrupt interaction (Caitlyn R vs Seraphine E/R)."
+}

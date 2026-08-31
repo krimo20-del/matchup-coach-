@@ -1,0 +1,44 @@
+{
+ "ownerKey": "seraphine_bot",
+ "enemy": "vayne",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level chart already has you ahead levels 1-6 (poke/range/CC) and Vayne ahead first item onward (Silver Bolts + Q resets), matching the packet's levelChart exactly.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[2].text calls Vayne's third-hit true damage passive \"Silver Bolt\" — the real name is Silver Bolts (W), and it also says \"Vayne items\" which is a placeholder-style filler phrase.",
+   "why": "packet.suspectNames flags this exact string; enemyKit W is named Silver Bolts.",
+   "corrected": "Once Vayne finishes her Berserker's/Runaan's-tier items and lands three consecutive hits for Silver Bolts (W) true damage, she starts winning extended fights, so use your first-item burst window before she out-DPSes you.",
+   "confidence": "High",
+   "sources": ["enemyKit.W", "packet.suspectNames"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "No field states that Vayne's W (Silver Bolts) true damage ignores your armor/MR stacking, and Condemn (E) creates terrain that stuns you into a wall — only vaguely referenced as 'Wall-stuns you'. Real cooldowns for Condemn (20/18/16/14/12) and your E Beat Drop (11/10.5/10/9.5/9) are never stated.",
+   "why": "missingInteractions rules resistances-invalidated, autoreset-burst-tell, terrain-cuts-retreat all apply and are unmentioned; breakdown.cooldowns has no digit (lint flag).",
+   "corrected": "See edits: breakdown.cooldowns rewritten with real numbers, tldr/winCon/report[0-1] regendered, spikes[2] renamed ability.",
+   "confidence": "High",
+   "sources": ["enemyKit", "ownerKit", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"tldr","before":"His DPS needs fights your charm postpones — poke the notes, sustain the chip, and encore the all-in backward.","after":"Her DPS needs fights your charm postpones — poke the notes, sustain the chip, and encore the all-in backward."},
+  {"layer":"full","path":"winCon","before":"Out-sustain the stream and charm the one fight he saved for. Keep one eye on Condemn and one on the wave, in that order.","after":"Out-sustain the stream and charm the one fight she saved for. Keep one eye on Condemn and one on the wave, in that order."},
+  {"layer":"full","path":"report[0].t","before":"His DPS needs fights your charm postpones — poke the notes, sustain the chip, and encore the all-in backward.","after":"Her DPS needs fights your charm postpones — poke the notes, sustain the chip, and encore the all-in backward."},
+  {"layer":"full","path":"report[1].t","before":"Out-sustain the stream and charm the one fight he saved for. Keep one eye on Condemn and one on the wave, in that order.","after":"Out-sustain the stream and charm the one fight she saved for. Keep one eye on Condemn and one on the wave, in that order."},
+  {"layer":"full","path":"dosFull[1].d","before":"Echoed Q the contact, W the trade-back, E the disengage — the song taxed, healed, and rooted in one verse.","after":"Her Q Tumble has no cooldown at rank 5 but starts at 6s — bank the third-cast W on the exchange right after she tumbles in, not before."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending the echo on a plain W out of rhythm — the third note is the champion; wasting it is singing scales.","after":"Standing in front of your support hands Vayne a free Condemn (E) angle to pin you into terrain for the stun."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Vayne Condemn: matchup-defining — Wall-stuns you — never fight her with terrain at your back. Count it out loud if you must. - Your E Beat Drop has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Condemn (E): 20/18/16/14/12s, matchup-defining — wall-stuns you if it pins you into terrain. Never fight her with your back to a wall while it's up. - Your Beat Drop (E): 11/10.5/10/9.5/9s, the answer to a committed Tumble. - Your R: 160/140/120s, spend it only on the fight it wins."}
+ ],
+ "notes": "Silver Bolts (W) true damage ignores armor/MR entirely — flagged via missingInteractions resistances-invalidated but no writable field currently states it as advice; left as a note since inserting it would require expanding breakdown.trading past the length band. Condemn creates terrain per enemyKit E; existing prose already gestures at 'Wall-stuns you' so left mostly intact, just added real cooldown numbers."
+}

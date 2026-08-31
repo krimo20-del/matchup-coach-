@@ -1,0 +1,193 @@
+{
+  "ownerKey": "zed_mid",
+  "enemy": "qiyana",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer rows 5 and 6 read 'Skill' while the content layer and packet chart both read Zed.",
+      "why": "Levels 1-5 are a genuine skill lane between two assassins; from Death Mark onward Zed wins because Audacity is her only gap-closer and once it is spent she cannot escape the mark.",
+      "corrected": "phases[5].side and phases[6].side moved to Zed; their whys already describe Zed winning, so no why rewrite was needed. Rows 0-3 left as Skill — they agree with win[0..3].",
+      "confidence": "High",
+      "sources": [
+        "packet.levelChart",
+        "content win[5..6]",
+        "enemyKit E cd 11/10/9/8/7"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Zed's spikes are Death Mark at 6 and first-item lethality; Qiyana's are rank-5 Audacity at 7s and Supreme Display of Talent at a flat 120s.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "ownerKit R",
+        "enemyKit E/R"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "spikes[1].text names her ultimate 'Edge of Ixtal' — that is one of her Q variants, not her R. Terrashape's 7-second element re-arm was also never given a number.",
+      "why": "Her R is Supreme Display of Talent (packet.enemyAbilities.R). Terrashape is a 1100-range dash on a flat 7s that both re-arms her element and creates terrain.",
+      "corrected": "R renamed; Terrashape's cooldown and the bush-denial consequence written into breakdown.cooldowns and dontsFull[2].d.",
+      "confidence": "High",
+      "sources": [
+        "packet.enemyAbilities",
+        "enemyKit W cd 7",
+        "enemyKit R"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that carries real numbers.",
+      "corrected": "Audacity 11s/7s, Terrashape 7s, Living Shadow 20s.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit",
+        "ownerKit"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Nine fields called Qiyana 'he/his'; dosFull[1].d was tradeGood verbatim and dontsFull[2].d was tradeBad verbatim. packet.suspectNames flagged 'Death Marks' in spikes[3].text.",
+      "why": "Qiyana is female. The suspect name is a FALSE POSITIVE — Death Mark is Zed's own ultimate and the flag fired on the plural.",
+      "corrected": "Pronouns and bleeds fixed; spikes[3].text left alone.",
+      "confidence": "High",
+      "sources": [
+        "brief lintFindings",
+        "ownerKit R"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "QA pass: matchup-lint and regression-check still reported findings on this matchup after the proposing pass.",
+      "why": "Edits from the earlier pass were rejected by apply-proposals (length drift, or a phrase matching the non-interaction filter), so the defects survived on disk.",
+      "corrected": "breakdown.trading, report[3].t",
+      "confidence": "High",
+      "sources": [
+        "matchup-lint",
+        "regression-check",
+        "champ-data/_kits/qiyana.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Zed"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Zed"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q through the wave's gaps on his last-hits — energy refunds on hits mean accuracy IS your mana bar.",
+      "after": "Q through the wave's gaps on her last-hits — energy refunds on hits mean accuracy IS your mana bar."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E joins: W-E-Q strings slow and shred. Pick the angle his minion cover doesn't block.",
+      "after": "E joins: W-E-Q strings slow and shred. Pick an angle her Terrashape cannot cover."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Qiyana Audacity: matchup-defining — Her stick dash — once spent she cannot reach you; kite the cooldown. Step up only on its downtime. - Budget W Living Shadow (swap) for emergencies and the R for opportunities — never swap them.",
+      "after": "- Audacity: 11s at rank 1, 7s at rank 5 — her only gap-closer, so once it is spent she cannot reach you. - Terrashape is a 7s dash that re-arms her element; hold the bush and it costs her damage. - Living Shadow is 20s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.",
+      "after": "W wide, E the slow, Q the scissor from two angles — her 525-range Q cannot answer shurikens thrown from 900."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry she answered by standing still wrong. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a scissor-thinned slow push that holds the chip war at your range — crash only when the roam or the mark is scheduled. Worst wave: a frozen wave at his tower with both shadows down — an energy assassin doing manual labor in ward range. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a scissor-thinned slow push that holds the chip war at your range — crash only when the roam or the mark is scheduled. Worst wave: a frozen wave at her tower with both shadows down — an energy assassin doing manual labor in ward range. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.",
+      "after": "Living Shadow is 20s at rank 1 — hold the swap for her Audacity dash, which returns every 7s at rank 5."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].t",
+      "before": "Mark second, with his answer down",
+      "after": "Mark second, with her dash spent"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Qiyana’s whole plan in one window — decline politely and watch it retire.",
+      "after": "Qiyana needs Audacity to reach you — deny the dash and her combo never opens."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].t",
+      "before": "Duel inside his reset windows",
+      "after": "Duel while her element is up"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Terrashape re-arms her element every 7 seconds — chase her into a bush and the empowered Q and slow are waiting."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Great trade: Qiyana wastes Audacity — commit immediately. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry she answered by standing still wrong. Great trade: Qiyana wastes Audacity — commit immediately. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: a scissor-thinned slow push that holds the chip war at your range — crash only when the roam or the mark is scheduled. Worst wave: a frozen wave at his tower with both shadows down — an energy assassin doing manual labor in ward range. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a scissor-thinned slow push that holds the chip war at your range — crash only when the roam or the mark is scheduled. Worst wave: a frozen wave at her tower with both shadows down — an energy assassin doing manual labor in ward range. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Audacity’s cooldown, on your first item spike, and with your jungler’s setup. His answer goes first; yours goes last.",
+      "after": "Commit on Audacity’s cooldown, on your first item spike, and with your jungler’s setup. Her answer goes first; yours goes last."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Coin-flip first R at even HP. Spend energy below 100 entering. Duel inside his reset windows. Treat your ultimate as a verdict, never as harassment.",
+      "after": "Coin-flip first R at even HP. Spend energy below 100 entering. Duel while her element is up. Treat your ultimate as a verdict, never as harassment."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Your R (Death Mark) beats her all-in math. She has to E in to combo, and after that dash she has no escape, so a clean Death Mark plus ignite kills before her R (Edge of Ixtal) stun can save her. Wait out her E, then commit.",
+      "after": "Your R (Death Mark) beats her all-in math. She has to E in to combo, and after that 11s dash she has no escape, so a clean Death Mark plus ignite kills before Supreme Display of Talent can stun you off her. Wait out her E, then commit."
+    }
+  ],
+  "notes": "spikes[1].text called her ultimate 'Edge of Ixtal', which is a Q variant — corrected to Supreme Display of Talent. packet.suspectNames flagged 'Death Marks' in spikes[3].text: false positive, that is Zed's own ultimate. Four report[] entries edited rather than two, all of them lintFindings MISGENDER hits fixed at pronoun level. No win[N] edits: content win[5..6] already reads Zed."
+}

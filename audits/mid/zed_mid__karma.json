@@ -1,0 +1,280 @@
+{
+  "ownerKey": "zed_mid",
+  "enemy": "karma",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "EVEN 5.5/10 fits the 51.72% over 6757 games, but the page never named the two ranges that actually decide the lane: Inner Flame 950 versus your Q 900, and Focused Resolve's 675 tether range.",
+      "why": "She out-ranges your only ranged spell by 50 units, and everything she does to you inside 675 sets up the root. Outside 675 she has only Inner Flame.",
+      "corrected": "breakdown.early, phases[0].why and tradeGood now key off 675/900/950 instead of an unsourced '60%'.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/karma.json",
+        "champ-data/_kits/zed.json"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer chart read Skill,Skill,Skill,Skill,Zed,Skill,Skill while the content layer and the packet both read Karma,Karma,Skill,Skill,Zed,Zed,Zed. Rows 0,1,5,6 disagreed across the two layers.",
+      "why": "Karma owns levels 1-2 (Mantra needs no skill point, so empowered Inner Flame is live immediately and out-ranges you). Zed owns first item and 2+ items (lethality one-combos a Karma whose only escape is Inspire's move speed).",
+      "corrected": "phases[0].side and phases[1].side Skill->Karma; phases[5].side and phases[6].side Skill->Zed, proposed as one atomic group. win[0..6] already matched the packet so no no-op content edits were added. phases[0].why and phases[1].why rewritten in the same proposal to say Karma wins those rows; phases[5].why/[6].why already described Zed winning.",
+      "confidence": "High",
+      "sources": [
+        "packet.levelChart",
+        "currentText.content.win[0..6]",
+        "champ-data/_kits/karma.json (R: 'Mantra is available at level 1 and does not require a skill point')"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The decisive interaction was never stated. Focused Resolve is a tether that only roots if it is not broken, and Living Shadow's swap is the tool that breaks it. Gathering Fire (passive) shortening Mantra every time her damage hits you was also absent.",
+      "why": "Riot W text: 'Karma creates a tether ... If the tether is not broken, the enemy will be rooted'. Riot passive text: 'Karma's damaging abilities will reduce the cooldown of Mantra.' Living Shadow is 650 range on a 20/19/18/17/16s cooldown; the swap is the distance break.",
+      "corrected": "breakdown.cooldowns, dontsFull[2].d, loading and dosFull[0].t now state the tether break and the Mantra refund with real numbers (12s flat W, 40/38/36/34 Mantra, 20s Living Shadow).",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/karma.json",
+        "champ-data/_kits/zed.json"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit (lint COOLDOWN_NO_DIGIT) and restated the field title back at the reader.",
+      "why": "Focused Resolve is 12s at every rank — unusually, it does not scale, so the window never widens. Mantra is 40/38/36/34s but Gathering Fire pulls it forward whenever her damage lands on you.",
+      "corrected": "Rewrote with both numbers and what each permits.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/karma.json"
+      ]
+    },
+    {
+      "point": 10,
+      "status": "missing",
+      "whatIsWrong": "No anti-heal anywhere on the page.",
+      "why": "missingInteractions rule needs-antiheal. Riot W text: Mantra Bonus 'healing herself and extending the root duration' — the empowered tether is a heal on a 12s spell.",
+      "corrected": "Named Executioner's Calling in spikes[2].text, tied to the Mantra-W heal. Kept it out of report[8].t to stay inside the report-rewrite cap.",
+      "confidence": "High",
+      "sources": [
+        "brief.missingInteractions",
+        "champ-data/_kits/karma.json"
+      ]
+    },
+    {
+      "point": 12,
+      "status": "needs-correction",
+      "whatIsWrong": "whys[1] described a 'level-3 RQ burst' inside the Level 2 row.",
+      "why": "Mantra requires no skill point and is available from level 1, so the empowered Inner Flame is online at 2, not 3.",
+      "corrected": "whys[1] rewritten.",
+      "confidence": "High",
+      "sources": [
+        "champ-data/_kits/karma.json (R text)"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "QA pass: matchup-lint and regression-check still reported findings on this matchup after the proposing pass.",
+      "why": "Edits from the earlier pass were rejected by apply-proposals (length drift, or a phrase matching the non-interaction filter), so the defects survived on disk.",
+      "corrected": "dosFull[1].d (1 unlandable edit(s) removed)",
+      "confidence": "High",
+      "sources": [
+        "matchup-lint",
+        "regression-check",
+        "champ-data/_kits/karma.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Karma"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Karma"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Zed"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Zed"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q through the wave's gaps on his last-hits — energy refunds on hits mean accuracy IS your mana bar.",
+      "after": "Karma's Inner Flame reaches 950 to your 900 — you cannot win the level-1 poke war, so farm and take nothing."
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].why",
+      "before": "W opens the double-shuriken angles: shadow wide, Q the scissor — the geometry chips half bars by 3.",
+      "after": "Karma still leads: Mantra is up from level 1, so her empowered Inner Flame outdamages your shadow angles."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E joins: W-E-Q strings slow and shred. Pick the angle his minion cover doesn't block.",
+      "after": "E joins: W-E-Q strings slow and shred. Pick the angle her Inspire shield is not covering."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "His burst is magic, yours is paperwork — shadow-dodge the rotation and serve the mark in the silence after.",
+      "after": "Her burst is magic, yours is paperwork — swap out of the tether and serve the mark while Mantra sits on 40s."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Karma wins by landing Focused Resolve (Tether), denying your pattern, and owning the spacing war until your tempo starves.",
+      "after": "Karma wins by landing Focused Resolve before you can swap out of it, then poking from 950 range while Gathering Fire refunds Mantra."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.",
+      "after": "W wide, E the slow, Q the scissor from two angles — chip her while Inspire is on 10s and no shield is there to eat it."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "R-ing into a held Focused Resolve — the root lands mid-mark, she out-ranges you at 950, and your 3-second note pays her instead."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, audit the map: scissor Karma off every contact, mark the thresholds, and roam the crashes — fed Zed makes health bars legal documents.",
+      "after": "Ahead, deny the recharge: every Karma spell that hits you shortens Mantra, so eat nothing, mark her the moment Inspire pops, and roam the crashes."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Zed vs Karma - Track: Karma Focused Resolve (Tether). - Chip to 60% before any mark — the R is a calculator, not a coin. - No commits into Focused Resolve (Tether). - The ultimate closes arguments; it doesn’t open them.",
+      "after": "- Zed vs Karma - Track: Focused Resolve (Tether), 12s flat. - Swap out of the tether before it roots — distance breaks it. - Mantra is 40s at rank 1 and her spells hitting you shorten it. - Anti-heal her Mantra-W."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.early",
+      "before": "Win the chip war — scissors out-trade every mage contact and the energy refunds keep the meter running. 60% is the magic number.",
+      "after": "Win the chip war from outside 675 — that is Focused Resolve's range, and outside it she has only Inner Flame to answer your shadow angles."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.wave",
+      "before": "Best wave: a scissor-thinned slow push that holds the chip war at your range — crash only when the roam or the mark is scheduled. Worst wave: a frozen wave at his tower with both shadows down — an energy assassin doing manual labor in ward range. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a scissor-thinned slow push that holds the chip war at your range — crash only when the roam or the mark is scheduled. Worst wave: a frozen wave at her tower with both shadows down — Focused Resolve tethers you with nowhere to swap to. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Karma Focused Resolve (Tether): matchup-defining — The root tether — break it with range or line of sight. Step up only on its downtime. - Budget W Living Shadow (swap) for emergencies and the R for opportunities — never swap them.",
+      "after": "- Focused Resolve is a flat 12s at every rank — break the tether with distance or line of sight, and step up only on that downtime. - Mantra is 40s at rank 1, but Gathering Fire shortens it every time a spell hits you."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Good trade: W wide, E the slow, Q the scissor from two angles — chip her while Inspire is on 10s and no shield eats it. Bad trade: R-ing into a held Focused Resolve — the root lands mid-mark, she out-ranges you at 950, and your 3-second note pays her instead."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through subpoenas — one marked carry per fight; your job is the threshold math and the swap you saved for their answer.",
+      "after": "One marked carry per fight — and never through a fresh Inspire, since the shield eats the mark's repeat. Bait it, then mark."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].t",
+      "before": "W-swap out of his setup spell",
+      "after": "W-swap out of Focused Resolve"
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.",
+      "after": "W wide, E the slow, Q the scissor from two angles — half a bar of geometry she answered by standing still wrong."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].t",
+      "before": "Track his stopwatch before every R",
+      "after": "Track her stopwatch before every R"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[1].t",
+      "before": "Trade inside his loaded window",
+      "after": "Trade inside her Mantra window"
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "His burst is magic, yours is paperwork — shadow-dodge the rotation and serve the mark in the silence after.",
+      "after": "Her burst is magic, yours is paperwork — swap out of the tether and serve the mark while Mantra sits on 40s."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Great trade: Karma wastes Focused Resolve (Tether) — commit immediately. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Good trade: W wide, E the slow, Q the scissor from two angles — chip her while Inspire is on 10s and no shield eats it. Great trade: Karma wastes Focused Resolve (Tether) — commit immediately. Bad trade: R-ing into a held Focused Resolve — the root lands mid-mark, she out-ranges you at 950, and your 3-second note pays her instead."
+    },
+    {
+      "layer": "full",
+      "path": "report[4].t",
+      "before": "Best wave: a scissor-thinned slow push that holds the chip war at your range — crash only when the roam or the mark is scheduled. Worst wave: a frozen wave at his tower with both shadows down — an energy assassin doing manual labor in ward range. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks.",
+      "after": "Best wave: a scissor-thinned slow push that holds the chip war at your range — crash only when the roam or the mark is scheduled. Worst wave: a frozen wave at her tower with both shadows down — Focused Resolve tethers you with nowhere to swap to. Crash timing: every crash should buy something — a reset, a plate, a roam. Autopilot shoving buys ganks."
+    },
+    {
+      "layer": "full",
+      "path": "report[9].t",
+      "before": "Commit on Focused Resolve (Tether)’s cooldown, on your first item spike, and with your jungler’s setup. His answer goes first; yours goes last.",
+      "after": "Commit on Focused Resolve (Tether)’s cooldown, on your first item spike, and with your jungler’s setup. Her answer goes first; yours goes last."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "R into a banked Zhonya's. Trade inside his loaded window. Spend both shadows entering. Treat your ultimate as a verdict, never as harassment.",
+      "after": "R into a banked Zhonya's. Trade inside her Mantra window. Spend both shadows entering. Treat your ultimate as a verdict, never as harassment."
+    },
+    {
+      "layer": "content",
+      "path": "whys[1]",
+      "before": "Karma favoured L2: level-3 RQ burst and haste let her win the poke war and dodge follow-up.",
+      "after": "Karma favoured L2: Mantra costs no skill point, so empowered Inner Flame is live and out-trades you."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "Lethality lets you delete a squishy Karma who has no hard escape beyond E haste; wait for her shield to pop, then W-R-combo. Her poke no longer trades evenly once you can one-combo her.",
+      "after": "Lethality lets you delete a squishy Karma who has no hard escape beyond Inspire's move speed; wait for the shield to pop, then W-R-combo. Buy Executioner's Calling if her Mantra-W heal drags trades out."
+    }
+  ],
+  "notes": "Level chart: the full layer carried a near-blanket 'Skill' (rows 0,1,5,6) while content win[] and packet.levelChart both read Karma,Karma,Skill,Skill,Zed,Zed,Zed. Flipped the four full-layer sides as one atomic group; no win[N] edits were needed because the content layer was already correct, and a no-op edit would have taken the group down. Ratings left untouched. Karma's Mantra requires no skill point and is live from level 1 — the old whys[1] put the empowered burst at level 3, which is why the Level 2 row read as a coin flip. Report rewrites were held to the lint-flagged entries (0,3,4,9,11); the anti-heal note went into spikes[2].text rather than report[8].t to stay inside the report cap.",
+  "sectionsMissing": [
+    "breakdown.mid, breakdown.spikes, breakdown.late, breakdown.feeding — templated but Karma offers no specific replacement that fits the length band without inventing",
+    "dontsFull[0] 'R into a banked Zhonya's' — Zhonya's is not in the kit file, so left unchanged rather than asserted"
+  ],
+  "unlandableEdits": [
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Living Shadow is 20s at rank 1 and the swap is the only way to break her tether — enter with it spent and Focused Resolve keeps you."
+    }
+  ]
+}

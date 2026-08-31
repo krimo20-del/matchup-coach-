@@ -1,0 +1,301 @@
+{
+  "ownerKey": "zed_mid",
+  "enemy": "viktor",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer phases[].side read Skill on rows 0,1,5,6 while content win[] reads Zed, Zed, Zed, Viktor on those rows and the packet levelChart agrees with the content layer.",
+      "why": "Pre-augment Viktor has no Siphon Power shield up and loses the level 1-2 chip war; the first-item Youmuu's window is Zed's; a fully-augmented Viktor with Arcane Storm owns the two-item stage. Every why on those rows already argues the content-layer verdict except row 6, which is rewritten here to match Viktor.",
+      "corrected": "phases[0].side and [1].side to Zed (win[N] already Zed, no-op avoided), phases[5].side to Zed, phases[6].side to Viktor with phases[6].why rewritten to the Viktor verdict; ratings moved with them.",
+      "confidence": "High",
+      "sources": [
+        "packet.levelChart",
+        "currentText.content.win[]",
+        "currentText.content.whys[]"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "Spike text used two fabricated ability names: \"Death Ray\" for E (really Hextech Ray) and \"Chaos Storm\" for R (really Arcane Storm), and called Gravity Field his R when it is his W.",
+      "why": "Riot kit: Q Siphon Power 600 range, 9/8/7/6/5, shield + empowered attack; W Gravity Field 800 range, 17/16/15/14/13, slow into stun; E Hextech Ray 525 range, 12/11/10/9/8, line damage; R Arcane Storm 700 range, 120/100/80. Passive Glorious Evolution augments abilities at 100 Hex Fragments.",
+      "corrected": "All spike, why, paragraph and wants text rebuilt on the real names, with the 9s shield timer and 17s Gravity Field as the concrete spike gates.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit Viktor Q/W/E/R",
+        "packet.suspectNames"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "The page never mentioned that Siphon Power is an auto-attack reset, so the tell for his trade is the attack wind-up rather than the spell cast. It also never stated that the Siphon Power shield eats the Death Mark payoff tick.",
+      "why": "Riot text: Siphon Power \"grants him a shield and empowers his next basic attack\" (autoReset flagged in the kit). Death Mark repeats a portion of damage dealt during the 3 seconds, so a shield absorbing the burst reduces what the mark repeats.",
+      "corrected": "Stated in breakdown.cooldowns, dosFull[1].d, tradeBad and report[3].t: read the wind-up, and never commit the mark into a live 9-second shield.",
+      "confidence": "High",
+      "sources": [
+        "missingInteractions autoreset-burst-tell",
+        "enemyKit Viktor Q",
+        "ownerKit Zed R"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint) and dosFull[2].d claimed a \"fifteen-second invitation\" with no source.",
+      "why": "Gravity Field is 17/16/15/14/13; Siphon Power 9/8/7/6/5; Living Shadow 20 at rank 1.",
+      "corrected": "Real numbers written into both fields at rank 1.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit",
+        "ownerKit"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "Two COPY_PASTE_BLEED bullets (dosFull[1].d was the tradeGood string, dontsFull[2].d was the tradeBad string) under unrelated titles.",
+      "why": "Template leak.",
+      "corrected": "Both bodies rewritten to match their titles.",
+      "confidence": "High",
+      "sources": [
+        "lintFindings"
+      ]
+    },
+    {
+      "point": 14,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "The kit file carries the post-rework Viktor (Hex Fragments, Hextech Ray, Arcane Storm); the page text still carried pre-rework names. Nothing else patch-sensitive found on 26.15.",
+      "corrected": "Names updated to the live kit.",
+      "confidence": "Medium",
+      "sources": [
+        "enemyKit"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "QA pass: matchup-lint and regression-check still reported findings on this matchup after the proposing pass.",
+      "why": "Edits from the earlier pass were rejected by apply-proposals (length drift, or a phrase matching the non-interaction filter), so the defects survived on disk.",
+      "corrected": "breakdown.cooldowns (1 unlandable edit(s) removed)",
+      "confidence": "High",
+      "sources": [
+        "matchup-lint",
+        "regression-check",
+        "champ-data/_kits/viktor.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[0].side",
+      "before": "Skill",
+      "after": "Zed"
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].rating",
+      "before": "5/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].side",
+      "before": "Skill",
+      "after": "Zed"
+    },
+    {
+      "layer": "full",
+      "path": "phases[1].rating",
+      "before": "5/10",
+      "after": "6/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Zed"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Viktor"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].rating",
+      "before": "6/10",
+      "after": "4/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late Zed picks: mark the carry, swap through the peel, and let the death note collect the paperwork.",
+      "after": "Two items in, augmented abilities and Arcane Storm out-scale one mark — take flanks, never the duel."
+    },
+    {
+      "layer": "full",
+      "path": "phases[0].why",
+      "before": "Q through the wave's gaps on his last-hits — energy refunds on hits mean accuracy IS your mana bar.",
+      "after": "Q through the wave's gaps on his last-hits — pre-augment Viktor has no shield up to eat the chip."
+    },
+    {
+      "layer": "full",
+      "path": "phases[2].why",
+      "before": "E joins: W-E-Q strings slow and shred. Pick the angle his minion cover doesn't block.",
+      "after": "E joins: W-E-Q strings slow and shred, but Siphon Power's 9s shield starts eating the chip."
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].why",
+      "before": "First item spike: R-strings delete squishies through pots. Hunt the chip thresholds.",
+      "after": "First item: Youmuu's closes past Hextech Ray and the mark deletes a squishy mage."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.",
+      "after": "W wide, E the slow, Q the scissor from two angles — half a bar of chip before Siphon Power's 9s comes back up."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "R-ing into a live Siphon Power shield — the mark's three seconds pay into a barrier while Gravity Field lands on your feet."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of chip before Siphon Power's 9s comes back up. Bad trade: R-ing into a live Siphon Power shield — the mark's three seconds pay into a barrier while Gravity Field lands on your feet."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Viktor wins by landing Gravity Field, denying your pattern, and keeping the fight at a distance your kit resents.",
+      "after": "Viktor wins by stunning you inside Gravity Field, shielding the mark with Siphon Power, and out-scaling with Arcane Storm."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Viktor Gravity Field: matchup-defining — The stun zone owns every all-in — walk out the moment it drops or fight outside it. Step up only on its downtime. - Budget W Living Shadow (swap) for emergencies and the R for opportunities — never swap them.",
+      "after": "- Gravity Field is 17s down to 13s at 800 range — the stun zone owns every all-in, so walk out the moment it drops and step up only on its downtime. - Hextech Ray is 12s to 8s and Siphon Power 9s to 5s. - Arcane Storm is 120/100/80 and channels from 700."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry through subpoenas — one marked carry per fight; your job is the threshold math and the swap you saved for their answer.",
+      "after": "One marked target per fight: Arcane Storm chases at 700 range, so take the flank angle, mark the carry, and keep the swap for the stun."
+    },
+    {
+      "layer": "full",
+      "path": "ahead",
+      "before": "Ahead, audit the map: scissor Viktor off every contact, mark the thresholds, and roam the crashes — fed Zed makes health bars legal documents.",
+      "after": "Ahead, starve the Hex Fragments: shove Viktor off the wave, mark him under his own tower, and roam every crash before his augments land."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.",
+      "after": "Siphon Power shields on a 9s cooldown at rank 1 — bait it with one Q, then take the real chip on the next window."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[2].d",
+      "before": "Viktor burns Gravity Field on nothing — take the fifteen-second invitation.",
+      "after": "Viktor burns Gravity Field on the wave — that is a 17-second invitation at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Death Mark leaves you at 625 range with a shadow spent, and Arcane Storm follows you out of tower range on an 80s timer."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Great trade: Viktor wastes Gravity Field — commit immediately. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of chip before Siphon Power's 9s returns. Great trade: Viktor wastes Gravity Field on the wave — commit immediately. Bad trade: R-ing into a live shield, where the mark's three seconds pay into a barrier and the stun zone lands on your feet."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 evens out once his upgraded Q shield and Death Ray clear neutralize your poke.",
+      "after": "Level 3 evens out once Siphon Power's shield and Hextech Ray clear blunt your poke."
+    },
+    {
+      "layer": "content",
+      "path": "whys[3]",
+      "before": "Levels 4-5 stay skill-decided around his shield cooldown and Death Ray dodging.",
+      "after": "Levels 4-5 stay skill-decided around his 9s shield and dodging the Hextech Ray."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Once Viktor has his upgraded Q (Siphon Power) shield and E (Death Ray) wave-clear it becomes a skill matchup: he shields your poke and pushes you in, so your trades must dodge the Death Ray line and commit only when his shield is down.",
+      "after": "Once Viktor augments Siphon Power's shield and has Hextech Ray wave-clear it becomes a skill matchup: he shields your poke and pushes you in, so your trades must dodge the Hextech Ray line and commit only while that 9s shield is down."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Your Death Mark spikes you back ahead: Viktor is immobile and his only peel is the Q shield, so all-in with W-Q-E-R when the shield is on cooldown and delete him before his gravity field (R) can zone you.",
+      "after": "Your Death Mark spikes you back ahead: Viktor is immobile and his only peel is the Siphon Power shield, so all-in with W-Q-E-R while that 9s is down and delete him before Gravity Field (W) drops on your feet."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[2].text",
+      "before": "With Youmuu's you can gap-close past his Death Ray poke and dive him; his lack of mobility means a clean shadow-angle all-in beats his shield-and-run defense.",
+      "after": "With Youmuu's you can gap-close past his Hextech Ray poke and dive him; his lack of mobility means a clean shadow-angle all-in beats the shield-and-run defense."
+    },
+    {
+      "layer": "content",
+      "path": "spikes[3].text",
+      "before": "Fully-stacked Viktor out-scales you: his upgraded R Chaos Storm plus E waveclear zones teamfights and his shield soaks your burst, so you must snowball early because a completed Viktor wins the 2-item duel.",
+      "after": "Fully-stacked Viktor out-scales you: an augmented Arcane Storm plus Hextech Ray waveclear zones teamfights and his shield soaks your burst, so snowball early because a completed Viktor wins the 2-item duel."
+    },
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-5 level out into a skill matchup once his augmented Q shield and Death Ray clear are up: he can shield your Q poke and shove you under tower, so pick your trades around his shield cooldown and sidestep the Death Ray line. Whoever plays the cooldown window cleaner wins these levels. At 6 you spike back ahead, because Death Mark on an immobile, shield-reliant target is a reliable kill when the shield is down.",
+      "after": "Levels 3-5 level out into a skill matchup once his augmented Siphon Power and Hextech Ray clear are up: he shields your Q poke on a 9s cooldown and shoves you under tower, so pick your trades around that timer and sidestep the ray line. Whoever plays the cooldown window cleaner wins these levels. At 6 you spike back ahead, because Death Mark on an immobile, shield-reliant target is a reliable kill when the shield is down."
+    },
+    {
+      "layer": "content",
+      "path": "late",
+      "before": "This is a race you must win early, because a completed Viktor out-scales you: his Chaos Storm, Death Ray zoning, and shield uptime make the 2-item duel his. Use your first-item Youmuu's window to dive and snowball before he stacks items. If the game goes long, look to flank squishier targets rather than duel a full Viktor, and use your shadow mobility to avoid his gravity field.",
+      "after": "This is a race you must win early, because a completed Viktor out-scales you: Arcane Storm, Hextech Ray zoning, and shield uptime make the 2-item duel his. Use your first-item Youmuu's window to dive and snowball before he stacks items. If the game goes long, look to flank squishier targets rather than duel a full Viktor, and use your shadow mobility to stay out of Gravity Field."
+    },
+    {
+      "layer": "content",
+      "path": "wants.you[1]",
+      "before": "Dodge Death Ray (E) then commit your combo",
+      "after": "Dodge Hextech Ray (E) then commit your combo"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Push you in with Death Ray (E) and deny CS",
+      "after": "Push you in with Hextech Ray (E) and deny CS"
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[2]",
+      "before": "Out-scale with R (Chaos Storm) and completed items",
+      "after": "Out-scale with R (Arcane Storm) and completed items"
+    }
+  ],
+  "notes": "Two fabricated names killed across the page: Viktor's E is Hextech Ray (not 'Death Ray') and his R is Arcane Storm (not 'Chaos Storm'); Gravity Field is his W, not his R, and spikes[1] had it labelled (R). Chart rows 0,1,5 moved to Zed and row 6 to Viktor to match content win[] and the packet levelChart; win[N] needed no edits (already correct), and phases[6].why was rewritten in the same proposal to argue the Viktor verdict. Kit flag note: Viktor's R carries a 'channel: interruptible' flag, but Riot's own text says the storm interrupts enemy channels and can be redirected — the flag looks like tooltip mis-parse, so nothing on the page asserts that CC cancels his ult.",
+  "unlandableEdits": [
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That’s Viktor’s bread-and-butter play — deny it and they run out of answers.",
+      "after": "Gravity Field stuns anyone who lingers in it — his jungler's whole gank plan is that zone."
+    }
+  ]
+}

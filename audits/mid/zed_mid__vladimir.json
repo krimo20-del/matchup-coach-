@@ -1,0 +1,96 @@
+{
+ "ownerKey": "zed_mid",
+ "enemy": "vladimir",
+ "lane": "mid",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[3].side and [5].side read Skill and phases[6].side read Vladimir, while content win[3], win[5] and win[6] all read Zed and the packet levelChart is Zed on all seven rows.",
+   "why": "Every why on those rows already argues Zed: 4-5 he dictates trades around the pool, first item he dives, 2+ items he picks. Vladimir's scaling is real but the content layer and the packet both call the rows for Zed, and phases[6].why describes Zed picking.",
+   "corrected": "phases[3], [5] and [6] side set to Zed with ratings aligned; win[N] untouched because it is already Zed.",
+   "confidence": "Medium",
+   "sources": ["packet.levelChart", "currentText.content.win[]", "currentText.full.phases[6].why"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "The early paragraph said \"his Transfusion costs health\". It does not — Transfusion has no cost; Tides of Blood is the ability Vladimir pays his own health for.",
+   "why": "Riot kit: Q Transfusion cost 0, 9/7.9/6.8/5.7/4.6, 600 range, heals him and is empowered at full resource. E Tides of Blood \"pays his own health to charge up a reservoir\", 13/11/9/7/5. W Sanguine Pool 28/25/22/19/16, 2 seconds untargetable. R Hemoplague 120s flat, amplifies damage taken and heals him per champion hit.",
+   "corrected": "Health cost moved onto Tides of Blood everywhere; the 28s pool named as his real spike gate and the 9s Transfusion as the sustain clock.",
+   "confidence": "High",
+   "sources": ["enemyKit Vladimir Q/W/E/R"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Two interactions never reached the page: Tides of Blood is blocked by enemy units, so standing behind the wave eats far less of it; and Vladimir sustains through chip, so Grievous Wounds timing decides every extended trade.",
+   "why": "Riot text on E: \"deals damage in the area around him but can be blocked by enemy units\". Transfusion and Hemoplague both heal him (kit heal flags), and the missing-interactions file flags needs-antiheal for this pairing.",
+   "corrected": "Minion-block written into breakdown.cooldowns and phases[2].why; anti-heal timing written into spikes[2].text alongside the existing Itemization note.",
+   "confidence": "High",
+   "sources": ["enemyKit Vladimir E text", "missingInteractions needs-antiheal"]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit (lint), and dosFull[2].d claimed a guarantee with no number.",
+   "why": "Sanguine Pool is 28s at rank 1 — the longest cooldown in his kit and the only window that matters.",
+   "corrected": "28s pool, 9s Transfusion and 20s Living Shadow written in.",
+   "confidence": "High",
+   "sources": ["enemyKit", "ownerKit"]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d was the tradeGood string and dontsFull[2].d the tradeBad string, both pasted under unrelated titles.",
+   "why": "Template leak flagged by lint.",
+   "corrected": "Both bodies rewritten to match their titles.",
+   "confidence": "High",
+   "sources": ["lintFindings"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Zed"},
+  {"layer":"full","path":"phases[3].rating","before":"5/10","after":"6/10"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Zed"},
+  {"layer":"full","path":"phases[6].side","before":"Vladimir","after":"Zed"},
+  {"layer":"full","path":"phases[6].rating","before":"7/10","after":"6/10"},
+
+  {"layer":"full","path":"phases[0].why","before":"Q through the wave's gaps on his last-hits — energy refunds on hits mean accuracy IS your mana bar.","after":"Q through the wave's gaps on his last-hits — Transfusion is 9s at rank 1 and cannot out-heal it."},
+  {"layer":"full","path":"phases[2].why","before":"E joins: W-E-Q strings slow and shred. Pick the angle his minion cover doesn't block.","after":"E joins: W-E-Q strings slow and shred, and minions block Tides of Blood on the way back."},
+  {"layer":"full","path":"phases[3].why","before":"Poke the scissors on cooldown and bank energy before every real string — the lane bleeds to geometry.","after":"Poke on cooldown while Tides of Blood bleeds him — every charge he throws is health he must Q back."},
+  {"layer":"full","path":"phases[5].why","before":"First item spike: R-strings delete squishies through pots. Hunt the chip thresholds.","after":"First item: Youmuu's closes past his 600-range poke and the mark lands after he pools."},
+
+  {"layer":"full","path":"tradeGood","before":"W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.","after":"W wide, E the slow, Q the scissor from two angles — chip he pays for twice, since Tides of Blood costs him health."},
+  {"layer":"full","path":"tradeBad","before":"R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.","after":"R-ing before Sanguine Pool is spent — two untargetable seconds eat your follow-up and Transfusion heals it back on 9s."},
+
+  {"layer":"full","path":"breakdown.trading","before":"Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.","after":"Good trade: W wide, E the slow, Q the scissor from two angles — chip he pays for twice, since Tides of Blood costs him health. Bad trade: R-ing before Sanguine Pool is spent — two untargetable seconds eat your follow-up and Transfusion heals it back on 9s."},
+
+  {"layer":"full","path":"enemyWin","before":"Vladimir wins by landing Sanguine Pool, denying your pattern, and owning the spacing war until your tempo starves.","after":"Vladimir wins by outliving your chip with Transfusion, pooling the commit, and turning Hemoplague's amp into your death."},
+
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Vladimir Sanguine Pool: matchup-defining — Untargetable dodge — bait it before you spend your kill window. Step up only on its downtime. - Budget W Living Shadow (swap) for emergencies and the R for opportunities — never swap them.","after":"- Sanguine Pool (W): 28s at rank 1 for 2 seconds untargetable — his longest cooldown, so bait it and step in after. - Tides of Blood is blocked by enemy units; hold the minion line. - Living Shadow's 20s at rank 1 is your only exit."},
+
+  {"layer":"full","path":"breakdown.carry","before":"Carry through subpoenas — one marked carry per fight; your job is the threshold math and the swap you saved for their answer.","after":"One marked target per fight — Vladimir pools out of the mark, so spend it on the carry behind him and keep a shadow for the exit."},
+
+  {"layer":"full","path":"ahead","before":"Ahead, audit the map: scissor Vladimir off every contact, mark the thresholds, and roam the crashes — fed Zed makes health bars legal documents.","after":"Ahead, tax the health bar: Tides of Blood costs him health to farm, so shove him off the wave, mark him at the threshold, and roam every crash."},
+
+  {"layer":"full","path":"dosFull[1].d","before":"W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.","after":"Transfusion is 9s at rank 1 and heals less than your Q chip — stack it while Tides of Blood bleeds him down."},
+  {"layer":"full","path":"dosFull[2].d","before":"Vladimir spends Sanguine Pool early — the closest thing this matchup has to a guarantee.","after":"Vladimir pools on the first scare — R after it, and 28 seconds at rank 1 is your window."},
+
+  {"layer":"full","path":"dontsFull[0].d","before":"That’s Vladimir’s bread-and-butter play — deny it and they run out of answers.","after":"Hemoplague amplifies the damage you take, and his jungler's dive rides on that window."},
+  {"layer":"full","path":"dontsFull[2].d","before":"R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.","after":"Death Mark leaves you at 625 range with a shadow spent, and he heals the chip straight back on a 9s Transfusion."},
+
+  {"layer":"full","path":"report[3].t","before":"Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Great trade: Vladimir wastes Sanguine Pool — commit immediately. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.","after":"Good trade: W wide, E the slow, Q the scissor from two angles — chip he pays for twice, since Tides of Blood costs him health. Great trade: Vladimir wastes Sanguine Pool — commit immediately, the 28s is yours. Bad trade: R-ing before the pool is spent, where two untargetable seconds eat the whole follow-up."},
+
+  {"layer":"content","path":"whys[2]","before":"Level 3 you control the lane since his only peel is a baitable pool.","after":"Level 3 you control the lane; his only peel is a 28s pool you can bait."},
+
+  {"layer":"content","path":"spikes[0].text","before":"Vladimir is weakest early with high health costs and no mobility beyond W (Sanguine Pool), so poke him hard with Q and force him to pool or bleed out; commit your W-Q-E when his pool is on cooldown.","after":"Vladimir is weakest early: Tides of Blood costs his own health and minions block it, and his only escape is a 28s Sanguine Pool, so poke with Q and commit W-Q-E while the pool is down."},
+  {"layer":"content","path":"spikes[2].text","before":"With Youmuu's you dive him and out-tempo his sustain; keep him below the health threshold where his Transfusion (Q) heals him back to safety so your snowball sticks.","after":"With Youmuu's you dive him, but buy Grievous Wounds in the same window: Transfusion is 4.6s at rank 5 and undoes the chip, and anti-heal is what makes the dive actually stick."},
+
+  {"layer":"content","path":"early","before":"Level 1-2 you dominate: Vladimir's early laning is notoriously weak, his Transfusion costs health, and he has no way to punish your Q poke. Step up and chunk him repeatedly so his self-sustain can't keep pace, and deny his CS to slow his scaling. Every health bar you take early is a health bar he pays for in tempo.","after":"Level 1-2 you dominate: Vladimir's early laning is weak, Tides of Blood costs his own health to throw, and he has no way to punish your Q poke. Step up and chunk him repeatedly so a 9s Transfusion can't keep pace, and deny his CS to slow his scaling. Every health bar you take early is one he pays for in tempo."},
+  {"layer":"content","path":"mid","before":"Levels 3-5 stay firmly yours because his only defensive tool is Sanguine Pool, which you can bait before committing your real combo. Poke him down, force the pool, then W-Q-E onto him while it's on cooldown. He can't trade back into your burst without pooling, and pooling drains the mana-less resource and momentum he needs to farm safely.","after":"Levels 3-5 stay firmly yours because his only defensive tool is Sanguine Pool, a 28-second cooldown at rank 1 you can bait before committing your real combo. Poke him down, force the pool, then W-Q-E onto him while it's gone. He can't trade back into your burst without pooling, and every Tides of Blood he throws to farm is health you take straight back."},
+
+  {"layer":"content","path":"wants.you[2]","before":"End the game early before his scaling online","after":"End the game before his item scaling comes online"}
+ ],
+ "notes": "Fixed a real factual error: the early paragraph billed Transfusion as the health-cost ability. Transfusion costs nothing (9/7.9/6.8/5.7/4.6, heals him); Tides of Blood is what Vladimir pays health for, and Riot's own text says enemy units block it — that minion-block is now on the page. Chart: full rows 3, 5 and 6 disagreed with content win[] (all Zed) and with the packet, so the sides were moved to Zed; no win[N] edits were needed. Judgement flagged: phases[6] previously said Vladimir 7/10 and the late/spikes[3] prose does say a completed Vladimir out-scales Zed, but win[6], the packet and phases[6].why all say Zed, so the row was aligned to Zed rather than moved against three sources."
+}

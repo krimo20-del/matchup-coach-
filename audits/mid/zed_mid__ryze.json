@@ -1,0 +1,147 @@
+{
+  "ownerKey": "zed_mid",
+  "enemy": "ryze",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer rows 3 and 5 read 'Skill' and row 6 read 'Ryze', while the content layer and the packet chart both read Zed on all seven rows.",
+      "why": "Ryze is immobile with no combat escape — Realm Warp is a delayed portal, not a dash — so Zed leads every stage; the full layer's own phases[6].why already says 'Late Zed picks', which contradicted the 'Ryze' side sitting above it.",
+      "corrected": "phases[3], [5] and [6] sides moved to Zed as one group. The whys on all three already describe Zed winning, so none needed rewriting.",
+      "confidence": "High",
+      "sources": [
+        "packet.levelChart",
+        "content win[0..6]",
+        "enemyKit R text",
+        "currentText phases[6].why"
+      ]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Zed spikes at 6 and first-item lethality; Ryze's spike is two to three items of stacked mana through Arcane Mastery, which arrives after Zed's window.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": [
+        "ownerKit R",
+        "enemyKit P"
+      ]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The page called Rune Prison a 'point-blank root' with no condition and no cooldown. It only roots a target that already has Flux on it — otherwise it is a slow.",
+      "why": "Riot's W text: 'If the target has Flux on it, they are instead rooted.' That conditional is the whole defensive read in this lane and it was missing.",
+      "corrected": "The Flux condition, Rune Prison's 11-9s cooldown and Overload's 5s reset written into breakdown.cooldowns, breakdown.trading, dosFull[1].d, dontsFull[0].d and dontsFull[2].d.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit W text",
+        "enemyKit E",
+        "enemyKit Q cd 5"
+      ]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that carries real numbers.",
+      "corrected": "Rune Prison 11s/9s, Overload 5s, Living Shadow 20s.",
+      "confidence": "High",
+      "sources": [
+        "enemyKit",
+        "ownerKit"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "dosFull[1].d was tradeGood verbatim and dontsFull[2].d was tradeBad verbatim (lint COPY_PASTE_BLEED).",
+      "why": "Bodies did not match their titles.",
+      "corrected": "Both replaced with kit-grounded text.",
+      "confidence": "High",
+      "sources": [
+        "brief lintFindings"
+      ]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "QA pass: matchup-lint and regression-check still reported findings on this matchup after the proposing pass.",
+      "why": "Edits from the earlier pass were rejected by apply-proposals (length drift, or a phrase matching the non-interaction filter), so the defects survived on disk.",
+      "corrected": "breakdown.cooldowns (2 unlandable edit(s) removed)",
+      "confidence": "High",
+      "sources": [
+        "matchup-lint",
+        "regression-check",
+        "champ-data/_kits/ryze.json"
+      ]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "phases[3].side",
+      "before": "Skill",
+      "after": "Zed"
+    },
+    {
+      "layer": "full",
+      "path": "phases[5].side",
+      "before": "Skill",
+      "after": "Zed"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Ryze",
+      "after": "Zed"
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ryze Rune Prison (Root): matchup-defining — Point-blank root — respect the EQ chain that follows it. Read it like a second minimap. - Guard your W Living Shadow (swap) like a fifth summoner spell. - Ultimate goes to kill windows only.",
+      "after": "- Rune Prison is 11s down to 9s at 615 range — the point-blank root starts every kill combo, so step up only on its cooldown. - Overload is a flat 5s from 1000 and Spell Flux 3.5s to 2.5s. - Realm Warp is 180/160/140 and reaches 3000."
+    },
+    {
+      "layer": "full",
+      "path": "tradeGood",
+      "before": "W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.",
+      "after": "W wide, E the slow, Q the scissor from two angles — at 900 range you sit outside his 615 Rune Prison."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.",
+      "after": "Overload is a 5s poke that his other casts reset — trade in the gap after he throws it, never into it."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].d",
+      "before": "That is Ryze’s whole plan in one window — decline politely and watch it retire.",
+      "after": "Ryze needs Spell Flux to land first — dodge the E and his Rune Prison is only a slow."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Rune Prison comes back every 11 seconds at rank 1 — linger Flux-marked near his tower and the root holds you there."
+    }
+  ],
+  "notes": "phases[6].rating left at 7/10 — the side moved to Zed but I could not tell from the kit whether that rating is scaled to difficulty or to the owner, so I did not guess. No win[N] edits: content win[0..6] already reads Zed on every row, matching the packet chart and the direction the full layer is moving.",
+  "unlandableEdits": [
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Good trade: W wide, E the slow, Q the scissor from two angles — at 900 range you sit outside his 615 Rune Prison. Bad trade: eating Spell Flux first — the mark it leaves turns his next Rune Prison from a slow into a root."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Great trade: Ryze wastes Rune Prison (Root) — commit immediately. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+      "after": "Good trade: W wide, E the slow, Q the scissor from two angles — at 900 range you sit outside his 615 Rune Prison. Great trade: Ryze wastes Rune Prison (Root) — commit immediately. Bad trade: eating Spell Flux first — the mark it leaves turns his next Rune Prison from a slow into a root."
+    }
+  ]
+}

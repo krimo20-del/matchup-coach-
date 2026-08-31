@@ -1,0 +1,94 @@
+{
+ "ownerKey": "zed_mid",
+ "enemy": "yasuo",
+ "lane": "mid",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full phases[4].side and [5].side read Skill and phases[6].side read Yasuo, while content win[4], win[5], win[6] all read Zed and the packet levelChart agrees with the content layer on those three rows.",
+   "why": "Level 6 onward Zed's mark plus first-item burst is the kill pattern the whys already describe, and phases[6].why is written from Zed's side (\"Late Zed picks\"). Rows 0-3 are Skill in both layers and stay untouched.",
+   "corrected": "phases[4], [5], [6] side set to Zed; win[N] untouched because it already reads Zed on all three.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]", "currentText.full.phases[6].why"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "Every stage gate was \"when Windwall is down\" with no cooldown attached, so the reader had no idea how long that window lasts.",
+   "why": "Wind Wall is 25/23/21/19/17 and lasts 4 seconds — a wasted wall at rank 1 is a 25-second lane. Steel Tempest is 4s and only knocks up at 2 stacks; Sweeping Blade is 0.5s but cannot re-cast on the same enemy for a few seconds; Last Breath is 70/50/30.",
+   "corrected": "25s and the 4-second duration written into the cooldowns field, dos bullets, spikes[0] and phases[3].why.",
+   "confidence": "High",
+   "sources": ["enemyKit Yasuo W/Q/E/R"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Two interactions were absent: one Wind Wall covers a single line, but Zed and his shadow throw two shuriken lines, so splitting the angles is what beats it; and Last Breath requires an Airborne target, which normally has to come from his own 2-stack Steel Tempest.",
+   "why": "Riot text: Wind Wall \"creates a moving wall that blocks all enemy projectiles\"; Zed Q — \"Zed and his shadows throw their shurikens\", flagged projectile. Last Breath: \"Blinks to an Airborne enemy champion\"; Steel Tempest knocks Airborne only at 2 stacks.",
+   "corrected": "Angle-splitting written into tradeGood, phases[0]/[2]/[3].why, spikes[0] and mid; the airborne requirement into breakdown.carry and spikes[3].",
+   "confidence": "High",
+   "sources": ["enemyKit Yasuo W/Q/R text", "ownerKit Zed Q text"]
+  },
+  {
+   "point": 6,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit (lint), and dosFull[2].d offered a \"fifteen-second invitation\" that does not match any rank of Wind Wall.",
+   "why": "Wind Wall is 25s at rank 1 and 17s at rank 5 — never 15.",
+   "corrected": "Corrected to 25s at rank 1 in both fields.",
+   "confidence": "High",
+   "sources": ["enemyKit Yasuo W"]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d was the tradeGood string and dontsFull[2].d the tradeBad string, both under unrelated titles.",
+   "why": "Template leak flagged by lint.",
+   "corrected": "Both bodies rewritten to match their titles.",
+   "confidence": "High",
+   "sources": ["lintFindings"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Zed"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Zed"},
+  {"layer":"full","path":"phases[6].side","before":"Yasuo","after":"Zed"},
+
+  {"layer":"full","path":"phases[0].why","before":"Q through the wave's gaps on his last-hits — energy refunds on hits mean accuracy IS your mana bar.","after":"Q through the wave's gaps on his last-hits, but one Wind Wall eats a line — pick angles he cannot cover."},
+  {"layer":"full","path":"phases[2].why","before":"E joins: W-E-Q strings slow and shred. Pick the angle his minion cover doesn't block.","after":"E joins: W-E-Q strings slow and shred, and the wall covers one angle only — split them."},
+  {"layer":"full","path":"phases[3].why","before":"Poke the scissors on cooldown and bank energy before every real string — the lane bleeds to geometry.","after":"Poke from two angles on cooldown and bank energy — every wall he spends is 25 seconds of open lane."},
+  {"layer":"full","path":"phases[4].why","before":"Death Mark online — anyone below 60% in lane is now a math problem with a three-second answer.","after":"Death Mark online — chip him under 60% first, since his Flow shield eats a mark taken at full health."},
+  {"layer":"full","path":"phases[5].why","before":"First item spike: R-strings delete squishies through pots. Hunt the chip thresholds.","after":"First item: Youmuu's closes the gap and the mark lands the moment the wall is spent."},
+
+  {"layer":"full","path":"tradeGood","before":"W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.","after":"W wide, E the slow, Q the scissor from two angles — one Wind Wall covers one line, so make him choose which."},
+  {"layer":"full","path":"tradeBad","before":"R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.","after":"R-ing into a fresh Wind Wall — four seconds of blocked shurikens while his 2-stack tornado sets up Last Breath on you."},
+
+  {"layer":"full","path":"breakdown.trading","before":"Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.","after":"Good trade: W wide, E the slow, Q the scissor from two angles — one Wind Wall covers one line, so make him choose which. Bad trade: R-ing into a fresh Wind Wall — four seconds of blocked shurikens while his 2-stack tornado sets up Last Breath on you."},
+
+  {"layer":"full","path":"enemyWin","before":"Yasuo wins by landing Wind Wall, denying your pattern, and cashing the all-in before your pattern matures.","after":"Yasuo wins by walling your shurikens, landing the 2-stack tornado, and cashing Last Breath before the mark resolves."},
+
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Yasuo Wind Wall: matchup-defining — Blocks every projectile for its duration — hold your poke until it is spent. Step up only on its downtime. - Budget W Living Shadow (swap) for emergencies and the R for opportunities — never swap them.","after":"- Wind Wall (W): 25s at rank 1 and 4 seconds long — one wall eats a whole shuriken line, so hold Q until it is spent. - Steel Tempest knocks up only at 2 stacks, and that knockup is what turns Last Breath on. - Living Shadow's 20s is your exit."},
+
+  {"layer":"full","path":"breakdown.carry","before":"Carry through subpoenas — one marked carry per fight; your job is the threshold math and the swap you saved for their answer.","after":"One marked target per fight — Last Breath needs someone Airborne, so deny the tornado and mark the carry, not the swordsman."},
+
+  {"layer":"full","path":"ahead","before":"Ahead, audit the map: scissor Yasuo off every contact, mark the thresholds, and roam the crashes — fed Zed makes health bars legal documents.","after":"Ahead, deny the wall its value: shove Yasuo off the wave, chip from two angles, and roam the crashes while Wind Wall sits on its 25s."},
+
+  {"layer":"full","path":"dosFull[0].d","before":"Blocks every projectile for its duration — hold your poke until it is spent. Its cooldown is the green light — wait for it.","after":"Blocks every projectile for 4 seconds on a 25s cooldown — hold your poke until it is spent, then chip on the downtime."},
+  {"layer":"full","path":"dosFull[1].d","before":"W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.","after":"Death Mark repeats only what you dealt in 3 seconds; on a full-health Yasuo the Flow shield and crit answer it."},
+  {"layer":"full","path":"dosFull[2].d","before":"Yasuo burns Wind Wall on nothing — take the fifteen-second invitation.","after":"Yasuo walls a minion wave — that is a 25-second invitation at rank 1."},
+
+  {"layer":"full","path":"dontsFull[0].d","before":"That’s Yasuo’s bread-and-butter play — deny it and they run out of answers.","after":"Steel Tempest counts as a basic attack and crits; melee range is his math."},
+  {"layer":"full","path":"dontsFull[2].d","before":"R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.","after":"Living Shadow is 20s at rank 1 — spend it dodging a tornado and your next poke has no second angle for the wall to miss."},
+
+  {"layer":"full","path":"report[3].t","before":"Good trade: W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong. Great trade: Yasuo wastes Wind Wall — commit immediately. Bad trade: R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.","after":"Good trade: W wide, E the slow, Q the scissor from two angles — one Wind Wall covers one line, so make him choose which. Great trade: Yasuo walls a minion wave — commit immediately, that is 25 seconds. Bad trade: R-ing into a fresh wall, where four seconds of blocked shurikens feed his tornado setup."},
+
+  {"layer":"content","path":"spikes[0].text","before":"Once you have Q, W, and E you can W the wave to eat his Q poke, then dash-Q on him whenever his Windwall is down; a whiffed Windwall is a free trade every time.","after":"Once you have Q, W and E, poke from two angles so one wall cannot cover both, then step in whenever Wind Wall is down — it is 25s at rank 1, so a wasted wall is a free trade."},
+  {"layer":"content","path":"spikes[3].text","before":"Late game he outscales in extended fights with crit and Last Breath knockup follow-up, so you must one-shot him with R + Electrocute the moment he steps up, not duel him.","after":"Late he out-scales extended fights with crit, and Last Breath needs an Airborne target — usually his own 2-stack tornado, so deny the stacks and one-shot him rather than duel him."},
+
+  {"layer":"content","path":"mid","before":"From 3 onward you both hit power spikes together, but you control it by respecting Windwall on your Q and forcing trades with E's slow and passive shield up when his double-dash is used.","after":"From 3 you spike together, but you control it by splitting your Q angles so one Wind Wall cannot eat both, and by trading after Sweeping Blade — he cannot re-dash the same target for seconds."},
+
+  {"layer":"content","path":"wants.you[1]","before":"Trade when his E-Q double-dash gap-close is on cooldown","after":"Trade after Sweeping Blade — he can't re-dash you yet"},
+  {"layer":"content","path":"wants.foe[2]","before":"Scale to crit items and knock you up with R to reset","after":"Scale to crit and hold you airborne with Last Breath"}
+ ],
+ "notes": "Chart: full rows 4, 5 and 6 disagreed with content win[] (Zed on all three) and with the packet; sides moved to Zed, no win[N] edits needed. The decisive interaction the page never stated is that Zed and his shadow throw two shuriken lines while one Wind Wall covers one line — splitting the angles, not waiting out the wall, is the actual answer, and the wall is 25s at rank 1 (the page said fifteen). Also added that Last Breath requires an Airborne target that normally comes from his own 2-stack Steel Tempest. Left standing without verification: spikes[1].text and the late paragraph claim Death Mark's delayed damage is unblockable by Wind Wall. That is consistent with Riot's text (the wall blocks projectiles; the mark is delayed damage) but Riot does not state it, so the existing wording was left untouched rather than strengthened."
+}

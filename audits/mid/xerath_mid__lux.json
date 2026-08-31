@@ -1,0 +1,93 @@
+{
+  "ownerKey": "xerath_mid",
+  "enemy": "lux",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer phases[0..3].side read 'Skill' while content win[0..3] read 'Xerath' — the page rendered two different answers for the first four rows.",
+      "why": "The packet levelChart is Xerath/Xerath/Xerath/Xerath/Skill/Skill/Skill, the content layer already matches it, and the phase whys for those rows describe Xerath winning. Xerath's charged Q reaches past Lux's 1175 Light Binding, so the early range lead is real; from 6 both ults land and it flattens.",
+      "corrected": "phases[0..3].side moved to Xerath with ratings raised to 7/10; rows 4-6 left at Skill, where both layers already agree.",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText content win[0..6]", "enemyKit Q range 1175"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The level 6 spike did not say what actually decides it: Final Spark punishing the Rite of the Arcane channel.",
+      "why": "Xerath's R is a channel that immobilises him and any CC cancels it, so a landed Light Binding at the wrong moment ends the ult outright. Final Spark is 60s at rank 1 and 40s at rank 3.",
+      "corrected": "breakdown.mid and breakdown.cooldowns now key the R commit to Light Binding being down.",
+      "confidence": "High",
+      "sources": ["ownerKit R channel flag", "enemyKit Q cd 10 / R cd 60/50/40"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Two decisive interactions were missing entirely: Prismatic Barrier absorbing the burst window, and Illumination's auto-attack reset being the real tell for her combo.",
+      "why": "Prismatic Barrier is 12s at rank 1 and shields on both the outbound and return pass, so burst spent before it is out is burst wasted. Illumination charges on any damaging spell and detonates on her next attack, so the auto wind-up — not the spell cast — is the cue to step back.",
+      "corrected": "dosFull[1].d now says to force the shield first; dontsFull[0].d now names Illumination as the tell.",
+      "confidence": "High",
+      "sources": ["enemyKit P text + autoReset flag", "enemyKit W text + shield flag", "missingInteractions key 20"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit (lint COOLDOWN_NO_DIGIT).",
+      "why": "Light Binding is a flat 10 seconds at every rank, which is the single number this whole matchup is played around, and it was never stated.",
+      "corrected": "Light Binding 10s, Shocking Orb 13s, Final Spark 60s->40s.",
+      "confidence": "High",
+      "sources": ["brief kits"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "21 lint findings: 19 misgender plus two copy-paste bleeds (dosFull[1].d was tradeGood verbatim, dontsFull[2].d was tradeBad verbatim).",
+      "why": "Lux is female; both bullets explained something other than what their titles promised.",
+      "corrected": "All flagged fields rewritten.",
+      "confidence": "High",
+      "sources": ["lintFindings"]
+    }
+  ],
+  "edits": [
+    {"layer":"full","path":"phases[0].side","before":"Skill","after":"Xerath"},
+    {"layer":"full","path":"phases[0].rating","before":"5/10","after":"7/10"},
+    {"layer":"full","path":"phases[1].side","before":"Skill","after":"Xerath"},
+    {"layer":"full","path":"phases[1].rating","before":"5/10","after":"7/10"},
+    {"layer":"full","path":"phases[2].side","before":"Skill","after":"Xerath"},
+    {"layer":"full","path":"phases[2].rating","before":"5/10","after":"7/10"},
+    {"layer":"full","path":"phases[3].side","before":"Skill","after":"Xerath"},
+    {"layer":"full","path":"phases[3].rating","before":"5/10","after":"7/10"},
+    {"layer":"full","path":"tldr","before":"His combo needs proximity your artillery exists to deny — poke the approach, stun the commit, finish by mail.","after":"Her combo starts with a 1175-range Light Binding — body-block it, stun what follows, and finish the rest by mail."},
+    {"layer":"full","path":"winCon","before":"Deny the approach, stun the commit, and let the barrage collect what the poke invoiced. Keep one eye on Light Binding and one on the wave, in that order.","after":"Stand behind the caster minions so Light Binding hits them, then let the barrage collect what the poke invoiced. Her Q is 10 seconds flat: down means you step up."},
+    {"layer":"full","path":"enemyWin","before":"Lux wins by landing Light Binding, denying your pattern, and out-ranging your plan one polite trade at a time.","after":"Lux wins by landing Light Binding at 1175 and chaining Lucent Singularity into Final Spark before the root wears off."},
+    {"layer":"full","path":"tradeGood","before":"Q the last-hit from beyond his answer range, W the lateral dodge, and walk — a one-way trade he can only end by leaving the lane.","after":"Q her last-hit from behind your caster minions, W the step she has to make, and walk — her only answer is a Q she has to hit."},
+    {"layer":"full","path":"tradeBad","before":"Spending E on chip and then watching the dash you bought it for arrive on schedule — the stun is your only 'no' and everyone knows it.","after":"Spending E on chip and then eating Light Binding with nothing left — her Q is 10s flat, so the root you had no answer for was always coming back."},
+    {"layer":"full","path":"ahead","before":"Ahead, extend the artillery line: chip Lux off every CS, R his recalls, and rotate barrages to rivers — a fed Xerath taxes the whole map from fog.","after":"Ahead, extend the artillery line: chip Lux off every CS, R her recall walk, and rotate barrages to river — a fed Xerath taxes the map from fog."},
+    {"layer":"full","path":"loading","before":"- Xerath vs Lux - Track: Lux Light Binding. - Hold E for his engage — the stun is your entire defense. - Fights start when Light Binding ends. - The R is for endings, not openings.","after":"- Xerath vs Lux - Track: Lux Light Binding (10s). - Hold E for her follow-up — the stun is your entire defense. - Fights start when Light Binding ends. - The R is for endings, not openings."},
+    {"layer":"full","path":"phases[0].why","before":"Q from fog-of-war range on his every last-hit — level 1 Xerath is the longest gun in the lane. Mana is the only governor.","after":"Q from fog-of-war range on her every last-hit — level 1 Xerath is the longest gun in the lane. Mana is the only governor."},
+    {"layer":"full","path":"phases[2].why","before":"E completes the kill kit: the stun into full rotation is real damage even now. Hold it for HIS aggression, not yours.","after":"E completes the kill kit: the stun into full rotation is real damage even now. Hold it for her binding follow-up, not chip."},
+    {"layer":"full","path":"phases[5].why","before":"Luden's spike: Q-W chunks third-bars. He farms at half HP forever or he doesn't farm.","after":"Luden's spike: Q-W chunks third-bars. She farms at half HP forever or she gives the wave up."},
+    {"layer":"full","path":"breakdown.wave","before":"Best wave: a Q-thinned slow push that crashes while you snipe from two screens — Xerath waves manage themselves if your poke owns the contact point. Worst wave: a frozen wave near his tower past minute six — the immobile artillery walking up to reset is the most assassinated picture in mid. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.","after":"Best wave: a Q-thinned slow push that crashes while you snipe from two screens — Xerath waves manage themselves if your poke owns the contact point. Worst wave: a frozen wave near her tower past minute six — the immobile artillery walking up to reset is the most assassinated picture in mid. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."},
+    {"layer":"full","path":"breakdown.trading","before":"Good trade: Q the last-hit from beyond his answer range, W the lateral dodge, and walk — a one-way trade he can only end by leaving the lane. Bad trade: Spending E on chip and then watching the dash you bought it for arrive on schedule — the stun is your only 'no' and everyone knows it.","after":"Good trade: Q her last-hit from behind your caster minions, W the step she has to make, and walk — her only answer is a Q she has to hit. Bad trade: Spending E on chip and then eating Light Binding with nothing left — her Q is 10s flat, so the root you had no answer for was always coming back."},
+    {"layer":"full","path":"breakdown.cooldowns","before":"- Lux Light Binding: matchup-defining — Everything keys off the root — minion-block it and her combo never starts. Count it out loud if you must. - Your E Shocking Orb has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Lux Light Binding: matchup-defining — 10 seconds flat at every rank and everything keys off it; minion-block the root and her combo never starts. - Shocking Orb is 13s: hold it for the follow-up, not chip. - Final Spark is 60s at rank 1 and 40s at rank 3."},
+    {"layer":"full","path":"breakdown.mid","before":"Post-6 you shove-and-snipe: crash the wave, R the chipped, and rotate your barrage to every river contest — your poke decides objectives you never attend.","after":"Post-6 you shove-and-snipe, but your R is a channel and any root cancels it: only start the barrage with Light Binding on cooldown, never while she is holding it."},
+    {"layer":"full","path":"breakdown.feeding","before":"If Lux opens the score, reset expectations and respect Light Binding doubly. After a second, your job description changes — farm with max-range Qs and stay relevant through R snipes.","after":"If Lux opens the score, hug the caster minions and play every wave as if Light Binding is up, because at 10 seconds it is. After a second, farm at max Q range and stay relevant through R snipes."},
+    {"layer":"full","path":"breakdown.carry","before":"Carry from the next postal code — no champion converts vision and distance into damage like Xerath; your job is never being where the fight thinks you are.","after":"Carry by refusing the range she wants: every Lux tool stops at 1175, so charge from further out, force Prismatic Barrier out early, and R whatever is left."},
+    {"layer":"full","path":"dosFull[0].t","before":"Tax every step toward his combo range","after":"Tax every step toward her combo range"},
+    {"layer":"full","path":"dosFull[0].d","before":"Everything keys off the root — minion-block it and her combo never starts. Until it’s spent, every commit is a coin flip.","after":"Her Q, W and E all sit between 1100 and 1175 — every step she takes toward that band is a step you charge a full Q for."},
+    {"layer":"full","path":"dosFull[1].d","before":"Q the last-hit from beyond his answer range, W the lateral dodge, and walk — a one-way trade he can only end by leaving the lane.","after":"Prismatic Barrier absorbs the burst you were saving it for, so force the shield out first and stun what comes after it, not before."},
+    {"layer":"full","path":"dosFull[2].d","before":"Lux whiffs Light Binding and the lane briefly belongs to you.","after":"She walks home lit up by Illumination — R the path, not the wave."},
+    {"layer":"full","path":"dontsFull[0].t","before":"Let him close distance during your cooldowns","after":"Let her close distance during your cooldowns"},
+    {"layer":"full","path":"dontsFull[0].d","before":"That is Lux’s rehearsed moment — don’t audition for it.","after":"Illumination detonates on her next auto — step back on it."},
+    {"layer":"full","path":"dontsFull[2].t","before":"Trade at the range where his burst reaches","after":"Trade at the range where her burst reaches"},
+    {"layer":"full","path":"dontsFull[2].d","before":"Spending E on chip and then watching the dash you bought it for arrive on schedule — the stun is your only 'no' and everyone knows it.","after":"Inside 1175 she can bind you, and a rooted Xerath eats Lucent Singularity and then Final Spark without moving a single step."},
+    {"layer":"full","path":"report[0].t","before":"His combo needs proximity your artillery exists to deny — poke the approach, stun the commit, finish by mail.","after":"Her combo starts with a 1175-range Light Binding — body-block it, stun what follows, and finish the rest by mail."},
+    {"layer":"full","path":"report[3].t","before":"Good trade: Q the last-hit from beyond his answer range, W the lateral dodge, and walk — a one-way trade he can only end by leaving the lane. Great trade: Lux wastes Light Binding — commit immediately. Bad trade: Spending E on chip and then watching the dash you bought it for arrive on schedule — the stun is your only 'no' and everyone knows it.","after":"Good trade: Q her last-hit from behind your caster minions, W the step she has to make, and walk — her only answer is a Q she has to hit. Great trade: Lux wastes Light Binding — commit immediately. Bad trade: Spending E on chip and then eating Light Binding with nothing left — her Q is 10s flat, so the root was always coming back."},
+    {"layer":"full","path":"report[4].t","before":"Best wave: a Q-thinned slow push that crashes while you snipe from two screens — Xerath waves manage themselves if your poke owns the contact point. Worst wave: a frozen wave near his tower past minute six — the immobile artillery walking up to reset is the most assassinated picture in mid. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because.","after":"Best wave: a Q-thinned slow push that crashes while you snipe from two screens — Xerath waves manage themselves if your poke owns the contact point. Worst wave: a frozen wave near her tower past minute six — the immobile artillery walking up to reset is the most assassinated picture in mid. Crash timing: the crash is a timer you set — reset, plate, or roam, but never just because."},
+    {"layer":"full","path":"report[11].t","before":"Let him close distance during your cooldowns. Stun-poke and then face the engage empty. Trade at the range where his burst reaches. The R buys fights, not poke — spend it like the last one in stock.","after":"Let her close distance during your cooldowns. Stun-poke and then face the engage empty. Trade at the range where her burst reaches. The R buys fights, not poke — spend it like the last one in stock."},
+    {"layer":"full","path":"report[13].t","before":"Ahead, extend the artillery line: chip Lux off every CS, R his recalls, and rotate barrages to rivers — a fed Xerath taxes the whole map from fog.","after":"Ahead, extend the artillery line: chip Lux off every CS, R her recall walk, and rotate barrages to river — a fed Xerath taxes the map from fog."},
+    {"layer":"content","path":"spikes[1].text","before":"Both ults come online and the lane flattens to a skill duel: your Rite of the Arcane (R) out-ranges Final Spark, but she can wait for your channel and root-combo you the instant it ends. Only ult when her Q is on cooldown, and never facecheck a bush where she can land binding into E-R burst.","after":"Both ults come online and the lane flattens to a skill duel: your Rite of the Arcane (R) out-ranges Final Spark, but your channel is cancelled by any root, so a held Light Binding ends it mid-barrage. Only ult with her 10-second Q down, and force Prismatic Barrier out before you commit."}
+  ],
+  "notes": "Chart repaired: full phases[0..3].side said 'Skill' while content win[0..3] said 'Xerath'. Content matched the packet levelChart and the phase whys, so the full layer was corrected to Xerath on those four rows (win[N] edits omitted — they are already 'Xerath' and a no-op would take the atomic chart group down). Ratings on those rows raised 5/10 to 7/10 to match the new side. Rows 4-6 are 'Skill' in both layers and were left alone. Both missing-interaction entries are now on the page (Prismatic Barrier in dosFull[1].d and breakdown.carry; Illumination's auto reset in dontsFull[0].d). I deliberately did not put a number on Xerath's own Q range: the kit lists 750, which is the uncharged value, and the charged maximum is not in the brief — so the copy says 'from behind your caster minions' and 'further out' rather than asserting a figure."
+}

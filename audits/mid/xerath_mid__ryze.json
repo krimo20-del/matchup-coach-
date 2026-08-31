@@ -1,0 +1,142 @@
+{
+  "ownerKey": "xerath_mid",
+  "enemy": "ryze",
+  "lane": "mid",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Xerath out-ranges Ryze at every point of the laning phase: Arcanopulse (Q) 750 base charged range and Eye of Destruction (W) 1000 against Overload (Q) 1000 but Rune Prison (W) and Spell Flux (E) at only 615. Difficulty 4/10 and 56.83% win rate over 1515 games match the FAVOURED label. Side lane and teamfight ownership flips late once Ryze has stacks and items.",
+      "corrected": "Lane FAVOURED for Xerath through first item; teamfights and late game favour Ryze.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits (Xerath, Ryze)", "packet winRate/games"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "phases[6].side read 'Skill' while content win[6] read 'Ryze' — the two layers rendered different answers for the 2+ items row, and phases[6].why described Xerath winning that stage.",
+      "why": "Packet levelChart[6] is Ryze, content whys[6] and the late field both say Ryze takes over at 2+ items. The full layer was stale.",
+      "corrected": "phases[6].side -> Ryze with a matching why; rating dropped to 4/10. win[6] already read Ryze, so no content edit was proposed (a no-op would fail the applier).",
+      "confidence": "High",
+      "sources": ["packet levelChart", "currentText content win[6]/whys[6]/late"]
+    },
+    {
+      "point": 4,
+      "status": "missing",
+      "whatIsWrong": "Nothing on the page said Ryze can interrupt Rite of the Arcane (R). Xerath's R carries the channel flag ('interruptible — any CC cancels it') and Ryze's Rune Prison roots when the target already has Flux on it.",
+      "why": "Xerath immobilises himself for the whole R. Ryze at 615 range with Spell Flux (E, 3.5s at rank 1) into Rune Prison (W, 11s at rank 1) has a root inside that window, and a root cancels the channel.",
+      "corrected": "Stated in phases[4].why and breakdown.cooldowns: ult only after his W is spent, and watch the E, not the W, because the W only roots on a Flux-marked target.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/xerath.json (R channel flag)", "champ-data/_kits/ryze.json (W text)", "_missing rule your-channel-punished"]
+    },
+    {
+      "point": 6,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns contained no digit at all (lint COOLDOWN_NO_DIGIT).",
+      "why": "It is the field that is supposed to hold real numbers.",
+      "corrected": "Rewritten with Rune Prison 615 range / 11s rank 1, Shocking Orb 13s, Rite of the Arcane 130s rank 1.",
+      "confidence": "High",
+      "sources": ["kits"]
+    },
+    {
+      "point": 13,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeBad, breakdown.trading and report[3] all referred to 'the dash you bought it for'. Ryze has no dash in his kit.",
+      "why": "Ryze's gap-close is Realm Warp (R) as a map tool and plain walking; his threat is Flux-into-Rune Prison at 615, not a dash.",
+      "corrected": "Replaced with the actual Flux-into-Rune Prison sequence and the 3.5s E cooldown.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/ryze.json"]
+    },
+    {
+      "point": 12,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Packet suspectNames flagged 'His Rune Prison' in the early field as a probable wrong name. It is not — Rune Prison is Ryze's real W. False positive; left alone.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet enemyAbilities"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Ryze Rune Prison (Root): matchup-defining — Point-blank root — respect the EQ chain that follows it. It governs your forward steps. - E Shocking Orb spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+      "after": "- Rune Prison (W) is 615 range on 11s at rank 1 and only roots a target Spell Flux already marked — watch the E, not the W. - Shocking Orb (E) is 13s; spent on poke it is a death you scheduled. - Rite of the Arcane is 130s at rank 1."
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].side",
+      "before": "Skill",
+      "after": "Ryze"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].rating",
+      "before": "6/10",
+      "after": "4/10"
+    },
+    {
+      "layer": "full",
+      "path": "phases[6].why",
+      "before": "Late Xerath wins fights from the next postal code: stun the entry, barrage the objective, and never be seen.",
+      "after": "Ryze's Flux-spread Overload out-damages your poke and one root ends you — play picks and objectives, not duels."
+    },
+    {
+      "layer": "full",
+      "path": "phases[4].why",
+      "before": "Rite of the Arcane online — chipped targets anywhere in the lane's zip code are now finishable. Shove and snipe.",
+      "after": "Rite of the Arcane online, but interruptible — a Flux-fed Rune Prison roots you out of it. Ult after his 11s W is spent."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].d",
+      "before": "Q the last-hit from beyond his answer range, W the lateral dodge, and walk — a one-way trade he can only end by leaving the lane.",
+      "after": "Eye of Destruction is 1000 range on 14s at rank 1 — put it where he sidesteps the Q, and the centre slow makes the follow-up Q free."
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[2].d",
+      "before": "Spending E on chip and then watching the dash you bought it for arrive on schedule — the stun is your only 'no' and everyone knows it.",
+      "after": "Past river he needs only 615 range to reach you, and Realm Warp puts his team on your half of the map — take the poke lead from your own side."
+    },
+    {
+      "layer": "full",
+      "path": "tradeBad",
+      "before": "Spending E on chip and then watching the dash you bought it for arrive on schedule — the stun is your only 'no' and everyone knows it.",
+      "after": "Spending Shocking Orb on chip, then watching Flux-into-Rune Prison arrive on a 3.5s E — the stun is your only 'no' and he counts it too."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.trading",
+      "before": "Good trade: Q the last-hit from beyond his answer range, W the lateral dodge, and walk — a one-way trade he can only end by leaving the lane. Bad trade: Spending E on chip and then watching the dash you bought it for arrive on schedule — the stun is your only 'no' and everyone knows it.",
+      "after": "Good trade: Q the last-hit from beyond his answer range, W the lateral dodge, and walk — a one-way trade he can only end by leaving the lane. Bad trade: Spending Shocking Orb on chip, then watching Flux-into-Rune Prison arrive on a 3.5s E — the stun is your only 'no' and he counts it too."
+    },
+    {
+      "layer": "full",
+      "path": "enemyWin",
+      "before": "Ryze wins by landing Rune Prison (Root), denying your pattern, and keeping the fight at a distance your kit resents.",
+      "after": "Ryze wins by walking Spell Flux onto you and rooting with Rune Prison, then chaining Overload resets until you die inside 615 range."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.carry",
+      "before": "Carry from the next postal code — no champion converts vision and distance into damage like Xerath; your job is never being where the fight thinks you are.",
+      "after": "You carry by never letting Ryze inside 615 range: barrage from fog, hold Shocking Orb for his step-up, and let a 1050-range stun decide who starts every fight."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.feeding",
+      "before": "If Ryze gets a kill, the lane gets honest — give Rune Prison (Root) extra room and farm it back. Two kills: stop dueling your tilt — farm with max-range Qs and stay relevant through R snipes.",
+      "after": "If Ryze gets a kill his mana pool funds every trade — respect 615 plus Flash of space and farm it back. Two kills: hold Shocking Orb purely for his walk-up and stay relevant with max-range Q."
+    },
+    {
+      "layer": "full",
+      "path": "report[3].t",
+      "before": "Good trade: Q the last-hit from beyond his answer range, W the lateral dodge, and walk — a one-way trade he can only end by leaving the lane. Great trade: Ryze wastes Rune Prison (Root) — commit immediately. Bad trade: Spending E on chip and then watching the dash you bought it for arrive on schedule — the stun is your only 'no' and everyone knows it.",
+      "after": "Good trade: Q the last-hit from beyond his answer range, W the lateral dodge, and walk — a one-way trade he can only end by leaving the lane. Great trade: Ryze burns Rune Prison — that is 11 seconds of open ground, commit immediately. Bad trade: Spending Shocking Orb on chip, then watching Flux-into-Rune Prison arrive on a 3.5s E — the stun is your only 'no'."
+    }
+  ],
+  "notes": "phases[6] moved Skill -> Ryze; content win[6] already read Ryze so no paired content edit was proposed (it would have been a no-op and taken the chart group down). Packet suspectNames flagged 'His Rune Prison' in content.early as a probable wrong name — it is a false positive, Rune Prison is Ryze's real W, left untouched. dosFull[0].d ('That is Ryze's rehearsed moment...') and dontsFull[0].d are under the length band's useful width to reground, left alone. Whether Rune Prison's root is cleansable/QSS-able and whether tenacity shortens it is not in Riot's text and was not asserted."
+}

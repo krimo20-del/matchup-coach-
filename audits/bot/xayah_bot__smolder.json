@@ -1,0 +1,49 @@
+{
+ "ownerKey": "xayah_bot",
+ "enemy": "smolder",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Even matchup, Xayah favored early through Smolder's stack-hungry laning phase — matches packet win rate and level chart.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/smolder.json"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Flap, Flap, Flap as matchup-defining but gives no cooldown number.",
+   "why": "Flap, Flap, Flap (E) is 24/22/20/18/16s — that's the real punish window, not vague filler.",
+   "corrected": "Added the rank cooldown string.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/smolder.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[1].text and spikes[3].text swap Smolder's W and E: they call the slow ability 'Mouthful of Fire (W)'/'his E slow' when the real W is Achooo! (the slow, per the slow flag) and E is Flap, Flap, Flap (the terrain-crossing flight, per the terrain flag). 'Mouthful of Fire' is not one of Smolder's real ability names at all. Also, phases[3-6].side ('Skill'/'Smolder') contradict content win[3-6] ('Xayah') and their own .why text, which is already written favorable to Xayah.",
+   "why": "enemyKit confirms W=Achooo! carries the slow flag and E=Flap, Flap, Flap carries the terrain flag — the current text has them backwards and invents a name. Separately, packet.levelChart has all 7 rows as Xayah, and win[3-6] already say Xayah, so the full-layer side field for those rows is stale and must be brought into agreement (win[N] doesn't need to change, since it's already correct).",
+   "corrected": "Swapped the W/E ability references to the real names and fixed which one carries the slow; flipped phases[3-6].side to Xayah to match win[N] and their own why text.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/smolder.json", "brief packet.levelChart"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Xayah"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Xayah"},
+  {"layer":"full","path":"phases[5].side","before":"Smolder","after":"Xayah"},
+  {"layer":"full","path":"phases[6].side","before":"Smolder","after":"Xayah"},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Smolder Flap, Flap, Flap: matchup-defining — The glide over terrain is his whole escape — engage in the window after it shows. It governs your forward steps. - R Featherstorm spent on poke is a death you scheduled. - Hold the R for the fight that decides something.","after":"- Smolder's Flap, Flap, Flap (E, 24/22/20/18/16s CD): The glide over terrain is his whole escape — engage in the window after it shows. It governs your forward steps. - R Featherstorm spent on poke is a death you scheduled. - Hold the R for the fight that decides something."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the line, W-trade three autos, E the disengage — the bill roots him on the floor he ignored.","after":"Bait Flap, Flap, Flap before you fully commit — once it's spent, the root sticks and the dive is free."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Calling two feathers out of impatience — the root needs three; early calls are confetti.","after":"Featherstorm answers a real dive, not chip poke — waste it early and the engage lands clean."},
+  {"layer":"full","path":"breakdown.early","before":"Decorate and trade — the feather geometry compounds while the lane reads it as chip.","after":"Decorate and trade — his Q ignores armor, so out-geometry him instead of stacking resistances."},
+  {"layer":"full","path":"breakdown.late","before":"You are the un-dive: R their engage mid-flight, call the storm's full line, and root the formation into your team's spreadsheet.","after":"You are the un-dive: R their engage, call the storm's full line, root the formation — his R heals chip, grab Grievous Wounds."},
+  {"layer":"content","path":"spikes[1].text","before":"His Mouthful of Fire (W) three-hit and Achoo! (E) slow are his only peel; Featherstorm dodges the E slow into all-in and lets you dive him before he outscales. Use R aggressively here — you want to punish his fragile pre-stacked state, not wait.","after":"His Achooo! (W) sneeze slow and Flap, Flap, Flap (E) terrain-hop are his only peel; Featherstorm dodges the W slow into all-in and lets you dive him before he outscales. Use R aggressively here — you want to punish his fragile pre-stacked state, not wait."},
+  {"layer":"content","path":"spikes[3].text","before":"Smolder scales terrifyingly, so late-game you must play the front-to-back with your lead already banked. Hold Featherstorm to survive his E slow and R nuke, and burst him with a full Feather callback before he can free-cast his evolved Q.","after":"Smolder scales terrifyingly, so late-game you must play the front-to-back with your lead already banked. Hold Featherstorm to survive his W slow and R nuke, and burst him with a full Feather callback before he can free-cast his evolved Q."},
+  {"layer":"content","path":"late","before":"You still win the item-spike fights if you press, but respect the clock; end it early with Feather burst and support CC before his evolved Q turns the game against you.","after":"You still win the item-spike fights if you press, but respect the clock; end it early with Feather burst and Grievous Wounds before his evolved Q turns the game against you."}
+ ],
+ "notes": "packet.defects flagged Smolder's abilities as never named and missing sequencing cues; the real issue found was worse than absent naming — W and E were swapped and one name ('Mouthful of Fire') was fabricated outright. Fixed at the two spots it appeared (spikes[1], spikes[3]); breakdown.cooldowns and dosFull already had E correctly as Flap, Flap, Flap so only the missing cooldown number was added there. Folded the two missingInteractions facts (R sustain needs Grievous Wounds timing; Q true damage bypasses resistances) into breakdown.early/late and content.late rather than touching report[8] itemization, which is outside this matchup's report-edit budget since it wasn't lint-flagged."
+}

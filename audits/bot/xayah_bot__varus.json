@@ -1,0 +1,56 @@
+{
+ "ownerKey": "xayah_bot",
+ "enemy": "varus",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[0..6].side are all the literal placeholder \"Skill\" instead of naming who wins the stage, contradicting content win[] (which already matches the packet level chart at Varus 5/7, Xayah 2/7) and the level-chart defect flagged by the packet.",
+   "why": "Piercing Arrow and Blighted Quiver outrange and outpoke Xayah until level 6, when Featherstorm flips the stage; win[] already reflects this correctly, only side/why in the full layer were untouched templates.",
+   "corrected": "phases[0-3].side and phases[5].side set to Varus, phases[4] and phases[6].side set to Xayah, with .why rewritten to match each verdict using real ability names.",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "currentText.content.win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "n/a — power spikes already correctly identify level 6 Featherstorm and the late Clean Cuts/R-immunity spike; content spikes[] array is accurate and well-sourced.",
+   "why": "spikes[0-3] correctly cite Piercing Arrow, Blighted Quiver, Chain of Corruption and Clean Cuts by name with real timing windows.",
+   "corrected": "No change needed to content.spikes[].",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no digit in it (lint COOLDOWN_NO_DIGIT) and omits both missingInteractions flags: Grievous Wounds timing against Hail of Arrows self-heal denial, and that Blighted Quiver's true-damage-adjacent %-health proc bypasses stacked armour/MR.",
+   "why": "Chain of Corruption is 100/80/60s, Piercing Arrow is 16/15/14/13/12s, and Hail of Arrows applies Grievous Wounds (antiHeal) while Blighted Quiver (percentHealth flag) punishes raw resistance stacking.",
+   "corrected": "breakdown.cooldowns rewritten with real numbers plus both missing-interaction facts folded in.",
+   "confidence": "High",
+   "sources": ["brief.enemyKit", "brief.missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Varus"},
+  {"layer":"full","path":"phases[0].why","before":"Q-feather the contacts — the lines drop ammunition; the floor behind him is your second health bar.","after":"Piercing Arrow (Q) outranges Double Daggers at level 1 — hold Q for max range; walking up eats free poke."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Varus"},
+  {"layer":"full","path":"phases[1].why","before":"W-trades begin: the plumage window out-DPSes his pattern; trade inside it.","after":"Blighted Quiver procs off autos now — his weave out-chips your Daggers at range."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Varus"},
+  {"layer":"full","path":"phases[2].why","before":"E threats open: three feathers is a root — the lane now answers to your floor plan.","after":"His full poke kit is live — Q, W and E zone your farm before your E-root is safe to cast."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Varus"},
+  {"layer":"full","path":"phases[3].why","before":"Stack lines on every trade and call them on the disengage — the bill roots.","after":"Charged Piercing Arrow chunks from range — nothing here punishes the windup yet."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Xayah"},
+  {"layer":"full","path":"phases[4].why","before":"Featherstorm online — your counter-engage deletes dives mid-flight and reloads the floor.","after":"Featherstorm (R) dodges Chain of Corruption and his charged Q, setting up a feather recall."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Varus"},
+  {"layer":"full","path":"phases[5].why","before":"First item spike: the feather math chunks and the root chains start kill windows.","after":"His lethality or on-hit spike hits first — Q burst and W procs outpace your Clean Cuts."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Xayah"},
+  {"layer":"full","path":"phases[6].why","before":"Late Xayah un-dives: R their engage, call the storm's feathers, and root the formation that thought it committed.","after":"Clean Cuts stacks plus R immunity now outscale his Q/R rotation — space his cooldowns onto your frontline, then clean up."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Varus Chain of Corruption: matchup-defining — The spreading root starts dives — stand apart from allies when it flies. Count it out loud if you must. - Your R Featherstorm has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Chain of Corruption is 100/80/60s — stand apart from allies when it's up, then punish the long gap. - Piercing Arrow is 16/15/14/13/12s; a whiffed charge is your farm window. - Hail of Arrows applies Grievous Wounds, so time your antiheal item before he leans on sustain. - Blighted Quiver hits %-health, so stacked armour alone won't fix it."},
+  {"layer":"full","path":"dosFull[1].t","before":"Call the root on his cooldown","after":"Call the root on his cooldown"},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the line, W-trade three autos, E the disengage — the bill roots him on the floor he ignored.","after":"Track Chain of Corruption's 100/80/60s timer and call your five-feather Bladecaller only once it's spent."},
+  {"layer":"full","path":"dontsFull[2].t","before":"Waste R answering poke","after":"Waste R answering poke"},
+  {"layer":"full","path":"dontsFull[2].d","before":"Calling two feathers out of impatience — the root needs three; early calls are confetti.","after":"Featherstorm burns 140/120/100s — spending it to dodge a single charged Q leaves no answer for the real all-in."}
+ ],
+ "notes": "Both packet suspectNames flags are false positives: 'Double Daggers' is Xayah's real Q name and 'Blighted Quiver' is Varus's real W name per enemyAbilities — left untouched. Level-chart side/why fully realigned to already-correct content win[]/whys[]; no win[] edits needed since content already agreed with the packet. Did not touch tradeGood/tradeBad/ahead/loading/breakdown.early|mid|wave|trading|spikes|feeding|carry|difficulty|late — judged against template-sweep criteria and found grounded in Xayah/Varus-specific facts (feather geometry, root math, Chain of Corruption naming) rather than swappable filler."
+}

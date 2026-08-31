@@ -1,0 +1,48 @@
+{
+ "ownerKey": "xayah_bot",
+ "enemy": "lucian",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0-3].side all read 'Lucian' while content win[0-3] all read 'Xayah', matching the packet's levelChart (Xayah,Xayah,Xayah,Xayah,Xayah,Lucian,Xayah). phases[4].side and phases[6].side read generic 'Skill' while win[4]/win[6] say Xayah. phases[5].side reads 'Skill' while win[5] says Lucian, and phases[5].why is written Xayah-favorable even though the correct side there is Lucian's first-item spike.",
+   "why": "Lucian's poke is short-range and blockable by minions early, so Xayah wins levels 1-5 per win[0..3] and whys[0..3]; he swings ahead only at his first item via Essence Reaver plus Lightslinger passive burst (win[5], whys[5], spikes[2]); Xayah retakes it 2+ items per win[6]/whys[6].",
+   "corrected": "Flipped phases[0-3].side and phases[4].side/phases[6].side to Xayah (why text there already read Xayah-favorable, so no rewrite needed). Flipped phases[5].side to Lucian and rewrote phases[5].why to describe his item-spike burst instead of the old Xayah-favorable text.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "content.win[0..6]", "content.whys[0..6]", "content.spikes[2]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "First-item Essence Reaver spike and level 6 R-vs-R interaction (Featherstorm untargetable through The Culling) are both correctly identified in content.spikes.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["content.spikes", "ownerKit.abilities[R].flags.untargetable"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "No field states that Lucian's Lightslinger (P) is an auto-attack-reset burst tell, that it grants him a shield-equivalent bonus-damage window off ally heals/shields, or that his sustained chip damage needs Grievous Wounds timing.",
+   "why": "enemyKit P flags list autoReset ('burst timing tell'), shield ('absorbs burst — changes all-in maths'), and heal ('anti-heal target — Grievous Wounds timing matters'); missingInteractions flags all three as unaddressed on this matchup's page.",
+   "corrected": "Folded the auto-reset tell into dosFull[1].d, the anti-heal timing into dontsFull[2].d, and the passive's bonus-damage trigger into breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities[P].flags", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Lucian", "after": "Xayah" },
+  { "layer": "full", "path": "phases[1].side", "before": "Lucian", "after": "Xayah" },
+  { "layer": "full", "path": "phases[2].side", "before": "Lucian", "after": "Xayah" },
+  { "layer": "full", "path": "phases[3].side", "before": "Lucian", "after": "Xayah" },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Xayah" },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Lucian" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item spike: the feather math chunks and the root chains start kill windows.", "after": "Essence Reaver plus his passive doubles the burst — his E-Q-auto chunks before you react." },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Xayah" },
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Lucian Relentless Pursuit: matchup-defining — His dash — lock him down while it is on cooldown. Check it before every step-up. - R Featherstorm is the lifeline; chip damage never gets it. - The ult answers fights, not waves.", "after": "- Lucian's E Relentless Pursuit (16-14s CD) is his dash — lock him down on cooldown. - His P Lightslinger shields off allied heals, so force his burst first. - R Featherstorm is the lifeline. - His R answers fights, not waves." },
+  { "layer": "full", "path": "dosFull[1].d", "before": "Q the line, W-trade three autos, E the disengage — the bill roots him on the floor he ignored.", "after": "His Lightslinger wind-up is the tell — step back on the animation, not after the ability lands." },
+  { "layer": "full", "path": "dontsFull[2].d", "before": "Calling two feathers out of impatience — the root needs three; early calls are confetti.", "after": "Extended trades favor you with Grievous Wounds — his passive sustains through chip damage." }
+ ],
+ "notes": "Chart fix: phases[0-6].side corrected across the board — levels 1-5 and 2+ items moved to Xayah, first item moved to Lucian, all to agree with content win[] (which already matched the packet's levelChart). phases[5].why was rewritten since it described the wrong side; the other flipped rows' why text already fit the corrected side. Fixed both COPY_PASTE_BLEED and the COOLDOWN_NO_DIGIT lint findings, and folded in all three missingInteractions entries (auto-reset burst tell, passive shield/bonus-damage window, Grievous Wounds timing against his passive sustain). No misgender issues (Lucian is he/him, matches existing pronouns)."
+}

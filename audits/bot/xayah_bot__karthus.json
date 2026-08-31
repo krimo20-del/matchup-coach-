@@ -1,0 +1,43 @@
+{
+ "ownerKey": "xayah_bot",
+ "enemy": "karthus",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[3].side and phases[4].side read 'Skill', and phases[5].side/phases[6].side read 'Karthus', but content win[3..6] and packet.levelChart all say Xayah wins every stage of this matchup.",
+   "why": "Karthus has no auto threat and must stand still to cast Q Lay Waste, and his kit has no dash or gap-closer — Xayah's root/poke pattern keeps dominating through items, which is exactly what win[] and the packet already record.",
+   "corrected": "Set phases[3].side, phases[4].side, phases[5].side, phases[6].side all to Xayah — the .why text at each of those rows already reads Xayah-favorable, so only the side token needed correcting, no win[] edit required since win[] was already right.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "content.win[3..6]", "content.whys[3..6]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly note level 3-5 punish on Lay Waste channels, level 6 R dodging Requiem entirely, and first-item root kills before Defile ramps.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["content.spikes", "enemyKit.abilities[R].flags.channel"]
+  },
+  {
+   "point": 4,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "R Featherstorm's untargetable flag correctly beats Requiem's global channel (dodges timed burst and executes), and this is already stated in spikes[1] and phases[4].why. No missingInteractions flagged.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit.abilities[R].flags.untargetable", "enemyKit.abilities[R].flags.channel", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Xayah" },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Xayah" },
+  { "layer": "full", "path": "phases[5].side", "before": "Karthus", "after": "Xayah" },
+  { "layer": "full", "path": "phases[6].side", "before": "Karthus", "after": "Xayah" },
+  { "layer": "full", "path": "dosFull[1].d", "before": "Q the line, W-trade three autos, E the disengage — the bill roots him on the floor he ignored.", "after": "Punish the Lay Waste channel, then call E Bladecaller — he can't reposition before the root lands." },
+  { "layer": "full", "path": "dontsFull[2].d", "before": "Calling two feathers out of impatience — the root needs three; early calls are confetti.", "after": "Requiem executes globally at 6 — dive without R banked and a bad fight turns fatal." }
+ ],
+ "notes": "Chart fix: phases[3-6].side all corrected to Xayah to agree with content win[3..6] and the packet's all-Xayah level chart; win[] was already correct so no content-layer edit was needed, only the full-layer side tokens. Fixed both COPY_PASTE_BLEED lint findings by writing dosFull[1].d and dontsFull[2].d content that actually matches their titles (punishing the Lay Waste channel with a root call; not diving without R banked against a global execute ult) instead of the pasted tradeGood/tradeBad strings. No misgender issues (Karthus is he/him, matches existing pronouns). Template fields (breakdown.carry/difficulty/feeding, ahead, loading) read grounded to Karthus's stationary-caster pattern and Requiem tracking, left alone."
+}

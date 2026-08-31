@@ -1,0 +1,45 @@
+{
+ "ownerKey": "xayah_bot",
+ "enemy": "twitch",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[3-6].side read 'Skill'/'Twitch' while content win[3-6] and packet.levelChart both say Xayah for all 7 rows, and phases[3-6].why is already written favorable to Xayah.",
+   "why": "packet.levelChart is all-Xayah and win[N] agrees, so those are the correct verdicts; the full-layer side field for those four rows was stale, not the prose.",
+   "corrected": "Flipped phases[3].side/[4].side/[5].side/[6].side to Xayah. why text needed no change since it already described an Xayah-favorable stage.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/twitch.json", "brief packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns calls Ambush matchup-defining with no cooldown number.",
+   "why": "Ambush (Q) is a flat 16s cooldown — the actual window a player can count out loud.",
+   "corrected": "Added the cooldown.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/twitch.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d and dontsFull[2].d are the tradeGood/tradeBad strings pasted verbatim under unrelated titles ('Root the committed engage' / 'R the poke instead of the dive'). Also, the missingInteractions facts (Deadly Venom is true damage and scales with attack speed, so armor alone misreads the trade) are absent from the page.",
+   "why": "enemyKit P confirms true-damage + on-hit-scaling flags on Deadly Venom, which nothing in currentText mentions — a reader could wrongly itemize pure armor against it.",
+   "corrected": "Rewrote the two bled fields to match their own titles, and folded the true-damage/on-hit fact into breakdown.early (in the mandatory sweep) rather than touching report[8] Itemization, which wasn't lint-flagged.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/twitch.json", "brief lintFindings", "brief missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Xayah"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Xayah"},
+  {"layer":"full","path":"phases[5].side","before":"Twitch","after":"Xayah"},
+  {"layer":"full","path":"phases[6].side","before":"Twitch","after":"Xayah"},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Twitch Ambush (Stealth): matchup-defining — The stealth approach starts every Twitch fight — sweep the flanks and track the disappearance. Count it out loud if you must. - Your R Featherstorm has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.","after":"- Twitch's Ambush (Q, 16s CD): The stealth approach starts every Twitch fight — sweep the flanks and track the disappearance. Count it out loud if you must. - Your R Featherstorm has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right."},
+  {"layer":"full","path":"breakdown.early","before":"Decorate and trade — the feather geometry compounds while the lane reads it as chip.","after":"Decorate and trade — his on-hit poison is true damage, so armor alone won't blunt his DPS."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the line, W-trade three autos, E the disengage — the bill roots him on the floor he ignored.","after":"Bait Ambush before you fully commit — once it's spent, the storm's root chain runs clean."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Calling two feathers out of impatience — the root needs three; early calls are confetti.","after":"Featherstorm answers his stealth burst, not poke — waste it early and the engage lands clean."}
+ ],
+ "notes": "suspectNames flagged 'With Deadly Plumage' in spikes[0].text — that is Xayah's own W and is correct as written, no change made. Packet also lists Ambush's Q cooldown as flat 16 (no per-rank scaling) per Twitch's actual kit, matching what's now in breakdown.cooldowns."
+}

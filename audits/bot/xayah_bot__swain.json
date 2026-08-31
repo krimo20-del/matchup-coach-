@@ -1,0 +1,57 @@
+{
+ "ownerKey": "xayah_bot",
+ "enemy": "swain",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Every full-layer phases[N].side reads 'Skill' (flat/even) for all 7 rows, while content win[0-6] and packet.levelChart both say Swain wins rows 0-4 and Xayah wins rows 5-6 — the packet even flags this exact contradiction as a defect.",
+   "why": "Swain's early W root (Nevermove) plus Q (Death's Hand) poke and R (Demonic Ascension) drain sustain win the lane phase per the kit; Xayah's crit/Deadly Plumage scaling flips it once she has an item. This matches both packet.levelChart and content win[N], so full-layer side was the stale layer.",
+   "corrected": "Flipped phases[0-4].side to Swain and phases[5-6].side to Xayah to agree with win[N]; rewrote phases[0-4].why (previously written as if Xayah won) to state the Swain-favored reasons grounded in his kit. phases[5-6].why already matched the Xayah-favored verdict, so left untouched.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/swain.json", "brief packet.levelChart", "brief packet.defects"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Demonic Ascension as matchup-defining but never gives its cooldown.",
+   "why": "Demonic Ascension (R) is a 120s cooldown — a single number that tells the reader exactly how rare the safe engage window is.",
+   "corrected": "Added the cooldown to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/swain.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d and dontsFull[2].d are the tradeGood/tradeBad strings pasted verbatim under unrelated titles ('R the rotation, then call the storm' / 'Dive the nest without the R') instead of describing what those titles actually promise.",
+   "why": "The Do's/Don'ts bullets should each stand on their own; the pasted content describes generic auto-trading and feather-call impatience, not the R-timing behavior the titles name.",
+   "corrected": "Rewrote both bodies to match their titles: baiting Demonic Ascension before committing, and reserving Featherstorm for his W pull-in rather than chip poke.",
+   "confidence": "High",
+   "sources": ["brief lintFindings"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Swain"},
+  {"layer":"full","path":"phases[0].why","before":"Q-feather the contacts — the lines drop ammunition; the floor behind him is your second health bar.","after":"Swain's Death's Hand (Q) pierce edges your level-1 autos — he outranges the trade before lines drop."},
+  {"layer":"full","path":"phases[0].rating","before":"5/10","after":"6/10"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Swain"},
+  {"layer":"full","path":"phases[1].why","before":"W-trades begin: the plumage window out-DPSes his pattern; trade inside it.","after":"Vision of Empire wants no Feathers down: Nevermove root punishes any step here."},
+  {"layer":"full","path":"phases[1].rating","before":"5/10","after":"6/10"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Swain"},
+  {"layer":"full","path":"phases[2].why","before":"E threats open: three feathers is a root — the lane now answers to your floor plan.","after":"W root into Q fan outpaces your three-feather math — the lane answers to his rotation."},
+  {"layer":"full","path":"phases[2].rating","before":"5/10","after":"6/10"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Swain"},
+  {"layer":"full","path":"phases[3].why","before":"Stack lines on every trade and call them on the disengage — the bill roots.","after":"Demonic Ascension's drain sustain wins extended trades — he out-heals your chip damage."},
+  {"layer":"full","path":"phases[3].rating","before":"5/10","after":"7/10"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Swain"},
+  {"layer":"full","path":"phases[4].why","before":"Featherstorm online — your counter-engage deletes dives mid-flight and reloads the floor.","after":"R still isn't your window: his drain-tank sustain outlasts your pre-item damage here."},
+  {"layer":"full","path":"phases[4].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Xayah"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Xayah"},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. It governs your forward steps. - R Featherstorm spent on poke is a death you scheduled. - Hold the R for the fight that decides something.","after":"- Swain's Demonic Ascension (R, 120s CD): His drain mode — disengage and reset the fight when it starts. It governs your forward steps. - R Featherstorm spent on poke is a death you scheduled. - Hold the R for the fight that decides something."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the line, W-trade three autos, E the disengage — the bill roots him on the floor he ignored.","after":"Bait Demonic Ascension before you commit — once it's spent, the storm's root chain runs clean."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Calling two feathers out of impatience — the root needs three; early calls are confetti.","after":"Featherstorm negates his W pull-in, not chip poke — waste it early and the real dive lands free."}
+ ],
+ "notes": "The main defect here was the packet-flagged level-chart contradiction: full-layer phases[0-6].side were all flat 'Skill' while content win[N] and the packet chart agreed Swain wins rows 0-4 and Xayah wins 5-6. Content whys[0-4] already described Swain winning early (root/poke/drain), so I used those as the grounding for the rewritten full-layer why text rather than inventing new claims — the two layers should now read the same story. Ratings for the flipped Swain rows were raised from the flat 5-6/10 to 6-7/10 to reflect a real (not marginal) early Swain advantage; ratings are enum-exempt."
+}

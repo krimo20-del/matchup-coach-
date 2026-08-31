@@ -1,0 +1,67 @@
+{
+ "ownerKey": "tristana_bot",
+ "enemy": "ezreal",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Chart and phase text agree: Tristana favored throughout on both layers, consistent with her longer effective range and burst outpacing Ezreal's poke-only kit in lane.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/ezreal.json", "champ-data/_kits/tristana.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly key level 3 (E stacking punishes Arcane Shift cooldown), level 6 (Buster Shot vs Trueshot Barrage), first item (burst vs his slower tear scaling), and late (jump range beats his poke).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/ezreal.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns, dosFull[0].d, and dosFull[2].d each cite a cooldown number ('nineteen seconds', 'fifteen-second invitation') that does not match Arcane Shift's actual cooldown (26/23/20/17/14s by rank) or any other Ezreal ability. This is a magnitude stated without a real source.",
+   "why": "The kit file gives Arcane Shift's per-rank cooldown as 26/23/20/17/14. Neither 19 nor 15 appears anywhere in that curve, so the stated punish window was fabricated rather than sourced.",
+   "corrected": "Replaced the invented numbers with the real per-rank cooldown range in breakdown.cooldowns, dosFull[0].d, and dosFull[2].d.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/ezreal.json"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Ezreal Arcane Shift: matchup-defining — The blink makes him untouchable — punish the nineteen seconds after he burns it. Count it out loud if you must. - Your W Rocket Jump (reset) has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+   "after": "- Ezreal Arcane Shift (E) is 26/23/20/17/14s — matchup-defining: the blink makes him untouchable, punish the window it's down. Count it out loud. - Your W Rocket Jump (reset) has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "The blink makes him untouchable — punish the nineteen seconds after he burns it. Bait it, count it, then go.",
+   "after": "The blink makes him untouchable — punish the 14-26s it's down, rank-dependent. Bait it, count it, then go."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the bomb, stack two autos, and step back at three — the threat does the zoning and the fourth stack stays loaded.",
+   "after": "Four stacks detonate the bomb: plant E, land two autos, then decide — step back at three or commit at four."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Ezreal burns Arcane Shift on nothing — take the fifteen-second invitation.",
+   "after": "Ezreal burns Arcane Shift on nothing — take the 14-to-26s invitation, rank-dependent."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Jumping in with the bomb unstacked and R down — Tristana without the string is a yordle tourist at a gunfight.",
+   "after": "Poking at max range trades into his higher Mystic Shot DPS — close the gap with the jump instead of matching pokes."
+  }
+ ],
+ "notes": "report[5].t and report[9].t also repeat the fabricated 'nineteen seconds' framing but are outside the report[] two-edit cap and not lint-flagged, so left alone per scope limits; flagging here in case a later pass wants them aligned. All ten breakdown.* fields plus ahead/tradeGood/tradeBad/loading/enemyWin were reviewed: aside from the cooldowns fix above, they already name Ezreal-specific mechanics (Arcane Shift, Mystic Shot, tear build, Trueshot Barrage) and are not generic templates."
+}

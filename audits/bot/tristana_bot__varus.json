@@ -1,0 +1,115 @@
+{
+ "ownerKey": "tristana_bot",
+ "enemy": "varus",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 phases[N].side read the blanket default \"Skill\" while content win[] swings hard across the lane (Varus, Tristana, Tristana, Varus, Skill, Varus, Tristana) matching packet.levelChart exactly. Only row 4 happened to already agree (Skill=Skill). Rows 0,3,5 (Varus rows) still carry Tristana-favoured why text that directly contradicts the side they're about to be set to.",
+   "why": "win[] already holds the target values (confirmed independently by packet.levelChart) and the content whys[]/spikes[] explain WHY Varus wins levels 1, 4-5, and first item (his range/poke/blight) and why Tristana wins 2, 3, and 2+ items (jump-E punish, mobility dives his immobile frame). Per the chart rule, since win[N] already holds the target, side is edited alone for each row, with why rewritten only where the current why now contradicts the new side.",
+   "corrected": "phases[0/1/2/3/5/6].side moved to match win[] (Varus/Tristana/Tristana/Varus/skip/Varus/Tristana); whys rewritten for rows 0, 3, 4 (level 6 kept side=Skill but its why was mismatched with the skill-check framing in whys[4]), and 5 where the old why still argued the opposite side. Rows 1, 2, 6 already had Tristana-flavoured why text so only side moved.",
+   "confidence": "High",
+   "sources": ["currentText.content.win[0..6]", "currentText.content.whys[0..6]", "packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes cover 3-5 (his range/poke wins early trades, punish spent Q), 6 (his R root is the skirmish decider), first item (his blight/poke still leads), late (Trist mobility dives his immobile frame). Grounded in real cooldowns and flags.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Chain of Corruption and W as matchup-defining but has no cooldown numbers (lint: COOLDOWN_NO_DIGIT). dosFull[1].d and dontsFull[2].d are verbatim tradeGood/tradeBad pasted under unrelated titles (lint: COPY_PASTE_BLEED).",
+   "why": "enemyKit R cd is 100/80/60, Q range is 925 vs owner E range 550; ownerKit W cd is 22/20/18/16/14, R is fixed 100.",
+   "corrected": "Added real numbers to breakdown.cooldowns; replaced the two bleed bullets with content matching their titles (R cooldown window; range mismatch for the range-trade don't).",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Varus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Contest level 1 autos — your early range is real and the all-in threat starts at 2; set the tone.",
+   "after": "Varus out-ranges you with charged Q and blight poke — he wins the level 1 poke war outright."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Tristana"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Tristana"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Varus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Trade around the bomb: four stacks detonate — back off at three or commit at four; never linger between.",
+   "after": "His poke, E zoning, and superior range out-trade you again through this whole stage — respect the distance."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Buster Shot peels or executes — the knockback flips dives both directions.",
+   "after": "His R root vs your dodge decides it — land it and he wins, whiff and you punish."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Varus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "First item spike: the jump-bomb-R string deletes squishies and the resets chain through fights.",
+   "after": "His first-item blight stacks and poke keep you at range — farm safe, don't force the engage."
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Tristana"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the bomb, stack two autos, and step back at three — the threat does the zoning and the fourth stack stays loaded.",
+   "after": "Chain of Corruption cools 100s down to 60s at max rank — track the cast and only commit once it's spent."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Jumping in with the bomb unstacked and R down — Tristana without the string is a yordle tourist at a gunfight.",
+   "after": "His Q hits from 925 with a full charge, well past your E's 550 range — closing the gap is mandatory, not optional."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Varus Chain of Corruption: matchup-defining — The spreading root starts dives — stand apart from allies when it flies. Count it out loud if you must. - Your W Rocket Jump (reset) has one job: the moment it all goes wrong. - The R has one too: the moment it all goes right.",
+   "after": "- Varus's Chain of Corruption cools 100s down to 60s at max rank — the spreading root starts dives; stand apart from allies when it flies. - Your W Rocket Jump cools 22s-14s; its one job is the moment it all goes wrong. - Your 100s R has one too: the moment it all goes right."
+  }
+ ],
+ "notes": "Major chart fix: all 7 phases[N].side had been left on the blanket default 'Skill' while content win[] and the packet's own levelChart already carried the real Varus/Tristana/Tristana/Varus/Skill/Varus/Tristana swing — a textbook case of the 'level chart lives in two places' defect. Fixed as one atomic group per the decided chart rule (side alone where win[N] already matched target; why rewritten only on rows 0, 3, 4, 5 where the old text argued the wrong side). suspectNames flagged 'Rocket Jump-' at 'early' — checked, it's the 'Rocket Jump-E' shorthand, not a fabricated name; left alone. Fixed both COPY_PASTE_BLEED bullets and added real cooldown/range numbers per lint. missingInteractions resistances-invalidated (Blighted Quiver percent-health magic damage) has no natural slot inside the +/-10% length band without bloating an existing field — left unaddressed and flagged here rather than forced in. No misgender issues — Varus is he/him."
+}

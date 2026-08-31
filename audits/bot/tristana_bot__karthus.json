@@ -1,0 +1,41 @@
+{
+ "ownerKey": "tristana_bot",
+ "enemy": "karthus",
+ "lane": "bot",
+ "audit": [
+  { "point": 2, "status": "needs-correction",
+    "whatIsWrong": "phases[3].side reads 'Skill' and phases[5-6].side read 'Karthus', but content win[3]/win[5]/win[6] all read 'Tristana', and phases[5-6].why already describe Tristana winning those stages — the side field disagrees with both its own why text and the content layer.",
+    "why": "win[N] already holds the correct verdict grounded in the kit (no dash on Karthus, attack-speed spike shreds him at 1 item, W lets you dive his backline late). The side labels were never synced to it.",
+    "corrected": "phases[3].side -> Tristana (with why rewritten to state the actual reason), phases[5].side -> Tristana, phases[6].side -> Tristana (why already matched, left alone).",
+    "confidence": "High", "sources": ["brief currentText: content.win vs full.phases[N].side/.why"] },
+  { "point": 3, "status": "correct", "whatIsWrong": "", "why": "spikes[] correctly tie the level 3-5, level 6, first-item and late windows to his lack of a dash and the global R's uselessness in a duel.", "corrected": "", "confidence": "High", "sources": ["brief currentText"] },
+  { "point": 4, "status": "needs-correction",
+    "whatIsWrong": "missingInteractions flags two facts absent from the page: Requiem is an interruptible channel, and Wall of Pain can cut off your retreat since you have no dash. Neither currently appears anywhere in the full-layer text.",
+    "why": "Karthus R-Requiem channels for 3s and any hard CC cancels it (kit flag 'channel: interruptible'). W-Wall of Pain (15s cd) creates a slow/MR-shred zone that can wall off your escape route, and Tristana has no dash to answer it.",
+    "corrected": "dosFull[2].d now states the channel can be CC-cancelled; dontsFull[0].d now states Wall of Pain can cut your retreat.",
+    "confidence": "High", "sources": ["missingInteractions[0]", "enemyKit W/R flags"] }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Tristana" },
+  { "layer": "full", "path": "phases[3].why",
+    "before": "Trade around the bomb: four stacks detonate — back off at three or commit at four; never linger between.",
+    "after": "His lack of a dash leaves him open through levels 4-5 — every step forward to E-Defile the wave is a free jump-in." },
+  { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[5].side", "before": "Karthus", "after": "Tristana" },
+  { "layer": "full", "path": "phases[6].side", "before": "Karthus", "after": "Tristana" },
+
+  { "layer": "full", "path": "dosFull[1].d",
+    "before": "E the bomb, stack two autos, and step back at three — the threat does the zoning and the fourth stack stays loaded.",
+    "after": "His Q-Lay Waste has a cast delay you can step through — bomb-stack while he's mid-animation, not after he resets." },
+  { "layer": "full", "path": "dontsFull[2].d",
+    "before": "Jumping in with the bomb unstacked and R down — Tristana without the string is a yordle tourist at a gunfight.",
+    "after": "Diving without a plan invites a Requiem snipe on low HP — he doesn't even need to be at the fight to end it." },
+  { "layer": "full", "path": "dosFull[2].d",
+    "before": "Karthus spends Requiem early — the closest thing this matchup has to a guarantee.",
+    "after": "His R-Requiem is a channel — hard CC cancels it outright. Trade CC, don't tank it." },
+  { "layer": "full", "path": "dontsFull[0].d",
+    "before": "That’s Karthus’s bread-and-butter play — deny it and they run out of answers.",
+    "after": "Wall of Pain cuts retreat — no dash to answer it; hold Flash for wall, not damage." }
+ ],
+ "notes": "Fixed a chart contradiction: phases[3].side said Skill and phases[5-6].side said Karthus while content win[3,5,6] all said Tristana (and the why text for rows 5-6 already described Tristana winning) — synced side to win[] and rewrote phases[3].why to match. Added the two missingInteractions facts (Requiem is a CC-cancellable channel; Wall of Pain can cut your retreat since you have no dash) into dosFull[2]/dontsFull[0], and fixed the two lintFindings copy-paste-bleed bullets with Karthus-specific content instead of the reused tradeGood/tradeBad strings. Karthus is he/him, no misgender issues found."
+}

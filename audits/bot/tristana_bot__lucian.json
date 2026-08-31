@@ -1,0 +1,70 @@
+{
+ "ownerKey": "tristana_bot",
+ "enemy": "lucian",
+ "lane": "bot",
+ "audit": [
+  { "point": 2, "status": "needs-correction",
+    "whatIsWrong": "phases[0-3].side, phases[5].side and phases[6].side are all flattened to 'Skill' while content win[0-3]/win[5] read 'Lucian' and win[6] reads 'Tristana' — the chart disagrees with itself on every row except level 6.",
+    "why": "win[N] and the content whys[] already correctly describe Lucian's passive/E dash winning levels 1-5 and first item, and Tristana's Rocket Jump/Explosive Charge scaling flipping it at 2+ items. The full-layer side/why fields were never synced to that.",
+    "corrected": "phases[0-3].side/why -> Lucian, phases[5].side/why -> Lucian, phases[6].side/why -> Tristana, ratings adjusted to match the favored side per row.",
+    "confidence": "High", "sources": ["brief currentText: content.win vs full.phases[N].side"] },
+  { "point": 3, "status": "correct", "whatIsWrong": "", "why": "spikes[] correctly identify lvl3-5 (Lucian's passive+E dash), lvl6 (skill-decided Culling vs Buster Shot), 1st item (his passive spike still wins), and late (your scaling flips it).", "corrected": "", "confidence": "High", "sources": ["brief currentText"] },
+  { "point": 4, "status": "needs-correction",
+    "whatIsWrong": "missingInteractions flags that Lucian's Lightslinger passive lets him sustain chip damage without Grievous Wounds, and that his combo opens with an auto-attack reset rather than a spell cast — neither is stated anywhere on the page.",
+    "why": "P-Lightslinger doubles Lucian's next attack after an ability, immobilize, heal, or shield — the wind-up tell is the reset auto, not the spell. Without anti-heal timed right, spaced poke just gets healed/sustained back.",
+    "corrected": "dosFull[1].d now states the auto-reset tell; dontsFull[2].d now states the anti-heal/sustain problem with trading at range.",
+    "confidence": "High", "sources": ["missingInteractions[0]", "enemyKit P flags"] },
+  { "point": 4, "status": "correct", "whatIsWrong": "", "why": "suspectNames flagged 'Relentless Pursuits' and 'Use Relentless Pursuit' as possible wrong names, but both are the correct ability name (Relentless Pursuit) used inline — false positives, no fix needed.", "corrected": "", "confidence": "High", "sources": ["packet.suspectNames vs currentText.content"] }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Lucian" },
+  { "layer": "full", "path": "phases[0].why",
+    "before": "Contest level 1 autos — your early range is real and the all-in threat starts at 2; set the tone.",
+    "after": "His double-shot Lightslinger passive and superior short-trade damage win level 1 autos outright." },
+  { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "3/10" },
+
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Lucian" },
+  { "layer": "full", "path": "phases[1].why",
+    "before": "Jump-bomb all-ins open: W in off any support CC and the E detonation math is already rude.",
+    "after": "His Piercing Light plus the double-shot passive out-trades your step-up last-hitting at level 2." },
+  { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "3/10" },
+
+  { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Lucian" },
+  { "layer": "full", "path": "phases[2].why",
+    "before": "Full kit: E the target, stack it with autos, and R the finish — the lane's most honest kill threat.",
+    "after": "Relentless Pursuit dodges your Rocket Jump and lets him re-kite you the moment you commit." },
+  { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "4/10" },
+
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Lucian" },
+  { "layer": "full", "path": "phases[3].why",
+    "before": "Trade around the bomb: four stacks detonate — back off at three or commit at four; never linger between.",
+    "after": "His mobility and burst keep beating you every time you contest CS through levels 4-5." },
+  { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "4/10" },
+
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Lucian" },
+  { "layer": "full", "path": "phases[5].why",
+    "before": "First item spike: the jump-bomb-R string deletes squishies and the resets chain through fights.",
+    "after": "His first-item spike with the passive is one of the strongest in the game and still beats yours." },
+  { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Tristana" },
+  { "layer": "full", "path": "phases[6].why",
+    "before": "Late Trist jumps the resets: E the carry, R the peel, and jump out — or in — on every takedown.",
+    "after": "Your Rocket Jump range steroid and Explosive Charge scaling outrange his faded lane power at 2+ items." },
+  { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "7/10" },
+
+  { "layer": "full", "path": "breakdown.cooldowns",
+    "before": "- Lucian Relentless Pursuit: matchup-defining — His dash — lock him down while it is on cooldown. Read it like a second minimap. - Guard your W Rocket Jump (reset) like a fifth summoner spell. - Ultimate goes to kill windows only.",
+    "after": "- Lucian's E-Relentless Pursuit is down 16s early, 14s at max rank — his only dash; lock him down while it's on cooldown, not while it's up. - Guard your W Rocket Jump (reset) like a fifth summoner spell. - Ultimate goes to kill windows only." },
+  { "layer": "full", "path": "dosFull[1].d",
+    "before": "E the bomb, stack two autos, and step back at three — the threat does the zoning and the fourth stack stays loaded.",
+    "after": "His combo opens with a Lightslinger reset auto, not a spell cast — the wind-up on that auto is your cue to back off, before the real damage lands." },
+  { "layer": "full", "path": "dontsFull[2].d",
+    "before": "Jumping in with the bomb unstacked and R down — Tristana without the string is a yordle tourist at a gunfight.",
+    "after": "He sustains chip poke through Lightslinger's bonus damage — without Grievous Wounds timed right, trading at range just heals him back up." },
+  { "layer": "full", "path": "breakdown.late",
+    "before": "You are the reset carry: jump in on the pick, R the peel, and jump out on the takedown — or don't, and take the tower instead.",
+    "after": "You outscale him late: flank with W onto a squishy, detonate E, and reset off every takedown — his short range can't keep up." }
+ ],
+ "notes": "Fixed a chart contradiction across six of seven rows: phases[0-3]/[5].side said 'Skill' while win[] said Lucian, and phases[6].side said 'Skill' while win[6] said Tristana — synced side to win[] and rewrote each row's why to state the actual reason (grounded in the already-correct content whys[]), with ratings adjusted per row. Fixed breakdown.cooldowns COOLDOWN_NO_DIGIT with the real 16-14s Relentless Pursuit curve, and the two copy-paste-bleed Do/Don't bullets using the missingInteractions facts (auto-reset combo tell, anti-heal/sustain problem) instead of the reused tradeGood/tradeBad strings. Rewrote breakdown.late, which was the identical generic 'reset carry' template shared verbatim across other matchups, into Lucian-specific late-game text. suspectNames flagged 'Relentless Pursuits'/'Use Relentless Pursuit' as possibly wrong but both already read the correct ability name — false positives."
+}

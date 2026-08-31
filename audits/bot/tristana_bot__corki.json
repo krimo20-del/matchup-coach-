@@ -1,0 +1,49 @@
+{
+ "ownerKey": "tristana_bot",
+ "enemy": "corki",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Chart is all-Tristana/Skill, matching a low-mobility poke mage-marksman losing to auto pressure and an all-in jump once Valkyrie is down — consistent with packet.levelChart (all Tristana).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/corki.json", "packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly ID the lvl 3-5 all-in window off Valkyrie's cooldown, the even-but-favoured lvl 6 window (Buster Shot vs a purely offensive Missile Barrage), and the first-item flip before his Sheen build completes. breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT).",
+   "corrected": "Added Missile Barrage's real 2s base cooldown (bankable to 4 charges) and Rocket Jump's 14s at rank 5.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/corki.json (R cd 2)", "champ-data/_kits/tristana.json (W cd 22/20/18/16/14)"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Every instance of Corki's ultimate is written backwards as 'The Big One (missile barrage)'. The kit's AbilityName(Effect) convention puts the real ability name first and the named effect in parens (e.g. 'Apprehend (Pull)') — the real ability is Missile Barrage; 'The Big One' is just the empowered every-3rd-shot, i.e. the effect, not the name. Also dosFull[1].d/dontsFull[2].d were verbatim tradeGood/tradeBad bleed (lint COPY_PASTE_BLEED), and missingInteractions flags that Corki's passive true damage (Hextech Munitions) bypasses stacking armour/MR, which was never stated.",
+   "why": "This mislabeling runs through winCon, enemyWin, loading, focus.text, breakdown.cooldowns, breakdown.feeding, dosFull[0].t/dosFull[2].d, and two report entries — a reader would come away thinking 'The Big One' is the ability's actual name.",
+   "corrected": "Swapped name/effect order everywhere it was cheap and length-neutral (word-order swap, same char count). Left report[9].t's instance uncorrected per the 2-report-entry cap — flagged in notes instead.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/corki.json (R: 'Every 3rd missile fired will be a Big One')"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"winCon","before":"Spend their answer with threats and jump the silence. Every commit starts with one question: is The Big One (missile barrage) down?","after":"Spend their answer with threats and jump the silence. Every commit starts with one question: is Missile Barrage (The Big One) down?"},
+  {"layer":"full","path":"enemyWin","before":"Corki wins by landing The Big One (missile barrage), denying your pattern, and pricing your power spike out of the game.","after":"Corki wins by landing Missile Barrage (The Big One), denying your pattern, and pricing your power spike out of the game."},
+  {"layer":"full","path":"loading","before":"- Tristana vs Corki - Track: Corki The Big One (missile barrage). - Four stacks or three steps back — the bomb math is the trade. - The Big One (missile barrage) down is the green light. - Hold the ult for names, not waves.","after":"- Tristana vs Corki - Track: Corki Missile Barrage (The Big One). - Four stacks or three steps back — the bomb math is the trade. - Missile Barrage (The Big One) down is the green light. - Hold the ult for names, not waves."},
+  {"layer":"full","path":"focus.text","before":"Corki The Big One (missile barrage)","after":"Corki Missile Barrage (The Big One)"},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Corki The Big One (missile barrage): matchup-defining — His banked Big One missiles flip river fights — track his R barrage windows like an objective. Read it like a second minimap. - Guard your W Rocket Jump (reset) like a fifth summoner spell. - Ultimate goes to kill windows only.","after":"- Corki Missile Barrage (The Big One): 2s base cooldown, banked up to 4 charges — every 3rd shot is a Big One that flips river fights; track his barrage windows like an objective. - Guard your W Rocket Jump (14s at rank 5) like a fifth summoner spell — never spend it loose."},
+  {"layer":"full","path":"breakdown.feeding","before":"If Corki takes first blood, tighten up: The Big One (missile barrage) is now always up in your head. A second kill means the duel is over and the game isn’t — farm with E-poke and stay relevant through all-in resets.","after":"If Corki takes first blood, tighten up: Missile Barrage (The Big One) is now always up in your head. A second kill means the duel is over and the game isn’t — farm with E-poke and stay relevant through all-in resets."},
+  {"layer":"full","path":"dosFull[0].t","before":"Bait The Big One (missile barrage) with bomb-poke threat","after":"Bait Missile Barrage (The Big One) with bomb-poke threat"},
+  {"layer":"full","path":"dosFull[1].d","before":"E the bomb, stack two autos, and step back at three — the threat does the zoning and the fourth stack stays loaded.","after":"Four stacks means the bomb detonates — commit only once loaded, or hold at three and let the threat alone zone him off farm."},
+  {"layer":"full","path":"dosFull[2].d","before":"Corki spends The Big One (missile barrage) early — the closest thing this matchup has to a guarantee.","after":"Corki spends Missile Barrage (The Big One) early — the closest thing this matchup has to a guarantee."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Jumping in with the bomb unstacked and R down — Tristana without the string is a yordle tourist at a gunfight.","after":"Buster Shot only executes low HP — its real value is peeling a diver or setting up the jump-bomb string before he closes."},
+  {"layer":"full","path":"report[1].t","before":"Spend their answer with threats and jump the silence. Every commit starts with one question: is The Big One (missile barrage) down?","after":"Spend their answer with threats and jump the silence. Every commit starts with one question: is Missile Barrage (The Big One) down?"},
+  {"layer":"full","path":"report[5].t","before":"Track Corki’s The Big One (missile barrage): His banked Big One missiles flip river fights — track his R barrage windows like an objective. Forward steps wait for its downtime.","after":"Track Corki’s Missile Barrage (The Big One): His banked Big One missiles flip river fights — track his R barrage windows like an objective. Forward steps wait for its downtime."}
+ ],
+ "notes": "report[9].t ('Commit on The Big One (missile barrage)’s cooldown...') still has the reversed name/effect order — left unedited under the 2-report-entry cap (report[1].t and report[5].t already used). Also unaddressed: missingInteractions flags Corki's true damage passive (Hextech Munitions) bypasses armour/MR — no field currently mentions this and none of the fields already being edited fit it naturally (itemization report[8].t would be the right home but adding a third report edit would exceed the cap); recorded here for a follow-up pass. Rest of breakdown.* fields, ahead, tradeGood already carry Corki-specific mechanics and were left alone."
+}

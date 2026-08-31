@@ -1,0 +1,79 @@
+{
+ "ownerKey": "tristana_bot",
+ "enemy": "caitlyn",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Chart already agrees across layers: Caitlyn favoured levels 1-4 on her range/trap poke, even at 6 once Buster Shot answers her all-in, Tristana favoured first item onward once the jump erases her range edge. Matches the packet's levelChart.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/caitlyn.json", "packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly identify Caitlyn's lvl 3-5 range/poke window, the even lvl 6 window (Buster Shot vs 90 Caliber Net), and the first-item flip once Rocket Jump erases her range. breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT).",
+   "corrected": "Added Yordle Snap Trap's 0.5s recast and Rocket Jump's 14s (rank 5) / R's 100s cooldown.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/caitlyn.json (W cd 0.5)", "champ-data/_kits/tristana.json (W cd 22/20/18/16/14, R cd 100)"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d and dontsFull[2].d were verbatim copies of tradeGood/tradeBad under unrelated titles (lint COPY_PASTE_BLEED). missingInteractions flags that Caitlyn's Ace in the Hole (R) is an interruptible channel and Tristana's Buster Shot (R) cancels it outright, which was never stated anywhere in the matchup text.",
+   "why": "dosFull[1].d's title concerns the four-stack bomb threshold but its body was the tradeGood sentence; dontsFull[2].d's title concerns R usage but its body was the tradeBad jump-unstacked sentence — neither mentioned the channel-cancel interaction, which is the single most decisive R-vs-R interaction in this matchup.",
+   "corrected": "Rewrote both bleed fields to match their titles, and rewrote dosFull[2].d (previously generic) to state the Buster Shot-cancels-Ace-in-the-Hole interaction.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/caitlyn.json (R: channel, interruptible — any CC cancels it)", "tools/audit-run/briefs/bot/tristana_bot__caitlyn.json missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Your all-in is his entire laning nightmare — jump the windows, stack the bomb, and end the lane before his curve enrolls.",
+   "after": "Your all-in is her entire laning nightmare — jump the windows, stack the bomb, and end the lane before her curve enrolls."
+  },
+  {
+   "layer": "full",
+   "path": "report[0].t",
+   "before": "Your all-in is his entire laning nightmare — jump the windows, stack the bomb, and end the lane before his curve enrolls.",
+   "after": "Your all-in is her entire laning nightmare — jump the windows, stack the bomb, and end the lane before her curve enrolls."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Yordle Snap Traps’s cooldown, on your first item spike, and with your support’s setup. His answer goes first; yours goes last.",
+   "after": "Commit on Yordle Snap Traps’s cooldown, on your first item spike, and with your support’s setup. Her answer goes first; yours goes last."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the bomb, stack two autos, and step back at three — the threat does the zoning and the fourth stack stays loaded.",
+   "after": "Four stacks means the bomb detonates — commit only once loaded, or hold at three and let the threat alone zone her off farm."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Caitlyn whiffs Yordle Snap Traps and the lane briefly belongs to you.",
+   "after": "Buster Shot cancels Ace in the Hole outright — punish the channel."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Jumping in with the bomb unstacked and R down — Tristana without the string is a yordle tourist at a gunfight.",
+   "after": "Buster Shot only executes low HP — its real value is peeling a diver or setting up the jump-bomb string before she closes."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Caitlyn Yordle Snap Traps: matchup-defining — The trap under your feet starts the headshot chain — never fight standing on one. Step up only on its downtime. - Budget W Rocket Jump (reset) for emergencies and the R for opportunities — never swap them.",
+   "after": "- Caitlyn Yordle Snap Traps: 0.5s recast, effectively always up — the trap under your feet starts the headshot chain; never fight standing on one. - Rocket Jump (14s at 5) for emergencies, the 100s R for opportunities — never swap them."
+  }
+ ],
+ "notes": "suspectNames flagged 'Caliber Net' vs '90 caliber net' but the actual currentText already reads '90 Caliber Net' in full — false positive, no edit needed, matches the calibration note about false positives in this field. Fixed three MISGENDER hits (tldr, its report[0].t duplicate, report[9].t — Caitlyn is she/her). Rest of breakdown.* fields, ahead, tradeGood, tradeBad, loading and enemyWin already carry Caitlyn-specific mechanics (Yordle Snap Trap, Piltover Peacemaker range, 90 Caliber Net) rather than reading as swapped templates."
+}

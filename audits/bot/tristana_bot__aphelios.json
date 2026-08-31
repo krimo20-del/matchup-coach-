@@ -1,0 +1,55 @@
+{
+ "ownerKey": "tristana_bot",
+ "enemy": "aphelios",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level chart already has Tristana favoured levels 1-5, even at 6, and flipping late (2+ items) to the item-scaled Aphelios (Infernum/Crescendum) — matches the kit: Trist out-ranges his clunky early guns, he out-scales once his gun rotation completes.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/aphelios.json", "champ-data/_kits/tristana.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly flag level 2 all-in start, the even level-6 window against Moonlight Vigil, and the first-item burst spike; breakdown.cooldowns was missing the actual Moonlight Vigil cooldown number, which is a lint-catchable defect (rule 3: cooldowns field must contain a number).",
+   "corrected": "Added 120/110/100s for Moonlight Vigil (R) and 14s (rank 5) for Rocket Jump.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/aphelios.json (R cd 120/110/100)", "champ-data/_kits/tristana.json (W cd 22/20/18/16/14)"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d and dontsFull[2].d were verbatim copies of tradeGood/tradeBad pasted under unrelated titles (lint COPY_PASTE_BLEED) instead of explaining the named mechanic.",
+   "why": "dosFull[1].d's title is 'Commit at four stacks or back at three' but its body was the tradeGood sentence; dontsFull[2].d's title is 'Hold R as only an execute' but its body was the tradeBad sentence about jumping in unstacked, which is a different mistake.",
+   "corrected": "Rewrote dosFull[1].d to restate the stack-detonation threshold in its own words, and dontsFull[2].d to explain Buster Shot's actual value (peel/setup, not just execute) — matching each title.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/briefs/bot/tristana_bot__aphelios.json lintFindings"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the bomb, stack two autos, and step back at three — the threat does the zoning and the fourth stack stays loaded.",
+   "after": "Four stacks means the bomb detonates — commit only once loaded, or hold at three and let the threat alone zone him off farm."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Jumping in with the bomb unstacked and R down — Tristana without the string is a yordle tourist at a gunfight.",
+   "after": "Buster Shot only executes low HP — its real value is peeling a diver or setting up the jump-bomb string before he closes."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Aphelios Moonlight Vigil: matchup-defining — The teamfight opener whose damage depends on his loaded gun — never clump once he hits 6. Step up only on its downtime. - Budget W Rocket Jump (reset) for emergencies and the R for opportunities — never swap them.",
+   "after": "- Aphelios Moonlight Vigil (R): 120/110/100s cooldown — the teamfight opener whose damage depends on his loaded gun; never clump once he hits 6, and step up only on its downtime. - Budget W Rocket Jump (14s at 5) for emergencies and the R for opportunities — never swap them."
+  }
+ ],
+ "notes": "Rest of the ten breakdown.* fields (early/mid/wave/trading/spikes/feeding/carry/difficulty/late), ahead, tradeGood, tradeBad, loading and enemyWin already name Aphelios-specific mechanics (Moonlight Vigil, Explosive Charge stacks, Rocket Jump resets, Infernum/Crescendum scaling) rather than reading as swap-the-name templates, so left as-is. suspectNames was empty and no fabricated ability names found — Weapon Abilites/Weapon Queue System/Phase in the brief are just the packet's generic slot labels, not names used anywhere in currentText."
+}

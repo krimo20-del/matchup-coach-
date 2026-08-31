@@ -1,0 +1,82 @@
+{
+ "ownerKey": "tristana_bot",
+ "enemy": "smolder",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Early/mid favours Tristana (weak stackless Smolder), late flips to Smolder once Q is ramped — matches winRate 54.72% and packet levelChart.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart"]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[6].side is \"Skill\" while content win[6] already says \"Smolder\" and the row's own why text describes Tristana winning (\"jump the resets... on every takedown\") — the row contradicts itself and disagrees with win[6].",
+   "why": "win[6] already reads Smolder (matches packet levelChart row 7 and the content 'late' text describing his ramped Q/Mothership taking over). Per the chart rule, since win[N] already holds the target value, side is edited alone with a matching why.",
+   "corrected": "phases[6].side -> \"Smolder\", why rewritten to describe his late-game Q/Mothership advantage instead of Tristana's reset carry.",
+   "confidence": "High",
+   "sources": ["currentText.content.win[6]", "currentText.content.late"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes cover 3-5 (stack-hungry Smolder is weak pre-ramp), 6 (Trist burst beats his pre-scale body), first item (denies stacks), late (his Q/Mothership flip). Grounded in real kit text.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Flap, Flap, Flap and W as matchup-defining but has no cooldown numbers (lint: COOLDOWN_NO_DIGIT). dosFull[1].d and dontsFull[2].d are verbatim tradeGood/tradeBad pasted under unrelated titles (lint: COPY_PASTE_BLEED). report[5].t never surfaces that Flap, Flap, Flap creates terrain that can block Tristana's own retreat path (missingInteractions terrain-cuts-retreat), since Tristana has no dash.",
+   "why": "enemyKit E cd is 24/22/20/18/16 with flag terrain: \"creates terrain, blocks paths and dashes\"; ownerKit W cd is 22/20/18/16/14, R is fixed 100s.",
+   "corrected": "Added real numbers to breakdown.cooldowns; replaced the two bleed bullets with content matching their titles; folded the retreat-path point into report[5].t.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "missingInteractions[14]"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Smolder"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].why",
+   "before": "Late Trist jumps the resets: E the carry, R the peel, and jump out — or in — on every takedown.",
+   "after": "His ramped Q chunks from max range and Mothership grants escape — respect it, never facecheck."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the bomb, stack two autos, and step back at three — the threat does the zoning and the fourth stack stays loaded.",
+   "after": "Your E bomb runs a 16s-14s cooldown for 50-70 mana — plan the stack window around when you can actually reload it, not just his health bar."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Jumping in with the bomb unstacked and R down — Tristana without the string is a yordle tourist at a gunfight.",
+   "after": "Buster Shot's 100s cooldown means a wasted execute call costs the reset window for two full minutes — spend it only when the kill is guaranteed."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Smolder Flap, Flap, Flap: matchup-defining — The glide over terrain is his whole escape — engage in the window after it shows. Read it like a second minimap. - Guard your W Rocket Jump (reset) like a fifth summoner spell. - Ultimate goes to kill windows only.",
+   "after": "- Smolder's Flap, Flap, Flap cools 24s down to 16s at max rank — the glide over terrain is his whole escape; engage the window right after it shows. - Guard your 22s-14s W Rocket Jump like a fifth summoner spell. - Hold the 100s R for kill windows only."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Smolder’s Flap, Flap, Flap: The glide over terrain is his whole escape — engage in the window after it shows. Forward steps wait for its downtime.",
+   "after": "Track Smolder's Flap, Flap, Flap: the glide over terrain is his whole escape and can wall off your own retreat — engage in the window right after it shows."
+  }
+ ],
+ "notes": "phases[6]/win[6] chart disagreement fixed (see audit) — win[6] already said Smolder, side/why were still describing a Tristana-favoured stage, so both were brought into agreement per the decided chart rule. Fixed both COPY_PASTE_BLEED bullets and added real cooldown numbers to breakdown.cooldowns per lint. missingInteractions needs-antiheal (Smolder sustaining through chip damage via his kit) and resistances-invalidated (Q true damage) were checked: resistances-invalidated is already covered by spikes[3].text ('his true-damage ramp... flip the matchup'). needs-antiheal has no natural slot that fits inside the +/-10% length band on any writable field without bloating it — left unaddressed and flagged here rather than forced in; deferring is safer than an over-length edit that gets rejected. terrain-cuts-retreat folded into report[5].t. No misgender issues — Smolder is he/him, matches existing text."
+}

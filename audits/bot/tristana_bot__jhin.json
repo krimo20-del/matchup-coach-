@@ -1,0 +1,54 @@
+{
+ "ownerKey": "tristana_bot",
+ "enemy": "jhin",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Content win[0..6] and the packet's own levelChart both say Tristana favored for all 7 rows, matching content's grounded whys (reload windows, self-rooting W, dodgeable Curtain Call). Full phases[0..6].side all carry the generic 'Skill' template instead, and phases[N].why is the unrelated level-curve template.",
+   "why": "Jhin's capped attack speed, forced reload after 4 shots, self-root on W, and stationary R channel are all real windows this content layer already documents correctly per stage; the full layer never caught up.",
+   "corrected": "Moved all 7 phases[N].side to Tristana (win[N] already agrees, so side is edited alone per the chart rule) and rewrote phases[N].why to restate content's grounded per-stage reasons.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/briefs/bot/tristana_bot__jhin.json (currentText.content whys)", "champ-data/_kits/jhin.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content spikes correctly key level 3 reload-punish windows, level 6 Curtain Call dodge, first-item attack-speed shred, and late kiting DPS to Jhin's actual kit.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/jhin.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Jhin threatens a threshold execute via Whisper's 4th-shot crit and Curtain Call, but nothing on the page tells the reader to track their own HP number against it — the missingInteractions execute-threshold rule was unaddressed.",
+   "why": "Both P (Whisper) and R (Curtain Call) deal bonus execute damage per the kit flags; without a stated HP threshold the reader only sees 'dodge his ult', not 'you can die below X% even through a partial hit'.",
+   "corrected": "Added the execute-tracking cue to dontsFull[2].d, folded into the lint fix for that field.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/jhin.json", "tools/audit-run/briefs/bot/tristana_bot__jhin.json (missingInteractions)"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Tristana"},
+  {"layer": "full", "path": "phases[0].why", "before": "Contest level 1 autos — your early range is real and the all-in threat starts at 2; set the tone.", "after": "Jhin's capped attack speed and reload rhythm let your level 1 autos out-trade him."},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Tristana"},
+  {"layer": "full", "path": "phases[1].why", "before": "Jump-bomb all-ins open: W in off any support CC and the E detonation math is already rude.", "after": "His every-fourth-shot reload gives you free windows at level 2 he can't answer."},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Tristana"},
+  {"layer": "full", "path": "phases[2].why", "before": "Full kit: E the target, stack it with autos, and R the finish — the lane's most honest kill threat.", "after": "Rocket Jump punishes his self-rooting W cast and his reload animation once W is up."},
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Tristana"},
+  {"layer": "full", "path": "phases[3].why", "before": "Trade around the bomb: four stacks detonate — back off at three or commit at four; never linger between.", "after": "Through levels 4-5 you dictate trades around his immobility and reload gaps."},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Tristana"},
+  {"layer": "full", "path": "phases[4].why", "before": "Buster Shot peels or executes — the knockback flips dives both directions.", "after": "Buster Shot dodges or cancels his stationary Curtain Call channel at level 6."},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Tristana"},
+  {"layer": "full", "path": "phases[5].why", "before": "First item spike: the jump-bomb-R string deletes squishies and the resets chain through fights.", "after": "Your first-item attack-speed steroid shreds a Jhin with no steroid or dash of his own."},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Tristana"},
+  {"layer": "full", "path": "phases[6].why", "before": "Late Trist jumps the resets: E the carry, R the peel, and jump out — or in — on every takedown.", "after": "Late, your reset and kiting out-DPS his fixed front-loaded cadence."},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Jhin Deadly Flourish (Root): matchup-defining — The cross-map root chains off any damage you took — never linger after a trade. Step up only on its downtime. - Budget W Rocket Jump (reset) for emergencies and the R for opportunities — never swap them.", "after": "- Deadly Flourish (W) is a flat 12s cooldown — the cross-map root chains off any damage you took, so track the 12 seconds and never linger after a trade. - Budget W Rocket Jump for emergencies and the R for opportunities — never swap them."},
+  {"layer": "full", "path": "dosFull[1].d", "before": "E the bomb, stack two autos, and step back at three — the threat does the zoning and the fourth stack stays loaded.", "after": "Four stacks detonate the bomb: plant E, land two autos, then decide — step back at three or commit at four."},
+  {"layer": "full", "path": "dontsFull[2].d", "before": "Jumping in with the bomb unstacked and R down — Tristana without the string is a yordle tourist at a gunfight.", "after": "Whisper crits and Curtain Call both threaten an execute on you — save R for that window, not just the kill."}
+ ],
+ "notes": "This was the highest-value fix in the slice: all 7 phases[N].side read the generic 'Skill' template while content win[N] and the packet's levelChart both already said Tristana for every row. Resolved by moving side alone (win[N] already correct) and swapping in content's grounded per-level reasons. All ten breakdown.* fields plus ahead/tradeGood/tradeBad/loading/enemyWin were reviewed: cooldowns and the two lint-flagged fields were fixed above; the rest already name Jhin-specific mechanics (Whisper, Dancing Grenade, Deadly Flourish, Curtain Call) and are not generic templates."
+}

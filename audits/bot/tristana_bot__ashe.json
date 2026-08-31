@@ -1,0 +1,73 @@
+{
+ "ownerKey": "tristana_bot",
+ "enemy": "ashe",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Full-layer chart is 'Skill' rows but content win[] already reads Tristana all seven rows — an immobile Ashe loses every stage of a range/dive matchup, matching the packet's Tristana-favoured levelChart. Rows already agree (win[N] equals what the row would move to), so no side edit is needed, only the enum consistency check.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/ashe.json", "packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly identify the level 3-5 all-in window off Ashe's zero mobility, level 6 (Buster Shot enabling the dive vs a dodgeable Crystal Arrow), and the first-item burst spike. breakdown.cooldowns lacked a digit (lint COOLDOWN_NO_DIGIT).",
+   "corrected": "Added Enchanted Crystal Arrow's real 100/80/60s cooldown and Rocket Jump's 14s (rank 5).",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/ashe.json (R cd 100/80/60)", "champ-data/_kits/tristana.json (W cd 22/20/18/16/14)"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d and dontsFull[2].d were verbatim copies of tradeGood/tradeBad under unrelated titles (lint COPY_PASTE_BLEED). Also missingInteractions flags that Hawkshot (E, global reveal, 5s cd, no cost) is never mentioned — Ashe can scout your position anywhere on the map, so being alive at low HP off-lane is a decision, not free.",
+   "why": "dosFull[1].d's title is about the four-stack bomb threshold but its body was the tradeGood sentence; dontsFull[2].d's title is about R usage but its body was the tradeBad jump-unstacked sentence. Hawkshot's global-reveal flag (25000 range) was unaddressed anywhere in the matchup text.",
+   "corrected": "Rewrote both bleed fields to match their titles, and folded the Hawkshot map-pressure point into breakdown.late.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/ashe.json (E: 25000 range, global, revealsStealth)", "tools/audit-run/briefs/bot/tristana_bot__ashe.json missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "Your all-in is his entire laning nightmare — jump the windows, stack the bomb, and end the lane before his curve enrolls.",
+   "after": "Your all-in is her entire laning nightmare — jump the windows, stack the bomb, and end the lane before her curve enrolls."
+  },
+  {
+   "layer": "full",
+   "path": "report[0].t",
+   "before": "Your all-in is his entire laning nightmare — jump the windows, stack the bomb, and end the lane before his curve enrolls.",
+   "after": "Your all-in is her entire laning nightmare — jump the windows, stack the bomb, and end the lane before her curve enrolls."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the bomb, stack two autos, and step back at three — the threat does the zoning and the fourth stack stays loaded.",
+   "after": "Four stacks means the bomb detonates — commit only once loaded, or hold at three and let the threat alone zone her off farm."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Jumping in with the bomb unstacked and R down — Tristana without the string is a yordle tourist at a gunfight.",
+   "after": "Buster Shot only executes low HP — its real value is peeling a diver or setting up the jump-bomb string before she closes."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Ashe Enchanted Crystal Arrow: matchup-defining — The global stun starts every Ashe kill play — juke laterally at range; the stun grows with distance. Check it before every step-up. - W Rocket Jump (reset) is the lifeline; chip damage never gets it. - The ult answers fights, not waves.",
+   "after": "- Ashe Enchanted Crystal Arrow (R): 100/80/60s cooldown — the global stun starts every kill play; juke laterally, the stun grows with travel distance, so check it before every step-up. - W Rocket Jump (14s at 5) is the lifeline; chip damage never gets it."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.late",
+   "before": "You are the reset carry: jump in on the pick, R the peel, and jump out on the takedown — or don't, and take the tower instead.",
+   "after": "You are the reset carry: jump in on the pick, R the peel, and jump out on the takedown — Hawkshot means low HP is never safe map-wide."
+  }
+ ],
+ "notes": "Fixed two MISGENDER lint hits (tldr and its report[0].t duplicate — Ashe is she/her). Rest of breakdown.* fields, ahead, tradeGood, tradeBad, loading and enemyWin already carry Ashe-specific mechanics (Enchanted Crystal Arrow, Frost Shot, her lack of mobility) rather than reading as swapped templates."
+}

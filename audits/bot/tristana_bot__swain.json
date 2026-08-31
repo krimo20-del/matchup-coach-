@@ -1,0 +1,79 @@
+{
+ "ownerKey": "tristana_bot",
+ "enemy": "swain",
+ "lane": "bot",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[3].side and phases[4].side both read \"Skill\" while content win[3]/win[4] already say \"Swain\" and the row whys still describe Tristana winning (bomb math / Buster Shot executes) instead of Swain's root and drain heal.",
+   "why": "win[3]/win[4] already hold Swain (matches packet levelChart rows 4-5 and content whys[3]/whys[4] describing his E root/sustain and R drain flipping the stage). Per the chart rule, since win[N] already holds the target value, side is edited alone with a matching why rewrite.",
+   "corrected": "phases[3].side and phases[4].side -> \"Swain\", whys rewritten to describe his root/sustain and drain-heal advantage instead of Tristana's bomb/Buster Shot pattern.",
+   "confidence": "High",
+   "sources": ["currentText.content.win[3]", "currentText.content.win[4]", "currentText.content.whys[3]", "currentText.content.whys[4]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes cover 3-5 (his root+sustain window), 6 (R drain flips skirmishes), first item (Trist reset DPS out-damages drain), late (kite the pick, win the sustained fight). Grounded in real cooldowns.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Demonic Ascension and W as matchup-defining but has no cooldown numbers (lint: COOLDOWN_NO_DIGIT). dosFull[1].d and dontsFull[2].d are verbatim tradeGood/tradeBad pasted under unrelated titles (lint: COPY_PASTE_BLEED).",
+   "why": "enemyKit R cd is fixed 120; ownerKit W cd is 22/20/18/16/14, R is fixed 100.",
+   "corrected": "Added real numbers to breakdown.cooldowns; replaced the two bleed bullets with content matching their titles.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Swain"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Trade around the bomb: four stacks detonate — back off at three or commit at four; never linger between.",
+   "after": "His E root and sustain win the extended trade — respect Nevermove's cooldown before you commit."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Swain"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Buster Shot peels or executes — the knockback flips dives both directions.",
+   "after": "His R drain heals him through your burst — fight only while it's down."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the bomb, stack two autos, and step back at three — the threat does the zoning and the fourth stack stays loaded.",
+   "after": "Your E bomb runs a 16s-14s cooldown — hold the fourth stack as threat, not committed damage, until his E is spent."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Jumping in with the bomb unstacked and R down — Tristana without the string is a yordle tourist at a gunfight.",
+   "after": "Buster Shot's 100s cooldown pays for one commitment — don't spend it walking into an active Demonic Ascension."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Swain Demonic Ascension: matchup-defining — His drain mode — disengage and reset the fight when it starts. It governs your forward steps. - W Rocket Jump (reset) spent on poke is a death you scheduled. - Hold the R for the fight that decides something.",
+   "after": "- Swain's Demonic Ascension runs a 120s cooldown — his drain mode; disengage and reset the fight when it starts. It governs your forward steps. - Your W Rocket Jump cools 22s-14s; spent on poke is a death you scheduled. - Hold the 100s R for the fight that decides something."
+  }
+ ],
+ "notes": "phases[3]/phases[4] chart disagreements fixed (see audit) — win[3]/win[4] already said Swain, side/why were still describing Tristana-favoured stages, brought into agreement per the decided chart rule; packet.levelChart independently confirms Swain owns rows 4-5. Fixed both COPY_PASTE_BLEED bullets and added real cooldown numbers per lint. missingInteractions needs-antiheal is already covered (report[8].t: 'Add anti-heal early into his sustain'). resistances-invalidated (Ravenous Flock percentHealth flag) has no natural slot inside the +/-10% length band without bloating an existing field — left unaddressed and flagged here rather than forced in. No misgender issues — Swain is he/him."
+}

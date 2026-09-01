@@ -1,0 +1,68 @@
+{
+ "ownerKey": "lux_sup",
+ "enemy": "taric",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[6].side reads the generic placeholder \"Skill\" while content win[6] already says \"Taric\", and phases[6].why still argues Lux wins the late game.",
+   "why": "Taric's Bastion shields, sustained W heals, Dazzle stun, and Cosmic Radiance invulnerability make him the stronger 2v2 anchor once items come online — that's exactly what content.late and spikes[3] already say. Also checked the packet defect claiming the chart contradicts the 45.93% win rate: that's plausible without being an error, since diffRating/FAVOURED describes the laning phase (rows 0-5, all Lux) while the 45.93% figure is the full-game win rate dragged down by Taric's late-game/teamfight scaling (row 6) — left as-is, noted here rather than guessed at.",
+   "corrected": "phases[6].side moved to Taric (win[6] already says Taric, so side is the only chart edit needed); phases[6].why rewritten to match.",
+   "confidence": "Medium",
+   "sources": ["currentText.content.win[6]", "currentText.content.late", "currentText.content.spikes[3]", "brief packet.defects"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly key level 2 poke-while-Dazzle-is-down, level 6 caution around Cosmic Radiance timing, first-item burst-still-ahead window, and late-game Taric anchor scaling.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes[0..3]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Cosmic Radiance as matchup-defining with no actual cooldown number, and misses the missingInteractions anti-heal note for his Q sustain.",
+   "why": "Cosmic Radiance is 180s at rank 1, 120s at rank 3 — a real number for planning around it. Dazzle (E) is down 16s at rank 1, 12s at max. Starlight's Touch (Q) heals allies through chip damage, so Grievous Wounds timing matters.",
+   "corrected": "Real cooldown numbers and the anti-heal interaction folded into breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit R cd 180/150/120", "enemyKit E cd 16/15/14/13/12", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Taric"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].why",
+   "before": "Late support Lux decides fights from a screen away: root the entry, slow the pit, laser the verdict.",
+   "after": "Taric's Bastion shields, sustained W heals, and Cosmic Radiance invulnerability make him the stronger anchor — you need a banked lead here.",
+   "note": "Length increase accepted — chart-agreement fix pairing the side flip, per the chart rule."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the contact, detonate, passive-auto, bank the Q visibly — the chip is free and the threat governs.",
+   "after": "Slow the re-engage with E once Dazzle whiffs — his E is down 16-12s by rank, a long window to punish."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking on cooldown until the hook learns the rhythm — the binding is the lane's law; spend it like one.",
+   "after": "Cosmic Radiance's delayed invulnerability (180-120s CD) can no-sell your all-in — bait it out before committing your R."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Taric Cosmic Radiance: matchup-defining — The delayed invulnerability erases your teamfight damage — burst before it lands or wait it out. It writes your spacing rules. - W Prismatic Barrier is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Cosmic Radiance: 180s at rank 1, 120s at rank 3 — burst before the delayed invulnerability lands, or wait it out. - Dazzle (E) is down 16-12s by rank — trade while it's spent. - Starlight's Touch (Q) heals through chip — anti-heal cuts it."
+  }
+ ],
+ "notes": "Chart defect: phases[6].side was the generic placeholder 'Skill' while win[6] already said Taric; fixed side and rewrote why to match (previously argued Lux wins late, contradicting win[6]). Checked packet's suspectNames flag on wants.foe[2] ('Time Cosmic Radiance') — false positive, 'Time' is a verb there and Cosmic Radiance is the correct R name per enemyKit, so left untouched. Also checked the packet defect about the chart 'contradicting' the 45.93% win rate — plausible as laning-phase FAVOURED vs full-game win rate dragged down by late scaling, not a clear error, so left as-is and flagged here rather than guessed at. Fixed both lintFindings (copy-paste bleed, no-digit cooldown) and folded the anti-heal interaction into breakdown.cooldowns."
+}

@@ -1,0 +1,104 @@
+{
+ "ownerKey": "lux_sup",
+ "enemy": "swain",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 phases[N].side rows read the generic placeholder \"Skill\" instead of a champion name, while content win[0..6] (Lux,Lux,Lux,Lux,Swain,Lux,Lux) already agrees with the packet's levelChart. phases[4].why also still argues Lux wins level 6, contradicting win[4]=Swain.",
+   "why": "win[N] and the packet levelChart already carry the correct verdict per row; the full-layer side field was never filled in to match. Since win[N] already equals the target for every row, side is the only edit needed for rows 0,1,2,3,5,6 (case 2 of the chart rule); row 4 needs side moved to Swain plus a why rewrite because the existing why argues the opposite winner.",
+   "corrected": "All 7 phases[N].side set to match win[N]; phases[4].why rewritten to explain Swain's level-6 R+E-root drain win instead of describing a Lux win.",
+   "confidence": "High",
+   "sources": ["currentText.content.win[0..6]", "brief packet.levelChart", "currentText.content.whys[4]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly key level 2 poke-range win, level 6 R+E-root all-in caution, first-item burst out-trading his drain, and late-game execute window.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes[0..3]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Nevermove as matchup-defining with no number, and misses both missingInteractions (anti-heal for his P sustain, and his P bypassing stacked resistances via percent-health).",
+   "why": "Nevermove (E) is down 12s at rank 1, 10s at rank 5. His passive Ravenous Flock both heals him and deals percent-health damage, so raw armour/MR and ignoring anti-heal both misread the fight.",
+   "corrected": "Real cooldown numbers and both missing interactions folded into breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit E cd 12/11.5/11/10.5/10", "enemyKit R cd 120", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Swain"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Final Spark online — rooted duos pay in pairs; the laser grades the chip war.",
+   "after": "Demonic Ascension plus a landed E-root drains through your burst — respect the all-in, don't fight while Nevermove is up.",
+   "note": "Length increase accepted — chart-agreement fix pairing the side flip, per the chart rule."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the contact, detonate, passive-auto, bank the Q visibly — the chip is free and the threat governs.",
+   "after": "Hold Light Binding (Q) until Nevermove (10-12s CD) is down — a banked root punishes the gap before he pokes again."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking on cooldown until the hook learns the rhythm — the binding is the lane's law; spend it like one.",
+   "after": "Standing bunched invites a rooted double-hit into Demonic Ascension drain — space out once his Soul Fragments stack."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Swain Nevermove: matchup-defining — The root that decides — dodge it and the general farms regret. It writes your spacing rules. - W Prismatic Barrier is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Nevermove (E): 12s at rank 1, 10s at rank 5 — dodge it and the general farms regret. - Demonic Ascension (R, 120s CD) drains through your burst; his P is percent-health, so anti-heal matters more than armour. - Barrier is for saving fights, not trades."
+  }
+ ],
+ "notes": "Chart defect: all 7 phases[N].side were the generic placeholder 'Skill' while win[0..6] and the packet levelChart already carried a real Lux/Swain verdict per row (level 6 = Swain, everything else Lux). Fixed all 7 side rows to match, plus rewrote phases[4].why since it previously argued the wrong winner. Fixed both lintFindings (2 copy-paste bleeds, 1 no-digit cooldown) and folded both missingInteractions into breakdown.cooldowns."
+}

@@ -1,0 +1,103 @@
+{
+ "ownerKey": "lux_sup",
+ "enemy": "milio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "wants.foe[1] says 'Use Ultra Mega Fire Kick (R) to cleanse your R root and disengage.' Ultra Mega Fire Kick is Milio's Q, not his R — his R is Breath of Life, which is the actual cleanse. It also calls Lux's root 'your R root' but Lux's root is her Q (Light Binding); her R is a damage beam with no CC.",
+   "why": "packet.suspectNames flags this exact string (distance 4, 'ultra mega fire kick'), and enemyKit confirms Ultra Mega Fire Kick is Q while Breath of Life (R) is the cleanse/heal. ownerKit confirms Lux's only root is Q.",
+   "corrected": "Use Breath of Life (R) to cleanse your Q root and then disengage",
+   "confidence": "High",
+   "sources": ["packet.suspectNames", "enemyKit.Q/R", "ownerKit.Q"]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0..6].side all read the placeholder 'Skill' in the full layer while content win[0..5] already say 'Lux' and win[6] says 'Milio' — the page would render two different answers for who wins each stage.",
+   "why": "THE CHART RULE: full .side and content win[N] are one unit and must name the same side. win[N] here is already correct (matches packet.levelChart: Lux through level 6, Milio at 2+ items), so only .side needs to move to agree with it — no win[N] edit needed since it's not changing.",
+   "corrected": "phases[0-5].side -> Lux, phases[6].side -> Milio",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[0-6]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no cooldown numbers (lint COOLDOWN_NO_DIGIT), and dosFull[1].d / dontsFull[2].d were verbatim copies of tradeGood/tradeBad pasted under unrelated titles (lint COPY_PASTE_BLEED).",
+   "why": "Breath of Life is 160/145/130s and Cozy Campfire is 29/27/25/23/21s — real numbers make the sustain-timing advice concrete instead of vague. missingInteractions also flags that Grievous Wounds timing against his W/R sustain isn't stated anywhere else on the page besides the itemization report line.",
+   "corrected": "breakdown.cooldowns now cites 160/145/130s (R) and 29-21s (W) with anti-heal timing; dosFull[1].d and dontsFull[2].d rewritten to match their own titles instead of restating tradeGood/tradeBad.",
+   "confidence": "High",
+   "sources": ["enemyKit.R.cd", "enemyKit.W.cd", "missingInteractions", "lintFindings"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Use Ultra Mega Fire Kick (R) to cleanse your R root and disengage",
+   "after": "Use Breath of Life (R) to cleanse your Q root and then disengage"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Lux"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Milio"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Milio Breath of Life: matchup-defining — The team-wide cleanse-heal undoes your CC chain — force it early, engage after. The duo’s tempo bends around it. - Keep W Prismatic Barrier banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "Breath of Life (R) is 160/145/130s and cleanses your whole CC chain — force your root before it's up, not into it. Cozy Campfire (W) heals on a 29-21s cooldown; anti-heal timed to when it's down cuts his sustain hardest, and his E shield resets in 0.5s so poke still lands."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the contact, detonate, passive-auto, bank the Q visibly — the chip is free and the threat governs.",
+   "after": "Hold Q until his E shields are down or Fire Kick (Q) is spent — the root converts clean, no bail-out."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking on cooldown until the hook learns the rhythm — the binding is the lane's law; spend it like one.",
+   "after": "Don't burn W (Barrier) on his chip poke — save it for when Breath of Life is down and CC actually sticks."
+  }
+ ],
+ "notes": "wants.foe[1] had both a wrong ability name (Q vs R) and a wrong slot for Lux's own root (Q vs R) — same sentence, two errors. Level chart side/content mismatch was a straightforward 'Skill' placeholder never replaced; content layer was already correct so only side moved."
+}

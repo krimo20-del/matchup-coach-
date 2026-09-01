@@ -1,0 +1,68 @@
+{
+ "ownerKey": "lux_sup",
+ "enemy": "thresh",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "N/A",
+   "why": "Lane difficulty (TRICKY 7/10) and pick-mirror framing already correctly capture that both champions compete on landing a long-range CC first.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["brief currentText"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "The full-layer level chart (phases[N].side) reads the generic placeholder 'Skill' on all seven rows instead of naming who wins, while the content-layer win[N] already names Lux on all seven rows and the why text on every row explicitly argues Lux is favored.",
+   "why": "The two layers must name the same side; 'Skill' is not a valid side value and disagrees with win[N]='Lux' plus the supporting why text (outranges the hook, cancels engage, keeps range edge, etc.).",
+   "corrected": "phases[0..6].side -> 'Lux' to match win[0..6] and the why text; win[N] left alone since it already reads 'Lux' (no-op skipped).",
+   "confidence": "High",
+   "sources": ["brief currentText.full.phases", "brief currentText.content.win"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Thresh's Dark Passage (W, 21/20/19/18/17s cd) shields and lantern-saves him out of your burst window, but no writable field states this; ahead/tradeGood only describe geometry generically.",
+   "why": "missingInteractions flags this as the applicable-but-unstated rule: force the lantern out before committing Q-E-passive, or the shield eats the burst.",
+   "corrected": "Folded into 'ahead' (grounded, in-scope per template sweep) so the snowball advice states the actual mechanic: bait Dark Passage before committing.",
+   "confidence": "High",
+   "sources": ["brief missingInteractions[0]", "champ-data/_kits/thresh.json W"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Lux"},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Lux"},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Lux"},
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Lux"},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Lux"},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Lux"},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Lux"},
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the contact, detonate, passive-auto, bank the Q visibly — the chip is free and the threat governs.",
+   "after": "Land Q into his hook step-up, then E before Dark Passage's 21s cooldown lantern can save him — the double CC denies a clean engage."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking on cooldown until the hook learns the rhythm — the binding is the lane's law; spend it like one.",
+   "after": "Burn Prismatic Barrier before his all-in shows — hold it for the Q-E-Box chain, not a stray poke, or the shield is gone when the duo commits."
+  },
+  {
+   "layer": "full",
+   "path": "enemyWin",
+   "before": "Thresh wins by landing Death Sentence, denying your pattern, and starting one clean chain and letting it pay the whole lane.",
+   "after": "Thresh wins by landing Death Sentence (9-19s cd by rank), double-tapping it to yank himself in, Flaying you into his duo, and detonating The Box before you can root your way out."
+  },
+  {
+   "layer": "full",
+   "path": "ahead",
+   "before": "Ahead, own the geometry: chip Thresh's duo per wave and laser the recovery roots.",
+   "after": "Ahead, force Dark Passage out first — his 21s W shields the burst you're building. Bait it on a poke, then commit Q-E through the empty cooldown."
+  }
+ ],
+ "notes": "Chart fix: side flipped from placeholder 'Skill' to 'Lux' on all 7 rows to match win[N] and the why text (already Lux-favored); win[N] left untouched (already correct, no-op avoided). Fixed both lintFindings copy-paste-bleed entries (dosFull[1].d, dontsFull[2].d) with content grounded in the entry's own title. Folded the missingInteractions Dark Passage note into 'ahead'. Rewrote enemyWin, which matched the flagged template pattern ('wins by landing X, denying your pattern, and...'), with real Thresh cooldowns and mechanics."
+}

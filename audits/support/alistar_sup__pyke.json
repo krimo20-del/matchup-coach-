@@ -1,0 +1,50 @@
+{
+ "ownerKey": "alistar_sup",
+ "enemy": "pyke",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Even lane (52.39% WR) with an early Pyke lead and a late Alistar swing, matches tldr/winCon.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes track Pyke's level-2 Q+E all-in, the shared level-6 R spike, and the late-game Alistar teamfight swing accurately.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["kit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Packet flags the exact defect: full phases[0,1,4,5,6].side all read 'Skill' (Alistar) while content win[0,1,4,5,6] read Pyke/Pyke/Pyke/Pyke/Alistar and packet.levelChart independently agrees with content on all 7 rows. Rows 2 and 3 (both 'Skill') already agree and were left alone. Missing interactions (resistance bypass, camo needing vision, Q channel being CC-cancellable) were absent from the text.",
+   "why": "win[N] and packet.levelChart already carry the correct verdict, so per the chart rule I move phases[N].side (and why) alone on the five disagreeing rows — no win[N] edit needed since it's already correct.",
+   "corrected": "phases[0,1,4,5].side -> 'Pyke', phases[6].side -> 'Alistar', whys rewritten to match; dosFull[0].d folds in the channel-interrupt note.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "packet.defects", "currentText.content", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[0].why","before":"Trade autos behind the roar sustain — the cow chips politely until level 2 changes religions.","after":"Pyke's level-1 hook range and lethality threaten more than your not-yet-online engage."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[1].why","before":"W-Q online — the combo is live and every squishy support is now flash-range nervous.","after":"His Q-plus-E all-in lands before your W-Q combo is live — respect hook range."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[4].why","before":"Unbreakable Will online — tower dives become appointments; the cow ignores the counter-CC.","after":"Death From Below resets on a kill — commit your knockup only when your ADC can follow."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the front line holds and the combos chain into jungler arrivals.","after":"His hook lethality still threatens your ADC through frontline — peel, don't dive."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Alistar"},
+  {"layer":"full","path":"phases[6].why","before":"Late Alistar opens and survives: combo the carry, ult the focus, and trample the cleanup.","after":"Late Alistar takes over: durability and chain-CC win grouped fights as his picks fall off."},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"His hook lands as a channel — CC him mid-cast with Trample or your combo cancels it outright."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with armor.","after":"Committing after his Bone Skewer whiffs, not before — a spent hook is a free fifteen seconds."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Pyke Bone Skewer: matchup-defining — The hook starts the chain — his R cleans what it catches. The duo’s tempo bends around it. - Keep R Unbreakable Will banked for their best play. - The ultimate is a fight decision, not a habit.","after":"- Pyke Bone Skewer: 10/9.5/9/8.5/8s cooldown, matchup-defining — the hook starts the chain, his R cleans what it catches. - Keep R Unbreakable Will banked for their best play. - The ultimate is a fight decision, not a habit."}
+ ],
+ "notes": "Chart fix: full phases[N].side moved to match content win[N]/packet.levelChart on the 5 rows the packet flagged as contradictory (0,1,4,5,6); rows 2-3 already agreed and were untouched. No content win[N] edits needed — that layer was already correct. dosFull[0].t/d ('Stand behind minions pre-combo') already covered the hook-avoidance angle so I used dosFull[1].d (previously a verbatim tradeGood copy-paste) to carry the channel-interrupt missingInteraction instead, per lint COPY_PASTE_BLEED. Stealth/vision (Ghostwater Dive) and the resistance-bypass passive (Gift of the Drowned Ones) were not worked into any field within the length band this pass — recording them here: Pyke ignores stacked HP/armor value via his passive, and his W camo needs a Control Ward or sweeper since Alistar has no reveal. Cooldowns field given a real Bone Skewer number per COOLDOWN_NO_DIGIT."
+}

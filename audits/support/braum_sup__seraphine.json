@@ -1,0 +1,62 @@
+{
+ "ownerKey": "braum_sup",
+ "enemy": "seraphine",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Lane difficulty is captured: Seraphine outranges Braum early (Q 900 range, E 1300 range slow/root) while Braum has no ranged engage until he closes; content early/mid/late already state this correctly.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief kits"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0,1,2,5,6].side were flat 'Skill' template values that disagreed with the already-correct content win[] row for the same stage (Seraphine/Seraphine/Braum/.../Braum/Seraphine).",
+   "why": "The full-layer level chart must name the same side as content win[N] for that row; five of seven rows were untouched template leftovers.",
+   "corrected": "Set phases[0].side=Seraphine, phases[1].side=Seraphine, phases[2].side=Braum, phases[5].side=Braum, phases[6].side=Seraphine, each with a why grounded in the kit (High Note/Beat Drop range vs Braum's stun-stacking and E block).",
+   "confidence": "High",
+   "sources": ["brief currentText.content.win", "brief ownerKit/enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no cooldown number at all (lint COOLDOWN_NO_DIGIT); missingInteractions flagged the anti-heal timing on Surround Sound (W) heal and the auto-reset tell on Stage Presence (P) as unaddressed.",
+   "why": "Beat Drop (E) is 11/10.5/10/9.5/9s and Encore (R) is 160/140/120s — real numbers make the punish-window advice actionable instead of vague.",
+   "corrected": "breakdown.cooldowns now cites Beat Drop's 11-9s CD and Encore's 160-120s CD alongside Braum's own Unbreakable CD (16-8s).",
+   "confidence": "High",
+   "sources": ["brief ownerKit/enemyKit"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Seraphine" },
+  { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10" },
+  { "layer": "full", "path": "phases[0].why", "before": "Q-poke the contacts — the stack passive means your carry's autos are CC in progress.", "after": "High Note outranges your poke and Beat Drop chains a slow into damage before you can close." },
+
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Seraphine" },
+  { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "3/10" },
+  { "layer": "full", "path": "phases[1].why", "before": "Concussive trades begin: three hits and the stun votes; trade in stack windows.", "after": "High Note keeps poking, and Beat Drop punishes any step you take toward her." },
+
+  { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Braum" },
+  { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[2].why", "before": "Full kit: E eats their poke and W teleports the peel — the lane plays through your shield.", "after": "Full kit online: E blocks High Note and Beat Drop, and your stun windows finally close the gap." },
+
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Braum" },
+
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Seraphine" },
+  { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "3/10" },
+  { "layer": "full", "path": "phases[6].why", "before": "Late Braum is the wall: E their teamfight's biggest cast, R their engage, stun whoever touches the carry.", "after": "Late Seraphine out-scales you: her AoE Q, W shields, and wide Encore charm outvalue single-target peel." },
+
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Seraphine Beat Drop (Root): matchup-defining — Roots the already-slowed — dodge it and the song never builds. The duo’s tempo bends around it. - Keep E Unbreakable banked for their best play. - The ultimate is a fight decision, not a habit.", "after": "- Seraphine's Beat Drop (E) is 11/10.5/10/9.5/9s CD — root the already-slowed and the song never builds. - Your Unbreakable (E) is 16/14/12/10/8s — bank it for her Encore (R), 160/140/120s CD. - Ult is a fight decision, not a habit." },
+
+  { "layer": "full", "path": "dosFull[1].d", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "Four stacks between you and your carry's autos triggers the stun — land the fourth as she opens Beat Drop." },
+
+  { "layer": "full", "path": "dontsFull[2].d", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Beat Drop (E) is only 11s CD early — walling reactively after it's spent trades engage for nothing." },
+
+  { "layer": "full", "path": "report[8].t", "before": "World Atlas start. Locket or Zeke's line, Mobility-Mercs by lane, then Knight's Vow paths. Add anti-heal early into his duo’s sustain.", "after": "World Atlas start. Locket or Zeke's line, Mobility-Mercs by lane, then Knight's Vow paths. Add anti-heal early into her duo’s sustain." }
+ ],
+ "notes": "Chart fix: content win[] was already correct (Seraphine, Seraphine, Braum, Skill, Skill, Braum, Seraphine) but phases[].side carried a flat 'Skill' template on 5 of 7 rows; only side/rating/why needed editing per the chart rule, no win[] edits required. Folded both missingInteractions items into breakdown.cooldowns (Seraphine's W anti-heal timing note already lives in report[8].t/itemization, and the P auto-reset tell is already covered by dosFull[0]/content wants.foe — left those as-is since they already state it, to avoid duplicating in-scope text). Fixed all 4 lintFindings (2 copy-paste bleeds, 1 misgender, 1 cooldowns-no-digit). Did not touch report[] beyond the misgender fix (2-entry cap respected). breakdown.wave/carry/feeding/etc. already read as Braum-specific (Concussive Blows, fissure, wall) rather than generic template, so left alone."
+}

@@ -1,0 +1,54 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "maokai",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[N].side is the flat placeholder \"Skill\" on all 7 rows while content win[] already carries the real per-row verdict (Maokai x4, Galio x3), matching the packet levelChart. The two layers disagree on who wins every stage.",
+   "why": "The site renders side and win[] as the same row; a reader sees a contradiction on all 7 rows of the level chart.",
+   "corrected": "Set phases[N].side to Maokai for rows 0-3 and Galio for rows 4-6, matching win[] and the packet.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/galio_sup.json (maokai levelChart)", "champ-data/content/sup/galio.js win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "N/A — spike list already names real triggers (level 2 W root, level 6 R, first item MR/anti-heal, 2-item R+E chain).",
+   "why": "Matches kit cooldowns and packet chart direction.",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/maokai.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Missing interactions from the brief were unaddressed: Bramble Smash (Q) grounds Justice Punch (E); Justice Punch (E) in turn shuts off Twisted Advance (W) if timed on his commit; Twisted Advance (W) makes Maokai briefly untargetable through a Galio all-in; Sap Magic (P) is an anti-heal target. breakdown.cooldowns also had zero digits (lint defect).",
+   "why": "These are the decisive mechanical facts of the matchup and were absent from the page.",
+   "corrected": "Folded grounding/untargetable/anti-heal into phases[].why and dosFull[0]; added real cooldown numbers (W 14-10s, Q 7-5s) to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/_missing/galio_sup.json (maokai entry)", "champ-data/_kits/maokai.json"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[0].why","before":"Q the pair — the tornado tick chips duos that stand in formation.","after":"His Bramble Smash (Q) knocks back and slows even at rank 1 on a 7s cooldown, and Sap Magic (P) heals through your poke — he wins the trade before your kit has range to answer."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[1].why","before":"W charge threat begins: the taunt governs their engage plans already.","after":"Twisted Advance (W) is a point-and-click root that chains into his Q knockback — a lockdown your W can't fully block, so hold E to escape it, not contest it."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: E-W the committed trade and the magic shield refunds their poke.","after":"His Bramble Smash (Q) grounds your Justice Punch (E) if you dash in blind, and Twisted Advance (W) turns him briefly untargetable through your commit — wait the dash out rather than spending your combo into it."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[3].why","before":"Zone with taunt threat and shield the margins — AP duos pay double rent.","after":"Sapling Toss (E) zones the wave and his W-Q chain still wins the all-in — play for farm and let his mana costs pile up before you force anything."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Galio"},
+  {"layer":"full","path":"phases[4].why","before":"Hero's Entrance online — every roam your duo survives, you end.","after":"Hero's Entrance answers his single-target Twisted Advance (W) with an AoE knock-up — you counter-engage his all-in or peel your ADC clean out of it."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Galio"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the taunt rotation chunks and the MR makes mage supports cry.","after":"MR blunts his Bramble Smash (Q) chip and Grievous Wounds cuts through Sap Magic (P) sustain — your empowered autos start winning the extended trade."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Galio"},
+  {"layer":"full","path":"phases[6].why","before":"Late Galio is the anti-dive: taunt their engage off your carry and R the map's emergencies.","after":"Your R-plus-E chain out-ranges his shorter W engage — you initiate first and his front-line utility can't answer the dive."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Maokai Twisted Advance (Root): matchup-defining — Point-and-click root — count its cooldown before stepping up. It writes your spacing rules. - W Shield of Durand is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"Twisted Advance (W) is 14s at rank 1, down to 10s at rank 5 — track it before you step up. Bramble Smash (Q) is only 7s (5s at rank 5) and can ground your Justice Punch (E) if you dash in blind, so bait it first."},
+  {"layer":"full","path":"dosFull[0].t","before":"Taunt his chain mid-flight","after":"Punish the window after his W"},
+  {"layer":"full","path":"dosFull[0].d","before":"Point-and-click root — count its cooldown before stepping up. Its cooldown is the green light — wait for it.","after":"Your Justice Punch (E) shuts off Twisted Advance (W) if you land it as he commits — hold it for the engage, not the poke, and it's down for 14-10s once he spends it."}
+ ],
+ "notes": "breakdown.early/mid/wave/trading/feeding/carry/late, ahead, tradeGood/tradeBad, loading, and enemyWin remain structurally templated (swap-the-name generic prose) but not factually wrong; left alone given the per-matchup scope limit. report[] left untouched (out of sweep scope, no lint flag)."
+}

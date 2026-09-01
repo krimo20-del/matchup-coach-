@@ -1,0 +1,85 @@
+{
+ "ownerKey": "blitzcrank_sup",
+ "enemy": "yuumi",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[0].text and wants.foe[1] both call Yuumi's Q 'You and Me! (Q)' — You and Me! is her W (attach/dash), and Q is actually Prowling Projectile. wants.foe[2] calls Zoomies her 'W' when it's her E.",
+   "why": "enemyAbilities/enemyKit give Q=Prowling Projectile, W=You and Me!, E=Zoomies. The current text swaps W's ability name onto the Q slot and mislabels E as W, which misdirects a reader tracking cooldowns by slot.",
+   "corrected": "spikes[0].text and wants.foe[1] now say Prowling Projectile (Q); wants.foe[2] now says Zoomies (E).",
+   "confidence": "High",
+   "sources": ["packet.enemyAbilities", "enemyKit"]
+  },
+  {
+   "point": 1,
+   "status": "needs-correction",
+   "whatIsWrong": "report[8].t and report[9].t use 'his'/'him' for Yuumi, who is female.",
+   "why": "Yuumi is on the female-champion list in the lane brief; lintFindings flags both instances as MISGENDER.",
+   "corrected": "Both instances corrected to 'her'.",
+   "confidence": "High",
+   "sources": ["lintFindings"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no digit (lintFindings COOLDOWN_NO_DIGIT), even though You and Me! having a 0-second cooldown is the single most important number in this matchup.",
+   "why": "Yuumi's W (You and Me!) has cd 0 per the kit — she can re-attach the instant she detaches, so this matchup is won by tracking her attachment state, not a cooldown timer. That's worth stating explicitly instead of leaving the field generic.",
+   "corrected": "breakdown.cooldowns now states the 0-second W cooldown directly.",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "This is a dream lane: while Yuumi is unattached and walking up to poke with You and Me! (Q), she is a soft, immobile 500-HP target. Reach level 2 first and Rocket Grab (Q) her out of position; her only safety is attaching to her ADC, so punish every second she's detached.",
+   "after": "This is a dream lane: while Yuumi is unattached and walking up to poke with Prowling Projectile (Q), she is a soft, immobile 500-HP target. Reach level 2 first and Rocket Grab (Q) her out of position; her only safety is attaching to her ADC, so punish every second she's detached."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Poke you down with You and Me! (Q) from safety while attached",
+   "after": "Poke you down with Prowling Projectile (Q) from safety while attached"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Kite the lane with Zoomies (W) shields and sustain, avoiding all-ins",
+   "after": "Kite the lane with Zoomies (E) shields and sustain, avoiding all-ins"
+  },
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "World Atlas start. Locket or Zeke's line, Mercs-Steelcaps by lane, then Knight's Vow paths. Add anti-heal early into his duo’s sustain.",
+   "after": "World Atlas start. Locket or Zeke's line, Mercs-Steelcaps by lane, then Knight's Vow paths. Add anti-heal early into her duo’s sustain."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on You and Me! (Attach)’s cooldown, on your first item spike, and with your carry’s damage online. Make him flinch first.",
+   "after": "Commit on You and Me! (Attach)’s cooldown, on your first item spike, and with your carry’s damage online. Make her flinch first."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Yuumi You and Me! (Attach): matchup-defining — Untargetable while attached — kill the host or catch the dismount windows. The duo’s tempo bends around it. - Keep W Overdrive banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Yuumi You and Me! (W): 0-second cooldown — she can re-attach instantly, so track her attachment state, not a timer. - Keep Overdrive banked for their best play. - Your R silence denies her Final Chapter cast outright."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Yuumi has zero hard CC of her own — a landed Grab is uninterruptible unless she's mid-dash onto her ally."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "Standing in her Prowling Projectile range between hooks lets her chip you down for free while your engage sits on cooldown."
+  }
+ ],
+ "notes": "Two mislabeled abilities found: You and Me! (her W, 0-cd attach/dash) was written onto the Q slot in spikes[0].text and wants.foe[1] — real Q is Prowling Projectile. Zoomies (her actual E) was labeled W in wants.foe[2]. Fixed all three against enemyKit. Also fixed 2 misgender instances (she/her) per lintFindings and added the real 0s W cooldown number, which is the actual mechanical hook of this matchup — she never has to wait to re-attach."
+}

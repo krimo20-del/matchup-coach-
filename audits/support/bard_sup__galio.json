@@ -1,0 +1,97 @@
+{
+ "ownerKey": "bard_sup",
+ "enemy": "galio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[0].side and phases[1].side read 'Skill' while content win[0]/win[1] say 'Bard'; phases[4].side reads 'Skill' while win[4] says 'Galio'. Rows 2,3,5,6 already agree ('Skill').",
+   "why": "packet.levelChart independently confirms Bard, Bard, Skill, Skill, Galio, Skill, Skill — matching content exactly, and content's whys give the concrete reason each time: Bard's range beats Galio's short pre-6 kit at 1-2, and Hero's Entrance (R) makes Galio a dominant global engage at 6.",
+   "corrected": "Moved phases[0], phases[1] to 'Bard' and phases[4] to 'Galio' (win[N] already held the correct value in all three cases, so only side+why needed editing) and rewrote each phases[N].why with the concrete reason.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[0],[1],[4]", "currentText.content.whys[0],[1],[4]"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Justice Punch as the key ability but carries no number.",
+   "why": "Justice Punch (E) is 11/10/9/8/7s and Galio's R is 180/160/140s — real numbers make the cooldown-tracking advice concrete.",
+   "corrected": "Added both cooldowns to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit.E cd", "enemyKit.R cd"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "No field mentions that Colossal Smash (P)'s wind-up is the read tell before the auto-reset burst lands, or that Shield of Durand (W) / Hero's Entrance (R) shield him against burst.",
+   "why": "missingInteractions flags both explicitly for this matchup: the auto-attack-reset tell and the shield that changes all-in math.",
+   "corrected": "Rewrote report[5] (Key Ability Interactions) to name Colossal Smash's wind-up as the step-back cue and call out forcing his W/R shield before committing.",
+   "confidence": "High",
+   "sources": ["missingInteractions[0].data.missing"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Bard"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Meep-chip the contacts and collect the first chimes — the wanderer's ledger opens.",
+   "after": "Your range beats his short early kit - poke freely before his Q-W scale up."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Bard"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Q threats begin: every wall adjacency is a stun audition.",
+   "after": "Meep poke still beats him before his Q-W come online."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Galio"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Tempered Fate online — the map's biggest moments now have a stasis clause.",
+   "after": "Hero's Entrance turns him into a dominant global engage threat at 6."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Tempered Fate stases the diver mid-combo at objectives - his Colossal Smash burst simply never lands."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "R stops CC on allies too - stasis your own carry mid-fight and you cancel their damage."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Galio Justice Punch: matchup-defining — His dash knockup — he has no engage while it is down. It writes your spacing rules. - E Magical Journey is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Galio Justice Punch (E): 11/10/9/8/7s cooldown - his dash knockup; no engage while it's down. - E Magical Journey is for saving fights, not seasoning trades. - His R (180/160/140s) opens or closes fights - pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Galio’s Justice Punch: His dash knockup — he has no engage while it is down. It’s down or you don’t go.",
+   "after": "Track Justice Punch's dash. Colossal Smash's wind-up is your step-back cue. Force his W/R shield out first."
+  }
+ ],
+ "notes": "Rows 2, 3, 5, 6 already agreed between layers and were left untouched. diffRating/carryRating (5.5/10, 6/10 EVEN) remain consistent with the corrected chart."
+}

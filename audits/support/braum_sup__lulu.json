@@ -1,0 +1,48 @@
+{
+ "ownerKey": "braum_sup",
+ "enemy": "lulu",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "EVEN 5.5/10 with Lulu favored early/late and Braum favored on first item fits a poke-and-peel enchanter matchup where Braum has no gap-closer early but out-tanks her peel once itemized.",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": ["champ-data/_kits/lulu.json"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0,1,2,5,6].side read 'Skill' while content win[] already names Lulu (0-2, 6) or Braum (5); rows 3-4 already agree as Skill. The brief's own defects flag also notes the aggregate levelChart (4 Lulu stages to 1 Braum stage) sits oddly against Braum's 55.52% overall winrate in this data, but packet.levelChart and content win[] already agree with each other row-for-row, so there is no basis in the kit to override either — recording the tension rather than inventing new verdicts.",
+   "why": "phases[N].side and content win[N] are the same row and must agree; win[] already matches the packet levelChart exactly.",
+   "corrected": "Set phases[0].side, phases[1].side, phases[2].side, phases[6].side to 'Lulu' and phases[5].side to 'Braum'.",
+   "confidence": "High",
+   "sources": ["currentText.content.win[0..6]", "brief packet.levelChart"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[3].text names 'Help Pix' as Lulu's E shield — the real ability is 'Help, Pix!' (the brief's own suspectNames flags this exact near-miss).",
+   "why": "Lulu's E is officially 'Help, Pix!' per Riot naming; the truncated form reads as a typo to anyone checking the client.",
+   "corrected": "Restored the real ability name in the AbilityName (Slot) convention.",
+   "confidence": "High",
+   "sources": ["brief packet.suspectNames[0]", "brief packet.enemyAbilities.E"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Lulu"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Lulu"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Lulu"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Braum"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Lulu"},
+  {"layer":"content","path":"spikes[3].text","before":"Lulu out-scales as a peel-enchanter: Wild Growth, W polymorph on your engager, and Help Pix shields keep her carry alive through your single-target lockdown.","after":"Lulu out-scales as a peel-enchanter: Wild Growth, W polymorph on your engager, and Help, Pix! (E) shields keep her carry alive through your single-target lockdown."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Lulu Whimsy (Polymorph): matchup-defining — The polymorph deletes a carry’s kit mid-fight — bait it before the real engage. It writes your spacing rules. - E Unbreakable is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Whimsy (W) is an 18s flat cooldown — the polymorph deletes a carry's kit mid-fight; bait it before the real engage. - Your Unbreakable (E) is 16s at rank 1, 8s at max — save it for her Q, not chip. - Wild Growth (R) is 120/100/80s; track when the knockup answer is gone."},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"Every auto landed while Whimsy is down adds a quarter-stun; four before she can polymorph your engager."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with armor.","after":"Her Glitterlance (Q) out-ranges yours and slows hard — closing distance while it's up just feeds the poke."},
+  {"layer":"full","path":"report[8].t","before":"World Atlas start. Locket or Zeke's line, Mobility-Mercs by lane, then Knight's Vow paths. Add anti-heal early into his duo’s sustain.","after":"World Atlas start. Locket or Zeke's line, Mobility-Mercs by lane, then Knight's Vow paths. Add anti-heal early into her duo’s sustain."},
+  {"layer":"full","path":"report[9].t","before":"Commit on Whimsy (Polymorph)’s cooldown, on your first item spike, and with your carry’s damage online. His answer goes first; yours goes last.","after":"Commit on Whimsy (Polymorph)’s cooldown, on your first item spike, and with your carry’s damage online. Her answer goes first; yours goes last."}
+ ],
+ "notes": "Fixed both COPY_PASTE_BLEED hits, both MISGENDER hits, gave breakdown.cooldowns real digits, and restored the real ability name 'Help, Pix! (E)' flagged by suspectNames. Fixed 5 of 7 level-chart side/win disagreements (rows 3-4 already agreed). Left win[]/levelChart content itself untouched despite the brief's defect note about it sitting oddly against Braum's 55.52% aggregate winrate -- packet.levelChart and content win[] already agree with each other and nothing in the kits gives grounds to flip specific rows, so I recorded the tension instead of guessing."
+}

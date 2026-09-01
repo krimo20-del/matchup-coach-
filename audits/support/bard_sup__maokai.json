@@ -1,0 +1,67 @@
+{
+ "ownerKey": "bard_sup",
+ "enemy": "maokai",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level chart (phases[].side) and content win[] already agree on every row and match the packet's levelChart exactly (Skill/Skill/Maokai/Maokai/Maokai/Skill/Skill). No chart edit needed.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief.packet.levelChart", "brief.currentText.content.win"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Maokai's W and R as things to track but gives no actual cooldown numbers (lint: COOLDOWN_NO_DIGIT).",
+   "why": "Twisted Advance (W) is 14/13/12/11/10s and Nature's Grasp (R) is 130/110/90s per the kit; stating the real numbers lets the reader count down the engage window instead of just being told to 'count it'.",
+   "corrected": "Twisted Advance (W) is 14s at rank 1, falling to 10s at rank 5 — count it before you step up. Your own Magical Journey (E) is for saving fights, not seasoning trades. Nature's Grasp (R) is 130/110/90s and opens or closes fights — pick one per cast.",
+   "confidence": "High",
+   "sources": ["brief.enemyKit.abilities[W].cd", "brief.enemyKit.abilities[R].cd"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "missingInteractions flags that Maokai's Twisted Advance (W) is untargetable mid-dash, which isn't stated anywhere on the page — dosFull[0].d only says to count the cooldown, not that spending a combo into the dash itself whiffs.",
+   "why": "Twisted Advance's kit flag is untargetable: 'dodges timed burst and executes'. Bard's stun/engage combo thrown at the dash animation is wasted; the punish window is after the root lands or the dash whiffs.",
+   "corrected": "Point-and-click root, but he's untargetable mid-dash — don't burn your combo into the dash itself, wait for the root to land or whiff, then punish. Commit on his cooldown, never into it.",
+   "confidence": "High",
+   "sources": ["brief.enemyKit.abilities[W].flags.untargetable", "brief.missingInteractions[0].data.missing[0]"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Maokai Twisted Advance (Root): matchup-defining — Point-and-click root — count its cooldown before stepping up. It writes your spacing rules. - E Magical Journey is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "Twisted Advance (W) is 14s at rank 1, falling to 10s at rank 5 — count it before you step up. Your own Magical Journey (E) is for saving fights, not seasoning trades. Nature's Grasp (R) is 130/110/90s and opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[0].d",
+   "before": "Point-and-click root — count its cooldown before stepping up. Commit on its cooldown, never into it.",
+   "after": "Point-and-click root, but he's untargetable mid-dash — don't burn your combo into the dash itself, wait for the root to land or whiff, then punish. Commit on his cooldown, never into it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Nature's Grasp stops time on everyone it catches — cast it when his duo is fully committed past the wave, not as a reflex answer to their engage."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[1].d",
+   "before": "The R stases EVERYTHING — allies, towers, and your own carry's ult; aim it like a verdict.",
+   "after": "Open-field Q telegraphs and wastes a stun that wins the engage war — save Bramble Smash for terrain-adjacent chains, not chip damage."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "Tempered Fate stops your own team too — a reflex R off your carry's burst removes their damage from the fight for its duration."
+  }
+ ],
+ "notes": "Level chart and content win[] already agree, no chart edits needed. dosFull[1].d and dontsFull[2].d had lint-flagged copy-paste bleed (verbatim tradeGood/tradeBad under unrelated titles); dontsFull[1].d had the same unflagged bleed (R-stasis text under a 'Q open-field for chip' title) so it was fixed too. Anti-heal timing against Maokai's passive sustain (Sap Magic) is already covered by report[8] itemization ('Add anti-heal early into his duo's sustain') — left alone since report[] edits are capped and this one isn't wrong, just slightly generic to 'duo' rather than naming the passive."
+}

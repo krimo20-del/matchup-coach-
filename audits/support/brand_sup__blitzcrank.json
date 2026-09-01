@@ -1,0 +1,58 @@
+{
+ "ownerKey": "brand_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "EVEN 5.5/10 correctly reflects a skillshot-vs-skillshot lane that flips on who lands their ability first.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly track Brand's early W-Q window vs Rocket Grab's ~16-20s downtime, then the shift to skill-dependent coinflip once his Q-E-R-auto combo can delete through Brand's burst.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0..2].side all read 'Skill' while content win[0..2] read 'Brand' — the chart disagrees with itself on the first three rows (packet.levelChart confirms Brand,Brand,Brand,Skill,Skill,Skill,Skill matching win[], so side is the stale layer). breakdown.cooldowns names Rocket Grab as matchup-defining with no cooldown number (lint). dosFull[1].d and dontsFull[2].d are verbatim copies of tradeGood/tradeBad under unrelated titles (lint). missingInteractions flags Mana Barrier/Static Field shield-absorbs-burst and Power Fist's auto-reset tell, neither mentioned anywhere on the page.",
+   "why": "Real cooldowns from enemyKit: Rocket Grab 20/19/18/17/16s, Power Fist 7/6.5/6/5.5/5s with an auto-attack-reset tell, Mana Barrier is a passive low-HP shield.",
+   "corrected": "phases[0..2].side moved to 'Brand' to match win[] (win unchanged, already correct — per the chart rule only side needed editing). Cooldowns field rewritten with real numbers plus the shield and auto-reset callouts. Dos/don'ts de-duplicated.",
+   "confidence": "High",
+   "sources": ["currentText", "lintFindings", "enemyKit", "missingInteractions", "packet"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Brand"},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Brand"},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Brand"},
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. The duo’s tempo bends around it. - Keep E-Q stun package banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Rocket Grab (Q): 20/19/18/17/16s CD — minion cover turns the lane into a farming sim while it's up. - Power Fist (E) auto-resets for burst; the wind-up is your cue to step back. - Mana Barrier (P) shields his low-HP all-in — force it out first."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "W the pair, E the ablaze, Q the stun, walk — the package billed two and the burn collects after.",
+   "after": "Bait or dodge Rocket Grab, then W-Q-ignite the naked Blitzcrank before his ~16-20s cooldown resets."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking clean targets while the engage waits — the unablazed Q is the kit's most expensive miss.",
+   "after": "Rocket Grab down (16-20s CD) means no engage — that is your all-in window, not a poke one."
+  }
+ ],
+ "notes": "Confirmed via packet.levelChart (Brand,Brand,Brand,Skill,Skill,Skill,Skill) that win[] was already correct and only the stale phases[].side rows 0-2 needed the fix."
+}

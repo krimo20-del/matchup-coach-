@@ -1,0 +1,127 @@
+{
+ "ownerKey": "bard_sup",
+ "enemy": "brand",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[0-5].side is the near-exact inverse of content win[0-5]: row 0 says 'Brand' while win[0] says 'Skill', and rows 1-5 all say 'Skill' while win[1-5] all say 'Brand'. Only row 6 (both 'Skill') agrees.",
+   "why": "packet.levelChart independently matches content exactly (Skill, Brand x5, Skill), and content's whys/spikes text gives concrete, kit-grounded reasons for each row (W-Q poke at 2, low-cd Pillar of Flame at 3, Pyroclasm burst at 6, first AP item poke rotation). The packet's own defects field flags this exact contradiction. This is a stale full-layer chart, not an ambiguous case.",
+   "corrected": "Moved phases[0-5].side to match win[0-5] (win[N] already held the correct value in every case, so per the chart rule only side+why needed editing, not win[N]) and rewrote each phases[N].why with the concrete reason instead of the generic Bard-favoring template text.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "packet.defects[0]", "currentText.content.win[0..5]", "currentText.content.whys[0..5]"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Sear as the key ability but carries no number.",
+   "why": "Sear (Q) is 8/7.5/7/6.5/6s and Brand's R is 100/90/80s — real numbers make the cooldown-tracking advice concrete.",
+   "corrected": "Added both cooldowns to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit.Q cd", "enemyKit.R cd"]
+  },
+  {
+   "point": 4,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Sear only stuns an ablaze target is already stated correctly in breakdown.cooldowns/report[5], and Bard's R (Tempered Fate) as the answer to a bounced Pyroclasm is already stated in spikes[1] and dosFull[1] — no missingInteractions were flagged for this matchup.",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": ["missingInteractions is empty for this matchup"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Brand",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Meep-chip the contacts and collect the first chimes — the wanderer's ledger opens.",
+   "after": "At level 1 neither side has a full combo - dodge Sear and meep-poke to keep it even."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Brand"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Q threats begin: every wall adjacency is a stun audition.",
+   "after": "W-Q poke out-damages you the moment he hits level 2."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Brand"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "Full kit: shrine the sustain, tunnel the angles, and Q the geometry.",
+   "after": "His low-cooldown Pillar of Flame keeps him ahead in the poke war at 3."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Brand"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Chime economy: collect on the move and return with meep upgrades — absence is investment.",
+   "after": "Brand's ranged Q-W-E burst keeps controlling the lane through levels 4 and 5 while you farm."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Brand"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Tempered Fate online — the map's biggest moments now have a stasis clause.",
+   "after": "Pyroclasm adds lethal bounced AoE burst at 6 that you can't out-trade."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Brand"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "First item: the meeps chunk and the portals make your jungler ambidextrous.",
+   "after": "His first AP item keeps the W-Q-E poke rotation dominant over your meeps."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Tempered Fate stases Brand mid-cast during objective fights - his Pyroclasm burst simply never lands."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "Standing near his shrine range invites free Pillar of Flame chip - back off, don't linger."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Brand Sear (Stun): matchup-defining — Q only stuns the ablaze — after eating W or E, the stun line is the dodge. The duo’s tempo bends around it. - Keep E Magical Journey banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Brand Sear (Stun): 8/7.5/7/6.5/6s cooldown - it only stuns ablaze targets, so eating W or E first is the dodge line. - Keep E Magical Journey banked for their best play. - His R (100/90/80s) is a fight decision, not a habit."
+  }
+ ],
+ "notes": "The packet's own defects field already flagged this chart contradiction (5/7 stages to Brand vs a 52.24% Bard winrate) — that's expected: winning most of the level-by-level stages of a poke matchup is consistent with an overall near-even lane once Bard's R/E utility and late scaling pull it back, which phases[6]='Skill' (unchanged, already agreed) already reflects. diffRating/carryRating (7/10, 7.5/10 TRICKY) were left as-is since they already lean Brand-favored and are consistent with the corrected chart."
+}

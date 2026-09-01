@@ -1,0 +1,67 @@
+{
+ "ownerKey": "brand_sup",
+ "enemy": "velkoz",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content layer (win[], whys[]) correctly calls this an all-Skill poke mirror across all 7 phases, matching the packet's levelChart.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly identify level 2 (W online), level 6 ults, and 2-item Lost Chapter power spikes; content layer is genuinely matchup-specific here.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "wants.foe[0] says 'Land Q knock-up into full combo' — Vel'Koz's Q (Plasma Fission) is a splitting slow bolt, not a knockup. The knockup is Tectonic Disruption (E), per enemyKit.E.flags.hardCC and the text 'knocking up enemies'.",
+   "why": "This mislabels which ability starts his combo, which would make a player play around the wrong cooldown.",
+   "corrected": "wants.foe[0] changed to attribute the knock-up to E.",
+   "confidence": "High",
+   "sources": ["enemyKit.E", "enemyKit.Q"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "W the pair, E the ablaze, Q the stun, walk — the package billed two and the burn collects after.",
+   "after": "Tectonic Disruption (12-10s CD) starts his true-damage rotation — sidestep it and the research stalls."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking clean targets while the engage waits — the unablazed Q is the kit's most expensive miss.",
+   "after": "Void Rift bursts twice on a delay — clumping with your carry lets one cast tag you both for full damage."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Vel'Koz Tectonic Disruption: matchup-defining — The knockup starts the true-damage rotation — dodge it and the research stalls. Read it before every duo step-up. - Your E-Q stun package answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Vel'Koz Tectonic Disruption: matchup-defining — the 12-10s knockup starts the true-damage rotation; dodge it and the research stalls. Read it before every duo step-up. - Your E-Q stun package answers exactly one disaster per cooldown. - Spend the R on swing moments only."
+  },
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "World Atlas start. Liandry's, Sorcerer's, then Rylai's-Zhonya's paths.",
+   "after": "World Atlas, Liandry's, Sorcerer's, Rylai's — MR won't stop his true damage."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Land Q knock-up into full combo",
+   "after": "Land E knock-up into full combo"
+  }
+ ],
+ "notes": "wants.foe[0] had a real ability-name/slot error (Q mislabeled as the knockup; it's E, Tectonic Disruption) — corrected. Fixed both COPY_PASTE_BLEED lint findings and the COOLDOWN_NO_DIGIT finding on breakdown.cooldowns (added the real 12-10s E cooldown). Folded the resistances-invalidated missingInteraction (Vel'Koz P/R deal true damage, bypassing MR) into itemization (report[8].t). Full-layer phases[].why/tldr/loading are heavily templated (identical wording to other Brand matchups) but phases[].side already agrees with content win[] (all 'Skill'), so no chart edit was needed; deeper de-templating of phases[].why left for a future pass to stay within the report[] edit cap."
+}

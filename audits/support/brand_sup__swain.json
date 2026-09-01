@@ -1,0 +1,82 @@
+{
+ "ownerKey": "brand_sup",
+ "enemy": "swain",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0-2].side and phases[4].side still hold the placeholder 'Skill' and disagree with win[0-2]='Brand' and win[4]='Swain'.",
+   "why": "Brand out-ranges an immobile early Swain (levels 1-3), it's a coin-flip at 4-5, Swain's Demonic Ascension flips level 6, then it's a coin-flip again. Matches packet.levelChart exactly.",
+   "corrected": "Set phases[0-2].side to Brand and phases[4].side to Swain to match win[].",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content win[]"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no digit, failing COOLDOWN_NO_DIGIT lint.",
+   "why": "Nevermove (E) is 12/11.5/11/10.5/10s and Demonic Ascension (R) is a flat 120s — real numbers make the punish window concrete.",
+   "corrected": "See edit to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "wants.you[1] and content.mid both claim Swain follows Nevermove (E) with a 'W root follow-up' / 'E-W' combo. Swain's W (Vision of Empire) is a global-range poke/reveal that grants a Soul Fragment — it does not root or pull. Nevermove (E) alone is the full root-and-pull; the follow-up that matters is his R (Demonic Ascension), not W.",
+   "why": "Confirmed against enemyKit: E text says Nevermove roots and can pull rooted champions by itself; W text describes only damage, slow, and reveal — no root/pull.",
+   "corrected": "Rewrote wants.you[1] to state Nevermove is the whole engage on its own, and content.mid to reference Nevermove+R instead of 'E-W'.",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Brand"},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Brand"},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Brand"},
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Swain"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Pyroclasm online — grouped duos pay the bounce tax; never lane in a line.",
+   "after": "Demonic Ascension flips six — drain-tank sustain beats your burst here."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "W the pair, E the ablaze, Q the stun, walk — the package billed two and the burn collects after.",
+   "after": "Nevermove's down for 12s at rank 1, 10s at max — step up in that window before he can root the engage."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking clean targets while the engage waits — the unablazed Q is the kit's most expensive miss.",
+   "after": "Grouped in Demonic Ascension range feeds his drain — spread so one Nevermove pull can't collect two."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Swain Nevermove: matchup-defining — The root that decides — dodge it and the general farms regret. The duo’s tempo bends around it. - Keep E-Q stun package banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Swain's Nevermove (E) is down 12s at rank 1, 10s at max — dodge it, the general farms regret. The duo's tempo bends around it. - Keep your E-Q stun banked for his best play. - Demonic Ascension (R) is 120s — track it, not a habit."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[1]",
+   "before": "Dodge his Nevermove (E) so he can never land the W root follow-up",
+   "after": "Dodge Nevermove (E) — the root-and-pull is his whole engage."
+  },
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "The lane tightens from 4 onward. At 4-5 it's skill-driven — respect his E root windows and keep poking from max range. His level-6 Demonic Ascension is his one clear spike: if he lands E-W and ults, he drain-tanks your combo, so hold your all-in until his R is down.",
+   "after": "The lane tightens from 4 onward. At 4-5 it's skill-driven — respect his E root windows and keep poking from max range. His level-6 Demonic Ascension is his one clear spike: if he lands Nevermove and ults, he drain-tanks your combo, so hold your all-in until his R is down."
+  }
+ ],
+ "notes": "wants.you[1] and content.mid described a fabricated 'W root follow-up' / 'E-W' combo — Swain's W (Vision of Empire) does not root or pull, only Nevermove (E) does, with the real second half of his engage being his R. Fixed both to name Nevermove/R accurately without inventing new claims."
+}

@@ -1,0 +1,62 @@
+{
+ "ownerKey": "brand_sup",
+ "enemy": "galio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "TRICKY 7/10 correctly reflects Galio being a hard anti-mage counter (shield + magic-damage-reduction taunt) rather than a normal engage duel.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly track Shield of Durand's passive shield eating early poke, his W-E taunt-knockup lockdown into level 6 roam pressure, and MR/HP scaling blunting Liandry's burn late.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0..6].side all read 'Skill' while content win[0..6] and packet.levelChart both read 'Galio' for every row — the chart disagrees with itself. breakdown.cooldowns names Justice Punch as matchup-defining with no cooldown number (lint). dosFull[1].d and dontsFull[2].d are verbatim copies of tradeGood/tradeBad under unrelated titles (lint). missingInteractions flags Pillar of Flame (W) denying Justice Punch (E, a dash), Colossal Smash's (P) auto-reset burst tell, and that Galio can cut Brand's retreat with E since Brand has no dash — none mentioned on the page.",
+   "why": "Justice Punch's real cooldown is 11/10/9/8/7s; enemyKit flags it as a dash, and ownerKit flags Brand's W as terrain that blocks dashes — so Pillar of Flame denies the leap when timed on the cast.",
+   "corrected": "phases[0..6].side moved to 'Galio' to match win[] and the packet (win unchanged, already correct — per the chart rule only side needed editing). Cooldowns field rewritten with the real number and the W-denies-E interaction. Dos/don'ts de-duplicated and folded in the Flash-for-the-wall-cut warning and shield-feeding note.",
+   "confidence": "High",
+   "sources": ["currentText", "lintFindings", "enemyKit", "ownerKit", "missingInteractions", "packet"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Galio"},
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Galio Justice Punch: matchup-defining — His dash knockup — he has no engage while it is down. It writes your spacing rules. - E-Q stun package is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Justice Punch (E): 11/10/9/8/7s CD — his only dash-knockup; your W denies it if timed on the cast. - Colossal Smash (P) auto-resets his combo opener; the wind-up is your step-back cue. - The R opens or closes fights."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "W the pair, E the ablaze, Q the stun, walk — the package billed two and the burn collects after.",
+   "after": "Hold Flash for his E wall-cut, not the damage — he has no other way to close the gap on you."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking clean targets while the engage waits — the unablazed Q is the kit's most expensive miss.",
+   "after": "Q-poking into his up W (Shield of Durand) just feeds the shield — wait for it to break first."
+  }
+ ],
+ "notes": "The full-layer tldr/winCon/enemyWin/loading/focus/dosFull[0]/dosFull[2]/dontsFull[0-1]/report block still read as the generic two-body-engage template (identical phrasing pattern to alistar/braum/blitzcrank/bard) despite Galio being mechanically a shield/taunt anti-mage rather than a hook-engage duo. Left untouched here since the sweep's scope for this pass targeted the lint-flagged fields and the chart contradiction; flagging for a follow-up pass since 'Justice Punch spent, duo synced, go' undersells that Galio's real answer is the W shield/taunt, not the E engage timing alone."
+}

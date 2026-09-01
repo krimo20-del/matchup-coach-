@@ -1,0 +1,59 @@
+{
+ "ownerKey": "blitzcrank_sup",
+ "enemy": "lux",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[N].side reads 'Skill' on rows 0-3 while content win[N]/packet.levelChart read 'Blitzcrank' for those rows.",
+   "why": "Lux has no mobility before level 6, so a landed level-1/2 Rocket Grab kills her outright, and through levels 3-5 she is forced to spend Light Binding defensively instead of locking the ADC.",
+   "corrected": "Moved phases[0-3].side to 'Blitzcrank' and rewrote each .why to state the real reason; rows 4-6 already agreed with Skill and were left alone.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "content.win[0-6]", "content.whys[0-6]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Final Spark (R, 60/50/40s) at level 6 correctly identified as the point the matchup levels into a skillshot duel.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["enemyKit R"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no digit; tldr/dosFull[2].t/dontsFull[0].t/dontsFull[2].t/report[0].t/report[9].t/report[11].t misgender Lux as 'he/his/him'; two Do's/Don'ts bullets paste tradeGood/tradeBad under unrelated titles (all in lintFindings).",
+   "why": "Light Binding (Q) is a flat 10s cooldown; Lucent Singularity (E) is 10-8s; Final Spark (R) is 60/50/40s. Lux is she/her per champ-gender data.",
+   "corrected": "Added real cooldowns, fixed all misgendered fields, rewrote the two bled bullets to match their own titles.",
+   "confidence": "High",
+   "sources": ["lintFindings", "enemyKit", "champ-gender.js"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[0].why","before":"The hook threat IS level 1 — their duo plays behind minions or pays immediately.","after":"Immobile Lux gets deleted by any level-1 Rocket Grab — she has no escape."},
+  {"layer":"full","path":"phases[0].rating","before":"5/10","after":"7/10"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[1].why","before":"E joins: hook-fist is live and the lane's geometry answers to your arm.","after":"Your hook into full burst kills her before Light Binding even matters."},
+  {"layer":"full","path":"phases[1].rating","before":"5/10","after":"7/10"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: W the flank angles — the hook from fog is the lane's scariest sentence.","after":"She's forced to spend Light Binding peeling instead of locking your carry."},
+  {"layer":"full","path":"phases[2].rating","before":"5/10","after":"6/10"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[3].why","before":"Zone with the arm — every minion they hide behind is tempo you taxed for free.","after":"Through levels 4-5 one whiffed Light Binding still hands you a free kill window."},
+  {"layer":"full","path":"phases[3].rating","before":"5/10","after":"6/10"},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Lux Light Binding: matchup-defining — Everything keys off the root — minion-block it and the combo never starts. It writes your spacing rules. - W Overdrive is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Light Binding (Q) is a flat 10s cooldown — minion-block it and her combo never starts. - Lucent Singularity (E) reloads in 10-8s and zones your walk-up. - Final Spark (R) resets at 60/50/40s — the poke window that decides late fights."},
+  {"layer":"full","path":"tldr","before":"He pokes the robot — eat the rent behind minions and hook the one rotation gap that matters.","after":"She pokes the robot — eat the rent behind minions and hook the one rotation gap that matters."},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"Stay behind the wave so Light Binding has no clean line to you or your carry while you wait to walk up."},
+  {"layer":"full","path":"dosFull[2].t","before":"Silence the zone he channels","after":"Silence the zone she channels"},
+  {"layer":"full","path":"dontsFull[0].t","before":"Fish through his minion line","after":"Fish through her minion line"},
+  {"layer":"full","path":"dontsFull[2].t","before":"Grab the tank his zone protects","after":"Grab the tank her zone protects"},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with intentions.","after":"Grabbing whoever her Lucent Singularity zone is covering just walks you into her poke for nothing."},
+  {"layer":"full","path":"report[0].t","before":"He pokes the robot — eat the rent behind minions and hook the one rotation gap that matters.","after":"She pokes the robot — eat the rent behind minions and hook the one rotation gap that matters."},
+  {"layer":"full","path":"report[9].t","before":"Commit on Light Binding’s cooldown, on your first item spike, and with your carry’s damage online. Make him flinch first.","after":"Commit on Light Binding’s cooldown, on your first item spike, and with your carry’s damage online. Make her flinch first."},
+  {"layer":"full","path":"report[11].t","before":"Fish through his minion line. Walk the zone at half HP. Grab the tank his zone protects. Keep the ultimate for the swing moment, not the spacing war.","after":"Fish through her minion line. Walk the zone at half HP. Grab the tank her zone protects. Keep the ultimate for the swing moment, not the spacing war."}
+ ],
+ "notes": "Level chart had 4 of 7 rows disagreeing between full ('Skill') and content/packet (Blitzcrank on rows 0-3) — corrected side+why for rows 0-3, left rows 4-6 alone since they already agreed. packet.suspectNames flagged 'Power Fist-' in the content.early field as a possible typo of 'power fist' — checked it, it's the real ability name Power Fist directly hyphenated to Overdrive ('Power Fist-Overdrive burst'), a false positive; left untouched. breakdown.wave, breakdown.carry, breakdown.difficulty, tradeGood/tradeBad remain templated but not factually wrong; left for time budget."
+}

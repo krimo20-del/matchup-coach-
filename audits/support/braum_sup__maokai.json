@@ -1,0 +1,62 @@
+{
+ "ownerKey": "braum_sup",
+ "enemy": "maokai",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Both are engage-support tanks with hard CC; lane difficulty is a mutual-engage skirmish, which the tldr and winCon already capture.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief.ownerKit", "brief.enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Power spikes (level 2 all-in, level 6 lane-wide root, first-item tank stats) are already stated in phases[] and spikes[]. Kept, only re-anchored to real cooldowns in breakdown.cooldowns.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief.currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0-6].side is the templated enum value 'Skill' on every row, which does not name a side. The content layer win[] already names Maokai for stages 0-4 and Braum for 5-6, and the why text for each row already argues that side's case — so 'Skill' is a stale placeholder disagreeing with its own row.",
+   "why": "Per the chart rule, when win[N] already holds the correct side, the full-layer side is edited alone with no win[N] edit (a no-op would be rejected). Maokai's Twisted Advance (W, 14/13/12/11/10s CD) and Sapling Toss (E) give him the early poke/root priority the why-text describes; Braum's tank stats and Unbreakable (E, 16/14/12/10/8s CD) flip it once itemized.",
+   "corrected": "phases[0-4].side -> 'Maokai', phases[5-6].side -> 'Braum'",
+   "confidence": "High",
+   "sources": ["brief.currentText.full.phases", "brief.currentText.content.win"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Braum"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Braum"},
+  {
+   "layer":"full",
+   "path":"dosFull[1].d",
+   "before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after":"He leaps onto whoever you left exposed and roots them for his ADC's follow-up — track Twisted Advance before your carry steps past minions."
+  },
+  {
+   "layer":"full",
+   "path":"dontsFull[2].d",
+   "before":"Engaging into a banked disengage — the chain that starts answered is a donation with armor.",
+   "after":"Flash can rebuy his Twisted Advance range for a surprise root — don't commit right after he's used Flash, wait until the root itself is actually spent."
+  },
+  {
+   "layer":"full",
+   "path":"breakdown.cooldowns",
+   "before":"- Maokai Twisted Advance (Root): matchup-defining — Point-and-click root — count its cooldown before stepping up. Read it before every duo step-up. - Your E Unbreakable answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after":"- Maokai's Twisted Advance (W) is down 14s at rank 1, 10s by rank 5 — count it before any step-up. - Your Unbreakable (E) is 16s early, 8s late, and answers one disaster per cast. - Glacial Fissure (R) sits at 130s early; spend it on the swing moment only."
+  }
+ ],
+ "notes": "suspectNames flagged wants.foe[2] 'Ult Nature's Grasp (R)' as a possible wrong name, but it matches enemyAbilities.R ('Nature's Grasp') exactly — false positive, left alone. missingInteractions items 1 (Maokai's Bramble Smash Q denying Braum's W dash) and 3 (Maokai going untargetable through the W root, dodging Braum's commit) are real and worth folding into breakdown.mid or dosFull on a future pass, but doing so within the +/-10% length band without cutting an existing fact needs more room than this pass had — flagged here rather than forced in."
+}

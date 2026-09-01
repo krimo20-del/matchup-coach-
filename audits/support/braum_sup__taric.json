@@ -1,0 +1,48 @@
+{
+ "ownerKey": "braum_sup",
+ "enemy": "taric",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content early/mid/late already correctly state Braum wins 1-3 (Taric's Dazzle is telegraphed), Taric flips at 6 via Cosmic Radiance invuln, Braum claws back first item, and Taric wins late via layered shields/heals/invuln.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief currentText.content"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "Two rows disagreed between phases[].side (full) and content win[N]: row4 said 'Skill' while win[4]='Taric', and row5 said 'Taric' while win[5]='Braum' (opposite direction from the usual template-leftover pattern).",
+   "why": "The full-layer chart row must name the same side as content win[N] for the same stage. Row4's why also still described Braum's knockup winning the stage, contradicting the Taric verdict.",
+   "corrected": "Set phases[4].side=Taric (rating down, why rewritten to Cosmic Radiance invuln negating the all-in) and phases[5].side=Braum (why already matched Braum-favor, so side alone was corrected, no win[] edit needed either way).",
+   "confidence": "High",
+   "sources": ["brief currentText.content.win/whys"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no cooldown number (lint COOLDOWN_NO_DIGIT); missingInteractions flagged Starlight's Touch (Q) anti-heal timing as unaddressed by the full-layer text.",
+   "why": "Cosmic Radiance (R) is 180/150/120s CD and Dazzle (E) is 16/15/14/13/12s CD — naming both makes the commit/bait-window advice concrete.",
+   "corrected": "breakdown.cooldowns now cites Cosmic Radiance's and Dazzle's real cooldowns alongside Braum's own Unbreakable CD.",
+   "confidence": "High",
+   "sources": ["brief enemyKit"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Taric" },
+  { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "4/10" },
+  { "layer": "full", "path": "phases[4].why", "before": "Glacial Fissure online — the line knockup starts dives and ends theirs.", "after": "Cosmic Radiance invuln negates your all-in — bait it before he R's through." },
+
+  { "layer": "full", "path": "phases[5].side", "before": "Taric", "after": "Braum" },
+
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Taric Cosmic Radiance: matchup-defining — The delayed invulnerability erases your teamfight damage — burst before it lands or wait it out. It writes your spacing rules. - E Unbreakable is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Taric's Cosmic Radiance (R) is 180/150/120s CD — the delayed invulnerability erases your burst; commit before it lands or wait it fully out. - Dazzle (E) stun runs 16/15/14/13/12s CD. - Your own Unbreakable (E) runs 16/14/12/10/8s, saving fights not seasoning trades." },
+
+  { "layer": "full", "path": "dosFull[1].d", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "Dazzle's stun needs a wind-up you can body through — engage before his Bastion shields come online." },
+
+  { "layer": "full", "path": "dontsFull[2].d", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Cosmic Radiance is only 120s CD at rank 3 — commit into it and your whole combo does nothing." }
+ ],
+ "notes": "Chart: unlike the usual flat-Skill-template pattern, this matchup's phases[].side was mostly already correct (rows 0-3, 6) except row4 (had 'Skill', should be 'Taric' to match win[4]) and row5 (had 'Taric', should be 'Braum' to match win[5] — this one had the side flipped the wrong direction, not just untouched). Row5's why text already matched the Braum verdict so only the side field needed correcting. Fixed both lintFindings (bleed + no-digit cooldowns). The single missingInteraction (anti-heal on Starlight's Touch) is already covered by report[8].t's itemization line, so left as-is to avoid duplication."
+}

@@ -1,0 +1,61 @@
+{
+ "ownerKey": "brand_sup",
+ "enemy": "thresh",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Lane difficulty is stated as EVEN (5.5/10) and the level chart tracks Brand favored levels 1-3, skill-dependent 4+, which matches the packet's levelChart exactly.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.full.diffRating"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Power spikes (level 2 W-Q burst, level 6 Pyroclasm, first item) are named in phases[] and spikes[], consistent with Brand's item/level curve.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Neither the full nor content layer mentions that Pillar of Flame (W) creates terrain that blocks Thresh's Dark Passage (W) lantern dash, or that Dark Passage's shield absorbs Brand's burst window.",
+   "why": "missingInteractions flags both (enemy-dash-deniable, shield-absorbs-burst) as applicable but unstated. Thresh's W is a 21-17s cooldown lantern that both shields an ally and lets them dash to him; Brand's terrain-creating W can deny that dash, and the shield itself eats a burst rotation if not baited first.",
+   "corrected": "Folded into report[5].t (Key Ability Interactions) and breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["ownerKit.W.flags.terrain", "enemyKit.W.flags.dash", "enemyKit.W.flags.shield", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "W the pair, E the ablaze, Q the stun, walk — the package billed two and the burn collects after.",
+   "after": "Track Death Sentence's cooldown and load your combo when it's down — Thresh has zero engage to punish it."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking clean targets while the engage waits — the unablazed Q is the kit's most expensive miss.",
+   "after": "Fighting into a live Death Sentence window — a landed hook chains straight into his ADC's Flay all-in."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Thresh Death Sentence: matchup-defining — The hook starts the lantern chain — dodge it and the playbook waits 19 seconds. The duo’s tempo bends around it. - Keep E-Q stun package banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Thresh Death Sentence: matchup-defining — The hook starts the lantern chain — dodge it and the playbook waits 19 seconds. The duo's tempo bends around it. - Bait Dark Passage (W) out before you commit; it absorbs your whole burst window. - The ultimate is a fight decision, not a habit."
+  },
+  {
+   "layer": "full",
+   "path": "report[5].t",
+   "before": "Track Thresh’s Death Sentence: The hook starts the lantern chain — dodge it and the playbook waits 19 seconds. The whole green-light system is its cooldown.",
+   "after": "Track Death Sentence: dodge it and the lantern chain waits 19 seconds. Pillar of Flame (W) blocks Dark Passage dashes; Dark Passage also eats your burst — bait it first."
+  }
+ ],
+ "notes": "wants.foe[0] flagged as suspect ('Land Death Sentence') is a false positive — Death Sentence is Thresh's real Q name per enemyAbilities, left unchanged. Fixed both COPY_PASTE_BLEED lint findings (dosFull[1].d, dontsFull[2].d) with content matched to their titles. Folded both missingInteractions entries (Pillar of Flame denying Dark Passage dash; Dark Passage shield absorbing burst) into breakdown.cooldowns and report[5].t rather than adding new array entries, since dosFull/dontsFull/report counts must stay fixed."
+}

@@ -1,0 +1,54 @@
+{
+ "ownerKey": "braum_sup",
+ "enemy": "hwei",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Hwei out-ranges Braum with zero gap-closer on Braum's side; TRICKY at 7/10 with Hwei favored early is consistent with his Q/W/E paint-poke kit.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/hwei.json", "champ-data/_kits/braum_sup.json"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 phases[].side values are the placeholder 'Skill' while the matching content win[] row already names Hwei (rows 0-5) or Braum (row 6). The level chart contradicts itself on every row.",
+   "why": "phases[N].side and content win[N] are the same row and must name the same side. win[] already carries the correct verdict (matches packet.levelChart exactly), so side must be updated to match, not re-derived.",
+   "corrected": "Set phases[0..5].side to 'Hwei' and phases[6].side to 'Braum', matching win[0..6] and the packet levelChart with no win[] edit needed.",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "currentText.content.win[0..6]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Full layer repeatedly names a fabricated ability 'Subject: Fear (CC Paints)' as Hwei's key CC. No such ability exists — Hwei's real E paint tree (Torment) contains Grim Visage (fear), Gaze of the Abyss, and Crushing Maw; Grim Visage is the fear/CC one referenced by the surrounding text ('All his CC lives on E').",
+   "why": "The kit file's enemyAbilities and Riot's own naming give E's paint options as Grim Visage / Gaze of the Abyss / Crushing Maw. 'Subject: Fear (CC Paints)' matches none of them and would mislead a reader trying to track the real ability on their screen.",
+   "corrected": "Replace every instance of 'Subject: Fear (CC Paints)' with 'Grim Visage (E)', following the AbilityName (Effect/Slot) convention already used elsewhere on the page.",
+   "confidence": "Medium",
+   "sources": ["champ-data/_kits/hwei.json enemyAbilities E: Subject: Torment", "brief enemyKit E text: crowd control abilities: Grim Visage, Gaze of the Abyss, Crushing Maw"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Hwei"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Hwei"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Hwei"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Hwei"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Hwei"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Hwei"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Braum"},
+  {"layer":"full","path":"winCon","before":"Door the keystone and stun the silence. Track Subject: Fear (CC Paints) before every commit and keep the lane where your duo’s pattern works.","after":"Door the keystone and stun the silence. Track his Grim Visage (E) fear before every commit and keep the lane where your duo’s pattern works."},
+  {"layer":"full","path":"enemyWin","before":"Hwei wins by landing Subject: Fear (CC Paints), denying your pattern, and billing your duo per wave until the all-in is unaffordable.","after":"Hwei wins by landing Grim Visage (E), denying your pattern, and billing your duo per wave until the all-in is unaffordable."},
+  {"layer":"full","path":"loading","before":"- Braum vs Hwei - Track: Hwei Subject: Fear (CC Paints). - Engage when their answer is down — the chain only needs one clean start. - Engage only on Subject: Fear (CC Paints)’s cooldown. - Spend your ultimate on fight windows only.","after":"- Braum vs Hwei - Track: Hwei Grim Visage (E). - Engage when their answer is down — the chain only needs one clean start. - Engage only on Grim Visage (E)’s cooldown. - Spend your ultimate on fight windows only."},
+  {"layer":"full","path":"focus.text","before":"Hwei Subject: Fear (CC Paints)","after":"Hwei Grim Visage (E)"},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Hwei Subject: Fear (CC Paints): matchup-defining — All his CC lives on E — dodge the paint and the burst never chains. It writes your spacing rules. - E Unbreakable is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Hwei's Grim Visage (E) fear is a 12s cooldown at rank 1, down to 10s at rank 5 — dodge the paint and the burst never chains. - Your Unbreakable (E) is 16s at rank 1, 8s at max — save it for his commit, not chip poke. - His R is 120/100/80s — force it early or play around its absence."},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"Every landed auto during his rotation adds a quarter-stun; three autos plus a Q force the 4th-stack stun before he can reposition."},
+  {"layer":"full","path":"dosFull[2].d","before":"Hwei wastes Subject: Fear (CC Paints) — that is your full-commit window.","after":"Hwei wastes Grim Visage (E) — that is your full-commit window."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with armor.","after":"His combo out-ranges your Winter's Bite by hundreds of units — you eat full damage and land nothing back."},
+  {"layer":"full","path":"report[5].t","before":"Track Hwei’s Subject: Fear (CC Paints): All his CC lives on E — dodge the paint and the burst never chains. Forward steps wait for its downtime.","after":"Track Hwei’s Grim Visage (E): his fear is the CC that chains his combo — dodge the paint and the burst never chains. Forward steps wait for its downtime."},
+  {"layer":"full","path":"report[9].t","before":"Commit on Subject: Fear (CC Paints)’s cooldown, on your first item spike, and with your carry’s damage online. Bait the answer, then sign.","after":"Commit on Grim Visage (E)’s cooldown, on your first item spike, and with your carry’s damage online. Bait the answer, then sign."}
+ ],
+ "notes": "Fixed a fabricated ability name ('Subject: Fear (CC Paints)') used 8x across the full layer -> replaced with the real ability, Grim Visage (E). Fixed both lint COPY_PASTE_BLEED entries and gave breakdown.cooldowns real digits. Also fixed the level chart: all 7 phases[].side were the unresolved 'Skill' placeholder while content win[] already had the correct verdict per row (matches packet.levelChart) -- brought side into agreement, no win[] edit needed since win[] was already right."
+}

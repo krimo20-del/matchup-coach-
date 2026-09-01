@@ -1,0 +1,127 @@
+{
+ "ownerKey": "hwei_sup",
+ "enemy": "swain",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The level chart's two layers disagree on four of seven rows: content win[0]=Hwei, win[4]=Swain, win[5]=Hwei, win[6]=Hwei, but full phases[0]/[4]/[5]/[6].side all read \"Skill\" — a blanket template that never picked up the actual swings the content layer already argues.",
+   "why": "whys[0]: 'Level 1 favours you: your E-Q poke lands before Swain's root and W come online.' whys[4]: 'Level 6 favours Swain: Demonic Ascension drain out-sustains your poke.' whys[5]: 'First item swings to you: burst poke chunks him faster than Ascension can heal.' whys[6]: '2+ items stay yours: long-range R punishes an immobile Swain.'",
+   "corrected": "Moved phases[0]/[4]/[5]/[6].side to match win[N] (Hwei, Swain, Hwei, Hwei respectively) and rewrote each .why to state the actual swing, with ratings adjusted off the flat 5-6/10 template.",
+   "confidence": "High",
+   "sources": ["currentText.content.win", "currentText.content.whys"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Nevermove as matchup-defining but has no digit (lint COOLDOWN_NO_DIGIT).",
+   "why": "Kit gives real numbers: Swain's E (Nevermove) is 12/11.5/11/10.5/10s, R (Demonic Ascension) is a flat 120s and channels indefinitely once he's draining champions.",
+   "corrected": "Added the E cooldown range and R's indefinite-drain behavior to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Power spikes accurately track level 2 (ranged poke duel dodging Nevermove), level 6 (Swain's Ascension+root all-in window), first item (Hwei's burst poke reclaims the edge), and late (Hwei punishes an immobile Swain from range).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "QQ the pair from artillery range — bot's formations eat the lava line beautifully.",
+   "after": "Your E-Q poke lands before Swain's root and W come online — the early edge is yours."
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Hwei"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].rating",
+   "before": "5/10",
+   "after": "7/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Spiraling Despair online — the river fights start at your brush-length.",
+   "after": "Demonic Ascension after a landed Nevermove out-drains your poke — this is Swain's window, not yours."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Swain"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].rating",
+   "before": "6/10",
+   "after": "6/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "First item: the rotations chunk and the CC paints decide every gank.",
+   "after": "Your burst poke chunks him before he can stack Ascension value — the lead swings back to you."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Hwei"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].rating",
+   "before": "6/10",
+   "after": "7/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].why",
+   "before": "Late support Hwei opens fights: R the carry, fear the choke, and root whatever the slow catches.",
+   "after": "Long-range R and combos punish an immobile Swain who must close for value — the lane stays yours."
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Hwei"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].rating",
+   "before": "6/10",
+   "after": "7/10"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Swain Nevermove: matchup-defining — The root that decides — dodge it and the general farms regret. Read it before every duo step-up. - Your E fear paint answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Swain's Nevermove (E) is 12s early, 10s at max — dodge it and the general farms regret. - Your E fear paint answers one disaster per cooldown. - His R (120s) is indefinite once draining — don't feed him channel time."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "QQ the pair, any second paint for the mark, detonate — gallery math their duo can't price.",
+   "after": "Repeating the combo lets him read your rotation — vary which paint finishes the mark each reset."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Painting predictably until the hook learns your rhythm — vary the palette or donate the artist.",
+   "after": "Your E fear answers Nevermove's root chain — spend it on chip and the follow-up goes uncontested."
+  }
+ ],
+ "notes": "Biggest finding: 4 of 7 chart rows (0, 4, 5, 6) had full.phases[].side stuck on a blanket 'Skill' template while content win[N] already correctly named the real winner (Hwei, Swain, Hwei, Hwei) with supporting whys — all four fixed as side+why+rating groups. Fixed both lintFindings. missingInteractions (anti-heal on P's Soul Fragment healing, and that it bypasses stacking resistances/percent-health) are already reflected in the enemyKit flags and existing prose doesn't contradict them; no dedicated field had room to add the resistances-invalidated point without breaking the length band, so it's recorded here rather than forced into an unrelated field."
+}

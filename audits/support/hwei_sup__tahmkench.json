@@ -1,0 +1,103 @@
+{
+ "ownerKey": "hwei_sup",
+ "enemy": "tahmkench",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[1].text and wants.foe[2] call Tahm Kench's ultimate 'Abyssal Voyage'. enemyAbilities.R and the enemyKit both give the real current name as 'Devour' — 'Abyssal Voyage' is a stale/outdated name.",
+   "why": "enemyKit.abilities R slot text and enemyAbilities.R both confirm 'Devour' as the live ability name. This matches the calibration example pattern (fabricated/outdated ability names shipping to the page).",
+   "corrected": "Replaced 'Abyssal Voyage' with 'Devour' in both fields, keeping the roam/gank-via-swallow framing which is accurate for Devour used on an ally.",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities", "packet.enemyAbilities"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The level chart's two layers disagree at levels 3 and 4-5: content win[2]/win[3] say 'Skill' (matching whys[2]/whys[3], which describe an even trade once his Q-W stun engage is online), but full phases[2]/[3].side both still say 'Hwei'.",
+   "why": "whys[2]: 'Level 3 evens to skill as his Q-W stun engage comes online.' whys[3]: 'Levels 4-5 stay skill: the trade hinges entirely on dodging Tongue Lash.'",
+   "corrected": "Moved phases[2].side and phases[3].side to Skill and rewrote each .why to match, since win[2]/win[3] already held the correct verdict.",
+   "confidence": "High",
+   "sources": ["currentText.content.win", "currentText.content.whys"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Abyssal Dive as matchup-defining but has no digit (lint COOLDOWN_NO_DIGIT), and never mentions that his R (Devour) is gated by 3 stacks of An Acquired Taste from Q hits rather than a normal cooldown.",
+   "why": "Kit gives real numbers: Abyssal Dive (W) is 21/20/19/18/17s; Devour (R) has 0 base cooldown but requires 3 stacks of the passive, which only build from landed Q hits.",
+   "corrected": "Added the W cooldown range and the stack-gating mechanic for R to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "His R (Abyssal Voyage) is a roam/gank tool, not lane pressure; keep vision on flanks and your own R plus long poke keeps him from ever landing a clean Tongue Lash into Devour.",
+   "after": "His R (Devour) is a roam/gank tool, not lane pressure — he swallows an ally to reposition; keep vision on flanks and your own R plus poke stop him landing Tongue Lash into it."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[2]",
+   "before": "Roam with Abyssal Voyage when you overextend",
+   "after": "Roam with Devour (swallow) when you overextend"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "Full palette: EE fear or EQ root into QQ — the support slot's longest pick kit.",
+   "after": "Level 3 evens as his Q-W stun engage comes online — the trade becomes about landing first."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Hwei",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].rating",
+   "before": "8/10",
+   "after": "5/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Mark-detonate the margins and bank Manaflow — the chip war is a gallery show.",
+   "after": "Levels 4-5 stay skill: the trade hinges entirely on dodging Tongue Lash."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Hwei",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].rating",
+   "before": "8/10",
+   "after": "5/10"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Tahm Kench Abyssal Dive: matchup-defining — His re-engage and his escape — all-in only while it is down. Read it before every duo step-up. - Your E fear paint answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Tahm Kench's Abyssal Dive (W) is 21s early, 17s at max — his re-engage and escape, all-in only while it's down. - Your E fear paint answers one disaster per cooldown. - Devour (R) needs 3 stacks of An Acquired Taste from Q — track stacks, not cooldown."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "QQ the pair, any second paint for the mark, detonate — gallery math their duo can't price.",
+   "after": "Repeating the combo lets him bank Devour stacks off you — vary which paint finishes the mark."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Painting predictably until the hook learns your rhythm — vary the palette or donate the artist.",
+   "after": "Your E fear is the answer once he's stacked Devour on you — spend it on chip and the eat goes uncontested."
+  }
+ ],
+ "notes": "Real ability-name error found and fixed: 'Abyssal Voyage' (outdated) -> 'Devour' (current kit) in spikes[1].text and wants.foe[2]. Chart mismatch at levels 3 and 4-5 (content already correct as Skill, full layer stale on Hwei) is fixed. Fixed both lintFindings (bleeds) and the cooldowns digit gap. missingInteractions (anti-heal on Q/E sustain, shield-absorbs-burst on E/R) are already well covered by existing content (spikes[0]/[2] reference his grey-health sustain, dosFull[0]/[2] and dontsFull[0] already address the E/R shield timing), so no further edit forced there."
+}

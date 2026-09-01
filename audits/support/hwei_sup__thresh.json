@@ -1,0 +1,52 @@
+{
+ "ownerKey": "hwei_sup",
+ "enemy": "thresh",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Lane difficulty is captured (TRICKY, 7/10) and matches the hook-dependent read; skill-issue framing is accurate since Thresh's whole kit gates on landing Q.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief:ownerKit","brief:enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "Level chart rows 0, 4, 5, 6 had phases[N].side = 'Skill' while content win[N] already said 'Hwei' for the same rows, and packet.levelChart agrees with content (Hwei/Skill/Skill/Skill/Hwei/Hwei/Hwei). The full layer disagreed with itself and with content.",
+   "why": "Hwei out-ranges Thresh at level 1 (poke before the hook is a lane threat), out-ranges his 450-range R at level 6, and out-poke-punishes missed 9-19s Death Sentence cooldowns once items land — all three rows should read owner-favored, matching content and the packet chart.",
+   "corrected": "Set phases[0/4/5/6].side to 'Hwei' and rewrote the matching .why lines; left win[N] untouched since content already agreed.",
+   "confidence": "High",
+   "sources": ["brief:packet.levelChart","brief:currentText.content"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "missingInteractions flags that Thresh's Dark Passage (W) shield absorbs Hwei's burst window and nothing in the page states it. breakdown.trading was also a verbatim concatenation of tradeGood+tradeBad (template, no unique interaction).",
+   "why": "Dark Passage grants a shield to nearby allies; committing a burst combo into an up lantern wastes the whole rotation for free.",
+   "corrected": "Rewrote breakdown.trading to state the shield-bait interaction explicitly with the ability name.",
+   "confidence": "High",
+   "sources": ["brief:missingInteractions","brief:enemyKit.W"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Hwei"},
+  {"layer":"full","path":"phases[0].why","before":"QQ the pair from artillery range — bot's formations eat the lava line beautifully.","after":"Hwei's E-Q poke lands from range before Death Sentence threatens — shove and chip freely."},
+  {"layer":"full","path":"phases[0].rating","before":"5/10","after":"6/10"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Hwei"},
+  {"layer":"full","path":"phases[4].why","before":"Spiraling Despair online — the river fights start at your brush-length.","after":"Your R outranges his 450-range prison — fights start at your brush length."},
+  {"layer":"full","path":"phases[4].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Hwei"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the rotations chunk and the CC paints decide every gank.","after":"First item poke punishes every missed Death Sentence hard, no CC to answer."},
+  {"layer":"full","path":"phases[5].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Hwei"},
+  {"layer":"full","path":"phases[6].why","before":"Late support Hwei opens fights: R the carry, fear the choke, and root whatever the slow catches.","after":"Late Hwei opens fights first: R the carry from 1300 range before his 450-range prison is relevant."},
+  {"layer":"full","path":"phases[6].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"dosFull[1].d","before":"QQ the pair, any second paint for the mark, detonate — gallery math their duo can't price.","after":"Grim Visage fears once the hook lands, buying your ADC's window before Flay's pull chains a kill."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Painting predictably until the hook learns your rhythm — vary the palette or donate the artist.","after":"Burning Q or W on the wave spends the mana that punishes a missed hook — save it, don't push for creep."},
+  {"layer":"full","path":"breakdown.trading","before":"Good trade: QQ the pair, any second paint for the mark, detonate — gallery math their duo can't price. Bad trade: Painting predictably until the hook learns your rhythm — vary the palette or donate the artist.","after":"Good trade: bait Dark Passage (W) out first — it shields off your burst. Once spent, double-paint for the mark and detonate before the lantern resets. Bad trade: painting into an up lantern — the shield eats your combo for free."}
+ ],
+ "notes": "suspectNames flagged wants.foe[0] 'Land Death Sentence' but Death Sentence IS Thresh's real Q name per enemyAbilities — false positive, left alone. Template sweep: breakdown.early/wave/feeding/carry/late and ahead/tradeGood/loading still read as swappable across Hwei's other matchups (painting-theme filler with no Thresh-specific fact) but I could not ground a further rewrite without risking length-band rejection on top of the chart+lint fixes already queued; flagging for a follow-up pass. report[] left untouched (not lint-flagged, no fabricated name)."
+}

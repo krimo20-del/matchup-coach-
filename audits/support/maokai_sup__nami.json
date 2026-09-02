@@ -1,0 +1,42 @@
+{
+ "ownerKey": "maokai_sup",
+ "enemy": "nami",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "phases[N].side (Nami, Nami, Skill, Maokai, Maokai, Skill, Nami) already matches content win[0..6] exactly and matches the packet's levelChart with no defects flagged — no chart disagreement to fix here.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win", "currentText.full.phases"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "spikes correctly track Aqua Prison stopping W at level 2, R Nature's Grasp beating Nami's non-CC ult at 6, E-buff all-in evening out first item, and Tidal Wave/E-kite taking over late.",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "missingInteractions flags that Nami's Ebb and Flow (W) sustain through chip means Grievous Wounds timing decides extended trades, but breakdown.cooldowns has no digit (lint COOLDOWN_NO_DIGIT) and the itemization line mentioning anti-heal misgenders Nami as 'his'.",
+   "why": "Nami W has a flat 10s cooldown and heals on every bounce, so anti-heal timing directly counters her sustain-trade plan; Aqua Prison is 12/11/10/9/8s by rank and Maokai's Q is 7/6.5/6/5.5/5s — stating these numbers makes both the cooldown-window advice and the anti-heal-timing advice concrete.",
+   "corrected": "Add real cooldown numbers to breakdown.cooldowns and fix the misgendered anti-heal line in report[8] (itemization) — that field already carries the missing-interaction's anti-heal note, it just needs correcting, not duplicating.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "missingInteractions", "lintFindings"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"Land W Twisted Advance the moment Aqua Prison is down — her 12-to-8s Q cooldown is the only window you get."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with armor.","after":"Wasting E Sapling on the minion wave leaves no zone tool once her Q resets and she pokes freely."},
+  {"layer":"full","path":"report[8].t","before":"World Atlas start. Locket or Zeke's line, Mobility-Mercs by lane, then Knight's Vow paths. Add anti-heal early into his duo’s sustain.","after":"World Atlas start. Locket or Zeke's line, Mobility-Mercs by lane, then Knight's Vow paths. Add anti-heal early into her duo’s sustain."},
+  {"layer":"full","path":"report[9].t","before":"Commit on Aqua Prison’s cooldown, on your first item spike, and with your carry’s damage online. Make him flinch first.","after":"Commit on Aqua Prison’s cooldown, on your first item spike, and with your carry’s damage online. Make her flinch first."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Nami Aqua Prison: matchup-defining — The bubble starts every Nami play — sidestep it and her kit is small numbers. It writes your spacing rules. - Q Bramble Smash is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Nami Aqua Prison (Q): 12/11/10/9/8s cooldown bubble — sidestep it and her kit is small numbers. It writes your spacing rules. - Q Bramble Smash (7s at rank 1) is for saving fights, not seasoning trades. - The R (130/110/90s) opens or closes fights — pick one per cast."}
+ ],
+ "notes": "No level-chart edits needed — full.side already agrees with content.win and the packet's own chart, so nothing to fix there (chart rule: nothing to do when nothing disagrees). dosFull[1].t and dontsFull[2].t left unchanged (before==after) since only the copy-paste-bled .d bodies were templated/wrong per lintFindings; kept the .t rows in the edit list only for traceability, not as real changes — if the applier rejects a no-op title edit, drop those two lines and keep the .d edits, which are the substantive fix. tldr/winCon/enemyWin/breakdown.early/mid/wave/trading/spikes/feeding/carry/difficulty/late, ahead, and loading were checked against the template sweep and are already Nami-specific (Aqua Prison named, Ebb and Flow sustain framing) — left alone."
+}

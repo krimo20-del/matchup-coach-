@@ -1,0 +1,58 @@
+{
+ "ownerKey": "maokai_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Blitzcrank pick threat early, Maokai stabilizing at 6 and 2+ items matches packet win rate 52.12%.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 2 (Rocket Grab + Power Fist pick), level 6 (Nature's Grasp), first item (fed Q-E-R combo) and 2+ items (tank stats eat the hook) spikes are already named correctly.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[0,1,4,5,6].side all read 'Skill' while content win[] and the packet levelChart already read Blitzcrank/Blitzcrank/Skill/Skill/Maokai/Blitzcrank/Maokai — five of seven rows disagreed between the two layers.",
+   "why": "Rocket Grab is an instant level-1/2 pick threat (content whys[0-1]), Nature's Grasp and 2+ item tankiness already favor Maokai (phases[4].why and phases[6].why already read that way), and a fed Q-E-R combo swings first item back to Blitzcrank (content whys[5]).",
+   "corrected": "Moved phases[0,1,5].side to 'Blitzcrank' with matching why text; moved phases[4,6].side to 'Maokai' (why text there already described the Maokai-favoring verdict, so only the side flag needed to change). win[] needed no edits — it already held the correct values throughout.",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "brief currentText.content.win[]", "brief currentText.content.whys[]"]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "missingInteractions flagged three unmentioned interactions: mutual knockup race (Bramble Smash/Sapling Toss vs Power Fist), Blitzcrank's Mana Barrier/Static Field shield absorbing burst, and Power Fist's auto-attack-reset wind-up as the real all-in tell.",
+   "why": "Whoever lands their displacement first controls the trade; his shield changes all-in math; and the E wind-up (not the ability cast) is the actual cue to disengage.",
+   "corrected": "Folded the knockup race and shield-absorb into breakdown.trading's good/bad trade clauses; folded the auto-reset tell into dontsFull[2].d, replacing its copy-pasted tradeBad text.",
+   "confidence": "High",
+   "sources": ["brief missingInteractions"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Blitzcrank" },
+  { "layer": "full", "path": "phases[0].why", "before": "Sapling the brush — the lane's hedges are yours now; trades start with a tree's consent.", "after": "Rocket Grab is an instant pick threat at level 1 — his cooldown decides who gets zoned." },
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Blitzcrank" },
+  { "layer": "full", "path": "phases[1].why", "before": "W threat begins: the point-click root governs their carry's spacing.", "after": "Power Fist comes online at level 2 and makes any forward step lethal." },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Maokai" },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Blitzcrank" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item: the roots chain and the saplings tax every brush.", "after": "A fed Q-E-R combo still deletes squishies through fog on first item" },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Maokai" },
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. The duo’s tempo bends around it. - Keep Q Bramble Smash banked for their best play. - The ultimate is a fight decision, not a habit.", "after": "- Rocket Grab is 20/19/18/17/16s — minion cover turns the lane into a farming sim while it's down. The duo's tempo bends around it. - Keep Bramble Smash (7-5s) banked for their best play. - Static Field's silence (60/40/20s) is a fight decision, not a habit." },
+  { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all. Bad trade: Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Good trade: land your knockup (Q or E) before his Power Fist lands — whoever displaces first owns the trade. Bad trade: all-in before Mana Barrier's shield or Static Field burns off — it absorbs your whole burst window." },
+  { "layer": "full", "path": "dosFull[1].d", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "Punish his 16-20s Rocket Grab cooldown with W-Q — force his shield and silence out before your team commits." },
+  { "layer": "full", "path": "dontsFull[2].d", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Power Fist's wind-up (E) is his all-in tell — step back on the animation, not the hit." }
+ ],
+ "notes": "Full-layer level chart disagreed with the already-correct content win[]/packet.levelChart at 5 of 7 rows (0,1,4,5,6). Fixed side (and why where the existing why didn't already match the target verdict — phases[4] and [6] why text was already Maokai-flavored so those needed side only). win[] required no edits. Fixed COOLDOWN_NO_DIGIT on breakdown.cooldowns with real numbers (Rocket Grab 20/19/18/17/16, Bramble Smash 7-5, Static Field silence 60/40/20). Fixed COPY_PASTE_BLEED on dosFull[1].d and dontsFull[2].d, and used dontsFull[2] to carry the autoreset-burst-tell missing interaction (Power Fist E wind-up as the real tell). Folded knockup-enabler and shield-absorbs-burst missing interactions into breakdown.trading."
+}

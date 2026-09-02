@@ -1,0 +1,49 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 full-layer phases[].side read 'Skill' while packet.levelChart and content win[] agree: Karma wins 1-5, Blitzcrank flips it at 6 and 1st item, Karma reclaims it late.",
+   "why": "packet.levelChart = [Karma,Karma,Karma,Karma,Blitzcrank,Blitzcrank,Karma] matches content win[0..6] exactly.",
+   "corrected": "Set phases[0-3].side and phases[6].side to Karma (why already matches). Set phases[4-5].side to Blitzcrank and rewrote their why to state the R Static Field + Q-E one-shot threat, grounded in content whys[4-5].",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]", "currentText.content.whys[4]", "currentText.content.whys[5]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "n/a — spikes[1] (Lvl 6 Static Field one-shot) and spikes[2] (1st item hook fear) already correctly name the real spikes.",
+   "why": "Confirmed against kit: R Static Field cooldown 60/40/20s, silences and marks; E Power Fist 7/6.5/6/5.5/5s with auto-reset knockup.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real number (lint COOLDOWN_NO_DIGIT), and both missingInteractions items (Power Fist auto-reset tell, R silence removing your escape) were never stated.",
+   "why": "Static Field silences on activation, so pre-casting Mantra-E before he presses R wastes it — you need to hold it and react, and the E auto-attack wind-up is the visual tell before the knockup lands.",
+   "corrected": "Rewrote breakdown.cooldowns with Rocket Grab (Q) 20/19/18/17/16s, R Static Field 60/40/20s with its silence, and the Power Fist wind-up tell.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[4].why","before":"No new ult — press the early lead; scaling supports are waking up behind you.","after":"His R Static Field plus a Q-E chain one-shots you at this HP, and your Focused Resolve root is too slow to beat the instant grab."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[5].why","before":"First item: RQ chunks and RE engages — convert to plates and picks now.","after":"His one-shot hook threat peaks with first item — one Rocket Grab into Power Fist and Static Field kills a squishy, so play permanently behind minions."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"dosFull[1].d","before":"RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.","after":"Static Field silences on activation, so save Mantra-E to react after his R lands, not before — a pre-cast shield wastes the charge."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending mantra on a wave while the enemy banks theirs for your face.","after":"Power Fist's wind-up is the tell — step back on the animation, not the hit; waiting for the knockup itself is already too late."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. It writes your spacing rules. - RE shield-speed is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Rocket Grab (Q) is 20/19/18/17/16s — a whiff is a long window to punish. Stay behind minions until it's down. - R Static Field (60/40/20s) silences on activation, killing your escape — hold Mantra-E to react, don't pre-cast it. - Power Fist (E) has a visible wind-up before the knockup; that's your step-back cue."}
+ ],
+ "notes": "phases[].rating unchanged; the magnitude in the why text supports the existing numbers on the corrected side."
+}

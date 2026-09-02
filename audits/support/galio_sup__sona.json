@@ -1,0 +1,61 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "sona",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[6].side (2+ items) says 'Skill' — a generic placeholder, not a real verdict — while content win[6] already says 'Sona'. The two layers disagree on who wins the late-game row.",
+   "why": "Sona's late-game aura stacking and a fully-ranked Crescendo (140/120/100s CD) AoE stun genuinely out-scale a single-target Galio dive once both sides are 2+ items, which is exactly what content's win[6]='Sona' and the breakdown.late/carry text already argue.",
+   "corrected": "Moved phases[6].side from 'Skill' to 'Sona' to agree with the existing win[6], and rewrote phases[6].why to state the reason instead of leaving the generic template.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/sona.json", "tools/audit-run/packets/galio_sup.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content spikes[] already correctly identifies Level 2 (Galio's E-Q spike before Power Chord is online), Level 6 (Hero's Entrance vs no answer), 1st item (Galio out-trades her heals), and Late (Sona's auras/Crescendo flip it) — four real, distinct spikes.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/galio.js"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Crescendo as 'matchup-defining' with no cooldown number in the field (lint rule: must contain a digit). dosFull[1].d is a verbatim copy of tradeGood pasted under an unrelated 'E-W the carry on cooldown gaps' title. No writable field mentions that Aria of Perseverance (W) both heals and shields on the same cast, that Power Chord (P) / Hymn of Valor (Q) both carry an auto-attack-reset burst tell, or that Hymn of Valor applies on-hit (armor alone misreads Sona's poke once she has attack-speed items).",
+   "why": "Real numbers (Crescendo 140/120/100s) make the ult-tracking advice concrete; the anti-heal/shield-stack interaction from the missing-interactions file is high-value and currently occupies zero fields.",
+   "corrected": "Rewrote breakdown.cooldowns with the real R cooldown; rewrote dosFull[1].d to state the Aria of Perseverance heal+shield interaction and Grievous Wounds timing instead of repeating tradeGood.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/sona.json", "champ-data/_kits/_missing/galio_sup.json"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Sona"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].why",
+   "before": "Late Galio is the anti-dive: taunt their engage off your carry and R the map's emergencies.",
+   "after": "Sona's aura-stacked Crescendo now outscales your single dive — group fights, don't solo-engage."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Sona Crescendo: matchup-defining — The stun chord flips grouped fights — spread while it is up. The duo’s tempo bends around it. - Keep W Shield of Durand banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Sona's Crescendo (R) is 140/120/100s cooldown — the stun chord flips grouped fights, so track when it's down. The duo's tempo bends around it. - Keep W Shield of Durand banked for their best play. - The ultimate is a fight decision, not a habit."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Aria of Perseverance heals and shields off the same cast — buy Grievous Wounds early or her sustain erases your poke lead."
+  }
+ ],
+ "notes": "No brief file existed at tools/audit-run/briefs/support/galio_sup__sona.json; sourced from champ-data/_kits/galio.json, champ-data/_kits/sona.json, champ-data/_kits/_missing/galio_sup.json, tools/audit-run/packets/galio_sup.json, and the live full/content files. Chart edit proposed as a matched pair is NOT needed here (win[6] already reads 'Sona' — per the chart rule I edited side+why alone, no win[N] edit, since a before==after win edit would be a no-op and rejected). Confirmed via champ-data/champ-gender.js that Sona is female (she/her already used correctly in content) — the user's inline champion list in this brief omitted Sona/Soraka from the female roster, but the authoritative champ-gender.js file lists both; followed the file per the stated authority rule."
+}

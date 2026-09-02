@@ -1,0 +1,60 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "zyra",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "packet.defects flags \"level chart contradicts data: Galio wins 53.33% but the chart gives Zyra 5/7 stages\" as a possible error.",
+   "why": "Not an actual contradiction: content win[] and packet.levelChart already agree (Zyra L1-L5-minus-6 and first item, Galio L6 and 2+ items), and this exactly matches the pattern of every other matchup on this page — Galio is weak early, strong at 6 and late. Winning 2 of 7 lane stages but 53% of games overall is consistent with a scaling tank support, not a data error.",
+   "corrected": "No chart-direction change; only fixed the \"Skill\" placeholder to the already-agreed-upon side per row.",
+   "confidence": "Medium",
+   "sources": ["tools/audit-run/packets/galio_sup.json", "champ-data/content/sup/galio.js (win[])"]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 phases[].side values are the literal placeholder \"Skill\" instead of a real name.",
+   "why": "content win[] already agrees on the correct verdict per stage; only side/rating/why needed to move to match it.",
+   "corrected": "phases[0-3].side and phases[5].side -> Zyra; phases[4].side and phases[6].side -> Galio, why rewritten to match.",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/galio.js (win[])", "champ-data/sup/galio.full.js (phases[])"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Content repeatedly claims Galio's knockup \"interrupts\"/\"cancels\" Zyra's \"channeled Stranglethorns\" (spikes[1], mid, late, whys[4]) — but Stranglethorns carries no channel flag in the kit, unlike Vel'Koz/Xerath/Yuumi's ults which are explicitly flagged channel=\"interruptible — any CC cancels it\". Zyra's R is an instant cast with a delayed expand-then-contract knockup, not a maintained channel.",
+   "why": "champ-data/_kits/zyra.json R flags only list \"knockup\"; no channel flag. Riot's description (\"summons a twisted thicket... knocking them airborne as it contracts\") describes a fire-and-forget zone, not an ongoing cast Galio's CC can interrupt mid-effect. Only her brief cast window (like any ability) is interruptible by CC landed first — that's a much narrower claim than \"cancels the channel.\"",
+   "corrected": "Reworded the four instances to say CC landed before/during her cast interrupts the cast, not that the R is a channel that gets canceled mid-effect.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/zyra.json"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Zyra" },
+  { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "4/10" },
+  { "layer": "full", "path": "phases[0].why", "before": "Q the pair — the tornado tick chips duos that stand in formation.", "after": "Her Q Deadly Spines poke out-ranges your melee kit and controls the wave." },
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Zyra" },
+  { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "4/10" },
+  { "layer": "full", "path": "phases[1].why", "before": "W charge threat begins: the taunt governs their engage plans already.", "after": "Plant-empowered Q-plus-E root bursts your duo before your E can reach her." },
+  { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Zyra" },
+  { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "4/10" },
+  { "layer": "full", "path": "phases[2].why", "before": "Full kit: E-W the committed trade and the magic shield refunds their poke.", "after": "Her sustained plant poke still out-trades a Galio with no gap-closer online." },
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Zyra" },
+  { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "4/10" },
+  { "layer": "full", "path": "phases[3].why", "before": "Zone with taunt threat and shield the margins — AP duos pay double rent.", "after": "Her plant zone and root threat keep you soaking rather than trading back." },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Galio" },
+  { "layer": "full", "path": "phases[4].why", "before": "Hero's Entrance online — every roam your duo survives, you end.", "after": "Flash-E or R closes past her plants onto a dashless target — take the all-in." },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Zyra" },
+  { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item: the taunt rotation chunks and the MR makes mage supports cry.", "after": "Her first item restores plant DPS and zone control above your frontline." },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Galio" },
+  { "layer": "full", "path": "phases[6].why", "before": "Late Galio is the anti-dive: taunt their engage off your carry and R the map's emergencies.", "after": "R flanks an immobile Zyra behind her plant wall — land it before she resets." },
+  { "layer": "content", "path": "spikes[1].text", "before": "Level 6 is your flip point: Flash-E Justice Punch or R Hero's Entrance lands on top of Zyra past her plant zone, and your knock-up interrupts her ult Stranglethorns as it winds up. She has no dash to escape your dive, so coordinate the R entrance with your ADC and you convert her poke lane into a kill.", "after": "Level 6 is your flip point: Flash-E Justice Punch or R Hero's Entrance lands on top of Zyra past her plant zone, and CC landed during her cast interrupts Stranglethorns before it goes off. She has no dash to escape your dive, so coordinate the R entrance with your ADC and you convert her poke lane into a kill." },
+  { "layer": "content", "path": "mid", "before": "Through 3-4 she keeps the lane with plant-fueled poke and root threat, so play safe and ward for her E Grasping Roots. At 6 the matchup flips: Flash-E Justice Punch or R Hero's Entrance closes past her plants, cancels her channeled Stranglethorns, and gives you a decisive all-in with your ADC on a dashless target.", "after": "Through 3-4 she keeps the lane with plant-fueled poke and root threat, so play safe and ward for her E Grasping Roots. At 6 the matchup flips: Flash-E Justice Punch or R Hero's Entrance closes past her plants, interrupts her Stranglethorns cast if you land it first, and gives you a decisive all-in on a dashless target." },
+  { "layer": "content", "path": "late", "before": "Her first item restores zone control and plant DPS in spaced trades, so avoid the poke war and pick your engage when her root is down. By two items teamfights hinge on who lands AoE first, and your R flanking an immobile Zyra and interrupting her ult is a cleaner win than her plant wall ever holds.", "after": "Her first item restores zone control and plant DPS in spaced trades, so avoid the poke war and pick your engage when her root is down. By two items teamfights hinge on who lands AoE first, and your R flanking an immobile Zyra before her Stranglethorns cast lands is a cleaner win than her plant wall ever holds." },
+  { "layer": "content", "path": "whys[4]", "before": "At 6 your Flash-E or R closes past her plants and cancels her ult, flipping the lane to you.", "after": "At 6 your Flash-E or R closes past her plants and interrupts her cast, flipping the lane to you." }
+ ],
+ "notes": "Corrected a genuine mechanical overstatement: Stranglethorns (Zyra R) is not flagged as a channel in the kit (unlike Vel'Koz/Xerath/Yuumi's ults, which are explicitly channel=interruptible), so 'cancels her channeled ult' overstated what Galio's knockup can do — it can only interrupt her brief cast window before the thicket goes off, not stop an already-summoned effect. Reworded four instances (spikes[1], mid, late, whys[4]) to the narrower, kit-supported claim. Level chart's phases[].side held the literal placeholder \"Skill\" on all 7 rows although win[] already had the correct verdicts; the packet's own \"chart contradicts win rate\" defect flag was reviewed and judged a false positive (2-of-7 lane stages plus a strong 6/late spike is consistent with a 53% overall win rate for this champion's kit pattern), so the chart direction itself was left as-is."
+}

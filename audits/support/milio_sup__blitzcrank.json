@@ -1,0 +1,55 @@
+{
+ "ownerKey": "milio_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 phases[N].side read 'Skill' while content.win[0-5] read 'Blitzcrank' and win[6] reads 'Milio' — and packet.levelChart (Blitzcrank x6, Milio x1) matches win[]. The full-layer chart disagrees with the content-layer chart and the packet on every single row.",
+   "why": "The level chart is the single most load-bearing visual on the page; a reader sees it say 'even' on every row while the prose text elsewhere (whys[], early, spikes) all describe Blitzcrank dominating lane.",
+   "corrected": "Flipped phases[0-5].side to Blitzcrank and phases[6].side to Milio to match win[]/packet, and rewrote each phases[N].why (previously generic template text identical across matchups) to ground the verdict in this matchup's actual mechanics — Rocket Grab's threat range/cooldown, the lack of a Milio dash/cleanse for hooks, and the level-6/2-item flip once Breath of Life can answer the follow-up.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "content.win[]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "content.early says 'Your Q heal and cleanse can't undo a displacement.' Milio's Q has no heal or cleanse — that's his R, Breath of Life.",
+   "why": "Same fabricated-mechanic pattern as other Milio matchups: attributing the R's heal/cleanse to Q would mislead a reader about what's actually on cooldown when.",
+   "corrected": "Changed 'Your Q heal and cleanse' to 'Your R heal and cleanse'.",
+   "confidence": "High",
+   "sources": ["ownerKit Q/R ability text in brief"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "lintFindings: breakdown.cooldowns has no digit. Also flagged by packet.defects: 'NO cooldown-sequencing advice anywhere.'",
+   "why": "Both point at the same gap — the field needs a real, punishable cooldown number.",
+   "corrected": "Added Rocket Grab's real cooldown (20s rank 1, 16s maxed).",
+   "confidence": "High",
+   "sources": ["brief enemyKit.abilities Q.cd", "packet.defects"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].why","before":"Q-poke the contacts — the rebound catches the second body; bot stands in pairs.","after":"Rocket Grab threatens from level 1 — Milio has no cleanse or dash to answer it."},
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[1].why","before":"E-shields begin: two charges of trade insurance; count them like summoners.","after":"Blitz's hook-into-Power Fist spike outvalues your shield on an immobile ADC."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: the campfire's range gift means your duo out-ranges theirs standing still.","after":"Rocket Grab's short cooldown threatens every wave; standing to poke risks the pull."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[3].why","before":"Chip and warm the margins — the burn passive taxes every shielded trade.","after":"You stay pinned behind minions — no tool punishes his hook range advantage."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[4].why","before":"Breath of Life online — their CC chain comp now answers to one cleansing button.","after":"R (Static Field) silence-bursts a landed hook into a kill despite your heal."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the fire compounds and the range zone decides every poke war.","after":"He still converts one grab into a kill faster than your shield-heal offsets."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[6].why","before":"Late Milio un-CCs teamfights: cleanse the chain, range the siege, and warm the carry through everything.","after":"Two items your R finally heals and cleanses the hook's follow-up, flipping fights back to your side."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Milio"},
+  {"layer":"content","path":"early","before":"You are behind levels 1-6. Blitzcrank's Q (Rocket Grab) one-shots the lane's tempo: a single pull on your immobile ADC chains into W-E-R for a kill, and Milio has no dash or hard CC to contest the pick. Your Q heal and cleanse can't undo a displacement, so you must play permanently behind minions and body-block hook lines with your own champion.","after":"You are behind levels 1-6. Blitzcrank's Q (Rocket Grab) one-shots the lane's tempo: a single pull on your immobile ADC chains into W-E-R for a kill, and Milio has no dash or hard CC to contest the pick. Your R heal and cleanse can't undo a displacement, so you must play permanently behind minions and body-block hook lines with your own champion."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. Read it before every duo step-up. - Your R Breath of Life answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Blitzcrank Rocket Grab: 20s at rank 1, 16s maxed — the hook IS the champion; minion cover turns the lane into a farming sim. Read it before every duo step-up. - Your R Breath of Life answers exactly one disaster per cooldown. - Spend the R on swing moments only."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the rebound through the pair, warm the carry, auto — the burn ledger compounds while the buttons wait.","after":"Save Breath of Life for the full hook-into-burst chain, not a poke auto — one cleanse answers one chain."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending the R on a single stun — the cleanse answers chains; chains wait for it to be gone.","after":"He spends the whole combo on one grab — match cooldowns, not damage, or you feed the next."}
+ ],
+ "notes": "This matchup's level chart was the most broken of the slice so far: all 7 full-layer rows read 'Skill' (neutral) while the content layer and packet agreed Blitzcrank wins 6 of 7. Rewrote all 7 phases[].why to ground each row instead of leaving generic templated text next to a corrected side. Also fixed the recurring Q/R heal-cleanse mislabel and the digit-free cooldowns field flagged both by lint and by packet.defects. Did not touch report[] (out of sweep scope)."
+}

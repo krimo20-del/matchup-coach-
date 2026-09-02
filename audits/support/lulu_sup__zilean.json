@@ -1,0 +1,49 @@
+{
+ "ownerKey": "lulu_sup",
+ "enemy": "zilean",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "N/A",
+   "why": "Content-layer early/mid/late correctly frame this as Lulu-favored early (Zilean's thin mana and single-bomb kit can't contest poke), an even skill-fight through levels 4-6 and first item around his double-bomb stun and Chronoshift, and Lulu-favored again late once repeatable CC outlasts one revive.",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/lulu.js"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[].side is flat 'Skill' on all 7 rows, contradicting the packet levelChart and the content win[]/whys[], which give Lulu Level 1, Level 2, Level 3, and 2+ items, with Skill (even) only on Levels 4-5, Level 6, and First item.",
+   "why": "Zilean's Time Bomb needs a second bomb to stun and his mana is thin early, so Lulu's Glitterlance/Help, Pix! poke wins levels 1-3 outright per champ-data/_kits/zilean.json (Q cooldown 10/9.5/9/8.5/8, no CC until the double-bomb setup); late, Chronoshift only buys one revive against Lulu's repeatable Whimsy/Wild Growth lockdown.",
+   "corrected": "phases[0].side, phases[1].side, phases[2].side, phases[6].side all set to Lulu (matching win[]); ratings bumped and why rewritten on those four rows. Rows 3-5 (Levels 4-5, Level 6, First item) keep side=Skill, which already matches win[], so no edit was needed there.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/lulu_sup.json", "champ-data/content/sup/lulu.js", "champ-data/_kits/zilean.json"]
+  },
+  {
+   "point": 4,
+   "status": "correct",
+   "whatIsWrong": "N/A",
+   "why": "Ability names verified against champ-data/_kits/zilean.json: Time Bomb (Q), Time Warp (E), Chronoshift (R) are all correct. The lint-flagged 'Help Pix' truncation in early[] was the only naming issue and is fixed below (real name 'Help, Pix!').",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/zilean.json"]
+  }
+ ],
+ "edits": [
+  { "layer": "content", "path": "early", "before": "You own level 1-3: Zilean needs two bombs to stun and his mana can't sustain it, so your Glitterlance and Help Pix out-poke him and punish every step he takes to bomb the wave.", "after": "You own level 1-3: Zilean needs two bombs to stun and his mana can't sustain it, so your Glitterlance and Help, Pix! out-poke him and punish every step he takes to bomb the wave." },
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Lulu" },
+  { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[0].why", "before": "Glitterlance the contacts — the Pix angles double your poke and the chip is constant.", "after": "Zilean's thin mana and single-bomb kit can't contest your poke at level 1 outright." },
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Lulu" },
+  { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[1].why", "before": "E-mark trades begin: Pix on the carry makes every auto a volley.", "after": "Your Q+E out-trade his lone Time Bomb, punish every step at level 2." },
+  { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Lulu" },
+  { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[2].why", "before": "Polymorph online — their engage now has a 1.5-second hole where a champion used to be.", "after": "Level 3 you still out-poke him well before his stun combo becomes reliable to land." },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Lulu" },
+  { "layer": "full", "path": "phases[6].why", "before": "Late Lulu deletes dives: poly the assassin, grow the carry, and watch their plan become a squirrel.", "after": "Late your repeatable Whimsy and Wild Growth CC outlast his single Chronoshift revive." }
+ ],
+ "notes": "No brief file exists for lulu_sup as owner; worked directly from champ-data/_kits/zilean.json, tools/audit-run/packets/lulu_sup.json, and the full/content JS source. Rows 3-5 (Levels 4-5, Level 6, First item) already carry side=Skill in both layers, matching win[], so left untouched. breakdown.*, tradeGood/Bad, ahead, loading, and enemyWin reviewed for the template sweep and are already grounded in Zilean-specific mechanics (Chronoshift revive, double-bomb stun) — left unchanged."
+}

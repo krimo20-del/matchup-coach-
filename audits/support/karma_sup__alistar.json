@@ -1,0 +1,50 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "alistar",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[0-3].side say 'Alistar' and phases[4-6].side say 'Skill', but the packet levelChart and content win[] both agree: Karma wins levels 1 through 4-5, Alistar takes over at level 6, 1st item and 2+ items. The full-layer side field disagreed with its own why text (which already described Karma winning early) and with the content layer.",
+   "why": "packet.levelChart = [Karma,Karma,Karma,Karma,Alistar,Alistar,Alistar] matches content win[0..6] exactly; only full.phases[].side was wrong.",
+   "corrected": "Flip phases[0-3].side to Karma (why text already matches, no change needed there) and phases[4-6].side to Alistar with why rewritten to explain the level-6 Unbreakable Will flip.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "n/a — spikes[1] (Lvl 6, R Unbreakable Will) and spikes[2] (1st item pick window) already name the real power spikes accurately.",
+   "why": "Confirmed against kit: R cooldown 120/100/80s, unlocks at 6.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real cooldown number (lint COOLDOWN_NO_DIGIT), and the Trample (E) auto-attack-reset burst tell from missingInteractions was never stated anywhere on the page.",
+   "why": "Alistar's E Trample stacks and its 5th auto-attack reset is the actual tell that his stun combo is about to land; without a number/tell a reader can't time the disengage.",
+   "corrected": "Rewrote breakdown.cooldowns with Headbutt (W) 14/13/12/11/10s, Trample (E) 12/11.5/11/10.5/10s plus the auto-reset tell, and R 120/100/80s.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Alistar","after":"Karma"},
+  {"layer":"full","path":"phases[1].side","before":"Alistar","after":"Karma"},
+  {"layer":"full","path":"phases[2].side","before":"Alistar","after":"Karma"},
+  {"layer":"full","path":"phases[3].side","before":"Alistar","after":"Karma"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Alistar"},
+  {"layer":"full","path":"phases[4].why","before":"No new ult — press the early lead; scaling supports are waking up behind you.","after":"R Unbreakable Will comes online (120/100/80s CD) and tanks your poke while cleansing your root, guaranteeing his W-Q pick."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Alistar"},
+  {"layer":"full","path":"phases[5].why","before":"First item: RQ chunks and RE engages — convert to plates and picks now.","after":"With R and first item up, one Headbutt-Pulverize connects for a kill — your Focused Resolve root is too slow to beat his flash-W range."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Alistar"},
+  {"layer":"full","path":"phases[6].why","before":"Late Karma enables: RE the engage, tether the diver, RQ the sieges.","after":"He's a near-unkillable engage tank under R who walks through your poke — play max range and lean on Mantra-E disengage, not trades."},
+  {"layer":"full","path":"dosFull[1].d","before":"RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.","after":"Cast Focused Resolve the instant he commits Headbutt (14-10s CD) — the root holds through Pulverize and turns his combo into a dead cast."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending mantra on a wave while the enemy banks theirs for your face.","after":"His Passive Triumphant Roar heals him and nearby allies whenever his CC lands, so an even-HP trade quietly refills his bar while yours doesn't."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Alistar Headbutt: matchup-defining — The headbutt-pulverize combo starts every play — respect flash range while it is up. The duo’s tempo bends around it. - Keep RE shield-speed banked for their best play. - The ultimate is a fight decision, not a habit.","after":"- Headbutt (W) is 14/13/12/11/10s and opens every all-in — respect flash range while it's up; a whiffed cast is a free window. - Trample (E) cycles in 12-10s and its auto-reset is the burst tell — step back on the wind-up, not the cast. - R Unbreakable Will is 120/100/80s; bank Mantra-E for the fight he commits it to."}
+ ],
+ "notes": "phases[].rating left unchanged (7/10 for 0-3, 6/10 for 4-6) since the magnitude of advantage in the why text supports the same numbers on the corrected side. suspectNames flagged 'Hold Focused Resolve' as a possible bad name but it is Karma's real W name — false positive, no action taken."
+}

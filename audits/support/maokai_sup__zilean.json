@@ -1,0 +1,57 @@
+{
+  "ownerKey": "maokai_sup",
+  "enemy": "zilean",
+  "lane": "support",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "content win[] and the packet levelChart give Maokai levels 1 through 6 (indices 0-4) and Zilean 2+ items (index 6), with First item (index 5) already Skill, but full.phases[0..4].side and phases[6].side are all still the flat 'Skill' template.",
+      "why": "Zilean needs two Time Bombs (10s CD rank1) stacked on one target to stun — he can't do that reliably before 6, so Twisted Advance goes through unanswered early. Chronoshift (120s CD rank1) only becomes a real answer at 6, and by 2+ items its revive plus his E kiting starts negating kills outright.",
+      "corrected": "phases[0-3].side and phases[6].side moved to match win[]; phases[4] (Level 6) moved to Maokai per win[4], grounded in Chronoshift's long cooldown making it a one-time save rather than a lane-flipping answer. phases[5] (First item) left alone since win[5] already reads Skill.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zilean.json", "tools/audit-run/packets/maokai_sup.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns names Chronoshift as matchup-defining but never states a number.",
+      "why": "Chronoshift (R) is 120/90/60 seconds by rank — 120s at rank 1, and Time Bomb (Q) is 10s at rank 1 (the ability that needs a second stack to stun).",
+      "corrected": "Added both real cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/zilean.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeGood/tradeBad are the byte-identical generic template shared by every matchup in this file.",
+      "why": "champ-data/_kits/_missing/maokai_sup.json flags that Zilean can go untargetable through your commit via Chronoshift, and that Time Bomb (Q) is a mutual displacement race against Bramble Smash/Sapling Toss.",
+      "corrected": "Rewrote tradeGood/tradeBad naming Time Bomb's stun requirement and Chronoshift's cooldown.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/_missing/maokai_sup.json", "champ-data/_kits/zilean.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Maokai" },
+    { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[0].why", "before": "Sapling the brush — the lane's hedges are yours now; trades start with a tree's consent.", "after": "Zilean's only early threat is a single Time Bomb — he needs two stacked on the same target to stun, so your W engage goes through unpunished." },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Maokai" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[1].why", "before": "W threat begins: the point-click root governs their carry's spacing.", "after": "You hit level 2 first and can W his ADC while he's forced to burn a bomb just clearing the wave." },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Maokai" },
+    { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[2].why", "before": "Full kit: E-zone the trades, W the commits, Q the disengage — the swamp votes.", "after": "Twisted Advance locks his carry outright — his only peel is a telegraphed double-bomb stun that's easy to bait and dodge." },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Maokai" },
+    { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[3].why", "before": "Sustain the margins with passive heals and sapling chip — attrition is a tree's game.", "after": "Sap Magic sustain shrugs off single-bomb poke, so every clean W-engage before 6 keeps snowballing the lane." },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Maokai" },
+    { "layer": "full", "path": "phases[4].why", "before": "Nature's Grasp online — the root wave starts fights from fog and ends dives in it.", "after": "Chronoshift is a real answer now, but at 120 seconds rank 1 it's a one-time save — force the trade knowing his first revive is his only one." },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Zilean" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Maokai is the engage forest: R the formation, W the carry, and Q whatever the roots deliver.", "after": "Chronoshift's revive plus his E speed/slow negate your engage — a kill that should end the fight just resets while he kites your frontline out." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Zilean Chronoshift: matchup-defining — The revive undoes your kill — force it early or swap focus when it glows. It writes your spacing rules. - Q Bramble Smash is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Zilean Chronoshift (R): 120s at rank 1, down to 60s at rank 3 — the revive undoes your kill; force it early or swap focus onto his ADC when it glows. - His Time Bomb (Q) is 10s at rank 1 and needs two stacked hits to stun — a lone bomb can't stop your W. - Twisted Advance is 14s at rank 1." },
+    { "layer": "full", "path": "tradeGood", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "All-in before he stacks a second Time Bomb on the same target — one bomb alone can't stun, so your W closes clean." },
+    { "layer": "full", "path": "tradeBad", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Committing past level 6 without tracking Chronoshift — his 120-second rank-1 revive undoes the kill your dive just bought." }
+  ],
+  "notes": "phases[5] (First item) left untouched: win[5]='Skill' already agrees with the full-layer side, so no edit was made there per the chart rule (only edit a row that disagrees). did not touch report[], dosFull/dontsFull, or the remaining breakdown.* fields (identical template shared across all six matchups in this file) — recorded as sectionsMissing."
+}

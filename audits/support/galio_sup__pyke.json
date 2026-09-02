@@ -1,0 +1,62 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "pyke",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 phases[].side are 'Skill' (even/mirror language) while content win[0..5]='Pyke' and win[6]='Galio' — the level chart contradicts the prose under it, and packet.levelChart confirms Pyke early/Galio late.",
+   "why": "Pyke's Bone Skewer outranges Galio's level-1 walk-up, his gray-health regen shrugs off poke, and Death From Below snowballs picks — Galio only takes over once Hero's Entrance is online with 2+ items to flip fights.",
+   "corrected": "Moved phases[0..5].side to Pyke and phases[6].side to Galio, rewrote each why to state the real reason, dropped ratings for the early/mid Pyke-favored rows. win[N] already read this way so no content edit was needed for the chart values themselves.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]", "currentText.content.whys[]"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Bone Skewer as matchup-defining but has no cooldown number (lint: COOLDOWN_NO_DIGIT); packet also flags zero sequencing cues anywhere in the matchup.",
+   "why": "Bone Skewer is 10/9.5/9/8.5/8s — a short, spammable cooldown that's the actual timer to track for hook attempts.",
+   "corrected": "Added the real cooldown number to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities[Q]"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "None of channel-interruptible (Bone Skewer is a channel your W/R cancels), stealth-needs-vision (Ghostwater Dive has no reveal answer here), or resistances-invalidated (Gift of the Drowned Ones converts HP stacking to AD) appear anywhere on the page.",
+   "why": "missingInteractions lists all three as applicable-but-absent for this matchup.",
+   "corrected": "Fixed the two copy-paste-bled dos/don'ts to carry real content: dosFull[1].d now covers shielding the hook target, dontsFull[2].d now states the channel-cancel interaction. Added spikes[3] (was missing — packet defect notes only 3 entries) covering the stealth/vision and percent-health points.",
+   "confidence": "High",
+   "sources": ["missingInteractions", "enemyKit.abilities[P,W,Q]"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[0].why","before":"Q the pair — the tornado tick chips duos that stand in formation.","after":"Bone Skewer outranges your level-1 walk-up — he controls first contact."},
+  {"layer":"full","path":"phases[0].rating","before":"5/10","after":"4/10"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[1].why","before":"W charge threat begins: the taunt governs their engage plans already.","after":"Pyke's hook-into-melee trade beats you before E comes online at 2."},
+  {"layer":"full","path":"phases[1].rating","before":"5/10","after":"4/10"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: E-W the committed trade and the magic shield refunds their poke.","after":"His gray-health regen shrugs off your mana-hungry poke at level 3."},
+  {"layer":"full","path":"phases[2].rating","before":"5/10","after":"4/10"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[3].why","before":"Zone with taunt threat and shield the margins — AP duos pay double rent.","after":"Gray-health sustain and hook range keep punishing you through 4-5."},
+  {"layer":"full","path":"phases[3].rating","before":"5/10","after":"4/10"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[4].why","before":"Hero's Entrance online — every roam your duo survives, you end.","after":"Death From Below turns his roams into picks faster than your flip."},
+  {"layer":"full","path":"phases[4].rating","before":"6/10","after":"4/10"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the taunt rotation chunks and the MR makes mage supports cry.","after":"First item: his pick pressure still outweighs your one committed engage."},
+  {"layer":"full","path":"phases[5].rating","before":"6/10","after":"4/10"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Galio"},
+  {"layer":"full","path":"phases[6].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Pyke Bone Skewer: matchup-defining — The hook starts the chain — his R cleans what it catches. The duo’s tempo bends around it. - Keep W Shield of Durand banked for their best play. - The ultimate is a fight decision, not a habit.","after":"- Pyke Bone Skewer (10s at rank 1, 8s maxed): matchup-defining — the hook starts the chain, his R cleans what it catches. - Keep W Shield of Durand banked for their best play. - The ultimate is a fight decision, not a habit."},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"W the instant he lands Bone Skewer — it blunts the follow-up burst and buys the caught carry time to disengage."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with armor.","after":"Bone Skewer is a channel — your W or Hero's Entrance cancels it outright if you catch him mid-cast."},
+  {"layer":"content","path":"spikes[3].text","before":null,"after":"Gift of the Drowned Ones converts his stacked HP into bonus AD instead, so raw armor doesn't scale him down, and Ghostwater Dive has no reveal answer here — Control Wards and a sweeper are mandatory, not optional."},
+  {"layer":"content","path":"spikes[3].when","before":null,"after":"Late"}
+ ],
+ "notes": "Chart correction was the main issue: full-layer side/rating disagreed with content win[] on all 7 rows. win[] itself already matched packet.levelChart and content.whys[], so per the chart rule I edited side alone (no win[N] edit) except where the why needed grounding to stop it arguing with the new side. spikes[] had only 3 entries (packet defect) — filled spikes[3] with the resistances/stealth interactions from missingInteractions that had no home anywhere else on the page. Did not touch breakdown.wave/trading/spikes/feeding/carry/difficulty/late — generic engage-mirror language but nothing sharper available within budget."
+}

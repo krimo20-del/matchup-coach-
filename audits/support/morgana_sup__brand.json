@@ -1,0 +1,127 @@
+{
+ "ownerKey": "morgana_sup",
+ "enemy": "brand",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 phases[N].side read 'Skill' while content win[] already reads Brand,Brand,Brand,Brand,Brand,Brand,Morgana, matching the packet's levelChart exactly. The full-layer side field never got updated.",
+   "why": "phases[N].side and content win[N] must name the same side. win[] already agrees with the packet chart (Brand favored levels 1-5/first item, Morgana only at 2+ items), so side is the stale field. The packet's own defect note is about the aggregate 54% winrate looking odd against a 6-1 chart split, not about win[] disagreeing with the chart — win[] and packet chart already agree with each other.",
+   "corrected": "Moved phases[0-5].side to Brand and phases[6].side stays Morgana (already correct), rewriting phases[0-5].why to state the Brand-favored reasoning that the content layer's whys[0-5] already establish (out-range poke, W-Q chunk, Sear-through-shield, Pyroclasm chain).",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "packet.defects", "currentText.content.win", "currentText.content.whys"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes cover the level-2 out-poke, level-6 Pyroclasm-through-shield risk, first-item DoT spike, and late shield-timing flip, all grounded in real ability names.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Sear as key but has no cooldown number.",
+   "why": "Sear is 8s at rank 1, 6s at max rank.",
+   "corrected": "Folded the real cooldown numbers into breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Brand"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "W-chip the pair — the pool taxes bot's formations politely from one.",
+   "after": "Brand out-ranges your poke and your shield eats only one burn tick."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Brand"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Q threats begin: the three-second root is the lane's longest sentence.",
+   "after": "His W-Q poke chunks you harder than you can trade back at level 2."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Brand"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "Full kit: the black shield pre-answers their entire support's kit.",
+   "after": "His AoE burn still dominates the sustained poke war at level 3."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Brand"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Bank the root and shield the engage attempts — the lane plays at your Q's pleasure.",
+   "after": "A landed Sear stun through your single Black Shield can still kill your ADC by levels 4-5."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Brand"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Soul Shackles online — close-range fights end in a double stun you started.",
+   "after": "Pyroclasm chained with hard CC out-damages your all-in once he hits level 6."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Brand"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "First item: the root converts and the shields multiply.",
+   "after": "His DoT spike keeps outpoking your sustain past first item."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Brand Sear (Stun): matchup-defining — Q only stuns the ablaze — after eating W or E, the stun line is the dodge. It writes your spacing rules. - E Black Shield is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Sear cools 8s early, 6s maxed and only stuns targets already ablaze — eat W or E first and the stun line becomes the dodge. - E Black Shield is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "W the pair, bank the Q visibly, shield the answer — the threat governs while the pool bills.",
+   "after": "Once he burns his Blaze rotation, W and E are down 8-13s — poke back while he has nothing to spread."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking into shields while their hook waits for yours to be down — the binding is the law; spend it like one.",
+   "after": "Half-shielding into his poke wastes E for nothing — save it whole for the Sear stun, not the passive burn."
+  }
+ ],
+ "notes": "Fixed a genuine chart contradiction: full-layer side read 'Skill' on all 7 rows while content win[] and the packet levelChart already agreed on Brand favored for levels 1 through first-item, Morgana only at 2+ items. Rewrote the six affected phases[N].why to state the Brand-favored reasoning (already present in content whys[]) instead of leaving Morgana-favored language sitting under a corrected side. Legalistic template phrasing persists in tldr/winCon/ahead/breakdown.early-late/loading; left alone as not factually wrong or lint-flagged."
+}

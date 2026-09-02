@@ -1,0 +1,49 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "bard",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "n/a",
+   "why": "Lane difficulty is EVEN (5.5/10) and matches the packet win rate context; no change needed.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["brief packet"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0..6].side were all the literal placeholder \"Skill\" instead of naming a champion, while content win[0..6] already correctly reads Bard/Bard/Galio/Galio/Galio/Galio/Galio (matches packet.levelChart). The full-layer chart never named a side.",
+   "why": "A reader sees a blank/placeholder verdict on the full-layer chart row even though the content layer already states the correct winner; the two layers must agree and both must be real champion names.",
+   "corrected": "Set phases[N].side to the champion win[N] already names; rewrote phases[0].why and phases[1].why (previously written for a Galio-favor placeholder) to justify Bard's early edge, matching content whys[0]/whys[1] (Cosmic Binding wall-stun, meep chip damage).",
+   "confidence": "High",
+   "sources": ["currentText.content.win[]", "packet.levelChart"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns named Cosmic Binding as matchup-defining but contained no actual cooldown number (lint: COOLDOWN_NO_DIGIT). Also two Do/Don't bullets were verbatim tradeGood/tradeBad text pasted under unrelated titles (lint: COPY_PASTE_BLEED) instead of explaining the titled action.",
+   "why": "Cooldown windows need a real number to be actionable, and a Do/Don't bullet whose body doesn't match its title reads as broken to a player.",
+   "corrected": "Added Cosmic Binding's real cooldown (11s at rank 1 down to 7s at max, from the kit). Rewrote dosFull[1].d to actually describe shielding the caught carry, and dontsFull[2].d to describe why fighting into an up Cosmic Binding is bad, instead of reusing tradeGood/tradeBad verbatim.",
+   "confidence": "High",
+   "sources": ["enemyKit.Q cd", "lintFindings"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Bard"},
+  {"layer": "full", "path": "phases[0].why", "before": "Q the pair — the tornado tick chips duos that stand in formation.", "after": "Cosmic Binding's wall-stun opens a free trade before your kit loads."},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Bard"},
+  {"layer": "full", "path": "phases[1].why", "before": "W charge threat begins: the taunt governs their engage plans already.", "after": "Meeps chip every trade and the stun threat outweighs your still-loading taunt."},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Bard Cosmic Binding: matchup-defining — The wall-stun starts every Bard pick — never hug terrain near him. The duo’s tempo bends around it. - Keep W Shield of Durand banked for their best play. - The ultimate is a fight decision, not a habit.", "after": "- Bard Cosmic Binding (Q): 11s at rank 1, 7s at max — the wall-stun starts every Bard pick; don't hug terrain near him. - Keep W Shield of Durand banked for their best play. - The ultimate is a fight decision, not a habit."},
+  {"layer": "full", "path": "dosFull[1].d", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "Land W's shield on the carry the instant Cosmic Binding lands — it eats the follow-up burst and buys time to disengage."},
+  {"layer": "full", "path": "dontsFull[2].d", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Fighting while Cosmic Binding is up hands Bard a free stun — wait for the cooldown instead."}
+ ],
+ "notes": "phases[0]/[1] side flipped to Bard to match content win[] (already correct) and packet.levelChart; only rows 0-1 needed a rewritten why since their old text assumed Galio favor. Rows 2-6 already read Galio-favor so only side was set, per the chart rule (win[N] already agreed, no win edit needed — a no-op would be rejected). The anti-heal-vs-Caretaker's-Shrine missing interaction is already covered in report[8] itemization (\"Add anti-heal early into his duo's sustain\"), so left as-is rather than duplicating. suspectNames flagged \"Hero's Entrance\" as a possible typo but that is Galio's real ultimate name (confirmed against the calibration note pattern) — no fix made."
+}

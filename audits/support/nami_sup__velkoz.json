@@ -1,0 +1,52 @@
+{
+ "ownerKey": "nami_sup",
+ "enemy": "velkoz",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "n/a",
+   "why": "Content early/mid/late already correctly identify lane phases: Nami favored levels 1-2, Vel'Koz favored 3 through first item on his poke DPS, Nami swings back in 2+ item teamfights.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["brief currentText.content"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "n/a",
+   "why": "Spikes array correctly identifies level-2 all-in, level-6 R combo, first-item poke DPS crossover, and late-game teamfight swing.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["brief currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Level chart mismatch between layers: full phases[N].side does not match content win[N] (already correct per packet levelChart) on 6 of 7 rows — several rows use the placeholder 'Skill' or the wrong champion, and some why text contradicts its own side value (e.g. phases[0].why reads pro-Nami but side says Vel'Koz).",
+   "why": "content win[] already matches packet.levelChart exactly; full phases[N].side was never updated to match, and several whys were templated ('Skill'-generic) rather than grounded in the kit numbers (Tectonic Disruption 12/11.5/11/10.5/10s CD, R 100/90/80s).",
+   "corrected": "Set full phases[N].side to match content win[N] for all 7 rows, rewriting why text where it contradicted the new side, grounded in real cooldowns.",
+   "confidence": "High",
+   "sources": ["brief currentText.full.phases", "brief currentText.content.win", "brief packet.levelChart"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Vel'Koz", "after": "Nami"},
+  {"layer": "full", "path": "phases[1].side", "before": "Vel'Koz", "after": "Nami"},
+  {"layer": "full", "path": "phases[1].why", "before": "Bubble threats begin: the lane's longest stun re-prices their every step-up.", "after": "Hitting 2 first: E-buffed autos plus Bubble punish his no-escape step-up."},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Vel'Koz"},
+  {"layer": "full", "path": "phases[2].why", "before": "Full kit: E the carry's autos and the buffed trade window out-damages their plan.", "after": "At 3 his Q slow-split and E knockup out-range your auto-empowered trades."},
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Vel'Koz"},
+  {"layer": "full", "path": "phases[3].why", "before": "Tide the margins: bounce the trades, bubble the answers, and bank the tempo passive.", "after": "His poke now stacks research toward the execute faster than your heals refill."},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Vel'Koz"},
+  {"layer": "full", "path": "phases[4].why", "before": "Tidal Wave online — engages arrive on a wave and disengages leave on one.", "after": "His full R combo outranges Tidal Wave and can execute your ADC via stacks."},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Vel'Koz"},
+  {"layer": "full", "path": "phases[5].why", "before": "First item: the bounce chunks and the bubble converts every gank.", "after": "First item: his poke DPS now beats your heal-sustain throughput."},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Nami"},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Vel'Koz Tectonic Disruption: matchup-defining — The knockup starts the true-damage rotation — dodge it and the research stalls. The duo’s tempo bends around it. - Keep Q Aqua Prison banked for their best play. - The ultimate is a fight decision, not a habit.", "after": "- Vel'Koz E (Tectonic Disruption): 12/11.5/11/10.5/10s CD — the knockup starts the true-damage rotation, so dodging it stalls the whole research combo and buys your duo the trade window. - His R is 100/90/80s — a fight decision, not a habit."},
+  {"layer": "full", "path": "dosFull[1].d", "before": "W the bounce through carry-and-support, E your carry, auto — the trade healed you, billed them, and buffed the follow-up.", "after": "Tectonic Disruption's knockup has a tight radius — sidestep behind casters and it whiffs, denying his true-damage combo."},
+  {"layer": "full", "path": "dontsFull[2].d", "before": "Throwing the bubble at poke range out of boredom — the stun is the matchup; the rest is salad.", "after": "Warding into his 810-range E invites the knockup that starts his research combo — ward from max range."}
+ ],
+ "notes": "Resistances-invalidated interaction (Organic Deconstruction P and R both deal true damage, bypassing armor/MR) is already implicit in the R spike text (spikes[1]) but not stated as an itemization callout — flagging for a possible future edit to breakdown.difficulty or itemization report entry rather than inventing one now, since current itemization text (World Atlas/Helia/Swiftness/Redemption-Mikael's) is fine as written and doesn't claim resistances help."
+}

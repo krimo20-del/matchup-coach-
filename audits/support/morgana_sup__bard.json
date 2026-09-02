@@ -1,0 +1,79 @@
+{
+ "ownerKey": "morgana_sup",
+ "enemy": "bard",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[3-6].side all read 'Skill' but content win[3-6] already reads 'Morgana', and the packet's levelChart (Skill,Skill,Skill,Morgana x4) agrees with win[]. The full-layer side field is stale.",
+   "why": "phases[N].side and content win[N] must name the same side; win[] already matches the packet, so side is the outdated field.",
+   "corrected": "Moved phases[3-6].side to 'Morgana' to match win[3-6] and the packet chart. The existing why text for those rows already describes a Morgana advantage, so no why rewrite was needed.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win", "currentText.full.phases"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes cover level 2 Q read, level 6 R vs stasis, first-item CDR shielding, and late teamfight shielding with concrete tactics.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Cosmic Binding as key but has no cooldown number, and omits the missingInteractions antiheal note on Caretaker's Shrine sustain.",
+   "why": "Cosmic Binding is 11s at rank 1, 7s at max rank; Caretaker's Shrine heals Bard through Morgana's chip poke, so anti-heal timing decides extended trades.",
+   "corrected": "Folded real cooldown numbers and the antiheal interaction into breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Morgana"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Morgana"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Morgana"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Morgana"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Bard Cosmic Binding: matchup-defining — The wall-stun starts every Bard pick — never hug terrain near him. Read it before every duo step-up. - Your E Black Shield answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Cosmic Binding cools 11s early, 7s maxed — the wall-stun recurs fast, so never hug terrain or minions near him. - Caretaker's Shrine heals him through your chip — anti-heal timing matters. - Bank E; spend R only on swing moments."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "W the pair, bank the Q visibly, shield the answer — the threat governs while the pool bills.",
+   "after": "If his Q whiffs, Cosmic Binding is 7-11s down — step up and root before he can fish again."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking into shields while their hook waits for yours to be down — the binding is the law; spend it like one.",
+   "after": "He wins the poke war if you Q first — bait his Q whiff, then punish; trading Q-for-Q favors his longer range."
+  }
+ ],
+ "notes": "Legalistic template phrasing ('the pool bills', 'legislate') persists in tldr/winCon/ahead/breakdown.early-late/loading; left alone as not factually wrong or lint-flagged. Fixed a real chart contradiction: side field said Skill for levels 4-5/6/first-item/2+items while content already said Morgana and packet agreed with content."
+}

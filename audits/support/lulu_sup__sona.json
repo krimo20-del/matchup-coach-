@@ -1,0 +1,54 @@
+{
+ "ownerKey": "lulu_sup",
+ "enemy": "sona",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Levels 1-4 favor Lulu (Glitterlance + Pix auto burst punishes Sona's lack of a dash), levels 5-6 are a skill matchup around Crescendo timing, late game favors Lulu via Whimsy/Wild Growth peel.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief packet levelChart", "content win[] already agrees with packet"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes: Lvl 2 (Glitterlance+empowered auto punishes her no-escape kit), Lvl 6 (race to land Crescendo/Wild Growth first), 1st item (Power Chord+aura sustain scales but shield still wins even fights), Late (Whimsy/Wild Growth peel wins the 2v2).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Crescendo as matchup-defining but gives no cooldown, failing lint COOLDOWN_NO_DIGIT. Sona's R is 140/120/100s.",
+   "why": "Point 6 (cooldown windows) needs the real number so the timing advice is concrete.",
+   "corrected": "Crescendo is 140s at rank 1, down to 100s at rank 3 - a whiffed cast is a two-minute-plus window at rank 1 where her all-in disappears.",
+   "confidence": "High",
+   "sources": ["enemyKit R cd"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The full-layer level chart (phases[5].side and phases[6].side both 'Sona') disagrees with the content-layer win[5]='Skill' and win[6]='Lulu', and also disagrees with the packet's own levelChart (which reads Skill/Lulu at those indices, matching content, not full). phases[6].why already reads 'Late Lulu deletes dives...' which contradicts a Sona-side row.",
+   "why": "Chart rule requires full.side and content.win to name the same side per row; here content and the packet agree with each other, so full is the outlier and gets corrected to match rather than the other way around.",
+   "corrected": "phases[5].side -> Skill (already matches win[5]='Skill', no content edit needed); phases[6].side -> Lulu (matches win[6]='Lulu' and the existing why text, no content edit needed).",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"loading","before":"- Lulu vs Sona - Track: Sona Crescendo. - Track his engage cooldown — your duo trades only when it's down. - The duo goes when Crescendo is down. - The R decides fights; it doesn’t advertise them.","after":"- Lulu vs Sona - Track: Sona Crescendo. - Track her engage cooldown — your duo trades only when it's down. - The duo goes when Crescendo is down. - The R decides fights; it doesn’t advertise them."},
+  {"layer":"full","path":"report[8].t","before":"World Atlas start. Helia/Moonstone line, Swiftness, then Mikael's-Redemption. Add anti-heal early into his duo’s sustain.","after":"World Atlas start. Helia/Moonstone line, Swiftness, then Mikael's-Redemption. Add anti-heal early into her duo’s sustain."},
+  {"layer":"full","path":"report[10].t","before":"Your CC plus jungler arrival decides bot — ping gank windows on his engage cooldown and hold the river bush vision.","after":"Your CC plus jungler arrival decides bot — ping gank windows on her engage cooldown and hold the river bush vision."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Sona Crescendo: matchup-defining — The stun chord flips grouped fights — spread while it is up. It writes your spacing rules. - W Whimsy is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Sona Crescendo: 140s at rank 1, 100s at rank 3 — a whiffed cast is a two-minute-plus window with no stun to flip a fight. - Whimsy (18s CD) is for saving fights, not seasoning trades. - Your R (120/100/80s) opens or closes fights — pick one per cast."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the doubled angle, E-mark the carry, auto — Pix volleys the chip while your buttons wait for the real question.","after":"Sona has no dash — Glitterlance's slow plus an empowered Pix auto punishes her Hymn poke before she can disengage."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Polymorphing poke out of irritation and meeting the engage with a shrug — the W is the matchup.","after":"Aria of Perseverance (W) heals through chip on a 10s cooldown — sustained poke alone won't win it, force a cooldown trade instead."},
+  {"layer":"full","path":"phases[5].side","before":"Sona","after":"Skill"},
+  {"layer":"full","path":"phases[6].side","before":"Sona","after":"Lulu"}
+ ],
+ "notes": "Fixed lint findings: misgendered 'his' -> 'her' in loading, report[8].t, report[10].t (Sona is she/her). Fixed COPY_PASTE_BLEED on dosFull[1].d and dontsFull[2].d with content grounded in Sona's actual kit (no dash, W heals on 10s CD). Fixed COOLDOWN_NO_DIGIT on breakdown.cooldowns with Crescendo's real cooldown (140/120/100s) plus Lulu's own W/R cooldowns. Fixed a chart disagreement: full-layer phases[5]/[6].side both said 'Sona' while content win[5]/win[6] said 'Skill'/'Lulu' and the packet's levelChart agreed with content, not full — corrected full to match; no content edit needed since win[] was already correct (would have been a no-op edit). No changes needed to win[0-4]/phases[0-4] — both layers already agree there. missingInteractions (anti-heal vs Aria sustain, Q on-hit scaling) are already represented in the existing dontsFull/breakdown text; on-hit itemization nuance (Sona's Q scales with attack speed items) wasn't added as a standalone point to stay within the length band on already-edited fields — flagging as a residual gap rather than forcing it in."
+}

@@ -1,0 +1,40 @@
+{
+ "ownerKey": "maokai_sup",
+ "enemy": "sona",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[6].side (2+ items) reads 'Skill' while content win[6] and the packet's real levelChart both say Sona wins the late game.",
+   "why": "Sona's Q/W/E auras and Crescendo are point-and-click sustain/CC with no cast risk, and by two items her aura value and AoE stun outscale Maokai's single-target lockdown — matching what win[6] and the 565-game packet chart already say.",
+   "corrected": "Move phases[6].side to Sona with a why grounded in her aura scaling, matching win[6].",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/maokai.json", "champ-data/_kits/sona.json", "champ-data/content/sup/maokai.js (win[])", "tools/audit-run/packets/maokai_sup.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 2 Q-W lock before Powerchord readies, and the level 6 R vs Crescendo race, are already stated correctly with real ability names in content spikes[].",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/maokai.js"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The packet flags 'NO cooldown-sequencing advice anywhere' and breakdown.cooldowns has no digit in it at all — it just calls Crescendo 'matchup-defining' without a timer.",
+   "why": "Sona's ult Crescendo is 140/120/100s and her Q Hymn of Valor is a flat 8s cooldown, so her poke rhythm is nearly constant between ults.",
+   "corrected": "Rewrote breakdown.cooldowns to give Crescendo's real cooldown range and flag her 8s Q poke cadence.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/sona.json"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Sona"},
+  {"layer": "full", "path": "phases[6].why", "before": "Late Maokai is the engage forest: R the formation, W the carry, and Q whatever the roots deliver.", "after": "Late Sona out-scales: her aura sustain and AoE Crescendo swing fights past your frontline."},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Sona Crescendo: matchup-defining — The stun chord flips grouped fights — spread while it is up. It writes your spacing rules. - Q Bramble Smash is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Sona's R Crescendo resets on a 100-140s clock — the stun chord flips grouped fights, so spread while it's up. - Q Bramble Smash is for saving fights, not seasoning trades. - Her Q Hymn is only an 8s cooldown — expect near-constant poke pressure."}
+ ],
+ "notes": "No maokai_sup brief exists (checked tools/audit-run/briefs/support/ and briefs/sup/ — neither has a maokai_sup__* file for this run), so this matchup was built directly from champ-data/_kits, tools/audit-run/packets/maokai_sup.json, champ-data/_kits/_missing/maokai_sup.json and the live full/content JS. Edits limited to the verified level-chart mismatch and the packet-flagged missing-cooldown defect; the rest of the ten breakdown keys, tradeGood/tradeBad, dosFull/dontsFull bodies and loading remain templated boilerplate shared across this owner's whole file and are flagged for a follow-up pass."
+}

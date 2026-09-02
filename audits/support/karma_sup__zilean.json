@@ -1,0 +1,97 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "zilean",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 full-layer phases[N].side read the literal placeholder 'Skill' instead of a champion name, while content win[] already correctly reads Karma for rows 0-5 and Zilean for row 6 (matching the packet's levelChart and the prose in whys[]/early/mid/late). The chart's full and content layers disagree because 'Skill' never got replaced with a name.",
+   "why": "win[N] is already the correct target for every row, so per the chart rule this is a side-only fix, not a paired win[N] edit — a no-op win edit would be rejected. The packet.levelChart (Karma x6, Zilean row 6) and the content prose both independently confirm the correct side for every row.",
+   "corrected": "phases[0..5].side -> 'Karma'; phases[6].side -> 'Zilean'.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win", "currentText.content.whys/early/mid/late"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly track Karma's level-2 range edge over a single un-stunning Time Bomb, level-6 Chronoshift as a bait/track window, first item as Karma's poke-tempo peak, and late as Zilean's double-bomb-stun/Chronoshift utility flip.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d is the tradeGood string pasted verbatim under 'Tether the cover attempts'. dontsFull[2].d is the tradeBad string pasted verbatim under 'Trade past their item spikes politely'. breakdown.cooldowns has no digit despite Chronoshift's real cooldown (120/90/60) being the matchup-defining number.",
+   "why": "lintFindings flags both bleeds and the missing digit. Zilean's Q (Time Bomb) only stuns when a second bomb detonates the first early — that stacking mechanic is the real content dosFull[1] should carry given its title.",
+   "corrected": "dosFull[1].d rewritten to the double-bomb-stun mechanic; dontsFull[2].d rewritten to the item-spike trading behavior its title promises; breakdown.cooldowns gets Chronoshift's real numbers.",
+   "confidence": "High",
+   "sources": ["enemyKit Q text", "enemyKit R cd", "lintFindings"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Karma"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Karma"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Karma"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Karma"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Karma"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Karma"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Zilean"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.",
+   "after": "A lone Time Bomb doesn't stun — it only locks down when a second bomb detonates the first early, so don't let two bombs land on your ADC before you clear one."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Spending mantra on a wave while the enemy banks theirs for your face.",
+   "after": "Once Chronoshift is up and his bombs can double-stun, an 'even' trade you start turns into a kill for him — stop contesting once he's two items deep."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Zilean Chronoshift: matchup-defining — The revive undoes your kill — force it early or swap focus when it glows. The duo’s tempo bends around it. - Keep RE shield-speed banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Zilean Chronoshift: matchup-defining — down 120s at rank 1, 60s at rank 3. The revive undoes your kill — force it early or swap focus when it glows. - Keep RE shield-speed banked for their best play. - The ultimate is a fight decision, not a habit."
+  }
+ ],
+ "notes": "Chart repair: all 7 full-layer phases[N].side held the literal placeholder 'Skill' instead of a champion name; content win[] was already correct (Karma x6, Zilean row 6, matching packet.levelChart), so this was a side-only fix per the chart rule, not a paired win[] edit. Also fixed both COPY_PASTE_BLEED findings and COOLDOWN_NO_DIGIT. The missingInteractions entry (Chronoshift's untargetability dodging burst) is already substantively covered by dosFull[0].d ('force it early or swap focus when it glows'), so left that field alone."
+}

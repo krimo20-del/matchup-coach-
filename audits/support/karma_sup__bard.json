@@ -1,0 +1,47 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "bard",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 full-layer phases[].side read 'Skill' while packet.levelChart and content win[0-6] both say Karma wins every stage.",
+   "why": "packet.levelChart = [Karma x7] matches content win[] exactly; only the full layer never got the side filled in.",
+   "corrected": "Set phases[0-6].side to Karma; the why text at each row already describes Karma's advantage so no why rewrite was required.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "n/a — spikes[1] (Lvl 6, R uptime comparison) and spikes[2] (1st item roam punish) already correctly identify the real spikes.",
+   "why": "Confirmed against kit: Karma R (Mantra) is a 40/38/36/34s reset-on-use resource vs Bard's 110/95/80s R.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real cooldown number (lint COOLDOWN_NO_DIGIT), and the missingInteractions antiheal note (Caretaker's Shrine sustain) was never stated.",
+   "why": "Bard's W Caretaker's Shrine heals whoever reaches it first; without Grievous Wounds a shrine-fed Bard/ADC out-sustains your poke.",
+   "corrected": "Rewrote breakdown.cooldowns with Cosmic Binding (Q) 11/10/9/8/7s and R Tempered Fate 110/95/80s, plus a Grievous Wounds timing note against the shrine.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"dosFull[1].d","before":"RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.","after":"His stasis R can't rescue a carry already tethered — Focused Resolve locks the root before Tempered Fate lands."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending mantra on a wave while the enemy banks theirs for your face.","after":"His W shrine heals whoever reaches it first — a healthy Bard/ADC pair off one shrine out-sustains chip poke without Grievous Wounds."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Bard Cosmic Binding: matchup-defining — The wall-stun starts every Bard pick — never hug terrain near him. Read it before every duo step-up. - Your RE shield-speed answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Cosmic Binding (Q) is 11/10/9/8/7s and only fully stuns off terrain or a second body — hug open ground so a whiff means a free trade. - R Tempered Fate is a long 110/95/80s; your Mantra resets far faster, so out-tempo him between his ult windows. - Add Grievous Wounds early — his W shrine heals whoever reaches it first."}
+ ],
+ "notes": "diff/tone left as EVEN despite the level chart favoring Karma every stage — winRate is 50.27%, near-coinflip, so the discrepancy may be real (lane lead not converting) rather than an error; flagging for review rather than guessing. suspectNames flagged 'Ult Tempered Fate' but Tempered Fate is Bard's real R name — false positive."
+}

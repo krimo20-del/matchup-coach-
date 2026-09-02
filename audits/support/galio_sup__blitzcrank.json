@@ -1,0 +1,53 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "n/a",
+   "why": "EVEN 5.5/10 matches the win-rate context in the packet; no change needed.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["brief packet"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0..6].side were all the literal placeholder \"Skill\" instead of a champion name, while content win[0..6] already correctly reads Blitzcrank/Blitzcrank/Blitzcrank/Blitzcrank/Galio/Blitzcrank/Galio (matches packet.levelChart). The full-layer chart named no real side.",
+   "why": "The full and content layers must agree on who wins each stage; a placeholder side contradicts the already-correct content verdict.",
+   "corrected": "Set phases[N].side to the champion win[N] already names. Rewrote the why text for rows 0,1,2,3,5 (previously written assuming Galio favor) to justify Blitzcrank's edge with real kit numbers (Rocket Grab range/cooldown, Power Fist cooldown, Static Field cooldown). Rows 4 and 6 already read Galio-favor so only side was set.",
+   "confidence": "High",
+   "sources": ["currentText.content.win[]", "packet.levelChart", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns named Rocket Grab as matchup-defining with no cooldown number (lint: COOLDOWN_NO_DIGIT). dosFull[1].d and dontsFull[2].d were verbatim tradeGood/tradeBad text pasted under unrelated titles (lint: COPY_PASTE_BLEED). The missingInteractions brief also flags that Power Fist (E) is an auto-attack-reset burst tell that isn't mentioned anywhere.",
+   "why": "Cooldown windows need a real number to act on, Do/Don't bullets need to match their titles, and the E wind-up is the actual cue a laner can react to before the grab combo lands.",
+   "corrected": "Added Rocket Grab's real cooldown range (20s at rank 1 down to 16s at max) plus Static Field's cooldown to breakdown.cooldowns. Rewrote dosFull[1].d and dontsFull[2].d to match their titles. Added the Power Fist auto-reset tell into dosFull[0].d alongside the existing hook-cooldown advice.",
+   "confidence": "High",
+   "sources": ["enemyKit.Q/E/R cd", "lintFindings", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Blitzcrank"},
+  {"layer": "full", "path": "phases[0].why", "before": "Q the pair — the tornado tick chips duos that stand in formation.", "after": "Rocket Grab's 1079 range punishes any step before your kit loads."},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Blitzcrank"},
+  {"layer": "full", "path": "phases[1].why", "before": "W charge threat begins: the taunt governs their engage plans already.", "after": "Rocket Grab's threat still tops your still-loading W taunt in raw punish."},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Blitzcrank"},
+  {"layer": "full", "path": "phases[2].why", "before": "Full kit: E-W the committed trade and the magic shield refunds their poke.", "after": "E cools to 6s by rank 3, but Rocket Grab at 18s still threatens every step forward."},
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Blitzcrank"},
+  {"layer": "full", "path": "phases[3].why", "before": "Zone with taunt threat and shield the margins — AP duos pay double rent.", "after": "Rocket Grab at 17s still outpaces your kit — one grab still swings the fight."},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Blitzcrank"},
+  {"layer": "full", "path": "phases[5].why", "before": "First item: the taunt rotation chunks and the MR makes mage supports cry.", "after": "R Static Field at 60s still silences your engage window on his first back."},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. It writes your spacing rules. - W Shield of Durand is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Blitzcrank Rocket Grab (Q): 20s at rank 1, 16s at max — minion cover turns the lane into a farming sim; stand behind the wave. - W Shield of Durand is for saving fights, not seasoning trades. - R Static Field silences at 60s cooldown, dropping to 20s late — it opens or closes fights, pick one per cast."},
+  {"layer": "full", "path": "dosFull[0].d", "before": "The hook IS the champion — minion cover turns the lane into a farming sim. Its cooldown is the green light — wait for it.", "after": "Watch for the Power Fist wind-up — that auto-reset is his combo's opener, not the grab itself. Its cooldown is the green light — wait for it."},
+  {"layer": "full", "path": "dosFull[1].d", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "Land W's shield the instant Rocket Grab lands — it eats the Power Fist and R follow-up burst and buys time to disengage."},
+  {"layer": "full", "path": "dontsFull[2].d", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Fighting while Rocket Grab is up hands Blitzcrank a free burst — wait for the cooldown instead."}
+ ],
+ "notes": "phases side flipped to match content win[] (already correct, matches packet.levelChart) and packet-verified cooldown numbers. Rows 0,1,2,3,5 needed rewritten why text since old text assumed Galio favor; rows 4 and 6 already read Galio-favor so only side was set (win[N] already agreed there, no win edit needed). suspectNames flagged \"Hero's Entrance\" but that is Galio's real ultimate — left unchanged."
+}

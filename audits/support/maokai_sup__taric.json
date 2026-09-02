@@ -1,0 +1,44 @@
+{
+ "ownerKey": "maokai_sup",
+ "enemy": "taric",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[3],[4].side read 'Skill' and phases[6].side reads 'Taric', while content win[3],win[4],win[6] and the packet's real levelChart all say Maokai wins levels 4-5, level 6 and 2+ items. The packet itself flags this as a defect: 'level chart contradicts data: Maokai wins only 43.9% but the chart gives Maokai 6/7 stages vs 1' — that 6-vs-1 split is what both win[] and levelChart already carry, so it's a pre-existing packet/win-rate tension, not a full/content disagreement to invent around; the fix here is only to make phases[].side stop contradicting the win[] row it already sits next to.",
+   "why": "Taric is short-ranged and immobile, so Maokai's W lands before his E Dazzle charges through levels 4-6 (matching win[3]/win[4]=Maokai), and late, Maokai's R-W chain can beat Cosmic Radiance before it comes up (matching win[6]=Maokai) even though Taric's aura tankiness keeps the overall matchup close.",
+   "corrected": "Move phases[3],[4].side to Maokai and phases[6].side from Taric to Maokai, with why lines grounded in Taric's lack of mobility and Cosmic Radiance's long cooldown. Left the win-rate/levelChart tension itself in notes since it's a data-source disagreement the kits can't resolve.",
+   "confidence": "Medium",
+   "sources": ["champ-data/_kits/maokai.json", "champ-data/_kits/taric.json", "champ-data/content/sup/maokai.js (win[])", "tools/audit-run/packets/maokai_sup.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "The level-2 W lock before Dazzle, the level-6 R-vs-Cosmic-Radiance bait, and the item-1 sustain re-level are already stated correctly with real ability names in content spikes[].",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/maokai.js"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Cosmic Radiance as 'matchup-defining' but never states its cooldown, so a reader doesn't know how rare the invuln window is.",
+   "why": "Taric's R Cosmic Radiance is 180/150/120s — one of the longest ults in the game at rank 1 — while his E Dazzle is only 16/15/14/13/12s.",
+   "corrected": "Rewrote breakdown.cooldowns with Cosmic Radiance's real cooldown range and Dazzle's much shorter reset.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/taric.json"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Maokai"},
+  {"layer": "full", "path": "phases[3].why", "before": "Sustain the margins with passive heals and sapling chip — attrition is a tree's game.", "after": "Your W lands before his E Dazzle even charges — the tempo stays yours through 4-5."},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Maokai"},
+  {"layer": "full", "path": "phases[4].why", "before": "Nature's Grasp online — the root wave starts fights from fog and ends dives in it.", "after": "Your R out-ranges his lane presence, engaging before Dazzle ever charges up."},
+  {"layer": "full", "path": "phases[6].side", "before": "Taric", "after": "Maokai"},
+  {"layer": "full", "path": "phases[6].why", "before": "Late Maokai is the engage forest: R the formation, W the carry, and Q whatever the roots deliver.", "after": "Late your R-W chain locks him before Cosmic Radiance, and Saplings deny his short aura."},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Taric Cosmic Radiance: matchup-defining — The delayed invulnerability erases your teamfight damage — burst before it lands or wait it out. The duo’s tempo bends around it. - Keep Q Bramble Smash banked for their best play. - The ultimate is a fight decision, not a habit.", "after": "- Taric's R Cosmic Radiance is a 120-180s cooldown delayed invulnerability that erases your teamfight damage — burst before it lands or wait it out. - Keep Q Bramble Smash banked for their best play. - His E Dazzle is only 12-16s; track it before every dive."}
+ ],
+ "notes": "No maokai_sup brief exists for this run (checked briefs/support/ and briefs/sup/), so this matchup was built directly from champ-data/_kits, tools/audit-run/packets/maokai_sup.json, champ-data/_kits/_missing/maokai_sup.json and the live full/content JS (missEntry was null for this pair). Flagging for the user: the packet itself records a defect that Maokai's real win rate here is only 43.9% (Taric-favored) even though both the content win[] array and the packet's own levelChart give Maokai 6 of 7 stages — win[] and levelChart agree with each other but arguably disagree with the aggregate win rate. I made phases[].side internally consistent with win[]/levelChart per the mirror rule rather than trying to re-derive the whole chart from the win-rate number, since the kits give no way to tell which stages are wrong. Recommend a dedicated look at whether win[]/levelChart for taric needs a broader revision, not just the 3 rows touched here. Remaining breakdown keys, tradeGood/tradeBad, dosFull/dontsFull bodies and loading are still templated boilerplate shared across this owner's whole file."
+}

@@ -1,0 +1,50 @@
+{
+ "ownerKey": "morgana_sup",
+ "enemy": "milio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[0].text and spikes[2].text both call the shield 'Cozy Campfire shield' or attribute healing to 'Warm Hugs' — but per the kit, W Cozy Campfire is the heal-zone and E Warm Hugs is the shield. The two are swapped/conflated.",
+   "why": "enemyAbilities in the packet and enemyKit both list W: Cozy Campfire (heals allies in a zone) and E: Warm Hugs (shield + move speed, 2 charges). Cozy Campfire never shields.",
+   "corrected": "spikes[0].text now says 'Warm Hugs shield'; spikes[2].text now correctly credits the heal to Cozy Campfire and the shield to Warm Hugs.",
+   "confidence": "High",
+   "sources": ["enemyKit", "packet.enemyAbilities"]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[3-6].side are all 'Skill' while content win[3-5] already say 'Morgana' and win[6] says 'Milio' — four rows disagree, and phases[6].why literally reads 'Late Morgana erases playbooks', the opposite of what win[6]=Milio and whys[6] state.",
+   "why": "Content whys[3-6] are grounded (hard CC pressures his shields at 4-5, Soul Shackles beats his defensive ult at 6, item-window all-ins beat his sustain, but late his stacked heal/shield/cleanse ult overwhelms a single Q pick) and match the packet's own levelChart.",
+   "corrected": "phases[3-6].side moved to match win[] (Morgana, Morgana, Morgana, Milio); phases[3-6].why rewritten to state the actual reasoning instead of the unrelated templates.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "currentText.content.whys", "packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 2 pick window, level 6 R-vs-cleanse comparison, and first-item burst spike are all named with real ability references in spikes[].",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  }
+ ],
+ "edits": [
+  {"layer": "content", "path": "spikes[0].text", "before": "Milio has no hard CC to punish, so level 2 is about your Q: land Dark Binding on him or his ADC and you win the trade outright since his only defense is the Cozy Campfire shield and a slow. He'll poke with Ultra Mega Fire Kick, but that Q is dodgeable and gives you free positioning.", "after": "Milio has no hard CC to punish, so level 2 is about your Q: land Dark Binding on him or his ADC and you win the trade outright since his only defense is the Warm Hugs shield and a slow. He'll poke with Ultra Mega Fire Kick, but that Q is dodgeable and gives you free positioning."},
+  {"layer": "content", "path": "spikes[2].text", "before": "With first item your poke damage outpaces his sustain in short windows; force all-ins rather than long poke wars, because his Warm Hugs shields and heals will out-sustain slow chip.", "after": "With first item your poke damage outpaces his sustain in short windows; force all-ins rather than long poke wars, because his Cozy Campfire heal and Warm Hugs shields will out-sustain slow chip."},
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Morgana"},
+  {"layer": "full", "path": "phases[3].why", "before": "Bank the root and shield the engage attempts — the lane plays at your Q's pleasure.", "after": "Your hard CC out-pressures his shields through 4-5, so Dark Binding wins the trades your ADC needs."},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Morgana"},
+  {"layer": "full", "path": "phases[4].why", "before": "Soul Shackles online — close-range fights end in a double stun you started.", "after": "Soul Shackles threatens more than his purely defensive ult — bait Breath of Life first and your R wins the fight."},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Morgana"},
+  {"layer": "full", "path": "phases[5].why", "before": "First item: the root converts and the shields multiply.", "after": "First item keeps you ahead in burst-window all-ins over his slow sustain — force the fight rather than the poke war."},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Milio"},
+  {"layer": "full", "path": "phases[6].why", "before": "Late Morgana erases playbooks: black-shield the engage's target and root the diver who insisted.", "after": "Stacked heals, shields, and a CC-cleanse ult overwhelm your single-target pick late — burst before Breath of Life comes up or bait it out first."},
+  {"layer": "full", "path": "dosFull[1].d", "before": "W the pair, bank the Q visibly, shield the answer — the threat governs while the pool bills.", "after": "Land Dark Binding on him or his ADC while Ultra Mega Fire Kick is down — his Q's landing lag is your punish window."},
+  {"layer": "full", "path": "dontsFull[2].d", "before": "Q-poking into shields while their hook waits for yours to be down — the binding is the law; spend it like one.", "after": "Black Shield holds no value against chip alone — save it for the all-in, or Milio bait-shields it for free."},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Milio Breath of Life: matchup-defining — The team-wide cleanse-heal undoes your CC chain — force it early, engage after. It writes your spacing rules. - E Black Shield is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Milio Breath of Life: 160s at rank 1, 130s at rank 3 — the cleanse-heal undoes your CC chain, so force it early, engage after. - E Black Shield (26s early, 16s at rank 5) is for saving fights, not seasoning trades. - R (120/110/100s) opens or closes fights — pick one per cast."}
+ ],
+ "notes": "Found and fixed a real ability-attribution error: Cozy Campfire (W, heal zone) and Warm Hugs (E, shield) were swapped/conflated in two spikes[] entries — the kind of error the calibration examples warned about. Also fixed a real chart contradiction on rows 4-7: full-layer side was flat 'Skill' (and phases[6].why literally argued the opposite of the packet's own Milio-favored late game) while content win[] already had the correct Morgana/Morgana/Morgana/Milio story; moved side to match and rewrote the four why lines. Fixed the two copy-paste-bleed bullets and the cooldowns field's missing digits."
+}

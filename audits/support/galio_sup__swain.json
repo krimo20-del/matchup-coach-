@@ -1,0 +1,63 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "swain",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[0..6].side are all the generic placeholder 'Skill' — none of the seven rows name a real winner. Meanwhile content win[] already carries a real, specific verdict: Swain for rows 0-5, Galio for row 6 (2+ items). The two layers disagree on every single row.",
+   "why": "Swain's Nevermove (E, 12/11.5/11/10.5/10s CD) and Vision of Empire (W) out-range Galio's kit and his Ravenous Flock (P) heal-and-max-HP-stack out-sustains early trades, while Galio's late-game burst-engage (E-Q into Hero's Entrance) finally out-paces Demonic Ascension's sustain once he has 2+ items — exactly what content's win[] and breakdown.late already argue.",
+   "corrected": "Moved all 7 phases[].side from 'Skill' to the real winner (Swain rows 0-5, Galio row 6) to agree with the existing win[], and rewrote each phases[].why to state the real reason instead of the recycled generic template shared across unrelated matchups.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/swain.json", "tools/audit-run/packets/galio_sup.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content spikes[] already correctly identifies Level 2 (Swain's W/E out-range Galio's kit), Level 6 (Demonic Ascension out-heals the engage), 1st item (soul-stack sustain still ahead), and Late (Galio's burst finally catches up) as four distinct real spikes.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/galio.js"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Nevermove as 'matchup-defining' with no cooldown number in the field (lint rule: must contain a digit). dosFull[1].d is a verbatim copy of tradeGood pasted under an unrelated 'E-W the cooldown gaps' title. No writable field mentions that Ravenous Flock (P) is both an anti-heal target and bypasses flat resistances via percent-health scaling (kit flag: percentHealth — 'punishes HP stacking, armour alone is not the answer').",
+   "why": "Real numbers (Nevermove 12/11.5/11/10.5/10s) make the root-tracking advice concrete; the percent-health/anti-heal interaction on Swain's passive is a genuine itemization trap for a Tank-build Galio and currently occupies zero fields.",
+   "corrected": "Rewrote breakdown.cooldowns with the real E cooldown; rewrote dosFull[1].d to state that Ravenous Flock heals and stacks max HP, so armour alone doesn't answer it — Grievous Wounds does.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/swain.json", "champ-data/_kits/_missing/galio_sup.json"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Swain"},
+  {"layer": "full", "path": "phases[0].why", "before": "Q the pair — the tornado tick chips duos that stand in formation.", "after": "Death's Hand outranges your kit at level 1 — you have no punish for it yet."},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Swain"},
+  {"layer": "full", "path": "phases[1].why", "before": "W charge threat begins: the taunt governs their engage plans already.", "after": "Nevermove's root can land now — respect its threat before you step up."},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Swain"},
+  {"layer": "full", "path": "phases[2].why", "before": "Full kit: E-W the committed trade and the magic shield refunds their poke.", "after": "His W-E soul-stack sustain out-trades your full combo in extended fights."},
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Swain"},
+  {"layer": "full", "path": "phases[3].why", "before": "Zone with taunt threat and shield the margins — AP duos pay double rent.", "after": "Vision of Empire zones you out while Ravenous Flock heals him for free."},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Swain"},
+  {"layer": "full", "path": "phases[4].why", "before": "Hero's Entrance online — every roam your duo survives, you end.", "after": "Demonic Ascension out-heals your Hero's Entrance damage before you can finish him."},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Swain"},
+  {"layer": "full", "path": "phases[5].why", "before": "First item: the taunt rotation chunks and the MR makes mage supports cry.", "after": "Soul-stacked haste and heal keep funding his poke faster than your tank items."},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[6].why", "before": "Late Galio is the anti-dive: taunt their engage off your carry and R the map's emergencies.", "after": "Two items in, your burst engage finally outpaces Ascension's sustain — go dive him."},
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Swain Nevermove: matchup-defining — The root that decides — dodge it and the general farms regret. It writes your spacing rules. - W Shield of Durand is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Swain's Nevermove (E) is 12/11.5/11/10.5/10s cooldown — dodge the root and the general farms regret for up to 12 seconds. It writes your spacing rules. - W Shield of Durand is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Ravenous Flock heals and stacks max HP off soul fragments — armour alone won't stop it, buy Grievous Wounds instead."
+  }
+ ],
+ "notes": "No brief file existed at tools/audit-run/briefs/support/galio_sup__swain.json; sourced from champ-data/_kits/galio.json, champ-data/_kits/swain.json, champ-data/_kits/_missing/galio_sup.json, tools/audit-run/packets/galio_sup.json, and the live full/content files. All 7 chart-row edits are proposed together as required by THE CHART RULE; win[] on the content layer already carried the correct real verdict per row so only side+why (full layer) needed editing, no win[N] edits (which would be no-ops and get rejected). Confirmed via champ-data/champ-gender.js that Swain is male (he/his correct as already used)."
+}

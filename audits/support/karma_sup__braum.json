@@ -1,0 +1,47 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "braum",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 full-layer phases[].side read 'Skill' while packet.levelChart and content win[0-6] both say Karma wins every stage.",
+   "why": "packet.levelChart = [Karma x7] matches content win[] exactly; only the full layer never got the side filled in.",
+   "corrected": "Set phases[0-6].side to Karma; the why text at each row already describes Karma's range/poke advantage so no why rewrite was required.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "n/a — spikes[1] (Lvl 6, R is disengage-only, no kill threat) and spikes[2] (1st item poke out-values his sustain) already correctly name the real spikes.",
+   "why": "Confirmed against kit: Braum's kit has no ranged poke besides the slow Q, and R is a 130/115/100s zone/disengage tool, not burst.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real cooldown number (lint COOLDOWN_NO_DIGIT).",
+   "why": "Winter's Bite (Q) is the only thing that starts his passive stun chain; its cooldown decides how often he can even threaten it.",
+   "corrected": "Rewrote breakdown.cooldowns with Winter's Bite (Q) 8/7.5/7/6.5/6s and E Unbreakable 16/14/12/10/8s.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"dosFull[1].d","before":"RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.","after":"He needs a landed Winter's Bite to even start Concussive Blows — sidestep the Q and his whole engage plan is dead for its 8-6s cooldown."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending mantra on a wave while the enemy banks theirs for your face.","after":"He has no kill pressure once E Unbreakable and R are down — trading at even HP just lets his ADC catch up for free."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Braum Unbreakable: matchup-defining — The shield wall eats your poke and engage projectiles — wait it out. Read it before every duo step-up. - Your RE shield-speed answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Winter's Bite (Q) is 8/7.5/7/6.5/6s — his only ranged tool and the only way he starts Concussive Blows; dodge it and he has nothing. - E Unbreakable is 16/14/12/10/8s and blocks one direction of projectiles — bait it before committing Inner Flame. - R Glacial Fissure (130/115/100s) is disengage, not a kill threat."}
+ ],
+ "notes": "packet flags 'Karma wins only 47.9% but chart gives Karma 7/7 stages' — the chart-agreement fix above resolves the full-vs-content contradiction; the deeper WR-vs-chart gap is inherent to the data and left alone per the no-guessing rule."
+}

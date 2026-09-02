@@ -1,0 +1,52 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "nami",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[N].side is the flat placeholder \"Skill\" on all 7 rows while content win[] carries the real per-row verdict (Nami, Nami, Nami, Galio, Galio, Galio, Nami), matching the packet levelChart.",
+   "why": "Side and win[] render as the same row; all 7 currently contradict.",
+   "corrected": "Set phases[N].side to match win[] row by row.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/galio_sup.json (nami levelChart)", "champ-data/content/sup/galio.js win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "N/A — content.js spikes already track Aqua Prison (Q) and the level-6 flip.",
+   "why": "Matches kit.",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/nami.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Missing interaction unaddressed: Ebb and Flow (W) is an anti-heal target. breakdown.cooldowns had no cooldown numbers.",
+   "why": "Grievous Wounds timing decides extended trades against her sustain.",
+   "corrected": "Folded anti-heal into phases[].why for the item-timing rows and added real numbers to breakdown.cooldowns (Q 12-8s, R 120-100s).",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/_missing/galio_sup.json (nami entry)", "champ-data/_kits/nami.json"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Nami"},
+  {"layer":"full","path":"phases[0].why","before":"Q the pair — the tornado tick chips duos that stand in formation.","after":"Aqua Prison (Q) is a point-blank-to-ranged stun that sets up a big Ebb and Flow (W) trade, and her E buffs her ADC's autos — she out-trades your kit before you have E."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Nami"},
+  {"layer":"full","path":"phases[1].why","before":"W charge threat begins: the taunt governs their engage plans already.","after":"Her bubble threat still governs your positioning at rank 2, and the Q cooldown (12s at rank 1) is long enough that whiffing it is your only real punish window."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Nami"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: E-W the committed trade and the magic shield refunds their poke.","after":"Her poke and CC still out-range your gap-close at level 3, so play back and soak Aqua Prison (Q) on minions rather than forcing an engage."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Galio"},
+  {"layer":"full","path":"phases[3].why","before":"Zone with taunt threat and shield the margins — AP duos pay double rent.","after":"Your W Shield of Durand blocks her Ebb and Flow (W) poke and your Q slow lets Justice Punch (E) connect — the trade math flips to you."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Galio"},
+  {"layer":"full","path":"phases[4].why","before":"Hero's Entrance online — every roam your duo survives, you end.","after":"Hero's Entrance flashes onto her carry before Tidal Wave (R) — a slow, not a hard peel — can save them."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Galio"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the taunt rotation chunks and the MR makes mage supports cry.","after":"Grievous Wounds timing cuts through Ebb and Flow (W) sustain, and your gap-close sticks through her shield-less kit once she can't kite far enough."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Nami"},
+  {"layer":"full","path":"phases[6].why","before":"Late Galio is the anti-dive: taunt their engage off your carry and R the map's emergencies.","after":"Tidal Wave (R) into Aqua Prison (Q) is a chain that can hard-lock your only engage, so bait the bubble first or pair Hero's Entrance with your jungler rather than solo-committing."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Nami Aqua Prison: matchup-defining — The bubble starts every Nami play — sidestep it and her kit is small numbers. The duo’s tempo bends around it. - Keep W Shield of Durand banked for their best play. - The ultimate is a fight decision, not a habit.","after":"Aqua Prison (Q) is 12s at rank 1, down to 8s at rank 5 — sidestep it and her kit is small numbers until it's back. Tidal Wave (R) is 120s at rank 1, so a used ult is a long window to force fights."}
+ ],
+ "notes": "breakdown.early/mid/wave/trading/feeding/carry/late, ahead, tradeGood/tradeBad, loading, enemyWin remain structurally templated but not factually wrong; left alone given per-matchup scope. report[] untouched (no lint flag, out of sweep)."
+}

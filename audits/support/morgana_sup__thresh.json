@@ -1,0 +1,112 @@
+{
+ "ownerKey": "morgana_sup",
+ "enemy": "thresh",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content layer already calls levels 1-3 even (skill trade on hook dodge) matching the packet levelChart and content win[0-2]=\"Skill\".",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "currentText.content.win[0..2]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 (Soul Shackles online) and first item (poke punishes whiffed Q) are the stated spikes and match spikes[] array.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0-2].side on the full layer say \"Morgana\" (favoured 7-8/10) for Levels 1-3, but the SAME rows in the content layer (win[0-2]) already say \"Skill\", matching the packet levelChart exactly. The full-layer prose for those rows also describes Morgana out-poking Thresh from level 1, contradicting the mirrored/packet-backed even read.",
+   "why": "Neither Q (Dark Binding, 10s CD, 1250 range) nor his hook (Death Sentence, 19-9s CD, 1075 range) has a clear range/CD edge before level 4 when Black Shield comes online to hard-answer the hook-flay chain; the packet's win rate data (51.11% Thresh-favoured-ish, near-even) and the content whys[0-2] already describe this correctly as a skill matchup, not a Morgana favour.",
+   "corrected": "phases[0-2].side -> Skill, ratings normalized to 5/10, why text rewritten to describe the even hook-dodge trade instead of a false early Morgana favour.",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "currentText.content.whys[0..2]"]
+  },
+  {
+   "point": 13,
+   "status": "missing",
+   "whatIsWrong": "missingInteractions flags that Morgana's W/R grounding \"shuts off Thresh's Dark Passage (W)\", implying grounding Thresh prevents allies from using his dropped lantern to dash to him.",
+   "why": "Grounding effects deny dashes performed by the grounded unit itself. Thresh's W lantern-dash is performed by the ALLY clicking the lantern, not by Thresh — it is unclear from the kit text whether grounding Thresh also disables an ally's click-dash to an already-thrown lantern. This is not confirmed by Riot's ability text and risks being wrong if stated as fact.",
+   "corrected": "Left unwritten; recorded in notes instead of asserted as fact.",
+   "confidence": "Low",
+   "sources": ["champ-data/_kits/thresh.json W flags"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Morgana",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].rating",
+   "before": "7/10",
+   "after": "5/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "W-chip the pair — the pool taxes bot's formations politely from one.",
+   "after": "Skill lane: dodge Death Sentence behind minions or eat the hook-flay chain."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Morgana",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].rating",
+   "before": "7/10",
+   "after": "5/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Q threats begin: the three-second root is the lane's longest sentence.",
+   "after": "Still skill: a missed 9s-cooldown Q punishes him hard as your Binding lands."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Morgana",
+   "after": "Skill"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].rating",
+   "before": "8/10",
+   "after": "5/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "Full kit: the black shield pre-answers their entire support's kit.",
+   "after": "Even through 3 — Black Shield only blanks CC that lands, not whiffs."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "W the pair, bank the Q visibly, shield the answer — the threat governs while the pool bills.",
+   "after": "Sit outside his 1075-range hook and punish the whiff — Death Sentence sits at 9-19s cooldown."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking into shields while their hook waits for yours to be down — the binding is the law; spend it like one.",
+   "after": "Don't trade Q into his lantern shield hoping to win it — bank Dark Binding for a whiffed Death Sentence instead."
+  }
+ ],
+ "notes": "Level chart contradiction fixed: full-layer phases[0-2] previously said Morgana favoured Levels 1-3 while content win[0-2] and the packet levelChart already said Skill/even — moved full to match content per the chart rule (win[N] already at target, so side/rating/why edited alone). Fixed both lintFindings COPY_PASTE_BLEED entries (dosFull[1].d and dontsFull[2].d were verbatim tradeGood/tradeBad pasted under unrelated titles). missingInteractions claim that Morgana grounding shuts off Thresh's lantern-dash for an ALLY is not verifiable from the kit text (grounding stops the grounded unit's own dash; the lantern dash is performed by the ally) — left unwritten, flagged in audit point 13 instead of asserted. suspectNames flags on wants.foe[0]/[2] (\"Land Death Sentence\", \"Use Dark Passage\") are false positives — these are correct ability names with normal phrasing, not typos."
+}

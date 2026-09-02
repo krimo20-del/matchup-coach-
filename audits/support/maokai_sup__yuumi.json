@@ -1,0 +1,42 @@
+{
+  "ownerKey": "maokai_sup",
+  "enemy": "yuumi",
+  "lane": "support",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "full.phases[0..6].side already all read 'Maokai', matching content win[] and the packet levelChart exactly.",
+      "why": "Yuumi has no hard CC in her actual kit text (her W's 'hardCC' flag is a tooltip-parsing misfire — the description only says she becomes untargetable and dashes, no stun/root/slow), so Maokai's engage goes largely unanswered all game.",
+      "corrected": "No chart edit needed.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/yuumi.json", "tools/audit-run/packets/maokai_sup.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "The packet flags this matchup with two defects: breakdown.cooldowns has no sequencing advice and the page never names any of Yuumi's abilities (Feline Friendship, Prowling Projectile, You and Me!, Zoomies, Final Chapter). breakdown.cooldowns currently names only 'You and Me!' with no number.",
+      "why": "You and Me! (W) itself lists cooldown 0 in the kit — she can re-attach freely — but Zoomies (E) is her only real self-peel tool and sits on a flat 10-second cooldown; once she's burned it she has nothing left to answer a dive.",
+      "corrected": "Rewrote breakdown.cooldowns to lead with Zoomies' real 10s cooldown and note the attach dash has no meaningful cooldown of its own.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/yuumi.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeGood/tradeBad are the byte-identical generic template shared by every matchup in this file and never mention Yuumi's actual toolkit.",
+      "why": "champ-data/_kits/_missing/maokai_sup.json flags: your Bramble Smash (Q) shuts off her You and Me! (W) dash (grounding denies it), she can go untargetable through your commit via that same W, and she needs anti-heal — none of that reached the page.",
+      "corrected": "Rewrote tradeGood/tradeBad to name Zoomies' cooldown and her lack of hard CC directly.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/_missing/maokai_sup.json", "champ-data/_kits/yuumi.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Yuumi You and Me! (Attach): matchup-defining — Untargetable while attached — kill the host or catch the dismount windows. It writes your spacing rules. - Q Bramble Smash is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Yuumi Zoomies (E): flat 10s cooldown — once she's burned it to shield or speed her ADC, she has no self-peel left for your dive. - Her You and Me! (W) attach dash has no meaningful cooldown of its own, so waiting doesn't make the re-engage easier. - The R opens or closes fights — pick one per cast." },
+    { "layer": "full", "path": "tradeGood", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "W her ADC the moment Yuumi is detached or mid-cast — she has no hard CC to punish the dash, so the trade is close to free." },
+    { "layer": "full", "path": "tradeBad", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Trading into a fresh Zoomies (E) — its 10-second shield and speed boost let her ADC disengage before your root ever lands." },
+    { "layer": "content", "path": "early", "before": "You own levels 1-2: Yuumi brings zero hard CC and can only chip with her Q, so as long as you respect the poke you can walk the lane down. Watch for the moment she detaches to CS or fires Q — that window is a free W or Sapling slow onto her ADC. Your sustain from Sap Magic soaks her poke and keeps your health where you want it for the all-in.", "after": "You own levels 1-2: Yuumi brings zero hard CC and can only chip with Prowling Projectile (Q), so as long as you respect the poke you can walk the lane down. Watch for the moment she detaches to CS or fires her Q — that window is a free W or Sapling slow onto her ADC. Your sustain from Sap Magic soaks her poke and keeps your health where you want it for the all-in." },
+    { "layer": "content", "path": "mid", "before": "From 3 to 6 your engage completely outclasses her peel. Twisted Advance locks her ADC regardless of whether she's attached, and she has no stun, root, or knockback to interrupt you — the best she can do is heal and speed-boost after the fact. Coordinate your W with your ADC's follow-up on her cooldowns; even a mediocre trade snowballs because she can't answer your CC. Ward her flanks and punish any greedy positioning from the carry.", "after": "From 3 to 6 your engage completely outclasses her peel. Twisted Advance locks her ADC regardless of whether she's attached, and she has no stun, root, or knockback to interrupt you — the best she can do is Final Chapter's heal or a 10s Zoomies speed boost after the fact. Coordinate your W with your ADC's follow-up on her cooldowns; even a mediocre trade snowballs because she can't answer your CC. Ward her flanks and punish any greedy positioning from the carry." }
+  ],
+  "notes": "Chart already agreed between layers (no side/win mismatch) — only the two packet-flagged defects (missing ability names, no cooldown number) and the generic tradeGood/tradeBad template were fixed. did not touch report[], dosFull/dontsFull, or the remaining breakdown.* fields (identical template shared across all six matchups in this file) — recorded as sectionsMissing."
+}

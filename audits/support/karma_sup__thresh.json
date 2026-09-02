@@ -1,0 +1,49 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "thresh",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level chart (Skill/Skill/Skill/Skill/Thresh/Thresh/Skill) matches content win[] rows and the packet's levelChart; Karma's poke leads early, Thresh's level-6 hook-Flay-Box combo flips levels 6 and first item, Karma reclaims with 2+ items range/disengage.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[0..6]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Power spikes correctly identify level 6 (Q/E/R combo online) and first item (Death Sentence range/damage scaled) as Thresh's windows, with Karma's 2+ item spike (RQ poke, W disengage) as the reclaim point.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d ('RE the caught carry instantly') is the tradeGood string pasted verbatim and describes a poke trade, not saving a hooked ally. dontsFull[2].d ('Ward face-first into his brush') is the tradeBad string pasted verbatim and describes mantra-poke timing, not warding.",
+   "why": "Both are flagged by lintFindings as COPY_PASTE_BLEED. Karma's actual save tool for a hooked ally is Mantra'd E (Inspire) which shields and speeds nearby allies; the brush-warding don't should explain why facechecking his bush specifically feeds his Death Sentence angle, per E's revealsStealth/hook-angle flags.",
+   "corrected": "dosFull[1].d -> Mantra-empowered E (Inspire) shields and speeds everyone near the hooked target the instant Death Sentence lands — throw it before Flay's knockback separates your carry from peel. dontsFull[2].d -> Thresh wards and waits in his own brush for a hook angle — a facecheck there hands him the free Death Sentence your positioning was supposed to deny.",
+   "confidence": "High",
+   "sources": ["ownerKit E flags/text", "enemyKit Q text", "lintFindings"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.",
+   "after": "Mantra-empowered E (Inspire) shields and speeds everyone near the hooked target the instant Death Sentence lands — throw it before Flay's knockback separates your carry from peel."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Spending mantra on a wave while the enemy banks theirs for your face.",
+   "after": "Thresh wards and waits in his own brush for a hook angle — a facecheck there hands him the free Death Sentence your positioning was supposed to deny."
+  }
+ ],
+ "notes": "Fixed both COPY_PASTE_BLEED lint findings (dosFull[1].d and dontsFull[2].d were verbatim tradeGood/tradeBad text under unrelated titles). Level chart, spikes, and ability names (Death Sentence/Dark Passage/Flay/The Box) all check out against the kit and packet; no mirror file existed to cross-check against. Several breakdown.* fields (carry, wave, feeding) remain templated but factually accurate — left alone per the length/fabrication guardrails since no Thresh-specific correction was needed beyond what's already there."
+}

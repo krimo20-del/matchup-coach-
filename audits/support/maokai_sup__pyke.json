@@ -1,0 +1,94 @@
+{
+ "ownerKey": "maokai_sup",
+ "enemy": "pyke",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "56.16% Maokai win rate over 2498 games; the content layer already reflects a Pyke-favored lane despite the raw number, which is fine — level chart is skill-based.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet"]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full.phases[N].side is flat \"Skill\" on all 7 rows while content win[] (and packet.levelChart) read Skill/Pyke/Skill/Skill/Pyke/Pyke/Maokai. Rows Level 2, Level 6, First item and Two+ items disagree between the two layers — a live mirror/chart contradiction.",
+   "why": "Content win[], spikes[], and whys[] already state Pyke wins level 2 (harder Bone Skewer all-in), level 6 (Death From Below execute vs non-lethal Grasp) and first item (roam snowball), then Maokai takes over at two-plus items — and packet.levelChart agrees. The full layer's side field was never updated to match.",
+   "corrected": "Moved full.phases[1].side, phases[4].side, phases[5].side to \"Pyke\" and phases[6].side to \"Maokai\", with matching why text for each grounded in the real interaction. win[] in content already holds the correct values, so no content-layer edit needed (would be a no-op).",
+   "confidence": "High",
+   "sources": ["currentText content win[]/spikes/whys", "packet levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Bone Skewer as matchup-defining but has no cooldown number, matching the packet's own defect flag on this matchup, and never mentions Ghostwater Dive's stealth.",
+   "why": "Pyke's kit: Bone Skewer (Q) cooldown 10/9.5/9/8.5/8s; Ghostwater Dive (W) grants Camouflage with no built-in reveal (missingInteractions: stealth-needs-vision).",
+   "corrected": "Added real Q cooldown numbers and the Control Ward/sweeper requirement against his W stealth.",
+   "confidence": "High",
+   "sources": ["enemyKit pyke.json", "missingInteractions", "packet defects"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Gift of the Drowned Ones (P) bypassing stacking resistances is never mentioned anywhere in the matchup text.",
+   "why": "missingInteractions flags resistances-invalidated: Pyke's passive punishes HP/armor stacking rather than raw resistance, so pure tank stats read the trade wrong.",
+   "corrected": "Not folded into an edit this pass — itemization guidance lives in report[] which is out of scope except for lint-flagged or fabricated-name entries; recorded here instead.",
+   "confidence": "Medium",
+   "sources": ["enemyKit pyke.json", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Pyke"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "W threat begins: the point-click root governs their carry's spacing.",
+   "after": "Bone Skewer into melee Q gives Pyke a harder all-in than yours."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Pyke"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Nature's Grasp online — the root wave starts fights from fog and ends dives in it.",
+   "after": "Death From Below threatens an execute-reset kill; your Grasp only roots, no execute."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Pyke"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "First item: the roots chain and the saplings tax every brush.",
+   "after": "Pyke's item snowballs off picks; your tankiness barely matters."
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Maokai"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Pyke Bone Skewer: matchup-defining — The hook starts the chain — his R cleans what it catches. It writes your spacing rules. - Q Bramble Smash is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Pyke's Bone Skewer (Q) is down 10s at rank 1, 8s at max — his all-in window. Ghostwater Dive (W) hides him; carry a Control Ward or sweeper or you have no reveal. - Your Q resets in 5-7s to zone the hook. - Save R for the swing fight."
+  }
+ ],
+ "notes": "phases[6].why (\"Late Maokai is the engage forest...\") already reads as a Maokai-favored description, so it was left unedited when the side flipped to Maokai — it already agrees with the new verdict. Pyke's pronouns (his/him) are already correct — pyke is male per champ-gender.js, no fix needed. Gift of the Drowned Ones resistance-bypass interaction (point 4) not folded into any writable field this pass since itemization detail lives in the restricted report[] array; flagged for a future pass. Rest of breakdown.* (early/mid/wave/trading/spikes/feeding/carry/difficulty/late), ahead, tradeGood, tradeBad, loading, enemyWin remain generic engage-mirror template language shared with other matchups but nothing here to ground further without inventing specifics — recorded per the relevance rule rather than rewritten."
+}

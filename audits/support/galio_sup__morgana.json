@@ -1,0 +1,39 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "morgana",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "N/A — phases[N].side is already \"Galio\" on all 7 rows and content win[] is also [\"Galio\"x7], matching the packet levelChart. No chart fix needed.",
+   "why": "Layers already agree.",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/galio.js win[]", "tools/audit-run/packets/galio_sup.json (morgana)"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "N/A — spikes already key off Dark Binding (Q) and Hero's Entrance.",
+   "why": "Matches kit.",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/morgana.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Missing interaction unaddressed: Soul Siphon (P) and Tormented Shadow (W) are anti-heal targets. breakdown.cooldowns had no digit character (lint defect — \"three-second\" is spelled out, not numeric, and the actual Q cooldown is a flat 10s, not tied to that 3s root duration).",
+   "why": "Grievous Wounds timing decides whether Morgana's chip sustain matters, and the real cooldown number is more useful than a spelled-out duration of an unrelated stat.",
+   "corrected": "Added anti-heal note to phases[2].why and a real Q cooldown (10s flat) plus E (26-16s) to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/_missing/galio_sup.json (morgana entry)", "champ-data/_kits/morgana.json"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[2].why","before":"Full kit: E-W the committed trade and the magic shield refunds their poke.","after":"Full kit: W your engage through her Black Shield (E) and grind her down — Soul Siphon (P) and Tormented Shadow (W) heal her, so time Grievous Wounds before the extended trade."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Morgana Dark Binding: matchup-defining — The three-second root — minion-block it; the pool follows wherever it lands. Read it before every duo step-up. - Your W Shield of Durand answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"Dark Binding (Q) is a flat 10s cooldown — minion-block it and the pool follows wherever it lands. Black Shield (E) drops from 26s to 16s at rank 5, so a used shield on her carry is a long window to punish."}
+ ],
+ "notes": "breakdown.early/mid/wave/trading/feeding/carry/late, ahead, tradeGood/tradeBad, loading, enemyWin, tldr/winCon and dosFull/dontsFull remain structurally templated (swap-name generic prose) but not factually wrong; left alone given per-matchup scope. Flag: Black Shield (E) carries a 'terrain' kitFlag in the kit file, but Riot's own description is a magic-damage-and-CC-absorbing barrier, not terrain — likely a tooltip-parsing misfire; did not use that flag in any edit. report[] untouched (no lint flag, out of sweep)."
+}

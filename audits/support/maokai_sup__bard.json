@@ -1,0 +1,58 @@
+{
+ "ownerKey": "maokai_sup",
+ "enemy": "bard",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Even lane split by CC checks; matches packet win rate 57.22% and difficulty rating.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 (Nature's Grasp online) and first-item (Meeps/chime scaling) spikes are named correctly.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[2/3/4/6].side all read 'Skill' while content win[2/3/4/6] already read 'Maokai', and the packet levelChart agrees with content (Skill, Skill, Maokai, Maokai, Maokai, Skill, Maokai). The full-layer chart disagreed with both the content layer and the packet.",
+   "why": "Content whys[2..4,6] already give the grounded reasoning (guaranteed Twisted Advance root vs conditional Cosmic Binding, Nature's Grasp forcing fights, W-R lockdown late) — the full layer just never had its side/why updated to match.",
+   "corrected": "Moved phases[2].side, phases[3].side, phases[4].side, phases[6].side to 'Maokai' with matching why text grounded in the real cooldowns; win[N] was already correct so no content edit was needed for those rows.",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "brief currentText.content.win[]"]
+  },
+  {
+   "point": 13,
+   "status": "needs-correction",
+   "whatIsWrong": "missingInteractions flagged that Bard's Caretaker's Shrine (W) sustain through chip damage and Grievous Wounds timing was never mentioned.",
+   "why": "Shrine heals whichever ally (including Bard) touches it first, which can undo extended poke unless anti-heal is up.",
+   "corrected": "Added to breakdown.trading's bad-trade clause.",
+   "confidence": "High",
+   "sources": ["brief missingInteractions"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Maokai" },
+  { "layer": "full", "path": "phases[2].why", "before": "Full kit: E-zone the trades, W the commits, Q the disengage — the swamp votes.", "after": "Twisted Advance guarantees a root; Cosmic Binding needs a wall or ally to land it." },
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Maokai" },
+  { "layer": "full", "path": "phases[3].why", "before": "Sustain the margins with passive heals and sapling chip — attrition is a tree's game.", "after": "Sapling poke and passive sustain punish his roams — attrition favors the tree now." },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Maokai" },
+  { "layer": "full", "path": "phases[4].why", "before": "Nature's Grasp online — the root wave starts fights from fog and ends dives in it.", "after": "Nature's Grasp is a wide, unavoidable root — it forces the fight before his R saves him." },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Maokai" },
+  { "layer": "full", "path": "phases[6].why", "before": "Late Maokai is the engage forest: R the formation, W the carry, and Q whatever the roots deliver.", "after": "Late Maokai wins the engage: W-R lockdown is steadier than his skillshot-dependent stun." },
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Bard Cosmic Binding: matchup-defining — The wall-stun starts every Bard pick — never hug terrain near him. It writes your spacing rules. - Q Bramble Smash is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Bard's Cosmic Binding stuns off a wall on a 11/10/9/8/7s cooldown — never hug terrain near him. It writes your spacing rules. - Bramble Smash (7-5s) is for saving fights, not seasoning trades. - Tempered Fate (110/95/80s) opens or closes fights — pick one per cast." },
+  { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all. Bad trade: Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Good trade: Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all. Bad trade: fighting into a banked Caretaker's Shrine heal without Grievous Wounds up — it undoes the chip." },
+  { "layer": "full", "path": "dosFull[1].d", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "Land W on their carry the instant Cosmic Binding whiffs — Twisted Advance's root is your guaranteed follow window." },
+  { "layer": "full", "path": "dontsFull[2].d", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Diving on his clock hands Tempered Fate a free reset — wait for Cosmic Binding to whiff first." }
+ ],
+ "notes": "Full-layer level chart (phases[].side) disagreed with the already-correct content-layer win[] and packet.levelChart at rows 2,3,4,6 (Level 3, Levels 4-5, Level 6, 2+ items) — all full.side said 'Skill', content/packet said 'Maokai'. Fixed full.side + full.why to match; win[] needed no edit since it already held the right value. Fixed COPY_PASTE_BLEED on dosFull[1].d and dontsFull[2].d, and COOLDOWN_NO_DIGIT on breakdown.cooldowns with real numbers (Cosmic Binding 11/10/9/8/7, Bramble Smash 7-5, Tempered Fate 110/95/80). wants.foe[0] 'Land Cosmic Binding' flagged as a suspect name is actually correct (Bard's real Q per enemyAbilities) — no fix needed, false positive."
+}

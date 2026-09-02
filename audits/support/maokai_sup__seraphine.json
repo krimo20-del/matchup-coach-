@@ -1,0 +1,50 @@
+{
+ "ownerKey": "maokai_sup",
+ "enemy": "seraphine",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0-4].side all read the placeholder 'Skill' while content win[0-4] and the packet's real levelChart already say Maokai wins levels 1 through 6; phases[6].side also says 'Skill' where win[6]/packet say Seraphine wins late. The two layers disagree on who wins 6 of 7 stages.",
+   "why": "Seraphine is an immobile squishy support with no dash — Maokai's level-2 Q-Sapling all-in and W gap-close through minions punish her hard, matching the win[] array and the 1,998-game packet chart. Late game her double-cast passive, stacked shields/heals and Encore flip it back to her, which win[6] already reflects.",
+   "corrected": "Move phases[0],[1],[2],[3],[4].side to Maokai and phases[6].side to Seraphine, with why lines grounded in her lack of mobility early and her scaling late; phases[5] (First item) already agrees at 'Skill' so it is untouched.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/maokai.json", "champ-data/_kits/seraphine.json", "champ-data/content/sup/maokai.js (win[])", "tools/audit-run/packets/maokai_sup.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 2 all-in, level 6 Nature's Grasp vs Encore, and the item-2 scaling flip are all already stated correctly in the content spikes[] array with real ability names.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/maokai.js"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Beat Drop as 'matchup-defining' but contains no actual cooldown number, so a reader can't time it. It's also a templated sentence shared verbatim (name-swapped) across every matchup in this owner's file.",
+   "why": "Seraphine's E Beat Drop (Root) is 11/10.5/10/9.5/9s and her ult Encore is 160/140/120s — real numbers a support can play around.",
+   "corrected": "Rewrote breakdown.cooldowns to state Beat Drop's real cooldown window and Encore's ult timer instead of the generic 'matchup-defining' filler.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/seraphine.json"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Maokai"},
+  {"layer": "full", "path": "phases[0].why", "before": "Sapling the brush — the lane's hedges are yours now; trades start with a tree's consent.", "after": "Sapling zones the brush; Seraphine has no engage to punish it — Level 1 opens on your terms."},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Maokai"},
+  {"layer": "full", "path": "phases[1].why", "before": "W threat begins: the point-click root governs their carry's spacing.", "after": "W threat begins: your root punishes her immobile poke on approach."},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Maokai"},
+  {"layer": "full", "path": "phases[2].why", "before": "Full kit: E-zone the trades, W the commits, Q the disengage — the swamp votes.", "after": "Full kit: E-zone her poke, W the commit — she has no dash to answer it."},
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Maokai"},
+  {"layer": "full", "path": "phases[3].why", "before": "Sustain the margins with passive heals and sapling chip — attrition is a tree's game.", "after": "Sustain the margins with Sap Magic heals — her Q poke can't outpace your attrition."},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Maokai"},
+  {"layer": "full", "path": "phases[4].why", "before": "Nature's Grasp online — the root wave starts fights from fog and ends dives in it.", "after": "Nature's Grasp out-ranges Encore — start fights from fog before her charm can land."},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Seraphine"},
+  {"layer": "full", "path": "phases[6].why", "before": "Late Maokai is the engage forest: R the formation, W the carry, and Q whatever the roots deliver.", "after": "Late Seraphine out-scales: her double-cast shields and Encore outvalue your frontline once she has items."},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Seraphine Beat Drop (Root): matchup-defining — Roots the already-slowed — dodge it and the song never builds. It writes your spacing rules. - Q Bramble Smash is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Seraphine's E Beat Drop (Root) recharges in 9-11s — dodge it and the song never builds; it writes your spacing rules. - Q Bramble Smash is for saving fights, not seasoning trades. - Her R Encore resets on a 120-160s clock — spend yours to answer it."}
+ ],
+ "notes": "No maokai_sup brief file exists at tools/audit-run/briefs/support/maokai_sup__seraphine.json (or any maokai_sup__* brief) — this whole slice was built directly from champ-data/_kits, tools/audit-run/packets/maokai_sup.json, champ-data/_kits/_missing/maokai_sup.json, and the live full/content JS files, since the pre-built brief this run's instructions point to was never generated for maokai_sup. Given that, I limited edits to the highest-value, verifiable defects (level-chart side/win agreement and a real cooldown number) rather than the full template sweep across all ten breakdown keys, tradeGood/tradeBad, dosFull/dontsFull and loading — those remain templated (name-swapped boilerplate) and are flagged here for a follow-up pass with more budget. Pronoun check passed: Seraphine is female per champ-gender.js and the existing text already uses she/her correctly."
+}

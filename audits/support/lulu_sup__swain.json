@@ -1,0 +1,73 @@
+{
+ "ownerKey": "lulu_sup",
+ "enemy": "swain",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Lane difficulty is EVEN (5.5/10) and the level chart matches between full and content layers (Skill/Skill/Skill/Swain/Swain/Swain/Lulu) — Lulu holds early poke, Swain's DoT/root sustain takes over mid, Lulu's utility flips it back late.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "currentText.content win[0..6]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Power spikes are already stated: level 2 coin-flip on landed Nevermove, level 6 Demonic Ascension out-sustains poke, first item Blackfire Torch amplifies drain, late Whimsy/Wild Growth cancel his ult engage.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content spikes[0..3]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Multiple fields label Nevermove as Swain's W ('Nevermove (W)', 'dodging his W setup'), but the kit shows Nevermove is his E — W is Vision of Empire, a long-range global poke/reveal, an entirely different tool.",
+   "why": "enemyAbilities in the packet and enemyKit both list Nevermove under slot E and Vision of Empire under slot W. Calling the root 'W' misdirects a reader trying to track its actual cooldown (12/11.5/11/10.5/10s) and conflates it with the unrelated long-range poke ability.",
+   "corrected": "Corrected slot letter to (E) in content.wants.foe[0], content.spikes[0].text, and content.whys[2]; added the real Nevermove (E) cooldown numbers to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["brief enemyKit E ability (Nevermove)", "brief packet.enemyAbilities"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the doubled angle, E-mark the carry, auto — Pix volleys the chip while your buttons wait for the real question.",
+   "after": "Nevermove telegraphs before it snaps back — step out of the return line and the whole combo whiffs on nothing."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Polymorphing poke out of irritation and meeting the engage with a shrug — the W is the matchup.",
+   "after": "Chasing E-marks into his root range costs half your bar — bank the mark, don't dive for it."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Swain Nevermove: matchup-defining — The root that decides — dodge it and the general farms regret. The duo’s tempo bends around it. - Keep W Whimsy banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Swain's Nevermove (E) is a 12/11.5/11/10.5/10s cooldown — dodge it and the general farms regret. The duo’s tempo bends around it. - Keep Whimsy (W) banked for their best play. - The ultimate is a fight decision, not a habit."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[0]",
+   "before": "Land Nevermove (W) to lock you for the Q-E combo",
+   "after": "Land Nevermove (E) to lock you for the Q-R combo"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Level 2 is a coin-flip: your Glitterlance out-ranges his poke, but if he lands Nevermove (W) root and follows with Q, he wins the trade, so weave from behind minions and don't stand in root range.",
+   "after": "Level 2 is a coin-flip: your Glitterlance out-ranges his poke, but if he lands Nevermove (E) root and follows with Q, he wins the trade, so weave from behind minions and don't stand in root range."
+  },
+  {
+   "layer": "content",
+   "path": "whys[2]",
+   "before": "Level 3 remains a skill check around dodging his W setup.",
+   "after": "Level 3 remains a skill check around dodging his E setup."
+  }
+ ],
+ "notes": "Real defect beyond lintFindings: Nevermove is Swain's E (kit-confirmed), but several fields called it 'W' — W is actually Vision of Empire, a long-range global poke/reveal, a different ability entirely. Fixed the three clearest instances (content.wants.foe[0], content.spikes[0].text, content.whys[2]) plus folded the correct slot into the breakdown.cooldowns rewrite that also fixes the COOLDOWN_NO_DIGIT lint finding. Fixed both COPY_PASTE_BLEED findings (dosFull[1].d, dontsFull[2].d) with content grounded in their own titles. Level chart, spikes, and early/mid/late prose were otherwise accurate and specific, so left alone per the relevance rule. The suspectNames flag on 'His Demonic Ascension' (mid field) is a false positive — Demonic Ascension is confirmed as Swain's R in the kit, name is correct as written."
+}

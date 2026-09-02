@@ -1,0 +1,67 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "seraphine",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Galio's W (Shield of Durand) blocks Seraphine's magic poke and she has no mobility to disengage his E dash, so the level chart correctly gives Galio all 7 stages.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/galio.json", "champ-data/_kits/seraphine.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "spikes[] only has 3 entries where every other stage array expects 4 (missing a 1st-item spike) — a structural gap, not a factual error.",
+   "why": "The applier's spikes array is fixed at 4 entries; this matchup file was left with 3, silently dropping the first-item power spike a reader needs.",
+   "corrected": "Added a 1st-item spike grounded in Surround Sound's (W) heal-after-shield sequencing and Grievous Wounds timing.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/galio_sup.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Beat Drop as 'matchup-defining' with no cooldown number anywhere in the field (lint rule: cooldowns field must contain a digit). dosFull[1].d is copy-paste bled from tradeGood — same sentence pasted under an unrelated title. Neither field, nor any other writable field, mentions that Surround Sound (W) heals once Seraphine is already shielded (needsResearch-confirmed anti-heal target) or that Stage Presence (P) casts every 3rd spell and resets her auto-attack as a burst tell.",
+   "why": "Real per-rank cooldowns (Beat Drop E: 11/10.5/10/9.5/9s) make the cooldown-tracking advice concrete instead of vague; the copy-pasted Do bullet wastes a slot that should carry the anti-heal interaction listed in the missing-interactions file for this matchup.",
+   "corrected": "Rewrote breakdown.cooldowns with the real E cooldown; rewrote dosFull[1].d to state the Surround Sound heal-after-shield interaction and Grievous Wounds timing; renamed Seraphine's poke in 'early' from generic 'magic Q and E poke' to High Note (Q) and Beat Drop (E) by name.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/seraphine.json", "champ-data/_kits/_missing/galio_sup.json"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Seraphine Beat Drop (Root): matchup-defining — Roots the already-slowed — dodge it and the song never builds. It writes your spacing rules. - W Shield of Durand is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Seraphine's Beat Drop (E) is 11/10.5/10/9.5/9s cooldown — dodge it and she has nothing to root you with for up to 11 seconds. It writes your spacing rules. - W Shield of Durand is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Surround Sound (W) heals once she's already shielded — force the fight before her back, or buy Grievous Wounds to shut the sustain off."
+  },
+  {
+   "layer": "content",
+   "path": "early",
+   "before": "Galio hard-counters Seraphine early: his W Shield of Durand drastically reduces her magic Q and E poke, turning her main strength into wasted mana. He can raise W into her casts and then walk her down since she has no mobility to escape. Punish every time she steps up to poke.",
+   "after": "Galio hard-counters Seraphine early: his W Shield of Durand drastically reduces her High Note (Q) and Beat Drop (E) poke, turning her main strength into wasted mana. He can raise W into her casts and then walk her down since she has no mobility to escape. Punish every time she steps up to poke."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].when",
+   "before": null,
+   "after": "1st item"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": null,
+   "after": "Once you've got a tank component, Surround Sound (W) only heals after it's already shielded — force fights before her recall or buy Grievous Wounds to shut the sustain off entirely."
+  }
+ ],
+ "notes": "No brief file existed at tools/audit-run/briefs/support/galio_sup__seraphine.json (only the mirror direction seraphine_sup__galio.json briefs exist under briefs/sup/, and no mirror audit has been written yet). Sourced this matchup directly from champ-data/_kits/galio.json, champ-data/_kits/seraphine.json, champ-data/_kits/_missing/galio_sup.json, tools/audit-run/packets/galio_sup.json, and the live full/content files. Chart already agrees (full phases[].side all Galio, content win[] all Galio) — no chart edit needed. Confirmed via champ-data/champ-gender.js that Seraphine is female (she/her correct as already used). Stage Presence's (P) auto-reset burst tell (missing-interactions file) was not folded into an edit due to no free slot in the length-banded fields I touched — flagging for a follow-up pass rather than inventing a slot."
+}

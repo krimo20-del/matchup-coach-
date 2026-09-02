@@ -1,0 +1,62 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "lux",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "All 7 phases[N].side read the generic 'Skill' while content win[] alternates Karma/Lux/Karma matching the packet's own levelChart. phases[4].why and phases[5].why also describe Karma pressing an early lead / converting items while win[4]=win[5]='Lux'.",
+   "why": "The chart shows no verdict at all, and the two rows where a verdict is most needed (level 6, first item — Lux's real power spikes) argued the opposite of the recorded winner.",
+   "corrected": "Set side to Karma (rows 0-3, 6) and Lux (rows 4-5) to match win[]. Rewrote phases[4].why and phases[5].why to explain Lux's real E-Q-R poke-and-execute spike, grounded in the same reasoning already in content.spikes[1]/[2].text. Rows 0-3 and 6 kept their existing why — already correct for Karma.",
+   "confidence": "High",
+   "sources": ["currentText content.win[0..6]", "brief packet.levelChart", "currentText content.spikes[1].text/spikes[2].text"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "2 misgenders (loading, report[10].t) call Lux 'his'.",
+   "why": "Lux is female; a stray pronoun reads as a wrong-champion leak.",
+   "corrected": "Swapped his->her.",
+   "confidence": "High",
+   "sources": ["lintFindings MISGENDER x2"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d and dontsFull[2].d are verbatim tradeGood/tradeBad text pasted under titles about dodging her root and eating her zone.",
+   "why": "Neither body explains the titled mechanic.",
+   "corrected": "Replaced both with real Q/E-specific content.",
+   "confidence": "High",
+   "sources": ["lintFindings COPY_PASTE_BLEED x2"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "missingInteractions flags that Lux's combo opens with an auto-attack reset via Illumination (P) — not reflected on the page.",
+   "why": "The follow-up auto that detonates Illumination is the actual damage spike, not the spell that primed it.",
+   "corrected": "Added as dosFull[3] via before:null (no prior 4th entry existed).",
+   "confidence": "Medium",
+   "sources": ["missingInteractions rule autoreset-burst-tell"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "loading", "before": "- Karma vs Lux - Track: Lux Light Binding. - Track his engage cooldown — your duo trades only when it's down. - The duo goes when Light Binding is down. - The R decides fights; it doesn’t advertise them.", "after": "- Karma vs Lux - Track: Lux Light Binding. - Track her engage cooldown — your duo trades only when it's down. - The duo goes when Light Binding is down. - The R decides fights; it doesn’t advertise them."},
+  {"layer": "full", "path": "report[10].t", "before": "Your CC plus jungler arrival decides bot — ping gank windows on his engage cooldown and hold the river bush vision.", "after": "Your CC plus jungler arrival decides bot — ping gank windows on her engage cooldown and hold the river bush vision."},
+  {"layer": "full", "path": "dosFull[1].d", "before": "RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.", "after": "Light Binding (Q) is a slow single-target skillshot on a 10s cooldown — juke the sightline instead of walking straight, and punish the whiff hard with W root."},
+  {"layer": "full", "path": "dontsFull[2].d", "before": "Spending mantra on a wave while the enemy banks theirs for your face.", "after": "Lucent Singularity (E) denies a zone until she detonates it — eating one Q trade inside costs you the full E-R combo, not a single hit."},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Lux Light Binding: matchup-defining — Everything keys off the root — minion-block it and the combo never starts. The duo’s tempo bends around it. - Keep RE shield-speed banked for their best play. - The ultimate is a fight decision, not a habit.", "after": "- Lux's Light Binding (Q) is a 10s-cooldown single-target root — minion-block it and the E-Q-R combo never starts. - Keep RE shield-speed banked for her best play. - Her R Final Spark is 60/50/40s — punish a missed cast hard."},
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Karma"},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Karma"},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Karma"},
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Karma"},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Lux"},
+  {"layer": "full", "path": "phases[4].why", "before": "No new ult — press the early lead; scaling supports are waking up behind you.", "after": "Her E-Q-R poke-and-execute out-ranges you and can burst your ADC before Mantra-E shields it, so Lux spikes at 6."},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Lux"},
+  {"layer": "full", "path": "phases[5].why", "before": "First item: RQ chunks and RE engages — convert to plates and picks now.", "after": "First-item mage power lets her E-Q-R combo one-shot squishies from range, keeping the lane hers while she lands skillshots."},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Karma"},
+  {"layer": "full", "path": "dosFull[3].t", "before": null, "after": "Watch the Illumination proc timer"},
+  {"layer": "full", "path": "dosFull[3].d", "before": null, "after": "Lux's passive (Illumination) primes a target after a landed spell — her follow-up auto detonates it, so that auto's wind-up is your real cue to disengage, not the spell cast."}
+ ],
+ "notes": "Fixed a full-vs-content chart mismatch: every phases[].side read the generic 'Skill' instead of matching win[] (which agrees with the packet's own alternating Karma/Lux/Karma chart). Rows 4-5's why text argued Karma was pressing/converting while win[4-5]=Lux, so both were rewritten using the grounded E-Q-R poke-execute reasoning already present in content.spikes. Fixed 2 misgenders, both lint copy-paste bleeds, the digit-less cooldowns field with real Q (10s) and R (60/50/40s) numbers, and added the missing Illumination auto-reset tell as dosFull[3]."
+}

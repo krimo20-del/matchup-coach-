@@ -1,0 +1,61 @@
+{
+ "ownerKey": "bard_sup",
+ "enemy": "xerath",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Difficulty framing (7/10, Tricky, poke lane, artillery-position R) matches Xerath's real kit — long-range Q/W poke and a channel R that punishes Bard's short engage range.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief ownerKit/enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no digit (lint COOLDOWN_NO_DIGIT) — it calls Shocking Orb 'matchup-defining' but never states the actual cooldown.",
+   "why": "The audit brief requires real cooldown numbers; Shocking Orb (E) is 13/12.5/12/11.5/11s by rank, which is the number a player needs to know when to step up.",
+   "corrected": "Inserted the 13-11s rank cooldown into breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["brief enemyKit.abilities[E].cd"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Nothing on the page states that Xerath's R (Rite of the Arcane) is a channel that any CC cancels — missingInteractions flagged this as applicable and absent.",
+   "why": "Bard's Q (Cosmic Binding) is a stun/slow projectile; landing it on a channeling Xerath cancels Rite of the Arcane outright, which is a much stronger counter-play than merely dodging the individual snipes the page currently emphasizes.",
+   "corrected": "Rewrote dosFull[1] (previously a copy-pasted tradeGood bleed) to state the channel-cancel interaction directly.",
+   "confidence": "High",
+   "sources": ["brief missingInteractions key 27", "brief enemyKit.abilities[R].flags.channel"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Level-chart rows disagree between layers: full phases[0].side says 'Xerath' while content win[0] says 'Skill' (even), and full phases[1]-[5].side all say 'Skill' while content win[1]-win[5] all say 'Xerath' — the opposite of what the packet levelChart and the content whys[] actually argue.",
+   "why": "packet.levelChart is ['Skill','Xerath','Xerath','Xerath','Xerath','Xerath','Skill'] and content.whys[0-5] already explain Xerath's Q+W outranging Meep poke from level 2, E-stun-into-Q burst at 3-5, artillery range at 4-5, R snipes at 6, and mana-burst Q at first item — all consistent with content win[]. The full layer's side column was simply wrong on 6 of 7 rows.",
+   "corrected": "Flipped phases[0].side to Skill and phases[1-5].side to Xerath to match win[]/packet, rewriting each .why to state the same verdict (win[] itself needed no edit since it already matched the target).",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "brief currentText.content.win[]", "brief currentText.content.whys[]"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Xerath","after":"Skill"},
+  {"layer":"full","path":"phases[0].why","before":"Meep-chip the contacts and collect the first chimes — the wanderer's ledger opens.","after":"No combo online yet — a clean wall-stun bump beats his poke as often as it loses."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Xerath"},
+  {"layer":"full","path":"phases[1].why","before":"Q threats begin: every wall adjacency is a stun audition.","after":"Q plus W out-range Meep poke; he chips free outside stun range."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Xerath"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: shrine the sustain, tunnel the angles, and Q the geometry.","after":"Shocking Orb stun guarantees a free Q burst you can't answer at range."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Xerath"},
+  {"layer":"full","path":"phases[3].why","before":"Chime economy: collect on the move and return with meep upgrades — absence is investment.","after":"His artillery range keeps you chipped and out of engage range through mid-lane."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Xerath"},
+  {"layer":"full","path":"phases[4].why","before":"Tempered Fate online — the map's biggest moments now have a stasis clause.","after":"His three long-range R snipes now out-pressure your single-target stasis ult."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Xerath"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the meeps chunk and the portals make your jungler ambidextrous.","after":"First-item mana burst makes his Q poke lethal while you bleed mana healing."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Xerath Shocking Orb (Stun): matchup-defining — His only CC — dodge the orb and the artillery never converts. It writes your spacing rules. - E Magical Journey is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Xerath Shocking Orb (Stun): 13-11s cooldown by rank — dodge it and the artillery never converts. It writes your spacing rules. - E Magical Journey is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"His Rite of the Arcane channel breaks on any stun — land Cosmic Binding on him and the ultimate cancels outright."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with intentions.","after":"Popping the shrine at full HP wastes it — save the heal for when Xerath's poke has chipped your team."}
+ ],
+ "notes": "Only Level 1's why needed a full rewrite (verdict flipped); rows 1-5 all flipped from Skill to Xerath to match win[]/packet, which agreed with each other already. dosFull[1] and dontsFull[2] were verbatim copies of tradeGood/tradeBad under unrelated titles (COPY_PASTE_BLEED lint) — both rewritten to match their own titles. breakdown.cooldowns now carries Shocking Orb's real 13/12.5/12/11.5/11s cooldown (COOLDOWN_NO_DIGIT lint). Added the missing channel-interruptible interaction (Bard Q cancels Xerath R) via dosFull[1], since no writable field currently mentioned it."
+}

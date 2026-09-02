@@ -1,0 +1,52 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "brand",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[].side disagreed with content win[] in three rows (2, 3, 4, 5 used 'Skill' placeholder) and phases[0-1].why described KARMA winning even though side already correctly said Brand.",
+   "why": "packet.levelChart = [Brand,Brand,Brand,Karma,Brand,Brand,Karma] matches content win[0..6] exactly; the full layer's side and why fields were stale/templated.",
+   "corrected": "Set phases[2,4,5].side to Brand and phases[3,6].side to Karma to match win[], and rewrote why for every row (0-6) so the text actually names who wins and why, grounded in content whys[].",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]", "currentText.content.whys[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "n/a — spikes[1] (Lvl 6 Pyroclasm+Blaze) and spikes[2] (1st item Liandry's/Luden's chunk) already name the real spikes.",
+   "why": "Confirmed against kit: R Pyroclasm 100/90/80s CD, W Pillar of Flame adds 25% damage to ablazed targets.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real cooldown number (lint COOLDOWN_NO_DIGIT).",
+   "why": "Sear only stuns an already-ablazed target, and its cooldown (8-6s) is short enough to matter for trade timing.",
+   "corrected": "Rewrote breakdown.cooldowns with Sear (Q) 8/7.5/7/6.5/6s, Pillar of Flame (W) 10/9.5/9/8.5/8s, and R Pyroclasm 100/90/80s.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].why","before":"RQ from level 1 — the empowered poke is the strongest level-1 button in the role.","after":"His Sear (Q) and Pillar of Flame (W) out-damage your Inner Flame at level 1 — he has no reason to respect your poke range."},
+  {"layer":"full","path":"phases[1].why","before":"Q-chip the contacts; the mantra cycle taxes every trade they consider.","after":"His stun-primed W-Q combo chunks harder than your Mantra-Q at level 2 — he doesn't need to land Sear first to win the exchange."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Brand"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: tether the overstep, shield-speed the trades — the lane bully era peaks here.","after":"Blaze detonations still out-trade your poke at level 3 — his raw magic damage leads the exchange even with your full kit online."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[3].why","before":"Chip below all-in range and call the jungler — your RQ-W chains convert every gank.","after":"Your kit stabilises and you can dodge Sear to answer back — this is your window, before his level-6 spike closes it."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Brand"},
+  {"layer":"full","path":"phases[4].why","before":"No new ult — press the early lead; scaling supports are waking up behind you.","after":"R Pyroclasm (100/90/80s) plus Blaze burst reasserts a lethal poke lead through a Sear stun."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Brand"},
+  {"layer":"full","path":"phases[5].why","before":"First item: RQ chunks and RE engages — convert to plates and picks now.","after":"With Liandry's or Luden's his every-spell chunk zones you and your ADC under tower — his sustained poke out-ranges your Q."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Karma"},
+  {"layer":"full","path":"phases[6].why","before":"Late Karma enables: RE the engage, tether the diver, RQ the sieges.","after":"Late he's a squishy immobile mage — your Focused Resolve root and Mantra-E disengage punish his positioning and flip the 2v2."},
+  {"layer":"full","path":"dosFull[1].d","before":"RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.","after":"Sidestep Sear the moment it leaves his hand — a landed stun chains straight into W-Q-E burst that can delete you."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending mantra on a wave while the enemy banks theirs for your face.","after":"Standing in the Pillar of Flame zone for one extra trade lets Blaze stack to detonation — that's a third free hit."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Brand Sear (Stun): matchup-defining — Q only stuns the ablaze — after eating W or E, the stun line is the dodge. Read it before every duo step-up. - Your RE shield-speed answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Sear (Q) is 8/7.5/7/6.5/6s and only stuns an ablazed target — after eating W or E, the stun line is dodgeable. - Pillar of Flame (W) is 10/9.5/9/8.5/8s and adds 25% damage to anything ablaze — don't stand in the zone. - R Pyroclasm is 100/90/80s; his real threat is stacking Blaze with W-E, not the ult alone."}
+ ],
+ "notes": "packet itself flags this contradiction (defects: 'level chart contradicts data: Karma wins 55.08% but chart gives Brand 5/7 stages') — the fix here makes the full layer agree with the content layer's chart, which is the resolvable half of that defect; the deeper WR-vs-chart tension is inherent to the data and left as-is per the rule to not guess."
+}

@@ -1,0 +1,43 @@
+{
+ "ownerKey": "lulu_sup",
+ "enemy": "braum",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "missing",
+   "whatIsWrong": "content win[] (Lulu, Lulu, Lulu, Skill, Skill, Skill, Lulu) disagrees with full phases[].side, which reads 'Skill' at every one of the 7 stages including the three where win[] names Lulu outright. The packet also flags this row: Lulu's actual winrate is 47.43% (Lulu is behind) but win[] gives Lulu 4 of 7 stages with none for Braum.",
+   "why": "Braum's passive (Concussive Blows) needs stacks to threaten a stun, which supports an early-Lulu read, but I can't verify from the kit alone whether the correct fix is moving win[] toward Skill/Braum or moving phases[].side toward Lulu, and the win rate suggests the page overall reads too favourably for Lulu. Per the chart rule, a disagreement I can't resolve from the kit gets left and flagged, not guessed at.",
+   "corrected": "",
+   "confidence": "Low",
+   "sources": ["tools/audit-run/packets/lulu_sup.json", "champ-data/sup/lulu.full.js", "champ-data/content/sup/lulu.js"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 spike correctly identifies Glacial Fissure as the engage Wild Growth answers, and the level-2 spike correctly notes Braum's passive isn't stacked yet, so his kill pressure is low.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/braum.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Unbreakable correctly but gives no cooldown number.",
+   "why": "Templated with no digits — fails the cooldowns-must-contain-a-number check. No entry exists for Braum in _missing/lulu_sup.json, so no additional interaction was available to fold in.",
+   "corrected": "Cite Unbreakable at 16/14/12/10/8s and note Concussive Blows stacks off ally autos too.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/braum.json"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Braum Unbreakable: matchup-defining — The shield wall eats your poke and engage projectiles — wait it out. It writes your spacing rules. - W Whimsy is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Braum Unbreakable (E) is 16s at rank 1, 8s maxed — the shield wall eats your poke and engage projectiles, so wait it out. - Concussive Blows (P) stuns at 4 stacks off ally autos too. - The R opens or closes fights — pick one per cast."
+  }
+ ],
+ "notes": "Left the level chart alone: content win[] and full phases[].side already disagree on disk (win[] names Lulu for 4 stages, full reads Skill for all 7), and the packet separately flags win[] as too favourable given the 47.43% winrate. Could not resolve which layer is correct from the kit alone within scope, so recorded rather than guessed — needs a human or mirror-fix.js pass. No entry for braum exists in champ-data/_kits/_missing/lulu_sup.json, so only the cooldowns number-fix was made."
+}

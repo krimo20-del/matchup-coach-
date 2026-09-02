@@ -1,0 +1,47 @@
+{
+ "ownerKey": "lulu_sup",
+ "enemy": "thresh",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "N/A",
+   "why": "Content layer breakdown.early/mid/late already frame lane difficulty accurately: even level 1, hook-dodge skill check levels 2-5, Thresh favored at 6 and first item via lantern/Flay pick pressure, Lulu retakes it at two items via polymorph/Wild Growth denying hooks.",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/lulu.js", "champ-data/_kits/thresh.json"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[].side is flat 'Skill' on all 7 rows, contradicting the packet levelChart (Lulu, Skill, Skill, Skill, Thresh, Thresh, Lulu) which the content layer's win[] already matches exactly.",
+   "why": "Level 1: Thresh has no way to trade into Glitterlance before he has levels. Level 6: Flay + The Box + a landed hook chain enough CC to lock the ADC through a full combo that one Wild Growth can't answer. First item: Dark Passage lantern (engage/disengage) plus Flay slow give Thresh constant pick pressure and roam threat. Two items: Whimsy (polymorph) and Wild Growth deny his hooks, swinging it back.",
+   "corrected": "phases[0].side=Lulu, phases[4].side=Thresh, phases[5].side=Thresh, phases[6].side=Lulu (matching win[] rows 0,4,5,6 which already carry these values), with why/rating updated on the three rows whose why previously described the wrong winner.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/lulu_sup.json", "champ-data/content/sup/lulu.js"]
+  },
+  {
+   "point": 4,
+   "status": "correct",
+   "whatIsWrong": "N/A",
+   "why": "breakdown.cooldowns correctly names Death Sentence (Q) at 19s rank 1 as the matchup-defining cooldown; kit confirms 19/16.5/14/11.5/9. Ability names (Death Sentence, Dark Passage, Flay, The Box) all verified against champ-data/_kits/thresh.json — no fabricated names found (the 'Land Death Sentence (Q)' phrasing is the allowed AbilityName(Effect) convention, not an error).",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/thresh.json"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Lulu" },
+  { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[0].why", "before": "Glitterlance the contacts — the Pix angles double your poke and the chip is constant.", "after": "Thresh has no tool to trade into Glitterlance — the Pix angles poke freely, lane is yours." },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Thresh" },
+  { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "4/10" },
+  { "layer": "full", "path": "phases[4].why", "before": "Wild Growth online — burst math on your carry dies; the knockup punishes the divers who try.", "after": "Thresh spikes here — Flay plus The Box plus a landed hook chains through your one Wild Growth peel." },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Thresh" },
+  { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item: shields compound and the polymorph windows decide every 2v2.", "after": "First item: his lantern and Flay slow give him pick pressure over your poke." },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Lulu" }
+ ],
+ "notes": "No brief file exists for lulu_sup as owner (only enemy-side briefs exist under tools/audit-run/briefs/sup/*__lulu.json); worked directly from champ-data/_kits, tools/audit-run/packets/lulu_sup.json, and the full/content JS source. The chart fix here only touches the full-layer phases[].side/rating/why — win[] and whys[] in the content layer already state the correct winner for every row (Lulu, Skill, Skill, Skill, Thresh, Thresh, Lulu), matching the packet's levelChart, so no content-layer edit was needed or proposed (a no-op win[] edit would have been rejected). Breakdown.*, tradeGood/Bad, ahead, loading, and enemyWin were reviewed for the template sweep and are already grounded in Thresh's specific kit (Death Sentence, Flay, The Box, lantern) rather than generic phrasing — left unchanged."
+}

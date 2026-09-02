@@ -1,0 +1,49 @@
+{
+ "ownerKey": "lulu_sup",
+ "enemy": "rell",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "full.phases[].side is Lulu on all 7 rows and content.win[] is Lulu on all 7 rows — the layers already agree and match the packet levelChart.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 (Wild Growth vs Magnet Storm) and First item are the real spikes and content.spikes already covers them.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/rell.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "content.wants.foe says Rell lands 'W dash + E (Attract and Repel) stun' — Rell has no ability named Attract and Repel, and her E (Full Tilt) is a move-speed/auto-reset buff with no CC. The actual hard-CC ability is Q (Shattering Strike), which is also her shield-breaker.",
+   "why": "Kit authority: Rell's abilities are P Break the Mold, Q Shattering Strike (hardCC, shield-break), W Ferromancy: Crash Down (dash, knockup on dismount), E Full Tilt (autoReset, no CC), R Magnet Storm. The stun in her combo is Q, cast after the W knockup, not an E called 'Attract and Repel'.",
+   "corrected": "Rewrite to 'Land W (Crash Down) knockup, then Q Shattering Strike stun'.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/rell.json"]
+  },
+  {
+   "point": 13,
+   "status": "missing",
+   "whatIsWrong": "No field mentions that Full Tilt (E) opens with an auto-attack reset — the wind-up is a readable tell that Rell's combo is starting.",
+   "why": "missingInteractions flags this directly for the matchup and it isn't covered anywhere in dosFull/dontsFull.",
+   "corrected": "Add as a new dosFull bullet.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/_missing/lulu_sup.json", "champ-data/_kits/rell.json"]
+  }
+ ],
+ "edits": [
+  {"layer":"content","path":"wants.foe[0]","before":"Land W dash + E (Attract and Repel) stun to lock your ADC","after":"Land W (Crash Down) knockup, then Q Shattering Strike stun"},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Rell Crash Down: matchup-defining — The mount-crash knockup starts her chain — respect the dismount range. It writes your spacing rules. - W Whimsy is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Crash Down (W) is a flat 10s cooldown — respect the dismount range; it writes your spacing rules. - W Whimsy is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."},
+  {"layer":"full","path":"dosFull[3]","before":null,"after":{"t":"Watch for the Full Tilt auto-reset","d":"Her E (Full Tilt) opens with an auto-attack reset — the wind-up is your cue to step back, not the ability cast."}}
+ ],
+ "notes": "Chart already agrees across both layers (Lulu 7/7). Fixed a fabricated ability name ('Attract and Repel' does not exist on Rell) and corrected which ability carries the CC — the stun is Q Shattering Strike, not the E. Added a real number to breakdown.cooldowns and a new dosFull bullet for the auto-reset tell via before:null. breakdown.early/mid/wave/trading/feeding/carry/late and tldr/winCon/enemyWin/ahead/tradeGood/tradeBad/loading remain the shared cross-matchup template and were left alone for time."
+}

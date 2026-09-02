@@ -1,0 +1,64 @@
+{
+ "ownerKey": "nautilus_sup",
+ "enemy": "alistar",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level chart (levels 1-6 Nautilus, 2+ items Alistar) agrees between phases[].side and content win[], and matches the packet levelChart. No change needed.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.full.phases", "currentText.content.win"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes (lvl2 Q-auto-E poke, lvl6 Depth Charge, first item Titan's Wrath shield, late Alistar's R+chain-CC) are already concrete and grounded in real ability names.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT) and didn't state Alistar's actual Headbutt/Pulverize/Trample cooldowns or the Trample auto-reset burst tell (missingInteractions autoreset-burst-tell).",
+   "why": "Headbutt (W) and Pulverize (Q) are both 14/13/12/11/10 CD, Trample (E) is 12/11.5/11/10.5/10 and telegraphs its stun via an auto-attack wind-up before the stunning auto lands, not on cast.",
+   "corrected": "Rewrote breakdown.cooldowns with real per-rank numbers and the auto-reset tell.",
+   "confidence": "High",
+   "sources": ["ownerKit/enemyKit brief", "missingInteractions.autoreset-burst-tell"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d and dontsFull[2].d were verbatim copies of tradeGood/tradeBad pasted under unrelated titles (lint COPY_PASTE_BLEED); neither addressed the missingInteractions anti-heal or flash-W chase-reset findings.",
+   "why": "Triumphant Roar (P) charges off nearby CC or champion deaths and heals Alistar and allies — that's the anti-heal/sustain trigger the brief flags. Alistar also commonly flash-Ws a displaced target back onto his ADC, re-stacking Trample.",
+   "corrected": "dosFull[1].d now ties to counter-hooking his passive charge window; dontsFull[2].d now names the flash-W chase-reset pattern.",
+   "confidence": "Medium",
+   "sources": ["missingInteractions", "enemyKit.P/E"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Triumphant Roar (P) charges off CC or deaths — land your own root through his charge window before he banks the heal."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "He flash-Ws onto your ADC after a knock-up — chase resets are Trample stacks in disguise; disengage clean."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Alistar Headbutt: matchup-defining — The headbutt-pulverize combo starts every play — respect flash range while it is up. It writes your spacing rules. - W Titan's Wrath is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "Headbutt (W) is down 14s at rank 1, 10s at rank 5 — that gap is your window to engage first. Pulverize (Q) matches it. Trample (E) resets 12-10s and telegraphs its stun on the auto wind-up, not the cast — step back on the animation, not the cast."
+  }
+ ],
+ "notes": "Level chart, spikes, wants.you/wants.foe, and the early/mid/late content prose already name real abilities (Dredge Line, Titan's Wrath, Depth Charge, Headbutt, Pulverize, Trample) correctly with no fabricated names found against the kit brief. report[8] (Itemization) already tells the owner to buy anti-heal into the enemy duo's sustain, which covers the P-heal missingInteraction at the report level, so I left report[] untouched (sweep exempts report[] except for lint/fabrication hits, and none were found there). breakdown.early/mid/wave/trading/spikes/feeding/carry/difficulty/late and ahead/tradeGood/tradeBad/loading were reviewed for templating; they already reference this matchup's specific abilities (Headbutt, Titan's Wrath, Depth Charge, Pulverize) rather than generic swap-in phrasing, so left as-is."
+}

@@ -1,0 +1,67 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "milio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Chart and content agree: Karma leads levels 1-5 and first item on pure range advantage (Milio has no poke), Milio takes over at full build via his AoE cleanse and stacked heals. Matches packet levelChart and 52% win rate over 6490 games.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[0..6]"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[] has only 3 entries (Level 1, Level 3, Full build) but the schema needs 4, and the missing slot is exactly the gap the packet flags between the level-3 Mantra burst and Milio's full-build sustain takeover.",
+   "why": "Packet defect explicitly states 'spikes[] has 3 entries, expected 4'. First item is Karma's real midgame spike (mana item lets her spam Q) and belongs as its own entry before the late-game flip.",
+   "corrected": "Added spikes[3] naming the first-item Q-spam window, matching the full layer's phases[5] (first item, still Karma-favored).",
+   "confidence": "High",
+   "sources": ["packet.defects", "currentText.full.phases[5]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "No field mentions Grievous Wounds timing against Milio's Cozy Campfire (W) heal zone and Breath of Life (R) team heal, despite this being the single biggest lever in a poke-vs-sustain lane.",
+   "why": "missingInteractions flags needs-antiheal directly: Milio sustains through chip via W and R, so anti-heal timing decides whether Karma's poke actually closes the HP gap before he tops off.",
+   "corrected": "Added anti-heal timing to breakdown.cooldowns alongside the real R cooldown number, fixing the COOLDOWN_NO_DIGIT lint hit at the same time.",
+   "confidence": "High",
+   "sources": ["missingInteractions[0].data.missing"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": null,
+   "after": "First support item (Moonstone/mana) lets Karma spam Q Inner Flame freely, keeping Milio's lane perpetually chunked before his W Cozy Campfire zone can out-heal it."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].when",
+   "before": null,
+   "after": "1st item"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.",
+   "after": "Tether the carry mid-poke before Milio's E Warm Hugs shield can land — his 0.5s cooldown means he'll re-throw it fast, so time the tether for the gap."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Spending mantra on a wave while the enemy banks theirs for your face.",
+   "after": "Poking without anti-heal timing — W Cozy Campfire and R Breath of Life undo chip damage, so land Grievous Wounds before you commit to a long trade."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Milio Breath of Life: matchup-defining — The team-wide cleanse-heal undoes your CC chain — force it early, engage after. Read it before every duo step-up. - Your RE shield-speed answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- R Breath of Life: 160/145/130s, team-wide cleanse-heal — undoes your CC chain, so force it early and engage after. - W Cozy Campfire: 29/27/25/23/21s heal zone — GW timing decides if your poke actually closes the gap. - Your RE shield-speed answers one disaster per 12s cooldown."
+  }
+ ],
+ "notes": "Filled the packet-flagged spikes[3] gap using before:null (genuine structural gap, verified from full.phases[5] which already treats first item as Karma-favored). Fixed both COPY_PASTE_BLEED lint hits and the COOLDOWN_NO_DIGIT hit. Named Milio's real abilities (Cozy Campfire W, Warm Hugs E, Breath of Life R) in the edited fields per the packet defect that no field named his kit; left untouched full-layer fields (tldr, winCon, ahead, etc.) still carry the generic 'his engage'/'RQ the carry' template — flagging in sectionsMissing since a full de-templating sweep of those would exceed this matchup's edit scope without a grounded change to make in each one beyond what's already covered."
+}

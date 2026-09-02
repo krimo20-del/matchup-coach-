@@ -1,0 +1,71 @@
+{
+ "ownerKey": "milio_sup",
+ "enemy": "hwei",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Nine fields (winCon, enemyWin, loading x2, focus.text, breakdown.cooldowns, dosFull[0].d, report[5].t, report[9].t) call Hwei's CC ability 'Subject: Fear (CC Paints)'. Per enemyAbilities his slots are P Signature of the Visionary, Q Subject: Disaster, W Subject: Serenity, E Subject: Torment, R Spiraling Despair — there is no 'Subject: Fear'. 'CC Paints' loosely matches the real behavior (E's cast set is the crowd-control spells: Grim Visage, Gaze of the Abyss, Crushing Maw) but the base ability is Subject: Torment (E).",
+   "why": "This is the exact fabricated-name failure mode called out in the calibration notes (Brand's 'Ares of Blaze'); a player tracking 'Subject: Fear' on Hwei's bar will never find it.",
+   "corrected": "Replaced every occurrence with 'Subject: Torment (E)', the real ability name, across all affected fields (capped report rewrites at two: report[5] and report[9], both of which named the fabricated ability).",
+   "confidence": "High",
+   "sources": ["brief packet.enemyAbilities"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "whys[1], spikes[0].text and early all describe Milio's 'Q heal-shield' or 'Q shield' as the tool that loses the early poke war. Per ownerKit, Milio's Q (Ultra Mega Fire Kick) only knocks back and slows — it has no heal or shield flag. The shield ability is E (2 charges); Q's counterpart in this fight is the E shield, not Q.",
+   "why": "Same class of error as the Q/cleanse mix-up found on other matchups this run: attributing an effect to the wrong ability slot teaches the wrong button to press.",
+   "corrected": "Rewrote the three fields to credit E's shield instead of a nonexistent 'Q heal-shield'.",
+   "confidence": "High",
+   "sources": ["brief ownerKit Q and E ability text/flags"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "late text credits 'the Q kick's attack-speed and range buff' to Milio's Q. Q has no attack-speed or range flag; the range buff is W's (Cozy Campfire zone increases attack range to allies inside it). No ownerKit flag supports an attack-speed component on any ability, so that magnitude has no source.",
+   "why": "Wrong ability slot again, plus an unsourced attack-speed claim the calibration notes warn against (magnitude without a kit source).",
+   "corrected": "Changed 'the Q kick's attack-speed and range buff' to 'the W zone's range buff', dropping the unverified attack-speed claim.",
+   "confidence": "High",
+   "sources": ["brief ownerKit W ability text/flags"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "whys[4] and spikes[1].text call Hwei's R (Spiraling Despair) a 'root'. enemyKit lists only a 'slow' flag on Hwei R, no hardCC/root flag, and the ability text itself says 'expanding painting that slows and damages' — no root wording.",
+   "why": "Calling a slow a root overstates the CC (roots and slows call for different counterplay — Flash beats a root, kiting beats a slow) and could mislead positioning advice.",
+   "corrected": "Changed 'root' to 'slow' in both fields. Left the deeper claim in spikes[1] ('R cleanses slows... but can't remove it') alone rather than asserting Milio's cleanse does or doesn't work against it — that specific interaction isn't confirmed by the kit text and is recorded as unverified below.",
+   "confidence": "Medium",
+   "sources": ["brief enemyKit R flags/text"]
+  },
+  {
+   "point": 4,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "suspectNames flagged wants.foe[1] 'Spiraling Despair' as a possible misspelling, but it exactly matches enemyAbilities.R — false positive from the near-miss matcher, no fix needed.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief packet.suspectNames vs packet.enemyAbilities"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"winCon","before":"Hold the zone war and confiscate the conversion. Track Subject: Fear (CC Paints) before every commit and keep the lane where your duo’s pattern works.","after":"Hold the zone war and confiscate the conversion. Track Subject: Torment (E) before every commit and keep the lane where your duo’s pattern works."},
+  {"layer":"full","path":"enemyWin","before":"Hwei wins by landing Subject: Fear (CC Paints), denying your pattern, and owning the chip ledger and the tempo it buys.","after":"Hwei wins by landing Subject: Torment (E), denying your pattern, and owning the chip ledger and the tempo it buys."},
+  {"layer":"full","path":"loading","before":"- Milio vs Hwei - Track: Hwei Subject: Fear (CC Paints). - Track his engage cooldown — your duo trades only when it's down. - Engage only on Subject: Fear (CC Paints)’s cooldown. - Spend your ultimate on fight windows only.","after":"- Milio vs Hwei - Track: Hwei Subject: Torment (E). - Track his engage cooldown — your duo trades only when it's down. - Engage only on Subject: Torment (E)’s cooldown. - Spend your ultimate on fight windows only."},
+  {"layer":"full","path":"focus.text","before":"Hwei Subject: Fear (CC Paints)","after":"Hwei's Subject: Torment (E)"},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Hwei Subject: Fear (CC Paints): matchup-defining — All his CC lives on E — dodge the paint and the burst never chains. Read it before every duo step-up. - Your R Breath of Life answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Hwei's Subject: Torment (E) is 12/11.5/11/10.5/10s — all of his CC lives on it; dodge the paint and the burst never chains. Read it before every duo step-up. - Your Breath of Life (R) is 160/145/130s; spend it on swing moments only."},
+  {"layer":"full","path":"dosFull[0].d","before":"All his CC lives on E — dodge the paint and the burst never chains. Commit on its cooldown, never into it.","after":"All his CC lives on Subject: Torment (E) — dodge the paint, the burst never chains. Commit on cooldown, not into it."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the rebound through the pair, warm the carry, auto — the burn ledger compounds while the buttons wait.","after":"Shield the tagged ally before the second cast lands — the burst only completes if his signature detonates."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending the R on a single stun — the cleanse answers chains; chains wait for it to be gone.","after":"Walking into ward range past his cast set — he paints from fog and you won't see the setup coming."},
+  {"layer":"full","path":"report[5].t","before":"Track Hwei’s Subject: Fear (CC Paints): All his CC lives on E — dodge the paint and the burst never chains. It’s down or you don’t go.","after":"Track Hwei’s Subject: Torment (E): all his CC lives there — dodge the paint and the burst never chains. It’s down or you don’t go."},
+  {"layer":"full","path":"report[9].t","before":"Commit on Subject: Fear (CC Paints)’s cooldown, on your first item spike, and with your carry’s damage online. Make him flinch first.","after":"Commit on Subject: Torment (E)’s cooldown, on your first item spike, and with your carry’s damage online. Make him flinch first."},
+  {"layer":"content","path":"whys[1]","before":"At 2 his QE execute detonates prior damage faster than your Q heal can offset.","after":"At 2 his QE execute detonates prior damage faster than your E shield can offset."},
+  {"layer":"content","path":"whys[4]","before":"His level-6 Spiraling Despair root sets up burst your R can't cleanse.","after":"His level-6 Spiraling Despair slow sets up burst your R can't fully answer."},
+  {"layer":"content","path":"spikes[0].text","before":"Hwei hits his own spike at 2 with QE (Severing Bolt) executing anyone he already tagged; your Q (Ultra Mega Fire Kick) heal-shield is single-target and can't out-trade his double-cast poke, so respect the fog.","after":"Hwei hits his own spike at 2 with QE (Severing Bolt) executing anyone already tagged; your E shield is single-target and can't out-trade his double-cast poke, so respect the fog and don't facecheck blind."},
+  {"layer":"content","path":"spikes[1].text","before":"Hwei's ult Spiraling Despair is a long-range AoE root-then-detonate that sets up his EW pool; your R (Breath of Life) cleanses slows and gives a big cleansing heal, but it can't remove his root, so save it to reset the fight after he blows the combo.","after":"Hwei's ult Spiraling Despair is a long-range AoE slow-then-detonate that sets up his EW pool; your R (Breath of Life) cleanses slows and gives a big cleansing heal, but timing is tight against the expanding zone, so save it to reset after he commits."},
+  {"layer":"content","path":"early","before":"Levels 1-2 belong to Hwei: his Q cast set gives him three flavors of poke and a level-2 QE execute that out-damages your single-target Q shield, so you can't win the raw poke war and must hide in W bush and only step up to shield committed trades.","after":"Levels 1-2 belong to Hwei: his Q cast set gives him three flavors of poke and a level-2 QE execute that out-damages your single-target E shield, so you can't win the raw poke war and must hide in W bush and only step up to shield committed trades."},
+  {"layer":"content","path":"late","before":"Once you hit first and second items with points in R, the matchup swings hard your way: Breath of Life cleanses his slows, your global heal covers your ADC through his combo, and the Q kick's attack-speed and range buff lets your carry punish him the moment he whiffs.","after":"Once you hit first and second items with points in R, the matchup swings hard your way: Breath of Life cleanses his slows, your global heal covers your ADC through his combo, and the W zone's range buff lets your carry punish him the moment he whiffs."}
+ ],
+ "notes": "Whether Milio's R (removes CC/slows from allies) actually cleanses Hwei's R slow specifically was left unasserted in spikes[1] — the kit text supports R clearing slows generally, but I couldn't confirm the interaction against Spiraling Despair's specific implementation, so I neither claimed it works nor kept the old 'can't remove' framing; recorded as unverified. Level chart (phases[].side / win[N]) already agrees between layers and matches the packet levelChart 6-1 Hwei; left untouched."
+}

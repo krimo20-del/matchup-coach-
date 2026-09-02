@@ -1,0 +1,52 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "milio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[N].side is the flat placeholder \"Skill\" on all 7 rows while content win[] carries the real per-row verdict (Milio, Milio, Galio, Galio, Galio, Galio, Milio), matching the packet levelChart.",
+   "why": "Side and win[] render as the same row on the page; all 7 currently contradict.",
+   "corrected": "Set phases[N].side to match win[] row by row.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/galio_sup.json (milio levelChart)", "champ-data/content/sup/galio.js win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "N/A — content.js spikes already reflect the level-2 poke spike, level-6 R race, first-item sustain-cutting, and 2-item R cleanse.",
+   "why": "Matches kit cooldowns.",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/milio.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Missing interactions unaddressed: Cozy Campfire (W) and Breath of Life (R) are anti-heal targets; Hero's Entrance (R) vs Ultra Mega Fire Kick (Q)/Warm Hugs (E) is a mutual-displacement race decided by who lands first. breakdown.cooldowns also had no cooldown numbers (lint defect).",
+   "why": "These are decisive facts for the level-6 all-in and item-timing windows and were missing from the page.",
+   "corrected": "Folded the displacement race and anti-heal timing into phases[].why; added real R (160-130s) and Q (10s flat) cooldowns to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/_missing/galio_sup.json (milio entry)", "champ-data/_kits/milio.json"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Milio"},
+  {"layer":"full","path":"phases[0].why","before":"Q the pair — the tornado tick chips duos that stand in formation.","after":"Ultra Mega Fire Kick (Q) out-ranges your Q at 1200 units and knocks back on a flat 10s cooldown — he pokes and disengages before you can close."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Milio"},
+  {"layer":"full","path":"phases[1].why","before":"W charge threat begins: the taunt governs their engage plans already.","after":"A second point in Fire Kick (Q) or Cozy Campfire (W) lets him poke and heal the chip straight back — hold your all-in rather than trade into free sustain."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Galio"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: E-W the committed trade and the magic shield refunds their poke.","after":"Your Q slow into E Justice Punch lands hard CC he can't cleanse yet — Breath of Life (R) isn't up until 6, so every landed root sticks."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Galio"},
+  {"layer":"full","path":"phases[3].why","before":"Zone with taunt threat and shield the margins — AP duos pay double rent.","after":"Warm Hugs (E) only shields, it doesn't stop your dash — keep pressuring his ADC with empowered autos while Fire Kick (Q) is down."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Galio"},
+  {"layer":"full","path":"phases[4].why","before":"Hero's Entrance online — every roam your duo survives, you end.","after":"Hero's Entrance and his Breath of Life (R) are both team-wide plays, but his R is 160s at rank 1 — your flash-R reaches his backline long before he can answer with it."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Galio"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the taunt rotation chunks and the MR makes mage supports cry.","after":"MR and durability blunt his Q/W poke, and Grievous Wounds timing beats Cozy Campfire (W) and Breath of Life (R) sustain before he can reapply it."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Milio"},
+  {"layer":"full","path":"phases[6].why","before":"Late Galio is the anti-dive: taunt their engage off your carry and R the map's emergencies.","after":"His R cleanses your whole CC chain and his team-wide shields blanket the carry — a lone engage gets undone the moment he R's, so pair Hero's Entrance with your jungler instead of solo-diving."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Milio Breath of Life: matchup-defining — The team-wide cleanse-heal undoes your CC chain — force it early, engage after. The duo’s tempo bends around it. - Keep W Shield of Durand banked for their best play. - The ultimate is a fight decision, not a habit.","after":"Breath of Life (R) is 160s at rank 1, down to 130s — force it out with a real CC threat before you commit, since it cleanses your whole chain. Ultra Mega Fire Kick (Q) is a flat 10s at every rank, so respect the poke between your engages."}
+ ],
+ "notes": "breakdown.early/mid/wave/trading/feeding/carry/late, ahead, tradeGood/tradeBad, loading, and enemyWin remain structurally templated but not factually wrong; left alone given per-matchup scope. report[] untouched (no lint flag, out of sweep)."
+}

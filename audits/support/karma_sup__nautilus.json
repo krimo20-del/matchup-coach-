@@ -1,0 +1,97 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "nautilus",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full.phases[4].side and phases[5].side both read \"Skill\" (Karma) for Level 6 and First item, but content.win[4] and win[5] both already say \"Nautilus\" — the two layers disagree on who wins those two stages.",
+   "why": "content.whys[4] and whys[5] both describe Nautilus winning (R-into-Q double CC locking Karma or her ADC through one shield), and the packet's own levelChart has Nautilus at rows 4 and 5. The full layer's side/why never caught up to that.",
+   "corrected": "Flipped phases[4].side and phases[5].side to \"Nautilus\" and rewrote their .why to match content's already-correct whys[4]/whys[5]. content.win[4]/win[5] already read \"Nautilus\" so no edit needed there — only side+why change.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[4..5]", "currentText.content.whys[4..5]"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[] has only 3 entries (Level 1, Level 6, Full build) but needs 4; nothing separately covers the level 4-5 pre-ult stage that phases[3] and breakdown.early already establish as strongly Karma-favored.",
+   "why": "Packet defect flags 'spikes[] has 3 entries, expected 4'.",
+   "corrected": "Added spikes[1] for levels 4-5 (renumbering the existing R+Q entry to when=Level 6 stays the same slot order via new index), grounded in existing whys[3]/breakdown.early text.",
+   "confidence": "High",
+   "sources": ["packet.defects", "currentText.content.whys[3]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "No field warns that Dredge Line (Q) creates terrain that can wall off Karma's retreat, even though she carries no dash and this is a hook champion whose pull-to-wall combo is a real death sentence.",
+   "why": "missingInteractions flags terrain-cuts-retreat directly for this matchup.",
+   "corrected": "Added the terrain warning to dontsFull, fixing the COPY_PASTE_BLEED hit at the same field.",
+   "confidence": "High",
+   "sources": ["missingInteractions[0].data.missing"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Nautilus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "No new ult — press the early lead; scaling supports are waking up behind you.",
+   "after": "His ult goes unstoppable — R Depth Charge chains into Q Dredge Line and passive for a lock that pins you or your carry through one shield."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Nautilus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "First item: RQ chunks and RE engages — convert to plates and picks now.",
+   "after": "Still dangerous: his tanky double-CC all-in outlasts a single RE shield even after your first item lands."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.",
+   "after": "RE the caught carry the instant Dredge Line lands — the shield-speed is your only answer to a landed hook before the follow-up knockup."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].t",
+   "before": "Ward face-first into his brush",
+   "after": "Get pulled into his own terrain"
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Spending mantra on a wave while the enemy banks theirs for your face.",
+   "after": "You carry no dash — Dredge Line hooks toward terrain and can cut your retreat line, so hold Flash for the wall, not the damage."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Nautilus Dredge Line (Hook): matchup-defining — His only real engage — dodge it and the lane is free. It writes your spacing rules. - RE shield-speed is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Q Dredge Line: 14/13/12/11/10s, his only real engage — dodge it and the lane is free. - R Depth Charge: 120/100/80s, chains into Q for a double-CC lock at 6 — one RE shield isn't enough alone. - RE shield-speed is for saving fights, not seasoning trades."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": null,
+   "after": "Levels 4-5, before his ult exists, Karma's poke keeps building the lead — hold this window because it closes hard the moment he hits 6."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].when",
+   "before": null,
+   "after": "Lvl 4-5"
+  }
+ ],
+ "notes": "Fixed a genuine chart disagreement: full.phases[4/5].side said Skill while content.win[4/5] already said Nautilus (content and packet.levelChart were already correct — only full's side+why lagged). Fixed both COPY_PASTE_BLEED hits and COOLDOWN_NO_DIGIT. Filled packet-flagged spikes[3] gap with before:null for the level 4-5 window, grounded in existing whys[3] text. Packet's other defect note ('47.42% but chart gives Karma 5/7') is inherent to a close-to-even matchup with an early Karma lead and late Nautilus spike partially offsetting — left alone since content/packet chart agree with each other and the win rate isn't wildly off from even."
+}

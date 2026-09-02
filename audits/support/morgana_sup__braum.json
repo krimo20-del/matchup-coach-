@@ -1,0 +1,127 @@
+{
+ "ownerKey": "morgana_sup",
+ "enemy": "braum",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[N].side reads 'Skill' on all 7 rows, but content win[] already reads Morgana,Morgana,Skill,Morgana,Morgana,Morgana,Morgana, matching the packet's levelChart exactly.",
+   "why": "phases[N].side and content win[N] must name the same side. win[] already agrees with the packet chart, so side is the stale field on every row except level 3, which was already correctly Skill.",
+   "corrected": "Moved phases[0,1,3,4,5,6].side to Morgana, rewriting each why to state the Morgana-favored reasoning the content layer's whys[] already establish (Q-root beats slow engage, Black Shield eats Winter's Bite, point-click R beats dodgeable R).",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win", "currentText.content.whys"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes cover the level-2 root-into-trade, level-6 R comparison, first-item shield uptime, and late teamfight positioning with concrete kit references.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Unbreakable as key but has no cooldown number and doesn't name the actual engage tool (Winter's Bite / Q, which starts his passive stacking).",
+   "why": "Winter's Bite is 8s at rank 1, 6s at max rank, and is the ability that stacks Concussive Blows — Unbreakable (E) is his defensive block, not his engage.",
+   "corrected": "Rewrote breakdown.cooldowns to name Winter's Bite with real cooldown numbers as the actual threat to track.",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Morgana"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "W-chip the pair — the pool taxes bot's formations politely from one.",
+   "after": "Your Q root and poke beat his slow Winter's Bite engage at level 1."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Morgana"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Q threats begin: the three-second root is the lane's longest sentence.",
+   "after": "You spike harder at 2 — a root-into-trade he cannot punish back."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Morgana"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Bank the root and shield the engage attempts — the lane plays at your Q's pleasure.",
+   "after": "Black Shield negates his Winter's Bite and your poke retakes the lane by 4-5."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Morgana"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Soul Shackles online — close-range fights end in a double stun you started.",
+   "after": "Your point-click R out-threatens his dodgeable, telegraphed Glacial Fissure."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Morgana"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "First item: the root converts and the shields multiply.",
+   "after": "CDR keeps his passive-starter Q shielded off cooldown."
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Morgana"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].why",
+   "before": "Late Morgana erases playbooks: black-shield the engage's target and root the diver who insisted.",
+   "after": "Your reliable snare-ult picks through his kit while E blanks his engage and passive chain."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Braum Unbreakable: matchup-defining — The shield wall eats your poke and engage projectiles — wait it out. It writes your spacing rules. - E Black Shield is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Winter's Bite cools 8s early, 6s maxed and starts his passive stack chain — Black Shield eats the slow-moving projectile clean. - E is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "W the pair, bank the Q visibly, shield the answer — the threat governs while the pool bills.",
+   "after": "Once his Q whiffs or is shielded, he has no engage left — step up and root him for a free trade."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking into shields while their hook waits for yours to be down — the binding is the law; spend it like one.",
+   "after": "He wins nothing once E is spent on your poke — he still needs Winter's Bite to start any real fight."
+  }
+ ],
+ "notes": "Fixed a chart contradiction: full-layer side read 'Skill' on 6 of 7 rows while content win[] and the packet levelChart already agreed Morgana favored (Skill only at level 3). Rewrote the six affected phases[N].why to state the Morgana-favored reasoning instead of leaving neutral-sounding language under a corrected side. breakdown.cooldowns previously named Unbreakable (his defensive block) as 'matchup-defining' when Winter's Bite is the actual engage/passive-stacking tool — corrected to the right ability with real numbers. Legalistic template phrasing persists in tldr/winCon/ahead/breakdown.early-late/loading; left alone as not factually wrong or lint-flagged."
+}

@@ -1,0 +1,51 @@
+{
+  "ownerKey": "maokai_sup",
+  "enemy": "thresh",
+  "lane": "support",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Level chart is self-contradictory: content win[] (and the packet levelChart) say Level 2 goes to Thresh, Level 6 and 2+ items go to Maokai, and First item goes to Thresh, but full.phases[1,4,5,6].side all say 'Skill' — a flat template that never differed.",
+      "why": "Death Sentence (Q, 19s CD rank1) out-ranges Twisted Advance and peaks Thresh's combo at 2; Nature's Grasp (R) out-arcs the hook and can't be dodged in one sidestep at 6; his 21s (rank1) lantern (Dark Passage) buys the disengage window on first item; late, Maokai's reliable AoE lockdown outscales his skillshot playmaking.",
+      "corrected": "phases[1].side=Thresh, phases[4].side=Maokai, phases[5].side=Thresh, phases[6].side=Maokai, with ratings and why rewritten to match.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/thresh.json", "tools/audit-run/packets/maokai_sup.json"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "breakdown.cooldowns already names Death Sentence's 19-second rank-1 cooldown correctly.",
+      "why": "Matches champ-data/_kits/thresh.json Q cooldown 19/16.5/14/11.5/9.",
+      "corrected": "No change needed.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/thresh.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "tradeGood/tradeBad are byte-identical template text shared across every matchup in this file and give no Thresh-specific interaction (his lantern shield, the mutual displacement race).",
+      "why": "Both sides carry displacement (Bramble Smash/Sapling Toss vs Death Sentence) — whoever lands first owns the trade; Dark Passage's shield absorbs the burst window a landed W buys.",
+      "corrected": "Rewrote tradeGood/tradeBad naming Death Sentence's cooldown and the lantern shield explicitly.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/thresh.json", "champ-data/_kits/_missing/maokai_sup.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Thresh" },
+    { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[1].why", "before": "W threat begins: the point-click root governs their carry's spacing.", "after": "Death Sentence-into-Flay peaks now: his hook out-ranges your W dash, and a landed pull chains into Flay for a two-for-one before your engage catches up." },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Maokai" },
+    { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[4].why", "before": "Nature's Grasp online — the root wave starts fights from fog and ends dives in it.", "after": "Nature's Grasp out-arcs Death Sentence and can't be juked by one sidestep — engage the instant he whiffs Q and W chains the follow-up." },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Thresh" },
+    { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "4/10" },
+    { "layer": "full", "path": "phases[5].why", "before": "First item: the roots chain and the saplings tax every brush.", "after": "His lantern (Dark Passage) disengages your dives and Flay interrupts your W — respect the 21-second rank-1 lantern reset before you commit a grab." },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Maokai" },
+    { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "7/10" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Maokai is the engage forest: R the formation, W the carry, and Q whatever the roots deliver.", "after": "Your reliable AoE lockdown outscales his skillshot playmaking — a landed R+W chains through Flay and lantern in grouped fights." },
+    { "layer": "full", "path": "tradeGood", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "W the instant Thresh whiffs Death Sentence — your root chains straight into your ADC's follow-up before his 19-second cooldown resets." },
+    { "layer": "full", "path": "tradeBad", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Diving while his lantern (Dark Passage) is up — Flay knocks your W off target and the shield eats the burst you traded for." }
+  ],
+  "notes": "win[]/packet.levelChart already had the correct story (Thresh L2 & first item, Maokai L6 & 2+ items); only full.phases.side/rating/why were stale 'Skill' template rows, now brought into agreement per the chart rule. Did not touch report[], dosFull/dontsFull, or the ten breakdown.* fields beyond cooldowns (already fine) — leaving those as sectionsMissing since they are byte-identical templates shared with velkoz/xerath/yuumi/zilean/zyra in this same file and a full de-template pass across all ten fields for six matchups was out of scope for this pass."
+}

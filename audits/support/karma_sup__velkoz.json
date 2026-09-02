@@ -1,0 +1,61 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "velkoz",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "packet.defects flags a contradiction, but packet.winRate (53.12) is Vel'Koz's side, matching the chart favoring Vel'Koz 5/7 stages; content win[] and full phases[].side already agree with each other and with the packet chart, so no chart edit is needed.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win", "currentText.full phases[].side"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly track Vel'Koz's level-2 Q/W double-cast poke, his level-6 R true-damage execute, and Karma's first-item/2+item Mantra-E shield reclaim — matches the kit's cooldowns and flags.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "dosFull[1].d is the tradeGood string pasted under an unrelated title, and its title 'Dodge the keystone root' names a mechanic Vel'Koz doesn't have (he has no root — E is a knockup/zone). dontsFull[2].d is the tradeBad string pasted under 'Eat the zone for one Q', which is actually about W's delayed second burst. breakdown.cooldowns has no digit despite the E cooldown (12/11.5/11/10.5/10) being the matchup-defining number.",
+   "why": "lintFindings flags both COPY_PASTE_BLEED spots and the missing digit. R (Life Form Disintegration Ray) is a channel any hard CC interrupts per its flags, which is the real save-worthy interaction; W (Void Rift) deals its damage in two separate bursts, which is the real zone/E-adjacent trap.",
+   "corrected": "dosFull[1] retitled to the CC-interrupt interaction with a grounded body; dontsFull[2].d rewritten to describe W's two-burst damage; breakdown.cooldowns gets the real E cooldown number.",
+   "confidence": "High",
+   "sources": ["enemyKit R flags/text", "enemyKit W text", "enemyKit E cd", "lintFindings"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "dosFull[1].t",
+   "before": "Dodge the keystone root",
+   "after": "Interrupt the R channel with CC"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.",
+   "after": "Life Form Disintegration Ray is a 2.5s channel that any hard CC cancels — a landed tether root ends the ray outright, so bank it for his ult, not a poke trade."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Spending mantra on a wave while the enemy banks theirs for your face.",
+   "after": "Void Rift bursts once on cast and again after a delay — stand in the first hit waiting it out and you eat both explosions for one poke."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Vel'Koz Tectonic Disruption: matchup-defining — The knockup starts the true-damage rotation — dodge it and the research stalls. It writes your spacing rules. - RE shield-speed is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Vel'Koz Tectonic Disruption: matchup-defining — down 12s at rank 1, 10s at rank 5. The knockup starts the true-damage rotation — dodge it and the research stalls. - RE shield-speed is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  }
+ ],
+ "notes": "Fixed both COPY_PASTE_BLEED findings and the COOLDOWN_NO_DIGIT finding. Also corrected dosFull[1].t, which named a 'keystone root' Vel'Koz's kit doesn't have — Vel'Koz has no root, only a knockup (E) and an interruptible channel (R); retitled to the actual CC-interrupt interaction. No chart edits: the packet's 'contradiction' note compares winRate to the wrong side (53.12 is Vel'Koz's WR, consistent with him favored 5/7 stages) and the full/content layers already agree."
+}

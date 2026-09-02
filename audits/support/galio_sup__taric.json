@@ -1,0 +1,53 @@
+{
+ "ownerKey": "galio_sup",
+ "enemy": "taric",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[3].side (Levels 4-5) and phases[4].side (Level 6) both read the generic placeholder 'Skill', while content win[3] and win[4] already say 'Galio' for both rows.",
+   "why": "Galio's E-Q lockdown still beats Taric before his passive heal-per-attack and Bastion (W) tether-stun stacking come fully online, and Hero's Entrance still wins fights as long as Cosmic Radiance (R, 180/150/120s CD) is on cooldown when the engage lands — exactly what content's win[] and breakdown.mid already argue.",
+   "corrected": "Moved phases[3].side and phases[4].side from 'Skill' to 'Galio' to agree with the existing win[3]/win[4], and rewrote both phases[].why to state the real reason instead of the recycled generic template shared across unrelated matchups.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/taric.json", "tools/audit-run/packets/galio_sup.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content spikes[] already correctly identifies Level 2 (Galio's E-Q spike before Dazzle is reliable), Level 6 (Hero's Entrance if Cosmic Radiance is down), 1st item (Taric's tether-stun and heal flip it), and Late (Cosmic Radiance out-scales the all-in) as four distinct real spikes.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/galio.js"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Cosmic Radiance as 'matchup-defining' with no cooldown number in the field (lint rule: must contain a digit). dosFull[1].d is a verbatim copy of tradeGood pasted under an unrelated 'E the recovery window' title. No writable field mentions that Starlight's Touch (Q) is an anti-heal target even though Taric's whole early sustain runs through it, or that Bastion (W) absorbs burst on top of the heal.",
+   "why": "Real numbers (Cosmic Radiance 180/150/120s) make the invulnerability-tracking advice concrete; naming the anti-heal target on Starlight's Touch is the single highest-leverage sentence missing from this matchup since it's Taric's core sustain tool.",
+   "corrected": "Rewrote breakdown.cooldowns with the real R cooldown; rewrote dosFull[1].d to state that Starlight's Touch heals through poke even before Bastion shields it, and when to buy Grievous Wounds.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/taric.json", "champ-data/_kits/_missing/galio_sup.json"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[3].why", "before": "Zone with taunt threat and shield the margins — AP duos pay double rent.", "after": "Taric's stun-heal stacking hasn't come online yet — your zone and shield still win trades."},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[4].why", "before": "Hero's Entrance online — every roam your duo survives, you end.", "after": "Hero's Entrance still wins if Cosmic Radiance (180s CD) is down when you engage."},
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Taric Cosmic Radiance: matchup-defining — The delayed invulnerability erases your teamfight damage — burst before it lands or wait it out. It writes your spacing rules. - W Shield of Durand is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Taric's Cosmic Radiance (R) is 180/150/120s cooldown — the delayed invulnerability erases your teamfight damage, so burst before it lands or wait it out. It writes your spacing rules. - W Shield of Durand is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Starlight's Touch heals off stored charges even through poke — Grievous Wounds early denies the sustain before Bastion shields it."
+  }
+ ],
+ "notes": "No brief file existed at tools/audit-run/briefs/support/galio_sup__taric.json; sourced from champ-data/_kits/galio.json, champ-data/_kits/taric.json, champ-data/_kits/_missing/galio_sup.json, tools/audit-run/packets/galio_sup.json, and the live full/content files. Only rows 3 and 4 disagreed between layers (rows 0-2 already 'Galio' on both, rows 5-6 already 'Taric' on both); the two disagreeing rows are proposed together with their why per THE CHART RULE, no win[N] edits needed since win[] already carried the correct verdict. Confirmed via champ-data/champ-gender.js that Taric is male (he/his correct as already used)."
+}

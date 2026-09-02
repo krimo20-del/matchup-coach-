@@ -1,0 +1,43 @@
+{
+ "ownerKey": "lulu_sup",
+ "enemy": "brand",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "missing",
+   "whatIsWrong": "The full-layer level chart (phases[].side) and the content-layer chart (win[]) already disagree with each other on disk, independent of anything I touched: win[] reads Brand for indices 0-5 and Lulu only at index 6, while phases[].side reads Brand only at indices 0-1 and 'Skill' for indices 2-6. The packet also flags the win[]/winrate contradiction (52.12% Lulu winrate vs. a chart giving Brand 6 of 7 stages).",
+   "why": "I cannot determine from the kit alone which chart is correct — Brand's Sear+Pillar+Conflagration burst plausibly wins early trades, but whether that extends through levels 4-6 (win[]'s claim) or evens out at level 3 (phases[]'s claim) isn't something the ability text settles, and the level-chart rule requires leaving a self-contradictory row alone rather than guessing.",
+   "corrected": "",
+   "confidence": "Low",
+   "sources": ["tools/audit-run/packets/lulu_sup.json", "champ-data/sup/lulu.full.js", "champ-data/content/sup/lulu.js"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 spike correctly flags Pyroclasm as a lane-wide kill threat Wild Growth only partially answers, and first-item spike correctly notes Brand out-ranges Lulu's poke once he has burn items.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/brand.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Sear (Stun) correctly but gives no cooldown number.",
+   "why": "Templated with no digits — fails the cooldowns-must-contain-a-number check. No entry exists for Brand in _missing/lulu_sup.json, so no additional interaction was available to fold in.",
+   "corrected": "Cite Sear at 8/7.5/7/6.5/6s and Pyroclasm at 100/90/80s.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/brand.json"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Brand Sear (Stun): matchup-defining — Q only stuns the ablaze — after eating W or E, the stun line is the dodge. It writes your spacing rules. - W Whimsy is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Brand Sear is 8s at rank 1, 6s maxed, and only stuns the ablaze — after eating W or E, the stun line is the dodge. - Pyroclasm is 100s at rank 1, 80s maxed; respect the window, then punish the long wait. - The R opens or closes fights — pick one per cast."
+  }
+ ],
+ "notes": "Left the level chart (phases[].side vs content win[]) alone — those two already disagree with each other on disk before any edit of mine, and the packet separately flags the win[] vs. winrate mismatch. Per the chart rule, a pre-existing self-contradictory row that the kit can't resolve gets recorded, not guessed at. This needs a human or mirror-fix.js pass, not an audit-agent guess. No entry for brand exists in champ-data/_kits/_missing/lulu_sup.json, so only the cooldowns number-fix was made."
+}

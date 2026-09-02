@@ -1,0 +1,58 @@
+{
+ "ownerKey": "maokai_sup",
+ "enemy": "morgana",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0..6].side all read 'Skill' while content win[0..6] all read 'Morgana' — the two layers disagree on who wins every stage, and the packet's own levelChart (all Morgana) plus the 52.13% Maokai overall winrate defect note confirms lane-phase favor sits with Morgana even though Maokai's kit (engage/peel) wins the game overall.",
+   "why": "Dark Binding (10s CD, 1250 range) out-ranges Maokai's entire kit including W Twisted Advance (525 range dash), and Black Shield negates the W root/knockup and R root outright, so Morgana wins the lane exchanges stage by stage even though Maokai's late engage value pulls the overall matchup winrate to 52%.",
+   "corrected": "Set phases[0..6].side to Morgana to match win[0..6], and rewrite each .why to state the actual mechanical reason (Dark Binding range/CD, Black Shield negating engage, Soul Shackles) instead of the templated tree-favor language.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "packet.defects", "currentText.content.whys"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "phases[4].label 'Level 6' and phases[5]/[6] correctly track R Nature's Grasp coming online and first/second item CDR reducing Dark Binding and Black Shield uptime.",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns contains no digit (lint COOLDOWN_NO_DIGIT) despite Morgana's Q being a flat 10s cooldown and Maokai's Q scaling 7/6.5/6/5.5/5s and R 130/110/90s — real numbers that make the timing advice actionable are missing.",
+   "why": "Riot kit data gives Dark Binding a flat 10s cooldown and Bramble Smash 7s at rank 1; stating these lets a reader actually count down the window instead of reading vague prose.",
+   "corrected": "Rewrite breakdown.cooldowns with the real cooldown numbers.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "lintFindings"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Morgana"},
+  {"layer":"full","path":"phases[0].why","before":"Sapling the brush — the lane's hedges are yours now; trades start with a tree's consent.","after":"Dark Binding outranges your saplings — she binds the approach before any hedge takes root."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Morgana"},
+  {"layer":"full","path":"phases[1].why","before":"W threat begins: the point-click root governs their carry's spacing.","after":"Q Dark Binding lands first — its root governs your spacing, not your W's."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Morgana"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: E-zone the trades, W the commits, Q the disengage — the swamp votes.","after":"Full kit online: Black Shield voids your commit and Dark Binding wins the poke war."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Morgana"},
+  {"layer":"full","path":"phases[3].why","before":"Sustain the margins with passive heals and sapling chip — attrition is a tree's game.","after":"Her passive Soul Siphon and Q chip win attrition — sapling damage alone can't keep pace."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Morgana"},
+  {"layer":"full","path":"phases[4].why","before":"Nature's Grasp online — the root wave starts fights from fog and ends dives in it.","after":"R lands, but Soul Shackles plus a fresh Black Shield still stonewall your follow-up."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Morgana"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the roots chain and the saplings tax every brush.","after":"First item's CDR shortens her root and shield timers further."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Morgana"},
+  {"layer":"full","path":"phases[6].why","before":"Late Maokai is the engage forest: R the formation, W the carry, and Q whatever the roots deliver.","after":"Late, Zhonya's plus perma-shield fully negate your one engage — R alone can't force it through."},
+  {"layer":"full","path":"dosFull[1].t","before":"Sapling his favorite cast spots","after":"Sapling her favorite cast spots"},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"Ward and poke where she likes to cast Dark Binding and Tormented Shadow — deny the angle before she gets it."},
+  {"layer":"full","path":"dontsFull[0].t","before":"Trade at his max range","after":"Trade at her max range"},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with armor.","after":"Q'ing the chip damage wastes the poke window you could've spent zoning her Dark Binding angle instead."},
+  {"layer":"full","path":"report[9].t","before":"Commit on Dark Binding’s cooldown, on your first item spike, and with your carry’s damage online. Make him flinch first.","after":"Commit on Dark Binding’s cooldown, on your first item spike, and with your carry’s damage online. Make her flinch first."},
+  {"layer":"full","path":"report[11].t","before":"Trade at his max range. Walk the zone for sapling spots. Q the poke instead of the dive. And hold the ultimate for the fight it was drafted to decide.","after":"Trade at her max range. Walk the zone for sapling spots. Q the poke instead of the dive. And hold the ultimate for the fight it was drafted to decide."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Morgana Dark Binding: matchup-defining — The three-second root — minion-block it; the pool follows wherever it lands. Read it before every duo step-up. - Your Q Bramble Smash answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Morgana Dark Binding (Q): 10s cooldown, ~2.25s root — minion-block it; the pool follows wherever it lands. Read it before every duo step-up. - Your Q Bramble Smash (7s at rank 1) answers exactly one disaster per cooldown. - Spend the R (130/110/90s) on swing moments only."}
+ ],
+ "notes": "win[0..6] already read Morgana for every stage and match the corrected full-layer side, so per the chart rule (case 2: win[N] already matches the target side) only phases[N].side + .why needed editing — no win[N] edit included, since a no-op before==after would be rejected and could take the whole chart group down. breakdown.spikes, breakdown.trading, breakdown.difficulty, ahead, tldr, winCon, loading were judged against the template sweep and found already Morgana-specific enough (name Dark Binding, Black Shield) to leave alone given length-band risk. dosFull[0]/[2] and dontsFull[1] already ability-specific, left alone."
+}

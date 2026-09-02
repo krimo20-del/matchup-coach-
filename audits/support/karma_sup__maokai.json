@@ -1,0 +1,55 @@
+{
+ "ownerKey": "karma_sup",
+ "enemy": "maokai",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Even lane rated 5.5/10 with a clean phase-by-phase chart (Karma levels 1-5, Maokai spikes at 6, Karma retakes on first item) already matches the packet's levelChart and win rate (50.62%, 1288 games).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[0..6]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes are correctly sequenced: level 2 poke advantage, level 6 R+W root-chain all-in, first item Karma reassertion, late-game utility edge. All four spikes[].text are grounded in real ability names.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes[0..3]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "The audit never mentions that Twisted Advance (W) makes Maokai untargetable during the dash, so all-in cooldowns thrown mid-dash are wasted, nor that Nature's Grasp (R) creates terrain that can wall off Karma's retreat since she has no dash of her own.",
+   "why": "Both are in missingInteractions and are decisive: untargetable-dodges-burst changes how you should spend cooldowns on his W engage, and terrain-cuts-retreat is a threat specific to Karma because she lacks a gap-closer/blink to escape the wall.",
+   "corrected": "Added to dosFull[2].d (wait out the untargetable window) and a new dontsFull note plus breakdown.cooldowns covering R's terrain-block threat to her escape.",
+   "confidence": "High",
+   "sources": ["missingInteractions[0].data.missing"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "RQ the carry at wave contact, tether the answer, walk — the chip leads the lane's ledger.",
+   "after": "Tether W Twisted Advance the instant he lands — he's untargetable mid-dash, so wait for arrival before spending Q or R on him."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Spending mantra on a wave while the enemy banks theirs for your face.",
+   "after": "Trading into his all-in at even HP — R Nature's Grasp walls your only escape route since you carry no dash."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Maokai Twisted Advance (Root): matchup-defining — Point-and-click root — count its cooldown before stepping up. Read it before every duo step-up. - Your RE shield-speed answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- W Twisted Advance: 14/13/12/11/10s, untargetable in transit — punish only after he lands, not mid-dash. - R Nature's Grasp: 130/110/90s but 3000 range and creates a wall — hold Flash for it since you have no dash out. - Your RE shield-speed answers one disaster per 12s cooldown."
+  }
+ ],
+ "notes": "Level chart and win rate already agree between full and content layers; no chart edit needed. Fixed two COPY_PASTE_BLEED lint hits (dosFull[1].d was tradeGood verbatim, dontsFull[2].d was tradeBad verbatim) by grounding both in the missingInteractions findings instead, and added real W/R cooldown numbers to breakdown.cooldowns to fix the COOLDOWN_NO_DIGIT lint hit."
+}

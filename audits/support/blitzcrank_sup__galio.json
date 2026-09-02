@@ -1,0 +1,55 @@
+{
+ "ownerKey": "blitzcrank_sup",
+ "enemy": "galio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level chart and phase side both correctly favor Blitzcrank early (immobile, dash-less Galio can't dodge Q) and go even at 6+ once Hero's Entrance and tankiness come online. Full/content layers already agree.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/galio.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Power spikes correctly flagged at level 2 (Q+E before W Shield of Durand is chargeable), level 6 (Galio's Hero's Entrance can flip a committed all-in), and first item (out-ranging hook stays ahead of the dash-less Galio).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/galio.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real cooldown number and omitted two applicable missing-interactions: Galio's Colossal Smash (P) auto-reset is a burst tell, and Justice Punch (E) creates terrain that can cut off your retreat since Blitzcrank has no dash.",
+   "why": "Both interactions are in missingInteractions for this matchup and were absent from currentText. Justice Punch's real cooldown (11/10/9/8/7) belongs in breakdown.cooldowns, which is also the field the lint flagged for having no digit.",
+   "corrected": "Rewrote breakdown.cooldowns to include Justice Punch's real per-rank cooldown, the auto-reset tell on Colossal Smash, and the terrain/no-dash retreat warning.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/briefs/sup/blitzcrank_sup__galio.json missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Galio Justice Punch: matchup-defining — His dash knockup — he has no engage while it is down. The duo’s tempo bends around it. - Keep W Overdrive banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Justice Punch (E): down 11/10/9/8/7s, his only engage — it cuts your retreat with terrain, so hold Flash for the wall. - Colossal Smash (P) resets on auto; the wind-up is your step-back cue. - Keep R Static Field for the fight, not a habit."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Once Q connects, E follows for the double-damage knockup before he can Shield of Durand — under a second window."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "Justice Punch is only 11-7s on cooldown — an even flash trade just resets his engage sooner than yours."
+  }
+ ],
+ "notes": "Fixed both COPY_PASTE_BLEED lint findings (dosFull[1].d and dontsFull[2].d no longer duplicate tradeGood/tradeBad) and the COOLDOWN_NO_DIGIT finding (breakdown.cooldowns now carries Justice Punch's real 11/10/9/8/7 cooldown). Folded in both missingInteractions items (autoreset-burst-tell on Colossal Smash, terrain-cuts-retreat on Justice Punch) via breakdown.cooldowns since Blitzcrank has no dash to counter the terrain cutoff. Level chart and phase sides were already mirror-consistent and left untouched. Ten-point template sweep reviewed: tldr/winCon/enemyWin/tradeGood/tradeBad/ahead/loading and the remaining breakdown.* fields already reference Galio-specific abilities (Justice Punch, Shield of Durand, Hero's Entrance) rather than generic filler, so no further rewrite was made there."
+}

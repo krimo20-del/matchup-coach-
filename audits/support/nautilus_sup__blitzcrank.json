@@ -1,0 +1,55 @@
+{
+ "ownerKey": "nautilus_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "phases[].side and content win[] agree row-for-row (Blitzcrank lvl1, Nautilus lvl2-7) and match the packet levelChart. No change needed.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.full.phases", "currentText.content.win"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes already give concrete, kit-grounded windows (lvl2 minion-hug, lvl6 Depth Charge, first-item body-block, late CC-chain scaling).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT) and referenced the owner's own W ('Titan's Wrath') instead of Blitzcrank's punishable timers; the missingInteractions for shield-absorbs-burst, autoreset-burst-tell, and silence-denies-answer were not reflected anywhere in the writable text.",
+   "why": "Rocket Grab (Q) is 20/19/18/17/16s. Power Fist (E) is 7/6.5/6/5.5/5s and telegraphs via an auto-attack wind-up (autoReset flag). Static Field (R) is 60/40/20s, silences on activation, and Mana Barrier (P) plus R both shield off burst.",
+   "corrected": "Rewrote breakdown.cooldowns with real numbers and the Power Fist wind-up tell; dosFull[1].d now covers forcing out the P/R shield before committing burst; dontsFull[2].d now covers the R silence denying a pre-cast escape.",
+   "confidence": "High",
+   "sources": ["enemyKit brief", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Force out Mana Barrier (P) or Static Field (R) shield before you commit — burst into a shield just refunds his mana."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "Don't pre-cast E before his R — Static Field silences you for the duration, denying your escape."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. The duo’s tempo bends around it. - Keep W Titan's Wrath banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "Rocket Grab (Q) is 20s at rank 1, 16s at max — punish the miss window hard. Power Fist (E) resets on 7-5s and opens with an auto wind-up, not the cast. Static Field (R) charges 60-20s and silences on activation — bait it before you all-in."
+  }
+ ],
+ "notes": "Level chart, spikes, and early/mid/late already use real names (Rocket Grab, Power Fist, Static Field, Mana Barrier) correctly. dosFull[0] and dontsFull[0]/[1] already cover the hook/minion-hug interaction well, so left untouched. breakdown.early/mid/wave/trading/spikes/feeding/carry/difficulty/late reviewed for templating; kept as they reference this matchup's abilities specifically."
+}

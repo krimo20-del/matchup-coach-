@@ -1,0 +1,67 @@
+{
+ "ownerKey": "neeko_sup",
+ "enemy": "sona",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "packet.defects flags that MC_REAL_GAMES win rate is 42.41% (Neeko loses this matchup) but diff='FAVOURED', diffRating='4/10', and every phases[].side/win[N] except the last row say Neeko wins 6 of 7 stages.",
+   "why": "A 42.41% win rate means Sona wins this matchup more often than Neeko does, which directly contradicts calling it FAVOURED for Neeko and giving Neeko 6/7 level-chart rows. I cannot tell from the kits alone whether the win-rate number or the prose/chart is the stale one — the prose is detailed and internally consistent (real ability names, real cooldowns, a coherent late-game flip), which suggests it may have been written correctly against an older, more favourable win rate before a balance patch shifted this matchup, but I can't verify that without patch history I don't have access to.",
+   "corrected": "Left diff, diffRating, and the phases/win level chart untouched per the chart rule (do not guess when the packet disagrees with the prose and the kit can't adjudicate it). Recording this as the single most important thing for the user to check by hand.",
+   "confidence": "Low",
+   "sources": ["packet.defects", "packet.winRate"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes are stated with real ability names and levels (Q/E level 2 all-in, R Pop Blossom level 6 execute window, first-item Liandry's race, late Crescendo flip) independent of the win-rate question above.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "missingInteractions flagged three unmentioned facts: Aria of Perseverance (W) sustains through chip damage (antiheal timing), Aria also absorbs burst as a shield (force it out before committing), and Hymn of Valor (Q) applies on-hit effects so armour alone misreads her poke.",
+   "why": "The shield-absorbs-burst point was already implicitly covered by 'force a heal or death' framing in breakdown.early/mid, but the antiheal timing and on-hit itemization facts were absent from every field.",
+   "corrected": "Folded the on-hit itemization fact into breakdown.cooldowns (already being edited for the missing-digit lint) and the antiheal-timing fact into dosFull[1].d (already being edited for the copy-paste-bleed lint).",
+   "confidence": "High",
+   "sources": ["missingInteractions", "enemyKit.Q.flags.onHit", "enemyKit.W.flags.heal"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Sona Crescendo: matchup-defining — The stun chord flips grouped fights — spread while it is up. The duo’s tempo bends around it. - Keep W Shapesplitter banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Sona's Crescendo (R) is a 140s cooldown early, 100s at rank 3 — the stun chord flips grouped fights, spread while it is up. - Hymn of Valor (Q) applies on-hit, so armour alone underrates her poke. - Bank Shapesplitter for the fight it decides."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the cover-line, Q the rooted pile, auto the passive — the lane's longest pick paid in pairs.",
+   "after": "Force Aria (W) out first, then E the cover-line and Q the rooted pile before the heal refunds it."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking with the E banked forever — the root is the threat; the bloom is just the receipt.",
+   "after": "Sitting outside her Song of Celerity aura and never closing — you give up the only trade you win."
+  },
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Add anti-heal early into his duo’s sustain.",
+   "after": "World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Add anti-heal early into her duo’s sustain."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Crescendo’s cooldown, on your first item spike, and with your carry’s damage online. Make him flinch first.",
+   "after": "Commit on Crescendo’s cooldown, on your first item spike, and with your carry’s damage online. Make her flinch first."
+  }
+ ],
+ "notes": "IMPORTANT FOR REVIEW: packet.defects flags a real contradiction I did not resolve — MC_REAL_GAMES win rate is 42.41% (Sona favoured) but diff/diffRating say FAVOURED/4-10 for Neeko and 6 of 7 level-chart rows say Neeko. Per the chart rule I left phases[].side, win[N], diff, and diffRating untouched rather than guess which layer is stale, but this matchup's overall verdict may need a human pass with patch-history context I don't have. Fixed all 5 lintFindings otherwise: 2 copy-paste bleeds, 2 misgenders (sona is she/her), 1 cooldowns-field-with-no-digit. Folded missingInteractions (antiheal timing, on-hit itemization) into fields already being edited; the shield-absorbs-burst interaction was already implicit in breakdown.early's 'force a heal or death' framing so left as-is. suspectNames were false positives (Blooming Burst, Power Chord[s], Aria of Perseverance all match the real kit names)."
+}

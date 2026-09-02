@@ -1,0 +1,59 @@
+{
+ "ownerKey": "nautilus_sup",
+ "enemy": "braum",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Nautilus's own page has phases[6].side/win[6] both saying 'Nautilus' for the 2+ items stage, but the already-audited mirror (audits/support/braum_sup__nautilus.json, on disk) explicitly flips that stage to Braum ('Late, Unbreakable blocks his Q hooks and your peel finally out-scales his single engage'). The two pages currently contradict each other on who wins the late stage.",
+   "why": "Braum's Unbreakable (E) blocks projectiles including Dredge Line (Q), and once he has tank items his peel/shield value out-scales a single-target engage in grouped fights — the same logic the mirror already used and that regression-check.js requires both sides to agree on.",
+   "corrected": "Flipped phases[6].side to Braum and win[6] to Braum in the same proposal, with matching why/whys text, to agree with the mirror.",
+   "confidence": "High",
+   "sources": ["audits/support/braum_sup__nautilus.json (mirror, on disk)"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes 0-2 (lvl2 instant-CC engage, lvl6 unstoppable R past his directional E, first-item durability) are concrete and kit-grounded; only the late spike/late content needed to agree with the mirror per point 2.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit (lint COOLDOWN_NO_DIGIT) and named the owner's own W ('Titan's Wrath') instead of Braum's punishable timers; dosFull[1].d and dontsFull[2].d were verbatim tradeGood/tradeBad copies (lint COPY_PASTE_BLEED); the knockup-enabler missingInteraction (both sides carry a displacement — Dredge Line vs Glacial Fissure) wasn't stated anywhere.",
+   "why": "Winter's Bite (Q) is 8/7.5/7/6.5/6s and stacks Concussive Blows toward the passive stun; Stand Behind Me (W) is a 12-8s leap that grounding/walls can deny; Glacial Fissure (R) is 130/115/100s and is a competing knockup against Nautilus's own Dredge Line.",
+   "corrected": "Rewrote breakdown.cooldowns with real numbers; dosFull[1].d now covers the knockup race (land Q before his Fissure); dontsFull[2].d now covers not standing in his fissure line post-R.",
+   "confidence": "High",
+   "sources": ["enemyKit brief", "missingInteractions.knockup-enabler"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Braum"},
+  {"layer":"full","path":"phases[6].why","before":"Late Naut starts everything: R the carry through the formation and anchor whatever peels.","after":"Late, Unbreakable (E) blocks your Q hook and his peel value out-scales your engage in fights."},
+  {"layer":"content","path":"win[6]","before":"Nautilus","after":"Braum"},
+  {"layer":"content","path":"whys[6]","before":"You keep the edge at 2+ items: your engage dictates fights that Braum can only answer.","after":"Braum's Unbreakable (E) blocks your hook late; his peel out-scales your engage once itemized."},
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Both sides carry a knockup — land Dredge Line before Glacial Fissure lands, or his chain wins the trade instead."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "Standing in his fissure line after he R's stuns you before your own Q connects — reposition off the line."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Braum Unbreakable: matchup-defining — The shield wall eats your poke and engage projectiles — wait it out. The duo’s tempo bends around it. - Keep W Titan's Wrath banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "Winter's Bite (Q) is 8-6s and stacks Concussive Blows toward a 4-stack stun. Stand Behind Me (W) leaps on 12-8s but is dash-grounded. Glacial Fissure (R) is 130-100-80s; land your Q knockup before his fissure or his chain wins the race."
+  }
+ ],
+ "notes": "The packet's own defect note (46.94% overall win rate vs a chart giving Nautilus all 7 stages) turned out to point at a real problem, but the fix came from the mirror rather than the raw win rate: braum_sup__nautilus.json (already audited) has phases[0-5]=Nautilus, phases[6]=Braum, and this proposal brings nautilus_sup's own page into agreement on that last stage rather than trusting the aggregate win-rate number directly. Levels 1-6 (phases[0-5]/win[0-5]) already agreed with the mirror and were left alone."
+}

@@ -1,0 +1,86 @@
+{
+ "ownerKey": "nautilus_sup",
+ "enemy": "taric",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[3].side and phases[4].side read the generic 'Skill' placeholder while win[3]/win[4] already say Nautilus; phases[6].side says 'Taric' while win[6] says 'Nautilus' (and phases[6].why itself already describes a Nautilus-favored late game); phases[5].why describes Nautilus-favored trades ('the chains harden and the shield trades bully') even though both phases[5].side and win[5] already agree on Taric winning first item.",
+   "why": "Each is the full-layer chart disagreeing with itself or with the content layer's win[] row for the same stage, which is exactly the two-places-must-agree defect the process guards against.",
+   "corrected": "Set phases[3]/[4].side to 'Nautilus' to match win[3]/win[4] (whys there already matched). Fixed phases[6].side to 'Nautilus' to match win[6] and the row's own already-Nautilus-favored why. Rewrote phases[5].why to describe Taric's first-item spike, matching the already-correct side='Taric'/win[5]='Taric'.",
+   "confidence": "High",
+   "sources": ["currentText"]
+  },
+  {
+   "point": 2,
+   "status": "missing",
+   "whatIsWrong": "packet.defects flags that the level chart (Nautilus favored 6 of 7 stages) contradicts the real win rate (Nautilus wins only 44.76% of 2223 games, i.e. Taric wins ~55%).",
+   "why": "This is a real, checkable numeric contradiction, but the kit alone doesn't tell me which is wrong — the chart could be capturing lane-phase skill expression that doesn't show up in full-game win rate (Taric is a known scaling/utility pick), or the chart could be genuinely miscalibrated for this matchup.",
+   "corrected": "Left the chart's per-stage verdicts as-is rather than guessing a rewrite; flagging for the user instead.",
+   "confidence": "Low",
+   "sources": ["packet"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no digit for Cosmic Radiance; missingInteractions flag Taric's untargetable R (dodges committed burst) and his anti-heal timing (Starlight's Touch) as unaddressed.",
+   "why": "A real cooldown makes the sequencing call actionable, and Cosmic Radiance's invulnerability specifically punishes dumping an all-in into an already-cast ult — a checkable kit fact (untargetable flag) that changes when to commit.",
+   "corrected": "Added the Cosmic Radiance cooldown, folded the untargetable-dodges-burst fact into a do bullet, and the anti-heal timing into a don't bullet and itemization.",
+   "confidence": "High",
+   "sources": ["kit", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Nautilus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Nautilus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "First item: the chains harden and the shield trades bully.",
+   "after": "First item is Taric's window — his shield-tank stats and repeated Dazzle stun out-trade your single all-in, so play safer until his E is down."
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Taric",
+   "after": "Nautilus"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Taric Cosmic Radiance: matchup-defining — The delayed invulnerability erases your teamfight damage — burst before it lands or wait it out. It writes your spacing rules. - W Titan's Wrath is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Taric Cosmic Radiance (180s down to 120s at rank 3): matchup-defining — the delayed invulnerability erases your teamfight damage, burst before it lands or wait it out. It writes your spacing rules. - W Titan's Wrath is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Cosmic Radiance turns his side fully untargetable once it lands — don't dump your all-in into a pulse already cast, wait it out and re-commit after it fades."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "Starlight's Touch heals off charges his empowered autos bank up — sitting in poke range just funds the sustain he cashes in the next fight."
+  },
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "World Atlas start. Locket or Zeke's line, Mercs-Steelcaps by lane, then Knight's Vow paths. Add anti-heal early into his duo’s sustain.",
+   "after": "World Atlas start. Locket or Zeke's line, Mercs-Steelcaps by lane, then Knight's Vow paths. Add anti-heal early — Starlight's Touch heals off banked charges, so Grievous Wounds timing decides extended trades."
+  }
+ ],
+ "notes": "packet.defects flags a real contradiction: the level chart favors Nautilus 6/7 stages but the actual win rate is 44.76% (Taric wins ~55% of 2223 games). I fixed the internal full-vs-content disagreements (rows 3, 4, 5, 6 now agree between phases[N].side and win[N]) but left the chart's overall lean toward Nautilus as-is rather than flipping rows on my own judgment — the kit doesn't tell me whether the win-rate gap is real skill-expression (Taric out-scales past laning) or a miscalibrated chart, and inventing a rewrite risks being wrong in the other direction. Flagging for the user/QA pass rather than guessing. suspectNames 'Use Cosmic Radiance' is a correct real ability name, not a fabrication. Fixed both COPY_PASTE_BLEED bullets and COOLDOWN_NO_DIGIT. Folded both missingInteractions entries.",
+ "questionsForUser": ["Nautilus vs Taric: real win rate is 44.76% Nautilus (2223 games) but the level chart favors Nautilus in 6 of 7 stages and diffRating/breakdown.difficulty call it EVEN 5.5/10 in Nautilus's favor. Should the chart/diff be flipped toward Taric, or does the per-stage lane read stay accurate despite the full-game win rate skewing to Taric's scaling? Left as-is pending a decision."]
+}

@@ -1,0 +1,73 @@
+{
+ "ownerKey": "pyke_sup",
+ "enemy": "velkoz",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Tricky poke lane where you have to close a skillshot gap, already reflected in diff TRICKY 7/10.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief currentText"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 execute range beating his combo, and first-item lethality spikes are correctly called out.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief currentText"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "spikes[0].text and wants.you[0] both label the split-bolt as 'Q (Tectonic Disruption)' — Tectonic Disruption is Vel'Koz's E knockup, not his Q. The splitting bolt is Plasma Fission (Q). wants.foe[1] labels the knockup itself as 'E (Organic Deconstruction)' — Organic Deconstruction is his Passive, not his E; the knockup is Tectonic Disruption (E). breakdown.cooldowns has no digit (lint COOLDOWN_NO_DIGIT), and it omits that Organic Deconstruction stacks (P) and his R deal true damage, bypassing armor/MR entirely (missingInteractions rule 27). dosFull[1].d and dontsFull[2].d are verbatim tradeGood/tradeBad copy-paste (lint COPY_PASTE_BLEED).",
+   "why": "Per enemyKit, Q=Plasma Fission (splits), E=Tectonic Disruption (knockup), P=Organic Deconstruction (true-damage stacks), R=Life Form Disintegration Ray (true damage, 100/90/80s CD).",
+   "corrected": "Swapped the two mislabeled ability names, added the E cooldown number and the true-damage/resistance-bypass note, replaced the two copy-pasted bullets.",
+   "confidence": "High",
+   "sources": ["brief enemyKit", "missingInteractions rule 27"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[0].text",
+   "before": "Hit 2 before Vel'Koz and you can Q (Bone Skewer) charge or tap-hook the instant he steps up to Q (Tectonic Disruption) a minion; his squishy immobile frame melts to a hook plus ADC follow-up.",
+   "after": "Hit 2 before Vel'Koz and you can Q (Bone Skewer) charge or tap-hook the instant he steps up to Q (Plasma Fission) a minion; his squishy immobile frame melts to a hook plus ADC follow-up."
+  },
+  {
+   "layer": "content",
+   "path": "wants.you[0]",
+   "before": "Dodge his Q (Tectonic Disruption) split so you never eat the knock-up that sets up his full poke chain",
+   "after": "Dodge his Q (Plasma Fission) split so you never eat the E Tectonic Disruption knock-up that sets up his full poke chain"
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "Hold E (Organic Deconstruction) to knock you up mid-hook and cancel your all-in",
+   "after": "Hold E (Tectonic Disruption) to knock you up mid-hook and cancel your all-in"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Vel'Koz Tectonic Disruption: matchup-defining — The knockup starts the true-damage rotation — dodge it and the research stalls. It writes your spacing rules. - W Ghostwater Dive is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Vel'Koz's E Tectonic Disruption (12-10s CD) starts the true-damage rotation — three Organic Deconstruction stacks and his R both ignore armor/MR, so resistances don't save you. Dodge the knockup and the research stalls. - W Ghostwater Dive is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q-threat the cover, E the gap, X the threshold — the chain pays your whole team.",
+   "after": "Approach from an angle he hasn't warded — his Q and E are both skillshots, so a hook from an unseen bush is a free kill with no way for him to dodge in return."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Fishing visibly at half HP - Pyke's health bar is a rumor only fog can keep.",
+   "after": "His E Tectonic Disruption knocks up along a wide arc — don't dash your Phantom Undertow straight through his likely cast line or you eat the knockup mid-channel."
+  }
+ ],
+ "notes": "Real ability-name errors found and fixed: split bolt is Plasma Fission (Q), not Tectonic Disruption; the knockup is Tectonic Disruption (E), not Organic Deconstruction (P). Added missingInteractions rule 27 (resistances invalidated by true damage) into breakdown.cooldowns, which also fixes the COOLDOWN_NO_DIGIT lint flag. Both COPY_PASTE_BLEED bullets replaced with content distinct from tradeGood/tradeBad. Level chart and win[] already agree (Skill/Pyke all rows), no chart edit needed."
+}

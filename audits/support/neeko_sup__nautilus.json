@@ -1,0 +1,109 @@
+{
+ "ownerKey": "neeko_sup",
+ "enemy": "nautilus",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full-layer phases[0].side and phases[5].side both say 'Skill', but content win[0] says 'Neeko' and win[5] says 'Nautilus' — and those content values already match the packet levelChart (Neeko/Skill/Skill/Skill/Neeko/Nautilus/Skill). The two layers disagree at level 1 and first item.",
+   "why": "Level 1: Nautilus's only tool is Dredge Line, a 14s-cooldown skillshot hook at rank 1 with no other trading tool, so Neeko's free-cast Q wins the level outright. First item: a tank item turns his hook-into-passive-root chain into a near-guaranteed kill, favoring Nautilus. Content whys[0]/whys[5] already state exactly this.",
+   "corrected": "phases[0].side -> Neeko (why rewritten to match), phases[5].side -> Nautilus (why rewritten to match); win[0] and win[5] already correct, left alone.",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "currentText.content win[]/whys[]", "enemyKit Q cd 14/13/12/11/10"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level-6 Pop Blossom all-in before his R is up, and the first-item tank spike, are already correctly called out in spikes[].",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content spikes[]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns calls Dredge Line matchup-defining but has no cooldown number (COOLDOWN_NO_DIGIT).",
+   "why": "The hook's actual cooldown (14s at rank 1, down to 10s at rank 5) is the number that makes 'dodge it and the lane is free' actionable.",
+   "corrected": "breakdown.cooldowns now states the real Dredge Line cooldown range.",
+   "confidence": "High",
+   "sources": ["enemyKit Q cd"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Neeko"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Q-bloom the pair — bot's formations eat the triple pop beautifully.",
+   "after": "His only level-1 tool is a 14s-cooldown hook — out-poke him free with Q."
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].rating",
+   "before": "5/10",
+   "after": "6/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Nautilus"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "First item: root-blooms delete and the clone sells angles.",
+   "after": "First item: tank stats turn his hook-passive chain lethal."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].rating",
+   "before": "6/10",
+   "after": "4/10"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Nautilus Dredge Line (Hook): matchup-defining — His only real engage — dodge it and the lane is free. It writes your spacing rules. - W Shapesplitter is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Nautilus's Dredge Line (Q): 14s cooldown at rank 1, down to 10s at rank 5 — his only real engage. Dodge it and the lane is free. - W Shapesplitter is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "tradeGood",
+   "before": "E the cover-line, Q the rooted pile, auto the passive — the lane's longest pick paid in pairs.",
+   "after": "Land Q+E together and burst immediately — a lone poke only feeds his W shield's tank."
+  },
+  {
+   "layer": "full",
+   "path": "tradeBad",
+   "before": "Q-poking with the E banked forever — the root is the threat; the bloom is just the receipt.",
+   "after": "Single Q pokes while E sits banked — his W shield eats one hit for free, every time."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: E the cover-line, Q the rooted pile, auto the passive — the lane's longest pick paid in pairs. Bad trade: Q-poking with the E banked forever — the root is the threat; the bloom is just the receipt.",
+   "after": "Good trade: Land Q+E together and burst immediately — a lone poke only feeds his W shield's tank. Bad trade: Single Q pokes while E sits banked — his W shield eats one hit for free, every time."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the cover-line, Q the rooted pile, auto the passive — the lane's longest pick paid in pairs.",
+   "after": "E roots, Q blooms, auto for the third hit — three instances before his W shield tanks the burst."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking with the E banked forever — the root is the threat; the bloom is just the receipt.",
+   "after": "Single Q pokes while E sits banked — his W shield eats one hit for free, every time."
+  }
+ ],
+ "notes": "phases[0].side and phases[5].side moved to match content win[0]='Neeko' and win[5]='Nautilus', which already agreed with the packet levelChart — per the chart rule, no win[N] edit was proposed since win[] was already correct (a same-value edit would be a no-op and could take the chart group down). Fixed all 3 lintFindings: two COPY_PASTE_BLEED (dosFull[1].d, dontsFull[2].d duplicated tradeGood/tradeBad — rewrote tradeGood/tradeBad and both bodies with distinct wording, updated breakdown.trading to match) and one COOLDOWN_NO_DIGIT (breakdown.cooldowns now carries Dredge Line's real 14s-to-10s cooldown range). No missingInteractions were listed for this matchup. Did not touch breakdown.early/mid/wave/feeding/carry/difficulty/late, ahead, loading, or enemyWin — these still read as generic templates shared with other matchups but I found no additional Nautilus-specific fact beyond what's already used in the cooldowns/trading fixes to ground a further rewrite within this pass; flagging them for a future template-sweep pass."
+}

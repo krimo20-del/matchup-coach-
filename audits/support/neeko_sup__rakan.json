@@ -1,0 +1,50 @@
+{
+ "ownerKey": "neeko_sup",
+ "enemy": "rakan",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Poke lane early (Neeko has ranged Q/E, Rakan has nothing ranged until W item spike), flips to Rakan once his mobility item lands and he can pick with Grand Entrance/The Quickness.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit at all (lint flag), and full-layer phases[0/1/4/5/6].side disagreed with content win[0/1/4/5/6] — chart said 'Skill' across most rows while content already correctly had Neeko/Neeko/Skill/Skill/Neeko/Rakan/Rakan (matches packet.levelChart).",
+   "why": "Cooldown field must carry real numbers per rule 3 of the defect catalogue. Chart disagreement is a mirror/regression failure risk.",
+   "corrected": "Added real W/R cooldown numbers to breakdown.cooldowns; realigned phases[].side to match the already-correct content win[] row for row 0, 1, 4, 5, 6, with matching why edits.",
+   "confidence": "High",
+   "sources": ["currentText", "packet.levelChart", "lintFindings"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Missing interactions list Rakan's antiheal-relevant sustain (Gleaming Quill heal) and shield absorption (Fey Feathers passive, Battle Dance E) not stated concretely with real ability names/cooldowns in breakdown.cooldowns and dos/donts.",
+   "why": "Applies directly to this matchup per missingInteractions brief data.",
+   "corrected": "Named Gleaming Quill (Q) heal and Grievous Wounds timing in trading/cooldowns text where space allowed; named real ability (Fey Feathers P, Gleaming Quill Q, Grand Entrance W, Battle Dance E) instead of vague pronouns in dos/donts.",
+   "confidence": "High",
+   "sources": ["missingInteractions", "enemyKit"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[0].why","before":"Q-bloom the pair — bot's formations eat the triple pop beautifully.","after":"Q-E poke owns level 1 — a toolless Rakan has no way to trade back."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[1].why","before":"Clone games begin: the lane's information war opens in your favor.","after":"AoE poke widens it: your zone threat outpaces his melee assist range."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[4].why","before":"Pop Blossom online — the disguise plus R turns brush control into ambush law.","after":"Pop Blossom outpaces his double-move W — time R on his engage and you win it."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[5].why","before":"First item: root-blooms delete and the clone sells angles.","after":"First item: his mobility item makes Grand Entrance land."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[6].why","before":"Late support Neeko is the ambush: crouch the pit, pop the formation, root the scatter.","after":"Late, his engage-disengage dance and flank threat outscale your single burst window."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Rakan Grand Entrance: matchup-defining — The leap knockup starts every play — track him in fog; the E extends it. The duo’s tempo bends around it. - Keep W Shapesplitter banked for their best play. - The ultimate is a fight decision, not a habit.","after":"- Grand Entrance (W): 14/13/12/11/10s, down to 7s late. The knockup starts every play; his Battle Dance (E) re-cast extends the dash. - Bank your W clone for his best play. - Your R (120/105/90s) is a fight decision, not a habit."},
+  {"layer":"full","path":"dosFull[1].d","before":"The leap knockup starts every play — track him in fog; the E extends it. Commit on its cooldown, never into it.","after":"Grand Entrance (W) is down 10-14s early — track him in fog; Battle Dance (E) extends it. Commit on cooldown, not into it."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Q-poking with the E banked forever — the root is the threat; the bloom is just the receipt.","after":"Standing in Gleaming Quill range while Fey Feathers shields back the chip you're spending."}
+ ],
+ "notes": "Fixed a real chart contradiction: full-layer phases[0/1/4/5/6].side all read 'Skill' while content win[] already had the correct Neeko/Neeko/Skill/Skill/Neeko/Rakan/Rakan row (matches packet.levelChart exactly) — moved side+why to agree, content layer left untouched since it was already right. Fixed both lint-flagged copy-paste-bleed bullets (dosFull[1].d, dontsFull[2].d) with real ability names instead of the pasted tradeGood/tradeBad text. breakdown.cooldowns now carries real numbers (W 14/13/12/11/10, R 120/105/90) per lint COOLDOWN_NO_DIGIT flag. Named Gleaming Quill (Q) heal/antiheal and Fey Feathers (P)/Battle Dance (E) shield per missingInteractions. Did not touch report[] beyond nothing (no lint flag, no fabricated name there)."
+}

@@ -1,0 +1,115 @@
+{
+ "ownerKey": "neeko_sup",
+ "enemy": "milio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0/1/2/4/6].side all read 'Skill' while win[0]=Neeko, win[1]=Neeko, win[2]=Neeko, win[4]=Neeko, win[6]=Milio — full-layer chart disagrees with content-layer chart on 5 of 7 rows. Packet also flags this exact defect.",
+   "why": "THE CHART RULE requires phases[N].side to name the same side as win[N]. win[] already matches packet.levelChart (Neeko, Neeko, Neeko, Skill, Neeko, Skill, Milio) and content whys[] give grounded reasons (Milio has no early trade tools; his sustain/cleanse-heal takes over late), so win[] is correct and side must move to match it.",
+   "corrected": "Moved phases[0/1/2/4].side to Neeko and phases[6].side to Milio to match win[], rewriting each matching .why from the kit/whys[] reasoning.",
+   "confidence": "High",
+   "sources": ["currentText.content.win[]", "currentText.full.phases[].side", "packet.levelChart", "packet.defects[0]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes (Lvl2 Q+E burst before shields, Lvl6 Pop Blossom before R comes up, 1st item Campfire/shield soak, Late R cleanse+heal negate burst) are grounded in Milio's real kit (W Cozy Campfire cd 29-21s, E Warm Hugs shield, R Breath of Life cleanse+heal).",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": ["currentText.content.spikes", "enemyKit.abilities"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no real number for Breath of Life (R), and doesn't mention Milio's antiheal-relevant P/W/R sustain from missingInteractions.",
+   "why": "Kit: Milio R Breath of Life cd 160/145/130, cleanses CC and heals — the field should carry the real number since it decides whether to force an all-in before or after it's up.",
+   "corrected": "Named the real cooldown (160s rank1, 130s rank3) for Breath of Life in breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities[R]", "missingInteractions[0].data.missing[0]"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Milio Breath of Life: matchup-defining — The team-wide cleanse-heal undoes your CC chain — force it early, engage after. It writes your spacing rules. - W Shapesplitter is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Milio Breath of Life (R): 160s cd at rank 1, 130s at rank 3 — the team-wide cleanse-heal undoes your CC chain, so force it early and engage after. - W Shapesplitter is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the cover-line, Q the rooted pile, auto the passive — the lane's longest pick paid in pairs.",
+   "after": "Milio has no early trade tools — punish step-ups before his Cozy Campfire and shields exist."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking with the E banked forever — the root is the threat; the bloom is just the receipt.",
+   "after": "Don't all-in once he has 2 items — his R cleanses your stun and mass-heals through the burst."
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Neeko"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Q-bloom the pair — bot's formations eat the triple pop beautifully.",
+   "after": "Milio has zero early trade tools — your Q poke chunks him free before his sustain matters."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Neeko"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Clone games begin: the lane's information war opens in your favor.",
+   "after": "Your level-2 Q+E root threatens a kill Milio can't yet shield through."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Neeko"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "E threats live: the root into bloom chunks; pick one window per wave.",
+   "after": "You still out-poke and out-pressure his weak early sustain at 3."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Neeko"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Pop Blossom online — the disguise plus R turns brush control into ambush law.",
+   "after": "Pop Blossom at 6 gives you a fresh all-in window before his R is up."
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Milio"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].why",
+   "before": "Late support Neeko is the ambush: crouch the pit, pop the formation, root the scatter.",
+   "after": "Two items favor him: his R cleanse and heals hard-counter your engage."
+  }
+ ],
+ "notes": "packet.defects flagged this exact mismatch (win rate 46.56% but chart read Neeko-favored) — root cause was full-layer phases[N].side stuck on 'Skill' while content win[N] already carried the correct per-row verdict; moved side+why to match win[] on rows 0/1/2/4/6, rows 3/5 already agreed (both Skill). Note the overall matchup is still net-EVEN territory (diffRating 5.5/10 with Milio favored late) — left diff/diffRating alone since neither packet nor kit gives grounds to move the aggregate rating, only the per-level chart was wrong."
+}

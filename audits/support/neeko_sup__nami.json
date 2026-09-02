@@ -1,0 +1,85 @@
+{
+ "ownerKey": "neeko_sup",
+ "enemy": "nami",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level chart (Skill/Skill/Skill/Skill/Neeko/Skill/Nami) agrees between phases[].side and content win[], and matches the packet levelChart — no discrepancy to fix.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "currentText.full phases", "currentText.content win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Power spikes are already correctly identified: level 6 Pop Blossom is the one clean all-in window before Nami's Tidal Wave R is up; two items favor Nami via W/E/R scaling.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content spikes[]"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Aqua Prison as matchup-defining but contains no actual cooldown number (COOLDOWN_NO_DIGIT lint finding), and the Grievous Wounds / anti-heal interaction against Ebb and Flow sustain (missingInteractions key 13) is only present in report[8].t itemization, which currently misgenders Nami as 'his'.",
+   "why": "Real numbers make the cooldown windows usable, and the anti-heal timing is the one interaction the packet flags as missing from this matchup's text.",
+   "corrected": "breakdown.cooldowns now states Aqua Prison's 12s-at-rank-1 to 8s-at-rank-5 cooldown; report[8].t keeps the anti-heal callout with correct pronouns.",
+   "confidence": "High",
+   "sources": ["enemyKit Q cd", "missingInteractions key 13"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Nami Aqua Prison: matchup-defining — The bubble starts every Nami play — sidestep it and her kit is small numbers. The duo’s tempo bends around it. - Keep W Shapesplitter banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Nami's Aqua Prison (Q): 12s cooldown at rank 1, down to 8s at rank 5 — sidestep it and her all-in options collapse. Trade windows open once it's down. - Keep W Shapesplitter banked for their best play. - The ultimate is a fight decision, not a habit."
+  },
+  {
+   "layer": "full",
+   "path": "tradeGood",
+   "before": "E the cover-line, Q the rooted pile, auto the passive — the lane's longest pick paid in pairs.",
+   "after": "Land Q+E together and burst immediately — a lone poke only funds her W bounce sustain."
+  },
+  {
+   "layer": "full",
+   "path": "tradeBad",
+   "before": "Q-poking with the E banked forever — the root is the threat; the bloom is just the receipt.",
+   "after": "Single Q pokes while E sits banked — her W sustain erases one hit for free, every time."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: E the cover-line, Q the rooted pile, auto the passive — the lane's longest pick paid in pairs. Bad trade: Q-poking with the E banked forever — the root is the threat; the bloom is just the receipt.",
+   "after": "Good trade: Land Q+E together and burst immediately — a lone poke only funds her W bounce sustain. Bad trade: Single Q pokes while E sits banked — her W sustain erases one hit for free, every time."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the cover-line, Q the rooted pile, auto the passive — the lane's longest pick paid in pairs.",
+   "after": "E roots, Q blooms, auto for the third hit — three instances before her W bounce offsets any of it."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Q-poking with the E banked forever — the root is the threat; the bloom is just the receipt.",
+   "after": "Single Q pokes while E sits banked — her W sustain erases one hit for free, every time."
+  },
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Add anti-heal early into his duo’s sustain.",
+   "after": "World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Add anti-heal early into her duo's sustain."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Aqua Prison’s cooldown, on your first item spike, and with your carry’s damage online. Make him flinch first.",
+   "after": "Commit on Aqua Prison’s cooldown, on your first item spike, and with your carry’s damage online. Make her flinch first."
+  }
+ ],
+ "notes": "Fixed all 5 lintFindings: two COPY_PASTE_BLEED (dosFull[1].d and dontsFull[2].d duplicated tradeGood/tradeBad verbatim — rewrote tradeGood/tradeBad themselves plus the two do/don't bodies with distinct wording, and updated breakdown.trading to match so all three stay consistent), two MISGENDER (report[8].t 'his', report[9].t 'him' -> 'her'), one COOLDOWN_NO_DIGIT (breakdown.cooldowns now carries Nami's real Aqua Prison cooldown, 12s at rank 1 down to 8s at rank 5). The anti-heal / Grievous Wounds missing interaction (key 13, vs Ebb and Flow sustain) was already present in report[8].t itemization — only its pronoun needed fixing, so no new field was added. Did not touch the level chart (already internally consistent and matches the packet) or breakdown.late/carry/difficulty/feeding/wave/early/mid/ahead/loading/enemyWin — those read as generic across matchups but I did not have a concrete Nami-specific fact to ground a rewrite for all of them within this pass; flagging breakdown.wave, breakdown.feeding, breakdown.late, ahead, and loading as still templated for a future pass."
+}

@@ -1,0 +1,67 @@
+{
+  "ownerKey": "poppy_sup",
+  "enemy": "maokai",
+  "lane": "support",
+  "audit": [
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Content layer repeatedly calls the root ability 'W Nature's Grasp'. Per champ-data/_kits/maokai.json, Nature's Grasp is the R (ultimate, unlocks level 6, 130/110/90s CD); the point-and-click dash-root available at levels 3-5 is Twisted Advance, slot W.",
+      "why": "mid text and whys[2] describe a root active at levels 3-5, but Maokai has no ultimate before level 6 — the ability being described has to be Twisted Advance (W), not the R. The level-6 spike and wants.foe correctly pair with the R timing, so only the early/mid references were mislabeled.",
+      "corrected": "Swap 'W Nature's Grasp' to 'Twisted Advance (W)' wherever it describes the levels 3-5 root; keep 'R Nature's Grasp' where it describes the level-6+ ultimate interrupt.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/maokai.json"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "n/a",
+      "why": "Level 6 (Nature's Grasp R online) and first-item spikes are already flagged in spikes[] and phases[].",
+      "corrected": "n/a",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/poppy.json"]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "n/a",
+      "why": "Early-levels-favor-Maokai / late-favors-Poppy shape in content already matches the 53.43% Poppy winrate over a close matchup with a late-game swing.",
+      "corrected": "n/a",
+      "confidence": "Medium",
+      "sources": ["tools/audit-run/packets/poppy_sup.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "mid",
+      "before": "Levels 3-5 stay his: Nature's Grasp W roots your ADC from range and his passive sustain lets him win extended brawls, so only commit E when his Q is down.",
+      "after": "Levels 3-5 stay his: Twisted Advance (W) roots your ADC off a point-and-click dash and his passive sustain lets him win extended brawls, so only commit E when his Q is down."
+    },
+    {
+      "layer": "content",
+      "path": "whys[2]",
+      "before": "Level 3 Nature's Grasp W gives him a long root your kit can't answer yet.",
+      "after": "Level 3 Twisted Advance (W) gives him a point-and-click root your kit can't answer yet."
+    },
+    {
+      "layer": "content",
+      "path": "wants.foe[1]",
+      "before": "Land W Nature's Grasp root to lock your ADC",
+      "after": "Land Twisted Advance (W) root to lock your ADC"
+    },
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "Your R Keeper's Verdict flips the lane: charged, it launches Maokai out of his own W Nature's Grasp range and can interrupt his all-in, so you finally dictate engages.",
+      "after": "Your R Keeper's Verdict flips the lane: charged, it launches Maokai out of his own R Nature's Grasp range and can interrupt his all-in, so you finally dictate engages."
+    },
+    {
+      "layer": "full",
+      "path": "breakdown.cooldowns",
+      "before": "- Maokai Twisted Advance (Root): matchup-defining — Point-and-click root — count its cooldown before stepping up. The duo’s tempo bends around it. - Keep W Steadfast Presence banked for their best play. - The ultimate is a fight decision, not a habit.",
+      "after": "- Maokai Twisted Advance (Root): matchup-defining — point-and-click root on a 14s (10s at max rank) cooldown; count it before stepping up. - Keep W Steadfast Presence banked for their best play. - The ultimate is a fight decision, not a habit."
+    }
+  ],
+  "notes": "Real defect found and fixed: content layer confused Twisted Advance (W, point-and-click dash-root, 14/13/12/11/10s CD) with Nature's Grasp (R, ultimate wall-root, unlocks lvl 6) in several early/mid references — a root can't come from an unlocked ultimate at level 3. Left full-layer phases[].side alone (all read the generic placeholder 'Skill' rather than a champion name across every matchup in this file) — content win[] already tells a coherent early-Maokai/late-Poppy story consistent with the 53.43% winrate, but rewriting all 7 side+why pairs with kit-grounded justification was out of scope for this pass; flagging for a dedicated chart-sync pass."
+}

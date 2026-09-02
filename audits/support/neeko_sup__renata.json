@@ -1,0 +1,55 @@
+{
+ "ownerKey": "neeko_sup",
+ "enemy": "renata",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Owner favored levels 1-3 and 6 against a toolless-early kit, even at 4-5 and first item as W Bailout/E Loyalty Program come online, Renata takes over at two items with R Hostile Takeover flips.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit (lint flag). Full-layer phases[0/1/2/4/6].side all read 'Skill' while content win[] already correctly had Neeko/Neeko/Neeko/Neeko/Renata (matches packet.levelChart exactly); rows 3 and 5 already agreed as Skill.",
+   "why": "Cooldown field must carry real numbers; chart rows must agree across layers per the chart rule.",
+   "corrected": "Added Hostile Takeover (R) 150/130/110s and Loyalty Program (E) 14-10s cooldowns to breakdown.cooldowns; realigned phases[].side for rows 0, 1, 2, 4, 6 to match the already-correct content win[] row with matching why edits.",
+   "confidence": "High",
+   "sources": ["currentText", "packet.levelChart", "lintFindings"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Content layer (spikes[0].text, early implicit, wants.you[0], wants.foe[0]) names Renata's E as 'Loyal Bodyguard' — the real ability per the kit file is Loyalty Program. Shield-absorbs-burst (Loyalty Program E) and antiheal (Bailout W sustain) from missingInteractions were not stated concretely.",
+   "why": "ownerKit/enemyKit are authority on ability names; kit lists E = Loyalty Program, not 'Loyal Bodyguard'. Fabricated name must be corrected per the calibration examples in the brief.",
+   "corrected": "Replaced 'Loyal Bodyguard' with 'Loyalty Program' in spikes[0].text, wants.you[0], wants.foe[0]. Named Loyalty Program (E) shield and Bailout (W) sustain concretely in dos/donts.",
+   "confidence": "High",
+   "sources": ["enemyKit", "missingInteractions", "currentText.content"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[0].why","before":"Q-bloom the pair — bot's formations eat the triple pop beautifully.","after":"Q-E poke owns level 1 — it beats her slow Handshake setup easily."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[1].why","before":"Clone games begin: the lane's information war opens in your favor.","after":"Clone games begin: Q-E spike zones her toolless approach clean."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[2].why","before":"E threats live: the root into bloom chunks; pick one window per wave.","after":"You keep out-poking her here — her saves aren't online yet to punish it."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[4].why","before":"Pop Blossom online — the disguise plus R turns brush control into ambush law.","after":"Pop Blossom online — your AoE stun out-initiates her Hostile Takeover."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Renata"},
+  {"layer":"full","path":"phases[6].why","before":"Late support Neeko is the ambush: crouch the pit, pop the formation, root the scatter.","after":"Her Hostile Takeover flip plus Bailout save out-scale your single burst window."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Renata Glasc Hostile Takeover: matchup-defining — The berserk wave turns your team on itself — never group in a line against it. The duo’s tempo bends around it. - Keep W Shapesplitter banked for their best play. - The ultimate is a fight decision, not a habit.","after":"- Hostile Takeover (R): 150/130/110s cooldown, global range. The berserk wave turns your team on itself — never group in a line against it. - Bank your W clone for her best play. - Loyalty Program (E) is down 14-10s early; punish that window."},
+  {"layer":"full","path":"dosFull[1].d","before":"E the cover-line, Q the rooted pile, auto the passive — the lane's longest pick paid in pairs.","after":"Loyalty Program (E) shields whoever it hits — force it out before you commit your burst."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Q-poking with the E banked forever — the root is the threat; the bloom is just the receipt.","after":"Chip trading into Bailout (W) — she just delays the death; poke doesn't finish it."},
+  {"layer":"full","path":"report[8].t","before":"World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Add anti-heal early into his duo’s sustain.","after":"World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Add anti-heal early into her duo’s sustain."},
+  {"layer":"full","path":"report[9].t","before":"Commit on Hostile Takeover’s cooldown, on your first item spike, and with your carry’s damage online. His answer goes first; yours goes last.","after":"Commit on Hostile Takeover’s cooldown, on your first item spike, and with your carry’s damage online. Her answer goes first; yours goes last."},
+  {"layer":"content","path":"spikes[0].text","before":"You spike first: Renata's only early tool is E Loyal Bodyguard, a slow skillshot, so your Q Blooming Burst plus E Tangle-Barbs out-pokes her whenever she steps to the wave.","after":"You spike first: Renata's only early tool is E Loyalty Program, a slow skillshot, so your Q Blooming Burst plus E Tangle-Barbs out-pokes her whenever she steps to the wave."},
+  {"layer":"content","path":"wants.you[0]","before":"Poke with Q and E before her E Loyal Bodyguard can snare you","after":"Poke with Q and E before her E Loyalty Program can snare you"},
+  {"layer":"content","path":"wants.foe[0]","before":"Land E Loyal Bodyguard root to set up the all-in","after":"Land E Loyalty Program root to set up the all-in"}
+ ],
+ "notes": "Corrected a fabricated ability name in the content layer: Renata's E is Loyalty Program per the kit file, not 'Loyal Bodyguard' — fixed in spikes[0].text, wants.you[0], wants.foe[0] (early/mid/late prose fields did not reference it so were left alone). Fixed a real chart contradiction: full.phases[0/1/2/4/6].side all read 'Skill' while content win[] already correctly had Neeko/Neeko/Neeko/Neeko/Renata (matches packet.levelChart); rows 3 and 5 already agreed so left untouched. Fixed both COPY_PASTE_BLEED lint flags and both MISGENDER flags (report[8].t, report[9].t — Renata is she/her). breakdown.cooldowns now carries real numbers (R 150/130/110s, E 14-10s) per COOLDOWN_NO_DIGIT flag."
+}

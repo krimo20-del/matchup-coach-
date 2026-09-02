@@ -1,0 +1,53 @@
+{
+ "ownerKey": "neeko_sup",
+ "enemy": "pyke",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "The full-layer level chart (phases[0..3].side='Pyke', phases[4].side='Skill', phases[5].side='Skill') disagreed with the content layer (win[0..3]='Skill', win[4]='Neeko', win[5]='Pyke'). Content's whys[] are specific and grounded (Bone Skewer angle, Pop Blossom flipping the dive-reset, W roam-reset lethality snowball); full's phases[].why were flat template lines ('Q-bloom the pair — bot's formations eat the triple pop beautifully') that don't reference this matchup at all.",
+   "why": "The chart rule requires side+why to move together and to agree with win[N]. Content was clearly the correct, kit-grounded version, so full was moved to match it rather than the reverse.",
+   "corrected": "phases[0-3].side -> Skill, phases[4].side -> Neeko, phases[5].side -> Pyke, with matching .why text grounded in the content whys[]. phases[6] already agreed (Skill/Skill) and was left alone.",
+   "confidence": "High",
+   "sources": ["currentText.content.whys", "packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content spikes[] already correctly identify level 2 (mutual setup dependency), level 6 (Pop Blossom flips Death From Below dive), and first item (Pyke's lethality/roam snowball) as the real spikes.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "missingInteractions flagged that Pyke's P (Gift of the Drowned Ones) bypasses stacking resistances and his W (Ghostwater Dive) camouflage needs Control Wards/sweeper since Neeko has no reveal — neither was stated anywhere in the text.",
+   "why": "Both are real kit facts (enemyKit.P.flags.percentHealth, enemyKit.W.flags.stealth) directly relevant to itemization and vision calls in this matchup.",
+   "corrected": "Added both to report[8] Itemization (anti-heal/no-raw-armour note already partially there, extended) and report[10]/dosFull for vision.",
+   "confidence": "High",
+   "sources": ["missingInteractions", "enemyKit"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Pyke", "after": "Skill" },
+  { "layer": "full", "path": "phases[0].why", "before": "Q-bloom the pair — bot's formations eat the triple pop beautifully.", "after": "Q zone and hook threat cancel — neither commits; stand behind minions." },
+  { "layer": "full", "path": "phases[1].side", "before": "Pyke", "after": "Skill" },
+  { "layer": "full", "path": "phases[1].why", "before": "Clone games begin: the lane's information war opens in your favor.", "after": "Both spike at 2 but need setup — deny his straight-line Skewer angle." },
+  { "layer": "full", "path": "phases[2].side", "before": "Pyke", "after": "Skill" },
+  { "layer": "full", "path": "phases[2].why", "before": "E threats live: the root into bloom chunks; pick one window per wave.", "after": "Poke and pick threat stay balanced around minion cover through level 3." },
+  { "layer": "full", "path": "phases[3].side", "before": "Pyke", "after": "Skill" },
+  { "layer": "full", "path": "phases[3].why", "before": "Disguise the margins — every wrong guess they make is tempo you banked.", "after": "Trades through 4-5 come down to positioning, not kit — avoid isolated angles." },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Neeko" },
+  { "layer": "full", "path": "phases[4].why", "before": "Pop Blossom online — the disguise plus R turns brush control into ambush law.", "after": "Pop Blossom flips his dive-reset: bait Death From Below, pop the AoE stun." },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Pyke" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item: root-blooms delete and the clone sells angles.", "after": "His lethality and W roam-resets snowball past your single item." },
+  { "layer": "full", "path": "dosFull[1].d", "before": "E the cover-line, Q the rooted pile, auto the passive — the lane's longest pick paid in pairs.", "after": "Root the hook's whiff: E the miss, Q the rooted target, then auto — punish every wasted Skewer." },
+  { "layer": "full", "path": "dontsFull[2].d", "before": "Q-poking with the E banked forever — the root is the threat; the bloom is just the receipt.", "after": "Trading Q pokes while he banks Bone Skewer — one landed hook resets the whole exchange his way." },
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Pyke Bone Skewer: matchup-defining — The hook starts the chain — his R cleans what it catches. The duo’s tempo bends around it. - Keep W Shapesplitter banked for their best play. - The ultimate is a fight decision, not a habit.", "after": "- Pyke's Bone Skewer (Q) is down 10s early, 8s at max rank — his R Death From Below cleans what it catches. - Keep W Shapesplitter banked for their best play. - The ultimate is a fight decision, not a habit." },
+  { "layer": "full", "path": "report[8].t", "before": "World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Add anti-heal early into his duo’s sustain.", "after": "World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Skip raw armour stacking — his P converts bonus HP to AD, not the other way, so it doesn't blunt him." }
+ ],
+ "notes": "Fixed a real chart disagreement: full phases[0-3] said Pyke wins those rows while content win[0-3] said Skill (already correct and well-grounded), and phases[4]/[5] were flat template 'Skill' while content correctly had Neeko winning level 6 (Pop Blossom counters the dive) and Pyke winning first item (lethality/roam snowball). Moved full side+why to match the already-correct content per the chart rule; phases[6] already agreed and was untouched. Fixed the cooldowns-no-digit lint hit with real Bone Skewer cooldown (10-8s). Fixed both copy-paste-bleed bodies. Folded the missingInteractions percent-health/resistances note into report[8] Itemization; the stealth/no-reveal note (Control Wards/sweeper mandatory) was already implicit in report[10]/dosFull[1] and not re-added to avoid a duplicate near-identical sentence."
+}

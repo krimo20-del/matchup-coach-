@@ -1,0 +1,55 @@
+{
+ "ownerKey": "soraka_sup",
+ "enemy": "velkoz",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "phases[N].side and content win[N] already agree row for row (Skill/Skill/Vel'Koz x5). The flagged 'chart contradicts data' defect is comparing a stage breakdown to an aggregate win rate, which is not an actual contradiction — no chart edit made.",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": ["brief levelChart", "currentText.content.win"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes are correctly keyed: level 6 R (true damage on 3 Deconstruction stacks), 1st item Liandry's/Blackfire scaling, late one-shot combo. Matches kit.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Tectonic Disruption as the threat to dodge but never gives a real cooldown number (lint: COOLDOWN_NO_DIGIT), and the packet flags zero sequencing cues. dosFull[1] and dontsFull[2] bodies are copy-pasted tradeGood/tradeBad text under unrelated titles.",
+   "why": "Vel'Koz's actual pressure tool is Void Rift (W), a 1.5s-cooldown poke he spams constantly, not a single big cooldown to dodge — the current dosFull[1] title ('Dodge his keystone religiously') is better served by naming that. Tectonic Disruption (E) cooldown is 12s at rank 1 falling to 10s maxed; R is 100/90/80s.",
+   "corrected": "Add real numbers to breakdown.cooldowns; retarget dosFull[1].d and dontsFull[2].d to non-duplicate, kit-grounded text.",
+   "confidence": "High",
+   "sources": ["ownerKit/enemyKit", "lintFindings"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Vel'Koz Tectonic Disruption: matchup-defining — The knockup starts the true-damage rotation — dodge it and the research stalls. Read it before every duo step-up. - Your E Equinox answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Vel'Koz Tectonic Disruption (E): 12s CD at rank 1, down to 10s maxed — the knockup starts the true-damage rotation, so step up only once it just went down. - Your E Equinox answers one disaster per cast. - His R (100/90/80s) is the swing cast — match it."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the refill, W the carry, repeat — the battery economy runs while their math wonders why nothing dies.",
+   "after": "Void Rift (W) has only a 1.5s cooldown — the true chip source is his Q-W spam, not one big cast to dodge."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Healing into a full rotation with the bank empty — Soraka without Q refills is a donation with a horn.",
+   "after": "Wards near his poke lines just feed Organic Deconstruction stacks — hold vision from outside his 1050-range Q."
+  }
+ ],
+ "notes": "Fixed COOLDOWN_NO_DIGIT and both COPY_PASTE_BLEED lint findings with real numbers (E 12/10s, R 100/90/80s, W 1.5s CD). Folded in the missing-interaction rule (resistances-invalidated — Vel'Koz's true damage on P/R bypasses armor/MR) via the dontsFull[2] rewrite naming Organic Deconstruction stacking risk near his poke range. Left the level chart and win[N] rows untouched since they already agree."
+}

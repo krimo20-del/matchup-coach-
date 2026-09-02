@@ -1,0 +1,60 @@
+{
+ "ownerKey": "soraka_sup",
+ "enemy": "taric",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[0,1,2].side say Soraka (even should be Skill), phases[4].side says Skill but win[4]/packet say Taric, and phases[5,6].side say Taric while win[5,6]/packet say Skill.",
+   "why": "Content whys[] already give the correct grounded reasons: melee Taric has to walk up for anything at 1-3 (even, not Soraka-favored), Cosmic Radiance flips level 6 to Taric, and outside the long R cooldown afterward it reverts to even. Only the full layer's side/rating had drifted.",
+   "corrected": "phases[0,1,2,5,6].side moved to Skill and phases[4].side moved to Taric, all with matching rating/why; win[] left untouched since it already agreed with the packet.",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "brief currentText.content win[]/whys[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 correctly identifies Cosmic Radiance's delayed invulnerability as the spike, matching spikes[1] and the 180/150/120s cooldown.",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": ["brief currentText.content spikes[1]", "brief enemyKit R"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no cooldown number, and no writable field names that Bastion (W) shields absorb burst even though missingInteractions flags it as applicable.",
+   "why": "Cosmic Radiance is 180/150/120s with a real cast delay before invulnerability lands — worth stating so a player can count it down. Bastion actively shields whoever Taric casts on, so all-in math changes if it's already up.",
+   "corrected": "breakdown.cooldowns rewritten with real numbers; breakdown.spikes rewritten to cover the Bastion shield-bait timing; report[8] itemization now names Starlight's Touch.",
+   "confidence": "High",
+   "sources": ["brief enemyKit W/R", "brief missingInteractions key 24"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Soraka","after":"Skill"},
+  {"layer":"full","path":"phases[0].rating","before":"6/10","after":"5/10"},
+  {"layer":"full","path":"phases[0].why","before":"Starcall the contacts — the self-heal funds the bank and the slow annoys their spacing.","after":"Melee Taric must walk into your ranged Q poke to do anything — an even level 1."},
+  {"layer":"full","path":"phases[1].side","before":"Soraka","after":"Skill"},
+  {"layer":"full","path":"phases[1].rating","before":"6/10","after":"5/10"},
+  {"layer":"full","path":"phases[1].why","before":"W opens the battery: your carry's HP bar is now a shared account.","after":"No stun-backed all-in yet for either support."},
+  {"layer":"full","path":"phases[2].side","before":"Soraka","after":"Skill"},
+  {"layer":"full","path":"phases[2].rating","before":"6/10","after":"5/10"},
+  {"layer":"full","path":"phases[2].why","before":"Equinox threats begin: the silence zone cancels engages mid-cast.","after":"His Starlight heal trades evenly with your W sustain."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Taric"},
+  {"layer":"full","path":"phases[4].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"phases[4].why","before":"Wish online — every all-in on the map gets a second health bar.","after":"Cosmic Radiance invulnerability wins any all-in he opens."},
+  {"layer":"full","path":"phases[5].side","before":"Taric","after":"Skill"},
+  {"layer":"full","path":"phases[5].rating","before":"6/10","after":"5/10"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the heals compound and the silence zones decide dives.","after":"Outside his ult his slow melee kit matches your poke."},
+  {"layer":"full","path":"phases[6].side","before":"Taric","after":"Skill"},
+  {"layer":"full","path":"phases[6].rating","before":"7/10","after":"5/10"},
+  {"layer":"full","path":"phases[6].why","before":"Late Soraka is the global bank: wish the map, silence the dives, and outlast every ledger.","after":"His long R cooldown means ult timing and ADC scaling decide it, not the kit."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Taric Cosmic Radiance: matchup-defining — The delayed invulnerability erases your teamfight damage — burst before it lands or wait it out. Read it before every duo step-up. - Your E Equinox answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Taric's Cosmic Radiance (R) is 180/150/120s with a real cast delay before it lands — burst before the invuln hits or wait it out. - Your Equinox (E, 20-16s) answers exactly one disaster per cooldown. - Spend the R on swing moments only."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the refill, W the carry, repeat — the battery economy runs while their math wonders why nothing dies.","after":"Stay outside Dazzle's 610 range while healing so a landed stun can't lock you mid-cast."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Healing into a full rotation with the bank empty — Soraka without Q refills is a donation with a horn.","after":"Committing burst while his ally already has Bastion up — the shield absorbs it before it counts."},
+  {"layer":"full","path":"breakdown.spikes","before":"First item compounds the bank; level 6 goes global; the silence zones decide every dive.","after":"First item compounds the bank; level 6 goes global — force Bastion's shield out before you commit burst."},
+  {"layer":"full","path":"report[8].t","before":"World Atlas start. Moonstone, Swiftness, Redemption-Mikael's — heal amps compound the battery. Add anti-heal early into his duo’s sustain.","after":"World Atlas start. Moonstone, Swiftness, Redemption-Mikael's — heal amps compound the battery. His Starlight's Touch (Q) heals through your chip, so add anti-heal early into his duo's sustain."}
+ ],
+ "notes": "Fixed a chart disagreement on rows 0,1,2 (full said Soraka, content/packet said even Skill), and rows 4,5,6 where full and content had actually swapped which side favored (full said Skill at level 6 / Taric afterward; content/packet said the opposite — Taric at level 6 only). All grounded in existing content whys[] which were already correct. Both copy-paste-bleed bullets and the missing cooldown digit fixed. Covered both missing-interaction flags (antiheal via report[8], Bastion shield-burst via breakdown.spikes and dontsFull[2])."
+}

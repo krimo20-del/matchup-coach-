@@ -1,0 +1,54 @@
+{
+ "ownerKey": "soraka_sup",
+ "enemy": "maokai",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases.side (Maokai, Maokai, Skill, Skill, Skill, Skill, Skill) contradicts content-layer win[] (Skill, Skill, Maokai x5) on every row.",
+   "why": "The packet's levelChart and win[]/whys[] already agree and tell a coherent story: even level 1-2 poke stalemate, Maokai pulling ahead from level 3 once Twisted Advance is up and snowballing via Nature's Grasp and tank stats. The full-layer phases were never aligned to that.",
+   "corrected": "Flip phases[0-1].side to Skill and phases[2-6].side to Maokai, rewriting each .why to match the content narrative.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]", "currentText.content.whys[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly identify level 6 (Nature's Grasp wave-wide root) and first item (tank stats blunting Starcall poke while root windows persist) as Maokai's power spikes, grounded in his kit.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns calls Twisted Advance 'matchup-defining' with no actual cooldown number, and never states the R cooldown either.",
+   "why": "Twisted Advance (W) is 14/13/12/11/10s by rank and Nature's Grasp (R) is 130/110/90s. Concrete numbers let the reader count the window instead of relying on vague language.",
+   "corrected": "Rewrote breakdown.cooldowns with both cooldown ranges stated.",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"dosFull[1].d","before":"Q the refill, W the carry, repeat — the battery economy runs while their math wonders why nothing dies.","after":"Starcall reaches 810 — outrange his root and poke from max distance before Twisted Advance's dash lands."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Healing into a full rotation with the bank empty — Soraka without Q refills is a donation with a horn.","after":"Healing off cooldown at half HP is exactly when a 14-10s Twisted Advance chain punishes it — refill first."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Maokai Twisted Advance (Root): matchup-defining — Point-and-click root — count its cooldown before stepping up. It writes your spacing rules. - E Equinox is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Maokai Twisted Advance (Root): 14-10s cooldown by rank — count it before stepping up. It writes your spacing rules. - E Equinox is for saving fights, not seasoning trades. - R Nature's Grasp is 130-90s — opens or closes fights, pick one per cast."},
+  {"layer":"full","path":"phases[0].side","before":"Maokai","after":"Skill"},
+  {"layer":"full","path":"phases[0].why","before":"Starcall the contacts — the self-heal funds the bank and the slow annoys their spacing.","after":"Even level 1: both just poke, neither Starcall nor a lone Sapling threatens a kill."},
+  {"layer":"full","path":"phases[1].side","before":"Maokai","after":"Skill"},
+  {"layer":"full","path":"phases[1].why","before":"W opens the battery: your carry's HP bar is now a shared account.","after":"Still even: his root all-in is dodgeable, Q-heal keeps trades neutral."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[2].why","before":"Equinox threats begin: the silence zone cancels engages mid-cast.","after":"Maokai leads: Twisted Advance is up, a step-up becomes a free root."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[3].why","before":"Heal the margins and Q the refills — the battery economy runs the lane.","after":"His slow plus W root give repeatable pick threat your heals can't pre-empt."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[4].why","before":"Wish online — every all-in on the map gets a second health bar.","after":"Nature's Grasp roots the wave unmissably; Wish only heals, he picks."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the heals compound and the silence zones decide dives.","after":"His tank stats shrug off poke while the root still opens all-in windows."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Maokai"},
+  {"layer":"full","path":"phases[6].why","before":"Late Soraka is the global bank: wish the map, silence the dives, and outlast every ledger.","after":"His CC chain out-skirmishes your sustain, keeping the pick initiative on his side."}
+ ],
+ "notes": "suspectNames flagged wants.foe[0] 'Land Twisted Advance' as a possible misname — checked against enemyKit.W ('Twisted Advance') and it is correct; false positive, no edit made. missingInteractions (untargetable-through-burst on W, Grievous Wounds timing vs Sap Magic sustain) aren't yet reflected in currentText but I found no clean empty slot to add them without risking a fabricated report/dosFull entry — flagging for a future pass rather than inventing content."
+}

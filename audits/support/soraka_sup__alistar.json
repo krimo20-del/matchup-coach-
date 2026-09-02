@@ -1,0 +1,55 @@
+{
+ "ownerKey": "soraka_sup",
+ "enemy": "alistar",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content layer already reflects the lane's real texture: even early poke, Alistar's dive/engage threat taking over mid-late.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief.currentText.content"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit in it at all despite being the field meant to hold real cooldowns.",
+   "why": "Headbutt/Pulverize sit at 14s early, 10s at rank 5; Unbreakable Will is 120/100/80s. Naming the real numbers lets a reader time the window instead of just being told 'it's up'.",
+   "corrected": "Added real cooldowns for Headbutt/Pulverize and R, plus the Trample auto-reset tell.",
+   "confidence": "High",
+   "sources": ["brief.ownerKit", "brief.enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer level chart (phases[0-3].side=Alistar, phases[4-6].side=Skill) is inverted against both the content layer (win[0-3]=Skill, win[4-6]=Alistar) and the packet's levelChart, which itself flags the contradiction (defects[0]).",
+   "why": "Content already matches the packet: even early (Q outranges his short engage before level 6), Alistar favored once Unbreakable Will (R) makes his engage unpeelable and his first item lets him roam-dive. The full layer's side column was simply backwards.",
+   "corrected": "Flipped phases[0-3].side to Skill and phases[4-6].side to Alistar, matching content win[] and the packet; rewrote each .why to state the correct side without contradicting itself.",
+   "confidence": "High",
+   "sources": ["brief.packet.levelChart", "brief.packet.defects", "brief.currentText.content"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Alistar","after":"Skill"},
+  {"layer":"full","path":"phases[0].why","before":"Starcall the contacts — the self-heal funds the bank and the slow annoys their spacing.","after":"Level 1 is even: Starcall pokes his contacts while his short range can't reach you yet."},
+  {"layer":"full","path":"phases[1].side","before":"Alistar","after":"Skill"},
+  {"layer":"full","path":"phases[1].why","before":"W opens the battery: your carry's HP bar is now a shared account.","after":"Coin-flip: his W-Q all-in trades against your heal-and-poke rhythm."},
+  {"layer":"full","path":"phases[2].side","before":"Alistar","after":"Skill"},
+  {"layer":"full","path":"phases[2].why","before":"Equinox threats begin: the silence zone cancels engages mid-cast.","after":"Skill-based level: you sustain his chip while he hunts for a Pulverize."},
+  {"layer":"full","path":"phases[3].side","before":"Alistar","after":"Skill"},
+  {"layer":"full","path":"phases[3].why","before":"Heal the margins and Q the refills — the battery economy runs the lane.","after":"Levels 4-5 remain even while both sides scale toward the level 6 power spike."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Alistar"},
+  {"layer":"full","path":"phases[4].why","before":"Wish online — every all-in on the map gets a second health bar.","after":"At 6, Unbreakable Will makes his engage unpeelable, tilting his way."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Alistar"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the heals compound and the silence zones decide dives.","after":"First item and roams: his dive threat starts to outweigh your healing."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Alistar"},
+  {"layer":"full","path":"phases[6].why","before":"Late Soraka is the global bank: wish the map, silence the dives, and outlast every ledger.","after":"Late, his uncleansable engage and flips force you to react, which now favors him each fight."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the refill, W the carry, repeat — the battery economy runs while their math wonders why nothing dies.","after":"Cast Astral Infusion (W) outside Headbutt's 650 range so healing never invites his knockback."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Healing into a full rotation with the bank empty — Soraka without Q refills is a donation with a horn.","after":"At half HP you're one Headbutt-Pulverize combo from dying — disengage and rebuild the bank first."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Alistar Headbutt: matchup-defining — The headbutt-pulverize combo starts every play — respect flash range while it is up. The duo’s tempo bends around it. - Keep E Equinox banked for their best play. - The ultimate is a fight decision, not a habit.","after":"- Headbutt (W) and Pulverize (Q) sit at 14s early, 10s at rank 5 — the combo starts every play, track it. - Trample (E) stuns off an auto-reset; the wind-up is your cue to step back, not the cast. - Unbreakable Will (R) is 120/100/80s, a fight call not a habit."},
+  {"layer":"full","path":"breakdown.trading","before":"Good trade: Q the refill, W the carry, repeat — the battery economy runs while their math wonders why nothing dies. Bad trade: Healing into a full rotation with the bank empty — Soraka without Q refills is a donation with a horn.","after":"Good trade: chip him with Starcall (Q) and bank the refill — Triumphant Roar heals his chip back, so grab anti-heal before extending. Bad trade: healing a full rotation with the bank empty invites the Headbutt-Pulverize combo."}
+ ],
+ "notes": "The full-layer level chart was inverted against both the content layer and the packet's own levelChart (packet.defects[0] flagged this itself) — fixed by flipping side on rows 0-3 and 4-6 to match content win[], with matching .why rewrites. Folded both missingInteractions (Triumphant Roar anti-heal timing, Trample auto-reset tell) into breakdown.trading and breakdown.cooldowns respectively rather than adding new array entries. Did not touch report[] (out of sweep scope) or dosFull[0]/[2]/dontsFull[0]/[1], which were not lint-flagged and were not templated name-swaps."
+}

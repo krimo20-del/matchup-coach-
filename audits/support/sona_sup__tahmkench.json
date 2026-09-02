@@ -1,0 +1,58 @@
+{
+ "ownerKey": "sona_sup",
+ "enemy": "tahmkench",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full.phases[].side is [Tahm Kench,Tahm Kench,Tahm Kench,Skill,Skill,Skill,Skill] but content.win[] (matching the packet levelChart, 812 games) is [Skill,Skill,Skill,Tahm Kench,Tahm Kench,Tahm Kench,Sona]. Every row disagrees — the two layers are fully inverted.",
+   "why": "content already matches the packet's real levelChart, so full is the stale/inverted layer.",
+   "corrected": "Rewrite full.phases[0-6].side to match content.win exactly: even skill-trades early (his Q triple-stack isn't built yet), Tahm Kench ahead mid (Grey Health tank plus Q-stun all-ins and his R/W dive-and-peel at 6), Sona ahead once 2 items land.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/sona_sup.json (tahmkench entry)", "champ-data/content/sup/sona.js (tahmkench.win)"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "content.spikes already names the real spikes correctly (Lvl2 Q triple-stack skill matchup, Lvl6 R dive + W Devour peel, 1st item Grey Health tank durability, Late Diminuendo/Crescendo peel).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": []
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Missing-interactions file flags needs-antiheal (Tongue Lash (Q), Thick Skin (E) sustain via Grey Health) and shield-absorbs-burst (Thick Skin (E), Devour (R) absorbs your burst window) — neither is stated as concrete advice in the current text.",
+   "why": "His Grey Health passive and Thick Skin shield both directly counter an all-in-burst plan, which is exactly what the page currently recommends without qualification.",
+   "corrected": "State that his Thick Skin shield should be baited out before committing burst, and that anti-heal timing matters once his Grey Health passive is topped up.",
+   "confidence": "Medium",
+   "sources": ["champ-data/_kits/_missing/sona_sup.json (tahmkench entry)"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Tahm Kench", "after": "Skill" },
+  { "layer": "full", "path": "phases[0].rating", "before": "6/10", "after": "5/10" },
+  { "layer": "full", "path": "phases[0].why", "before": "Q-chord the contacts — the aura poke is quiet and constant; the lane pays per note.", "after": "Neither commits; trades stay skill-based while his Q triple-stack threat is still building." },
+  { "layer": "full", "path": "phases[1].side", "before": "Tahm Kench", "after": "Skill" },
+  { "layer": "full", "path": "phases[1].rating", "before": "6/10", "after": "5/10" },
+  { "layer": "full", "path": "phases[1].why", "before": "W answers the trades: the sustain mirror opens and yours compounds.", "after": "Power Chord out-tempos his single tongue if you dodge it early on." },
+  { "layer": "full", "path": "phases[2].side", "before": "Tahm Kench", "after": "Skill" },
+  { "layer": "full", "path": "phases[2].rating", "before": "6/10", "after": "5/10" },
+  { "layer": "full", "path": "phases[2].why", "before": "Full kit: the chord colors decide trades — power chord the carry, speed the disengage.", "after": "It's a coinflip decided by whether he lands the third Q stack and its stun on you." },
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Tahm Kench" },
+  { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[3].why", "before": "Aura economy: chip, heal, speed — the margins are invisible and decisive.", "after": "Grey Health tankiness and repeat Q-stun all-in threat start to pull him ahead here." },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Tahm Kench" },
+  { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[4].why", "before": "Crescendo online — grouped lanes pay the dance tax; your duo's all-in has a stage.", "after": "His Abyssal Dive plus Devour peel win the 2v2 all-in on a durable engage support." },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Tahm Kench" },
+  { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item: the auras compound and the chords chunk.", "after": "His tank item and Q-stun engage keep him ahead in lane." },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Sona" },
+  { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[6].why", "before": "Late Sona scales into a one-button teamfight: crescendo the clump and aura the cleanup.", "after": "Your Diminuendo, Crescendo peel, and scaling ADC finally flip the fight in your favor." }
+ ],
+ "notes": "Tahm Kench is male, so no pronoun fix was needed. This was a full inversion (all 7 rows moved) which is worse than a partial disagreement — the whole level chart on the full layer previously argued the opposite of the content layer at every stage. tldr/winCon/enemyWin/breakdown.* remain templated — a follow-up pass should ground breakdown.cooldowns/trading/feeding/carry, ahead, tradeGood, tradeBad in his actual kit (Tongue Lash triple-stack, Abyssal Dive, Devour, Grey Health) rather than the generic 'chord'/'aura' phrasing."
+}

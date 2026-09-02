@@ -1,0 +1,58 @@
+{
+ "ownerKey": "sona_sup",
+ "enemy": "taric",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full.phases[].side is [Skill,Skill,Sona,Skill,Skill,Taric,Taric] but content.win[] (matching the packet levelChart, 502 games, 47.81% WR) is [Taric,Taric,Taric,Taric,Taric,Sona,Sona]. Every row disagrees, including a full inversion of first item / 2+ items.",
+   "why": "content already matches the packet's real levelChart, so full is the stale/inverted layer.",
+   "corrected": "Rewrite full.phases[0-6].side to match content.win exactly: Taric ahead through level 6 (Q sustain, Dazzle stun, Cosmic Radiance invulnerability negating Crescendo), Sona ahead once 2 items land (aura DPS and double Crescendo outscale his cooldown-gated engage).",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/sona_sup.json (taric entry)", "champ-data/content/sup/sona.js (taric.win)"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "content.spikes already names the real spikes correctly (Lvl2 Q sustain + Dazzle all-in, Lvl6 Cosmic Radiance negates Crescendo, 1st item Bravado reset durability, Late aura/Crescendo out-scale).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": []
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Missing-interactions file flags needs-antiheal (Starlight's Touch (Q) sustain) and shield-absorbs-burst (Bastion (W) absorbs your burst window) — neither is stated as concrete advice.",
+   "why": "The current text already says 'do not commit into an up ult' for Cosmic Radiance, but never mentions baiting Bastion (W) or anti-heal timing against his Q sustain.",
+   "corrected": "Add that Bastion (W) should be forced out before you commit burst, and that anti-heal matters against his Starlight's Touch stack-heal in extended trades.",
+   "confidence": "Medium",
+   "sources": ["champ-data/_kits/_missing/sona_sup.json (taric entry)"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Taric" },
+  { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[0].why", "before": "Q-chord the contacts — the aura poke is quiet and constant; the lane pays per note.", "after": "His stacked Q (Starlight's Touch) sustain and empowered autos out-bully your poke." },
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Taric" },
+  { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[1].why", "before": "W answers the trades: the sustain mirror opens and yours compounds.", "after": "His heal plus Dazzle stun setup wins any all-in at the shared level-2 spike." },
+  { "layer": "full", "path": "phases[2].side", "before": "Sona", "after": "Taric" },
+  { "layer": "full", "path": "phases[2].rating", "before": "6/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[2].why", "before": "Full kit: the chord colors decide trades — power chord the carry, speed the disengage.", "after": "Q-charge sustain keeps out-attritioning your trades even with your full kit online." },
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Taric" },
+  { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[3].why", "before": "Aura economy: chip, heal, speed — the margins are invisible and decisive.", "after": "His Dazzle stun and Q sustain keep him dominant through this stretch of the lane." },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Taric" },
+  { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[4].why", "before": "Crescendo online — grouped lanes pay the dance tax; your duo's all-in has a stage.", "after": "Cosmic Radiance invulnerability negates your Crescendo outright — do not commit into it." },
+  { "layer": "full", "path": "phases[5].side", "before": "Taric", "after": "Sona" },
+  { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item: the auras compound and the chords chunk.", "after": "Bravado resets and Q sustain keep his durable engage ahead here." },
+  { "layer": "full", "path": "phases[6].side", "before": "Taric", "after": "Sona" },
+  { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[6].why", "before": "Late Sona scales into a one-button teamfight: crescendo the clump and aura the cleanup.", "after": "Your aura DPS and double Crescendo out-scale his cooldown-gated engage once ult is down." }
+ ],
+ "notes": "Taric is male, so no pronoun fix was needed. Note the phases[5]/[6].why swap: the OLD text at index5 ('First item...chunk') was reused verbatim at index6 as well in the original template pattern; the corrected pair is grounded per-side instead (Taric's Bravado/Q sustain still ahead on 1st item, Sona's aura+double-Crescendo ahead at 2+ items) matching content's early/late text. tldr/winCon/enemyWin/breakdown.* remain templated — a follow-up pass should ground breakdown.cooldowns/trading/feeding/carry, ahead, tradeGood, tradeBad in his real kit (Dazzle stun, Cosmic Radiance invulnerability, Bastion shield) rather than the generic 'chord'/'aura' phrasing shared across the page."
+}

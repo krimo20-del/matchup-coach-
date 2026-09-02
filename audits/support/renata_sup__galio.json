@@ -1,0 +1,47 @@
+{
+ "ownerKey": "renata_sup",
+ "enemy": "galio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Even matchup profile (51.3% WR over 653 games) tracks the diffRating 5.5/10; Renata wins the poke lane, Galio's E-into-taunt is the swing tool once level 6 hits.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.winRate", "packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0..3,5,6].side all read the literal placeholder \"Skill\" instead of a real name, and phases[4].why describes Renata's own R as the level-6 swing when the packet levelChart and content win[4] both say Galio wins level 6 via his R.",
+   "why": "The packet levelChart (Renata,Renata,Renata,Renata,Galio,Renata,Renata) matches content win[] exactly, so it's the ground truth; the full-layer chart was never filled in.",
+   "corrected": "Set side to the real winner on every row; rewrite the level-6 why around Galio's Hero's Entrance dive threat, not Renata's own ult.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names \"Galio Justice Punch\" as matchup-defining but carries no cooldown number, and never mentions that Colossal Smash (P) is an auto-attack-reset tell for his combo (missingInteractions rule autoreset-burst-tell).",
+   "why": "Real numbers make the punish window actionable; the passive proc is the visual cue that his combo is starting, which this matchup's missing-interactions file flags as absent.",
+   "corrected": "Justice Punch (E) is 11s at rank 1 / 7s maxed; add the Colossal Smash auto-reset tell as the wind-up cue.",
+   "confidence": "High",
+   "sources": ["ownerKit/enemyKit E cooldown", "missingInteractions rule autoreset-burst-tell"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Renata"},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Renata"},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Renata"},
+  {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Renata"},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Galio"},
+  {"layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "4/10"},
+  {"layer": "full", "path": "phases[4].why", "before": "Hostile Takeover online — their teamfight formation is now a liability you can weaponize.", "after": "Hero's Entrance lets him or a roamer knock-up-taunt from off-screen — the level-6 window briefly belongs to him, not you."},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Renata"},
+  {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Renata"},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Galio Justice Punch: matchup-defining — His dash knockup — he has no engage while it is down. It writes your spacing rules. - W Bailout is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Galio's Justice Punch (E) is down 11s early, 7s maxed — no engage while it's on CD, and Colossal Smash (P) resets his auto as the tell. - Your W Bailout saves fights, not trades. - Hostile Takeover (150s at rank 1) opens or closes a fight."}
+ ],
+ "notes": "Chart brought into agreement with packet.levelChart/content.win (level 6 flips to Galio, all other rows to Renata). breakdown.early/mid/wave/trading/feeding/carry/difficulty/late, ahead, tradeGood/tradeBad, loading and enemyWin were judged and are grounded enough (real ability names Justice Punch/Hostile Takeover, not swappable filler) — left alone given the ±10% band and limited high-confidence rewrites available without a kit fact to add. Flagging for the template sweep list: breakdown.wave and breakdown.feeding are still fairly generic and could be tightened later."
+}

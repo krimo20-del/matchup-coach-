@@ -1,0 +1,45 @@
+{
+ "ownerKey": "rell_sup",
+ "enemy": "galio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "N/A",
+   "why": "Both are hard-engage tanks; the packet win rate (53.6%, 2071 games) and the content layer already agree Rell wins the matchup, driven by her instant W dismount CC landing before Galio's two-part E-Q setup.",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/rell_sup.json", "champ-data/content/sup/rell.js"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "N/A",
+   "why": "Spikes at level 2 (W unlock), level 6 (Magnet Storm punishing Galio's global R being spent elsewhere), and first item are already stated in content.spikes; full.js phases correctly track the same beats.",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/rell.js"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[N].side is the literal string \"Skill\" (the unaudited template placeholder value) on all 7 rows in the full layer, while the content layer's win[] array and the packet's independently-computed levelChart both already agree Rell wins every stage. The two layers currently disagree on who wins each row.",
+   "why": "champ-data/sup/rell.full.js kitFlags/side use \"Skill\" as a template default (5661 occurrences repo-wide) that has not been replaced with a real verdict for this matchup, even though win[0..6] in champ-data/content/sup/rell.js already reads \"Rell\" x7 and the packet levelChart independently reads [\"Rell\"]x7 with no defect flagged and a plausible 53.6% win rate. Per the win[N]-already-correct branch of the chart rule, only side needs to be synced.",
+   "corrected": "Set phases[0..6].side to \"Rell\" to match the already-correct win[] array; no win[] edit needed since it already reads Rell.",
+   "confidence": "High",
+   "sources": ["champ-data/sup/rell.full.js", "champ-data/content/sup/rell.js", "tools/audit-run/packets/rell_sup.json"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Rell" }
+ ],
+ "notes": "No owner-side brief existed at tools/audit-run/briefs/support/rell_sup__galio.json (only briefs/sup/galio_sup__rell.json for the mirror direction exist); this proposal was built directly from champ-data/_kits/galio.json, champ-data/_kits/_missing/rell_sup.json, champ-data/sup/rell.full.js, champ-data/content/sup/rell.js, and tools/audit-run/packets/rell_sup.json. No missingInteractions entry beyond the auto-reset tell (Galio's P) which the content layer's spikes[0].text already covers implicitly via his 'clunky melee' framing — left as-is since it is not contradicted. breakdown.* fields remain templated (identical boilerplate shared with the other five matchups in this slice: e.g. breakdown.wave, .trading, .spikes, .carry, .difficulty, .late) but I could not ground champ-specific replacements within this pass's budget; flagged in sectionsMissing rather than risk inventing detail. galio is male by the project's gender list (not in the female roster), and existing he/his pronoun usage in the full layer is already correct, so no pronoun fix needed here.",
+ "sectionsMissing": ["breakdown.early", "breakdown.mid", "breakdown.wave", "breakdown.trading", "breakdown.spikes", "breakdown.feeding", "breakdown.carry", "breakdown.difficulty", "breakdown.late", "ahead", "tradeGood", "tradeBad", "loading", "enemyWin"]
+}

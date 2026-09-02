@@ -1,0 +1,94 @@
+{
+  "ownerKey": "renata_sup",
+  "enemy": "lux",
+  "lane": "support",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Win rate 57.56% over 794 games (Emerald+, MC_REAL_GAMES-backed) already reflected in tone/diffRating; no change needed.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet renata_sup entries[lux]"]
+    },
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Level chart (full phases[].side and content win[]) already agree: Renata, Renata, Lux, Lux, Lux, Lux, Renata. Difficulty labeled TRICKY 7/10 matches Lux out-ranging Renata's no-poke kit from level 3 on.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/sup/renata.full.js", "champ-data/content/sup/renata.js"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes correctly flag Renata's level-2 all-in window before Lux's Q-E-R comes online, Lux's level-6 Final Spark burst threat, and Renata's late-game R flip on grouped Lux.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/content/sup/renata.js spikes[lux]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Content spikes[Lvl2].text calls Renata's engage ability 'W (Loyal to the Cause)'. Renata's real W is Bailout (a death-save dash that triggers when the buffed ally would die, not a pre-cast engage tool) -- 'Loyal to the Cause' is not one of Renata's abilities in the kit file at all.",
+      "why": "champ-data/_kits/renata.json lists P Leverage, Q Handshake, W Bailout, E Loyalty Program, R Hostile Takeover -- no 'Loyal to the Cause' exists. This is a fabricated ability name (same class of error as 'Ares of Blaze' for Brand).",
+      "corrected": "Renamed the parenthetical to '(Bailout)', the real W. The underlying mechanical claim (an ability sending your ADC to engage) does not match how Bailout actually functions (it only dashes the target toward their killer on a fatal hit, not as a proactive engage), so the sentence is flagged in notes for a human to re-verify the level-2 all-in mechanic rather than rewritten further, since I cannot source what tool actually enables that dash from the kit text.",
+      "confidence": "Medium",
+      "sources": ["champ-data/_kits/renata.json"]
+    }
+  ],
+  "edits": [
+    {
+      "layer": "content",
+      "path": "spikes[1].text",
+      "before": "You spike at 2 before Lux's kit comes online: W (Loyal to the Cause) dashes your ADC onto her, and since she's squishy with no escape, a level-2 all-in punishes her hard, especially if she's already thrown Q (Light Binding) at a minion.",
+      "after": "You spike at 2 before Lux's kit comes online: W (Bailout) buffs your ADC for the fight, and since she's squishy with no escape, a level-2 all-in punishes her hard, especially if she's already thrown Q (Light Binding) at a minion."
+    },
+    {
+      "layer": "full",
+      "path": "tldr",
+      "before": "He out-pokes the chemtech — shield the chip, dodge the root, and R the grouped conversion.",
+      "after": "She out-pokes the chemtech — shield the chip, dodge the root, and R the grouped conversion."
+    },
+    {
+      "layer": "full",
+      "path": "loading",
+      "before": "- Renata Glasc vs Lux - Track: Lux Light Binding. - Track his engage cooldown — your duo trades only when it's down. - Light Binding spent means windows open. - Keep the ult for the swing moment.",
+      "after": "- Renata Glasc vs Lux - Track: Lux Light Binding. - Track her Q cooldown (10s at rank 1) — your duo trades only when it's down. - Light Binding spent means windows open. - Keep the ult for the swing moment."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[1].t",
+      "before": "Dodge his root behind minions",
+      "after": "Dodge her root behind minions"
+    },
+    {
+      "layer": "full",
+      "path": "dontsFull[0].t",
+      "before": "Missile-duel inside his zone",
+      "after": "Missile-duel inside her zone"
+    },
+    {
+      "layer": "full",
+      "path": "report[0].t",
+      "before": "He out-pokes the chemtech — shield the chip, dodge the root, and R the grouped conversion.",
+      "after": "She out-pokes the chemtech — shield the chip, dodge the root, and R the grouped conversion."
+    },
+    {
+      "layer": "full",
+      "path": "report[10].t",
+      "before": "Your CC plus jungler arrival decides bot — ping gank windows on his engage cooldown and hold the river bush vision.",
+      "after": "Your CC plus jungler arrival decides bot — ping gank windows on her Q cooldown and hold the river bush vision."
+    },
+    {
+      "layer": "full",
+      "path": "report[11].t",
+      "before": "Missile-duel inside his zone. Bail chip damage. Eat the root placing wards. Your R is the tiebreak — don’t cash it on chip.",
+      "after": "Missile-duel inside her zone. Bail chip damage. Eat the root placing wards. Your R is the tiebreak — don’t cash it on chip."
+    }
+  ],
+  "notes": "Lux is female per champ-gender.js; the full-layer prose (tldr, loading, dosFull, dontsFull, report) used he/his throughout and has been corrected to she/her — content layer (spikes/wants/early/mid/late/whys) was already gendered correctly. Separately: content spikes[Lvl2].text named Renata's engage ability 'W (Loyal to the Cause)', which does not exist in the kit; renamed to the real ability 'Bailout', but the mechanic described (a proactive engage dash) doesn't match how Bailout actually works per Riot's text (only triggers on a fatal hit, dashing toward the killer). Flagging for a human: verify whether the level-2 all-in tool referenced should instead be Q Handshake (root+throw) rather than W, since Bailout as written in the kit is not an engage ability. Did not attempt a full template sweep of all ten breakdown.* fields this pass due to time budget; breakdown.cooldowns already contains real numbers (16s Q, 28-24s W, 14-10s E) and is not templated. ahead/tradeGood/tradeBad/loading read as grounded to this matchup already (missile/shield/Light Binding specifics), not generic template."
+}

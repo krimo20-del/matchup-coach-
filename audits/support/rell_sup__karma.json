@@ -1,0 +1,139 @@
+{
+ "ownerKey": "rell_sup",
+ "enemy": "karma",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "N/A",
+   "why": "Karma is a squishy poke/shield enchanter with only one tether root (Focused Resolve, W, 12s cd) as hard CC; Rell is a hard-engage tank whose instant W dismount stun she cannot answer. Content layer already frames this correctly (Tricky/7-10 for Rell, meaning Rell is favored per this project's diffRating convention).",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": [
+    "champ-data/_kits/karma.json"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "N/A",
+   "why": "content.spikes already tracks the real pattern: level-2 W dismount kills her outright since she has no hard CC to answer it, and Karma gains no level-6 power spike (Mantra just re-empowers earlier spells), so Rell's lead only compounds.",
+   "corrected": "N/A",
+   "confidence": "High",
+   "sources": [
+    "champ-data/content/sup/rell.js"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0..3].side read \"Karma\" in the full layer, but content win[0..6] and the packet levelChart both independently agree Rell wins every single stage (winRate 55.99%, 3056 games, no defect flagged). phases[4..6].side are the unaudited \"Skill\" placeholder, also disagreeing with the already-correct win[] array.",
+   "why": "Content's early/mid text already explains why: \"Karma has no hard CC to stop your level-2 W engage\" and \"she has nothing but the empowered RQ snare to peel you.\" This is grounded in the kit (Karma's only hard CC is the W tether, easily broken by range/LoS per its own flag description) and matches both independent data sources, so I moved side to Rell for all 7 rows and rewrote the 4 templated why strings (previously generic boilerplate shared word-for-word with galio/hwei/janna/lulu) to state the actual Karma-specific reason.",
+   "corrected": "Set phases[0..6].side to \"Rell\"; rewrote phases[0..3].why to name Karma's lack of hard CC, matching the already-correct win[] array (no win[] edit needed).",
+   "confidence": "High",
+   "sources": [
+    "champ-data/sup/rell.full.js",
+    "champ-data/content/sup/rell.js",
+    "tools/audit-run/packets/rell_sup.json"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "World Atlas start. Locket or Zeke's line, Mercs-Steelcaps by lane, then Knight's Vow paths. Add anti-heal early into his duo’s sustain.",
+   "after": "World Atlas start. Locket or Zeke's line, Mercs-Steelcaps by lane, then Knight's Vow paths. Add anti-heal early into her duo’s sustain."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Karma Focused Resolve (Tether): matchup-defining — The root tether — break it with range or line of sight. It writes your spacing rules. - E Full Tilt (remount speed) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Karma Focused Resolve (Tether, 12s cooldown): matchup-defining — The root tether — break it with range or line of sight. It writes your spacing rules. - E Full Tilt (remount speed) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Karma",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Mounted speed governs the lane's first minutes — the charge threat zones before it lands.",
+   "after": "Karma has no hard CC before 6 — only Mantra-empowered Q roots — your engage threat already wins."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Karma",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "W crash online — the dismount knockup starts chains the lane can't refuse.",
+   "after": "W dismount stuns her outright — Mantra shields soften it, but can't stop it."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Karma",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "Full kit: crash the carry, Q the shields off, and steal the resistances your trades need.",
+   "after": "Full kit: crash her, Q the shield off, and her fragile frame folds to your lockdown chain."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Karma",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Zone with crash range — their enchanter's shields die to your stab on principle.",
+   "after": "She has zero disengage — hold zone with crash range and force every trade on your terms."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Rell"
+  }
+ ],
+ "notes": "No owner-side brief existed at tools/audit-run/briefs/support/rell_sup__karma.json (only briefs/sup/karma_sup__rell.json for the mirror direction); built directly from champ-data/_kits/karma.json, champ-data/_kits/_missing/rell_sup.json, champ-data/sup/rell.full.js, champ-data/content/sup/rell.js, and tools/audit-run/packets/rell_sup.json. Karma is on the project's female-champion list; the content layer already correctly uses she/her throughout, so no content pronoun fix was needed. The full layer had exactly one misgendered pronoun (report[8].t Itemization, \"his duo's sustain\") which is fixed here. breakdown.* fields other than cooldowns remain templated and untouched, listed in sectionsMissing.",
+ "sectionsMissing": [
+  "breakdown.early",
+  "breakdown.mid",
+  "breakdown.wave",
+  "breakdown.trading",
+  "breakdown.spikes",
+  "breakdown.feeding",
+  "breakdown.carry",
+  "breakdown.difficulty",
+  "breakdown.late",
+  "ahead",
+  "tradeGood",
+  "tradeBad",
+  "loading",
+  "enemyWin"
+ ]
+}

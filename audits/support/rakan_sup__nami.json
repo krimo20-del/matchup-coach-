@@ -1,0 +1,50 @@
+{
+ "ownerKey": "rakan_sup",
+ "enemy": "nami",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[N].side reads a flat 'Skill' on every row, but content win[] (Nami/Nami/Skill/Rakan/Rakan/Rakan/Rakan) exactly matches the packet's own levelChart — the full-layer side field is the stale outlier, not win[].",
+   "why": "The chart rule: when win[N] already agrees with a direction, correct side to match it. Here win[] and the packet levelChart independently agree, which is strong grounding to fix the full-layer side rather than leave it self-contradictory.",
+   "corrected": "phases[0].side->Nami, phases[1].side->Nami, phases[3].side->Rakan, phases[4].side->Rakan, phases[5].side->Rakan, phases[6].side->Rakan (phases[2] already 'Skill' matching win[2]='Skill', left alone). whys rewritten for rows 0, 1 and 3 where the existing why did not clearly indicate the corrected winner.",
+   "confidence": "High",
+   "sources": ["brief.currentText","brief.packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit.",
+   "why": "Lint flag plus quality bar require concrete numbers.",
+   "corrected": "breakdown.cooldowns now cites Aqua Prison's 12-8s cooldown and Ebb and Flow's flat 10s.",
+   "confidence": "High",
+   "sources": ["brief.enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Nami's Ebb and Flow sustain never got an anti-heal call, and mirrored displacement (both sides carry a knockup/stun) went unstated.",
+   "why": "missingInteractions flags both as applicable-but-absent.",
+   "corrected": "Folded into breakdown.cooldowns and phases[0]/[1] whys.",
+   "confidence": "High",
+   "sources": ["brief.missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Nami"},
+  {"layer":"full","path":"phases[0].why","before":"Q-poke the contacts — the feather heals your carry on connect; the trade pays twice.","after":"Aqua Prison threatens every level-1 poke and you have no gapclose yet — respect its 12s cooldown before you engage."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Nami"},
+  {"layer":"full","path":"phases[1].why","before":"W threat begins: the leap governs their spacing from fog already.","after":"Empowered autos from Tidecaller's Blessing plus the bubble threat out-trade your early poke before your dash comes online."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[3].why","before":"Zone with entrance threat and shield-hop the margins — the bird is everywhere at once.","after":"Your mobility dodges her telegraphed Aqua Prison, and Nami has no dash to escape your dash-charm all-ins."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"report[8].t","before":"World Atlas start. Locket / Zeke's, Mobility-Mercs, then Knight's Vow paths. Add anti-heal early into his duo’s sustain.","after":"World Atlas start. Locket / Zeke's, Mobility-Mercs, then Knight's Vow paths. Add anti-heal early into her duo’s sustain."},
+  {"layer":"full","path":"report[9].t","before":"Commit on Aqua Prison’s cooldown, on your first item spike, and with your carry’s damage online. His answer goes first; yours goes last.","after":"Commit on Aqua Prison’s cooldown, on your first item spike, and with your carry’s damage online. Her answer goes first; yours goes last."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Nami Aqua Prison: matchup-defining — The bubble starts every Nami play — sidestep it and her kit is small numbers. It writes your spacing rules. - E Battle Dance is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Aqua Prison (Q) is 12s down to 8s — sidestep it and her kit is small numbers until it's back. - Ebb and Flow (W) is a flat 10s heal-bounce; anti-heal decides extended trades against it. - Both sides carry displacement (Gleaming Quill vs Tidal Wave) — land yours first."},
+  {"layer":"full","path":"breakdown.spikes","before":"Level 2-3 windows govern; level 6 hardens the playbook; first item funds it.","after":"Levels 1-2 her Q-E poke wins; level 3 is a coinflip on who lands Aqua Prison; from 4 on your dash punishes her dashless kit and level 6's Quickness outraces her slow Tidal Wave."}
+ ],
+ "notes": "suspectNames flagged 'Your Quickness' in spikes[1].text but it correctly names Rakan's own R (The Quickness) — no fabrication, left as-is."
+}

@@ -1,0 +1,72 @@
+{
+  "ownerKey": "renata_sup",
+  "enemy": "maokai",
+  "lane": "support",
+  "audit": [
+    {
+      "point": 1,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Win rate 50.61% over 247 games; tone/diffRating (EVEN, 5.5/10) already match a near-coinflip matchup.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["packet renata_sup entries[maokai]"]
+    },
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "full phases[0..6].side are all the literal placeholder 'Skill' instead of naming Renata or Maokai per row, while content win[] already correctly reads Renata, Renata, Maokai, Maokai, Maokai, Renata, Renata. The two layers disagree because the full layer was never filled in.",
+      "why": "The chart rule requires phases[N].side and content win[N] to name the same side. win[] is already correct and grounded (early Q all-in window, Maokai's Twisted Advance/Sap Magic sustain taking over levels 3-5, Renata's R flipping grouped fights late) so only the full-layer side (and its now-generic why) needed fixing to match.",
+      "corrected": "Set phases[0-1].side='Renata', phases[2-4].side='Maokai', phases[5-6].side='Renata', matching win[]. Rewrote each phases[N].why (previously identical boilerplate reused verbatim across other champions' matchups, e.g. Lux's phases[0].why is the same sentence) to state the Maokai-specific reason for that row's verdict.",
+      "confidence": "High",
+      "sources": ["champ-data/sup/renata.full.js", "champ-data/content/sup/renata.js"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Spikes correctly identify Renata's level-2 all-in window before Twisted Advance is online, Maokai's level-6 Nature's Grasp engage, and Renata's first-item/late R counter-engage.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/content/sup/renata.js spikes[maokai]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Content spikes[Lvl2].text contains a leftover editing artifact: 'Sapling (W... actually E) toss' names the wrong slot then self-corrects mid-sentence instead of just stating the right one. Also missing: Maokai's Twisted Advance (W) makes him untargetable during the dash per the kit flags, so spending burst into the dash itself whiffs -- this interaction is absent from the current text.",
+      "why": "champ-data/_kits/maokai.json W flags include 'untargetable: dodges timed burst and executes'; champ-data/_kits/_missing/renata_sup.json flags this exact rule (untargetable-dodges-burst) for the maokai matchup as unaddressed.",
+      "corrected": "Cleaned the ability reference to 'Sapling Toss (E)'. Added the untargetable-dodge note to dosFull[0].d, which already covers Q-throwing the diver and had room to name the dash-untargetable window without changing the bullet's title.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/maokai.json", "champ-data/_kits/_missing/renata_sup.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Renata" },
+    { "layer": "full", "path": "phases[0].why", "before": "E-poke the pair — the missiles shield yours and bill theirs in one cast.", "after": "No poke from Maokai at 1 — Handshake's root threatens his approach before he has any ranged tool." },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Renata" },
+    { "layer": "full", "path": "phases[1].why", "before": "Q threats begin: the root-throw relocates whoever steps wrong.", "after": "All-in window: Q root plus your ADC lands before Twisted Advance (14s CD at rank 1) is online." },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Maokai" },
+    { "layer": "full", "path": "phases[2].why", "before": "Full kit: W on the carry turns even trades into insured ones — the bailout math is rude.", "after": "Twisted Advance's dash-root plus Sap Magic sustain let him tank your Q and win the extended trade." },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Maokai" },
+    { "layer": "full", "path": "phases[3].why", "before": "Chip the margins and bank the leverage — marked trades hit harder than their items say.", "after": "Sapling Toss poke and passive healing keep him ahead in the sustain war." },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Maokai" },
+    { "layer": "full", "path": "phases[4].why", "before": "Hostile Takeover online — their teamfight formation is now a liability you can weaponize.", "after": "Nature's Grasp adds a second hard engage — respect the telegraphed vine wall." },
+    { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Renata" },
+    { "layer": "full", "path": "phases[5].why", "before": "First item: the missiles chunk and the Q-throw converts every gank.", "after": "Your W shield-heal and R value start to out-value his single-target lockdown." },
+    { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Renata" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Renata flips fights: berserk the clump, bail the carry, and watch their formation eat itself.", "after": "R counter-engages his Nature's Grasp and out-ranges his kit in grouped fights." },
+    {
+      "layer": "content",
+      "path": "spikes[0].text",
+      "before": "Hitting 2 first with a Handshake (Q) root plus your ADC gives you a clean all-in window before Maokai has both his Sapling (W... actually E) toss and Twisted Advance (W) online, so shove and look for the pull-in.",
+      "after": "Hitting 2 first with a Handshake (Q) root plus your ADC gives you a clean all-in window before Maokai has both his Sapling Toss (E) and Twisted Advance (W) online, so shove and look for the pull-in."
+    },
+    {
+      "layer": "full",
+      "path": "dosFull[0].d",
+      "before": "Point-and-click root — count its cooldown before stepping up. Until it’s spent, every commit is a coin flip.",
+      "after": "Point-and-click root — count its cooldown before stepping up. He's untargetable mid-dash, so don't spend your burst into the animation; throw after he lands."
+    }
+  ],
+  "notes": "Full-layer level chart carried the literal placeholder 'Skill' on all 7 rows for this matchup while content win[] already had real verdicts -- fixed per the chart rule by setting side to match win[] and rewriting the boilerplate why text (previously identical to other champions' matchups word-for-word) to Maokai-specific reasoning. Fixed a leftover self-correction artifact '(W... actually E)' in spikes[Lvl2].text. Added the Twisted Advance untargetable-dash note (kit flag + missing-interactions file) to dosFull[0].d. wants.foe[0] ('lock it for his ADC's follow-up') has an awkward 'it' referring to the player's ADC but is not a gender/fact error, left alone given the length band and low priority. Did not do a full ten-field breakdown template sweep this pass; breakdown.cooldowns already names Twisted Advance's cooldown with a number and is not templated."
+}

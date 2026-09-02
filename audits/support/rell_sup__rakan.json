@@ -1,0 +1,65 @@
+{
+ "ownerKey": "rell_sup",
+ "enemy": "rakan",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "51.4% win rate over 1,638 games — roughly even, matching the page's EVEN diff.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet"]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases all read the generic 'Skill' placeholder while content win[] and packet.levelChart already agree exactly: Rakan, Rell, Rell, Rell, Rakan, Rell, Rakan.",
+   "why": "Rakan's early mobility and poke edge level 1, but Rell's point-and-hit W-Q beats his skillshot Grand Entrance from level 2 through the first item; The Quickness (R) flips level 6 and late game back to Rakan since it lets him dodge W-Q and peel with Battle Dance (E).",
+   "corrected": "Set all 7 phases[].side to match content win[] and rewrote each why with the actual interaction instead of generic engage-class filler.",
+   "confidence": "High",
+   "sources": ["currentText", "packet.levelChart", "content win[]/whys[]", "enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit anywhere ('matchup-defining', 'read it before every duo step-up' — no numbers).",
+   "why": "Cooldown field must carry real numbers so the reader knows the actual punish window.",
+   "corrected": "Added Grand Entrance (W) 14s down to 10s at max rank, and Rell's Full Tilt (E) 14-10s and R 120/100/80s.",
+   "confidence": "High",
+   "sources": ["enemyKit", "ownerKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "lint-style defect: 'wants.foe[0]' names 'Land Grand Entrance knock-up' which the packet flags as a possible fabricated ability (distance 5 to 'grand entrance') — verified against enemyKit this is the correct, real W name, so it is NOT an error; no change made there. Real gaps found instead: missingInteractions for needs-antiheal (Gleaming Quill Q sustain) and shield-absorbs-burst (Fey Feathers P / Battle Dance E) were unaddressed on the full layer.",
+   "why": "Both apply directly per the kit: Rakan sustains through chip damage via Q and both his passive and E shield through your burst window.",
+   "corrected": "Rewrote dosFull[1] to name the anti-heal timing against Gleaming Quill sustain, and dontsFull[2] to name Fey Feathers/Battle Dance absorbing burst.",
+   "confidence": "High",
+   "sources": ["missingInteractions", "enemyKit"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Rakan Grand Entrance: matchup-defining — The leap knockup starts every play — track him in fog; the E extends it. Read it before every duo step-up. - Your E Full Tilt (remount speed) answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Grand Entrance (W): 14s down to 10s at max rank — the leap knockup starts every play, track him in fog; the E extends it. - Full Tilt (E, 14-10s) answers exactly one disaster per cooldown. - Your R (120/100/80s) is a swing-moment spend only."},
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[0].why","before":"Mounted speed governs the lane's first minutes — the charge threat zones before it lands.","after":"Rakan's mobility and Gleaming Quill poke give him the opening edge before you engage."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[1].why","before":"W crash online — the dismount knockup starts chains the lane can't refuse.","after":"Your W-Q dash-stun beats his skillshot Grand Entrance if you commit first."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: crash the carry, Q the shields off, and steal the resistances your trades need.","after":"Your chain-CC punishes his squishy frame the moment he steps up to poke or trade."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[3].why","before":"Zone with crash range — their enchanter's shields die to your stab on principle.","after":"Your tank stats and lockdown keep winning extended trades through this stretch."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[4].why","before":"Magnet Storm online — formations near you are a suggestion; the clump is mandatory.","after":"The Quickness lets him dodge your combo and peel his ADC out of Magnet Storm."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the crash chains and the stolen stats compound.","after":"Your sustain and hard-engage overpower his Q poke on tank stats."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[6].why","before":"Late Rell makes clumps: R the formation, crash the center, and let the team bill the gravity.","after":"His Battle Dance double-dash and R disengage outmaneuver your point-blank Magnet Storm."},
+  {"layer":"full","path":"dosFull[1].t","before":"Crash his hook's cooldown","after":"Time anti-heal onto his sustain"},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"Gleaming Quill (Q) heals him back chip damage — Grievous Wounds timing decides whether your extended trades actually stick."},
+  {"layer":"full","path":"dontsFull[2].t","before":"Trade at his catch tempo","after":"Spend your all-in into his shields"},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with intentions.","after":"Fey Feathers (P) and Battle Dance (E) both absorb burst — force one out before you commit your combo."}
+ ],
+ "notes": "Rakan is male, existing pronouns were already correct and left alone. Verified 'Grand Entrance' in wants.foe[0] against enemyKit — it is the real W name, packet's suspectNames flag on it is a false positive (distance-5 fuzzy match), no fix needed."
+}

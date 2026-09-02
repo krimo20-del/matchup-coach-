@@ -1,0 +1,54 @@
+{
+ "ownerKey": "senna_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[0-3].side already read Blitzcrank but content win[0-3] read Skill; full phases[4-6] read Skill while content win[4-6] read Blitzcrank. The two layers directly contradict each other on all seven rows.",
+   "why": "The mirror (blitzcrank_sup__senna.json) already ships with Blitzcrank favored on all 7 rows and left it untouched as internally consistent — that's the ground truth to align to.",
+   "corrected": "Move content win[0-3] to Blitzcrank and full phases[4-6].side to Blitzcrank so both layers agree Blitzcrank favored throughout.",
+   "confidence": "High",
+   "sources": ["audits/support/blitzcrank_sup__senna.json", "champ-data/sup/senna.full.js", "champ-data/content/sup/senna.js"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[4-6].why are templated late-game lines that don't reflect Blitzcrank's actual threat curve — a single landed Rocket Grab is lethal at any item count, which the level-6/first-item/2-items text needs to say explicitly.",
+   "why": "The current text implies Senna's scaling matters here when the packet and mirror agree Blitzcrank's hook stays a coin-flip kill threat regardless of items.",
+   "corrected": "Ground each in the grab-into-Static-Field kill combo and the fact that items don't buy safety against one hook.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/blitzcrank.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no cooldown number (defect #3). dosFull[1].d and dontsFull[2].d are tradeGood/tradeBad copy-pasted under unrelated titles (defect #2). The missingInteractions entry for this matchup — Power Fist's auto-reset tell — is never mentioned.",
+   "why": "No real Rocket Grab/Power Fist numbers means no concrete spacing rule; the bleed hides the actual bullet content; the auto-reset tell is the single most useful reaction cue in this matchup and isn't on the page.",
+   "corrected": "Rewrite breakdown.cooldowns with real numbers and fold the auto-reset tell into the don't bullet.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/blitzcrank.json", "champ-data/_kits/_missing/senna_sup.json"]
+  }
+ ],
+ "edits": [
+  {"layer":"content","path":"win[0]","before":"Skill","after":"Blitzcrank"},
+  {"layer":"content","path":"win[1]","before":"Skill","after":"Blitzcrank"},
+  {"layer":"content","path":"win[2]","before":"Skill","after":"Blitzcrank"},
+  {"layer":"content","path":"win[3]","before":"Skill","after":"Blitzcrank"},
+  {"layer":"content","path":"whys[0]","before":"Level 1 is even — you out-range his poke but must respect the hook, so neither snowballs.","after":"Level 1 favors Blitzcrank — one landed Rocket Grab decides the level regardless of your range edge."},
+  {"layer":"content","path":"whys[1]","before":"Level 2 stays a skill matchup as the lane is a hook coin-flip he can't yet fully convert.","after":"Level 2 still favors Blitzcrank — Power Fist's auto-reset turns any landed hook into a real trade."},
+  {"layer":"content","path":"whys[2]","before":"Level 3 remains even with disciplined positioning neutralising his grab.","after":"Level 3 stays Blitzcrank's — Rocket Grab range keeps forcing you off minion cover to farm."},
+  {"layer":"content","path":"whys[3]","before":"Levels 4-5 stay skill-dependent as both trade cautiously around his Q cooldown.","after":"Levels 4-5 remain Blitzcrank's — Static Field coming online at 6 is already changing how you position."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[4].why","before":"Dawning Shadow online — the global beam saves dives and finishes recalls.","after":"Grab into Static Field silence and Power Fist knockup is a near-guaranteed kill — his level 6 spike, not yours."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the Q chunks and the soul thresholds start mocking trade math.","after":"One landed Rocket Grab is still lethal regardless of items — itemization doesn't buy you safety, positioning does."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[6].why","before":"Late Senna out-ranges the game from the support slot — souls, beams, and mist.","after":"A single Rocket Grab still deletes squishy Senna at any item count — max range and a minion screen are mandatory."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. It writes your spacing rules. - E Curse of the Black Mist is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Rocket Grab (Q): 20s at rank 1, down to 16s — stand behind a minion at all times so the hook eats a creep instead of you. - Power Fist (E) is only 7s-5s and resets his auto — the wind-up is your cue to step back, not the cast. - Static Field (R, 60s-20s) silences on top of a landed grab — never stand exposed once he's 6."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q off a minion through their pair — the cast healed your carry, billed theirs, and grew your range.","after":"Rocket Grab is 20s at rank 1 — punish the down window by farming aggressively, then retreat behind minions the instant it's back up."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Walking through an open lane for one soul with a hook champion watching — the curve doesn't pay death benefits.","after":"Power Fist's wind-up is his tell, not the grab itself — react to the animation, not the hook landing, or the knockup chains into a kill."}
+ ],
+ "notes": "Chart target matches the mirror's already-consistent verdict (Blitzcrank favored on all 7 rows). breakdown.wave, .spikes, .feeding, .carry, .difficulty, .late, ahead, loading, tldr, winCon, enemyWin remain structurally templated across my 5 matchups and were left for a dedicated pass."
+}

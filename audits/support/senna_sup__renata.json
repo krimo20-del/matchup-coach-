@@ -1,0 +1,79 @@
+{
+ "ownerKey": "senna_sup",
+ "enemy": "renata",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 1,
+   "status": "needs-correction",
+   "whatIsWrong": "diff is \"EVEN\" and diffRating/carryRating sit at 5.5/6, but the real win rate is 56.79% over 1,215 games — the strongest of this slice — with content win[] and packet.levelChart giving Senna 4 of 7 rows.",
+   "why": "The enum diff/rating fields should reflect the actual favourability, not a generic even label.",
+   "corrected": "diff -> FAVOURED, diffRating -> 6.5/10, carryRating -> 7/10.",
+   "confidence": "High",
+   "sources": ["packet.winRate", "content win[]"]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[0..2].side (Level 1-3) say \"Skill\" while content win[] and packet.levelChart both give Senna those rows; rows 3-6 already agree (Skill, Skill, Skill, Senna).",
+   "why": "Chart-agreement rule — the two layers must name the same side per row.",
+   "corrected": "Set phases[0..2].side to Senna and rewrote each .why from content's early text; left phases[3..6] untouched since they already agreed.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "content win[]/early", "champ-data/_kits/renata.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "content spikes[] already key level 2 (poke down a fragile, low-mobility target), level 6 (respect Hostile Takeover before an all-in), first item (no self-peel keeps trades even), and late (global R buries a no-escape enchanter) — grounded in the real kit.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/renata.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "missingInteractions (needs-antiheal) is absent: Bailout (W) shields and heals a diving ally, and Grievous Wounds timing matters for it. breakdown.cooldowns has no real numbers.",
+   "why": "This decides exactly when to add anti-heal into her sustain, and it isn't stated anywhere on the page.",
+   "corrected": "Rewrote breakdown.cooldowns with real numbers plus the anti-heal fact.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/_missing/senna_sup.json (renata entry)", "champ-data/_kits/renata.json"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "diff", "before": "EVEN", "after": "FAVOURED" },
+  { "layer": "full", "path": "diffRating", "before": "5.5/10", "after": "6.5/10" },
+  { "layer": "full", "path": "carryRating", "before": "6/10", "after": "7/10" },
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Senna" },
+  { "layer": "full", "path": "phases[0].why", "before": "Q off minions to chip the duo — the angles are the lane and every wave drops souls.", "after": "You out-range and out-poke fragile Renata from level 1 — her only threat is a slow, dodgeable Handshake (Q)." },
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Senna" },
+  { "layer": "full", "path": "phases[1].why", "before": "Soul discipline begins: collect what's safe; the range grows forever.", "after": "Your level-2 spike chunks her while she has only a slow Q to answer with." },
+  { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Senna" },
+  { "layer": "full", "path": "phases[2].why", "before": "W threats open: any clumped trade risks the spreading root.", "after": "Your poke keeps snowballing the lead — stand off minions to dodge Handshake." },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Renata Glasc Hostile Takeover: matchup-defining — The berserk wave turns your team on itself — never group in a line against it. The duo’s tempo bends around it. - Keep E Curse of the Black Mist banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "Handshake (Q) is a flat 16s root — dodge it behind minions and punish the long cooldown. Bailout (W, 28-24s) shields and heals a diving ally, so get Grievous Wounds online before a long trade. Hostile Takeover (R) is 150/130/110s and can flip a won fight."
+  },
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "World Atlas start. BotRK-lite paths or Helia-utility by team need; standard support Senna: Helia into RFC-range items. Add anti-heal early into his duo’s sustain.",
+   "after": "World Atlas start. BotRK-lite paths or Helia-utility by team need; standard support Senna: Helia into RFC-range items. Add anti-heal early into her duo’s sustain."
+  },
+  {
+   "layer": "full",
+   "path": "loading",
+   "before": "- Senna vs Renata Glasc - Track: Renata Glasc Hostile Takeover. - Track his engage cooldown — your duo trades only when it's down. - Hostile Takeover spent means windows open. - Keep the ult for the swing moment.",
+   "after": "- Senna vs Renata Glasc - Track: Renata Glasc Hostile Takeover. - Track her engage cooldown — your duo trades only when it's down. - Hostile Takeover spent means windows open. - Keep the ult for the swing moment."
+  },
+  {
+   "layer": "full",
+   "path": "report[10].t",
+   "before": "Your CC plus jungler arrival decides bot — ping gank windows on his engage cooldown and hold the river bush vision.",
+   "after": "Your CC plus jungler arrival decides bot — ping gank windows on her engage cooldown and hold the river bush vision."
+  }
+ ],
+ "notes": "Renata Glasc is female per champ-gender.js; fixed remaining his/him pronouns (report[8].t, loading, report[10].t is Duo & Jungle Interaction — not counted against the report[] 2-item cap since these are mechanical pronoun-lint fixes, not template rewrites). phases[3..6] already agreed with win[] and were left untouched. breakdown.early/mid/wave/trading/spikes/feeding/carry/late remain templated; flagged for a future sweep given slice scope."
+}

@@ -1,0 +1,127 @@
+{
+ "ownerKey": "senna_sup",
+ "enemy": "poppy",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 1,
+   "status": "needs-correction",
+   "whatIsWrong": "diff is \"EVEN\" and diffRating/carryRating sit at 5.5/6, but the real win rate is 53.49% over 1,690 games with content win[] and packet.levelChart giving Senna 5 of 7 rows.",
+   "why": "The enum diff/rating fields should reflect the actual favourability, not a generic even label.",
+   "corrected": "diff -> FAVOURED, diffRating -> 6.5/10, carryRating -> 7/10.",
+   "confidence": "High",
+   "sources": ["packet.winRate", "content win[]"]
+  },
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[].side is \"Skill\" on rows 0-4 (Level 1 through Level 6) while content win[] and packet.levelChart already say Senna wins all of those rows — only First item (Skill) and 2+ items (Senna) already agree.",
+   "why": "Chart-agreement rule: the two layers must name the same side per row.",
+   "corrected": "Set phases[0..4].side to Senna and rewrote each .why to explain the level-by-level range/poke advantage from content.early/mid, leaving phases[5] and phases[6] untouched since they already agreed.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "content win[]/early/mid", "champ-data/_kits/poppy.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "content spikes[] already key level 2 (Q chunk before her trade lands), level 6 (her R knockback all-in vs your global R), first item (crit/AS outranging melee), and late (hypercarry range vs peel melee) — all grounded in the real kit.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/poppy.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "missingInteractions (untargetable-dodges-burst, channel-interruptible) are absent from the page: Keeper's Verdict (R) is a channel that Last Embrace (W) cancels outright, and Poppy can go untargetable through a commit if you're too slow. breakdown.cooldowns has no real numbers.",
+   "why": "This is the single highest-value fact in the matchup and currently isn't stated anywhere on the page.",
+   "corrected": "Rewrote dosFull[2] to state the R-channel interrupt; rewrote breakdown.cooldowns with real numbers plus the same interrupt note.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/_missing/senna_sup.json (poppy entry)", "champ-data/_kits/poppy.json R flags"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "diff", "before": "EVEN", "after": "FAVOURED" },
+  { "layer": "full", "path": "diffRating", "before": "5.5/10", "after": "6.5/10" },
+  { "layer": "full", "path": "carryRating", "before": "6/10", "after": "7/10" },
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Senna"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Q off minions to chip the duo — the angles are the lane and every wave drops souls.",
+   "after": "You out-range melee Poppy from level 1 — her only threat needs a wall, so hug the open side and Q-poke every step-up."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Senna"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "Soul discipline begins: collect what's safe; the range grows forever.",
+   "after": "Second point in Q lets a cannon wave plus Q chunk her before her short trade connects."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Senna"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "W threats open: any clumped trade risks the spreading root.",
+   "after": "Root-and-auto poke keeps punishing every step-up while you deny her Heroic Charge (E) wall angle."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Senna"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Chip the ledger and bank the souls — the collection out-scales every support item.",
+   "after": "You still control the open lane and deny Heroic Charge (E) angles, chipping freely off cooldown."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Senna"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Dawning Shadow online — the global beam saves dives and finishes recalls.",
+   "after": "Global R punishes a landed Heroic Charge (E) from across the lane, though her R knockback all-in is her one real swing here."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Poppy Steadfast Presence: matchup-defining — Stops every dash near her — mobility dies inside the zone. It writes your spacing rules. - E Curse of the Black Mist is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "Steadfast Presence (W) is down 20/18/16/14/12s and grounds every dash near her — track it before stepping up. Heroic Charge (E) is 14-10s, her real all-in tool. Her R is a channel: land Last Embrace before it fires and it cancels outright."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].t",
+   "before": "Beam the dive's target globally",
+   "after": "Cancel Keeper's Verdict with your root"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[2].d",
+   "before": "Poppy spends Steadfast Presence early — the closest thing this matchup has to a guarantee.",
+   "after": "Her R is a channel — land Last Embrace first to cancel it, or she goes untargetable through it."
+  }
+ ],
+ "notes": "phases[5] (First item, Skill) and phases[6] (2+ items, Senna) already agreed with win[] and were left untouched. tone/loading/report[] left as-is (templated but not false) beyond scope for this pass; flagged for a future sweep. suspectNames was empty for this matchup — no fabricated ability names found."
+}

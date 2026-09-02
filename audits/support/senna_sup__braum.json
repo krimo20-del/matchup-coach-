@@ -1,0 +1,50 @@
+{
+ "ownerKey": "senna_sup",
+ "enemy": "braum",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "content win[0-2] already read Senna (matching packet.levelChart) but full phases[0-2].side still read Skill. content win[5] read Skill but the mirror (braum_sup__senna.json) already committed Braum favored at first item (its own phases[5].side=Braum, rating 6.5/10) — full phases[5] also still read Skill.",
+   "why": "The mirror already resolved this exact chart: Senna favored levels 1-3, unchanged skill at 4-5, Braum favored at first item, Senna favored at 2+items. Both of my layers were lagging behind it in different places.",
+   "corrected": "Move full phases[0-2].side to Senna, content win[5] and full phases[5].side to Braum; leave phases[3-4] (already Skill on both layers) alone.",
+   "confidence": "High",
+   "sources": ["audits/support/braum_sup__senna.json", "champ-data/sup/senna.full.js", "champ-data/content/sup/senna.js"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0-2].why and phases[5].why are the same templated sentences reused verbatim on the alistar and bard matchups and don't reference Braum's actual kit (Winter's Bite range, Concussive Blows stacking, Unbreakable's directional block).",
+   "why": "A trading sentence that pastes onto any enemy with the name swapped isn't Braum-specific.",
+   "corrected": "Ground each in Winter's Bite range, Concussive Blows stacks, and Unbreakable's uptime scaling with rank.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/braum.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no cooldown number (defect #3). dosFull[1].d and dontsFull[2].d are the tradeGood/tradeBad strings copy-pasted under unrelated titles (defect #2). This matchup has no missingInteractions entry in the run's data.",
+   "why": "No numbers means no concrete spacing rule against Unbreakable's block or the stun-stack threshold; the bleed hides the actual bullet content.",
+   "corrected": "Rewrite breakdown.cooldowns with real numbers and de-bleed the two bullets around Winter's Bite range and Concussive Blows stacking.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/braum.json"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Senna"},
+  {"layer":"full","path":"phases[0].why","before":"Q off minions to chip the duo — the angles are the lane and every wave drops souls.","after":"Piercing Darkness out-ranges Winter's Bite from level 1 — poke and heal through his short-range answer."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Senna"},
+  {"layer":"full","path":"phases[1].why","before":"Soul discipline begins: collect what's safe; the range grows forever.","after":"Ranged harass keeps working — Braum has no way to trade back until Concussive Blows stacks four autos."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Senna"},
+  {"layer":"full","path":"phases[2].why","before":"W threats open: any clumped trade risks the spreading root.","after":"You keep chipping and stacking Mist freely while he's stuck peeling instead of trading."},
+  {"layer":"content","path":"win[5]","before":"Skill","after":"Braum"},
+  {"layer":"content","path":"whys[5]","before":"At first item it's even as his shield-and-peel utility offsets your growing poke.","after":"At first item Unbreakable finally has enough uptime to shut down your poke — his tank stats start paying off before your item spike does."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Braum"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the Q chunks and the soul thresholds start mocking trade math.","after":"Unbreakable's uptime finally lets him block your poke line outright — his tank stats start paying off before your item spike does."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Braum Unbreakable: matchup-defining — The shield wall eats your poke and engage projectiles — wait it out. Read it before every duo step-up. - Your E Curse of the Black Mist answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Unbreakable (E): 16s at rank 1, down to 8s — its block is directional, so angle your Q around it rather than waiting it out blind. - Concussive Blows needs 4 stacked autos to stun — don't feed him the stacks by trading autos back. - Glacial Fissure (R, 130s-100s) is his only real engage; bait it before you commit to an all-in."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q off a minion through their pair — the cast healed your carry, billed theirs, and grew your range.","after":"Winter's Bite is only 1000 range — stand outside it and poke with Piercing Darkness where he has zero answer."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Walking through an open lane for one soul with a hook champion watching — the curve doesn't pay death benefits.","after":"Four stacked autos trigger Concussive Blows' stun — don't trade autos back into him just to punish a poke."}
+ ],
+ "notes": "Chart target matches the mirror (braum_sup__senna.json) exactly. breakdown.wave, .spikes, .feeding, .carry, .difficulty, .late, ahead, loading, tldr, winCon, enemyWin remain structurally templated across my 5 matchups and were left for a dedicated pass."
+}

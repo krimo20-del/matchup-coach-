@@ -1,0 +1,63 @@
+{
+ "ownerKey": "zilean_sup",
+ "enemy": "velkoz",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Even poke at level 1-2, then Vel'Koz's three-spell poke plus Organic Deconstruction true damage dominates level 3 through first item; Zilean flips it at two-plus items when Chronoshift and stun punish his immobile channel.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief packet winRate 54.18", "content whys[0-6]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Vel'Koz's level-6 R Life Form Disintegration Ray (100/90/80s) is the biggest lane-wide threat; Zilean's spike is two-plus items, where Chronoshift (R) and the double-bomb stun turn his stationary channel into a free kill.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["enemyKit R", "ownerKit R"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Every phases[N].side in the full layer disagrees with the matching content win[N] — level 1-2 are marked Vel'Koz in full but Skill in content, and levels 3-6 are marked Skill in full but Vel'Koz/Zilean in content.",
+   "why": "The content whys already correctly describe an even level 1-2 poke race, Vel'Koz taking over from level 3 through first item on his three-spell poke and true-damage passive, and Zilean flipping it at two-plus items via Chronoshift. The full-layer sides and whys were left as a flat template and never updated to match.",
+   "corrected": "Move phases[0/1].side to 'Skill' and phases[2/3/4/5].side to 'Vel'Koz' and phases[6].side to 'Zilean', rewriting each .why to match the content-layer reasoning (win[] is already correct, no content edits needed).",
+   "confidence": "High",
+   "sources": ["currentText.full.phases", "currentText.content.win/whys"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "Packet flags that breakdown.cooldowns never names Vel'Koz's actual E/R abilities or their cooldowns.",
+   "why": "breakdown.cooldowns only says 'Tectonic Disruption' with no rank cooldown and never names Life Form Disintegration Ray at all, despite it being the level-6 defining threat.",
+   "corrected": "Add the real cooldown numbers (E 12-10s, R 100/90/80s) and name both abilities explicitly.",
+   "confidence": "High",
+   "sources": ["enemyKit E/R"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Vel'Koz","after":"Skill"},
+  {"layer":"full","path":"phases[0].why","before":"Q-bomb the contacts — the sticky chip annoys and the double-bomb threat governs.","after":"Level 1 is skill-even as both trade single spells at range."},
+  {"layer":"full","path":"phases[1].side","before":"Vel'Koz","after":"Skill"},
+  {"layer":"full","path":"phases[1].why","before":"W loops begin: the rewind means your cooldowns lie; theirs don't.","after":"Level 2 stays even since your Rewind double-bomb answers his early poke."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Vel'Koz"},
+  {"layer":"full","path":"phases[2].why","before":"Double-bomb stun live: Q-W-Q is the lane's longest-range stun setup.","after":"At 3 his Q-W poke range starts out-trading your bombs."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Vel'Koz"},
+  {"layer":"full","path":"phases[3].why","before":"Bank XP and chip the margins — your duo levels early and spikes rude.","after":"Through 4-5 his three-ability poke and true-damage passive grind you down."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Vel'Koz"},
+  {"layer":"full","path":"phases[4].why","before":"Chronoshift online — their kill math now includes an undo button.","after":"At 6 his R channel is the dominant lane-wide burst threat."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Vel'Koz"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the bombs chunk and the speed warps decide every chase.","after":"On first item his poke superiority and passive keep you on the back foot."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Zilean"},
+  {"layer":"full","path":"phases[6].why","before":"Late Zilean rewrites fights: revive the carry, slow the divers, and double-bomb the chokes.","after":"With two-plus items Chronoshift and your stun punish his immobile ult and flip it."},
+  {"layer":"full","path":"dosFull[1].d","before":"Q the carry, W, Q the stun, walk — the double-bomb chunk that started as chip.","after":"Time Warp off his Void Rift the instant it lands — it bursts again in 0.5s."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Spending the R on a survivable catch — the undo insures deaths, not discomfort.","after":"You can't out-sustain three damage spells plus true-damage stacks — warp away instead."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Vel'Koz Tectonic Disruption: matchup-defining — The knockup starts the true-damage rotation — dodge it and the research stalls. Read it before every duo step-up. - Your E Time Warp answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Vel'Koz E Tectonic Disruption (12-10s): matchup-defining — the knockup starts the true-damage rotation, dodge it and Research stalls. - His R Life Form Disintegration Ray (100/90/80s) channels 2.5s and breaks on any CC — interrupt it. - Your E answers one disaster per cooldown."}
+ ],
+ "notes": "Level-chart mismatch was total (all 7 rows disagreed between full and content) — resolved to Skill/Skill/Vel'Koz/Vel'Koz/Vel'Koz/Vel'Koz/Zilean, agreeing with content win[]. Also fixed the packet defect that no Vel'Koz ability besides Tectonic Disruption was ever named, and added real cooldown numbers to breakdown.cooldowns (fixes the COOLDOWN_NO_DIGIT lint). His R is interruptible by any CC — Zilean has no hard CC to interrupt it directly, but the double-bomb stun (via detonating one Time Bomb early with another) can still peel the target out of the beam; noted in dosFull[1] rewrite via Time Warp speed instead since that's the more reliable owned tool. No new report[] edits — none flagged by lint and no fabricated ability names present."
+}

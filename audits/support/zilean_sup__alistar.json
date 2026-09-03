@@ -1,0 +1,56 @@
+{
+ "ownerKey": "zilean_sup",
+ "enemy": "alistar",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Even overall lane read (52.98% Zilean WR) is broadly accurate; the level chart just mislabeled which stages are even vs Alistar-favored (fixed under point 3).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "full.phases[N].side was 'Skill' on all 7 rows while content win[0-6] already correctly reads Zilean/Skill/Alistar/Alistar/Alistar/Alistar/Skill, and content whys[2-5] explicitly argue Alistar wins those stages. The two layers disagreed on who wins levels 1, 3, 4-5, 6, and first item.",
+   "why": "Reader sees the level-chart bar say 'Skill' (even) at level 3 while the paragraph directly below says Alistar wins level 3 outright — a self-contradicting page.",
+   "corrected": "Moved phases[0].side to Zilean (matches win[0]=Zilean already), and phases[2,3,4,5].side to Alistar (matches win[2-5]=Alistar already). Rewrote the matching .why and bumped .rating on each moved row so the full-layer prose argues the same verdict the content layer already states. No win[] edits needed since content already held the correct verdict.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "packet.defects", "currentText.content.whys"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Kit interactions confirmed: Alistar's Trample (E) auto-attack reset is the wind-up tell before his stun connects (not called out anywhere); Triumphant Roar (P) heals him through chip damage (not mentioned, no anti-heal guidance existed despite the field being about trading).",
+   "why": "Both are missingInteractions flagged for this matchup and both change concrete play: stepping back on the auto-reset (not the cast) avoids eating the stun, and buying Grievous Wounds early denies his passive sustain during extended trades.",
+   "corrected": "Folded the auto-reset tell into dosFull[0].d and the anti-heal timing into breakdown.trading.",
+   "confidence": "High",
+   "sources": ["missingInteractions", "enemyKit.P", "enemyKit.E"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Zilean" },
+  { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Alistar" },
+  { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[2].why", "before": "Double-bomb stun live: Q-W-Q is the lane's longest-range stun setup.", "after": "Headbutt into Pulverize lands first — it locks your ADC, no hard answer." },
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Alistar" },
+  { "layer": "full", "path": "phases[3].rating", "before": "5/10", "after": "6/10" },
+  { "layer": "full", "path": "phases[3].why", "before": "Bank XP and chip the margins — your duo levels early and spikes rude.", "after": "Repeated W-Q windows beat your poke; Speed Up reacts after, not before." },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Alistar" },
+  { "layer": "full", "path": "phases[4].rating", "before": "6/10", "after": "7/10" },
+  { "layer": "full", "path": "phases[4].why", "before": "Chronoshift online — their kill math now includes an undo button.", "after": "Unbreakable Will lets him dive and facetank bombs, chaining CC." },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Alistar" },
+  { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "7/10" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item: the bombs chunk and the speed warps decide every chase.", "after": "Combo damage and tankiness spike — landed W-Q outpaces Rewind." },
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Alistar Headbutt: matchup-defining — The headbutt-pulverize combo starts every play — respect flash range while it is up. Read it before every duo step-up. - Your E Time Warp answers exactly one disaster per cooldown. - Spend the R on swing moments only.", "after": "- Headbutt (W, 14-10s) into Pulverize (Q, 14-10s): matchup-defining combo — track both before every duo step-up, respect flash range while it's up. - Your E Time Warp (15s) answers exactly one disaster per cooldown. - Spend the 120/90/60s R on swing moments only." },
+  { "layer": "full", "path": "breakdown.trading", "before": "Good trade: Q the carry, W, Q the stun, walk — the double-bomb chunk that started as chip. Bad trade: Spending the R on a survivable catch — the undo insures deaths, not discomfort.", "after": "Good trade: Q, W, Q the stun, walk — double-bomb chip; buy Grievous Wounds early, Triumphant Roar heals through chip. Bad trade: R'ing a survivable catch — the undo insures deaths, not discomfort." },
+  { "layer": "full", "path": "dosFull[0].d", "before": "The headbutt-pulverize combo starts every play — respect flash range while it is up. Commit on its cooldown, never into it.", "after": "Trample (E) auto-resets before the stun lands — that wind-up is the tell. Step back on it; commit only on his cooldown." },
+  { "layer": "full", "path": "dosFull[1].d", "before": "Q the carry, W, Q the stun, walk — the double-bomb chunk that started as chip.", "after": "Land the first Q to tag him, second Q on top — double stun is the setup." },
+  { "layer": "full", "path": "dontsFull[2].d", "before": "Spending the R on a survivable catch — the undo insures deaths, not discomfort.", "after": "Chronoshift undoes a death, not damage taken. Save it for the kill, not a poke." }
+ ],
+ "notes": "Level chart fix: content win[0-6] and whys[0-6] were already correct (Zilean/Skill/Alistar/Alistar/Alistar/Alistar/Skill); only the full-layer phases[N].side was stuck on 'Skill' across the board, contradicting both the packet's win-rate/chart defect note and the content prose. Fixed by moving side+rating+why on the 4 mismatched rows (0,2,3,4,5) to agree with the already-correct win[N]; no win[N] edits were needed (would have been no-ops). Also fixed the two COPY_PASTE_BLEED lint hits (dosFull[1].d, dontsFull[2].d) and added real cooldown numbers to breakdown.cooldowns (was digit-free). Folded in both missingInteractions: Trample's auto-reset tell (dosFull[0]) and Triumphant Roar sustain / Grievous Wounds timing (breakdown.trading)."
+}

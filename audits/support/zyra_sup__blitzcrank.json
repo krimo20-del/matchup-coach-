@@ -1,0 +1,46 @@
+{
+ "ownerKey": "zyra_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[0-2].side read \"Skill\" while content win[0-2] already read \"Zyra\" and content whys[0-2] explicitly argue Zyra wins those levels — the two layers disagreed on levels 1-3.",
+   "why": "The packet levelChart (Zyra,Zyra,Zyra,Skill,Skill,Skill,Skill) matches content win[] exactly: Blitzcrank has no ranged poke before he lands a hook, so levels 1-3 are Zyra's clean poke advantage, and it flips to even once Rocket Grab can one-shot her at 4-5+.",
+   "corrected": "phases[0-2].side moved to \"Zyra\" to match win[0-2]; phases[3-6].side stay \"Skill\", already agreeing with win[3-6].",
+   "confidence": "High",
+   "sources": ["packet", "currentText.content"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 2 double-plant burst, level 6 grab-Power Fist-Static Field kill threat, and the hook-coinflip late game are all correctly grounded in Blitzcrank's real kit.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no cooldown number (lint COOLDOWN_NO_DIGIT, and the packet defect flags no sequencing advice anywhere); dosFull[1].d and dontsFull[2].d were verbatim copies of tradeGood/tradeBad under unrelated titles.",
+   "why": "Rocket Grab (Q) is 20/19/18/17/16s, so a whiffed grab is a real 20-second punish window at rank 1; Power Fist (E) resets on hit at 7/6.5/6/5.5/5s and is the auto-reset burst tell; Static Field (R) silences on a 60/40/20s cycle.",
+   "corrected": "Cooldowns rewritten with real numbers and sequencing (grab whiff -> 20s window); the two bled bullets rewritten with grab-specific content instead of the generic garden/plant lines.",
+   "confidence": "High",
+   "sources": ["enemyKit"]
+  }
+ ],
+ "edits": [
+  {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Zyra"},
+  {"layer": "full", "path": "phases[0].why", "before": "Seed the brush and Q the pair — the garden opens bot with a formation tax.", "after": "Blitz has no ranged poke while your seeds and E outrange his melee presence."},
+  {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Zyra"},
+  {"layer": "full", "path": "phases[1].why", "before": "Plants join the trades: every exchange near your seeds is a 4v2.", "after": "E-seed burst punishes walk-ups — he can't trade back without a hook."},
+  {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Zyra"},
+  {"layer": "full", "path": "phases[2].why", "before": "E threats live: the root into bloom is the lane's nastiest level 3.", "after": "Zone behind minions and deny the grab line entirely — his only threat."},
+  {"layer": "full", "path": "dosFull[1].d", "before": "Seed, Q the pair, root the answer — the trade was 4v2 and the floor did the arguing.", "after": "Grab whiffs cost him 20s at rank 1 — punish the miss with seed poke immediately."},
+  {"layer": "full", "path": "dontsFull[2].d", "before": "Trading gardenless like an honest mage — the plants ARE the champion; the spells are gardening tools.", "after": "Trading beside his hook range hands him the pull he needs — stay behind minions until Rocket Grab is spent."},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. The duo’s tempo bends around it. - Keep R Stranglethorns banked for their best play. - The ultimate is a fight decision, not a habit.", "after": "- Blitzcrank Rocket Grab (Q) is 20/19/18/17/16s — minion cover denies the line, and a whiffed grab means 20s with no threat. - Power Fist (E) is 7/6.5/6/5.5/5s and resets on hit. - Static Field (R) silences at 60/40/20s; bank your R past his."}
+ ],
+ "notes": "phases[0-2].side were stale at Skill while content win[0-2] already said Zyra and packet levelChart confirmed it — moved side alone and rewrote why to match (bare side flips without a matching why are disallowed). phases[3-6]/win[3-6] already agreed at Skill, left alone. Fixed both lint copy-paste-bleed bullets and put real Rocket Grab/Power Fist/Static Field cooldown numbers into breakdown.cooldowns, addressing the packet's 'no sequencing advice' defect. suspectNames flagged 'Save Stranglethorns' and 'Power Fist-' but both are correct real ability names (Zyra's own R, Blitzcrank's real E) — false positives, no fix needed."
+}

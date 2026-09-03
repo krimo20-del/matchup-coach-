@@ -1,0 +1,69 @@
+{
+ "ownerKey": "xerath_sup",
+ "enemy": "milio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "Full-layer phases[0-6].side all read 'Skill' while content win[0-5]='Xerath' and win[6]='Milio' — the two layers disagreed on every row.",
+   "why": "The packet levelChart (Xerath x6, Milio last) and the content whys[] both already tell a consistent story: Xerath wins the poke war until Milio's Breath of Life/Cozy Campfire sustain and cleanse take over late. The full layer's flat 'Skill' rows never reflected that.",
+   "corrected": "phases[0-5].side set to Xerath (ratings raised) and phases[6].side set to Milio (rating lowered) to match win[] and the whys, which already argued the correct verdict.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win", "currentText.content.whys"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 2 Q-rush spike, Level 6 ult-snipe-around-Cozy-Campfire, first-item Luden's-vs-shield spike, and late Breath-of-Life scaling spike are all already stated with real interaction detail in spikes[].",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Milio's E (Warm Hugs) shield, which absorbs a full burst window, was never named on the page; breakdown.cooldowns had no digits.",
+   "why": "Warm Hugs has 2 charges and directly negates an all-in the moment it's thrown, so it needs to be forced out before Xerath commits his combo.",
+   "corrected": "dosFull[1].d now names the E shield and tells the player to bait it with a Q first; breakdown.cooldowns now carries Breath of Life (160/145/130s) and Cozy Campfire (29/27/25/23/21s) real cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit.E.flags.shield", "enemyKit.R.cd", "enemyKit.W.cd"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Xerath"},
+  {"layer":"full","path":"phases[0].rating","before":"5/10","after":"7/10"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Xerath"},
+  {"layer":"full","path":"phases[1].rating","before":"5/10","after":"7/10"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Xerath"},
+  {"layer":"full","path":"phases[2].rating","before":"5/10","after":"7/10"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Xerath"},
+  {"layer":"full","path":"phases[3].rating","before":"5/10","after":"6.5/10"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Xerath"},
+  {"layer":"full","path":"phases[4].rating","before":"6/10","after":"6.5/10"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Xerath"},
+  {"layer":"full","path":"phases[5].rating","before":"6/10","after":"6.5/10"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Milio"},
+  {"layer":"full","path":"phases[6].rating","before":"6/10","after":"3.5/10"},
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the pair from beyond answer range, W the dodge, walk — one-way ledgers per wave.",
+   "after": "Milio's shield (E) absorbs one burst window — force it out with a Q before committing."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Charging Q inside hook range — the artillery that forgets geography becomes the exhibit.",
+   "after": "Ignoring Cozy Campfire (W) sustain — his 29-21s heal zone quietly refunds every poke trade."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Milio Breath of Life: matchup-defining — The team-wide cleanse-heal undoes your CC chain — force it early, engage after. Read it before every duo step-up. - Your E Shocking Orb answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Breath of Life is 160/145/130s — the cleanse-heal undoes your CC chain, so bait it before you engage. - Cozy Campfire (W) is 29/27/25/23/21s; sustain resets once it's down. - Your E (13/12.5/12/11.5/11s) answers one disaster per cooldown."
+  }
+ ],
+ "notes": "Corrected a 7-row full/content chart disagreement (all rows said 'Skill' on the full layer while content already had the right Xerath/Milio verdicts) — side+rating only, win[] and whys already matched the correct call. The 'your-channel-punished' missingInteraction claims Milio's R cancels Xerath's R channel, but Milio's R text only removes CC and heals — it has no CC of its own, so that headline contradicts Riot's own ability description (the hardCC flag on Milio's R looks like a tooltip-parsing misfire). Did not add that claim to the page; flagging here per the calibration note to trust the description over the derived flag."
+}

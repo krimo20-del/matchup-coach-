@@ -1,0 +1,97 @@
+{
+ "ownerKey": "velkoz_sup",
+ "enemy": "bard",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0..6].side all read the placeholder 'Skill' instead of naming a winner, while content win[0..6] already correctly reads 'Vel'Koz' for all 7 rows and the packet levelChart agrees.",
+   "why": "'Skill' is a template placeholder, not a valid side value; the full-layer chart disagrees with its own content-layer counterpart on every row, which is exactly the two-layers-disagree defect the audit rules call out.",
+   "corrected": "Set phases[0..6].side to 'Vel'Koz' to match the already-correct win[0..6]; win[] is left alone since it already reads Vel'Koz (no-op avoided).",
+   "confidence": "High",
+   "sources": ["currentText", "packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 (R out-ranges Tempered Fate cast range) and first-item burst spikes are grounded in the real range numbers (R 1575 vs Bard's kit).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Cosmic Binding and Tempered Fate as the timers to track but has no actual cooldown numbers (lint: COOLDOWN_NO_DIGIT).",
+   "why": "The field is the designated home for concrete cooldown numbers per the audit rules; real numbers exist in both kits (Cosmic Binding 11-7s, Tectonic Disruption 12-10s, Tempered Fate 110-80s).",
+   "corrected": "Rewrote breakdown.cooldowns with real cooldown ranges for all three abilities.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q-fork the pair, W the pulse, third-hit the research — true math their page can't answer.",
+   "after": "Land Q's split on the pair, W the pulse, third-hit for true damage his armor ignores."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Beaming into a loaded engage — the channel is a verdict for fights already decided.",
+   "after": "Channeling R into his stasis range — Tempered Fate voids the whole beam for free."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Bard Cosmic Binding: matchup-defining — The wall-stun starts every Bard pick — never hug terrain near him. Read it before every duo step-up. - Your E Tectonic Disruption answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Cosmic Binding is 11s at rank 1, 7s at rank 5 — the wall-stun starts every Bard pick, never hug terrain near him. - Tectonic Disruption (E) is 12s early, 10s late — save it for the follow-up all-in. - Tempered Fate is up every 110-80s; track it before you commit R."
+  }
+ ],
+ "notes": "win[N] and phases[N].side disagreed on every row (content said Vel'Koz, full said the placeholder 'Skill') — fixed by moving side to match the already-correct content layer, per the chart rule's no-op-avoided case. suspectNames flags (Life Form Disintegration Ray, Plasma Fission, Tectonic Disruption, Cosmic Binding, Tempered Fate) are all real ability names for both champions — false positives, no correction needed. Bard's untargetable R (Tempered Fate) dodging a committed ult, and anti-heal timing against his shrine sustain, are already covered adequately in spikes[1].text and report[8] — left alone."
+}

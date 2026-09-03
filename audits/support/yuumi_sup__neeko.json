@@ -1,0 +1,59 @@
+{
+ "ownerKey": "yuumi_sup",
+ "enemy": "neeko",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 1,
+   "status": "needs-correction",
+   "whatIsWrong": "Neeko is female (champ-gender.js FEMALE list) but tldr/loading/dontsFull/report call her 'he/his'.",
+   "why": "The template was written generically and only swapped the champion name, not the pronoun.",
+   "corrected": "she/her throughout",
+   "confidence": "High",
+   "sources": ["champ-data/champ-gender.js"]
+  },
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "n/a",
+   "why": "Lane difficulty is EVEN (5.5/10) and the packet's 51.96% Yuumi win rate over 993 games supports a close, skill-expression matchup rather than a hard lane.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/yuumi_sup.json"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "Level chart contradicts itself: full-layer phases[].side reads 'Skill' on all 7 rows while content-layer win[] names Neeko on all 7 rows.",
+   "why": "The two layers must name the same side per stage; 'Skill' names neither side.",
+   "corrected": "Move all 7 phases[].side to 'Neeko' to agree with the already-correct win[] array (which matches the packet's own levelChart, also all-Neeko).",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/yuumi_sup.json", "champ-data/content/sup/yuumi.js"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Tangle-Barbs (E) as matchup-defining but gives no cooldown number, and R (Pop Blossom) is described generically.",
+   "why": "Real numbers make the advice actionable: Tangle-Barbs is 12/11.5/11/10.5/10s, Pop Blossom is 120/105/90s.",
+   "corrected": "Cite the E cooldown explicitly so the reader knows how long a whiffed root is punished.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/neeko.json"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"tldr","before":"He pokes the host you're taped to — heal the chip, steer the answers, and out-scale the rotation.","after":"She pokes the host you're taped to — heal the chip, steer the answers, and out-scale the rotation."},
+  {"layer":"full","path":"loading","before":"- Yuumi vs Neeko - Track: Neeko Tangle-Barbs (Root). - Track his engage cooldown — your duo trades only when it's down. - The duo goes when Tangle-Barbs (Root) is down. - The R decides fights; it doesn’t advertise them.","after":"- Yuumi vs Neeko - Track: Neeko Tangle-Barbs (Root). - Track her engage cooldown — your duo trades only when it's down. - The duo goes when Tangle-Barbs (Root) is down. - The R decides fights; it doesn’t advertise them."},
+  {"layer":"full","path":"dontsFull[0].t","before":"Dismount inside his zone","after":"Dismount inside her zone"},
+  {"layer":"full","path":"report[0].t","before":"He pokes the host you're taped to — heal the chip, steer the answers, and out-scale the rotation.","after":"She pokes the host you're taped to — heal the chip, steer the answers, and out-scale the rotation."},
+  {"layer":"full","path":"report[10].t","before":"Your CC plus jungler arrival decides bot — ping gank windows on his engage cooldown and hold the river bush vision.","after":"Your CC plus jungler arrival decides bot — ping gank windows on her engage cooldown and hold the river bush vision."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Neeko Tangle-Barbs (Root): matchup-defining — The root sets up her whole burst — sidestep it behind minions. The duo’s tempo bends around it. - Keep W attach (untargetability) banked for their best play. - The ultimate is a fight decision, not a habit.","after":"- Neeko Tangle-Barbs (Root): matchup-defining — 12/11.5/11/10.5/10s, and it sets up her whole burst — sidestep it behind minions. - Keep W attach (untargetability) banked for their best play. - Pop Blossom (100/85/70s CDR-scaled: 120/105/90s base) is a fight decision, not a habit."},
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Neeko"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Neeko"}
+ ],
+ "notes": "win[] and the packet levelChart already agreed on Neeko all 7 stages (packet.winRate 51.96% favors Yuumi overall, which is inconsistent with an all-Neeko chart — flagged but left as-is per THE CHART RULE since I can't confirm from the kit which is stale; only the full/content disagreement was fixed). Remaining templated fields (breakdown.early/mid/wave/trading/spikes/feeding/carry/difficulty/late, ahead, tradeGood/tradeBad, enemyWin) are still generic 'saddle/host/duo' language shared verbatim across this owner's matchups — deferred for a dedicated de-templatization pass; report[1..8] and report[9],[11] pronoun errors ('him') also deferred past the 2-report-edit cap."
+}

@@ -1,0 +1,52 @@
+{
+  "ownerKey": "yuumi_sup",
+  "enemy": "taric",
+  "lane": "support",
+  "audit": [
+    {
+      "point": 2,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer phases[0..4].side all read \"Skill\" (a placeholder) and phases[5..6].side read \"Taric\", but content win[] (matching the packet levelChart) says Taric wins levels 1 through 6 and Yuumi wins first item and 2+ items — the exact opposite split. Reader sees two different answers to who wins early lane.",
+      "why": "Taric's empowered-auto/Q heal trade package and Dazzle stun genuinely dominate Yuumi before an item; Yuumi's poke and R waves only out-value his short range once she has AP online, matching the 49.64% WR and the packet's own levelChart.",
+      "corrected": "Set phases[0..4].side = \"Taric\" and phases[5..6].side = \"Yuumi\", with rewritten why lines grounded in Taric's kit (see edits).",
+      "confidence": "High",
+      "sources": ["packet levelChart", "content win[]/whys[] (already correct)", "champ-data/_kits/taric.json"]
+    },
+    {
+      "point": 3,
+      "status": "correct",
+      "whatIsWrong": "n/a",
+      "why": "Content spikes[] already correctly identify level 6 Cosmic Radiance and first-item AP power spikes.",
+      "corrected": "n/a",
+      "confidence": "High",
+      "sources": ["content spikes[]"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "The missing-interactions file flags three unmentioned facts: Taric sustains through chip via Starlight's Touch (Q) so Grievous Wounds timing matters; Taric's Dazzle (E) can cancel Yuumi's channeled Final Chapter (R); and Bastion (W) shield absorbs Yuumi's burst window. breakdown.cooldowns only vaguely mentions Cosmic Radiance and never states the E-cancels-R interaction or the anti-heal timing.",
+      "why": "These are real, sourced facts from the kits (Taric Q heal, Dazzle hardCC, Bastion shield) that change how the reader should sequence R and itemize.",
+      "corrected": "Folded into breakdown.cooldowns and dosFull edit below.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/_missing/yuumi_sup.json", "champ-data/_kits/taric.json"]
+    }
+  ],
+  "edits": [
+    { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Taric" },
+    { "layer": "full", "path": "phases[0].why", "before": "Poke from the saddle — the attached Q steers and the lane can't bill you for it.", "after": "Taric's empowered autos and Starlight's Touch heal out-trade your poke." },
+    { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Taric" },
+    { "layer": "full", "path": "phases[1].why", "before": "Dismount windows begin: the passive autos shield and heal; schedule them carefully.", "after": "Dazzle (E) threatens a stun the moment you step up — his heal outlasts your Q." },
+    { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Taric" },
+    { "layer": "full", "path": "phases[2].why", "before": "Full rhythm: attach for the trades, dismount for the passive, never linger between.", "after": "Bastion shield plus Dazzle stun keep his lane healthier than your chip damage." },
+    { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Taric" },
+    { "layer": "full", "path": "phases[3].why", "before": "Zoomies the margins — the host's tempo is your tempo; bank the chip.", "after": "His stun-and-heal package still controls engages; hold max attach range." },
+    { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Taric" },
+    { "layer": "full", "path": "phases[4].why", "before": "Final Chapter online — the root waves referee every dive on your host.", "after": "Cosmic Radiance invuln guarantees his ADC an all-in you cannot burst through." },
+    { "layer": "full", "path": "phases[5].side", "before": "Taric", "after": "Yuumi" },
+    { "layer": "full", "path": "phases[5].why", "before": "First item: the heals compound and the steered Qs chunk.", "after": "Your item flips it: R waves and Q chip outrange his mana-hungry heals." },
+    { "layer": "full", "path": "phases[6].side", "before": "Taric", "after": "Yuumi" },
+    { "layer": "full", "path": "phases[6].why", "before": "Late Yuumi is the unkillable second health bar: attach, amplify, and out-vote the focus fire.", "after": "Your range and sustain now overtake his short-range enchanter kit outside R." },
+    { "layer": "full", "path": "breakdown.cooldowns", "before": "- Taric Cosmic Radiance: matchup-defining — The delayed invulnerability erases your teamfight damage — burst before it lands or wait it out. Read it before every duo step-up. - Your W attach (untargetability) answers exactly one disaster per cooldown. - Spend the R on swing moments only.", "after": "- Taric Cosmic Radiance: matchup-defining — the delayed invulnerability erases your teamfight damage; burst before it lands or wait it out. - Dazzle (E, 16/15/14/13/12s) is a hard CC that cancels your channeled R outright — only cast Final Chapter once it's spent. - Starlight's Touch (Q) heals through your chip; time Grievous Wounds to his recall, not mid-fight." }
+  ],
+  "notes": "Level chart was fully inverted between layers before this proposal; content win[]/whys[] were already correct and full-layer side/why were rewritten to match. Grounded the missing-interactions (anti-heal timing, R-cancels-your-R, Bastion shield) into breakdown.cooldowns."
+}

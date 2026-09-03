@@ -1,0 +1,77 @@
+{
+ "ownerKey": "xerath_sup",
+ "enemy": "alistar",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Xerath out-ranges Alistar at every stage until Alistar closes with Headbutt-Pulverize; chart and content agree Xerath favoured all 7 rows.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "brief levelChart",
+    "brief currentText.content.win[]"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes at level 2 (Q+W zoning), level 6 (R snipe), and mana item online are already recorded; a 4th spikes[] slot is missing per packet defect.",
+   "corrected": "Added spikes[3]: Alistar's Unbreakable Will (R) clears CC but not damage, so an E-stun landed just before he presses R still whiffs his engage timing.",
+   "confidence": "Medium",
+   "sources": [
+    "packet.defects",
+    "ownerKit/enemyKit R text"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real number (COOLDOWN_NO_DIGIT); dosFull/dontsFull rows were verbatim copies of tradeGood/tradeBad (COPY_PASTE_BLEED)",
+   "why": "Headbutt/Pulverize share a 14-10s cooldown curve and Trample stacks a stun on the 3rd auto — none of that is stated, so the reader gets no actionable timing.",
+   "corrected": "Fixed breakdown.cooldowns (COOLDOWN_NO_DIGIT) and dosFull[1].d/dontsFull[2].d (COPY_PASTE_BLEED) per matchup-lint.js findings.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit W cd 14/13/12/11/10",
+    "enemyKit E cd 12/11.5/11/10.5/10",
+    "enemyKit E autoReset flag"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": null,
+   "after": "Unbreakable Will only clears CC, not the damage already in flight — an E-stun landed right before he presses R still cancels his combo timing even though the stun itself is cleansed."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].when",
+   "before": null,
+   "after": "Level 6, on his R"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Alistar Headbutt: matchup-defining — The headbutt-pulverize combo starts every play — respect flash range while it is up. It writes your spacing rules. - E Shocking Orb is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Alistar Headbutt cycles 14-10s — the headbutt-pulverize combo starts every play — respect flash range while it is up. It writes your spacing rules. - E Shocking Orb is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the pair from beyond answer range, W the dodge, walk — one-way ledgers per wave.",
+   "after": "Headbutt needs him in W range first — E-stun his walk-up and the combo never starts."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Charging Q inside hook range — the artillery that forgets geography becomes the exhibit.",
+   "after": "Trading autos past his second stack — Trample stuns on the 3rd auto and hands him the combo."
+  }
+ ],
+ "notes": "missingInteractions covered: antiheal timing already present in report[8] Itemization; autoreset burst-tell folded into breakdown.cooldowns and dontsFull[2]. Did not touch tradeGood/tradeBad/ahead/loading/enemyWin/breakdown.carry|wave|feeding|difficulty|late — stylistically templated ('Bill the engage class per zip code') but not factually wrong and time-boxed this pass; flagged in sectionsMissing."
+}

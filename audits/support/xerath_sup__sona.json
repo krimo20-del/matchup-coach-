@@ -1,0 +1,78 @@
+{
+ "ownerKey": "xerath_sup",
+ "enemy": "sona",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[6].side is \"Skill\" while content win[6] already says \"Sona\" — the two layers disagree on who wins the 2+ items stage.",
+   "why": "The chart and win-row are the same stage rendered twice; a reader would see a contradictory answer for the late-game stage. Kit and prose both agree Sona's stacked auras and teamfight Crescendo flip fights against a clumped team once she has 2+ items, matching win[6]=\"Sona\" and the packet's own levelChart entry.",
+   "corrected": "phases[6].side set to \"Sona\" to match the already-correct win[6]. No win[N] edit needed since it was already right.",
+   "confidence": "High",
+   "sources": [
+    "currentText content layer",
+    "packet.levelChart",
+    "packet.defects"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real number (COOLDOWN_NO_DIGIT); dosFull/dontsFull rows were verbatim copies of tradeGood/tradeBad (COPY_PASTE_BLEED)",
+   "why": "Xerath's R is a self-immobilizing channel any hard CC cancels. Crescendo stuns on a long 140/120/100s cooldown, so eating it mid-ult is rare but costly and worth naming with the real number. Separately, Sona's Q scales with her attack speed via on-hit, so a pure-armor reading of the poke trade underrates her damage once she has attack-speed items.",
+   "corrected": "Fixed breakdown.cooldowns (COOLDOWN_NO_DIGIT) and dosFull[1].d/dontsFull[2].d (COPY_PASTE_BLEED) per matchup-lint.js findings.",
+   "confidence": "High",
+   "sources": [
+    "ownerKit",
+    "enemyKit",
+    "missingInteractions"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[6].why",
+   "before": "Late support Xerath grades sieges: stun the entry, barrage the pit, relocate.",
+   "after": "At 2+ items her stacked auras and multi-target Crescendo flip fights on a clumped team."
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Sona"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Q the pair from beyond answer range, W the dodge, walk — one-way ledgers per wave. Bad trade: Charging Q inside hook range — the artillery that forgets geography becomes the exhibit.",
+   "after": "Good trade: poke every Power Chord walk-up from beyond her Q's 825 range. Bad trade: extended on-hit exchanges once she's stacked attack speed — Hymn of Valor scales off it, so armor alone reads the trade wrong."
+  },
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Add anti-heal early into his duo’s sustain.",
+   "after": "World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Add anti-heal early into her duo’s sustain."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Sona Crescendo: matchup-defining — The stun chord flips grouped fights — spread while it is up. Read it before every duo step-up. - Your E Shocking Orb answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Sona Crescendo cycles 140-100s — the stun chord flips grouped fights — spread while it is up. Read it before every duo step-up. - Your E Shocking Orb answers exactly one disaster per cooldown. - Spend the R on swing moments only."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the pair from beyond answer range, W the dodge, walk — one-way ledgers per wave.",
+   "after": "Aria only shields, no root — walk the step-up down, she has no answer at 10s cooldown."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Charging Q inside hook range — the artillery that forgets geography becomes the exhibit.",
+   "after": "Facechecking a bush before Crescendo's cooldown (100-140s) is confirmed spent — it flips fights."
+  }
+ ],
+ "notes": "Level-chart fix: phases[6].side moved to \"Sona\" alone since content win[6] already read \"Sona\" — no win[N] edit needed (would have been a rejected no-op). The packet's stated defect (46.9% winrate vs a chart that reads Xerath-favored 6/7 rows) is not itself a mechanical error: kit evidence supports an early Xerath range/poke lead that fades once Sona stacks Power Chord auras and hits a multi-target Crescendo at 2+ items, and win[6]/phases[6] were already split that way before this edit — left the other 6 rows alone per the leave-it-alone rule since nothing in the kits contradicts them. suspectNames flagged \"Power Chord-\" (distance 1 from \"power chord\") but the kit confirms Power Chord is the correct name; it's just hyphenated against \"CS\" in spikes[0].text — not an error, no edit made. Fixed both COPY_PASTE_BLEED lint hits, the MISGENDER hit (Sona is she/her), and COOLDOWN_NO_DIGIT with real numbers. Folded in missingInteractions channel-punish and onhit-itemization; needs-antiheal and autoreset-burst-tell were already adequately covered by existing tradeBad/dosFull[0] text referencing Aria sustain and Power Chord tells."
+}

@@ -1,0 +1,45 @@
+{
+ "ownerKey": "yuumi_sup",
+ "enemy": "pyke",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "n/a",
+   "why": "EVEN lane (5.5/10), 50.07% Yuumi win rate over 4346 games — early stages favor Yuumi's ranged poke, late stages favor Pyke's hook-plus-execute pick game, matching the content-layer whys.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/yuumi_sup.json"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0-2].side reads 'Pyke' while content win[0-2] and the packet's own levelChart read 'Yuumi' for those same three rows; phases[3-6].side reads 'Skill' while win[3-6] reads 'Pyke'.",
+   "why": "Rows 0-2's own why text ('Poke from the saddle — the attached Q steers and the lane can't bill you for it') already describes an owner-favored lane, so the side label was simply backwards; rows 3-6's 'Skill' placeholder doesn't name a side at all.",
+   "corrected": "Move phases[0-2].side to 'Yuumi' and phases[3-6].side to 'Pyke' to match win[] and the packet levelChart.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/yuumi_sup.json", "champ-data/content/sup/yuumi.js"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns calls Bone Skewer (Q) matchup-defining with no cooldown number, and doesn't mention it's an interruptible channel.",
+   "why": "Bone Skewer is 10/9.5/9/8.5/8s and is a channeled pull — any CC (including your E-heal window's incidental proc) cancels it, and it can be blocked by Wind Wall-class effects.",
+   "corrected": "Add the cooldown and the channel/interrupt flag.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/pyke.json"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Pyke Bone Skewer: matchup-defining — The hook starts the chain — his R cleans what it catches. It writes your spacing rules. - W attach (untargetability) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Pyke Bone Skewer: matchup-defining — 10/9.5/9/8.5/8s, a channeled pull his R cleans up. Any CC on him cancels the channel. - W attach (untargetability) is for saving fights, not seasoning trades. - Death From Below (R, 100/85/70s) opens or closes fights — pick one per cast."},
+  {"layer":"full","path":"phases[0].side","before":"Pyke","after":"Yuumi"},
+  {"layer":"full","path":"phases[1].side","before":"Pyke","after":"Yuumi"},
+  {"layer":"full","path":"phases[2].side","before":"Pyke","after":"Yuumi"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Pyke"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Pyke"}
+ ],
+ "notes": "win[] and the packet levelChart already agreed (Yuumi x3 early, Pyke x4 late); only full-layer side tokens were wrong (early rows literally backwards). Remaining templated breakdown fields (early/mid/wave/trading/spikes/feeding/carry/difficulty/late, ahead, tradeGood/tradeBad, enemyWin) are still generic saddle/host language shared across this owner's matchups — deferred for a dedicated pass."
+}

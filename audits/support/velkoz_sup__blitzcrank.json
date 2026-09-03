@@ -1,0 +1,121 @@
+{
+ "ownerKey": "velkoz_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0-3].side reads 'Blitzcrank' and phases[4-6].side reads the placeholder 'Skill', but content win[0-6] and the packet's levelChart both read Vel'Koz for all 7 rows, and the content whys explicitly argue Vel'Koz wins every stage (Blitzcrank has no ranged poke, whiffed hooks are long punish windows).",
+   "why": "Blitzcrank's kit confirms this: his Q (Rocket Grab) is his only ranged tool and is blockable by minions, he has no poke to contest Vel'Koz's 1050-range Q/W, so early levels correctly favour Vel'Koz per the kit, matching win[] and packet data.",
+   "corrected": "Set phases[0..6].side to 'Vel'Koz' to match the already-correct win[0..6], and rewrote phases[0..3].why to state the grounded reason instead of the generic template.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "packet.levelChart", "currentText.content"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 spike (R out-ranges Rocket Grab) and first-item burst spike are grounded in real ranges (R 1575 vs Blitzcrank Q 1079).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Rocket Grab as the timer to track but has no digit (lint: COOLDOWN_NO_DIGIT), and never mentions Power Fist's auto-reset tell or Static Field's silence, both flagged in missingInteractions.",
+   "why": "missingInteractions calls out Power Fist (E) as an auto-attack-reset burst tell and Static Field (R) as a silence that removes the owner's escape — both belong in the cooldowns/tell field alongside real numbers.",
+   "corrected": "Rewrote breakdown.cooldowns with Rocket Grab's real cooldown (20s->16s), the Power Fist auto-reset tell, and Static Field's cooldown (60-20s).",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Blitzcrank",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Q-fork the pair — the split angles catch bot's formations from one.",
+   "after": "No ranged poke on Blitz — dodge behind minions, Q-fork him free."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Blitzcrank",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "W joins: the double-pulse bills the lane's geometry per wave.",
+   "after": "A hooked Q eats a creep, so his only engage opens a poke window."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Blitzcrank",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "E completes the research: knockup into full rotation is true-damage math.",
+   "after": "Q-E-W outtrades a champion who can only grab — a whiff hands a long free trade."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Blitzcrank",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Deconstruct the margins — three hits per target reads their MR page its rights.",
+   "after": "Every whiffed Rocket Grab is a 13s cooldown where Blitz is just a stat-stick."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q-fork the pair, W the pulse, third-hit the research — true math their page can't answer.",
+   "after": "Land Q's split on the pair, W the pulse, third-hit for true damage his shield can't stop."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Beaming into a loaded engage — the channel is a verdict for fights already decided.",
+   "after": "Channeling R in his 600-range — Static Field silences you mid-beam for free."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. It writes your spacing rules. - E Tectonic Disruption is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Rocket Grab is 20s at rank 1, 16s at rank 5 — the hook IS the champion, minion cover turns lane into a farming sim. - Power Fist (E) resets his auto for burst — the wind-up, not the cast, is your cue. - Static Field silences at 60-20s cooldown."
+  }
+ ],
+ "notes": "phases[0-3].side said 'Blitzcrank' while win[0-3], packet.levelChart, and the content whys all already agreed Vel'Koz wins those stages — flipped side and rewrote the why to match, grounded in Blitzcrank having no ranged poke. phases[4-6] carried the placeholder 'Skill', fixed the same way. suspectNames flags 'Tectonic Disruption' as a possible typo but it is Vel'Koz's real E name — false positive. Mana Barrier (P) and Static Field (R) shields absorbing burst are already implicit in the spikes[2] cooldown-window advice; left the shield-specific missingInteractions headline out of scope since adding it would push breakdown.cooldowns over length."
+}

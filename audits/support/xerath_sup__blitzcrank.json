@@ -1,0 +1,126 @@
+{
+ "ownerKey": "xerath_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0-3].side say 'Blitzcrank' but content win[0-3] say 'Xerath', and the packet levelChart also has Xerath winning rows 0-3 — full-layer and content-layer disagree on who wins Levels 1 through 4-5.",
+   "why": "Xerath's Q range beats Rocket Grab's 1079-range hook every early level, and the row's own why text ('bot's formations eat the beam per wave') already argues Xerath's side, not Blitzcrank's — the side column was simply mislabeled.",
+   "corrected": "Set phases[0-3].side to Xerath to match content win[0-3] and the packet chart; phases[4-6].side already agree with win[4-6] as Skill, left alone.",
+   "confidence": "High",
+   "sources": [
+    "packet.levelChart",
+    "brief currentText.content.win[0-3]",
+    "brief currentText.content.whys[0-3]"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "'Power Fist-' flagged by suspectNames is a punctuation artifact (ability names strung with dashes: 'Overdrive-hook-Power Fist-R'), not a wrong name — Power Fist is Blitzcrank's real E per enemyKit.",
+   "why": "spikes[] has 3 entries per packet defect, needs a 4th grounded in a real interaction not yet covered.",
+   "corrected": "Added spikes[3] on Mana Barrier (P) / Static Field (R) shielding through a burst window, from missingInteractions.",
+   "confidence": "High",
+   "sources": [
+    "packet.suspectNames",
+    "enemyKit P/R text and shield flags"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real number (COOLDOWN_NO_DIGIT); dosFull/dontsFull rows were verbatim copies of tradeGood/tradeBad (COPY_PASTE_BLEED)",
+   "why": "Rocket Grab's real 20-16s cooldown and Power Fist's auto-reset tell are the concrete facts a reader needs to time engages and retreats.",
+   "corrected": "Fixed breakdown.cooldowns (COOLDOWN_NO_DIGIT) and dosFull[1].d/dontsFull[2].d (COPY_PASTE_BLEED) per matchup-lint.js findings.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit Q cd 20/19/18/17/16",
+    "enemyKit E cd 7/6.5/6/5.5/5 with autoReset flag",
+    "missingInteractions autoreset-burst-tell"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Q the pair from fog range — bot's formations eat the beam per wave.",
+   "after": "Xerath out-ranges Rocket Grab entirely and pokes free if Blitz body-blocks with minions."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "W joins: the artillery circles tax the lane's geometry.",
+   "after": "Q+W zones Blitz off CS while his hook stays easy to dodge behind minions."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "E completes the kit: the stun into rotation is the lane's longest pick.",
+   "after": "E stun and poke punish Blitz hard for stepping up into grab range."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Chip the ledger — their duo farms at half HP or doesn't farm.",
+   "after": "The poke lead holds as long as you respect the flash-hook threat."
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Blitzcrank",
+   "after": "Xerath"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Blitzcrank",
+   "after": "Xerath"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Blitzcrank",
+   "after": "Xerath"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Blitzcrank",
+   "after": "Xerath"
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": null,
+   "after": "Mana Barrier shields him at low HP and Static Field can shield off nearby damage too — force one of those shields out with poke before you commit your all-in burst, or it just absorbs it."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].when",
+   "before": null,
+   "after": "Any all-in, once he's near a Static Field proc or low-HP shield"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. Read it before every duo step-up. - Your E Shocking Orb answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Blitzcrank Rocket Grab cycles 20-16s — the hook IS the champion — minion cover turns the lane into a farming sim. Read it before every duo step-up. - Your E Shocking Orb answers exactly one disaster per cooldown. - Spend the R on swing moments only."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the pair from beyond answer range, W the dodge, walk — one-way ledgers per wave.",
+   "after": "Rocket Grab is minion-blockable — hug your wave and his 16-20s Q hooks nothing."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Charging Q inside hook range — the artillery that forgets geography becomes the exhibit.",
+   "after": "Standing in Rocket Grab range with no minion cover — the hook deletes you into his kill zone."
+  }
+ ],
+ "notes": "missingInteractions covered: shield-absorbs-burst in new spikes[3]; autoreset-burst-tell folded into breakdown.cooldowns. Left tradeGood/tradeBad/ahead/loading/enemyWin/breakdown.carry|wave|feeding|difficulty|late templated but not factually wrong — time-boxed this pass."
+}

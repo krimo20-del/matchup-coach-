@@ -1,0 +1,85 @@
+{
+ "ownerKey": "xerath_sup",
+ "enemy": "rell",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "missing",
+   "whatIsWrong": "The level chart sweeps Xerath 7/7 stages (both layers agree, matching the packet's own chart), but the packet's actual winRate is 46.91% — Rell wins the matchup slightly.",
+   "why": "packet.defects explicitly flags this: 'level chart contradicts data: Xerath wins only 46.91% but the chart gives Xerath 7/7 stages vs 0'. Both full and content layers agree with each other and with the packet's own levelChart array, so this isn't a two-layer disagreement I can resolve mechanically — flipping a real-winrate-losing matchup to a full 7/7 sweep would need per-stage justification I can't source confidently from the kit alone (Rell's kit — armor/MR shred passive, shield-breaking stun, dash+shield+knockup, reset gap-closer, AoE pull ult — reads as a credible dive threat, not a clear Xerath blowout).",
+   "corrected": "Left the chart and diffRating/carryRating untouched per the chart rule (packet vs prose disagreement I can't adjudicate from the kit stays alone). Recorded here for the user.",
+   "confidence": "Medium",
+   "sources": ["packet.defects", "packet.winRate", "enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Both layers already agree the chart sweeps Xerath 0-6 (see point 2 caveat on the win rate mismatch); no layer-vs-layer edit is needed.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "No field states that Rell's Q/W shield away burst, that her Q cancels your R channel, or that Full Tilt (E) telegraphs with an auto-attack-reset wind-up before the burst lands.",
+   "why": "missingInteractions flags shield-absorbs-burst (Q/W), your-channel-punished (Q cancels your R), and autoreset-burst-tell (E) — none currently appear in the text.",
+   "corrected": "Folded shield-absorb into dosFull[1].d, the auto-reset tell into dontsFull[2].d, and the channel-cancel into breakdown.cooldowns, replacing the copy-paste-bleed bodies lint already flagged.",
+   "confidence": "High",
+   "sources": ["missingInteractions", "enemyKit Q/W/E flags"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "tldr",
+   "before": "His engage starts at a range you retired from — chip the wait and stun the charge.",
+   "after": "Her engage starts at a range you retired from — chip the wait and stun the charge."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].t",
+   "before": "E his charge mid-flight",
+   "after": "E her charge mid-flight"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the pair from beyond answer range, W the dodge, walk — one-way ledgers per wave.",
+   "after": "Her Shattering Strike (Q) and Crash Down (W) shield absorb your burst — force it first."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[0].t",
+   "before": "Stand his flash range chipping",
+   "after": "Stand her flash range chipping"
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Charging Q inside hook range — the artillery that forgets geography becomes the exhibit.",
+   "after": "Ignoring her auto-attack reset (Full Tilt) wind-up — that's your cue to step back, not the cast."
+  },
+  {
+   "layer": "full",
+   "path": "report[0].t",
+   "before": "His engage starts at a range you retired from — chip the wait and stun the charge.",
+   "after": "Her engage starts at a range you retired from — chip the wait and stun the charge."
+  },
+  {
+   "layer": "full",
+   "path": "report[11].t",
+   "before": "Stand his flash range chipping. E the poke. Trade the all-in evenly. And hold the ultimate for the fight it was drafted to decide.",
+   "after": "Stand her flash range chipping. E the poke. Trade the all-in evenly. And hold the ultimate for the fight it was drafted to decide."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Rell Crash Down: matchup-defining — The mount-crash knockup starts her chain — respect the dismount range. Read it before every duo step-up. - Your E Shocking Orb answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Crash Down (W, 10s cd) starts her chain — respect the dismount knockup range and read it before every step-up. - Her Q (11-9s cd) cancels your R channel outright. - Your E (13-11s cd) answers one disaster; save R for swing moments only."
+  }
+ ],
+ "notes": "packet.defects flags that this matchup's level chart (7/7 Xerath, agreed by both layers) contradicts the 46.91% winRate — Rell actually wins slightly more often than Xerath despite the chart showing a clean sweep. Since both layers already agree with each other and with the packet's own chart array, this isn't the layer-vs-layer disagreement the chart rule targets, and I can't confidently re-grade all 7 stages from the kit alone, so I left the chart, diffRating and carryRating untouched and am flagging it here for review — a human pass re-checking each stage against Rell's engage/shield kit would be warranted. Fixed 6 MISGENDER hits (Rell is she/her per lintFindings), both COPY_PASTE_BLEED bodies, and the missing-digit cooldowns field, folding in shield-absorb, channel-cancel, and auto-reset-tell interactions from missingInteractions."
+}

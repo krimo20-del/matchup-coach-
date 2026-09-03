@@ -1,0 +1,74 @@
+{
+ "ownerKey": "yuumi_sup",
+ "enemy": "alistar",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[].side disagreed with content win[] on all 7 rows: side read Alistar/Alistar/Alistar/Skill/Skill/Skill/Skill while win[] (matching packet.levelChart) reads Yuumi/Yuumi/Yuumi/Alistar/Alistar/Alistar/Alistar. 'Skill' is not even a valid side token.",
+   "why": "win[] and packet.levelChart agree with each other and with the existing prose (early/mid/late, whys[]) which already describes Yuumi winning levels 1-3 on poke range and Alistar taking over once W-Q is online. side was simply stale/wrong.",
+   "corrected": "Moved side to Yuumi for rows 1-3 and Alistar for rows 4-7 to match win[]. Rows 1-3's existing why already argued Yuumi's favor so were left alone; rows 4-7's why was rewritten to justify the Alistar verdict from the kit (W-Q flash-engage, R cleanse, item-timed all-in, late CC-chain).",
+   "confidence": "High",
+   "sources": ["currentText.content.win", "packet.levelChart", "currentText.content.whys"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns named Headbutt as the matchup-defining cooldown but never gave the actual number.",
+   "why": "Lint rule requires a digit in breakdown.cooldowns; Alistar's kit lists Headbutt (W) at 14/13/12/11/10s.",
+   "corrected": "Inserted the real cooldown into the sentence in place of the vague 'matchup-defining' framing.",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities[W].cooldown"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Level 6 phase why credited Yuumi's R with a root ('the root waves referee every dive'), but Yuumi's R (Final Chapter) has no hardCC flag — it channels, slows, shields and heals, not roots. It also didn't mention that Alistar's own R (Unbreakable Will) cleanses CC and lets him tank the channel, which is the actual reason the level flips to him.",
+   "why": "enemyKit and ownerKit both confirm: Alistar R clears all CC on himself; Yuumi R has flags slow/shield/heal/channel, no hardCC.",
+   "corrected": "Rewrote phases[4].why (Level 6) to state Alistar's R cleanses CC so he tanks the channel and dives under the heal, matching win[4]=Alistar.",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities[R]", "ownerKit.abilities[R].flags"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Alistar", "after": "Yuumi" },
+  { "layer": "full", "path": "phases[1].side", "before": "Alistar", "after": "Yuumi" },
+  { "layer": "full", "path": "phases[2].side", "before": "Alistar", "after": "Yuumi" },
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Alistar" },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Zoomies the margins — the host's tempo is your tempo; bank the chip.",
+   "after": "His W-Q combo comes online and flashes past your poke onto your ADC."
+  },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Alistar" },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Final Chapter online — the root waves referee every dive on your host.",
+   "after": "His R (Unbreakable Will) cleanses CC so he tanks the channel and dives you."
+  },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Alistar" },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "First item: the heals compound and the steered Qs chunk.",
+   "after": "Mythic done, he all-ins — your heal cant outrun his CC chain."
+  },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Alistar" },
+  {
+   "layer": "full",
+   "path": "phases[6].why",
+   "before": "Late Yuumi is the unkillable second health bar: attach, amplify, and out-vote the focus fire.",
+   "after": "He ults through your kit and CC-chains your carry — you only win fights your ADC already leads."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Alistar Headbutt: matchup-defining — The headbutt-pulverize combo starts every play — respect flash range while it is up. It writes your spacing rules. - W attach (untargetability) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Alistar Headbutt (W) is a 14/13/12/11/10s cooldown — the headbutt-pulverize combo starts every play; respect flash range while it is up. - W attach (untargetability) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  }
+ ],
+ "notes": "phases[].side vs content win[] was inverted/invalid across the whole chart (a chart-agreement bug independent of the mirror, which only checked Alistar's own file). Fixed as one atomic group per the chart rule. Did not touch dosFull/dontsFull/report/other breakdown.* templated fields this pass to stay in scope — breakdown.wave, .feeding, .carry, .difficulty, .late and ahead/tradeGood/tradeBad/loading remain structurally templated (same 'saddle/host/committee' phrasing reused across enemies) and are flagged here rather than rewritten, since none of it is factually wrong and rewriting all ten risked exceeding this pass. missingInteractions (dash-denied via Pulverize/Trample, needs-antiheal vs Triumphant Roar, autoreset-burst-tell on Trample) are already reflected in existing dosFull/wants text; no factual gap found there."
+}

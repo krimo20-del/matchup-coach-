@@ -1,0 +1,61 @@
+{
+ "ownerKey": "yuumi_sup",
+ "enemy": "sona",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full-layer phases[0..4].side reads generic 'Skill' (even) while content win[0..4] reads 'Sona' for the exact same rows; phases[5..6].side reads 'Sona' while content win[5..6] reads 'Yuumi'. Every row disagrees between the two layers.",
+   "why": "Content's early/mid/late narrative is specific and kit-grounded: Sona's Q (Hymn of Valor, 8s cd) + Power Chord out-poke Yuumi through level 5, Crescendo (140s rank-1, lane-wide guaranteed stun) is her strongest kill window at 6, then Yuumi's completed AP item flips the poke war and Sona's squishiness becomes the liability.",
+   "corrected": "Moved phases[0..4].side to 'Sona' and phases[5..6].side to 'Yuumi' to agree with the already-correct content win[] row, rewriting each why to the specific reason.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/sona.json", "champ-data/content/sup/yuumi.js"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "The first-item power spike (Yuumi's AP completion flipping the poke math) and level 6 Crescendo spike are both correctly identified and kit-accurate.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/sona.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns calls Crescendo 'matchup-defining' but never states its cooldown, failing the lint rule requiring a digit.",
+   "why": "Sona's R Crescendo is 140/120/100 (rank 1 = 140s) and her Q Hymn of Valor is only 8s — the asymmetry (rare game-changing stun vs. constant poke tool) is the actual matchup mechanic and needs the numbers to land.",
+   "corrected": "Rewrote breakdown.cooldowns with both real cooldowns.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/sona.json"]
+  },
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Sona is female per champ-data/champ-gender.js; scanned full-layer text for this matchup (loading, report fields, dos/donts) and found no misgendered pronouns.",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": ["champ-data/champ-gender.js"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Sona"},
+  {"layer":"full","path":"phases[0].why","before":"Poke from the saddle — the attached Q steers and the lane can't bill you for it.","after":"Her Hymn Q and Power Chord auto out-range and out-damage your empowered poke."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Sona"},
+  {"layer":"full","path":"phases[1].why","before":"Dismount windows begin: the passive autos shield and heal; schedule them carefully.","after":"Her double-bolt Q toggle keeps winning the poke war — attach and farm safe."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Sona"},
+  {"layer":"full","path":"phases[2].why","before":"Full rhythm: attach for the trades, dismount for the passive, never linger between.","after":"Her stacked auras keep her ADC healthier than yours — do not contest trades."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Sona"},
+  {"layer":"full","path":"phases[3].why","before":"Zoomies the margins — the host's tempo is your tempo; bank the chip.","after":"Her E speed-up dictates every engage still — survive to your item spike."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Sona"},
+  {"layer":"full","path":"phases[4].why","before":"Final Chapter online — the root waves referee every dive on your host.","after":"Crescendo is a guaranteed stun that catches you attached — her best kill."},
+  {"layer":"full","path":"phases[5].side","before":"Sona","after":"Yuumi"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the heals compound and the steered Qs chunk.","after":"Item spike flips it: your R and Q chip beat her poke."},
+  {"layer":"full","path":"phases[6].side","before":"Sona","after":"Yuumi"},
+  {"layer":"full","path":"phases[6].why","before":"Late Yuumi is the unkillable second health bar: attach, amplify, and out-vote the focus fire.","after":"Late you outscale: sustained heals and chip beat her single-shot poke on a paper frame."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Sona Crescendo: matchup-defining — The stun chord flips grouped fights — spread while it is up. It writes your spacing rules. - W attach (untargetability) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Sona's R Crescendo is 140s at rank 1 — a guaranteed lane-wide stun that catches even attached targets, so never contest a fight while it is up. - Her Q Hymn of Valor is only 8s — expect it every trade, not once, until you spike."}
+ ],
+ "notes": "diff/tone/diffRating/carryRating (EVEN, 5.5/10) were left untouched even though the corrected chart now leans Sona-favored early/mid — those top-level summary fields read as reasonably still in range for a matchup that flips hard after level 6/first item, and are not part of the mandatory chart pair. Flag for a follow-up pass if the overall diff rating should move toward TRICKY."
+}

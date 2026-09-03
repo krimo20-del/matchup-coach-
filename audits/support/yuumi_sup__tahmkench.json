@@ -1,0 +1,61 @@
+{
+ "ownerKey": "yuumi_sup",
+ "enemy": "tahmkench",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full-layer phases[0..6].side reads generic 'Skill' (even) for all seven rows while content win[0..6] and the packet's real levelChart both read 'Tahm Kench' for every single row.",
+   "why": "Content is specific and kit-grounded: Tongue Lash out-ranges Yuumi's poke and stacks toward a gray-screen stun, Thick Skin converts Yuumi's chip into a shield, and Abyssal Dive + Devour give Tahm both engage and an untouchable peel from level 6 on — there is no stage where the kit favors Yuumi.",
+   "corrected": "Moved phases[0..6].side to 'Tahm Kench' to agree with the already-correct content win[] row and the packet levelChart, rewriting each why to the specific kit reason.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/tahmkench.json", "champ-data/content/sup/yuumi.js", "tools/audit-run/packets/yuumi_sup.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 (Abyssal Dive + Devour as a combined engage/peel package) and the first-item Thick Skin sustain spike are both correctly identified and kit-accurate.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/tahmkench.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns calls Abyssal Dive 'matchup-defining' but never states its cooldown, failing the lint rule requiring a digit — the packet also flags 'NO cooldown-sequencing advice anywhere' as a defect for this matchup.",
+   "why": "Tahm's W Abyssal Dive is 21/20/19/18/17 (rank 1 = 21s); his Q Tongue Lash is 7/6.5/6/5.5/5 (rank 1 = 7s) and stacks toward the 3-stack gray-screen the content spikes correctly call out. Both numbers matter for sequencing.",
+   "corrected": "Rewrote breakdown.cooldowns with both real cooldowns and the stack-tracking note.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/tahmkench.json"]
+  },
+  {
+   "point": 1,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Tahm Kench is male; scanned this matchup's full-layer text and all he/his usage is correctly gendered.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/champ-gender.js"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Tahm Kench"},
+  {"layer":"full","path":"phases[0].why","before":"Poke from the saddle — the attached Q steers and the lane can't bill you for it.","after":"His Tongue Lash out-ranges your empowered Q, and Thick Skin tanks your chip."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Tahm Kench"},
+  {"layer":"full","path":"phases[1].why","before":"Dismount windows begin: the passive autos shield and heal; schedule them carefully.","after":"Three Q stacks gray-screen your ADC — pull back the instant he hits two stacks."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Tahm Kench"},
+  {"layer":"full","path":"phases[2].why","before":"Full rhythm: attach for the trades, dismount for the passive, never linger between.","after":"His W lets him engage or disengage on demand — he dictates every trade here."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Tahm Kench"},
+  {"layer":"full","path":"phases[3].why","before":"Zoomies the margins — the host's tempo is your tempo; bank the chip.","after":"Your poke just banks into Thick Skin shields — do not feed the war."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Tahm Kench"},
+  {"layer":"full","path":"phases[4].why","before":"Final Chapter online — the root waves referee every dive on your host.","after":"Abyssal Dive plus Devour is engage and untouchable peel — respect both."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Tahm Kench"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the heals compound and the steered Qs chunk.","after":"Tank sustain converts your damage straight into his shields."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Tahm Kench"},
+  {"layer":"full","path":"phases[6].why","before":"Late Yuumi is the unkillable second health bar: attach, amplify, and out-vote the focus fire.","after":"Devour eats your ADC out of your burst window every time — you cannot threaten his HP pool."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Tahm Kench Abyssal Dive: matchup-defining — His re-engage and his escape — all-in only while it is down. The duo's tempo bends around it. - Keep W attach (untargetability) banked for their best play. - The ultimate is a fight decision, not a habit.","after":"- Tahm's W Abyssal Dive is 21s at rank 1 — his engage and his escape, so all-in only while it is down. - His Q Tongue Lash is 7s at rank 1 and stacks toward a 3-stack gray-screen stun — track the stack count, not just the cooldown."}
+ ],
+ "notes": "This is the most one-sided matchup of the six: content, the packet's real levelChart, and the kit all agree Tahm Kench wins every stage, and near-even win rate (48.75%) plus this lane's whole design (drain-tank whose damage-sponge kit specifically punishes poke supports) makes that plausible rather than suspicious. diff/tone stayed EVEN/5.5-6 out of 10, which reads inconsistent with a full 7-of-7 stage disadvantage — flagged here but not changed since diff/carryRating/diffRating aren't part of the mandatory chart pair and re-deriving the summary numbers was out of scope for this pass."
+}

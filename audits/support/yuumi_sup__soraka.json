@@ -1,0 +1,64 @@
+{
+ "ownerKey": "yuumi_sup",
+ "enemy": "soraka",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full-layer phases[0..6].side reads generic 'Skill' (even) for all seven rows while content win[0..5] reads 'Soraka' and win[6] reads 'Yuumi' — every row disagrees.",
+   "why": "Content's narrative is specific and kit-grounded: Starcall heals Soraka on every cast and out-pokes Yuumi through level 5, her E Equinox can silence the attach-Q, Wish (global heal) erases kill pressure at 6, and only at two items does Yuumi's compounding Q chip plus a mobility-less Soraka finally flip the lane.",
+   "corrected": "Moved phases[0..5].side to 'Soraka' and phases[6].side to 'Yuumi' to agree with the already-correct content win[] row, rewriting each why to the specific reason.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/soraka.json", "champ-data/content/sup/yuumi.js"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 (Wish, global heal) and the two-item power spike are both correctly identified and kit-accurate — Wish is genuinely global and Soraka has zero mobility, which is exactly what makes the late swing real.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/soraka.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns calls Equinox 'matchup-defining' but never states its cooldown, failing the lint rule requiring a digit.",
+   "why": "Soraka's E Equinox is 20/19/18/17/16 (rank 1 = 20s), a silence+root zone; her R Wish is 150/135/120 (rank 1 = 150s) and global. Both numbers change how a reader plans around them.",
+   "corrected": "Rewrote breakdown.cooldowns with both real cooldowns.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/soraka.json"]
+  },
+  {
+   "point": 1,
+   "status": "needs-correction",
+   "whatIsWrong": "Soraka is female (per champ-data/champ-gender.js) but 'loading', report Itemization, and report Duo & Jungle all use 'his'.",
+   "why": "Template written for a male-default enemy and only the champion name was swapped.",
+   "corrected": "Replaced his with her in the three flagged fields.",
+   "confidence": "High",
+   "sources": ["champ-data/champ-gender.js"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Soraka"},
+  {"layer":"full","path":"phases[0].why","before":"Poke from the saddle — the attached Q steers and the lane can't bill you for it.","after":"Her Starcall heals every cast and steadily out-pokes your attached-Q chip."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Soraka"},
+  {"layer":"full","path":"phases[1].why","before":"Dismount windows begin: the passive autos shield and heal; schedule them carefully.","after":"Her E Equinox silences your Q, stripping your only damage tool for seconds."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Soraka"},
+  {"layer":"full","path":"phases[2].why","before":"Full rhythm: attach for the trades, dismount for the passive, never linger between.","after":"Her Starcall sustain keeps her lane healthier than yours — do not trade in."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Soraka"},
+  {"layer":"full","path":"phases[3].why","before":"Zoomies the margins — the host's tempo is your tempo; bank the chip.","after":"A poke war still favors her heal-per-cast — attach and scale instead."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Soraka"},
+  {"layer":"full","path":"phases[4].why","before":"Final Chapter online — the root waves referee every dive on your host.","after":"Wish is global and erases your kill pressure — coordinate burst, not a poke."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Soraka"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the heals compound and the steered Qs chunk.","after":"Her Starcall spam still out-sustains your W heal here."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Yuumi"},
+  {"layer":"full","path":"phases[6].why","before":"Late Yuumi is the unkillable second health bar: attach, amplify, and out-vote the focus fire.","after":"Late your compounding Q chip out-DPS her sustain, and her zero mobility eats a clean engage."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Soraka Equinox: matchup-defining — The silence zone cancels your engage mid-cast — step out before the root snaps. It writes your spacing rules. - W attach (untargetability) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Soraka's E Equinox is a 20s cooldown (rank 1) silence-and-root zone — it cancels your engage mid-cast, so step out before it snaps every single time. - Her R Wish is global, 150s at rank 1, and fully heals her carry straight through your best all-in window."},
+  {"layer":"full","path":"loading","before":"- Yuumi vs Soraka - Track: Soraka Equinox. - Track his engage cooldown — your duo trades only when it's down. - Equinox spent means windows open. - Keep the ult for the swing moment.","after":"- Yuumi vs Soraka - Track: Soraka Equinox. - Track her engage cooldown — your duo trades only when it's down. - Equinox spent means windows open. - Keep the ult for the swing moment."},
+  {"layer":"full","path":"report[8].t","before":"World Atlas start. Moonstone, then Redemption-Ardent paths — heal amps ride free. Add anti-heal early into his duo’s sustain.","after":"World Atlas start. Moonstone, then Redemption-Ardent paths — heal amps ride free. Add anti-heal early into her duo’s sustain."},
+  {"layer":"full","path":"report[10].t","before":"Your CC plus jungler arrival decides bot — ping gank windows on his engage cooldown and hold the river bush vision.","after":"Your CC plus jungler arrival decides bot — ping gank windows on her engage cooldown and hold the river bush vision."}
+ ],
+ "notes": "diff/tone/diffRating (EVEN, 5.5/10) left untouched even though the corrected chart now leans Soraka-favored through level 6/first item — those top-level summary fields are not part of the mandatory chart pair; flag for follow-up if the overall rating should shift toward TRICKY given a 6-of-7 stage disadvantage before the late swing. Anti-heal is already recommended in Itemization, which is correct against Soraka's heal-per-cast kit."
+}

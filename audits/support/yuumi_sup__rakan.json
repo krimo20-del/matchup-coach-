@@ -1,0 +1,45 @@
+{
+ "ownerKey": "yuumi_sup",
+ "enemy": "rakan",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "n/a",
+   "why": "EVEN lane (5.5/10), 46.79% Yuumi win rate over 1981 games favors Rakan across the whole game per the packet's all-Rakan chart.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/yuumi_sup.json"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[].side reads 'Skill' on all 7 rows while content win[] names Rakan on all 7 rows, matching the packet's own all-Rakan levelChart.",
+   "why": "'Skill' names neither side; win[] and the packet agree Rakan wins every stage.",
+   "corrected": "Move all 7 phases[].side to 'Rakan'.",
+   "confidence": "High",
+   "sources": ["tools/audit-run/packets/yuumi_sup.json", "champ-data/content/sup/yuumi.js"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Grand Entrance (W) as matchup-defining with no cooldown number.",
+   "why": "Grand Entrance is 14/13/12/11/10s. Also worth noting: Battle Dance (E) has 0 base cooldown outside its charm-consumption rules, so Rakan can re-engage far faster than a single-cooldown read suggests once he lands Q (Gleaming Quill, 11/10/9/8/7s) or his passive shield is up.",
+   "corrected": "Cite the W cooldown.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/rakan.json"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Rakan Grand Entrance: matchup-defining — The leap knockup starts every play — track him in fog; the E extends it. It writes your spacing rules. - W attach (untargetability) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Rakan Grand Entrance: matchup-defining — 14/13/12/11/10s, and the leap knockup starts every play — track him in fog; his near-cooldownless E extends it. - W attach (untargetability) is for saving fights, not seasoning trades. - The Quickness (R, 130/110/90s) opens or closes fights — pick one per cast."},
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Rakan"}
+ ],
+ "notes": "win[] and the packet levelChart already agreed on Rakan all 7 stages; only the full-layer side tokens were stale placeholders. Remaining templated breakdown fields (early/mid/wave/trading/spikes/feeding/carry/difficulty/late, ahead, tradeGood/tradeBad, enemyWin) are still generic saddle/host language shared across this owner's matchups — deferred for a dedicated pass."
+}

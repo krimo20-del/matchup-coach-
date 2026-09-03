@@ -1,0 +1,54 @@
+{
+ "ownerKey": "yuumi_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[].side read Blitzcrank/Blitzcrank/Blitzcrank/Skill/Skill/Skill/Skill while content win[] (matching packet.levelChart) reads Yuumi/Yuumi/Yuumi/Blitzcrank/Blitzcrank/Blitzcrank/Blitzcrank. Rows 1-3 had the side inverted and rows 4-7 carried the invalid 'Skill' token.",
+   "why": "win[]/packet.levelChart/whys[] all agree Yuumi wins levels 1-3 on poke range and minion cover against the hook, and Blitzcrank takes over once his grab-knockup-silence-R combo becomes lethal.",
+   "corrected": "Set side to Yuumi for rows 1-3 (existing why already matched that verdict, left alone) and Blitzcrank for rows 4-7 (why rewritten to state the grounded reason).",
+   "confidence": "High",
+   "sources": ["currentText.content.win", "packet.levelChart", "currentText.content.whys"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns named Rocket Grab as matchup-defining but had no number, matching packet.defects' 'no cooldown-sequencing advice' flag.",
+   "why": "Blitzcrank's Q (Rocket Grab) is a 20/19/18/17/16s cooldown per the kit.",
+   "corrected": "Inserted the real cooldown.",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities[Q].cooldown", "packet.defects"]
+  },
+  {
+   "point": 4,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Content spikes/wants already state the decisive chain correctly: Rocket Grab into Power Fist (E) knockup, Overdrive (W) empowers the follow-up, Static Field (R) bursts on connect — and that being attached to your host does not save the ADC who gets hooked, since Yuumi's W only makes herself untargetable.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities", "ownerKit.abilities[W]"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Blitzcrank", "after": "Yuumi" },
+  { "layer": "full", "path": "phases[1].side", "before": "Blitzcrank", "after": "Yuumi" },
+  { "layer": "full", "path": "phases[2].side", "before": "Blitzcrank", "after": "Yuumi" },
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Blitzcrank" },
+  { "layer": "full", "path": "phases[3].why", "before": "Zoomies the margins — the host's tempo is your tempo; bank the chip.", "after": "His grab-knockup-silence combo one-shots a squishy once it lands." },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Blitzcrank" },
+  { "layer": "full", "path": "phases[4].why", "before": "Final Chapter online — the root waves referee every dive on your host.", "after": "His Q into knockup, silence and R deletes your carry through your peel." },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Blitzcrank" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item: the heals compound and the steered Qs chunk.", "after": "He threatens a game-ending pick your heal cant undo." },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Blitzcrank" },
+  { "layer": "full", "path": "phases[6].why", "before": "Late Yuumi is the unkillable second health bar: attach, amplify, and out-vote the focus fire.", "after": "He stays a lottery-pick threat your enable kit cannot answer, ever." },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. It writes your spacing rules. - W attach (untargetability) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Blitzcrank Rocket Grab (Q) is a 20/19/18/17/16s cooldown — minion cover turns the lane into a farming sim while it's down. - W attach (untargetability) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  }
+ ],
+ "notes": "Chart disagreement fixed as one atomic group: rows 1-3 had side and win literally opposite (side said Blitzcrank, win said Yuumi); rows 4-7 side held the invalid 'Skill' placeholder. missingInteractions flagged the autoreset-burst-tell on Power Fist (E) — already reflected via spikes[1] describing the grab-knockup-silence-R chain, so no gap. breakdown.wave/feeding/carry/difficulty/late and ahead/tradeGood/tradeBad/loading remain the same cross-enemy template phrasing seen on other matchups; left untouched this pass, flagged for the template sweep."
+}

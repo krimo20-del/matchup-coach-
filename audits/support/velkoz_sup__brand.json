@@ -1,0 +1,97 @@
+{
+ "ownerKey": "velkoz_sup",
+ "enemy": "brand",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0..6].side all read the placeholder 'Skill' instead of naming a winner, while content win[0..6] already correctly reads 'Vel'Koz' for all 7 rows and the packet levelChart agrees.",
+   "why": "'Skill' is a template placeholder, not a valid side value; the full-layer chart disagrees with its own content-layer counterpart on every row, which is exactly the two-layers-disagree defect the audit rules call out.",
+   "corrected": "Set phases[0..6].side to 'Vel'Koz' to match the already-correct win[0..6]; win[] left alone since it already reads Vel'Koz (no-op avoided).",
+   "confidence": "High",
+   "sources": ["currentText", "packet.levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 (Vel'Koz R out-ranges Brand's whole combo, 1575 vs his longest ability at 1050) and first-item spikes are grounded in real ranges and Vel'Koz's guaranteed E-into-combo vs Brand's Sear-dependent combo.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Sear as the timer to track but gives no real cooldown number (lint: COOLDOWN_NO_DIGIT).",
+   "why": "The field is the designated home for real cooldown numbers per the audit rules; Sear is 8s->6s and Tectonic Disruption is 12s->10s per the kits.",
+   "corrected": "Rewrote breakdown.cooldowns with Sear's real cooldown and Tectonic Disruption's cooldown, keeping the ablaze-stun-requirement detail.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Vel'Koz"
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q-fork the pair, W the pulse, third-hit the research — true math their page can't answer.",
+   "after": "Land Q's split on the pair, W the pulse, third-hit for true damage his MR ignores."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Beaming into a loaded engage — the channel is a verdict for fights already decided.",
+   "after": "Channeling R into an unanswered Sear — one stun cancels the beam and burns the cast."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Brand Sear (Stun): matchup-defining — Q only stuns the ablaze — after eating W or E, the stun line is the dodge. The duo’s tempo bends around it. - Keep E Tectonic Disruption banked for their best play. - The ultimate is a fight decision, not a habit.",
+   "after": "- Sear (Q) is 8s at rank 1, 6s at rank 5, and only stuns targets already ablaze — dodge it once he has burned W or E on you first. - Tectonic Disruption (E) is 12s early, 10s late — bank it for his Pyroclasm engage, not chip trades."
+  }
+ ],
+ "notes": "phases[N].side carried the placeholder 'Skill' on every row while win[N] already correctly read Vel'Koz — fixed to match, no win[] edit needed (no-op avoided). suspectNames flags (Life Form Disintegration Ray, Tectonic Disruption) are Vel'Koz's real R and E names — false positives. missingInteractions was empty for this matchup, nothing further to fold in."
+}

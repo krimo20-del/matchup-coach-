@@ -1,0 +1,130 @@
+{
+ "ownerKey": "xerath_sup",
+ "enemy": "swain",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0/1/2].side all read \"Skill\" while content win[0/1/2] already read \"Xerath\", and phases[4].side reads \"Skill\" while content win[4] already reads \"Swain\" — four rows where the level chart and the win-row disagree.",
+   "why": "Both layers render the same stage; a reader would see a contradictory verdict for levels 1-3 and level 6. The content whys[] text itself says Xerath \"dominates\" the level-1 poke and out-ranges through level 3, then flips hard to Swain at 6 once Demonic Ascension's sustain comes online — matching win[] and the packet's own levelChart, not the stale \"Skill\" sides.",
+   "corrected": "phases[0/1/2].side set to \"Xerath\" and phases[4].side set to \"Swain\", each with a matching why grounded in the kit. win[] was already correct so no content edit was needed.",
+   "confidence": "High",
+   "sources": [
+    "currentText content layer",
+    "packet.levelChart"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real number (COOLDOWN_NO_DIGIT); dosFull/dontsFull rows were verbatim copies of tradeGood/tradeBad (COPY_PASTE_BLEED)",
+   "why": "Nevermove (E) is 12s at rank 1 falling to 10s; Demonic Ascension (R) is a flat 120s drain form. Ravenous Flock's healing and max-HP growth is percent-based, so armour/MR stacking doesn't answer it the way anti-heal does.",
+   "corrected": "Fixed breakdown.cooldowns (COOLDOWN_NO_DIGIT) and dosFull[1].d/dontsFull[2].d (COPY_PASTE_BLEED) per matchup-lint.js findings.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit",
+    "missingInteractions"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Xerath"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Q the pair from fog range — bot's formations eat the beam per wave.",
+   "after": "You out-range Death's Hand and Vision of Empire (W) at level 1 — poke free from beyond both."
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].rating",
+   "before": "5/10",
+   "after": "7/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Xerath"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "W joins: the artillery circles tax the lane's geometry.",
+   "after": "W speed lets you dodge his E-bird pull and win the return trade on every walk-up."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].rating",
+   "before": "5/10",
+   "after": "7/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Xerath"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "E completes the kit: the stun into rotation is the lane's longest pick.",
+   "after": "You keep out-ranging Death's Hand's cone and deny him Ravenous Flock souls."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].rating",
+   "before": "5/10",
+   "after": "8/10"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Swain"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].why",
+   "before": "Rite of the Arcane online — recalls and resets pay mortars on the way home.",
+   "after": "Demonic Ascension's HP and sustain win any trade where his E-W has rooted you — respect his kit here."
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].rating",
+   "before": "6/10",
+   "after": "4/10"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Q the pair from beyond answer range, W the dodge, walk — one-way ledgers per wave. Bad trade: Charging Q inside hook range — the artillery that forgets geography becomes the exhibit.",
+   "after": "Good trade: poke walk-ups before he stacks souls, and buy anti-heal — his passive heals off damage taken. Bad trade: stacking armour/MR alone; Ravenous Flock's healing scales off percent health, not resistances."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Swain Nevermove: matchup-defining — The root that decides — dodge it and the general farms regret. It writes your spacing rules. - E Shocking Orb is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Swain Nevermove cycles 12-10s — the root that decides — dodge it and the general farms regret. It writes your spacing rules. - E Shocking Orb is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the pair from beyond answer range, W the dodge, walk — one-way ledgers per wave.",
+   "after": "Nevermove roots on delay, not on cast — sidestep the bolt and his 10-12s E is wasted."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Charging Q inside hook range — the artillery that forgets geography becomes the exhibit.",
+   "after": "Clumping in his Vision of Empire zone — the reveal marks the kill target for his whole team."
+  }
+ ],
+ "notes": "Level-chart fix: rows 0, 1, 2 and 4 had full-layer side stuck on \"Skill\" while content win[] already read Xerath/Xerath/Xerath/Swain — moved side (and a matching why + rating) to agree, no content edits needed since win[] was already right. Rows 3, 5, 6 already agreed (both \"Skill\") and were left alone. suspectNames flagged \"Death's Hand\" and \"Demonic Ascension's\" but both are the correct kit names (possessive 's triggered the distance check) — no fix needed. Fixed both COPY_PASTE_BLEED lint hits and COOLDOWN_NO_DIGIT with real numbers (E 12s->10s, R 120s flat). Folded in both missingInteractions (needs-antiheal, resistances-invalidated) via breakdown.trading."
+}

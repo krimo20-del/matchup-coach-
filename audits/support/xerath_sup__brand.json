@@ -1,0 +1,79 @@
+{
+ "ownerKey": "xerath_sup",
+ "enemy": "brand",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Both are immobile long-range mages with symmetric scaling; full phases[].side and content win[] both read Skill/EVEN across all 7 rows and agree with the packet chart.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": [
+    "packet.levelChart",
+    "brief currentText.full.phases[].side",
+    "brief currentText.content.win[]"
+   ]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 2 skillshot spike, level 6 ult spike, and first-mana-item spike are recorded; spikes[] is missing its 4th slot per packet defect.",
+   "corrected": "Added spikes[3] covering Sear (Q) interrupting your channeled R, and Pillar of Flame (W) cutting your retreat since you have no dash.",
+   "confidence": "High",
+   "sources": [
+    "missingInteractions: your-channel-punished, terrain-cuts-retreat",
+    "ownerKit R channel flag",
+    "enemyKit W terrain flag"
+   ]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no real number (COOLDOWN_NO_DIGIT); dosFull/dontsFull rows were verbatim copies of tradeGood/tradeBad (COPY_PASTE_BLEED)",
+   "why": "Sear's 8-6s cooldown and the ablaze-stun condition are the real facts that decide when Brand can threaten a stun chain.",
+   "corrected": "Fixed breakdown.cooldowns (COOLDOWN_NO_DIGIT) and dosFull[1].d/dontsFull[2].d (COPY_PASTE_BLEED) per matchup-lint.js findings.",
+   "confidence": "High",
+   "sources": [
+    "enemyKit Q cd 8/7.5/7/6.5/6",
+    "enemyKit E cd 13/12/11/10/9",
+    "enemyKit R cd 100/90/80"
+   ]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "spikes[3].text",
+   "before": null,
+   "after": "Sear interrupts your channeled Rite of the Arcane if it lands on you — only cast R once his Q is on cooldown. And since you have no dash, a Pillar of Flame dropped behind you can cut off your only retreat line; hold Flash for the wall, not the damage."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[3].when",
+   "before": null,
+   "after": "Any time you commit your R"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Brand Sear (Stun): matchup-defining — Q only stuns the ablaze — after eating W or E, the stun line is the dodge. It writes your spacing rules. - E Shocking Orb is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Brand Sear (Stun) cycles 8-6s — Q only stuns the ablaze — after eating W or E, the stun line is the dodge. It writes your spacing rules. - E Shocking Orb is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the pair from beyond answer range, W the dodge, walk — one-way ledgers per wave.",
+   "after": "Sear only stuns targets already ablaze — dodge the first tag and his stun line is dead."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Charging Q inside hook range — the artillery that forgets geography becomes the exhibit.",
+   "after": "Clumping for a trade after his W lands — Pillar of Flame's stun chains into the whole team."
+  }
+ ],
+ "notes": "missingInteractions covered: your-channel-punished and terrain-cuts-retreat both folded into new spikes[3]. Left tradeGood/tradeBad/ahead/loading/enemyWin/breakdown.carry|wave|feeding|difficulty|late templated but not factually wrong — time-boxed this pass."
+}

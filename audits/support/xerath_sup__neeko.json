@@ -1,0 +1,121 @@
+{
+ "ownerKey": "xerath_sup",
+ "enemy": "neeko",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Even matchup rated 5.5/10 matches the 54.95% winRate over 868 games; not a lane where Xerath dominates.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0-3,5].side all read 'Skill' (even) while content win[0-3,5] already reads 'Xerath' — the two layers disagree on who wins levels 1-3, 4-5, and first item.",
+   "why": "The packet levelChart (Xerath/Xerath/Xerath/Xerath/Skill/Xerath/Skill) matches win[N] exactly, so win[N] is correct; the full-layer side rows were left on the flat template and never updated to match.",
+   "corrected": "Move phases[0].side, phases[1].side, phases[2].side, phases[3].side, phases[5].side to 'Xerath' (win[N] already says Xerath there, so no content edit needed) and rewrite each why to explain the owner win, grounded in real cooldowns.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "No field warns that Neeko can interrupt Rite of the Arcane (R) with her own CC.",
+   "why": "missingInteractions flags: Neeko can cancel Xerath's R with Inherent Glamour (P), Tangle-Barbs (E), or Pop Blossom (R) — any of her CC breaks the channel, so Xerath must channel only once her kit is spent.",
+   "corrected": "Fold into dosFull[1].d, replacing the tradeGood copy-paste bleed under 'Juke the keystone late'.",
+   "confidence": "High",
+   "sources": ["missingInteractions", "ownerKit R channel flag"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Xerath"
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].why",
+   "before": "Q the pair from fog range — bot's formations eat the beam per wave.",
+   "after": "You outrange Tangle-Barbs (E) — poke free, she has no answer."
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Xerath"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].why",
+   "before": "W joins: the artillery circles tax the lane's geometry.",
+   "after": "Q-W burst beats her one dodgeable root on a 9s cooldown."
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Xerath"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].why",
+   "before": "E completes the kit: the stun into rotation is the lane's longest pick.",
+   "after": "Stun lands first: your longer-range poke keeps her off the wave entirely."
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Xerath"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].why",
+   "before": "Chip the ledger — their duo farms at half HP or doesn't farm.",
+   "after": "Your safe poke chips their duo to half HP while E is down."
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Xerath"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].why",
+   "before": "First item: Q-W chunks pairs and the chip war forecloses.",
+   "after": "Q-W chunks pairs from range and shuts the chip war down."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Neeko Tangle-Barbs (Root): matchup-defining — The root sets up her whole burst — sidestep it behind minions. Read it before every duo step-up. - Your E Shocking Orb answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Neeko's Tangle-Barbs (E) is a 12-10s cooldown root that sets up her whole burst — sidestep it behind minions and punish the window it's down. - Your E (Shocking Orb, 13-11s cd) answers one disaster per cooldown. - Save the 130/115/100s R for swing moments only."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Q the pair from beyond answer range, W the dodge, walk — one-way ledgers per wave.",
+   "after": "Her CC cancels Rite of the Arcane — Glamour, Tangle-Barbs, Pop Blossom all break it."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Charging Q inside hook range — the artillery that forgets geography becomes the exhibit.",
+   "after": "Standing near your carry when she's near — Pop Blossom's landing AoE stuns both of you at once."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on Tangle-Barbs (Root)’s cooldown, on your first item spike, and with your carry’s damage online. Make him flinch first.",
+   "after": "Commit on Tangle-Barbs (Root)’s cooldown, on your first item spike, and with your carry’s damage online. Make her flinch first."
+  }
+ ],
+ "notes": "Level chart layers disagreed on 5 of 7 rows (full said even/'Skill', content already said Xerath, matching the packet) — fixed by moving side only per the chart rule, no win[N] edit needed since content was already correct. Fixed COPY_PASTE_BLEED on dosFull[1] and dontsFull[2], the MISGENDER on report[9], and the missing-digit cooldowns field. Added the missing R-interrupt interaction (Neeko's P/E/R all cancel Rite of the Arcane) into dosFull[1]. whys[4] 'Pop Blossom's' possessive flagged by suspectNames is correct usage (Pop Blossom's [all-in threat]), not a wrong ability name — left alone."
+}

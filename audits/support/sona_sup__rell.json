@@ -1,0 +1,52 @@
+{
+ "ownerKey": "sona_sup",
+ "enemy": "rell",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[].side (full layer) reads Rell,Rell,Rell,Rell,Skill,Skill,Skill while content win[] already reads Skill,Skill,Skill,Skill,Rell,Rell,Sona — every row disagrees between the two layers.",
+   "why": "Content win[] matches the packet's real levelChart (Skill,Skill,Skill,Skill,Rell,Rell,Sona) and the content whys[] already explain Levels 1-4 are a skill fight since Rell is melee with zero ranged poke, she pulls ahead at 5-6 and first item via her W-into-Q CC chain and Magnet Storm wombo, and Sona out-scales at 2+ items. The full-layer side/why array was never brought in line.",
+   "corrected": "Moved full phases[0-3].side to Skill, phases[4-5].side to Rell, phases[6].side to Sona, with each .why rewritten to state the real reason. content win[] left untouched since it already matches the target.",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/sona.js win[]/whys[] for rell", "tools/audit-run/packets/sona_sup.json entries[rell].levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes already key level 2 (Q+Power Chord punishing her lack of poke), level 6 (Magnet Storm wombo vs Crescendo interrupt), first item (her W dash + E stun spike), and late (AoE Crescendo answers her R) — grounded in the kit.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/sona.js spikes[] for rell"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Crash Down as the swing cooldown but has no digits at all, and never states Shattering Strike's cooldown either.",
+   "why": "Rell's W (Ferromancy: Crash Down) is a flat 10s cooldown; her Q (Shattering Strike) is 11/10.5/10/9.5/9 by rank. Sona's R (Crescendo) is 140/120/100.",
+   "corrected": "- Crash Down (W) is a flat 10s cooldown — the mount-crash knockup starts her chain, respect the dismount range. Shattering Strike (Q) is 11-9s by rank. - Crescendo cools 140/120/100s — save it for the real swing fight, not a habit.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/rell.json", "champ-data/_kits/sona.json"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Rell", "after": "Skill" },
+  { "layer": "full", "path": "phases[0].why", "before": "Q-chord the contacts — the aura poke is quiet and constant; the lane pays per note.", "after": "Melee, zero ranged poke — chip her with Hymn of Valor whenever she steps up for CS." },
+  { "layer": "full", "path": "phases[1].side", "before": "Rell", "after": "Skill" },
+  { "layer": "full", "path": "phases[1].why", "before": "W answers the trades: the sustain mirror opens and yours compounds.", "after": "Aria heals your chip evenly — she must still walk into your poke to trade." },
+  { "layer": "full", "path": "phases[2].side", "before": "Rell", "after": "Skill" },
+  { "layer": "full", "path": "phases[2].why", "before": "Full kit: the chord colors decide trades — power chord the carry, speed the disengage.", "after": "Full kit online, but she's still immobile until Crash Down — you keep the poke edge." },
+  { "layer": "full", "path": "phases[3].side", "before": "Rell", "after": "Skill" },
+  { "layer": "full", "path": "phases[3].why", "before": "Aura economy: chip, heal, speed — the margins are invisible and decisive.", "after": "Still even — hold a shield or slow for Crash Down, don't clump with your ADC." },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[4].why", "before": "Crescendo online — grouped lanes pay the dance tax; your duo's all-in has a stage.", "after": "Magnet Storm (R) plus her W-into-Q lockdown chain dominates skirmishes now." },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item: the auras compound and the chords chunk.", "after": "Her CC chain and durability beat your item timing." },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Sona" },
+  { "layer": "full", "path": "phases[6].why", "before": "Late Sona scales into a one-button teamfight: crescendo the clump and aura the cleanup.", "after": "Crescendo now answers her engage outright, and your auras outheal her burst-and-CC chain." },
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Rell Crash Down: matchup-defining — The mount-crash knockup starts her chain — respect the dismount range. The duo’s tempo bends around it. - Keep E Song of Celerity banked for their best play. - The ultimate is a fight decision, not a habit.", "after": "- Crash Down (W) is a flat 10s cooldown — the mount-crash knockup starts her chain, respect the dismount range. Shattering Strike (Q) is 11-9s by rank. - Crescendo cools 140/120/100s — save it for the real swing fight, not a habit." }
+ ],
+ "notes": "Full-layer level chart was inverted relative to content/packet on all 7 rows — fixed side+why per the Chart Rule (content win[] already matched the packet and was left untouched). Mirror check against audits/support/rell_sup__sona.json agrees: Rell wins phases[6] as 'Skill' -> 'Sona' there too, and Rell's own chart has her ahead levels 1-4 with Sona catching up by 2+ items, consistent with this page's corrected chart (levels 1-4 skill/even here, Rell ahead 5-6, Sona 2+ items — small phrasing difference in exactly which levels are 'even' vs 'Rell' is expected since ratings differ slightly per side, but no row contradicts the mirror's overall verdict). Did not touch report[] (out of sweep scope) or the remaining templated breakdown fields beyond cooldowns at this effort level; flagging for a future template sweep."
+}

@@ -1,0 +1,48 @@
+{
+ "ownerKey": "sona_sup",
+ "enemy": "renata",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[].side (full layer) reads Skill,Skill,Skill,Skill,Skill,Skill,Sona while content win[] already reads Renata,Renata,Renata,Renata,Skill,Sona,Sona — rows 0-3 and 5 disagree between layers (rows 4 and 6 already agree).",
+   "why": "Content win[] matches the packet's real levelChart (Renata,Renata,Renata,Renata,Skill,Sona,Sona) and the content whys[] already explain Renata's Handshake point-and-click root plus Bailout dives dominate Levels 1-4, it evens out at level 6 as Sona's W/Crescendo comes online, and Sona takes over at first item and beyond. The full-layer side/why array was left on the generic 'Skill' template for the rows that actually favor Renata or Sona.",
+   "corrected": "Moved full phases[0-3].side to Renata and phases[5].side to Sona, with each .why rewritten to state the real reason; phases[4] and phases[6] side already agreed with content so only left untouched. content win[] itself was not edited since it already matches the target (avoids a no-op edit).",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/sona.js win[]/whys[] for renata", "tools/audit-run/packets/sona_sup.json entries[renata].levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes already key level 2 (Handshake root-toss threat), level 6 (Hostile Takeover berserk vs W/Crescendo peel), first item (Bailout-boosted dives vs your sustain catching up), and late (Crescendo/auras flip fights) — grounded in the kit.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/sona.js spikes[] for renata"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Hostile Takeover as the swing cooldown but has no digits at all, and never states Handshake's cooldown even though it is the ability that decides the early lane.",
+   "why": "Renata's Q (Handshake) is a flat 16s cooldown; her R (Hostile Takeover) is 150/130/110s by rank. Sona's R (Crescendo) is 140/120/100.",
+   "corrected": "- Handshake (Q) is a flat 16s cooldown — never stand where its root can fling you into her team. Hostile Takeover (R) is 150/130/110s — the berserk wave turns your own team on itself. - Crescendo cools 140/120/100s — spend it only on the swing fight, not a habit.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/renata.json", "champ-data/_kits/sona.json"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Renata" },
+  { "layer": "full", "path": "phases[0].why", "before": "Q-chord the contacts — the aura poke is quiet and constant; the lane pays per note.", "after": "Handshake (Q) is a long-range point-and-click root that out-threatens your skillshot poke." },
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Renata" },
+  { "layer": "full", "path": "phases[1].why", "before": "W answers the trades: the sustain mirror opens and yours compounds.", "after": "Her point-and-click Handshake still beats your skillshot poke trades." },
+  { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Renata" },
+  { "layer": "full", "path": "phases[2].why", "before": "Full kit: the chord colors decide trades — power chord the carry, speed the disengage.", "after": "Full kit online for both, but Handshake pull plus Bailout dives keep pressure on you." },
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Renata" },
+  { "layer": "full", "path": "phases[3].why", "before": "Aura economy: chip, heal, speed — the margins are invisible and decisive.", "after": "Her all-in tools off Handshake and Bailout outpace your early scaling." },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Sona" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item: the auras compound and the chords chunk.", "after": "Your auras and Aria sustain overtake her poke pressure." },
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Renata Glasc Hostile Takeover: matchup-defining — The berserk wave turns your team on itself — never group in a line against it. Read it before every duo step-up. - Your E Song of Celerity answers exactly one disaster per cooldown. - Spend the R on swing moments only.", "after": "- Handshake (Q) is a flat 16s cooldown — never stand where its root can fling you into her team. Hostile Takeover (R) is 150/130/110s — the berserk wave turns your own team on itself. - Crescendo cools 140/120/100s — spend it only on the swing fight, not a habit." }
+ ],
+ "notes": "Full-layer level chart disagreed with content/packet on 5 of 7 rows (rows 4/L6 and 6/2+items already agreed and were left alone) — fixed side+why per the Chart Rule. Mirror check against audits/support/renata_sup__sona.json agrees: that page has Renata ahead early and Sona taking over at first item/2+ items, same overall shape as here. Note the mirror's own audit found a similar full-vs-content chart disagreement on Renata's own page and fixed it there independently — the two fixes are consistent (Sona side = 'Sona' at first item and 2+ items on both pages). Did not touch report[] (out of sweep scope) or the remaining templated breakdown fields beyond cooldowns at this effort level; flagging for a future template sweep. Renata Glasc is not on this run's female-champion list for this lane, so pronouns already in the file (he/him) were left as-is per that authority."
+}

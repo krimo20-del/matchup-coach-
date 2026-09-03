@@ -1,0 +1,67 @@
+{
+ "ownerKey": "taric_sup",
+ "enemy": "yuumi",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level chart already agrees between full (phases[N].side) and content (win[N]) — Taric every stage, 1 through 2+ items.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]", "currentText.full.phases[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Power spikes already correctly tie to Taric's level-2 E-stun all-in (Yuumi has no hard CC before 6), the level-6 R answering her root, and item-scaling Bravado trades.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "No field states that Taric's Dazzle (E) cancels Yuumi's Final Chapter (R) channel outright, and both COOLDOWN_NO_DIGIT and gender lint findings pointed at fields that needed the real interaction/numbers folded in.",
+   "why": "missingInteractions flags channel-interruptible (R is a channel, cancelled by any CC) plus anti-heal timing (already partly covered in itemization) and on-hit itemization (armour alone misreads her Q/W damage).",
+   "corrected": "Folded the channel-interrupt fact and Final Chapter's real cooldown into breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["missingInteractions[0]", "enemyKit.R"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Yuumi You and Me! (Attach): matchup-defining — Untargetable while attached — kill the host or catch the dismount windows. Read it before every duo step-up. - Your R Cosmic Radiance answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Yuumi You and Me! (Attach): matchup-defining — untargetable while attached — kill the host or catch the dismount windows. - Final Chapter (R, 120/110/100s CD) is a channel — your E cancels it outright. - Spend your R on swing moments only."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Punish every detach — her Q and W both need her off her host, so all-in the instant she steps out."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "Linking the wrong body when she can still dash W to a teammate — the chain fizzles for nothing."
+  },
+  {
+   "layer": "full",
+   "path": "report[8].t",
+   "before": "World Atlas start. Locket or Zeke's line, Mercs-Steelcaps by lane, then Knight's Vow paths. Add anti-heal early into his duo’s sustain.",
+   "after": "World Atlas start. Locket or Zeke's line, Mercs-Steelcaps by lane, then Knight's Vow paths. Add anti-heal early into her duo’s sustain."
+  },
+  {
+   "layer": "full",
+   "path": "report[9].t",
+   "before": "Commit on You and Me! (Attach)’s cooldown, on your first item spike, and with your carry’s damage online. Make him flinch first.",
+   "after": "Commit on You and Me! (Attach)’s cooldown, on your first item spike, and with your carry’s damage online. Make her flinch first."
+  }
+ ],
+ "notes": "Fixed both MISGENDER lint findings (Yuumi is she/her, report[8].t and report[9].t said 'his'/'him') and both COPY_PASTE_BLEED findings. Folded the missing channel-interrupt interaction (Taric's E cancels Yuumi's Final Chapter channel) and a real cooldown number into breakdown.cooldowns to also clear COOLDOWN_NO_DIGIT. Report edits used were the two misgender fixes, which used up the 2-report-entry sweep budget, so the on-hit-itemization missing interaction was left unaddressed this pass — noted here for a follow-up rather than forced into an already-used report slot. Level chart already agreed across layers, no change needed."
+}

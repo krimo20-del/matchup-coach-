@@ -1,0 +1,52 @@
+{
+ "ownerKey": "sona_sup",
+ "enemy": "rakan",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[].side (full layer) reads Rakan,Rakan,Rakan,Skill,Skill,Skill,Skill while content win[] already reads Skill,Skill,Skill,Rakan,Rakan,Rakan,Sona — the two layers disagree on every one of the 7 rows.",
+   "why": "Content win[] matches the packet's real levelChart exactly (Skill,Skill,Skill,Rakan,Rakan,Rakan,Sona) and the content whys[] already explain that Levels 1-3 are a poke-even skill fight, Rakan pulls ahead at 4-6 and first item off Grand Entrance into Battle Dance, and Sona out-scales at 2+ items. The full-layer side/why array was never updated to match and still carries the generic template ordering.",
+   "corrected": "Moved full phases[0-2].side to Skill, phases[3-5].side to Rakan, phases[6].side to Sona, with each .why rewritten to state the real reason. content win[] left untouched since it already matches the target.",
+   "confidence": "High",
+   "sources": ["brief-equivalent: champ-data/content/sup/sona.js win[]/whys[] for rakan", "tools/audit-run/packets/sona_sup.json entries[rakan].levelChart"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes already key level 2 (Q+Power Chord out-poking before he can engage), level 6 (Grand Entrance into The Quickness all-in), first item (his W/E mobility spike), and late (Crescendo/auras counter-engage) — all grounded in the kit.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/content/sup/sona.js spikes[] for rakan"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Grand Entrance as the swing cooldown but has no digits at all, and doesn't mention that Battle Dance (E) has 0 cooldown, which is why his mobility cycle is free.",
+   "why": "Rakan's W (Grand Entrance) is 14/13/12/11/10 by rank; his E (Battle Dance) is cd 0. Sona's R (Crescendo) is 140/120/100.",
+   "corrected": "- Grand Entrance (W) is 14-10s by rank — the leap knockup starts every play; track him in fog, Battle Dance (E) has 0 cooldown so it extends the chase free. - Crescendo cools 140/120/100s — spend it on the swing fight, not a habit.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/rakan.json", "champ-data/_kits/sona.json"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Rakan", "after": "Skill" },
+  { "layer": "full", "path": "phases[0].why", "before": "Q-chord the contacts — the aura poke is quiet and constant; the lane pays per note.", "after": "He must walk in to trade — your Hymn of Valor poke stays even until he can close the gap." },
+  { "layer": "full", "path": "phases[1].side", "before": "Rakan", "after": "Skill" },
+  { "layer": "full", "path": "phases[1].why", "before": "W answers the trades: the sustain mirror opens and yours compounds.", "after": "Aria heals your chip evenly — a poke fight until Grand Entrance is live." },
+  { "layer": "full", "path": "phases[2].side", "before": "Rakan", "after": "Skill" },
+  { "layer": "full", "path": "phases[2].why", "before": "Full kit: the chord colors decide trades — power chord the carry, speed the disengage.", "after": "Full kit online for both — you chip him, but his W knockup can flip one bad trade." },
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Rakan" },
+  { "layer": "full", "path": "phases[3].why", "before": "Aura economy: chip, heal, speed — the margins are invisible and decisive.", "after": "Grand Entrance into Battle Dance, plus E's free dash, overpowers your poke." },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Rakan" },
+  { "layer": "full", "path": "phases[4].why", "before": "Crescendo online — grouped lanes pay the dance tax; your duo's all-in has a stage.", "after": "The Quickness (R) charm makes his all-in nearly unstoppable in lane once it's live." },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Rakan" },
+  { "layer": "full", "path": "phases[5].why", "before": "First item: the auras compound and the chords chunk.", "after": "His engage tempo and roam mobility beat your item timing." },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Sona" },
+  { "layer": "full", "path": "phases[6].why", "before": "Late Sona scales into a one-button teamfight: crescendo the clump and aura the cleanup.", "after": "Crescendo and stacked auras counter his dive now — peel the knockup and your carry survives." },
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Rakan Grand Entrance: matchup-defining — The leap knockup starts every play — track him in fog; the E extends it. The duo’s tempo bends around it. - Keep E Song of Celerity banked for their best play. - The ultimate is a fight decision, not a habit.", "after": "- Grand Entrance (W) is 14-10s by rank — the leap knockup starts every play; track him in fog, Battle Dance (E) has 0 cooldown so it extends the chase free. - Crescendo cools 140/120/100s — spend it on the swing fight, not a habit." }
+ ],
+ "notes": "The full-layer level chart was inverted relative to content/packet on all 7 rows for this matchup — fixed side+why for every row per the Chart Rule (content win[] already matched the packet and was left untouched). Mirror check against audits/support/rakan_sup__sona.json confirms agreement: Rakan's page has him winning phases[3-5] and Sona winning phases[6], same as here. Did not touch report[] (out of sweep scope) or the other templated breakdown fields (early/mid/wave/trading/spikes/feeding/carry/difficulty/late, ahead, tradeGood/tradeBad, loading) beyond what's listed — they are shared boilerplate across this owner's matchups but rewriting all of them was out of scope for this pass at this effort level; flagging for a future template sweep."
+}

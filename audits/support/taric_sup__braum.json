@@ -1,0 +1,54 @@
+{
+ "ownerKey": "taric_sup",
+ "enemy": "braum",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[].side read 'Skill' at every stage while win[] and the packet both said Braum wins L1-3, even at L4-5, Taric wins L6/first-item/late.",
+   "why": "The two layers rendered contradictory answers to who wins each stage.",
+   "corrected": "Re-aligned phases[0-2].side to Braum and phases[4-6].side to Taric to match win[]/packet.levelChart; phases[3] already agreed (Skill) and was left alone.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes already correctly named: the level-2 Concussive Blows passive-stun setup, the level-6 Cosmic Radiance flip against Glacial Fissure, and the first-item sustain edge.",
+   "corrected": "No change to spikes[].",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns named Unbreakable as 'matchup-defining' with no digit and had no concrete sequencing line (per packet.defects); dosFull[1].d and dontsFull[2].d were the tradeGood/tradeBad strings pasted under unrelated titles; suspectNames flagged 'Concussive Blows' and 'Cosmic Radiance' but both are correct real ability names (false positives).",
+   "why": "Unbreakable is 16/14/12/10/8s — waiting it out before throwing a skillshot is the real rule. Concussive Blows falls off a few seconds after the 4th stack, and Glacial Fissure is a long 130/115/100s cooldown, so once he burns it there is a real multi-minute window to step up.",
+   "corrected": "Cooldowns field now names both real numbers with a wait-for-it sequencing line; dosFull[1] states the Concussive Blows stack-decay sequencing; dontsFull[2] states the Glacial Fissure cooldown window.",
+   "confidence": "High",
+   "sources": ["ownerKit.abilities", "enemyKit.abilities", "packet.defects"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Braum" },
+  { "layer": "full", "path": "phases[0].why", "before": "Bravado-weave the trades — the empowered autos refund cooldowns; the loop is the lane.", "after": "Braum's Q-into-passive stun setup outpaces your dashless kit early at level 1." },
+  { "layer": "full", "path": "phases[0].rating", "before": "5/10", "after": "3/10" },
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Braum" },
+  { "layer": "full", "path": "phases[1].why", "before": "Q-charges bank heals: the gemstone economy opens.", "after": "His Concussive Blows and E shield keep tempo his." },
+  { "layer": "full", "path": "phases[1].rating", "before": "5/10", "after": "3/10" },
+  { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Braum" },
+  { "layer": "full", "path": "phases[2].why", "before": "Full kit: W-link the carry and the E stuns from two bodies — the double angle is the trap.", "after": "His poke and peel still clearly out-value your slower, dashless setup at level 3." },
+  { "layer": "full", "path": "phases[2].rating", "before": "5/10", "after": "4/10" },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Taric" },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Taric" },
+  { "layer": "full", "path": "phases[5].rating", "before": "6/10", "after": "7/10" },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Taric" },
+  { "layer": "full", "path": "phases[6].rating", "before": "6/10", "after": "7/10" },
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Braum Unbreakable: matchup-defining — The shield wall eats your poke and engage projectiles — wait it out. It writes your spacing rules. - R Cosmic Radiance is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Braum Unbreakable: 16s at rank 1, down to 8s by rank 5 — wait for it to fully expire before you throw a skillshot he can wall off. - Your R Cosmic Radiance is 180s at rank 1, 120s at rank 3 — save it, never season trades with it." },
+  { "layer": "full", "path": "dosFull[1].d", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "Wait for Concussive Blows stacks to fall off before you commit -- stepping up mid-stack eats a free stun." },
+  { "layer": "full", "path": "dontsFull[2].d", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.", "after": "Glacial Fissure is 130s at rank 1 -- once he burns it, the ~2min gap is your window to step up freely." }
+ ],
+ "notes": "phases[4].side moved to Taric with no rating/why change needed — its existing why ('Cosmic Radiance online...meet a scheduled invulnerability') and rating (6/10) already argued Taric's favor, so only the side flag was out of sync."
+}

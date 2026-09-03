@@ -1,0 +1,55 @@
+{
+ "ownerKey": "thresh_sup",
+ "enemy": "bard",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "phases[].side and content win[] agree: Skill at 1, Thresh ahead 2-5, Skill late — matches packet.levelChart exactly.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly key level 2 (reliable hook vs wall-dependent Q), level 6 (Box denies roam-return, R only saves), first item, and late (global R + chime scaling levels it).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Cosmic Binding as the key window but has no rank cooldown number, and never mentions Bard's R (Tempered Fate) going untargetable through Thresh's commit — a missingInteractions rule flagged as applicable and absent from the whole matchup.",
+   "why": "Cosmic Binding (Q) is 11s at rank 1, down to 7s at rank 5. missingInteractions rule untargetable-dodges-burst says Bard's R puts everyone hit into stasis, dodging timed burst — Thresh should hold his combo rather than dump it into a stasised target.",
+   "corrected": "Added the Q cooldown numbers and the untargetable-R warning to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities (Q, R)", "missingInteractions[0].data.missing[0]"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Bard Cosmic Binding: matchup-defining — The wall-stun starts every Bard pick — never hug terrain near him. Read it before every duo step-up. - Your W Dark Passage answers exactly one disaster per cooldown. - Spend the R on swing moments only.",
+   "after": "- Bard Cosmic Binding (Q): 11s at rank 1, 7s at rank 5 — the wall-stun starts every Bard pick, so never hug terrain near him. - His R Tempered Fate goes untargetable — wait it out, don't dump your combo into stasis. - Spend your R on swing moments only."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Hook the gap, flay the landing, lantern the collapse — the full sentence pays the whole team.",
+   "after": "Flay him off the wall before Cosmic Binding lands — no wall contact means no double-stun."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Fishing predictably while the souls walk past — the collection IS the scaling; greed the hooks, not the chips.",
+   "after": "Committing your full combo the instant he casts Tempered Fate — he's untargetable; wait the stasis out first."
+  }
+ ],
+ "notes": "Both COPY_PASTE_BLEED findings and the COOLDOWN_NO_DIGIT finding are fixed. Both missingInteractions rules are now represented: untargetable-dodges-burst is in breakdown.cooldowns/dontsFull[2], and needs-antiheal (Caretaker's Shrine sustain) is already covered by report[8] itemization's anti-heal line, so left alone. phases[]/win[] were already in agreement, no chart edit needed. Reviewed the remaining template-sweep fields (breakdown.wave/carry/difficulty, ahead, tradeGood, tradeBad, loading, enemyWin) — generic Thresh phrasing but nothing in the kit or missingInteractions gave a groundable Bard-specific replacement beyond what's fixed above, so left as-is rather than guessed at."
+}

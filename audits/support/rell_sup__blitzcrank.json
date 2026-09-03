@@ -1,0 +1,50 @@
+{
+ "ownerKey": "rell_sup",
+ "enemy": "blitzcrank",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "breakdown.early/mid/wave and content.early/mid correctly describe Blitzcrank owning levels 1-2 (Rocket Grab into Power Fist kill threat) and Rell taking over at 3 once mounted knockup punishes a whiffed hook.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief:currentText.content.early", "brief:currentText.content.mid"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes at Lvl2 (Blitz's window), Lvl6 (Magnet Storm punishes a whiffed Q), 1st item, and Late are named with real abilities and match the packet level chart.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief:currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "content.whys[1] names 'Power Fist-E chain' — Power Fist IS the E ability, so the sentence double-labels the same ability as two things. lintFindings/suspectNames flags this exact string (distance 1 from 'power fist'). Also phases[0].side and phases[1].side both read the enum placeholder 'Skill' while content win[0] and win[1] correctly say 'Blitzcrank', and phases[2..6].side likewise read 'Skill' against win[2..6]='Rell'.",
+   "why": "Fix the ability-name collision by naming the chain as Rocket Grab into Power Fist (not 'Q-Power Fist-E'). For the chart, win[N] already holds the correct verdict for every row, so per the decided chart rule I move side alone to match it; phases[0].why and phases[1].why are the two rows flipping to the enemy, so I rewrote both to state the real reason Blitzcrank wins those levels: Rocket Grab range (1079) plus the Power Fist (E) follow-up threatens a kill before Rell has knockup range or a completed Crash Down.",
+   "corrected": "whys[1] renamed to 'Rocket Grab into Power Fist'; phases[0-1].side=Blitzcrank (why rewritten); phases[2-6].side=Rell",
+   "confidence": "High",
+   "sources": ["brief:packet.suspectNames", "brief:packet.levelChart", "brief:currentText.content.win", "brief:enemyKit.E"]
+  }
+ ],
+ "edits": [
+  {"layer":"content","path":"whys[1]","before":"Blitzcrank wins level 2 because his Q-Power Fist-E chain out-bursts your uncompleted engage.","after":"Blitzcrank wins level 2 because his Rocket Grab into Power Fist chain out-bursts your engage."},
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[0].why","before":"Mounted speed governs the lane's first minutes — the charge threat zones before it lands.","after":"Rocket Grab range plus a Power Fist follow-up threatens a kill before your knockup comes online."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Blitzcrank"},
+  {"layer":"full","path":"phases[1].why","before":"W crash online — the dismount knockup starts chains the lane can't refuse.","after":"His Q-into-Power Fist chain still outbursts Crash Down before it closes the gap."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"Rocket Grab is down 20s at rank 1 (16s by rank 5) — trade or engage inside that window before he can re-load the hook."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with intentions.","after":"His Q is live at 1079 range — trading now hands him a Rocket Grab into Power Fist chain that can kill you."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Blitzcrank Rocket Grab: matchup-defining — The hook IS the champion — minion cover turns the lane into a farming sim. It writes your spacing rules. - E Full Tilt (remount speed) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- His Q Rocket Grab (20/19/18/17/16s) is the champion — minion cover turns the lane into a farming sim while it's up. - E Power Fist (7-5s) resets off autos, so the wind-up is your cue to back off. - Your R (120/100/80s) opens or closes fights — pick one per cast."}
+ ],
+ "notes": "missingInteractions flagged shield-absorbs-burst (Mana Barrier P + Static Field R eat Rell's all-in burst) and autoreset-burst-tell (Power Fist E resets his autos, so the wind-up not the cast is the read) — the second is now folded into breakdown.cooldowns; the first had no field with room in this pass and is deferred. breakdown.carry, breakdown.wave, ahead, tradeGood, tradeBad, loading, and enemyWin remain structurally templated (identical boilerplate shared verbatim with the bard matchup in this same batch) but were not rewritten this pass; flagging in sectionsMissing."
+}

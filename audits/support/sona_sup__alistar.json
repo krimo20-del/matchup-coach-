@@ -1,0 +1,51 @@
+{
+ "ownerKey": "sona_sup",
+ "enemy": "alistar",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Diff is TRICKY, difficulty 7/10 — accurate: Alistar hard-punishes Sona's lack of hard CC pre-6 via Headbutt(W)->Pulverize(Q) knockup-stun, but her aura kit scales past his single-target lockdown late.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/alistar.json", "champ-data/_kits/sona.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly flag level 2 (W-Q combo online), level 6 (Unbreakable Will lets him dive through peel), first item (engage item + boots close the gap), and late (Sona's 2-item aura/Crescendo scaling flips it).",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/alistar.json"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[4]/[5].side (Level 6, First item) were 'Skill' while content win[4]/win[5] already said 'Alistar', and phases[0-3].side said 'Alistar' while content win[0-3] said 'Skill' — the level chart contradicted itself on 5 of 7 rows between the full and content layers.",
+   "why": "Alistar has zero hard CC before level 6 and a 12-14s Headbutt/Pulverize cooldown, so he threatens the knockup-stun combo on almost every wave through levels 1-5; Unbreakable Will (120/100/80s) then cleanses Sona's answer at 6 and lets him dive. Both signals agreed he's ahead the whole laning phase — only the row labels disagreed with the win column.",
+   "corrected": "Set phases[0-5].side and win[0-5] to Alistar consistently (matching win[4]/[5] which already had it right); left phases[6]/win[6] at Sona (already agreed) for the late scaling flip.",
+   "confidence": "High",
+   "sources": ["champ-data/_kits/alistar.json", "tools/audit-run/briefs/sup/alistar_sup__sona.json"]
+  }
+ ],
+ "edits": [
+  {"layer": "content", "path": "win[0]", "before": "Skill", "after": "Alistar"},
+  {"layer": "content", "path": "win[1]", "before": "Skill", "after": "Alistar"},
+  {"layer": "content", "path": "win[2]", "before": "Skill", "after": "Alistar"},
+  {"layer": "content", "path": "win[3]", "before": "Skill", "after": "Alistar"},
+  {"layer": "content", "path": "whys[0]", "before": "Level 1 is even because your Q poke and his empty engage range cancel out.", "after": "Level 1 favours Alistar: a Pulverize knockup punishes your poke; Q has no CC."},
+  {"layer": "content", "path": "whys[1]", "before": "Level 2 is even: your Power Chord threat matches his first W-Q combo window.", "after": "Level 2 tips Alistar: W-Q lands a knockup-stun — Power Chord can't punish it."},
+  {"layer": "content", "path": "whys[2]", "before": "Level 3 stays skill as your sustain-poke trades roughly with his short-cooldown engage.", "after": "Level 3 stays Alistar's: Headbutt refreshes in 12s at rank 3, threatening the combo most waves."},
+  {"layer": "content", "path": "whys[3]", "before": "Levels 4-5 remain even while his combo scales but your shielding keeps you safe.", "after": "Levels 4-5 stay Alistar's: combo threatens step-ups; Aria shields damage, not the stun."},
+  {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Alistar"},
+  {"layer": "full", "path": "phases[4].why", "before": "Crescendo online — grouped lanes pay the dance tax; your duo's all-in has a stage.", "after": "Unbreakable Will (120/100/80s) cleanses your CC — his all-in still survives it."},
+  {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Alistar"},
+  {"layer": "full", "path": "phases[5].why", "before": "First item: the auras compound and the chords chunk.", "after": "Engage item and boots close Headbutt's gap on you."},
+  {"layer": "full", "path": "breakdown.cooldowns", "before": "- Alistar Headbutt: matchup-defining — The headbutt-pulverize combo starts every play — respect flash range while it is up. It writes your spacing rules. - E Song of Celerity is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Headbutt (W) is down 14s at rank 1, 10s at max — that's your punish window. - Trample (E, 12s at rank 1) stacks for a stun off an auto-reset; the wind-up on his last cast is your tell to back off. - Unbreakable Will (120/100/80s) cleanses your Crescendo — bait it before you commit."},
+  {"layer": "full", "path": "dosFull[1].d", "before": "Q-chord the pair at aura edge, W the trade-back, walk — invisible margins, compounding ledger.", "after": "Song of Celerity buys the distance Headbutt needs — burn it to deny his range, not just chase kills."}
+ ],
+ "notes": "phases[0].side had a no-op edit removed from the group (was already 'Alistar', matches win[0] after this proposal) — listed here for transparency only, not submitted as a real change. Chart is now fully agreeing across both layers: Alistar favoured levels 1 through first-item, Sona favoured at 2+ items, matching mirror file alistar_sup__sona's own level chart (win[0-5]=Alistar, win[6]=Sona) read from tools/audit-run/briefs/sup/alistar_sup__sona.json. Applied the two missing interactions from champ-data/_kits/_missing/sona_sup.json (Alistar P Triumphant Roar anti-heal — already covered by report[8].t itemization line, no edit needed; Alistar E Trample auto-reset tell — folded into breakdown.cooldowns rewrite). dosFull[1].d was a COPY_PASTE_BLEED: title 'E-speed every disengage' had tradeGood's Q/W-chord text pasted under it; replaced with E-specific content. No brief file existed at tools/audit-run/briefs/support/sona_sup__alistar.json or tools/audit-run/briefs/sup/sona_sup__alistar.json for this matchup (only the mirror alistar_sup__sona.json exists), so this audit was built directly from champ-data kits, the live full/content JS files, and the mirror brief."
+}

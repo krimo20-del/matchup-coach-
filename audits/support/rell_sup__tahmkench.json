@@ -1,0 +1,57 @@
+{
+ "ownerKey": "rell_sup",
+ "enemy": "tahmkench",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Lane difficulty (5.5/10, EVEN) and phase-by-phase breakdown are accurately keyed to Abyssal Dive's cooldown as the swing mechanic.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief packet.winRate", "brief ownerKit/enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Power spikes (level 2 chain, level 6 Magnet Storm, first item tank stats) are correctly identified and match the kit's cooldown curve.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief ownerKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0].side reads the placeholder 'Skill' instead of naming a side, contradicting content win[0]='Tahm Kench' and whys[0] which both say Tahm wins level 1 on Tongue Lash poke/durability. phases[1..6].side carry the same 'Skill' placeholder despite win[1..6] already correctly reading 'Rell'.",
+   "why": "The full-layer chart never got a real side value written for this matchup — win[N] (content layer) was correctly filled in an earlier pass but phases[N].side (full layer) was left as a template token, so the two layers disagree on who wins every level.",
+   "corrected": "Set phases[0].side to 'Tahm Kench' (matching win[0], already correct) and rewrite phases[0].why to state Tahm's poke/durability edge. Set phases[1..6].side to 'Rell' (matching win[1..6], already correct) with no win[N] edit needed since content already agrees.",
+   "confidence": "High",
+   "sources": ["brief currentText.full", "brief currentText.content"]
+  },
+  {
+   "point": 4,
+   "status": "missing",
+   "whatIsWrong": "The kit flags Thick Skin (E) and Devour (R) as burst-absorbing shields (missingInteractions rule shield-absorbs-burst), but dosFull[1].d and dontsFull[2].d are copy-paste bleed from tradeGood/tradeBad rather than naming that interaction.",
+   "why": "Devour specifically can eat Tahm's own ADC out of Magnet Storm mid-fight, and Thick Skin's stored-damage shield eats the opening burst of a Q-W-E combo — neither bullet currently says this even though the titles promise it.",
+   "corrected": "dosFull[1].d now explains Devour/Thick Skin saving his ADC and the CC-lock-Tahm-first counter; dontsFull[2].d now explains R'ing into a live Abyssal Dive resets him for free instead of repeating tradeBad verbatim.",
+   "confidence": "High",
+   "sources": ["brief enemyKit E/R flags", "brief missingInteractions"]
+  }
+ ],
+ "edits": [
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Tahm Kench" },
+  { "layer": "full", "path": "phases[0].why", "before": "Mounted speed governs the lane's first minutes — the charge threat zones before it lands.", "after": "Tongue Lash poke and passive durability let Tahm Kench chip you down before your combo is online." },
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Rell" },
+  { "layer": "full", "path": "dosFull[1].d", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "Devour and Thick Skin save his ADC mid-fight — lock Tahm himself first, so his shield has nothing left to save." },
+  { "layer": "full", "path": "dontsFull[2].d", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.", "after": "His Abyssal Dive up means a banked disengage — R into a ready dive just resets him to full for free." },
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Tahm Kench Abyssal Dive: matchup-defining — His re-engage and his escape — all-in only while it is down. It writes your spacing rules. - E Full Tilt (remount speed) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.", "after": "- Abyssal Dive (W) is 21/20/19/18/17s — his re-engage and escape; all-in only while it is down, it writes your spacing rules. - E Full Tilt (remount speed) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast." }
+ ],
+ "notes": "Level chart on both layers now agree: Tahm Kench Level 1, Rell every row after, matching packet.levelChart and content win[N]. The two missingInteractions items (anti-heal timing, shield-absorbs-burst) were already partly covered by report[8] itemization text; the shield-absorbs-burst gap is now closed via dosFull[1].d. No unverifiable claims added."
+}

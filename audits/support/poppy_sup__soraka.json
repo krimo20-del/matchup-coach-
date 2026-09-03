@@ -1,0 +1,55 @@
+{
+ "ownerKey": "poppy_sup",
+ "enemy": "soraka",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full phases[].side is a flat 'Skill' template on all 7 rows while content win[] already gives concrete verdicts (Poppy 0-3 and 5, Soraka 4 and 6) backed by grounded content whys[]. Every row disagreed between the two layers.",
+   "why": "Content whys[] match the kit: Soraka self-costs HP to heal and has no mobility, so Poppy's wall-pin wins levels 1-3 and first item; Wish (R) is a global full-team heal that resets Poppy's all-in at 6 and lets stacked healing out-sustain her late — matching winRate 53.44% (owner favored overall, but the enemy has two real windows).",
+   "corrected": "Moved phases[0-3,5].side to 'Poppy' and phases[4,6].side to 'Soraka', rewriting each why to state the specific reason instead of the generic ability-threat template.",
+   "confidence": "High",
+   "sources": ["currentText.content", "packet", "enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "n/a",
+   "why": "spikes[] correctly identifies the level-2 wall-pin punish on Soraka's self-cost healing, the level-6 Wish reset, first-item burst outracing a single Q-heal, and the late-game sustain inversion.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Equinox as matchup-defining but carries no cooldown number (lint: COOLDOWN_NO_DIGIT), and never states that Equinox (E) landing mid-cast cancels Poppy's Keeper's Verdict channel (missingInteractions: your-channel-punished), nor that Wish/Astral Infusion sustain needs Grievous Wounds timing (missingInteractions: needs-antiheal).",
+   "why": "Equinox is 20/19/18/17/16s by rank and Wish is 150/135/120s; both real numbers let the reader time an engage or an anti-heal purchase around them.",
+   "corrected": "Rewrote breakdown.cooldowns with real Equinox/Wish cooldowns, the channel-cancel interaction, and the anti-heal timing note.",
+   "confidence": "High",
+   "sources": ["enemyKit", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Poppy"},
+  {"layer":"full","path":"phases[0].why","before":"Q the contacts — the hammer chunk is honest and the passive shield toss annoys.","after":"Soraka pays her own HP to heal — a Q poke and E threat force her off the ADC."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Poppy"},
+  {"layer":"full","path":"phases[1].why","before":"W governs dashes already — their mobility kit just lost its lane privileges.","after":"You hit 2 first: E-into-wall punishes her paper-thin HP before she can heal it."},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Poppy"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: E the wall-adjacent and Q the pinned — the lane's geometry is a weapon.","after":"Zero-mobility Soraka has no answer to a guaranteed E — keep picking through level 3."},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Poppy"},
+  {"layer":"full","path":"phases[3].why","before":"Zone with W threat — engage supports pay a no-dash tax to play.","after":"You still walk her down before Wish comes back up at 4-5."},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Soraka"},
+  {"layer":"full","path":"phases[4].why","before":"Keeper's Verdict online — the dive that survives everything still flies home.","after":"Soraka's global Wish resets your all-in here — bait it or fight when it's down."},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Poppy"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the pins chunk and the W deletes engage comps.","after":"Item burst outpaces one Q-heal, so you retake tempo now."},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Soraka"},
+  {"layer":"full","path":"phases[6].why","before":"Late Poppy un-dives: W their mobility, E their carry into walls, and R the unstoppable problem.","after":"Stacked infinite healing and repeat Wishes out-sustain a lone Poppy in extended fights."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Soraka Equinox: matchup-defining — The silence zone cancels your engage mid-cast — step out before the root snaps. The duo’s tempo bends around it. - Keep W Steadfast Presence banked for their best play. - The ultimate is a fight decision, not a habit.","after":"- Soraka Equinox (E): 20s at rank 1, down to 16s at 5 — silences then roots, and cancels your Keeper's Verdict channel if it lands mid-cast. - Wish (R) is 150/135/120s and out-heals your chip — anti-heal timing decides extended trades. - Spend your R on swing moments only."},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"Land the wall-pin exactly when she steps up to Q-heal herself — Soraka has zero peel to answer with."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with armor.","after":"Heroic Charge with no wall nearby just dashes — she walks it off and Q-heals for free."},
+  {"layer":"full","path":"report[7].t","before":"World Atlas start. Locket or Zeke's line, Mobility-Mercs by lane, then Knight's Vow paths. Add anti-heal early into his duo’s sustain.","after":"World Atlas start. Locket or Zeke's line, Mobility-Mercs by lane, then Knight's Vow paths. Add anti-heal early into her duo’s sustain."}
+ ],
+ "notes": "Soraka is female per champ-gender.js; report[7] used 'his' and was fixed. dosFull[1].d and dontsFull[2].d were verbatim copies of tradeGood/tradeBad pasted under unrelated titles (copy-paste bleed) — rewritten to match their actual titles. Level chart: all 7 rows were 'Skill' vs concrete win[] verdicts — this is the level-chart edit group and all 7 side+why pairs are proposed together per the atomic-group rule; win[] itself was already correct in content and was not touched. Mirror check: soraka_sup__poppy.json (their own page) independently reached the same level-1/2 wash-to-owner-favored and level-6/late Soraka-favored conclusion, so this does not fight the mirror. breakdown.early/mid/wave/feeding/carry/difficulty/late remain generic engage-support templates with no Soraka-specific fact available to ground a rewrite without inventing one — left alone."
+}

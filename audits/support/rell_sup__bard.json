@@ -1,0 +1,48 @@
+{
+ "ownerKey": "rell_sup",
+ "enemy": "bard",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Rell's mounted-vs-dismounted lane phases and Bard's roam pattern are reflected in breakdown.early/mid/wave.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief:currentText.full.breakdown"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes at Lvl2, Lvl6, 1st item, Late are named with real ability names (mounted W, Magnet Storm, E tether) and align with the packet level chart.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief:currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[0..6].side all read the enum placeholder 'Skill' instead of naming who wins each stage, contradicting content win[0]='Bard' and win[1..6]='Rell' (which are correct per the packet level chart).",
+   "why": "The chart lives in two places (full phases[N].side and content win[N]) and must agree. win[N] already holds the right verdict, so per the decided chart rule I move side alone to match it, and rewrite phases[0].why (the only row whose side is flipping to the enemy) to explain the real reason Bard wins Level 1: Cosmic Binding's wall-stun threat plus Meep poke before Rell has knockup range.",
+   "corrected": "phases[0].side=Bard (why rewritten to match), phases[1..6].side=Rell",
+   "confidence": "High",
+   "sources": ["brief:packet.levelChart", "brief:currentText.content.win", "brief:currentText.content.early"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[0].side","before":"Skill","after":"Bard"},
+  {"layer":"full","path":"phases[0].why","before":"Mounted speed governs the lane's first minutes — the charge threat zones before it lands.","after":"Cosmic Binding threatens a wall stun and Meeps chip you before your knockup range comes online."},
+  {"layer":"full","path":"phases[1].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Rell"},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"Cosmic Binding is down 11s at rank 1 (7s by rank 5) — trade or engage inside that window before he reloads the stun."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with intentions.","after":"His Q is live at the wall — trading now hands him a free stun and lets his Meeps chip you."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Bard Cosmic Binding: matchup-defining — The wall-stun starts every Bard pick — never hug terrain near him. It writes your spacing rules. - E Full Tilt (remount speed) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Bard's Q Cosmic Binding (11/10/9/8/7s) is matchup-defining — the wall-stun writes your spacing; trade the moment it's down. - His E Magical Journey (22-16s) baits overextensions, not trades. - Your R (120/100/80s) opens or closes fights — pick one per cast."}
+ ],
+ "notes": "missingInteractions flagged needs-antiheal (Bard's Caretaker's Shrine sustain) but no writable field had room within the length band without displacing an already-grounded sentence — left for a future pass, recorded here per the no-invent rule. breakdown.carry, breakdown.wave, ahead, tradeGood, tradeBad, loading, and enemyWin remain structurally templated (identical boilerplate 'crash/gravity/magnetize' language shared verbatim with the blitzcrank matchup in this same batch) but were not rewritten this pass to stay within scope; flagging in sectionsMissing."
+}

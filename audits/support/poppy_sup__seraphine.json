@@ -1,0 +1,42 @@
+{
+ "ownerKey": "poppy_sup",
+ "enemy": "seraphine",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "missing",
+   "whatIsWrong": "Packet defect flags a real contradiction: winRate has Poppy at 52.81% (owner favored) but content win[] gives Seraphine 6 of 7 rows and full phases[].side is a flat 'Skill' template on all 7. The content-layer whys[] array is itself internally split (whys[4] argues Poppy wins level 6, but win[4]='Seraphine'; whys[5] argues Seraphine wins first item, but win[5]='Poppy') — the two prose sources in the same file disagree with each other and with the packet-derived win rate.",
+   "why": "Nothing in either kit resolves which of the three conflicting sources (win[], whys[], win-rate) is correct, so moving phases[].side to match win[] would just propagate an already-contradicted array, and moving it to match the win rate would fight the mirror side's already-approved chart (seraphine_sup__poppy.json moved 6 of 7 rows to Seraphine).",
+   "corrected": "Left phases[].side and win[] untouched per the contradiction-guard rule. Recorded here instead of guessing.",
+   "confidence": "Low",
+   "sources": ["packet", "currentText.content", "audits/support/seraphine_sup__poppy.json"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "n/a",
+   "why": "spikes[] correctly names level 2 Q High Note poke outranging melee, level 6 R Keeper's Verdict as the all-in window, first-item W Surround Sound reclaiming the 2v2, and late-game R Encore chain-charm.",
+   "corrected": "n/a",
+   "confidence": "High",
+   "sources": ["currentText.content.spikes", "enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns names Beat Drop as matchup-defining but carries no cooldown number (lint: COOLDOWN_NO_DIGIT), and omits that Beat Drop (E) or Encore (R) landing mid-cast cancels Poppy's Keeper's Verdict channel outright (missingInteractions: your-channel-punished).",
+   "why": "Beat Drop is 11/10.5/10/9.5/9s by rank; a real number lets the reader time an R channel around it, and the channel-cancel is the single most punishable interaction in the matchup.",
+   "corrected": "Added rank-1/rank-5 Beat Drop cooldown and the channel-cancel interaction to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["enemyKit", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Seraphine Beat Drop (Root): matchup-defining — Roots the already-slowed — dodge it and the song never builds. It writes your spacing rules. - W Steadfast Presence is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.","after":"- Seraphine Beat Drop (E, Root): 11s at rank 1, down to 9s at 5 — roots the slowed and cancels your Keeper's Verdict channel outright if it lands mid-cast. - Steadfast Presence (W) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast."},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"Land it while her Beat Drop root holds — she can't walk out, and Stage Presence adds bonus damage behind it."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with armor.","after":"Heroic Charge with no wall nearby just dashes — she walks off and your engage buys nothing."},
+  {"layer":"full","path":"report[7].t","before":"World Atlas start. Locket or Zeke's line, Mobility-Mercs by lane, then Knight's Vow paths. Add anti-heal early into his duo’s sustain.","after":"World Atlas start. Locket or Zeke's line, Mobility-Mercs by lane, then Knight's Vow paths. Add anti-heal early into her duo’s sustain."},
+  {"layer":"full","path":"report[8].t","before":"Commit on Beat Drop (Root)’s cooldown, on your first item spike, and with your carry’s damage online. His answer goes first; yours goes last.","after":"Commit on Beat Drop (Root)’s cooldown, on your first item spike, and with your carry’s damage online. Her answer goes first; yours goes last."}
+ ],
+ "notes": "Level chart (phases[].side vs content win[]) is self-contradictory across three sources (win rate, win[], whys[]) and I could not resolve it from the kits — flagged in point 2, left untouched rather than guessed. dosFull[1].d and dontsFull[2].d were verbatim copies of tradeGood/tradeBad pasted under unrelated titles (lint copy-paste bleed) — rewritten to match their actual titles. Pronoun fixes: report[7]/report[8] used 'his'/'His' for Seraphine, who is female per champ-gender.js. breakdown.early/mid/wave/feeding/carry/difficulty/late remain generic engage-support templates with no Seraphine-specific fact available to ground a rewrite without inventing one — left alone."
+}

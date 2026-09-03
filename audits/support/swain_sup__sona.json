@@ -1,0 +1,43 @@
+{
+ "ownerKey": "swain_sup",
+ "enemy": "sona",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "Favoured/8-10 early framing matches: Sona has paper HP and no CC until 6, and Swain's E-Q punishes that hard.",
+   "why": "Sona's kit has zero hard CC pre-6 (only Power Chord poke), confirming Swain dominates the early stages.",
+   "corrected": "No change needed.",
+   "confidence": "High",
+   "sources": ["ownerKit", "enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "phases[6].side reads \"Skill\" while content win[6]=\"Sona\" (and every other row already agrees: Swain 0-5, Sona 6).",
+   "why": "Her completed auras, heal/shield output and R Crescendo take the late game per whys[6]/late — the full-layer side column for the last row was never updated to match.",
+   "corrected": "Move phases[6].side to Sona; why already describes her late takeover correctly, no rewrite needed there.",
+   "confidence": "High",
+   "sources": ["currentText.content.win", "currentText.content.whys"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Sona's Q on-hit scaling (armour alone misreads it) and the Power Chord/Hymn wind-up tell are both flagged as applicable but unstated.",
+   "why": "Hymn of Valor applies on-hit effects so attack-speed items scale her poke past what armour alone answers; the Power Chord charge glow is the actual all-in cue, not her spell cast.",
+   "corrected": "Folded both into the two bleed-fix rewrites below (dosFull[1].d and dontsFull[2].d) since those fields were already being touched for the lint fix.",
+   "confidence": "High",
+   "sources": ["missingInteractions"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Sona"},
+  {"layer":"full","path":"dosFull[1].d","before":"E the carrier, pull the fragment, Q the formation — one root taxed three bars and healed yours.","after":"Every E root drops a Soul Fragment — grab it, and note her Power Chord glow is the wind-up cue to back off, not her cast."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Brawling pre-6 at marksman range — the demon era has a start date; respect it.","after":"Her Q applies on-hit, so armor alone misreads the poke — brawling pre-6 at marksman range just feeds it."},
+  {"layer":"full","path":"report[8].t","before":"World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Add anti-heal early into his duo’s sustain.","after":"World Atlas start. Mandate or Liandry's-lite lines, Sorcerer's, then Rylai's-Zhonya's paths. Add anti-heal early into her duo’s sustain."},
+  {"layer":"full","path":"report[9].t","before":"Commit on Crescendo’s cooldown, on your first item spike, and with your carry’s damage online. His answer goes first; yours goes last.","after":"Commit on Crescendo’s cooldown, on your first item spike, and with your carry’s damage online. Her answer goes first; yours goes last."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Sona Crescendo: matchup-defining — The stun chord flips grouped fights — spread while it is up. Read it before every duo step-up. - Your E Nevermove answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Sona's Crescendo is up every 100-140s — the stun chord flips grouped fights, spread while it is up. - Your E Nevermove cools at 12s early, 10s maxed — bank it for her step-up. - Spend the R on swing moments only."}
+ ],
+ "notes": "packet.suspectNames flagged wants.you[0] 'Power Chords' as a possible wrong ability name — checked against enemyKit, the real name is Power Chord (P) and the sentence just uses it as a verb ('before she Power Chords'); this is a false positive, no edit made. phases[6].side was the only chart mismatch (rows 0-5 already agreed with win[]). Fixed both misgender lines, both copy-paste-bleed bullets (folding in the on-hit and auto-reset-tell missing interactions), and added real cooldown numbers to breakdown.cooldowns."
+}

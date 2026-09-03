@@ -1,0 +1,79 @@
+{
+ "ownerKey": "swain_sup",
+ "enemy": "galio",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Chart and content agree Swain wins every stage (EVEN 5.5/10 diff); Galio support has no early poke and no sustain, matching the packet's flat Swain-favoured levelChart.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief packet.levelChart", "brief currentText.content.win[]"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Spikes correctly key to Lvl2 poke window, Lvl6 Demonic Ascension out-sustaining the taunt all-in, and 1st item burn spike.",
+   "corrected": "",
+   "confidence": "High",
+   "sources": ["brief currentText.content.spikes"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "Content layer repeatedly calls Galio's E (Justice Punch, a dash that knocks up the first enemy hit) a 'taunt'. The actual taunt is on his W (Shield of Durand, charge-then-release taunt+damage). This is a fabricated ability behavior, same class of error as the Cassiopeia/Nilah calibration cases.",
+   "why": "enemyKit confirms W flags hardCC/taunt-on-release via Riot text ('Upon releasing the charge, Galio will taunt') while E is a dash+knockup only ('knocking up the first enemy champion he encounters'). Telling the reader to dodge an 'E taunt' sends them dodging the wrong cooldown.",
+   "corrected": "Reassign taunt to W (Shield of Durand) in mid, spikes[1].text, and wants.foe[1]; keep E (Justice Punch) as the dash-knockup.",
+   "confidence": "High",
+   "sources": ["brief enemyKit.abilities W/E", "brief currentText.content.mid/spikes/wants.foe"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "content",
+   "path": "mid",
+   "before": "Levels 3-5 stay yours — Galio still can't out-poke or out-sustain your root-and-drain, so keep chunking him while respecting his E Justice Punch taunt as his one real engage. Bait or dodge the taunt, then punish the cooldown. Hold prio and deny his ADC the farm his peel is meant to protect, and track his flash for a surprise dive.",
+   "after": "Levels 3-5 stay yours — Galio still can't out-poke or out-sustain your root-and-drain, so keep chunking him while respecting his W Shield of Durand taunt as his one real engage. Bait or dodge the taunt, then punish the cooldown. Hold prio and deny his ADC the farm his peel is meant to protect, and track his flash for a surprise dive."
+  },
+  {
+   "layer": "content",
+   "path": "spikes[1].text",
+   "before": "Demonic Ascension out-sustains a Galio all-in — when he E Justice Punch-taunts your ADC or ults in for a knock-up, pop R and E the diver, healing through his burst while your poke lead already has him behind.",
+   "after": "Demonic Ascension out-sustains a Galio all-in — when he W Shield of Durand-taunts your ADC or E Justice Punch-knocks him up, pop R and E the diver, healing through his burst while your poke lead already has him behind."
+  },
+  {
+   "layer": "content",
+   "path": "wants.foe[1]",
+   "before": "E-taunt or R knock-up to lock your ADC for a collapse",
+   "after": "W-taunt or E/R knock-up to lock your ADC for a collapse"
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Galio Justice Punch: matchup-defining — His dash knockup — he has no engage while it is down. It writes your spacing rules. - E Nevermove is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Galio's Justice Punch (E) is down 11/10/9/8/7s — no dash-knockup engage while it's on cooldown; it writes your spacing rules. - Shield of Durand (W) taunts on release, up again in 18-14s — bait it before you commit. - Your E Nevermove is for saving fights, not seasoning trades; the R opens or closes fights, pick one per cast."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "E the carrier, pull the fragment, Q the formation — one root taxed three bars and healed yours.",
+   "after": "Once Shield of Durand (W) or Hero's Entrance (R) burns its shield, the window is yours — commit E into R before he can taunt or shield again."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].t",
+   "before": "E the poke",
+   "after": "Respect his E wall on retreat"
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Brawling pre-6 at marksman range — the demon era has a start date; respect it.",
+   "after": "Justice Punch (E) charges back and knocks up anything in the way, cutting your escape line since you have no dash — hold Flash for the cutoff, not for chip damage."
+  }
+ ],
+ "notes": "Fixed a real fabricated-ability error: content layer called Galio's E (Justice Punch, dash-knockup) a 'taunt' three places — taunt is actually on W (Shield of Durand). Also fixed two COPY_PASTE_BLEED lint hits (dosFull[1].d and dontsFull[2].d duplicated tradeGood/tradeBad) and added real digits to breakdown.cooldowns (lint COOLDOWN_NO_DIGIT). Folded in missingInteractions: shield-absorbs-burst -> dosFull[1].d, terrain-cuts-retreat -> dontsFull[2]. Level chart already agrees full/content (all Swain) — left untouched, no side changes needed."
+}

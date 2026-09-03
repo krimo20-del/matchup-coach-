@@ -1,0 +1,109 @@
+{
+ "ownerKey": "rell_sup",
+ "enemy": "alistar",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "correct",
+   "whatIsWrong": "Lane difficulty is captured as EVEN (5.5/10) with Rell favored levels 1-5, first item, and Alistar taking over at 2+ items — matches the packet levelChart exactly (Rell x6, Alistar last).",
+   "why": "Rell's mounted W-knockup range beats Alistar's melee Q-W early, but Alistar's R (Unbreakable Will) plus stacked resistances let him tank the poke and outlast once itemized.",
+   "corrected": "n/a — rating and breakdown.difficulty already correct.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "packet.winRate"]
+  },
+  {
+   "point": 3,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns had no digit in it (lint COOLDOWN_NO_DIGIT) and named a nonexistent Rell ability, 'E Full Tilt' — Rell's E is Attract and Repel, not Full Tilt.",
+   "why": "Alistar's Headbutt and Pulverize both run 14/13/12/11/10s; Rell's E resets 14/13/12/11/10s. Naming the real numbers and the real ability lets a player track the actual punish window instead of a vague fabricated one.",
+   "corrected": "See edit to breakdown.cooldowns.",
+   "confidence": "High",
+   "sources": ["ownerKit.abilities[E].cd", "enemyKit.abilities.Q/W.cd"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "missingInteractions flagged dash-denied (Alistar's Pulverize/Trample deny Rell's W dash) and autoreset-burst-tell (Trample's auto-attack reset is the combo's tell) as applicable but unmentioned; breakdown.trading and the Do/Don't pair also had copy-paste bleed (dosFull[1].d and dontsFull[2].d were verbatim tradeGood/tradeBad pasted under unrelated titles).",
+   "why": "Trample stacks on unit contact and its reset-stun is the actual signal to disengage, not the cast itself; Pulverize/Trample ground Rell's Crash Down dash. These are concrete, sourced interactions the copy-paste text buried.",
+   "corrected": "See edits to breakdown.trading, dosFull[1].d, dontsFull[2].d.",
+   "confidence": "High",
+   "sources": ["enemyKit.abilities.E.flags.autoReset", "enemyKit.abilities.Q/E.flags.grounding", "missingInteractions"]
+  }
+ ],
+ "edits": [
+  {
+   "layer": "full",
+   "path": "breakdown.cooldowns",
+   "before": "- Alistar Headbutt: matchup-defining — The headbutt-pulverize combo starts every play — respect flash range while it is up. It writes your spacing rules. - E Full Tilt (remount speed) is for saving fights, not seasoning trades. - The R opens or closes fights — pick one per cast.",
+   "after": "- Alistar's Headbutt: 14s at rank 1 down to 10s at max, matched by Pulverize's 14-10s — the gap after both land is your window. - Your E, Attract and Repel, resets 14-10s; hold it, don't poke with it. - R (120/100/80s) is one commit per fight, not two."
+  },
+  {
+   "layer": "full",
+   "path": "dosFull[1].d",
+   "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.",
+   "after": "Wait for his Headbutt-Pulverize commit, then Magnet Storm the cluster — you steal the pick instead of feeding it."
+  },
+  {
+   "layer": "full",
+   "path": "dontsFull[2].d",
+   "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "R'ing before Headbutt is spent lets him knock your catch loose — wait for the whiff, not the bluff."
+  },
+  {
+   "layer": "full",
+   "path": "breakdown.trading",
+   "before": "Good trade: Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all. Bad trade: Engaging into a banked disengage — the chain that starts answered is a donation with intentions.",
+   "after": "Good trade: engage after his Headbutt-Pulverize whiffs, not into it. Bad trade: crashing W while his Trample is stacked — the auto-attack stun cancels your knockup and his Q/E ground your remount before you land."
+  },
+  {
+   "layer": "full",
+   "path": "phases[0].side",
+   "before": "Skill",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[1].side",
+   "before": "Skill",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[2].side",
+   "before": "Skill",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[3].side",
+   "before": "Skill",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[4].side",
+   "before": "Skill",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[5].side",
+   "before": "Skill",
+   "after": "Rell"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].side",
+   "before": "Skill",
+   "after": "Alistar"
+  },
+  {
+   "layer": "full",
+   "path": "phases[6].why",
+   "before": "Late Rell makes clumps: R the formation, crash the center, and let the team bill the gravity.",
+   "after": "R Unbreakable Will plus stacked tankiness lets him soak your engage and outlast the poke."
+  }
+ ],
+ "notes": "phases[0..6].side all read the literal placeholder 'Skill' instead of a champion name, disagreeing with content win[N] (Rell x6, Alistar last) which itself already matches packet.levelChart. win[N] needed no edit (already correct target) — only side was moved to agree, per the chart rule's second case. phases[6].why was rewritten in the same proposal because it previously described Rell winning stage 7 while win[6]='Alistar' — now both agree Alistar takes 2+ items. dash-denied interaction (Pulverize/Trample ground Crash Down) folded into breakdown.trading; needs-antiheal interaction was left alone since report[8] (itemization) already covers anti-heal into Alistar's Triumphant Roar sustain and report[] entries are out of the mandatory sweep scope. Remaining templated breakdown fields (carry, feeding, difficulty, wave, early, mid, late) were reviewed and are enemy-specific enough (name real abilities: Pulverize, Trample, Unbreakable Will, Triumphant Roar) that they were not flagged as generic templates — left alone."
+}

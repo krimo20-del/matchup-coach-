@@ -1,0 +1,54 @@
+{
+  "ownerKey": "poppy_sup",
+  "enemy": "swain",
+  "lane": "support",
+  "audit": [
+    {
+      "point": 2,
+      "status": "correct",
+      "whatIsWrong": "",
+      "why": "Content layer already states lane difficulty correctly: Swain out-ranges melee Poppy levels 1 through first item (Death's Hand poke + Ravenous Flock lifesteal), flipping to Poppy at 2+ items once Keeper's Verdict and W anti-mobility come online.",
+      "corrected": "",
+      "confidence": "High",
+      "sources": ["champ-data/content/sup/poppy.js", "champ-data/_kits/swain.json"]
+    },
+    {
+      "point": 3,
+      "status": "needs-correction",
+      "whatIsWrong": "breakdown.cooldowns had no cooldown numbers at all — pure filler prose with no digit, which the lint flags.",
+      "why": "Nevermove (E) is 12/11.5/11/10.5/10s by rank and is the punish window; Vision of Empire (W) is 22-18s; Demonic Ascension (R) is a flat 120s. None of these numbers were in the field.",
+      "corrected": "See edit to breakdown.cooldowns.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/swain.json"]
+    },
+    {
+      "point": 4,
+      "status": "needs-correction",
+      "whatIsWrong": "Full-layer phases[0..5].side were all the literal placeholder string \"Skill\" (never resolved to a real winner), even though content win[] already correctly names Swain as the level 1-First Item winner and Poppy at 2+ items. The full-layer .why text for those rows was also a generic templated engage/chain sentence that never mentions Swain's actual kit (Death's Hand poke, Ravenous Flock sustain, Nevermove root, Vision of Empire poke, Demonic Ascension heal-aura).",
+      "why": "Swain's Ravenous Flock (P) heals him off chip damage and Death's Hand (Q) out-ranges melee Poppy before level 2; Nevermove (E) unlocks at 2 and roots for a combo; Vision of Empire (W) adds a 22s-CD poke/reveal tool at 3; the heal keeps scaling through 4-5; Demonic Ascension (R) at 6 out-sustains any all-in; health-stacking items keep widening the gap until Poppy's own items/W/E come online.",
+      "corrected": "See paired edits below — side resolved to the real winner per row, why rewritten to name the actual interaction.",
+      "confidence": "High",
+      "sources": ["champ-data/_kits/swain.json", "champ-data/_kits/poppy.json", "champ-data/content/sup/poppy.js"]
+    }
+  ],
+  "edits": [
+    {"layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Swain"},
+    {"layer": "full", "path": "phases[0].why", "before": "Q the contacts — the hammer chunk is honest and the passive shield toss annoys.", "after": "Death's Hand pokes and Ravenous Flock heals it — melee Poppy eats free damage."},
+    {"layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Swain"},
+    {"layer": "full", "path": "phases[1].why", "before": "W governs dashes already — their mobility kit just lost its lane privileges.", "after": "Nevermove unlocks at 2 and roots a full combo — one landed root swings it."},
+    {"layer": "full", "path": "phases[2].side", "before": "Skill", "after": "Swain"},
+    {"layer": "full", "path": "phases[2].why", "before": "Full kit: E the wall-adjacent and Q the pinned — the lane's geometry is a weapon.", "after": "Vision of Empire adds ranged poke and reveals — full kit, Swain out-ranges you."},
+    {"layer": "full", "path": "phases[3].side", "before": "Skill", "after": "Swain"},
+    {"layer": "full", "path": "phases[3].why", "before": "Zone with W threat — engage supports pay a no-dash tax to play.", "after": "Ravenous Flock heals scale with rank — trades keep paying Swain back."},
+    {"layer": "full", "path": "phases[4].side", "before": "Skill", "after": "Swain"},
+    {"layer": "full", "path": "phases[4].why", "before": "Keeper's Verdict online — the dive that survives everything still flies home.", "after": "Demonic Ascension's aura outheals your all-in — a close fight favors him."},
+    {"layer": "full", "path": "phases[5].side", "before": "Skill", "after": "Swain"},
+    {"layer": "full", "path": "phases[5].why", "before": "First item: the pins chunk and the W deletes engage comps.", "after": "Health-stacking widens the DoT gap before your E can close."},
+    {"layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Poppy"},
+    {"layer": "full", "path": "breakdown.cooldowns", "before": "- Swain Nevermove: matchup-defining — The root that decides — dodge it and the general farms regret. The duo’s tempo bends around it. - Keep W Steadfast Presence banked for their best play. - The ultimate is a fight decision, not a habit.", "after": "- Swain Nevermove (E): 12s cooldown at rank 1, down to 10s at rank 5 — dodge it, a landed root eats your full combo. - Vision of Empire (W) is a 22s CD poke tool; punish it once spent. - Demonic Ascension (R) is a 120s heal-aura fight decision, not a habit."},
+    {"layer": "full", "path": "tradeGood", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "E him into a wall the moment Nevermove is down — Ravenous Flock still heals, so close the gap fast."},
+    {"layer": "full", "path": "tradeBad", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with armor.", "after": "Trading chip while Nevermove is up — a landed root is a free combo his passive drain repays."}
+  ],
+  "notes": "No poppy_sup brief file existed for this matchup (only mirror briefs where poppy is the enemy exist under briefs/sup/), so this audit was built directly from champ-data/_kits/poppy.json, champ-data/_kits/swain.json, champ-data/_kits/_missing/poppy_sup.json, the packet at tools/audit-run/packets/poppy_sup.json, and the current full/content source files. The content layer (win[]/whys[]/spikes/early/mid/late) was already accurate and specific, not templated — no edits needed there. Full-layer breakdown.mid/wave/trading/spikes/feeding/carry/difficulty/late, loading, ahead, and dosFull/dontsFull remain generic engage/chain template text identical across all three of my matchups (swain/tahmkench/taric) and likely across the whole lane; only cooldowns, tradeGood/tradeBad, and the chart side+why were fixed here given scope. dosFull[1].d and dontsFull[2].d are verbatim copies of tradeGood/tradeBad under different titles (copy-paste bleed) and were left unfixed — flagging for a follow-up pass. Missing-interactions flagged needs-antiheal (Ravenous Flock sustains through chip) and resistances-invalidated (Swain's kit doesn't scale off raw armor/MR the way flat stacking would suggest) and your-channel-punished (Nevermove can interrupt Keeper's Verdict) were not folded into report[] per the two-report-entry cap, but are worth a dosFull/dontsFull pass later.",
+  "sectionsMissing": ["breakdown.mid", "breakdown.wave", "breakdown.trading", "breakdown.spikes", "breakdown.feeding", "breakdown.carry", "breakdown.difficulty", "breakdown.late", "loading", "ahead", "dosFull", "dontsFull"]
+}

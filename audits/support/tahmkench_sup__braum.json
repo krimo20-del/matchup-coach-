@@ -1,0 +1,22 @@
+{
+ "ownerKey": "tahmkench_sup",
+ "enemy": "braum",
+ "lane": "support",
+ "audit": [
+  { "point": 2, "status": "needs-correction", "whatIsWrong": "full-layer phases[0,1,6].side read 'Skill' while content.win[0,1,6] and the packet levelChart both say Tahm Kench (2,3,4,5 already agree as Skill).", "why": "Content whys[0,1,6] already ground TK's early edge (Q slow + Passive out-trades a single-target poke, he can't proc his stun without your ADC feeding it) and late edge (Devour is a save AND a pick vs a purely reactive kit) — only the full layer lagged.", "corrected": "Set phases[0].side, phases[1].side and phases[6].side to Tahm Kench and rewrote their .why to match; left phases[2-5] alone since both layers already agree there.", "confidence": "High", "sources": ["brief.packet.levelChart", "currentText.content.whys"] },
+  { "point": 3, "status": "correct", "whatIsWrong": "", "why": "Level 6 (both ults purely defensive, reactive skill duel) and first-item (Unbreakable peel wall vs health+Devour, even) spikes are already correctly grounded in content.spikes.", "corrected": "n/a.", "confidence": "High", "sources": ["currentText.content.spikes"] },
+  { "point": 4, "status": "needs-correction", "whatIsWrong": "packet.defects flags no concrete cooldown-sequencing advice anywhere, and breakdown.cooldowns had no digit.", "why": "Unbreakable (E) is a directional block that negates the first hit and reduces the rest for its duration; naming its actual cooldown (16/14/12/10/8s) turns 'wait it out' into an actionable 'wait for it to expire before your Q'.", "corrected": "Rewrote breakdown.cooldowns with the real E cooldown and an explicit sequencing line.", "confidence": "High", "sources": ["brief.enemyKit E"] }
+ ],
+ "edits": [
+  { "layer": "full", "path": "dosFull[1].d", "before": "Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.", "after": "Land Q to slow his regroup once Unbreakable's block (16-8s CD) drops — that's your safe window to engage." },
+  { "layer": "full", "path": "dontsFull[2].d", "before": "Engaging into a banked disengage — the chain that starts answered is a donation with intentions.", "after": "Trading into an active Unbreakable block wastes your poke — wait for the shield to expire first." },
+  { "layer": "full", "path": "breakdown.cooldowns", "before": "- Braum Unbreakable: matchup-defining — The shield wall eats your poke and engage projectiles — wait it out. Read it before every duo step-up. - Your W Devour (ally save) answers exactly one disaster per cooldown. - Spend the R on swing moments only.", "after": "- Braum Unbreakable (E): 16/14/12/10/8s — the block eats your poke and engage projectiles; wait for it to expire before you commit. - His stun needs 4 stacks of Concussive Blows, so track his ADC's autos. - Spend the R on swing moments only." },
+  { "layer": "full", "path": "phases[0].side", "before": "Skill", "after": "Tahm Kench" },
+  { "layer": "full", "path": "phases[0].why", "before": "Tongue-chip the contacts — the gray health ledger makes your trades dishonest.", "after": "Your Q slow and Passive procs out-trade Braum's single-target poke early." },
+  { "layer": "full", "path": "phases[1].side", "before": "Skill", "after": "Tahm Kench" },
+  { "layer": "full", "path": "phases[1].why", "before": "Devour threats begin: their carry's worst moment now includes a frog's stomach.", "after": "He can't stun without your ADC feeding his Concussive Blows, so you dominate." },
+  { "layer": "full", "path": "phases[6].side", "before": "Skill", "after": "Tahm Kench" },
+  { "layer": "full", "path": "phases[6].why", "before": "Late Kench is the un-kill: eat the focused carry, wall the dive, and voyage the flanks.", "after": "Your Devour offers a save and a pick that his purely reactive kit can't match." }
+ ],
+ "notes": "packet.suspectNames flagged 'Concussive Blows' but that's Braum's real passive name per enemyAbilities — false positive, left untouched. Chart: content win[]/packet.levelChart already agree (TK, TK, Skill x4, TK); only 3 of 7 full-layer rows disagreed and were fixed."
+}

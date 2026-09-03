@@ -1,0 +1,55 @@
+{
+ "ownerKey": "tahmkench_sup",
+ "enemy": "rakan",
+ "lane": "support",
+ "audit": [
+  {
+   "point": 2,
+   "status": "needs-correction",
+   "whatIsWrong": "full.phases[].side reads 'Skill' on every row while content.win[] and the packet levelChart both give Rakan levels 3 through 2+ items, with only levels 1-2 even.",
+   "why": "Rakan's W Grand Entrance dash-knockup plus E Battle Dance flicker gives him engage angles Tahm Kench's slow, grounded kit can't answer once he has both abilities up (level 3+), and The Quickness (R) chains charms faster than a ~40s Devour cooldown recovers.",
+   "corrected": "phases[2,3,4,5,6].side moved to 'Rakan' to match win[] and the packet chart; matching why text rewritten. phases[0,1] already match win[0,1]='Skill' and are left alone.",
+   "confidence": "High",
+   "sources": ["packet.levelChart", "currentText.content.win[]", "enemyKit"]
+  },
+  {
+   "point": 3,
+   "status": "correct",
+   "whatIsWrong": "",
+   "why": "Level 6 is rated the sharpest swing (6/10 currently, moving with the side flip) because The Quickness turns Rakan's engage from single-target to a multi-charm flyby Tahm Kench's single Devour can't fully answer.",
+   "corrected": "",
+   "confidence": "Medium",
+   "sources": ["enemyKit"]
+  },
+  {
+   "point": 4,
+   "status": "needs-correction",
+   "whatIsWrong": "breakdown.cooldowns has no real number, and neither missingInteractions item (Grievous Wounds timing vs Gleaming Quill sustain; Fey Feathers/Battle Dance shields absorbing burst) reaches the text.",
+   "why": "Grand Entrance (W) is 14/13/12/11/10s and Gleaming Quill (Q) heals Rakan's allies on hit, so Grievous Wounds timing matters in extended trades; Fey Feathers (P) and a re-cast Battle Dance (E) both shield, so baiting a shield out before committing burst changes the trade math.",
+   "corrected": "breakdown.cooldowns rewritten with Grand Entrance's 14-10s cooldown; dosFull[1] rewritten to name the anti-heal timing; itemization report[8] already carries anti-heal advice and is left alone.",
+   "confidence": "High",
+   "sources": ["missingInteractions", "enemyKit"]
+  }
+ ],
+ "edits": [
+  {"layer":"full","path":"phases[2].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[2].why","before":"Full kit: Q-slow the trades, W the dives both directions, and thicken the margins.","after":"His W dash-in plus E flicker escape beats your slow, grounded engage every time."},
+  {"layer":"full","path":"phases[2].rating","before":"5/10","after":"6.5/10"},
+  {"layer":"full","path":"phases[3].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[3].why","before":"Zone with devour threat — the carry your Q stuns twice is the carry you eat.","after":"His W+E dash angles pick trades and disengage before your Devour threat lands."},
+  {"layer":"full","path":"phases[3].rating","before":"5/10","after":"7/10"},
+  {"layer":"full","path":"phases[4].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[4].why","before":"Abyssal Voyage online — your duo's roams arrive through the floor.","after":"The Quickness chains charms faster than your Devour recovers."},
+  {"layer":"full","path":"phases[4].rating","before":"6/10","after":"7.5/10"},
+  {"layer":"full","path":"phases[5].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[5].why","before":"First item: the gray health compounds and the stuns chain.","after":"His dash-tempo outpaces your immobile peel around objectives."},
+  {"layer":"full","path":"phases[5].rating","before":"6/10","after":"7/10"},
+  {"layer":"full","path":"phases[6].side","before":"Skill","after":"Rakan"},
+  {"layer":"full","path":"phases[6].why","before":"Late Kench is the un-kill: eat the focused carry, wall the dive, and voyage the flanks.","after":"He picks the engage angle every fight; your single-target peel can't cover every flank."},
+  {"layer":"full","path":"phases[6].rating","before":"6/10","after":"6.5/10"},
+  {"layer":"full","path":"dosFull[1].d","before":"Bait the answer, start the chain, and let your carry collect — engage trades are all-or-nothing; pick the all.","after":"Gleaming Quill heals his allies on hit — start Grievous Wounds before extended trades, not after."},
+  {"layer":"full","path":"dontsFull[2].d","before":"Engaging into a banked disengage — the chain that starts answered is a donation with intentions.","after":"Committing burst into a banked Fey Feathers or Battle Dance shield — bait it out first, then all-in."},
+  {"layer":"full","path":"breakdown.cooldowns","before":"- Rakan Grand Entrance: matchup-defining — The leap knockup starts every play — track him in fog; the E extends it. Read it before every duo step-up. - Your W Devour (ally save) answers exactly one disaster per cooldown. - Spend the R on swing moments only.","after":"- Grand Entrance (W): 14-10s cooldown — track him in fog; a re-cast Battle Dance (E) extends the escape. - Gleaming Quill (Q) heals allies on hit — anti-heal timing matters. - Spend the R on swing moments only."}
+ ],
+ "notes": "Level chart contradiction resolved: full.phases[].side now matches content.win[] and the packet chart (even levels 1-2, Rakan favored level 3 through 2+ items) rather than the flat 'Skill' the full layer previously carried on every row. Fixed the two copy-paste-bleed bullets flagged by lint, folded in both missingInteractions (Grievous Wounds timing vs Gleaming Quill sustain; bait the Fey Feathers/Battle Dance shield before committing), and gave breakdown.cooldowns a real number (Grand Entrance 14-10s). The suspectNames flag on 'Grand Entrances' in spikes[0].text is a verb usage of the correct ability name (Grand Entrance), not a wrong name — left alone."
+}

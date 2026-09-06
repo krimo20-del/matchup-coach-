@@ -168,6 +168,24 @@ function applySwaps(s) {
       hits++;
     }
   }
+  // ---- BROKEN COMPOUND WORDS -----------------------------------------------------
+  // The source data splits hyphenated compounds with a stray space: "map- wide",
+  // "late- game", "gap- closing", "hyper- carry", "Split- Pusher". 1,831 occurrences
+  // across 26 files and 38 distinct patterns, every one of them a broken word — verified
+  // against the pre-deslop commit, so this is in the generated source, not something the
+  // swaps above introduced. The rule needs a LETTER on both sides: a real em-dash (—) and
+  // a spaced hyphen used as punctuation ("Level 1 - Clear") both have a space before the
+  // hyphen and are left alone.
+  const beforeHy = out;
+  out = out.replace(/([A-Za-z])- ([A-Za-z])/g, '$1-$2');
+  if (out !== beforeHy) hits++;
+
+  // A plain typo, 127 times, inside the shared tldr template ("clearing whole campss").
+  // Several audits reviewed rows containing it and reported nothing to fix.
+  const beforeTypo = out;
+  out = out.replace(/campss/g, 'camps');
+  if (out !== beforeTypo) hits++;
+
   // tidy any double spaces the swaps introduced
   out = out.replace(/ {2,}/g, ' ').replace(/ ,/g, ',').replace(/ \./g, '.');
   return { out, hits };

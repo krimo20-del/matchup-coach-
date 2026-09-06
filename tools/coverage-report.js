@@ -29,6 +29,12 @@ function covered(lane, ownerKey, enemy) {
   if (!fs.existsSync(f)) return false;
   try {
     const p = JSON.parse(fs.readFileSync(f, 'utf8'));
+    // Lane proposals record their reasoning in an `audit` array. Jungle proposals do not
+    // have one — the jungle brief carries the research checklist instead — so requiring it
+    // scored the whole lane 0/50 forever no matter how much work landed. A jungle file that
+    // parses and carries an `edits` array is audited, including an empty one, which is the
+    // legitimate "reviewed, nothing needed changing" result.
+    if (lane === 'jungle') return Array.isArray(p.edits);
     return Array.isArray(p.audit) && p.audit.length > 0;
   } catch (e) { return false; }
 }

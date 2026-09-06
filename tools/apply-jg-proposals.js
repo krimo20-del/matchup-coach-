@@ -27,7 +27,17 @@ const ONLY = ci > -1 ? argv[ci + 1] : null;
 
 const JG_DIR = 'champ-data/jg';
 const AUDIT_DIR = path.join('audits', 'jungle');
-const MAX_DRIFT = 0.10;
+// THE LANE BAND IS 10%. JUNGLE IS 40%, DELIBERATELY.
+// The lane band protects an APPROVED VOICE from an agent drifting off it. Jungle has no
+// approved voice to protect: its baseline is generated boilerplate that said "camp node"
+// 2,450 times, and replacing a template with a real, specific sentence legitimately changes
+// the length. Measured on the first batch: every one of Amumu's 45 rejections was length
+// drift, median 20%, max 33% — including the fix for a FABRICATED claim (Bandage Toss
+// having "two charges"; it is a single cast). A 10% band was rejecting factual corrections
+// and leaving the invented version live. 40% admits real rewrites while still catching an
+// agent that replaces a sentence with an essay. Coherence and structure loss are still
+// caught by jg-regression-check, and elo/negative/filler are still filtered below.
+const MAX_DRIFT = 0.40;
 const MIN_LEN_CHECKED = 40;
 
 // ---- the same content filters the lane applier enforces -------------------------------

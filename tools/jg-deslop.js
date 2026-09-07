@@ -131,6 +131,28 @@ const SWAPS = [
   // the remaining "block" hits are real League vocabulary — body-block, terrain block,
   // pit-blocker, "a shield that blocks" — and are deliberately left alone. Only the
   // invented camp sense is swapped.
+  // ---- STALE / WRONG ABILITY NAMES ------------------------------------------------
+  // Every one of these was verified against champ-data/_kits/*.json (Data Dragon 16.15.1)
+  // with tools/jg-name-check.js. They are safe to apply globally because each name is
+  // unique to one champion, so an enemy page describing Trundle gets corrected too.
+  //
+  // A CAUTION WORTH KEEPING: a QA agent reported Shyvana's Emberstrike/Inferno Aegis/
+  // Molten Burst as FABRICATED and named Twin Bite/Burnout/Flame Breath as the real ones.
+  // It was exactly backwards — Shyvana was reworked and the kit carries the new names.
+  // Acting on that report would have corrupted 50 correct matchups. The kit file is the
+  // authority, never an agent's recollection.
+  ['Ice Pillar', 'Pillar of Ice'],                 // Trundle E
+  ['True Grit', 'Quickdraw'],                      // Graves E — the armour stacks are Quickdraw's
+  ['Twin Bite', 'Emberstrike'],                    // Shyvana Q, pre-rework name
+  ['Burnout', 'Inferno Aegis'],                    // Shyvana W, pre-rework name
+  ['Flame Breath', 'Molten Burst'],                // Shyvana E, pre-rework name
+  ['Unburrow', 'Un-burrow'],                       // Rek'Sai W
+  ['Void Spikes', 'Void Spike'],                   // Kha'Zix W is singular
+  ["Hound's Pursuit", "Hounds' Pursuit"],          // Naafiri R
+  ['Void Coral (R)', 'Void Coral'],                // Bel'Veth: real resource, but NOT her R
+  // "The" prefixes are handled by a guarded regex below, not here — a swap pair
+  // would flip back and forth between runs and never settle.
+
   ['farm AoE blocks', 'farm AoE camps'],
   ['the AoE blocks', 'the AoE camps'],
   ['pool the blocks', 'pool the camps'],
@@ -182,6 +204,11 @@ function applySwaps(s) {
 
   // A plain typo, 127 times, inside the shared tldr template ("clearing whole campss").
   // Several audits reviewed rows containing it and reported nothing to fix.
+  // Naafiri W and Kayn P carry a leading "The" in the kit. Add it only when it is absent,
+  // so running twice cannot produce "The The".
+  out = out.replace(/(?<!The )Call of the Pack/g, 'The Call of the Pack');
+  out = out.replace(/(?<!The )Darkin Scythe/g, 'The Darkin Scythe');
+
   const beforeTypo = out;
   out = out.replace(/campss/g, 'camps');
   if (out !== beforeTypo) hits++;

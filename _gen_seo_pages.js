@@ -154,6 +154,8 @@ function ownCls(owner, dispA, dispB) { return owner === dispA ? 'own-a' : owner 
 // ---------- matchup pages ----------
 let pages = 0;
 const sitemap = [];
+const laneStats = {};
+const laneStat = k => laneStats[k] || (laneStats[k] = { derived: 0, suppressed: 0 });
 function outWrite(rel, html) {
   const full = path.join('matchup', rel);
   fs.mkdirSync(path.dirname(full), { recursive: true });
@@ -189,11 +191,31 @@ for (const L of LANES) {
       if (typeof wrA === 'number' && typeof wrRev === 'number') {
         const wA = gA > 0 && gB > 0 ? gA : 1, wB = gA > 0 && gB > 0 ? gB : 1;
         wr = Math.round(((wrA * wA + (100 - wrRev) * wB) / (wA + wB)) * 100) / 100;
-        games = gA + gB;
+        // Top-lane data stores the reverse direction as the exact complement of
+        // the SAME sample (identical game count, win rates summing to 100), so
+        // there is nothing to pool — summing the two counts doubled every
+        // top-lane sample size on the page. Only add when the two sides are
+        // genuinely separate pulls.
+        const derived = gA > 0 && gA === gB && Math.abs(wrA + wrRev - 100) < 0.02;
+        games = derived ? gA : gA + gB;
+        if (derived) laneStat(L.key).derived++;
       } else if (typeof wrA === 'number') { wr = wrA; games = gA; }
       else if (typeof wrRev === 'number') { wr = Math.round((100 - wrRev) * 100) / 100; games = gB; }
       const gamesTxt = games ? Number(games).toLocaleString('en-US') : '';
-      const win = Array.isArray(e.win) && e.win.length === 7 ? e.win : null;
+      const winRaw = Array.isArray(e.win) && e.win.length === 7 ? e.win : null;
+      // Mirror check: B's own report of this matchup carries its own 7-window
+      // call. Mid/bot/support content was written per side, so A's page could
+      // say "A claims 4 of the 7 windows" while B's page said B did. The table
+      // below still shows A's plan (it is A's coaching), but the verdict, the
+      // skill-matchup answer and the FAQ only cite window counts when the two
+      // sides agree on who leads — otherwise they stay silent on windows and
+      // lean on the pooled win rate, which is shared by construction.
+      const eRev = C2 && C2.entries && C2.entries[C.fileSlug];
+      const winRev = eRev && Array.isArray(eRev.win) && eRev.win.length === 7 ? eRev.win : null;
+      const lead = w => Math.sign(w.filter(x => x === aName).length - w.filter(x => x === bName).length);
+      const mirrorsAgree = !winRaw || !winRev || lead(winRaw) === lead(winRev);
+      if (winRaw && !mirrorsAgree) laneStat(L.key).suppressed++;
+      const win = mirrorsAgree ? winRaw : null;
       const nA = win ? win.filter(x => x === aName).length : 0;
       const nB = win ? win.filter(x => x === bName).length : 0;
       const evens = win ? 7 - nA - nB : 0;
@@ -299,11 +321,11 @@ for (const L of LANES) {
 
       // body
       let tl = '';
-      if (win) {
+      if (winRaw) {
         tl = `<h2>Favour timeline — the windows in ${esc(aName)}'s game plan</h2>
 <p class="sub">Read from ${esc(aName)}'s seat: which stage windows this plan plays for against ${esc(bName)}.</p>
 <table><tr><th>Stage</th><th>Favoured</th><th>Why</th></tr>` +
-          win.map((o, i) => `<tr><td>${STAGES[i]}</td><td class="${ownCls(o, aName, bName)}">${esc(o === 'Skill' ? 'Even / skill' : o)}</td><td>${esc((e.whys && e.whys[i]) || '')}</td></tr>`).join('') +
+          winRaw.map((o, i) => `<tr><td>${STAGES[i]}</td><td class="${ownCls(o, aName, bName)}">${esc(o === 'Skill' ? 'Even / skill' : o)}</td><td>${esc((e.whys && e.whys[i]) || '')}</td></tr>`).join('') +
           `</table>`;
       }
       const spikes = (e.spikes || []).map(s => `<li><b>${esc(s.when)}:</b> ${esc(s.text)}</li>`).join('');
@@ -356,6 +378,8 @@ ${crossLane}`;
   }
 }
 
+for (const [k, s] of Object.entries(laneStats)) console.log(`${k}: derived-mirror samples kept single ${s.derived} · window-count claims suppressed (mirrors disagree) ${s.suppressed}`);
+
 // ---------- JUNGLE guides ----------
 // Jungle isn't a lane matchup — it's jungler vs jungler, stored in JG_DB
 // (keyed by display name) rather than the per-lane content files. Same
@@ -367,6 +391,22 @@ for (const f of fs.readdirSync('champ-data/jg').filter(f => f.endsWith('.js') &&
   // Deliberately NOT wrapped in a swallow-everything try/catch: a data error
   // here silently dropped 2,550 URLs from the sitemap while still exiting 0.
   new Function('window', fs.readFileSync('champ-data/jg/' + f, 'utf8'))(JGW);
+}
+// The app loads four fix layers AFTER the base files (see the <script> order in
+// MatchupCoach.dc.html): _jg-headsup-fixes recomputes stages 0-2 & 4 from the
+// shared duel model so mirrors agree; the others relabel windows and patch label
+// text. The old `!f.startsWith('_')` filter skipped them here, so the static
+// guides were built from the RAW reports — 535 of 1,225 mirror pairs declared
+// BOTH junglers favoured while the app showed the corrected race.
+// Same order as the app. In the browser the layers retry on a 250ms interval to
+// survive non-deterministic script order; here every base file is already
+// loaded, so the synchronous first apply() is the whole job and timers are no-ops.
+const JG_FIX_LAYERS = ['_jg-headsup-fixes.js', '_jg-loadouts.js', '_jg-window-labels.js', '_jg-label-text-fixes.js'];
+const noTimer = () => 0;
+for (const f of JG_FIX_LAYERS) {
+  if (!fs.existsSync('champ-data/jg/' + f)) throw new Error(`jungle fix layer missing: champ-data/jg/${f}`);
+  new Function('window', 'setInterval', 'clearInterval', 'setTimeout', 'document',
+    fs.readFileSync('champ-data/jg/' + f, 'utf8'))(JGW, noTimer, noTimer, noTimer, undefined);
 }
 const JG_DB = JGW.JG_DB || {};
 const jgNames = Object.keys(JG_DB);
@@ -382,6 +422,29 @@ function jgTone(adv, youName, foeName) {
   if (/dominant|domination|favou?red|peak|spike|apex|predator|stabilized|playmaker|absolute/.test(a)) return 'a';
   if (/defensive|posture|caution|risk|danger|avoid|surviv|weak|vulnerab|passive|concede|respect/.test(a)) return 'b';
   return 's';
+}
+// Build gate: with the fix layers applied, no mirror pair may call BOTH junglers
+// favoured (or both hard). Measured 535 -> 0 both-favoured the day the layers were
+// wired in; a few pairs of slack covers hand edits, 535 can never pass again.
+{
+  const jgDiff = (rep, you, foe) => {
+    const t = rep.stages.map(s => jgTone(s.adv, you, foe));
+    const spread = t.filter(x => x === 'a').length - t.filter(x => x === 'b').length;
+    return spread >= 3 ? 'FAVOURED' : spread <= -3 ? 'HARD' : 'SKILL';
+  };
+  let pairs = 0, clash = 0; const examples = [];
+  for (const a of jgNames) for (const b of Object.keys(JG_DB[a] || {})) {
+    if (a >= b) continue;
+    const ra = JG_DB[a][b], rb = JG_DB[b] && JG_DB[b][a];
+    if (!ra || !ra.stages || !ra.stages.length || !rb || !rb.stages || !rb.stages.length) continue;
+    pairs++;
+    const da = jgDiff(ra, a, b), db = jgDiff(rb, b, a);
+    if ((da === 'FAVOURED' && db === 'FAVOURED') || (da === 'HARD' && db === 'HARD')) {
+      clash++; if (examples.length < 5) examples.push(`${a} vs ${b} (${da}/${db})`);
+    }
+  }
+  console.log(`jungle mirror gate: ${clash} of ${pairs} pairs disagree${examples.length ? ' — ' + examples.join(', ') : ''}`);
+  if (clash > 5) throw new Error(`jungle mirror gate FAILED: ${clash} pairs both favoured / both hard — are the _jg-* fix layers loading?`);
 }
 let jgPages = 0;
 for (const you of jgNames) {

@@ -202,6 +202,13 @@ function applySwaps(s) {
   out = out.replace(/([A-Za-z])- ([A-Za-z])/g, '$1-$2');
   if (out !== beforeHy) hits++;
 
+  // A broken mail-merge substitution: the template inserted a possessive where the token
+  // resolved to "you", giving "cancel you's winding animation frames". 32 occurrences,
+  // all in the Level 1 Clear why. "your" is the correct possessive.
+  const beforeMerge = out;
+  out = out.replace(/you's/g, 'your');
+  if (out !== beforeMerge) hits++;
+
   // A plain typo, 127 times, inside the shared tldr template ("clearing whole campss").
   // Several audits reviewed rows containing it and reported nothing to fix.
   // Naafiri W and Kayn P carry a leading "The" in the kit. Add it only when it is absent,

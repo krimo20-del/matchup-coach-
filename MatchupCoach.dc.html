@@ -4197,54 +4197,104 @@ class Component extends DCLogic {
       this.setState({ wrTick: (this.state.wrTick || 0) + 1 });
     }).catch(() => {});
   }
-  // Scroll to top reliably: hit window + document + body, now and after the
-  // (heavy) re-render lands, so a matchup never opens scrolled into the middle.
-  _top() {
+  // Scroll to top when a view opens, WITHOUT ever fighting the user.
+  //
+  // This function has been wrong in both directions, so the history matters:
+  //  v1 pinned once. Trailing mouse-wheel momentum from scrolling the champion
+  //     picker landed right after the click and dragged the fresh matchup
+  //     halfway down.
+  //  v2 (the previous version) pinned EVERY frame for 1.6s — rAF + a 50ms
+  //     interval + a capture-phase scroll listener — with no cancellation at all,
+  //     and the deep-link loader re-fired it at +2000ms and +4200ms. That absorbed
+  //     the momentum. It also absorbed the user: every deliberate scroll in the
+  //     first ~3s was reverted to the top, which reads as the page stuttering up
+  //     and down until it finally "lets go". Measured on the live site: scrolling
+  //     blocked at 3.0s, 5.0s and 7.0s after a deep-link load. It also ran
+  //     querySelectorAll('div') on every frame of a very large page.
+  //  v3 (this): pin briefly, and treat a scroll GESTURE that arrives after a
+  //     short grace as the user's intent. Wheel inertia from the previous view
+  //     decays inside the grace; a wheel, touch, key or pointer after it is a
+  //     person, and a person wins immediately. Programmatic scrolls (browser
+  //     restoration, layout shifts) do not count as intent, so those still get
+  //     corrected.
+  _top(opts) {
     try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch(e) {}
-    // HARD-pin the page to the top on every animation frame for 1.2s after a view
-    // opens. No cancellation listeners: the old "cancel when the user scrolls"
-    // escape hatch was being tripped by trailing mouse-wheel momentum from
-    // scrolling the champion picker — the leftover wheel deltas landed right
-    // after the click, cancelled the reset, and dragged the fresh matchup
-    // halfway down. Pinning every frame absorbs that momentum completely; 1.2s
-    // is past any wheel/touch inertia and past the heavy re-render.
-    var until = Date.now() + 1600, self = this;
-    if (this._topRaf) { try { cancelAnimationFrame(this._topRaf); } catch (e) {} this._topRaf = null; }
-    if (this._topIv) { try { clearInterval(this._topIv); } catch (e) {} this._topIv = null; }
-    var pin = function(){
+    var self = this, start = Date.now();
+    var refire = !!(opts && opts.refire);
+    // One persistent, document-level record of the last real scroll gesture.
+    // The first version of this fix only listened DURING a pin, so a user who
+    // scrolled in the gap between the initial pin and the deep-link re-pins was
+    // invisible to those re-pins — which then yanked them back to the top anyway.
+    // Verified locally: a real wheel scroll at 8.0s after a deep-link open still
+    // read y=0. Recording every gesture, always, is what lets a re-pin ask
+    // "has this person already taken the wheel?" and stand down.
+    if (!this._gestureHook) {
+      var mark = function(){ self._lastGesture = Date.now(); };
+      var SK = { ' ': 1, ArrowDown: 1, ArrowUp: 1, PageDown: 1, PageUp: 1, End: 1, Home: 1 };
       try {
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0; document.body.scrollTop = 0;
-        // The app can scroll inside wrappers (#dc-root / .sc-host), not the
-        // window — reset EVERY scrolled container, whatever it is.
-        var els = document.querySelectorAll('div');
-        for (var i = 0; i < els.length; i++) { if (els[i].scrollTop > 0) els[i].scrollTop = 0; }
-      } catch (e) { try { window.scrollTo(0,0); } catch(e2){} }
+        document.addEventListener('wheel', mark, { capture: true, passive: true });
+        document.addEventListener('touchstart', mark, { capture: true, passive: true });
+        document.addEventListener('pointerdown', mark, { capture: true, passive: true });
+        document.addEventListener('keydown', function(e){ if (e && SK[e.key]) mark(); }, true);
+      } catch (e) {}
+      this._gestureHook = true;
+    }
+    // A re-pin exists only to catch late hydration / browser scroll restoration.
+    // If the user has scrolled since this view opened, they are reading — leave them.
+    if (refire && this._lastGesture && this._lastGesture >= (this._viewOpenedAt || 0)) return;
+    if (!refire) this._viewOpenedAt = start;
+    // The initial open follows a click, so trailing wheel inertia from the previous
+    // view can land inside the first ~250ms — that is momentum, not intent, and is
+    // absorbed. A re-pin follows nothing; any gesture during it is the user.
+    var GRACE = refire ? 0 : 250;
+    var CEILING = 600;   // never hold the page longer than this, intent or not
+    var until = start + CEILING;
+    if (this._topStop) this._topStop();     // cancel a pin still running from the last view
+    // The app can scroll inside wrappers (#dc-root / .sc-host), not the window.
+    // Find the containers that are actually scrolled ONCE, here — not every frame.
+    var scrollers = [document.documentElement, document.body];
+    try {
+      var els = document.querySelectorAll('div');
+      for (var i = 0; i < els.length; i++) if (els[i].scrollTop > 0) scrollers.push(els[i]);
+    } catch (e) {}
+    var pin = function(){
+      try { window.scrollTo(0, 0); } catch (e) {}
+      for (var i = 0; i < scrollers.length; i++) { try { scrollers[i].scrollTop = 0; } catch (e) {} }
     };
-    // rAF for per-frame smoothness PLUS a 50ms interval as the guarantee — rAF
-    // throttles/pauses when the tab isn't focused, and the pin must hold anyway.
-    var loop = function(){
-      if (Date.now() >= until) { self._topRaf = null; return; }
-      pin();
-      self._topRaf = requestAnimationFrame(loop);
+    var raf = null, iv = null, done = false;
+    var onScroll = function(){ if (Date.now() < until) pin(); else stop(); };
+    // A gesture after the grace is the user. Stop pinning and remember it, so the
+    // deep-link loader's later re-pins leave them alone as well.
+    var onIntent = function(){ if (Date.now() - start >= GRACE) stop(); };
+    var SCROLL_KEYS = { ' ': 1, ArrowDown: 1, ArrowUp: 1, PageDown: 1, PageUp: 1, End: 1, Home: 1 };
+    var onKey = function(e){ if (e && SCROLL_KEYS[e.key]) onIntent(); };
+    var stop = function(){
+      if (done) return; done = true;
+      if (raf) { try { cancelAnimationFrame(raf); } catch (e) {} }
+      if (iv) { try { clearInterval(iv); } catch (e) {} }
+      try {
+        document.removeEventListener('scroll', onScroll, true);
+        document.removeEventListener('wheel', onIntent, true);
+        document.removeEventListener('touchstart', onIntent, true);
+        document.removeEventListener('pointerdown', onIntent, true);
+        document.removeEventListener('keydown', onKey, true);
+      } catch (e) {}
+      if (self._topStop === stop) self._topStop = null;
     };
-    pin();
-    loop();
-    this._topIv = setInterval(function(){
-      if (Date.now() >= until) { clearInterval(self._topIv); self._topIv = null; return; }
-      pin();
-    }, 50);
-    // The deterministic layer: timers throttle in unfocused tabs, but scroll
-    // EVENTS fire synchronously with the scroll itself. A capture-phase listener
-    // on document sees every container's scroll and reverts it instantly, so
-    // trailing wheel momentum can never leave the fresh view scrolled down.
-    if (this._topOnScroll) { try { document.removeEventListener('scroll', this._topOnScroll, true); } catch (e) {} }
-    var onScroll = function(){ if (Date.now() < until) pin(); };
-    this._topOnScroll = onScroll;
+    this._topStop = stop;
+    // rAF for per-frame smoothness PLUS a 50ms interval — rAF pauses when the tab
+    // isn't focused, and the (short) pin should still hold.
+    var loop = function(){ if (done) return; if (Date.now() >= until) { stop(); return; } pin(); raf = requestAnimationFrame(loop); };
+    pin(); loop();
+    iv = setInterval(function(){ if (done) return; if (Date.now() >= until) { stop(); return; } pin(); }, 50);
     try {
       document.addEventListener('scroll', onScroll, { capture: true, passive: true });
-      setTimeout(function(){ try { document.removeEventListener('scroll', onScroll, true); } catch (e) {} if (self._topOnScroll === onScroll) self._topOnScroll = null; }, 1700);
+      document.addEventListener('wheel', onIntent, { capture: true, passive: true });
+      document.addEventListener('touchstart', onIntent, { capture: true, passive: true });
+      document.addEventListener('pointerdown', onIntent, { capture: true, passive: true });
+      document.addEventListener('keydown', onKey, true);
     } catch (e) {}
+    setTimeout(stop, CEILING + 50);
   }
   // Browser-history integration: every major view change pushes a snapshot so
   // the Back button walks the app instead of leaving the site. On a matchup we
@@ -4323,8 +4373,11 @@ class Component extends DCLogic {
         else self.openGen(role || 'top', a, b);
         // Cold deep-link loads hydrate for several seconds and some browsers
         // restore scroll on reload — run extra pin passes to cover the tail.
-        setTimeout(function(){ self._top(); }, 2000);
-        setTimeout(function(){ self._top(); }, 4200);
+        // These re-pins were the 3s/5s "yanked back to the top" stutter on every
+        // deep-link open. As re-fires, _top() skips them entirely if the user has
+        // scrolled since the view opened, and gives them no momentum grace.
+        setTimeout(function(){ self._top({ refire: true }); }, 2000);
+        setTimeout(function(){ self._top({ refire: true }); }, 4200);
       }
     }, 120);
   }

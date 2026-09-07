@@ -38,7 +38,15 @@ const LIVE_PATCH = '26.15';
 // win rates were sampled. These are CONTENT facts, not build facts — never wire
 // them to TODAY. A dateModified/lastmod that moves on every rebuild is a false
 // freshness signal to search engines and a false "Updated <date>" to readers.
-const DATA_MODIFIED = '2026-08-24';
+// 2026-09-07: bumped because the content GENUINELY changed, not because of a rebuild.
+// Since 2026-08-24 the mid (2,070), bot (870), support (1,260) and jungle (2,499)
+// matchups were all audited and shipped — 6,699 matchups of real content change — plus
+// lane-wide corrections: 25,420 invented-vocabulary phrases removed from jungle, 2,047
+// broken compound words, 547 misgendered fields, and 82 ability claims that contradicted
+// Riot's kit data. Leaving this at 2026-08-24 told Google that 12,096 pages were
+// unchanged, so none of that work was a reason to recrawl. The rule above still holds:
+// bump this when the DATA changes, never on a rebuild.
+const DATA_MODIFIED = '2026-09-07';
 const WR_SAMPLED = 'July 2026';
 const STAGES = ['Level 1', 'Level 2', 'Level 3', 'Levels 4-5', 'Level 6', 'First item', 'Two+ items'];
 
@@ -227,9 +235,19 @@ for (const L of LANES) {
           : 'Stage-by-stage skill matchup.';
       }
 
+      // TITLE LADDER — target 60 chars, not 70.
+      // Google truncates SERP titles near 55-60 characters. At the old 70-char threshold
+      // the ladder almost never fired: measured across the built site, 8,074 of 12,095
+      // titles (67%) ran past 60 and were being cut mid-phrase — and the cut lands on the
+      // brand and on "Who Wins?", which is the half that earns the click. The "<champ> vs
+      // <champ>" phrase must always survive, because that IS the search query.
+      // The brand is the first thing to drop: Google frequently appends the site name
+      // itself, so paying 18 characters for it and losing the hook is a bad trade.
       let title = `${aName} vs ${bName} ${L.short} Matchup: Who Wins & How to Play | MatchupCoach.gg`;
-      if (title.length > 70) title = `${aName} vs ${bName} ${L.short} Matchup: Who Wins? | MatchupCoach.gg`;
-      if (title.length > 70) title = `${aName} vs ${bName} ${L.short} Matchup | MatchupCoach.gg`;
+      if (title.length > 60) title = `${aName} vs ${bName} ${L.short} Matchup: Who Wins? | MatchupCoach.gg`;
+      if (title.length > 60) title = `${aName} vs ${bName} ${L.short}: Who Wins? | MatchupCoach.gg`;
+      if (title.length > 60) title = `${aName} vs ${bName} ${L.short} Matchup: Who Wins?`;
+      if (title.length > 60) title = `${aName} vs ${bName} ${L.short}: Who Wins?`;
       const desc = `Who wins ${aName} vs ${bName} in ${L.prose}? ${wrKnown ? `${aName} wins ${wr}% of games${gamesTxt ? ` across ${gamesTxt} Emerald+ games` : ''}. ` : ''}How to beat ${bName} as ${aName}: stage-by-stage favour, power spikes and the full lane plan.`;
 
       // Who-wins / skill-matchup / counter answers all derive from `cls`, so
@@ -386,9 +404,13 @@ for (const you of jgNames) {
       : diff === 'HARD'
       ? `${foe} pressures ${reds} of the 7 windows in this race — survive the early game and scale into your windows.`
       : `A window-to-window jungle race — ${greens ? `${greens} window${greens > 1 ? 's' : ''} for ${you}` : `no window clearly ${you}'s`}, ${reds ? `${reds} for ${foe}` : `none clearly ${foe}'s`}, the rest even.`;
+    // Same 60-char ladder as the lane pages — see the note there. Jungle names run long
+    // ("Nunu & Willump", "Fiddlesticks"), so these drop the brand more often.
     let title = `${you} vs ${foe} Jungle Matchup: Who Wins & How to Play | MatchupCoach.gg`;
-    if (title.length > 70) title = `${you} vs ${foe} Jungle Matchup: Who Wins? | MatchupCoach.gg`;
-    if (title.length > 70) title = `${you} vs ${foe} Jungle Matchup | MatchupCoach.gg`;
+    if (title.length > 60) title = `${you} vs ${foe} Jungle Matchup: Who Wins? | MatchupCoach.gg`;
+    if (title.length > 60) title = `${you} vs ${foe} Jungle: Who Wins? | MatchupCoach.gg`;
+    if (title.length > 60) title = `${you} vs ${foe} Jungle Matchup: Who Wins?`;
+    if (title.length > 60) title = `${you} vs ${foe} Jungle: Who Wins?`;
     const desc = `Who wins ${you} vs ${foe} in the jungle? ${diff === 'FAVOURED' ? `${you}'s race plan controls ${greens} of 7 windows. ` : diff === 'HARD' ? `${foe} pressures ${reds} of 7 windows. ` : 'A window-to-window skill matchup. '}How to beat ${foe} as ${you}: first clear, pathing, the level-by-level race, invade windows and objective control.`;
     const rows = rep.stages.map((s, i) => `<tr><td>${esc(s.stage)}</td><td class="own-${tones[i]}">${esc(String(s.adv).replace(/Favored/g, 'Favoured'))}</td><td>${esc(s.why || '')}</td></tr>`).join('');
     const jgSkill = diff === 'SKILL'
@@ -436,7 +458,9 @@ ${jgMore ? `<p class="sub">More ${esc(you)} jungle matchups: ${jgMore}</p>` : ''
   const uA = urlslug(you);
   const canonical = `${ORIGIN}/matchup/jungle/${uA}/`;
   const links = opps.filter(f => f !== you).sort().map(f => `<a href="/matchup/jungle/${uA}-vs-${urlslug(f)}/">${esc(you)} vs ${esc(f)}</a>`).join('');
-  const title = `${you} Jungle Matchups — All ${opps.length} Guides | MatchupCoach.gg`;
+  // Same 60-char budget as the matchup pages; long names drop the brand.
+  let title = `${you} Jungle Matchups — All ${opps.length} Guides | MatchupCoach.gg`;
+  if (title.length > 60) title = `${you} Jungle Matchups — All ${opps.length} Guides`;
   const desc = `Every ${you} jungle matchup guide: the level-by-level race, first clear, pathing, invade windows and objective control vs all ${opps.length} junglers.`;
   outWrite(`jungle/${uA}/index.html`, shell(title, desc, canonical, { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical }, `
 <nav class="crumbs"><a href="/matchup/">Matchups</a> › <a href="/matchup/jungle/">Jungle</a> › ${esc(you)}</nav>
@@ -470,7 +494,9 @@ for (const L of LANES) {
     const canonical = `${ORIGIN}/matchup/${L.key}/${uA}/`;
     const opps = Object.keys(C.entries).map(bF => dispOf(D, bF)).sort();
     const links = opps.map(bN => `<a href="/matchup/${L.key}/${uA}-vs-${urlslug(bN)}/">${esc(aName)} vs ${esc(bN)}</a>`).join('');
-    const title = `${aName} ${L.short} Matchups — All ${opps.length} Lane Guides | MatchupCoach.gg`;
+    let title = `${aName} ${L.short} Matchups — All ${opps.length} Lane Guides | MatchupCoach.gg`;
+    if (title.length > 60) title = `${aName} ${L.short} Matchups — All ${opps.length} Guides`;
+    if (title.length > 60) title = `${aName} ${L.short} Matchups — All ${opps.length}`;
     const desc = `Every ${aName} ${L.label.toLowerCase()} matchup guide: who wins, favour timeline, power spikes and game plans vs all ${opps.length} opponents.`;
     const jsonld = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical };
     const body = `

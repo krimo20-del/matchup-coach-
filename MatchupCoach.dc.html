@@ -34,9 +34,34 @@
   ]
 }
 </script>
+<!-- support.js pulls React + ReactDOM from unpkg the moment it runs — warm the
+     connection first so that fetch does not pay for DNS + TLS on a phone. -->
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
 <script src="/support.js"></script>
 </head>
 <body>
+<!-- BOOT SHELL. The 800+ synchronous data scripts inside the template block the
+     parser for 20-35s on a phone, and support.js hides the raw template itself, so
+     without this the page is blank white until React mounts. It sits BEFORE those
+     scripts so it paints at once, and it is hidden the moment boot() swaps the template
+     for the app root (id dc-root): support.js adds body.mc-booted right there, and the
+     :has() rule covers the same instant. The two hide rules are deliberately separate;
+     one selector list would be thrown out whole by a browser that does not know :has().
+     No images, system fonts only. (Keep the literal template tag name out of this
+     comment: the runtime finds the template by its first occurrence in the source.) -->
+<style>
+  .mc-boot-shell { position:fixed; inset:0; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; background:#0d0f16; color:#f4efe8; font-family:'Chakra Petch','Manrope',system-ui,sans-serif; text-align:center; }
+  .mc-boot-shell .mc-boot-logo { font-weight:700; font-size:26px; letter-spacing:0.4px; }
+  .mc-boot-shell .mc-boot-logo b { color:#e8b84b; font-weight:700; }
+  .mc-boot-shell .mc-boot-logo i { color:#3ddc97; font-style:normal; }
+  .mc-boot-shell .mc-boot-msg { font-size:13px; color:#8a90a2; letter-spacing:0.3px; }
+  .mc-boot-shell .mc-boot-bar { width:140px; height:3px; border-radius:99px; background:rgba(255,255,255,0.08); overflow:hidden; }
+  .mc-boot-shell .mc-boot-bar span { display:block; width:40%; height:100%; border-radius:99px; background:linear-gradient(90deg,#e8b84b,#3ddc97); animation:mc-boot-slide 1.4s ease-in-out infinite; }
+  @keyframes mc-boot-slide { 0% { transform:translateX(-100%); } 100% { transform:translateX(350%); } }
+  body.mc-booted .mc-boot-shell { display:none !important; }
+  body:has(#dc-root) .mc-boot-shell { display:none !important; }
+</style>
+<div class="mc-boot-shell" aria-live="polite"><div class="mc-boot-logo">Matchup<b>Coach</b><i>.gg</i></div><div class="mc-boot-msg">Loading matchup data…</div><div class="mc-boot-bar"><span></span></div></div>
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -99,7 +124,9 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
 
   /* NOTE: the template's inline styles are re-serialized by React with a
      space after the colon ("font-size: 56px"), so every value-matching
-     selector needs both the spaced and unspaced form. */
+     selector needs both the spaced and unspaced form. React also writes bare
+     zeros as "0px" (gap:0 -> "gap: 0px") and spaces minmax() arguments
+     ("minmax(0px, 1fr)"), so the spaced form must use those spellings. */
   @media (max-width: 760px) {
     /* Card grids: cap each card's floor at the viewport width so a single
        card never forces a horizontal scroll, while still pairing up when
@@ -113,7 +140,12 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
     [style*="grid-template-columns:repeat(5,1fr)"],
     [style*="grid-template-columns: repeat(5,1fr)"],
     [style*="grid-template-columns:repeat(5, 1fr)"],
-    [style*="grid-template-columns: repeat(5, 1fr)"] {
+    [style*="grid-template-columns: repeat(5, 1fr)"],
+    [style*="grid-template-columns:repeat(5, minmax(0,1fr))"],
+    [style*="grid-template-columns: repeat(5, minmax(0,1fr))"],
+    [style*="grid-template-columns:repeat(5,minmax(0,1fr))"],
+    [style*="grid-template-columns: repeat(5,minmax(0,1fr))"],
+    [style*="grid-template-columns: repeat(5, minmax(0px, 1fr))"] {
       grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     }
     /* Coaching tables pin 256px (Level-by-Level: Stage / Favored / Rate / Why) or
@@ -167,10 +199,103 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
        only affects block/inline-block/flex buttons — inline text links untouched. */
     button { min-height: 42px; }
     a[href][style*="padding"] { min-height: 40px; }
+    /* iOS Safari zooms the page into any field under 16px the moment it gets
+       focus. Every text field on the site is 14px inline — lift them all. */
+    input, select, textarea { font-size: 16px !important; max-width: 100%; box-sizing: border-box; }
+    /* Account screen (sign in / create account): the inputs carry no width, so
+       they sit at the browser's ~300px default and the 300px Google button next
+       to them pushes the card to ~398px on a 375px phone. Trim the padding so
+       300px fits inside the card even at 360, and make the fields fill it. */
+    [style*="padding:26px 24px 90px"], [style*="padding: 26px 24px 90px"] { padding: 18px 14px 70px !important; }
+    [style*="max-width:432px"], [style*="max-width: 432px"] { min-width: 0; width: 100%; box-sizing: border-box; }
+    [style*="max-width:432px"] > [style*="padding:24px"],
+    [style*="max-width: 432px"] > [style*="padding: 24px"] { padding: 18px 14px !important; }
+    [style*="max-width:432px"] input, [style*="max-width: 432px"] input { width: 100%; min-width: 0; }
+    #mc-gsi { max-width: 100%; overflow: hidden; }
+    /* The blanket flex-wrap rule above also lands on this screen's column
+       containers, and a wrapped column stops stretching its items: <main> then
+       sizes to the 300px Google button (362px on a 360px phone) and the inputs
+       stay at their 300px default instead of filling the card. Columns never
+       wrap here. */
+    [data-screen-label="Account"],
+    [data-screen-label="Account"] [style*="flex-direction:column"],
+    [data-screen-label="Account"] [style*="flex-direction: column"] { flex-wrap: nowrap !important; }
+    /* Favour timeline: seven stage labels share ~130px on a phone, so each one
+       ellipsises to a letter ("L… L… F… 2…"). Turn the strip on its side into a
+       Stage | You | Enemy table — one stage per row, label at full width, each
+       row's bar next to it. Lane and jungle timelines share these inline styles. */
+    [style*="padding:0 26px 22px"] > [style*="padding:13px 16px"],
+    [style*="padding: 0px 26px 22px"] > [style*="padding: 13px 16px"] {
+      display: grid; grid-template-columns: max-content minmax(0, 1fr) minmax(0, 1fr); column-gap: 8px; align-items: start; padding: 12px !important;
+    }
+    [style*="padding:0 26px 22px"], [style*="padding: 0px 26px 22px"] { padding: 0 12px 16px !important; }
+    [style*="padding:13px 16px"] > [style*="margin-bottom:9px"],
+    [style*="padding: 13px 16px"] > [style*="margin-bottom: 9px"] { grid-column: 1 / -1; }
+    [style*="margin-left:101px"], [style*="margin-left: 101px"] {
+      margin-left: 0 !important; margin-bottom: 0 !important; flex-direction: column; gap: 6px !important; padding-top: 22px;
+    }
+    [style*="margin-left:101px"] > span, [style*="margin-left: 101px"] > span {
+      flex: 0 0 auto !important; height: 16px; line-height: 16px; text-align: left !important; overflow: visible !important;
+    }
+    [style*="padding:13px 16px"] > [style*="align-items:center"],
+    [style*="padding: 13px 16px"] > [style*="align-items: center"] {
+      flex-direction: column; align-items: stretch !important; gap: 6px !important; margin-bottom: 0 !important;
+    }
+    [style*="flex:0 0 96px"], [style*="flex: 0 0 96px"] {
+      flex: 0 0 auto !important; width: 100%; height: 16px; line-height: 16px; font-size: 11px !important; text-align: left !important; padding-right: 0 !important;
+    }
+    [style*="flex:0 0 96px"] ~ span, [style*="flex: 0 0 96px"] ~ span { flex: 0 0 auto !important; width: 100%; height: 16px !important; }
+  }
+  /* Phone-only layout for the coaching views (lane + jungle share the styles). */
+  @media (max-width: 640px) {
+    /* Hero: the two champion cards squeeze to ~50px either side of the VS /
+       win-rate block and names truncate ("Try…"). Stack them — your champion,
+       the VS block, the enemy — each card the full width. */
+    [style*="align-items:stretch; gap:0; flex-wrap:nowrap"],
+    [style*="align-items: stretch; gap: 0px; flex-wrap: nowrap"] { flex-direction: column; }
+    [data-champ-splash][style*="min-height:256px"],
+    [data-champ-splash][style*="min-height: 256px"] { min-height: 190px !important; width: 100%; }
+    [style*="align-items:stretch; gap:0; flex-wrap:nowrap"] > [style*="flex:0 0 auto"],
+    [style*="align-items: stretch; gap: 0px; flex-wrap: nowrap"] > [style*="flex: 0 0 auto"] { padding: 14px 6px !important; }
+    /* Header: the logo block, user badge and "A vs B ROLE" box wrap into a
+       126px-tall sticky bar on a 375px screen, and it holds no controls. Let it
+       scroll away, and slim it to the brand line: no subtitle, no badge, and no
+       "A vs B" box (the hero right under it shows both champions at full size). */
+    [style*="position:sticky"][style*="backdrop-filter:blur(14px)"],
+    [style*="position: sticky"][style*="backdrop-filter: blur(14px)"] { position: static !important; }
+    [style*="padding:14px 28px;"], [style*="padding: 14px 28px;"] { padding: 8px 14px !important; gap: 10px !important; }
+    [style*="font-size:9px; letter-spacing:2.2px"], [style*="font-size: 9px; letter-spacing: 2.2px"] { display: none !important; }
+    [style*="margin-left:6px; padding:4px 10px"], [style*="margin-left: 6px; padding: 4px 10px"] { display: none !important; }
+    [style*="padding:7px 14px; border-radius:12px"], [style*="padding: 7px 14px; border-radius: 12px"],
+    [style*="width:1px; height:26px"], [style*="width: 1px; height: 26px"] { display: none !important; }
+    /* Page gutter: 28px a side leaves 319px for the tables on a 375px phone. */
+    [style*="padding:26px 28px 0"], [style*="padding: 26px 28px 0px"] { padding: 18px 16px 0 !important; }
   }
   @media (max-width: 420px) {
     [style*="font-size:56px"], [style*="font-size: 56px"] { font-size: 27px !important; }
     [style*="font-size:40px"], [style*="font-size: 40px"] { font-size: 24px !important; }
+    /* Cooldown cheat sheet: one card per row on the narrowest phones. */
+    [style*="grid-template-columns:repeat(5, minmax(0,1fr))"],
+    [style*="grid-template-columns: repeat(5, minmax(0,1fr))"],
+    [style*="grid-template-columns:repeat(5,minmax(0,1fr))"],
+    [style*="grid-template-columns: repeat(5,minmax(0,1fr))"],
+    [style*="grid-template-columns: repeat(5, minmax(0px, 1fr))"] { grid-template-columns: minmax(0, 1fr) !important; }
+  }
+  @media (max-width: 400px) {
+    /* Home header: the subtitle under the logo is what tips the bar into a
+       second line at 360px. */
+    [style*="font-size:8.5px; letter-spacing:2.4px"], [style*="font-size: 8.5px; letter-spacing: 2.4px"] { display: none !important; }
+  }
+  /* Home hero: its glow/grid decoration reaches 120px past the section on both
+     sides (inset:-40px -120px), which is 495px of scrollWidth on a 375px phone.
+     Clip sideways only — plain overflow:hidden would also cut off the champion
+     autocomplete dropdowns that hang below the search row. */
+  [style*="padding:54px 28px 30px"], [style*="padding: 54px 28px 30px"] { overflow-x: clip; }
+  /* Home: the free-sample caption ("every matchup for these champions — a new one
+     per role every 24h") is a nowrap span that runs 21px past a 360px screen. */
+  @media (max-width: 480px) {
+    [style*="font-size:11.5px; color:#7d8499; white-space:nowrap"],
+    [style*="font-size: 11.5px; color: rgb(125, 132, 153); white-space: nowrap"] { white-space: normal !important; }
   }
 </style>
 <script src="./image-slot.js"></script>
@@ -1143,7 +1268,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
     <div style="max-width:1020px; margin:0 auto 18px; padding:0 28px;">
       <div style="text-align:center; margin-bottom:14px;">
         <div style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:26px; color:#f6f1ea;">Choose your membership</div>
-        <p style="margin:8px auto 0; max-width:640px; font-size:14px; line-height:1.6; color:#c7c2b4;">Challenger-level matchup guides, draft analysis, counter picks and the enemy jungle tracker. Updated every major patch. Cancel anytime.</p>
+        <p style="margin:8px auto 0; max-width:640px; font-size:14px; line-height:1.6; color:#c7c2b4;">Challenger-level matchup guides, draft analysis, counter picks and the enemy jungle tracker. Reviewed on patch 26.15. Cancel anytime.</p>
       </div>
       <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px; align-items:stretch;">
         <!-- Lane Pass -->
@@ -1151,6 +1276,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
           <div style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:16px; color:#d7dbe6;">🎯 Lane Pass</div>
           <div style="margin-top:8px;"><span style="font-family:'Chakra Petch',sans-serif; font-weight:800; font-size:30px; color:#f6f1ea;">$1.99</span><span style="font-size:13px; color:#8a90a2;"> USD/month</span></div>
           <p style="margin:9px 0 0; font-size:12.5px; line-height:1.55; color:#aab0c2;">Every champion and every matchup — in <strong style="color:#d7dbe6;">one lane of your choice</strong>.</p>
+          <div style="margin-top:8px; font-size:11.5px; color:#7d8499;">Renews automatically — cancel anytime</div>
           <div style="margin-top:12px; font-size:11px; font-weight:700; letter-spacing:0.8px; color:#7d8499;">PICK YOUR LANE TO START</div>
           <div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:7px;">
             <sc-for list="{{ laneOptions }}" as="lo" hint-placeholder-count="5">
@@ -1164,6 +1290,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
             <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;"><span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:16px; color:#f0cd72;">🏆 All Lanes</span><span style="padding:4px 9px; border-radius:999px; background:rgba(240,205,114,0.14); border:1px solid rgba(240,205,114,0.4); font-size:10px; font-weight:800; letter-spacing:0.6px; color:#f0cd72;">MOST POPULAR</span></div>
             <div style="margin-top:8px;"><span style="font-family:'Chakra Petch',sans-serif; font-weight:800; font-size:30px; color:#f6f1ea;">$3.99</span><span style="font-size:13px; color:#8a90a2;"> USD/month</span></div>
             <p style="margin:9px 0 0; font-size:12.5px; line-height:1.55; color:#c7c2b4;">Everything, everywhere — <strong style="color:#f0cd72;">all five lanes</strong>, every champion, draft analysis and the jungle tracker.</p>
+            <div style="margin-top:8px; font-size:11.5px; color:#7d8499;">Renews automatically — cancel anytime</div>
             <button onClick="{{ buyAll }}" style="margin-top:auto; padding:13px 18px; border-radius:12px; border:none; background:linear-gradient(180deg,#f5d27a,#e8941f); color:#1c1206; font-weight:800; font-size:14.5px; cursor:pointer; font-family:'Chakra Petch',sans-serif; letter-spacing:0.3px; box-shadow:0 12px 30px -12px rgba(232,148,31,0.7); margin-top:16px;" style-hover="filter:brightness(1.06);">Get All Lanes – $3.99/mo</button>
           </div>
         </div>
@@ -1172,6 +1299,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
           <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;"><span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:16px; color:#7fe3b8;">📅 All Lanes — Annual</span><span style="padding:4px 9px; border-radius:999px; background:rgba(61,220,151,0.12); border:1px solid rgba(61,220,151,0.38); font-size:10px; font-weight:800; letter-spacing:0.6px; color:#7fe3b8;">SAVE 48%</span></div>
           <div style="margin-top:8px;"><span style="font-family:'Chakra Petch',sans-serif; font-weight:800; font-size:30px; color:#f6f1ea;">$24.99</span><span style="font-size:13px; color:#8a90a2;"> USD/year</span></div>
           <p style="margin:9px 0 0; font-size:12.5px; line-height:1.55; color:#aab0c2;">All five lanes for a year — works out to <strong style="color:#7fe3b8;">$2.08/month</strong> instead of $3.99.</p>
+          <div style="margin-top:8px; font-size:11.5px; color:#7d8499;">Renews automatically — cancel anytime</div>
           <button onClick="{{ buyYear }}" style="margin-top:auto; padding:13px 18px; border-radius:12px; border:1px solid rgba(61,220,151,0.45); background:rgba(61,220,151,0.12); color:#7fe3b8; font-weight:800; font-size:14.5px; cursor:pointer; font-family:'Chakra Petch',sans-serif; letter-spacing:0.3px; margin-top:16px;" style-hover="background:rgba(61,220,151,0.2);">Get the Annual Pass – $24.99/yr</button>
         </div>
       </div>
@@ -1634,9 +1762,14 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
             </span>
             <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; color:#dfe2ec;">Matchup<span style="color:#e8b84b;">Coach</span><span style="color:#6b7185;">.gg</span></span>
           </div>
-          <span style="font-size:12px; color:#5f6578;">Patch 26.15 database · updated every major patch · every role, every matchup</span>
+          <span style="font-size:12px; color:#5f6578;">Patch 26.15 database · reviewed on 26.15 · every role, every matchup</span>
           <div style="margin-left:auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-
+            <a href="/matchup/" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">All matchup guides</a>
+            <a href="/matchup/top/" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Top</a>
+            <a href="/matchup/jungle/" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Jungle</a>
+            <a href="/matchup/mid/" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Mid</a>
+            <a href="/matchup/bot/" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Bot</a>
+            <a href="/matchup/support/" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Support</a>
             <button onClick="{{ openLogin }}" style="background:none; border:none; padding:0; cursor:pointer; font-size:12.5px; font-weight:700; color:#8a90a2; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Account</button>
             <a href="/terms" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Terms</a>
             <a href="/privacy" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Privacy</a>
@@ -3478,7 +3611,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
             </button>
             <div style="display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;">
               <span style="display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:999px; background:rgba(61,220,151,0.08); border:1px solid rgba(61,220,151,0.3); font-size:11px; font-weight:700; color:#7fe3b8;">🔒 Secure Checkout</span>
-              <span style="display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:999px; background:rgba(240,205,114,0.08); border:1px solid rgba(240,205,114,0.32); font-size:11px; font-weight:700; color:#f0cd72;">💰 7-Day Money-Back</span>
+              <span style="display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:999px; background:rgba(240,205,114,0.08); border:1px solid rgba(240,205,114,0.32); font-size:11px; font-weight:700; color:#f0cd72;">💰 7-Day Money-Back (first payment)</span>
               <span style="display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:999px; background:rgba(70,198,245,0.08); border:1px solid rgba(70,198,245,0.3); font-size:11px; font-weight:700; color:#7cc8e8;">✋ Cancel Anytime</span>
             </div>
             <div style="text-align:center; font-size:11.5px; color:#5f6578; line-height:1.5;">Demo checkout — any card details work. Nothing is charged.</div>
@@ -3547,7 +3680,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
                 </button>
                 <div style="display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;">
                   <span style="display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:999px; background:#eefaf4; border:1px solid #bfe8d4; font-size:11px; font-weight:700; color:#1e7c4f;">🔒 Secure Checkout</span>
-                  <span style="display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:999px; background:#fdf8ec; border:1px solid #eadfb8; font-size:11px; font-weight:700; color:#8a6d1f;">💰 7-Day Money-Back</span>
+                  <span style="display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:999px; background:#fdf8ec; border:1px solid #eadfb8; font-size:11px; font-weight:700; color:#8a6d1f;">💰 7-Day Money-Back (first payment)</span>
                   <span style="display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:999px; background:#eef6fc; border:1px solid #c5dff2; font-size:11px; font-weight:700; color:#2a6fdb;">✋ Cancel Anytime</span>
                 </div>
                 <div style="text-align:center; font-size:11.5px; color:#9aa3b5; line-height:1.5;">Demo checkout — any card details work. Nothing is charged.</div>
@@ -3661,17 +3794,32 @@ class Component extends DCLogic {
       if (mc.view === 'demo' && mc.myChamp && mc.enemyChamp) {
         var laneRole = mc.role || 'top';
         var u = this.state.user;
+        // Today's featured sample pairing is free for everyone, signed-out
+        // included — same rule as _gated, so Back into it never kicks home.
         var covered = (u && u.plan && this._planCovers(u.plan, laneRole))
-          || (u && this.dailyFreeChamps(laneRole).indexOf(mc.myChamp) !== -1);
+          || (u && this.dailyFreeChamps(laneRole).indexOf(mc.myChamp) !== -1)
+          || this._isSampleToday(laneRole, mc.myChamp, mc.enemyChamp);
         if (!covered) { this.setState({ view: 'home', homeStep: 'role' }); this._top(); return; }
         this.setState(mc); this._top();
         this.loadComments(mc.myChamp, mc.enemyChamp, mc.role);
         this.refreshLiveWr(mc.myChamp, mc.enemyChamp, mc.role);
         return;
       }
+      // The demo card form is file:// only — a Back into an old checkout
+      // snapshot on the web lands on home instead.
+      if (mc.view === 'checkout' && this._onWeb()) { this.setState({ view: 'home', homeStep: 'role' }); this._top(); return; }
       this.setState(mc); this._top();
     };
     window.addEventListener('popstate', this._onPop);
+    // Any signed-in server action refused with 401 (checkout, billing portal,
+    // notes, /me) drops the stale session — see _dropSession. Wrong-password
+    // and Google refusals are 401s too, but they are not session problems.
+    this._onUnauth = (e) => {
+      var path = (e && e.detail && e.detail.path) || '';
+      if (/^\/(login|signup|google)\b/.test(path)) return;
+      this._dropSession();
+    };
+    window.addEventListener('mc:unauthorized', this._onUnauth);
     // Bootstrap Google Sign-In from the hardcoded public client ID.
     // Paste your client ID from console.cloud.google.com → Credentials here:
     var _gcid = window.MC_GOOGLE_CLIENT_ID || '';
@@ -3745,7 +3893,7 @@ class Component extends DCLogic {
   // jungler; we count up and tell laners when the cross-map gank window opens.
   jgSpot(side) { this.setState({ jgSeenSide: side, jgSeenAt: Date.now(), jgClock: 0 }); }
   jgReset() { this.setState({ jgSeenSide: '', jgSeenAt: null, jgClock: 0 }); }
-  componentWillUnmount() { clearInterval(this._t); clearInterval(this._gsi); window.removeEventListener('popstate', this._onPop); }
+  componentWillUnmount() { clearInterval(this._t); clearInterval(this._gsi); clearTimeout(this._wakeT); window.removeEventListener('popstate', this._onPop); window.removeEventListener('mc:unauthorized', this._onUnauth); }
   // Universal scroll-to-top: whenever the NAVIGATION identity changes (a new
   // matchup, lane, champion, jungler, screen, or home step) jump to the top —
   // so every view always loads from the top, no matter which picker/tab/picture
@@ -3774,24 +3922,48 @@ class Component extends DCLogic {
   openAuth(mode, notice) { this.setState({ view: 'auth', authMode: mode || 'login', auErr: '', auNotice: notice || '', auPass: '', auPass2: '' }); this._top(); this._nav(); }
   authSwitch(mode) { this.setState({ authMode: mode, auErr: '', auNotice: '' }); }
   // API-first auth: when the backend answers /api/health the server owns
-  // accounts/sessions; otherwise fall back to the localStorage demo store
-  // (file:// or plain static hosting).
+  // accounts/sessions; otherwise fall back to the localStorage demo store \u2014
+  // from file:// only. On the web a "no" from /api/health means the backend is
+  // restarting (Render answers 502 for ~40s), so the demo store is never used
+  // there: no local accounts, no plaintext passwords in localStorage.
   _withApi(onApi, onLocal) {
     if (!window.MC_API) { onLocal(); return; }
     window.MC_API.available().then(ok => { if (ok) onApi(); else onLocal(); });
+  }
+  _onWeb() { return location.protocol !== 'file:'; }
+  // The server said no while we are on the web. Say so, then re-probe in the
+  // background and re-run the action once it answers (a false probe is never
+  // memoised by api-client.js, so the Sign in / Create account button is the
+  // manual retry too). Capped so a server that is really down stops nagging.
+  _serverWaking(retry) {
+    this._wakeTries = (this._wakeTries || 0) + 1;
+    var again = this._wakeTries <= 3;
+    this.setState({ auBusy: false, auWaking: true, auErr: again ? 'Server is waking up \u2014 try again in a few seconds. Retrying\u2026' : 'Server is still waking up \u2014 hit Retry in a few seconds.' });
+    clearTimeout(this._wakeT);
+    if (!again) { this._wakeTries = 0; return; }
+    this._wakeT = setTimeout(() => {
+      if (this.state.view !== 'auth' || this.state.auBusy) return;
+      window.MC_API.available().then(ok => { if (ok && this.state.view === 'auth' && !this.state.auBusy) retry(); });
+    }, 3000);
   }
   doLogin() {
     var n = (this.state.auName || '').trim(), p = this.state.auPass || '';
     if (!n || !p) { this.setState({ auErr: 'Enter your username and password.' }); return; }
     if (this.state.auBusy) return;
+    // Busy from the first click: the health probe can take a few seconds while
+    // the server wakes, and the button must not fire twice meanwhile.
+    this.setState({ auBusy: true, auErr: '', auWaking: false });
     this._withApi(() => {
-      this.setState({ auBusy: true, auErr: '' });
+      this.setState({ auBusy: true, auErr: '', auWaking: false });
       window.MC_API.post('/login', { name: n, pass: p }).then(r => {
         window.MC_API.setToken(r.token, this.state.auRemember);
         this.setState({ auBusy: false });
+        this._wakeTries = 0;
         this._finishAuth(r.user);
       }).catch(e => this.setState({ auBusy: false, auErr: e.api ? e.message : 'Could not reach the server \u2014 try again.' }));
     }, () => {
+      if (this._onWeb()) { this._serverWaking(() => this.doLogin()); return; }
+      this.setState({ auBusy: false });
       var a = this._accts(), acc = a[n.toLowerCase()];
       if (!acc) { this.setState({ auErr: 'No account found with that username \u2014 create one below.' }); return; }
       if (acc.google && !acc.pw) { this.setState({ auErr: 'That account uses Google sign-in \u2014 use the Google button above.' }); return; }
@@ -3806,14 +3978,18 @@ class Component extends DCLogic {
     if (p.length < 6) { this.setState({ auErr: 'Password needs at least 6 characters.' }); return; }
     if (p !== p2) { this.setState({ auErr: 'Passwords don\u2019t match.' }); return; }
     if (this.state.auBusy) return;
+    this.setState({ auBusy: true, auErr: '', auWaking: false });
     this._withApi(() => {
-      this.setState({ auBusy: true, auErr: '' });
+      this.setState({ auBusy: true, auErr: '', auWaking: false });
       window.MC_API.post('/signup', { name: n, pass: p, website: this.state.auTrap }).then(r => {
         window.MC_API.setToken(r.token, this.state.auRemember);
         this.setState({ auBusy: false });
+        this._wakeTries = 0;
         this._finishAuth(r.user);
       }).catch(e => this.setState({ auBusy: false, auErr: e.api ? e.message : 'Could not reach the server \u2014 try again.' }));
     }, () => {
+      if (this._onWeb()) { this._serverWaking(() => this.doSignup()); return; }
+      this.setState({ auBusy: false });
       var a = this._accts(), k = n.toLowerCase();
       if (a[k]) { this.setState({ auErr: 'That username is taken \u2014 sign in instead.' }); return; }
       a[k] = { name: n, pw: p, plan: null, created: Date.now() };
@@ -3831,7 +4007,7 @@ class Component extends DCLogic {
   _googleCred(cred) {
     if (!cred) { this.setState({ auErr: 'Google sign-in was cancelled — try again.' }); return; }
     if (this.state.auBusy) return;
-    this.setState({ auBusy: true, auErr: '' });
+    this.setState({ auBusy: true, auErr: '', auWaking: false });
     window.MC_API.post('/google', { credential: cred }).then(r => {
       window.MC_API.setToken(r.token, this.state.auRemember);
       this.setState({ auBusy: false });
@@ -3855,6 +4031,14 @@ class Component extends DCLogic {
     if (pp && this.state.stripeEnabled) {
       this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '' });
       this.stripeCheckout(pp);
+      return;
+    }
+    // On the web stripeEnabled is only false because /api/config has not
+    // landed yet (or the API was down at load) — wait for it, then Stripe.
+    // The demo card form below is file:// only.
+    if (pp && this._onWeb()) {
+      this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '', view: 'home' });
+      this._awaitPayment(pp);
       return;
     }
     this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '', plan: pp || this.state.plan, view: pp ? 'checkout' : 'home', coDone: false });
@@ -3978,11 +4162,48 @@ class Component extends DCLogic {
       this.openAuth('signup', 'Create your account to finish checkout — plans start at $1.99/month.');
     } else if (this.state.stripeEnabled) {
       this.stripeCheckout(p);
+    } else if (this._onWeb()) {
+      this._awaitPayment(p);
     } else {
       var pp = this._planParts(p);
       this.setState({ showPaywall: false, view: 'checkout', plan: p, planRole: pp.role || this.state.planRole, coDone: false, cdErr: '' });
       window.scrollTo(0, 0);
     }
+  }
+  // Web only: stripeEnabled flips when /api/config lands, so a plan chosen
+  // while the API is down (restart, cold start) or before config arrives would
+  // otherwise fall into the file:// demo card form — on the production domain.
+  // Hold with a "connecting" banner, re-probe until the server answers, pick up
+  // config, then take the normal stripeCheckout(p) path.
+  _awaitPayment(p) {
+    if (this._payWait) return;
+    this._payWait = true;
+    var pp = this._planParts(p);
+    this.setState({ showPaywall: false, plan: p, planRole: pp.role || this.state.planRole, payErr: 'Connecting to payment server…' });
+    var go = (tries) => {
+      window.MC_API.available().then(ok => {
+        if (ok) {
+          window.MC_API.get('/config')
+            .then(c => { if (c.stripeEnabled) this.setState({ stripeEnabled: true }); })
+            .catch(() => {})
+            .then(() => { this._payWait = false; this.setState({ payErr: '' }); this.stripeCheckout(p); });
+          return;
+        }
+        if (tries < 3) { setTimeout(() => go(tries + 1), 3000); return; }
+        this._payWait = false;
+        this.setState({ payErr: 'Payment server is still waking up — try again in a few seconds.' });
+      });
+    };
+    go(1);
+  }
+  // A signed-in action came back 401: the stored session is stale (or a
+  // token-less mc_session that the server never issued). Drop it so the app
+  // stops showing a member who cannot buy, post or manage billing. Only
+  // reached from a server refusal — a token-less session is left alone on load.
+  _dropSession() {
+    if (window.MC_API) window.MC_API.clearToken();
+    try { localStorage.removeItem('mc_session'); sessionStorage.removeItem('mc_session'); } catch (e) {}
+    if (this.state.user) this.setState({ user: null });
   }
   // Real payment: hand off to Stripe's hosted Checkout page.
   stripeCheckout(p) {
@@ -4136,6 +4357,7 @@ class Component extends DCLogic {
       || (t === 'role' && pp.plan === 'lane' && u.plan.role === pp.role));
     if (already) { this.setState({ view: 'home', homeStep: 'role' }); this._top(); this._nav(); return; }
     if (this.state.stripeEnabled) { this.stripeCheckout(p); return; }
+    if (this._onWeb()) { this._awaitPayment(p); return; }
     this.setState({ plan: p, planRole: pp.role || this.state.planRole, view: 'checkout', coDone: false, coStyle: 'embedded' }); this._top(); this._nav();
   }
   becomeFounder() { this.buyPlan('all'); } // legacy alias (old CTAs)
@@ -4348,13 +4570,17 @@ class Component extends DCLogic {
       // Canonical points at the STATIC guide page for this matchup when one
       // exists (/matchup/<lane>/<a>-vs-<b>/). Those pages are what the sitemap
       // lists and what Google should rank; without this the app URL and the
-      // static page would compete as duplicates of each other. Jungle has no
-      // static guides, so it keeps its own app URL.
+      // static page would compete as duplicates of each other. Jungle guides
+      // exist for every JG_DB pair with a staged report (same urlslug as
+      // _gen_seo_pages.js, which skips the mirror), so they canonicalise too;
+      // a pair with no static page keeps the app URL.
       try {
         var cl = document.querySelector('link[rel="canonical"]');
         if (cl) {
           var canon = location.origin + path;
-          if (s.view === 'demo' && s.myChamp && s.enemyChamp && s.role && s.role !== 'jungle') {
+          var jgRep = (window.JG_DB && window.JG_DB[s.myChamp]) ? window.JG_DB[s.myChamp][s.enemyChamp] : null;
+          var hasStatic = s.role !== 'jungle' || !!(jgRep && jgRep.stages && jgRep.stages.length && s.myChamp !== s.enemyChamp);
+          if (s.view === 'demo' && s.myChamp && s.enemyChamp && s.role && hasStatic) {
             var cs = function(n){ return (n || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''); };
             canon = location.origin + '/matchup/' + s.role + '/' + cs(s.myChamp) + '-vs-' + cs(s.enemyChamp) + '/';
           }
@@ -4393,9 +4619,14 @@ class Component extends DCLogic {
       if (a && b) {
         // pretend signed-in gate already cleared for deep links is handled by openGen
         var R = window.ROSTERS || {}, lanes = ['top','mid','bot','support'], role = null;
-        if (forcedRole && forcedRole !== 'jungle') role = forcedRole;
-        else if (forcedRole === 'jungle') role = null; // falls through to the jungle branch below
-        else for (var i = 0; i < lanes.length; i++) { var p = (R[lanes[i]]||[]).reduce(function(x,g){return x.concat(g.c);},[]); if (p.indexOf(a)>=0 && p.indexOf(b)>=0) { role = lanes[i]; break; } }
+        var inLane = function(l, n){ return (R[l]||[]).reduce(function(x,g){return x.concat(g.c);},[]).indexOf(n) >= 0; };
+        // Honour the forced lane only when BOTH champions are actually played
+        // there. A hand-edited /matchup/bot/garen-vs-ornn/open would otherwise
+        // render the generic template with made-up cooldowns; it now falls back
+        // to the roster scan like a lane-less link.
+        if (forcedRole && forcedRole !== 'jungle' && inLane(forcedRole, a) && inLane(forcedRole, b)) role = forcedRole;
+        else if (forcedRole === 'jungle' && window.JG_DB && window.JG_DB[a]) role = null; // falls through to the jungle branch below
+        else for (var i = 0; i < lanes.length; i++) { if (inLane(lanes[i], a) && inLane(lanes[i], b)) { role = lanes[i]; break; } }
         // A deep-link open follows no click, so there is no champion-picker wheel
         // momentum for _top() to absorb — give it no grace, so a visitor already
         // scrolling as the page finishes hydrating keeps their scroll.
@@ -7125,7 +7356,9 @@ class Component extends DCLogic {
     // or legacy full-access. A $1.99 TOP pass gets the one-per-group preview —
     // exactly what the paywall's 'Jungle tracker teasers' perk promises.
     const jgHomeLocked = !(this.state.user && this.state.user.plan && this._planCovers(this.state.user.plan, 'jungle'));
-    const jgLockedCount = Math.max(0, Object.keys(JI).length - FREE_JG.length);
+    // Distinct entries, not keys — JI.nunuwillump is an alias of JI.nunu.
+    const jgDistinct = Object.keys(JI).filter((k, i, ks) => ks.findIndex(j => JI[j] === JI[k]) === i).length;
+    const jgLockedCount = Math.max(0, jgDistinct - FREE_JG.length);
     const DIVE_COLORS = ['#3ddc97', '#7fcf5a', '#e8b84b', '#ff8b3d', '#ff5d6c'];
     const DIVE_LABELS = ['', 'VERY LOW', 'LOW', 'MEDIUM', 'HIGH', 'EXTREME'];
     const jgSel = selJg ? {
@@ -7488,7 +7721,8 @@ class Component extends DCLogic {
           toggleRemember: () => self.setState(s => ({ auRemember: !s.auRemember })),
           auErr: st.auErr, hasAuErr: !!st.auErr,
           auNotice: st.auNotice, hasAuNotice: !!st.auNotice,
-          authSubmitLabel: m === 'login' ? 'Sign in' : m === 'signup' ? 'Create account' : 'Send reset link',
+          // While the server wakes the same button is the Retry control.
+          authSubmitLabel: st.auBusy ? 'Connecting…' : st.auWaking ? 'Retry' : m === 'login' ? 'Sign in' : m === 'signup' ? 'Create account' : 'Send reset link',
           doAuthSubmit: () => (m === 'login' ? self.doLogin() : m === 'signup' ? self.doSignup() : self.doForgot()),
           auKey: (e) => { if (e.key === 'Enter') (m === 'login' ? self.doLogin() : m === 'signup' ? self.doSignup() : self.doForgot()); },
           authSwitchQ: m === 'login' ? 'New here?' : m === 'signup' ? 'Already have an account?' : 'Remembered it?',
@@ -7623,11 +7857,16 @@ class Component extends DCLogic {
         var R = window.ROSTERS || {}, total = 0;
         ['top', 'mid', 'bot', 'support'].forEach(function(role){
           var pool = (R[role] || []).reduce(function(a, g){ return a + g.c.length; }, 0);
-          total += pool * pool;
+          // Ordered pairs of DIFFERENT champions — a champion vs itself is not a matchup.
+          total += pool * (pool - 1);
         });
         var JG = window.JG_DB || {};
-        Object.keys(JG).forEach(function(k){ total += Object.keys(JG[k]).length; });
-        var jgTimers = Object.keys(window.JUNGLE_INTEL || {}).length;
+        // JG_DB carries a mirror entry (Lee Sin vs Lee Sin) per jungler — skip it too.
+        Object.keys(JG).forEach(function(k){ total += Object.keys(JG[k]).filter(function(e){ return e !== k; }).length; });
+        // JUNGLE_INTEL aliases "nunuwillump" to the same entry as "nunu" — count
+        // distinct entries, not keys, or Nunu & Willump is counted twice.
+        var JIh = window.JUNGLE_INTEL || {};
+        var jgTimers = Object.keys(JIh).filter(function(k, i, ks){ return ks.findIndex(function(j){ return JIh[j] === JIh[k]; }) === i; }).length;
         var fmt = function(n){ return n.toLocaleString('en-US'); };
         var matchups = total ? (Math.floor(total / 100) * 100) : 11600;
         // Every matchup is graded across 7 lane stages (level 1 → 2+ items), so
@@ -7671,8 +7910,20 @@ class Component extends DCLogic {
         var WR = window.MC_REAL_WR || {}, LWR = window.MC_LIVE_WR || {};
         // Prefer a live lolalytics number (weekly-refreshed) when we have one for
         // this pair; otherwise fall back to the bundled MC_REAL_WR table.
-        var live = (LWR[sl(you)] && typeof LWR[sl(you)][sl(foe)] === 'number') ? LWR[sl(you)][sl(foe)] : null;
-        var real = live != null ? live : ((WR[sl(you)] && typeof WR[sl(you)][sl(foe)] === 'number') ? WR[sl(you)][sl(foe)] : null);
+        // The bundled table is keyed per lane: top is the bare slug, the other
+        // lanes are suffixed (heimerdinger_bot, ahri_mid, lulu_sup) — the same
+        // keys ingestTables() writes. Read the lane key first, then the mirror
+        // of the opponent's lane table, then the bare slug, so a bot or support
+        // panel never shows the top-lane number while /api/wr is still loading.
+        var suf = ({ mid: '_mid', bot: '_bot', support: '_sup' })[self.state.role] || '';
+        var num = function (m, a, b) { return (m[a] && typeof m[a][b] === 'number') ? m[a][b] : null; };
+        var pick = function (m) {
+          var v = suf ? num(m, sl(you) + suf, sl(foe)) : null;
+          if (v == null && suf) v = num(m, sl(you), sl(foe) + suf);
+          return v != null ? v : num(m, sl(you), sl(foe));
+        };
+        var live = num(LWR, sl(you), sl(foe));
+        var real = live != null ? live : pick(WR);
         var isLive = live != null;
         var base, isReal = false;
         if (real != null) { base = real; isReal = true; }
@@ -7691,7 +7942,7 @@ class Component extends DCLogic {
         // sample size (lolalytics games for THIS pair) — flag a limited sample so a
         // noisy low-game win rate on a niche lane is shown honestly, not as gospel.
         var GG = window.MC_REAL_GAMES || {};
-        var games = (isReal && GG[sl(you)] && typeof GG[sl(you)][sl(foe)] === 'number') ? GG[sl(you)][sl(foe)] : null;
+        var games = isReal ? pick(GG) : null;
         var limited = games != null && games < 100;
         return { wrA: wrA + '%', wrB: wrB + '%', wrLabel: isLive ? 'WIN RATE · LOLALYTICS LIVE' : (isReal ? 'WIN RATE · LOLALYTICS' : 'EST. WIN RATE'), wrATone: base >= 50.5 ? '#3ddc97' : base <= 49.5 ? '#ff5d6c' : '#e8b84b', wrBTone: base >= 50.5 ? '#ff5d6c' : base <= 49.5 ? '#3ddc97' : '#e8b84b', wrAPct: Math.round(base),
           wrSample: limited ? ('⚠ limited sample · ' + games + ' games') : '', wrSampleDisp: limited ? 'block' : 'none' };
@@ -7861,17 +8112,17 @@ class Component extends DCLogic {
         return [
           { key: 'lane:' + wantRole, name: 'Lane Pass — ' + (RLL[wantRole] || 'Top'), price: '$1.99', period: '/mo',
             cta: 'Get the ' + (RLL[wantRole] || 'Top') + ' Lane Pass',
-            perks: ['Every champion & matchup in ' + (RLL[wantRole] || 'Top'), 'Draft analysis for your lane', wantRole === 'jungle' ? 'Full enemy jungle tracker' : 'Jungle tracker teasers', 'Cancel anytime'],
+            perks: ['Every champion & matchup in ' + (RLL[wantRole] || 'Top'), 'Draft analysis for your lane', wantRole === 'jungle' ? 'Full enemy jungle tracker' : 'Jungle tracker teasers', 'Renews automatically \u2014 cancel anytime'],
             note: 'One lane only — switch plans whenever you like.', noteColor: '#8a90a2' },
           { key: 'all', name: 'All Lanes', price: '$3.99', period: '/mo', featured: true,
             cta: 'Get All Lanes',
             badgeText: '🏆 MOST POPULAR', badgeBg: 'linear-gradient(180deg,#f3cf6e,#e8b84b)', badgeColor: '#1a1303',
-            perks: ['Unlimited matchup guides', 'Every champion, every lane', 'Draft analysis & counter picks', 'Live enemy jungle tracker', 'Every future feature included', 'Cancel anytime'],
+            perks: ['Unlimited matchup guides', 'Every champion, every lane', 'Draft analysis & counter picks', 'Live enemy jungle tracker', 'Every future feature included', 'Renews automatically \u2014 cancel anytime'],
             note: 'Everything, everywhere.', noteColor: '#7fe3b8' },
           { key: 'year', name: 'All Lanes — Annual', price: '$24.99', period: '/yr',
             cta: 'Get the Annual Pass',
             badgeText: '💚 SAVE 48%', badgeBg: 'linear-gradient(180deg,#8ff0c3,#3ddc97)', badgeColor: '#0a2417',
-            perks: ['Everything in All Lanes', '$2.08/month effective', 'One payment a year', 'Cancel anytime'],
+            perks: ['Everything in All Lanes', '$2.08/month effective', 'One payment a year', 'Renews automatically \u2014 cancel anytime'],
             note: 'vs $47.88/yr billed monthly.', noteColor: '#7fe3b8' }
         ];
       })(this).map(t => ({

@@ -5,7 +5,9 @@
 // corrects the VERDICT (diff) + the 7-stage FAVOUR WINDOWS where the generated
 // data was wrong. Where a real win rate is known it is also written to
 // window.MC_REAL_WR so the app shows the REAL number (not the verdict estimate)
-// AND the verdict is derived from that number, so they can never disagree.
+// AND the verdict is derived from that number, so they can never disagree —
+// with one exception: when both seats' own numbers claim the same side is
+// favoured and the pooled rate is near 50, both seats read EVEN (diffFromPair).
 //
 // `win` (optional) = who owns each lane stage, in order:
 //   [Level 1, Level 2, Level 3, Levels 4-5, Level 6, First item, 2+ items]
@@ -161,6 +163,33 @@
   var SCALER = { vladimir: 1, kassadin: 1, nasus: 1, chogath: 1, camille: 1, vayne: 1, kayle: 1, ryze: 1, gangplank: 1, kled: 1, cassiopeia: 1, yorick: 1, akali: 1, gwen: 1, ksante: 1, yasuo: 1 };
   function diffFromWr(wr) { return wr >= 52.5 ? 'FAVOURED' : wr >= 48.5 ? 'EVEN' : wr >= 45.5 ? 'TRICKY' : 'HARD'; }
   function mirrorDiff(d) { return d === 'FAVOURED' ? 'TRICKY' : d === 'EVEN' ? 'EVEN' : 'FAVOURED'; }
+  // Verdict for champ-vs-enemy given BOTH sides' own lolalytics numbers. The
+  // two pages are independent samples that do not sum to 100, so a pair can
+  // read 53.1% from one seat and 53.4% from the other and label itself
+  // FAVOURED from both. When the two directions disagree on who is favoured
+  // and the pooled rate ((wrAB + (100 - wrBA)) / 2) sits in the EVEN band
+  // from either seat (within 2.5 points of 50, so both seats get the same
+  // answer), both seats read EVEN. Anything else keeps its own number's
+  // verdict — pooling everywhere would flip calls the hand-written prose was
+  // built on.
+  function diffFromPair(wr, rev) {
+    var da = diffFromWr(wr);
+    if (typeof rev !== 'number') return da;
+    var db = diffFromWr(rev);
+    var clash = (da === 'FAVOURED' && db === 'FAVOURED') || (da === 'HARD' && db === 'HARD');
+    if (!clash) return da;
+    var pooled = (wr + (100 - rev)) / 2;
+    return Math.abs(pooled - 50) < 2.5 ? 'EVEN' : da;
+  }
+  // The other seat's own number: lane tables are keyed bare for top and
+  // suffixed for the other lanes (ahri_mid, caitlyn_bot, lulu_sup), each
+  // listing opponents by bare slug — so the reverse of ahri_mid→annie lives
+  // at annie_mid→ahri.
+  function reverseWr(tables, champ, en) {
+    var m = /^(.*?)(_mid|_bot|_sup)?$/.exec(champ);
+    var t = tables[en + (m[2] || '')];
+    return (t && typeof t[m[1]] === 'number') ? t[m[1]] : null;
+  }
   // REAL tracks which (champ|enemy) ordered pairs came from that champ's OWN
   // lolalytics page, so a later champ's mirror write never clobbers a real number
   // (e.g. aatrox/vs/darius = 51.8 and darius/vs/aatrox = 50.97 are independent
@@ -174,9 +203,14 @@
   // write is guarded so it never clobbers an opponent's real number.
   function ingestTables() {
     var out = [], REAL = {};
+    // Every table in one map first, so each seat can see the other's number.
+    var ALL = {};
+    Object.keys(WR).forEach(function (c) { ALL[c] = WR[c]; });
+    var ext = window.MC_WR_TABLES || {};
+    Object.keys(ext).forEach(function (c) { ALL[c] = Object.assign({}, ALL[c] || {}, ext[c]); });
     function ingest(champ, m) {
       Object.keys(m).forEach(function (en) {
-        var wr = m[en], da = diffFromWr(wr);
+        var wr = m[en], da = diffFromPair(wr, reverseWr(ALL, champ, en));
         window.MC_REAL_WR[champ] = window.MC_REAL_WR[champ] || {}; window.MC_REAL_WR[champ][en] = wr; REAL[champ + '|' + en] = 1;
         window.MC_REAL_WR[en] = window.MC_REAL_WR[en] || {};
         if (!REAL[en + '|' + champ]) window.MC_REAL_WR[en][champ] = Math.round((100 - wr) * 10) / 10;
@@ -192,9 +226,7 @@
         out.push({ a: champ, b: en, da: da, db: mirrorDiff(da), win: win, fwd: true });
       });
     }
-    Object.keys(WR).forEach(function (c) { ingest(c, WR[c]); });
-    var ext = window.MC_WR_TABLES || {};
-    Object.keys(ext).forEach(function (c) { ingest(c, ext[c]); });
+    Object.keys(ALL).forEach(function (c) { ingest(c, ALL[c]); });
     return out;
   }
   // eager pass so the built-in MC_REAL_WR numbers exist synchronously at load

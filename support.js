@@ -161,6 +161,7 @@
     const hostEl = doc.createElement("div");
     hostEl.id = "dc-root";
     dc.replaceWith(hostEl);
+    doc.body.classList.add("mc-booted"); // hides the static boot shell in MatchupCoach.dc.html
     if (!parsed.preview) {
       const s = doc.createElement("style");
       s.textContent = FULL_PAGE_CSS;

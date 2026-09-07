@@ -13,11 +13,71 @@
    already say Viego wins, so colour now matches text.
 
    Own 250ms×40 retry loop (outlasts the headsup + window-labels 6s loops) so it has the last word
-   on these cells. Stage indices: 0 L1,1 L2,2 L3,3 L4-5,4 L6,5 First-Item(protected),6 2+items. */
+   on these cells. Stage indices: 0 L1,1 L2,2 L3,3 L4-5,4 L6,5 First-Item(protected),6 2+items.
+
+   ABILITY-NAME CAPITALS (2026-09-07). _jg-headsup-fixes.js builds the L1/L2/L3 and L6 why-texts by
+   splicing its threat/plan/tool phrases into sentence frames, and lower-cases the first letter of
+   any phrase that lands mid-sentence (after ": ", " — ", ", while ", ", but "). That is right for
+   "Stand behind your camp" and wrong for "Sonic Wave" — 1,490 cells read ": sonic Wave re-cast",
+   ", but certain Death picks", ": q stun, W reset bite". The phrase table lives in that file's
+   closure, so the repair is here: NAMES lists every ability or champion-owned proper noun that
+   opens one of those phrases (each checked against champ-data/_kits/*.json, Data Dragon 16.15.1),
+   and the pass restores the capital only where the exact lower-cased form follows one of the four
+   joins. Single words in NAMES are ones with no everyday sense ("Terrify", "Cocoon"); anything
+   that could be an ordinary word ("Counter", "Blood", "Void") is listed with its second word so
+   ", but certain fights" in hand-written text is never touched. Three entries carry the word that
+   follows the name because the name alone is an everyday word ("Despair tank", "Rampage spam",
+   "Consume chunks"). Idempotent by construction.
+
+   STALE NAMES in the same phrase table: "True Grit" (Graves' pre-rework passive — the armour is
+   Quickdraw's), "Burnout" and "Twin Bite" (Shyvana pre-rework W and Q; the kit carries Inferno Aegis
+   and Emberstrike). tools/jg-deslop.js already renames them in the base files; STALE does the same
+   for the text that layer builds, so the app never shows a name Data Dragon does not know. */
 (function () {
   var FIX = {
     "Vi": { "Viego": { "1": "Respect the Skirmish", "2": "Respect — Path Opposite", "3": "Respect — Path Opposite", "6": "Danger — Outscaled Late" } }
   };
+  var NAMES = [
+    "Above and Below", "Alpha Strike", "Arctic Assault", "Bandage Toss", "Battle Roar", "Black Shield",
+    "Blazing Stampede", "Blood Frenzy", "Blood Hunt", "Bramble Smash", "Brushmaker", "Cataclysm",
+    "Cease and Desist", "Certain Death", "Chomp", "Chronobreak", "Cocoon", "Collateral Damage",
+    "Consume chunks", "Counter Strike", "Crescent Guard", "Crescent Strike", "Crushing Blow",
+    "Curse of the Sad Mummy", "Daisy", "Dance of Arrows", "Dark Binding", "Deceive", "Defensive Ball Curl",
+    "Demon Shade", "Denting Blows", "Despair tank", "Dragon Strike", "Dragon's Descent", "Drunken Rage",
+    "Duskbringer", "E", "Elastic Slingshot", "Eternal Hunger", "Explosive Cask", "Frozen Domain",
+    "Glacial Prison", "Grandmaster's Might", "Highlander", "Impale", "Infinite Duress", "Lamb's Respite",
+    "Lay Waste", "Let's Bounce", "Lilting Lullaby", "Meditate", "Moonfall", "Nature's Grasp",
+    "Onslaught of Shadows", "Pale Cascade", "Parallel Convergence", "Paranoia", "Permafrost", "Phase Dive",
+    "Pillar", "Powerball", "Primal Howl", "Purgatory", "Pyroclasm", "Q", "Quickdraw", "Ragnarok", "Rake",
+    "Rampage spam", "Reaping Slash", "Requiem", "Seismic Bastion", "Shadow Assault", "Shattered Earth",
+    "Sky Splitter", "Smoke Screen", "Soaring Slam", "Sonic Wave", "Soul Shackles", "Spectral Maw",
+    "Spirit of Dread", "Stranglethorns", "Subjugate", "Supreme Display of Talent", "Terrashape", "Terrify",
+    "Thrill of the Hunt", "Timewinder", "Triggerseed", "Twisted Advance", "Umbra Blades", "Umbral Trespass",
+    "Undertow", "Unspeakable Horror", "Vicious Strikes", "Void Rush", "Void Spike", "Void Surge", "W",
+    "Wall of Pain", "Watch Out", "Weaver's Wall", "Wind Becomes Lightning", "Wolf's Frenzy", "Wuju Style"
+  ];
+  // [what the headsup layer writes, what the kit calls it] — first the one phrase that would
+  // otherwise read "Quickdraw (E) Quickdraw armor", then the bare names (either capital).
+  var STALE = [
+    [/Quickdraw \(E\) [Tt]rue Grit armor/g, "Quickdraw (E) armor"],
+    [/[Tt]rue Grit/g, "Quickdraw"],
+    [/[Bb]urnout/g, "Inferno Aegis"],
+    [/[Tt]win Bite/g, "Emberstrike"]
+  ];
+  // one regex: (join)(lower-cased name)(not followed by another letter, so "e" never matches "each")
+  var esc = function (s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); };
+  var LOW = {}, alts = [];
+  for (var n = 0; n < NAMES.length; n++) {
+    var low = NAMES[n].charAt(0).toLowerCase() + NAMES[n].slice(1);
+    LOW[low] = NAMES[n]; alts.push(esc(low));
+  }
+  var RE = new RegExp("(: |, while |, but | — )(" + alts.join("|") + ")(?![A-Za-z])", "g");
+  function recap(s) {
+    if (typeof s !== "string") return s;
+    s = s.replace(RE, function (m, join, low) { return join + LOW[low]; });
+    for (var i = 0; i < STALE.length; i++) s = s.replace(STALE[i][0], STALE[i][1]);
+    return s;
+  }
   function apply() {
     var DB = window.JG_DB; if (!DB) return;
     for (var you in FIX) {
@@ -25,6 +85,17 @@
       for (var ek in mm) {
         var rep = en[ek]; if (!rep || !rep.stages) continue; var idxs = mm[ek];
         for (var k in idxs) { var i = +k; if (rep.stages[i] && rep.stages[i].adv !== idxs[k]) rep.stages[i].adv = idxs[k]; }
+      }
+    }
+    for (var a in DB) {
+      var row = DB[a]; if (!row) continue;
+      for (var b in row) {
+        var st = row[b] && row[b].stages; if (!st) continue;
+        for (var j = 0; j < st.length; j++) {
+          if (!st[j] || typeof st[j].why !== "string") continue;
+          var fixed = recap(st[j].why);
+          if (fixed !== st[j].why) st[j].why = fixed;
+        }
       }
     }
   }

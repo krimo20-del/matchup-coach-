@@ -168,6 +168,80 @@ const SWAPS = [
   ['dash parameters', 'dash'],
   ['escape parameters', 'escape tools'],
   ['parameters', 'tools'],
+
+  // ---- sixth pass (2026-09-07, pre-launch audit): the item-spike and level-6 templates ----
+  // Measured before this pass: "fight geometries" 1,150, "termination loop" 993, "entirely
+  // automated" 811 (+49 "highly automated", same slot), "horizontal resets" 725,
+  // "hyper-velocity" 145, "target models" 110. Each is one template slot repeated once per
+  // matchup, so the replacement is chosen from the sentence it sits in, not the phrase alone.
+  //
+  // "dictates fight geometries through guaranteed initiation" — the sentence means you decide
+  // how the fight is shaped. "warps standard teamfight geometries" is the Kayn form line.
+  ['completely warps standard teamfight geometries', 'completely changes the shape of a teamfight'],
+  ['who dictates fight geometries through', 'who dictates the shape of every fight through'],
+  ['that dictates fight geometries through', 'that dictates the shape of every fight through'],
+  ['dictates fight geometries', 'dictates the shape of every fight'],
+  ['dictate fight geometries', 'dictate the shape of every fight'],
+  ['dictates fight geometry', 'dictates the shape of a fight'],
+  ['dictate fight geometry', 'dictate the shape of a fight'],
+  ['teamfight geometries', 'teamfight positioning'],
+  ['fight geometries', 'fight positioning'],
+  ['fight geometry', 'fight positioning'],
+
+  // "burst them out of their lane boundary for an instant termination loop" — it is a kill.
+  // Four hand-written rows quote the phrase ('termination loop') to argue with the template;
+  // they get the same plain word.
+  ["as an 'instant termination loop'", 'as an instant kill'],
+  ["a unilateral 'termination loop'", 'a guaranteed kill'],
+  ['for an instant termination loop', 'for a clean kill'],
+  ['the automatic termination loop', 'the automatic kill'],
+  ['termination loops', 'kills'],
+  ['termination loop', 'kill'],
+
+  // "Your camp clearing loops become entirely automated, allowing you to instantly clear out
+  // both sides" — the first-item spike line on 762 pages. The same slot also reads "highly
+  // automated" (49) and "incredibly fast" (557); all three are the same sentence.
+  ['Your camp clearing loops become entirely automated, allowing you to', 'Your clear is on autopilot, letting you'],
+  ['Your clear velocity becomes entirely automated, allowing you to', 'Your clear is on autopilot, letting you'],
+  ['Your camp clearing loops become highly automated, allowing you to', 'Your clear is on autopilot, letting you'],
+  ['Your camp clearing loops become incredibly fast, allowing you to', 'Your clear gets very fast, letting you'],
+  ['camp clearing loops', 'clear'],
+  ['entirely automated', 'on autopilot'],
+  ['highly automated', 'on autopilot'],
+
+  // "Prioritize rapid champion kills over executing slow, farm-heavy horizontal resets" — the
+  // contrast is kills versus farming, and the jungle word for that farming is a full clear
+  // (the same word "horizontal clears" already maps to above). Never a lane reset: every
+  // occurrence sits in the levels 4-5 macro row about your own camps.
+  ['farmheavy horizontal resets', 'farm-heavy full clears'],
+  ['horizontal resets', 'full clears'],
+  ['horizontal reset', 'full clear'],
+
+  // "melt camps at hyper-velocity, allowing you to" — fast. The one sentence that already
+  // says "rapidly" two words later gets "in seconds" so it does not say fast twice.
+  ['at hyper-velocity, letting you clear sides rapidly', 'in seconds, letting you clear sides rapidly'],
+  ['at hyper-velocity, allowing you to', 'fast, letting you'],
+  ['at hyper-velocity', 'fast'],
+  ['hyper-velocity', 'fast'],
+
+  // "blind target models before executing a dash-burst cycle" — Graves' Smoke Screen line,
+  // and Morgana's "shred values against target models". They are targets.
+  ['completely blind target models before executing a dash-burst cycle', 'blind your target before you dash in and burst them'],
+  ['shred values against target models', 'shred against your targets'],
+  ['target models', 'targets'],
+  ['target model', 'target'],
+
+  // Nunu's level-3 row: "Tempo Access to Snowball Barrage (E)" — "Tempo" is a stray slot.
+  ['Tempo Access to', 'Access to'],
+
+  // compounds the generator glued together with the hyphen missing
+  ['lowpercentage', 'low-percentage'],
+  ['highimpact', 'high-impact'],
+  ['shortrange', 'short-range'],
+  ['midclear', 'mid-clear'],
+  ['highvalue', 'high-value'],
+  ['farmheavy', 'farm-heavy'],
+  ['mapwide', 'map-wide'],
 ];
 
 function applySwaps(s) {
@@ -197,9 +271,9 @@ function applySwaps(s) {
   // against the pre-deslop commit, so this is in the generated source, not something the
   // swaps above introduced. The rule needs a LETTER on both sides: a real em-dash (—) and
   // a spaced hyphen used as punctuation ("Level 1 - Clear") both have a space before the
-  // hyphen and are left alone.
+  // hyphen and are left alone. A digit on the left is the same break ("6- camp", 55 times).
   const beforeHy = out;
-  out = out.replace(/([A-Za-z])- ([A-Za-z])/g, '$1-$2');
+  out = out.replace(/([A-Za-z0-9])- ([A-Za-z])/g, '$1-$2');
   if (out !== beforeHy) hits++;
 
   // A broken mail-merge substitution: the template inserted a possessive where the token

@@ -25,6 +25,12 @@ All 4 lanes: 0 diff inconsistencies, 0 phase-side contradictions. Allowed mirror
 ## Conventions
 - Fonts: Chakra Petch (headers) · Manrope (body). Dark UI: #0d0f16 bg / #11131c cards.
 - Ability colours: Q #46c6f5 · W #9b8cff · E #e8b84b · R #ff5d6c · AA/summoner #c7ccdb.
-- No paywall / upsell content. Beta: everything free, $2.99/month after launch, beta users get lifetime free access.
+- Plans (live): $1.99/mo one lane · $3.99/mo all lanes · $24.99/yr all lanes. The old note here
+  said "$2.99/month after launch, beta users get lifetime free access" — both are stale.
+  Lifetime is NO LONGER SOLD, but legacy member/founder/champ holders still exist and are
+  actively protected: the app mirrors a server repurchase guard so a lifetime founder cannot
+  buy a yearly plan and lose lifetime access, and server.js tracks them in founders.json.
+  Do not strip "lifetime" from that guard or from the Terms/Refund clauses that define what
+  those customers bought.
 - Preview server: matchupcoach port 8123. QA bypass: set `mc_session` in localStorage.
 - Google sign-in: client ID loaded from server `/config` or `window.MC_GOOGLE_CLIENT_ID` fallback.

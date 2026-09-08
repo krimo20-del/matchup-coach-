@@ -8000,8 +8000,10 @@ class Component extends DCLogic {
         // samples rather than a contradiction. The badge itself is left alone —
         // the verdict prose on the page is written to it.
         var band = function (w) { return w >= 52.5 ? 'FAVOURED' : w >= 48.5 ? 'EVEN' : w >= 45.5 ? 'TRICKY' : 'HARD'; };
-        var badgeTok = String(MU.difficulty || '').split(' ')[0].toUpperCase();
-        var badgeBand = /^(FAVOURED|EVEN|TRICKY|HARD)$/.test(badgeTok) ? badgeTok : (bundled != null ? band(bundled) : null);
+        // The badge text is 'EVEN MATCHUP' / 'FAVOURED MATCHUP' here and 'TRICKY FOR X' /
+        // 'X FAVOURED' on the chips, so look for the band word anywhere in it.
+        var badgeTok = /\b(FAVOURED|EVEN|TRICKY|HARD)\b/.exec(String(MU.difficulty || '').toUpperCase());
+        var badgeBand = badgeTok ? badgeTok[1] : (bundled != null ? band(bundled) : null);
         var note = (isLive && bundled != null && badgeBand && band(live) !== badgeBand) ? ('July sample: ' + bundled.toFixed(1) + '% · badge based on the sample') : '';
         return { wrA: wrA + '%', wrB: wrB + '%', wrLabel: isLive ? 'WIN RATE · LOLALYTICS LIVE' : (isReal ? 'WIN RATE · LOLALYTICS' : 'EST. WIN RATE'), wrATone: base >= 50.5 ? '#3ddc97' : base <= 49.5 ? '#ff5d6c' : '#e8b84b', wrBTone: base >= 50.5 ? '#ff5d6c' : base <= 49.5 ? '#3ddc97' : '#e8b84b', wrAPct: Math.round(base),
           wrSample: limited ? ('⚠ limited sample · ' + games + ' games') : '', wrSampleDisp: limited ? 'block' : 'none',

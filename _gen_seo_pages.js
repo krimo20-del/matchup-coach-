@@ -574,6 +574,17 @@ for (const L of LANES) {
       const nA = win ? win.filter(x => x === aName).length : 0;
       const nB = win ? win.filter(x => x === bName).length : 0;
       const evens = win ? 7 - nA - nB : 0;
+      // Pages with no pooled number (cls null below) read the 7 windows instead.
+      // One shape drives the verdict, the who-wins answer and the skill-matchup
+      // answer so the three cannot disagree about the same page: 'tempo' = one
+      // side holds two or more windows than the other, 'coinflip' = four or
+      // more windows are even and one side edges the rest by one, 'none' =
+      // every window is a skill check, 'skill' = anything else, '' = no
+      // usable window data (no array, or the mirrors disagree).
+      const winLead = nA > nB ? aName : nB > nA ? bName : '';
+      const winShape = !win ? '' : nA === 0 && nB === 0 ? 'none' : Math.abs(nA - nB) >= 2 ? 'tempo' : evens >= 4 && winLead ? 'coinflip' : 'skill';
+      const windowsClaim = (below = '') => `${nA > nB ? `${aName}'s plan${below} claims ${nA}` : `${bName} pressures ${nB}`} of the 7 stage windows`;
+      const coinflipNote = `${evens} of the 7 windows are a coin flip and ${winLead} edges the rest ${Math.max(nA, nB)}–${Math.min(nA, nB)}`;
 
       // ---- ONE classification (favourCls above) drives verdict, skill-matchup
       // answer and counter answer, so no page can contradict itself.
@@ -608,14 +619,12 @@ for (const L of LANES) {
           ? `Statistically even (${wr}% win rate) — but the tempo isn't: ${planNote}. Whoever converts their windows wins.`
           : `A genuine skill matchup — ${wr}% win rate ${over}, decided window to window rather than at champion select.`;
       } else {
-        verdict = win
-          ? (noWindows
-            ? 'A genuine skill matchup — every window is a skill check.'
-            : Math.abs(nA - nB) >= 2
-            ? `${nA > nB ? aName : bName} has the tempo edge — ${nA > nB ? `${aName}'s plan claims ${nA}` : `${bName} pressures ${nB}`} of the 7 stage windows.`
-            : (evens >= 4
-              ? `Mostly even — ${evens} of the 7 windows are a coin flip; the decisive ${Math.max(nA, nB) === 1 ? 'window belongs' : 'windows belong'} to ${nA >= nB ? aName : bName}.`
-              : `A genuine skill matchup — the favour swings window to window.`))
+        // No pooled number: the windows carry the verdict, on the same shape
+        // the who-wins and skill-matchup answers below read.
+        verdict = winShape === 'none' ? 'A genuine skill matchup — every window is a skill check.'
+          : winShape === 'tempo' ? `${winLead} has the tempo edge — ${windowsClaim()}.`
+          : winShape === 'coinflip' ? `Mostly even — ${coinflipNote}; execution decides it.`
+          : winShape === 'skill' ? 'A genuine skill matchup — the favour swings window to window.'
           : `No Emerald+ win-rate sample for ${aName} vs ${bName} on this patch — play it as a skill matchup and win the windows in the plan below.`;
       }
 
@@ -649,10 +658,11 @@ for (const L of LANES) {
         : cls === 'even' ? `Nobody on paper — a ${wr}% win rate ${over} makes this a coin flip decided by play, not champion select.`
         : cls === 'edgeB' ? `${bName}, slightly — ${aName} wins ${wr}% of ${gamesTxt} games; winnable with the right plan.`
         : cls === 'counterB' ? `${bName} — ${aName} wins only ${wr}% of ${gamesTxt} games, so ${aName} plays this as the disadvantaged side.`
-        // No pooled number: say so, then point at the windows when the two
+        // No pooled number: say so, then answer from the windows when the two
         // sides' plans agree on a leader (the verdict cites the same count).
-        : `No sample yet — ${aName} vs ${bName} has no Emerald+ win-rate data for this patch; ${win && Math.abs(nA - nB) >= 2
-          ? `${nA > nB ? `${aName}'s plan below claims ${nA}` : `${bName} pressures ${nB}`} of the 7 stage windows, so ${nA > nB ? aName : bName} sets the tempo`
+        : `No sample yet — ${aName} vs ${bName} has no Emerald+ win-rate data for this patch; ${winShape === 'tempo'
+          ? `${windowsClaim(' below')}, so ${winLead} sets the tempo`
+          : winShape === 'coinflip' ? `${coinflipNote}, so treat it as a skill matchup and play the plan below`
           : 'treat it as a skill matchup and play the plan below'}.`;
       const skillAns = cls === 'even'
         ? `Yes — ${aName} vs ${bName} is a genuine skill matchup: ${wr}% win rate, and the favour swings window to window rather than being set at champion select.`
@@ -660,11 +670,11 @@ for (const L of LANES) {
         ? `Mostly — ${cls === 'edgeA' ? aName : bName} has a small statistical edge (${cls === 'edgeA' ? wr : (Math.round((100 - wr) * 100) / 100)}% win rate), but execution decides this lane far more than the pick does.`
         : (cls === 'counterA' || cls === 'counterB')
         ? `Not really — ${cls === 'counterA' ? aName : bName} holds a real statistical advantage (${cls === 'counterA' ? wr : (Math.round((100 - wr) * 100) / 100)}% win rate), so ${cls === 'counterA' ? bName : aName} is the one working uphill.`
-        : (win
-          ? (nA === nB
-            ? `Yes — ${aName} vs ${bName} plays as a skill matchup: the favour swings window to window.`
-            : `Not exactly — ${nA > nB ? `${aName}'s game plan claims ${nA}` : `${bName} pressures ${nB}`} of the 7 stage windows, so one side sets the lane's tempo.`)
-          : '');
+        : winShape === 'tempo' ? `Not exactly — ${windowsClaim()}, so ${winLead} sets the lane's tempo.`
+        : winShape === 'coinflip' ? `Mostly — ${coinflipNote}, so execution decides far more than the pick does.`
+        : winShape === 'none' ? `Yes — every one of the 7 stage windows in ${aName} vs ${bName} is a skill check.`
+        : winShape === 'skill' ? `Yes — ${aName} vs ${bName} plays as a skill matchup: the favour swings window to window.`
+        : '';
       const counterAns = cls === 'counterA' ? `Statistically yes — ${aName} counters ${bName} in ${L.prose}, winning ${wr}% of ${gamesTxt} Emerald+ games.`
         : cls === 'edgeA' ? `Not a hard counter — ${aName} has a slight edge (${wr}% win rate), and play quality decides the rest.`
         : cls === 'even' ? `No hard counter either way — the ${aName} vs ${bName} win rate is ${wr}%, an even lane decided by execution.`

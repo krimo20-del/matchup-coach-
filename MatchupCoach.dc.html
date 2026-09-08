@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,17 +40,21 @@
 <script src="/support.js"></script>
 </head>
 <body>
-<!-- BOOT SHELL. The 800+ synchronous data scripts inside the template block the
+<!-- BOOT SHELL. The 800+ synchronous data scripts below it block the
      parser for 20-35s on a phone, and support.js hides the raw template itself, so
      without this the page is blank white until React mounts. It sits BEFORE those
      scripts so it paints at once, and it is hidden the moment boot() swaps the template
      for the app root (id dc-root): support.js adds body.mc-booted right there, and the
      :has() rule covers the same instant. The two hide rules are deliberately separate;
      one selector list would be thrown out whole by a browser that does not know :has().
-     No images, system fonts only. (Keep the literal template tag name out of this
-     comment: the runtime finds the template by its first occurrence in the source.) -->
+     No images, system fonts only. It also carries the only content a crawler that does
+     not run scripts can read: the H1, one positioning sentence, and 30 links (the five
+     lane hubs plus the 25 most-played matchups by pooled Emerald+ games). Those links
+     are the site's own guides, so the homepage passes its authority to guide pages
+     instead of to hubs and legal pages only. -->
 <style>
-  .mc-boot-shell { position:fixed; inset:0; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; background:#0d0f16; color:#f4efe8; font-family:'Chakra Petch','Manrope',system-ui,sans-serif; text-align:center; }
+  .mc-boot-shell { position:fixed; inset:0; z-index:9999; overflow-y:auto; display:flex; flex-direction:column; align-items:center; background:#0d0f16; color:#f4efe8; font-family:'Chakra Petch','Manrope',system-ui,sans-serif; text-align:center; }
+  .mc-boot-shell .mc-boot-inner { margin:auto; display:flex; flex-direction:column; align-items:center; gap:14px; width:100%; max-width:820px; padding:34px 20px 46px; box-sizing:border-box; }
   .mc-boot-shell .mc-boot-logo { font-weight:700; font-size:26px; letter-spacing:0.4px; }
   .mc-boot-shell .mc-boot-logo b { color:#e8b84b; font-weight:700; }
   .mc-boot-shell .mc-boot-logo i { color:#3ddc97; font-style:normal; }
@@ -58,11 +62,67 @@
   .mc-boot-shell .mc-boot-bar { width:140px; height:3px; border-radius:99px; background:rgba(255,255,255,0.08); overflow:hidden; }
   .mc-boot-shell .mc-boot-bar span { display:block; width:40%; height:100%; border-radius:99px; background:linear-gradient(90deg,#e8b84b,#3ddc97); animation:mc-boot-slide 1.4s ease-in-out infinite; }
   @keyframes mc-boot-slide { 0% { transform:translateX(-100%); } 100% { transform:translateX(350%); } }
+  .mc-boot-shell h1 { margin:2px 0 0; font-size:22px; font-weight:700; line-height:1.32; color:#f4efe8; }
+  .mc-boot-shell .mc-boot-lede { margin:0; max-width:62ch; font-family:'Manrope',system-ui,sans-serif; font-size:13.5px; line-height:1.65; color:#a7adbe; }
+  .mc-boot-nav { width:100%; font-family:'Manrope',system-ui,sans-serif; }
+  .mc-boot-nav h2 { margin:20px 0 9px; font-size:11px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase; color:#8a90a2; }
+  .mc-boot-nav .mc-boot-links { display:flex; flex-wrap:wrap; justify-content:center; gap:7px; }
+  .mc-boot-nav a { padding:6px 11px; border-radius:999px; border:1px solid rgba(255,255,255,0.10); background:rgba(255,255,255,0.03); color:#cdd2dd; font-size:12.5px; text-decoration:none; }
+  .mc-boot-nav .mc-boot-lanes a { border-color:rgba(232,184,75,0.34); color:#f0cd72; font-weight:700; }
   body.mc-booted .mc-boot-shell { display:none !important; }
   body:has(#dc-root) .mc-boot-shell { display:none !important; }
+  /* helmet holds the data scripts and the font link; it now stays in the body
+     after boot instead of being carried off with the template, so keep the
+     whitespace between its 835 script tags from opening a line box. */
+  helmet { display:none; }
 </style>
-<div class="mc-boot-shell" aria-live="polite"><div class="mc-boot-logo">Matchup<b>Coach</b><i>.gg</i></div><div class="mc-boot-msg">Loading matchup data…</div><div class="mc-boot-bar"><span></span></div></div>
-<x-dc>
+<div class="mc-boot-shell">
+  <div class="mc-boot-inner">
+    <div class="mc-boot-logo">Matchup<b>Coach</b><i>.gg</i></div>
+    <h1>League of Legends matchup guides for every lane</h1>
+    <p class="mc-boot-lede">Pick your champion and the enemy, and MatchupCoach gives you the plan for that exact lane — who is favoured at each level, the power spikes that decide it, and the build that answers them — across 11,851 researched matchups in top, jungle, mid, bot and support.</p>
+    <div class="mc-boot-msg" aria-live="polite">Loading matchup data…</div>
+    <div class="mc-boot-bar"><span></span></div>
+    <nav class="mc-boot-nav" aria-label="Matchup guides">
+      <h2>Guides by lane</h2>
+      <div class="mc-boot-links mc-boot-lanes">
+        <a href="/matchup/top/">Top lane</a>
+        <a href="/matchup/jungle/">Jungle</a>
+        <a href="/matchup/mid/">Mid lane</a>
+        <a href="/matchup/bot/">Bot lane (ADC)</a>
+        <a href="/matchup/support/">Support</a>
+      </div>
+      <h2>Most-played matchups</h2>
+      <div class="mc-boot-links">
+        <a href="/matchup/bot/caitlyn-vs-jhin/">Caitlyn vs Jhin</a>
+        <a href="/matchup/bot/caitlyn-vs-ezreal/">Caitlyn vs Ezreal</a>
+        <a href="/matchup/bot/ezreal-vs-kai-sa/">Ezreal vs Kai'Sa</a>
+        <a href="/matchup/bot/ezreal-vs-jhin/">Ezreal vs Jhin</a>
+        <a href="/matchup/bot/caitlyn-vs-jinx/">Caitlyn vs Jinx</a>
+        <a href="/matchup/bot/jhin-vs-kai-sa/">Jhin vs Kai'Sa</a>
+        <a href="/matchup/bot/caitlyn-vs-kai-sa/">Caitlyn vs Kai'Sa</a>
+        <a href="/matchup/bot/ashe-vs-caitlyn/">Ashe vs Caitlyn</a>
+        <a href="/matchup/bot/jhin-vs-jinx/">Jhin vs Jinx</a>
+        <a href="/matchup/bot/ashe-vs-jhin/">Ashe vs Jhin</a>
+        <a href="/matchup/bot/jinx-vs-kai-sa/">Jinx vs Kai'Sa</a>
+        <a href="/matchup/bot/ezreal-vs-jinx/">Ezreal vs Jinx</a>
+        <a href="/matchup/bot/ezreal-vs-lucian/">Ezreal vs Lucian</a>
+        <a href="/matchup/bot/ashe-vs-ezreal/">Ashe vs Ezreal</a>
+        <a href="/matchup/bot/caitlyn-vs-senna/">Caitlyn vs Senna</a>
+        <a href="/matchup/bot/jhin-vs-senna/">Jhin vs Senna</a>
+        <a href="/matchup/support/nautilus-vs-thresh/">Nautilus vs Thresh</a>
+        <a href="/matchup/bot/caitlyn-vs-lucian/">Caitlyn vs Lucian</a>
+        <a href="/matchup/bot/kai-sa-vs-lucian/">Kai'Sa vs Lucian</a>
+        <a href="/matchup/bot/jhin-vs-lucian/">Jhin vs Lucian</a>
+        <a href="/matchup/support/seraphine-vs-thresh/">Seraphine vs Thresh</a>
+        <a href="/matchup/bot/ezreal-vs-senna/">Ezreal vs Senna</a>
+        <a href="/matchup/bot/caitlyn-vs-miss-fortune/">Caitlyn vs Miss Fortune</a>
+        <a href="/matchup/bot/ashe-vs-jinx/">Ashe vs Jinx</a>
+        <a href="/matchup/bot/ashe-vs-kai-sa/">Ashe vs Kai'Sa</a>
+      </div>
+    </nav>
+  </div>
+</div>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1138,6 +1198,14 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
 <script src="./champ-data/_reddit-validated-fixes.js"></script>
 <script src="./champ-data/_slug-aliases.js"></script>
 </helmet>
+<!-- The app's markup ships inside this inert template: a crawler that does not run
+     scripts never reads its {{ }} placeholders as page text, so the boot shell above is
+     what it indexes instead. The script below moves the markup straight back into the
+     live DOM before anything looks for it. The x-dc tags stay INSIDE the template on
+     purpose: boot() re-reads this file's raw source and slices the template out between
+     them, and that raw copy is the only one that still has onClick / viewBox spelled in
+     camelCase — the DOM's own innerHTML lowercases every attribute. -->
+<template id="mc-app-tpl"><x-dc>
 <div style="min-height:{{ mainMinH }}; font-family:'Manrope',system-ui,sans-serif; color:#ece7e1; background:radial-gradient(1200px 640px at 50% -10%, rgba(232,184,75,0.13), transparent 60%), radial-gradient(900px 520px at 88% 2%, rgba(240,115,74,0.08), transparent 55%), radial-gradient(820px 520px at 8% 1%, rgba(70,198,245,0.05), transparent 55%), #0b0908; padding-bottom:64px;">
 
   <!-- ===== PAYMENT RESULT BANNER ===== -->
@@ -3748,7 +3816,13 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
     </div>
   </sc-if>
 </div>
-</x-dc>
+</x-dc></template>
+<script>
+  (function () {
+    var t = document.getElementById('mc-app-tpl');
+    t.parentNode.replaceChild(t.content, t);
+  })();
+</script>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = {

@@ -371,7 +371,7 @@ window.GEN_MID_CFGS_6 = [
   aheadTpl:"Ahead, weaponize the lies: zone {E} with root threat, fake roams that cost him plates either way, and crouch the river fights — fed Neeko is a horror film.",
   behindTpl:"Behind, lie harder: clone-cover your farm, hold the root for dives, and save R for their clump — one ambush resets any deficit Neeko respects.",
   spikeName:"Luden's",
-  runeReport:"Electrocute, Cheap Shot, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
+  runeReport:"Electrocute, Cheap Shot, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
   summReport:"Flash + Ignite into kill lanes (the root-bloom-ignite math is rude); Flash + TP when the matchup reads survival.",
   itemReport:"Start Doran's Ring + 2 pots. Luden's into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — cast it mid-Pop Blossom for maximum comedy.",
   jungleLine:"Root-on-arrival plus a clone that fakes the retreat lane — Neeko ganks convert absurdly; ping your jungler whenever E is banked and {E} is shoved.",
@@ -388,7 +388,7 @@ window.GEN_MID_CFGS_6 = [
     bootsVsAP:"Sorcerer's Shoes / Mercury's Treads",
     bootsVsAD:"Sorcerer's Shoes / Plated Steelcaps",
     spike:"Luden's + Shadowflame — root-bloom deletes squishies; the crouch deletes teams.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     yasuo:{ tldr:"Wind Wall eats your root and blooms, and his dashes find the real you fast — clone-feint his wall out FIRST, then root the dash-chain behind it.",

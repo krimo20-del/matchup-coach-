@@ -75,7 +75,7 @@ window.GEN_MID_CFGS_4 = [
   spikeName:"Luden's",
   runeReport:"Arcane Comet or First Strike, Manaflow Band, Transcendence, Scorch; secondary Inspiration — Biscuits + Cosmic Insight. First Strike funds the augment curve fastest.",
   summReport:"Flash + Teleport standard — the scaling thesis insurance. Cleanse into chain-CC pick comps that erase cast-time champions.",
-  itemReport:"Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — the stopwatch covers your cast windows.",
+  itemReport:"Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — the Zhonya’s covers your cast windows.",
   jungleLine:"W-on-arrival makes any mid gank a stun-kill, and your laser chunks the retreat — ping your jungler at 6: storm plus any CC is a guaranteed river win.",
   redditLine:"laser through the wave not around it, drop W before the dive not after, and respect the cast times — Viktor wins games his early game merely survives.",
   load:{
@@ -274,7 +274,7 @@ window.GEN_MID_CFGS_4 = [
   spikeName:"Luden's",
   runeReport:"Arcane Comet, Manaflow Band, Transcendence, Scorch; secondary Inspiration — Biscuits + Cosmic Insight. Comet plus W-slow is near-guaranteed chip.",
   summReport:"Flash + Teleport standard; Cleanse into hard-pick comps; Exhaust exists for the assassin lanes you cannot range away from.",
-  itemReport:"Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — buy the stopwatch at assassin-6, not after.",
+  itemReport:"Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — buy the Zhonya’s at assassin-6, not after.",
   jungleLine:"Your E is clean gank setup and your W slows the runback — but your real gift is R: tell your jungler to fight ANY skirmish; your barrage attends from base.",
   redditLine:"max range or no range, hold the stun like it's rent, and snipe the recalls — Xerath wins by making the lane a no-walk zone.",
   load:{

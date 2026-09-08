@@ -75,7 +75,7 @@ window.GEN_MID_CFGS_10 = [
   aheadTpl:"Ahead, hunt openly: zone {E} with dive threat, R-sweep the rivers, and feed the pack the map's mistakes.",
   behindTpl:"Behind, hunt quietly: bleed the farm, hold W for their dives, and let the pack's sustain rebuild the ledger.",
   spikeName:"first item",
-  runeReport:"Electrocute or First Strike, Sudden Impact, Eyeball Collection, Relentless Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
+  runeReport:"Electrocute or First Strike, Sudden Impact, Sudden Impact, Relentless Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
   summReport:"Flash + Ignite — the dive wants a closer; TP into the HARD column only.",
   itemReport:"Start Doran's Blade + pot. Eclipse or Profane-line first, Lucidity/Steelcaps, then Serylda's paths.",
   jungleLine:"Your W holds the gank target mid-dive and the R sweep clears the counter-gank fog — Naafiri-jungler dives are head-count arguments.",
@@ -92,7 +92,7 @@ window.GEN_MID_CFGS_10 = [
     bootsVsAP:"Mercury's Treads / Lucidity",
     bootsVsAD:"Plated Steelcaps / Lucidity",
     spike:"First lethality item — W dives plus the pack delete squishies.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Eyeball Collection","Relentless Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Sudden Impact","Relentless Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     cassiopeia:{ tldr:"Her W grounds the dive AND the dash — the pack arrives without you; farm bleeds, skip the dives, and roam for a living." },
@@ -175,7 +175,7 @@ window.GEN_MID_CFGS_10 = [
   aheadTpl:"Ahead, own the floor: zone {E} from hedges, root the answers, and R every wall fight — fed Qiyana makes geometry a banable offense.",
   behindTpl:"Behind, farm the elements: ice the dives, grass the resets, and wait for the pit fight where one R rewrites the ledger.",
   spikeName:"first item",
-  runeReport:"Electrocute or First Strike, Sudden Impact, Eyeball Collection, Relentless Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
+  runeReport:"Electrocute or First Strike, Sudden Impact, Sudden Impact, Relentless Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
   summReport:"Flash + Ignite — the string wants a signature. TP into the HARD column.",
   itemReport:"Start Doran's Blade + pot. Eclipse or Profane-line, Lucidity/Steelcaps, then Serylda's-Axiom paths.",
   jungleLine:"Ice-root on arrival plus an R that stuns the whole gank lane — Qiyana ganks near walls are pre-written verdicts.",
@@ -192,7 +192,7 @@ window.GEN_MID_CFGS_10 = [
     bootsVsAP:"Mercury's Treads / Lucidity",
     bootsVsAD:"Plated Steelcaps / Lucidity",
     spike:"First lethality item — element strings delete squishies near any wall.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Eyeball Collection","Relentless Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Sudden Impact","Relentless Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     lissandra:{ tldr:"Her root catches the stick-dash and her tomb laughs at the wall stun — the anti-Qiyana pick; poke from grass and win the map, not the lane." },
@@ -274,7 +274,7 @@ window.GEN_MID_CFGS_10 = [
   aheadTpl:"Ahead, monopolize: brawl {E} off every contact, steal the map's best button on cooldown, and flank fights with their own game plan.",
   behindTpl:"Behind, the shop stays open: farm chains, steal the fight-flipper, and let one borrowed teamfight reset the books.",
   spikeName:"first item",
-  runeReport:"Electrocute or Conqueror, Sudden Impact, Eyeball Collection, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
+  runeReport:"Electrocute or Conqueror, Sudden Impact, Sudden Impact, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
   summReport:"Flash + Ignite for kill lanes; Flash + TP when the steal menu suggests patience.",
   itemReport:"Start Doran's Ring or Shield + pots. Riftmaker into Mercs/Sorcerer's, then Zhonya's and Cosmic Drive — HP scales the whirls AND the steals.",
   jungleLine:"Chain-on-arrival holds any gank target, and a stolen enemy-jungler ult mid-river is the rudest 2v2 swing in the game.",
@@ -291,7 +291,7 @@ window.GEN_MID_CFGS_10 = [
     bootsVsAP:"Mercury's Treads",
     bootsVsAD:"Plated Steelcaps",
     spike:"Riftmaker — the brawl heals through everything and the steals hit like rent.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Eyeball Collection","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Sudden Impact","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     vex:{ tldr:"Your E feeds her fear and her R steals terribly — the worst trade agreement in mid; brawl on foot post-pulse and shop elsewhere." },
@@ -375,7 +375,7 @@ window.GEN_MID_CFGS_10 = [
   aheadTpl:"Ahead, raise the rent: bleed {E} off every contact, crash-and-parkour the rivers, and R the side lanes into receivership.",
   behindTpl:"Behind, rake from range and commute — Talon deficits are lane-shaped; the map still pays parkour rates.",
   spikeName:"first item",
-  runeReport:"Electrocute or First Strike, Sudden Impact, Eyeball Collection, Relentless Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
+  runeReport:"Electrocute or First Strike, Sudden Impact, Sudden Impact, Relentless Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
   summReport:"Flash + Ignite — the string wants a closer; TP only into the HARD column.",
   itemReport:"Start Doran's Blade + pot. Profane Hydra or Eclipse, Lucidity, then Serylda's-Axiom paths. Lethality is the language.",
   jungleLine:"Parkour to counter-gank angles no ward covers — Talon-jungler river fights start 2v1 because you arrived through the wall.",
@@ -392,7 +392,7 @@ window.GEN_MID_CFGS_10 = [
     bootsVsAP:"Mercury's Treads / Lucidity",
     bootsVsAD:"Plated Steelcaps / Lucidity",
     spike:"First lethality item — the full string one-rotations squishies.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Eyeball Collection","Relentless Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Sudden Impact","Relentless Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     galio:{ tldr:"MR, a dash-catching taunt, and AoE that ruins your melee window — the anti-Talon statue; rake from range and pay the side lanes instead." },
@@ -430,7 +430,7 @@ window.GEN_MID_CFGS_10 = [
     burst:{
       tldr:"His burst is magic, yours is paperwork — shadow-dodge the rotation and serve the mark in the silence after.",
       breakdown:"Your W doubles as the combo-dodge his aim can't pre-read: swap out of the setup, scissor the gap, and R the cooldown silence. Zhonya's-class answers are his only appeal — track them like summoners.",
-      dos:["W-swap out of his setup spell","Scissor the post-combo silence","Track his stopwatch before every R"],
+      dos:["W-swap out of his setup spell","Scissor the post-combo silence","Track his Zhonya’s before every R"],
       donts:["R into a banked Zhonya's","Trade inside his loaded window","Spend both shadows entering"],
       win:"Dodge the scheduled burst and administer the unscheduled one."
     },
@@ -459,7 +459,7 @@ window.GEN_MID_CFGS_10 = [
   },
   winS:"His answer is spent — mark the window and finish the paperwork.",
   tradeGood:"W wide, E the slow, Q the scissor from two angles — half a bar of geometry he answered by standing still wrong.",
-  tradeBad:"R-ing into a banked stopwatch or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
+  tradeBad:"R-ing into a banked Zhonya’s or held CC — the mark schedules YOUR death three seconds out when the answer was visible.",
   waveBest:"a scissor-thinned slow push that holds the chip war at your range — crash only when the roam or the mark is scheduled.",
   waveWorst:"a frozen wave at his tower with both shadows down — an energy assassin doing manual labor in ward range.",
   early:"Win the chip war — scissors out-trade every mage contact and the energy refunds keep the meter running. 60% is the magic number.",
@@ -474,7 +474,7 @@ window.GEN_MID_CFGS_10 = [
   aheadTpl:"Ahead, audit the map: scissor {E} off every contact, mark the thresholds, and roam the crashes — fed Zed makes health bars legal documents.",
   behindTpl:"Behind, chip from geometry: scissor-farm, bank the swap for dives, and serve the one mark that resets the ledger.",
   spikeName:"first item",
-  runeReport:"Electrocute or First Strike, Sudden Impact, Eyeball Collection, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
+  runeReport:"Electrocute or First Strike, Sudden Impact, Sudden Impact, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
   summReport:"Flash + Ignite — the mark wants a cosigner. TP into the Lissandra-Vex column you should have banned.",
   itemReport:"Start Doran's Blade + pot. Profane Hydra or Eclipse, Lucidity, then Serylda's and Axiom Arc — the ult-haste loops the subpoenas.",
   jungleLine:"Your W-E slow is gank setup and your R follows their Flash — Zed-jungler dives convert at signature rates; ping the 60% bars.",
@@ -491,7 +491,7 @@ window.GEN_MID_CFGS_10 = [
     bootsVsAP:"Mercury's Treads / Lucidity",
     bootsVsAD:"Plated Steelcaps / Lucidity",
     spike:"First lethality item — R-strings delete squishies through their pots.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Eyeball Collection","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Sudden Impact","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     lissandra:{ tldr:"She self-tombs your mark and roots the body that delivered it — the textbook counter; chip from max geometry and mark literally anyone else." },

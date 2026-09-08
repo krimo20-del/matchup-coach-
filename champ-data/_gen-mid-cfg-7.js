@@ -273,7 +273,7 @@ window.GEN_MID_CFGS_7 = [
   aheadTpl:"Ahead, gloom harder: zone {E} with marked-rotation threat, R every skirmish his team starts, and reset through the kills — fed Vex makes mobility a typo.",
   behindTpl:"Behind, the passive still works: farm marked clears, pulse their dives, and R-execute the overconfident — Vex from behind is still the worst news their assassin owns.",
   spikeName:"Luden's",
-  runeReport:"Electrocute, Cheap Shot, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
+  runeReport:"Electrocute, Cheap Shot, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
   summReport:"Flash + Ignite into dive comps you intend to counter-kill; Flash + TP into poke wars where the lane is a stall.",
   itemReport:"Start Doran's Ring + 2 pots. Luden's into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs the burst that ignores fear math.",
   jungleLine:"Your fear pulse turns 2v2s — the enemy jungler's gap-close feeds Doom and dies afraid. Ping for ganks whenever the glow is banked.",
@@ -290,7 +290,7 @@ window.GEN_MID_CFGS_7 = [
     bootsVsAP:"Sorcerer's Shoes / Mercury's Treads",
     bootsVsAD:"Sorcerer's Shoes / Plated Steelcaps",
     spike:"Luden's + Shadowflame — marked rotations chunk half bars and the R resets clean up.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     syndra:{ tldr:"No dashes to feed you and range you can't argue with — the anti-Vex mage. Dodge the QE line, farm marked clears, and win at skirmishes instead." },
@@ -372,9 +372,9 @@ window.GEN_MID_CFGS_7 = [
   aheadTpl:"Ahead, haunt the fog: bubble {E}'s every path, one-shot the dreams, and loot the map's panic — fed Zoe makes vision score a survival stat.",
   behindTpl:"Behind, the lottery still runs: farm flicks, bank bubbles for dives, and pick the overextended — one dream-shot resets any deficit Zoe acknowledges.",
   spikeName:"Luden's",
-  runeReport:"Electrocute, Cheap Shot, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence (Scorch alt).",
+  runeReport:"Electrocute, Cheap Shot, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence (Scorch alt).",
   summReport:"Flash + Ignite or Flash + TP — and remember you'll loot half a dozen more summoners off W; spend the stolen Flashes rudely.",
-  itemReport:"Start Doran's Ring + 2 pots. Luden's into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — the stopwatch covers your R return spot.",
+  itemReport:"Start Doran's Ring + 2 pots. Luden's into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — the Zhonya’s covers your R return spot.",
   jungleLine:"A landed bubble is the easiest gank in League — sleep, point, collect. Bubble the river entry as your jungler paths and the kill pre-books itself.",
   redditLine:"distance is damage, the bubble is both your lives, and loot everything — Zoe wins by making the map dream at the worst possible times.",
   load:{
@@ -389,7 +389,7 @@ window.GEN_MID_CFGS_7 = [
     bootsVsAP:"Sorcerer's Shoes / Mercury's Treads",
     bootsVsAD:"Sorcerer's Shoes / Plated Steelcaps",
     spike:"Luden's + Shadowflame — sleep into max-range Q one-shots squishies.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     yasuo:{ tldr:"Wind Wall eats the bubble AND the Q — the full kit. Bait the wall with a short flick, bubble behind his dash-chain, and accept the farm lane until he miscounts.",

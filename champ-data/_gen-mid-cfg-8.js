@@ -74,7 +74,7 @@ window.GEN_MID_CFGS_8 = [
   aheadTpl:"Ahead, erase the lane: shroud every contact, all-in the whiffs, and roam with R banked — fed Akali turns mid into a no-cast zone for {E}.",
   behindTpl:"Behind, the smoke still works: Q-farm, shroud the dives, and wait for the teamfight where one R deletes their carry anyway.",
   spikeName:"first item",
-  runeReport:"Electrocute or Conqueror, Sudden Impact, Eyeball Collection, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
+  runeReport:"Electrocute or Conqueror, Sudden Impact, Sudden Impact, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
   summReport:"Flash + Ignite — Akali lanes are kill scripts; TP only into the HARD column.",
   itemReport:"Start Doran's Shield or Ring + pots. Riftmaker or Stormsurge-line first, Sorcerer's/Mercs, then Zhonya's into burst, Rabadon's after.",
   jungleLine:"Your shroud turns 2v2s — the enemy jungler fights blind while yours doesn't. Shroud ON the fight, not behind it.",
@@ -91,7 +91,7 @@ window.GEN_MID_CFGS_8 = [
     bootsVsAP:"Mercury's Treads / Sorcerer's Shoes",
     bootsVsAD:"Plated Steelcaps / Sorcerer's Shoes",
     spike:"First item + 6 — shrouded windows become deletions.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Eyeball Collection","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Sudden Impact","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     lissandra:{ tldr:"Her W roots you in the shroud you trusted and her self-R laughs at your all-in — the anti-Akali pick; farm with Q range and win elsewhere." },
@@ -272,7 +272,7 @@ window.GEN_MID_CFGS_8 = [
   aheadTpl:"Ahead, phase harder: zone {E} with crescent threat, dive the river fights, and R every clump — fed Diana makes grouping illegal.",
   behindTpl:"Behind, shield-farm the arcs and hold R for their clump — one five-man Moonfall resets any scoreboard Diana acknowledges.",
   spikeName:"first item",
-  runeReport:"Electrocute or Conqueror, Sudden Impact, Eyeball Collection, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
+  runeReport:"Electrocute or Conqueror, Sudden Impact, Sudden Impact, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
   summReport:"Flash + Ignite for kill lanes; Flash + TP into the poke columns you must survive first.",
   itemReport:"Start Doran's Shield or Ring + pots. Stormsurge or Riftmaker line, Sorcerer's/Mercs, then Zhonya's and Rabadon's.",
   jungleLine:"Your R pull is the best clump-setup in mid — dive with your jungler and Moonfall the collapse; pre-6, mark-dash makes any gank stick.",
@@ -289,7 +289,7 @@ window.GEN_MID_CFGS_8 = [
     bootsVsAP:"Mercury's Treads / Sorcerer's",
     bootsVsAD:"Plated Steelcaps / Sorcerer's",
     spike:"First item + 6 — mark-dash phases become deletions with a pull attached.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Eyeball Collection","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Sudden Impact","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     syndra:{ tldr:"She out-ranges the crescent and her E stops the dash mid-flight — the anti-Diana mage; farm sweet spots, shield the QE, and all-in only off her cooldown gaps." },
@@ -371,7 +371,7 @@ window.GEN_MID_CFGS_8 = [
   aheadTpl:"Ahead, compound the tempo: string {E} off every contact, dive the rivers insured, and rewind the audits — fed Ekko makes time a one-way argument.",
   behindTpl:"Behind, phase quietly: Q-farm, W the dives, and hold R as the comeback button it literally is.",
   spikeName:"first item",
-  runeReport:"Electrocute or Conqueror, Sudden Impact, Eyeball Collection, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
+  runeReport:"Electrocute or Conqueror, Sudden Impact, Sudden Impact, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
   summReport:"Flash + Ignite standard — the string-plus-ignite math closes most mids; TP into the HARD column.",
   itemReport:"Start Doran's Shield or Ring + pots. Hextech Rocketbelt or Stormsurge line, Sorcerer's, then Zhonya's-Lich Bane paths.",
   jungleLine:"Pre-place W on the gank lane and the stun does the jungler's job — post-6 you can dive any counter-gank knowing the rewind votes last.",
@@ -388,7 +388,7 @@ window.GEN_MID_CFGS_8 = [
     bootsVsAP:"Mercury's Treads / Sorcerer's",
     bootsVsAD:"Plated Steelcaps / Sorcerer's",
     spike:"First item + 6 — strings delete half bars and the rewind erases rebuttals.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Eyeball Collection","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Sudden Impact","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     lissandra:{ tldr:"Her W roots the blink and her R freezes the rewind window — the anti-Ekko pick; string only off her cooldown gaps and rewind EARLY, not desperately." },

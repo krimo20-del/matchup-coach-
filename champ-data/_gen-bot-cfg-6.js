@@ -153,7 +153,7 @@ window.GEN_BOT_CFGS_6 = [
   aheadTpl:"Ahead, bill the map: iso-Q {E} off every wave, wall the dives, and Requiem the ledger on cooldown.",
   behindTpl:"Behind, the clock still loads: farm the aura, wall their engages, and let the global verdicts rebuild the books.",
   spikeName:"first item",
-  runeReport:"Dark Harvest or Comet, Cheap Shot, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
+  runeReport:"Dark Harvest or Comet, Cheap Shot, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
   summReport:"Flash + Heal or Flash + Exhaust — the passive is your real defensive summoner.",
   itemReport:"Start Doran's Ring + 2 pots. Liandry's or Blackfire first, Sorcerer's, then Rabadon's path — the aura scales with everything.",
   jungleLine:"Tell your jungler to fight everything — your Requiem attends every skirmish from bot lane; ping the health bars.",
@@ -170,7 +170,7 @@ window.GEN_BOT_CFGS_6 = [
     bootsVsAP:"Mercury's Treads / Sorcerer's",
     bootsVsAD:"Plated Steelcaps / Sorcerer's",
     spike:"First item + 6 — iso-Qs delete and the Requiem bills globally.",
-    runes:{ keystone:"Dark Harvest", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Dark Harvest", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     sivir:{ tldr:"Her shield eats the Requiem — yes, the whole global; fire it only after her E shows or bill someone else's lane." },
@@ -331,7 +331,7 @@ window.GEN_BOT_CFGS_6 = [
   aheadTpl:"Ahead, hold court: root {E}'s every formation, drain the river fights, and let the demon collect the verdicts.",
   behindTpl:"Behind, the bird waits: Q-farm, root the dives, and ascend defensively — Swain deficits drain away in one good fight.",
   spikeName:"first item",
-  runeReport:"Electrocute or Comet, Cheap Shot, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
+  runeReport:"Electrocute or Comet, Cheap Shot, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
   summReport:"Flash + Heal or Flash + Exhaust — the drain is your real second summoner.",
   itemReport:"Start Doran's Ring + 2 pots. Liandry's into Sorcerer's, then Rylai's-Zhonya's — HP is AP when the R scales survival.",
   jungleLine:"Root-on-arrival converts every bot gank — the E holds, the W pulls, and the jungler signs; ping the windows.",
@@ -348,7 +348,7 @@ window.GEN_BOT_CFGS_6 = [
     bootsVsAP:"Mercury's Treads / Sorcerer's",
     bootsVsAD:"Plated Steelcaps / Sorcerer's",
     spike:"Liandry's + Rylai's — the drain slows, burns, and out-lasts every duo.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     zeri:{ tldr:"The kite machine the drain can't catch — root the surge cooldown or root nothing; ascend only with her E confirmed down." },

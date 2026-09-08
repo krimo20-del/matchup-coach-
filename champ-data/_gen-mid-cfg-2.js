@@ -173,7 +173,7 @@ window.GEN_MID_CFGS_2 = [
   aheadTpl:"Ahead, hunt: claw into every river skirmish first, tomb the carry, and snowball picks — {E} farming under tower can't stop a roaming Lissandra.",
   behindTpl:"Behind, play warden: Q-farm safely, self-R their dives, and root the engage off your carries — Liss from behind is still the best anti-assassin in the game.",
   spikeName:"Malignance",
-  runeReport:"Electrocute, Cheap Shot, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence. Electrocute pays the root-shatter pattern instantly.",
+  runeReport:"Electrocute, Cheap Shot, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence. Electrocute pays the root-shatter pattern instantly.",
   summReport:"Flash + Teleport standard; Ignite into assassin lanes you intend to counter-kill — your tomb converts Ignite all-ins brutally.",
   itemReport:"Start Doran's Ring + 2 pots. Malignance rush into Sorcerer's, then Zhonya's and Rabadon's. The Malignance burn-field chains perfectly off both tombs.",
   jungleLine:"You are the best gank-setup mid in the game — W-root on arrival, tomb the Flash, claw to cut the runback. Tell your jungler to path mid early and farm the bounty.",
@@ -190,7 +190,7 @@ window.GEN_MID_CFGS_2 = [
     bootsVsAP:"Sorcerer's Shoes / Mercury's Treads",
     bootsVsAD:"Sorcerer's Shoes / Plated Steelcaps",
     spike:"Malignance + Zhonya's — tomb on a skirmish timer with a survival button behind it.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     zed:{ tldr:"The classic counter-pick — let him R you, self-tomb the mark, and root the body that appears behind you. He dies to his own aggression.",
@@ -378,7 +378,7 @@ window.GEN_MID_CFGS_2 = [
   spikeName:"Luden's",
   runeReport:"Arcane Comet or Phase Rush, Manaflow Band, Transcendence, Scorch; secondary Inspiration — Biscuits + Cosmic Insight. Comet rides the Q-W slow reliably.",
   summReport:"Flash + Teleport standard — the scaling control mage's insurance. Cleanse into hard-pick comps where one root means one Shockwave-less death.",
-  itemReport:"Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — buy the stopwatch the moment Zed hits 6.",
+  itemReport:"Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — buy the Zhonya’s the moment Zed hits 6.",
   jungleLine:"Protect-ball on your diving jungler is the best gank-assist buff in the game — shield, speed, and a travelling Shockwave. Pre-6, the W slow-field strands {E} for any collapse.",
   redditLine:"the ball is the champion and the robot is the mount — place it like it costs gold, shield like it's a summoner, and Shockwave clumps, not champions.",
   load:{
@@ -399,7 +399,7 @@ window.GEN_MID_CFGS_2 = [
     yasuo:{ tldr:"Wind Wall eats the ball mid-flight — move it AROUND the wall or hover it on yourself and let him dash into the Dissonance field.",
       dos:["Ball-on-self when his wall is up","W the ground his dash-chain crosses","Shockwave the EQ3 commit backward"] },
     zed:{ tldr:"The classic test: ball-on-self at 6, Zhonya's by 9, and Shockwave his R return spot — boring Ori beats brilliant Zed.",
-      dos:["Ball-on-self the moment he casts R","Shockwave his shadow-return spot","Rush the Zhonya's stopwatch at 6"] },
+      dos:["Ball-on-self the moment he casts R","Shockwave his shadow-return spot","Rush the Zhonya's Zhonya’s at 6"] },
     sylas:{ tldr:"He steals Shockwave and throws it back better in a brawl — hold yours until his is spent and never group ball-adjacent when he engages." }
   }
 }

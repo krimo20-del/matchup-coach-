@@ -158,7 +158,7 @@ window.CHAMP_CONFIGS_MID = Object.assign(window.CHAMP_CONFIGS_MID || {}, {
     ],
     isFlank: true,
     teamWinCon: 'You win fights by subpoena \u2014 mark the priority carry, swap through the peel, and let the death note argue with their items.',
-    teamLookFor: [{ label: 'Their carry under 60%', tone: '#ff5d6c' }, { label: 'Their stopwatch spent', tone: '#46c6f5' }, { label: 'Swap banked for the answer', tone: '#9b8cff' }, { label: 'Scissor angles open', tone: '#e8b84b' }],
+    teamLookFor: [{ label: 'Their carry under 60%', tone: '#ff5d6c' }, { label: 'Their Zhonya’s spent', tone: '#46c6f5' }, { label: 'Swap banked for the answer', tone: '#9b8cff' }, { label: 'Scissor angles open', tone: '#e8b84b' }],
     teamPositioning: ['Mark the math, not the montage.', 'Save the swap for their answer \u2014 always.', 'Scissor the chip war before the R war.', 'Track Zhonya\u2019s like a summoner spell.'],
     teamFlank: ['Shadow the flank angle pre-fight.', 'Mark the carry as their CC shows elsewhere.', 'E-Q the slow, autos through the pop.', 'Swap home through the shadow you parked.']
   }

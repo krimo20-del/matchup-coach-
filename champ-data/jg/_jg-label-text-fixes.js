@@ -15,7 +15,14 @@
    Own 250ms×40 retry loop (outlasts the headsup + window-labels 6s loops) so it has the last word
    on these cells. Stage indices: 0 L1,1 L2,2 L3,3 L4-5,4 L6,5 First-Item(protected),6 2+items.
 
-   ABILITY-NAME CAPITALS (2026-09-07). _jg-headsup-fixes.js builds the L1/L2/L3 and L6 why-texts by
+   ABILITY-NAME CAPITALS — now a second line of defence (2026-09-08). _jg-headsup-fixes.js has its
+   own LOWERABLE list and only lower-cases a spliced phrase whose first word is an ordinary one, so
+   it no longer emits ": sonic Wave" at any join. This pass is kept because it is idempotent, costs
+   nothing, and covers joins that layer does not use. The de-duplication rewrite added several new
+   joins (", and ", ". On top of that, ", ", which ") that the RE below deliberately does not list —
+   those are safe precisely because the headsup layer never lower-cases a name into them.
+
+   ORIGINAL NOTE. _jg-headsup-fixes.js builds the L1/L2/L3 and L6 why-texts by
    splicing its threat/plan/tool phrases into sentence frames, and lower-cases the first letter of
    any phrase that lands mid-sentence (after ": ", " — ", ", while ", ", but "). That is right for
    "Stand behind your camp" and wrong for "Sonic Wave" — 1,490 cells read ": sonic Wave re-cast",

@@ -74,7 +74,7 @@ window.GEN_MID_CFGS_9 = [
   aheadTpl:"Ahead, fish openly: zone {E} with string threat, shark every river, and pole the counterplay — fed Fizz makes the map an aquarium.",
   behindTpl:"Behind, fish quietly: W-farm, pole the dives, and wait for the one shark that resets the books.",
   spikeName:"first item",
-  runeReport:"Electrocute, Sudden Impact, Eyeball Collection, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
+  runeReport:"Electrocute, Sudden Impact, Sudden Impact, Ultimate Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
   summReport:"Flash + Ignite — Fizz lanes are kill scripts with a fish. TP only into Lissandra-Galio shaped problems.",
   itemReport:"Start Doran's Shield or Ring + pots. Stormsurge or Rocketbelt line, Sorcerer's, then Zhonya's-Rabadon paths.",
   jungleLine:"Shark-on-arrival is the cleanest dive setup in mid — R the target as your jungler commits and the knockup does the rest.",
@@ -91,7 +91,7 @@ window.GEN_MID_CFGS_9 = [
     bootsVsAP:"Mercury's Treads / Sorcerer's",
     bootsVsAD:"Plated Steelcaps / Sorcerer's",
     spike:"First item + 6 — shark-string deletes squishies from 70%.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Eyeball Collection","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Sudden Impact","Sudden Impact","Ultimate Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     lissandra:{ tldr:"Her W is point-blank, instant, and pole-proof timing-wise — the anti-Fizz pick; fish the farm, skip the dives, and shark only with jungle cover." },
@@ -171,7 +171,7 @@ window.GEN_MID_CFGS_9 = [
   aheadTpl:"Ahead, accelerate the clock: blink-trade {E}'s every gap, follow each roam instantly, and reach three items before the map adjusts.",
   behindTpl:"Behind, nothing changed: shield, farm, stall — Kassadin deficits expire at 16; protect the clock and stop donating.",
   spikeName:"Rod of Ages",
-  runeReport:"Fleet Footwork or First Strike, Presence of Mind, Legend: Tenacity... no — secondary Sorcery: Manaflow + Transcendence. Fleet funds the survival era.",
+  runeReport:"Fleet Footwork or First Strike, Presence of Mind, Legend: Haste... no — secondary Sorcery: Manaflow + Transcendence. Fleet funds the survival era.",
   summReport:"Flash + Teleport — the survival era demands both; Ignite Kassadin is a contradiction in terms.",
   itemReport:"Start Doran's Shield + pot. Rod of Ages into Seraph's, Sorcerer's/Mercs, then Zhonya's and Rabadon's — mana is stacks is power.",
   jungleLine:"Pre-6 you NEED jungle attention — ping the shield matchups honestly. Post-6 you need none: Riftwalk follows every roam {E} ever takes.",
@@ -188,7 +188,7 @@ window.GEN_MID_CFGS_9 = [
     bootsVsAP:"Mercury's Treads",
     bootsVsAD:"Plated Steelcaps / Sorcerer's",
     spike:"RoA + Seraph's — blink-strings start collecting the lane's unpaid debts.",
-    runes:{ keystone:"Fleet Footwork", primaryTree:"Precision", primary:["Presence of Mind","Legend: Tenacity","Last Stand"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Fleet Footwork", primaryTree:"Precision", primary:["Presence of Mind","Legend: Haste","Last Stand"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     cassiopeia:{ tldr:"Sustained DPS ignores your shield math and her grounds don't care about your blink — the foreclosure pick; farm scraps and pray the game goes 35 minutes." },
@@ -270,7 +270,7 @@ window.GEN_MID_CFGS_9 = [
   aheadTpl:"Ahead, chain it: zone {E} off daggers, lotus every skirmish, and reset through the map — fed Katarina is a weather event.",
   behindTpl:"Behind, dance quietly: bounce-farm, bank daggers at chokes, and wait for the one teamfight where resets erase ledgers.",
   spikeName:"first item",
-  runeReport:"Conqueror or Electrocute, Sudden Impact, Eyeball Collection, Relentless Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
+  runeReport:"Conqueror or Electrocute, Sudden Impact, Sudden Impact, Relentless Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
   summReport:"Flash + Ignite — the kill chain wants a lighter. TP belongs to the HARD column lanes only.",
   itemReport:"Start Doran's Shield or Blade + pots. Stormsurge or Nashor-AP lines, Sorcerer's, then Zhonya's-Rabadon's. Build for the reset, not the poke.",
   jungleLine:"Gank for HER: any CC your jungler lands is a full string plus lotus — ping the dagger-banked windows and watch the chain react.",
@@ -370,7 +370,7 @@ window.GEN_MID_CFGS_9 = [
   aheadTpl:"Ahead, sprint the window: chain {E} off every contact, roam with round-trip math, and end before two items dull the knife.",
   behindTpl:"Behind, poke the commute: W-return farm, chain their dives, and pick the overextended — LeBlanc from behind is still a flank nobody schedules.",
   spikeName:"first item",
-  runeReport:"Electrocute, Cheap Shot, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
+  runeReport:"Electrocute, Cheap Shot, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
   summReport:"Flash + Ignite — the chain wants a closer. TP only into Galio-Vex shaped sentences.",
   itemReport:"Start Doran's Ring + 2 pots. Stormsurge or Luden's, Sorcerer's, then Shadowflame and Rabadon's. Spend gold like the lead expires — it does.",
   jungleLine:"Chain-on-arrival holds the gank target for the full collapse — and your W return means you can engage ganks nobody else survives starting.",
@@ -387,7 +387,7 @@ window.GEN_MID_CFGS_9 = [
     bootsVsAP:"Mercury's Treads / Sorcerer's",
     bootsVsAD:"Plated Steelcaps / Sorcerer's",
     spike:"First item + 6 — Q-W-RW deletes squishies on a commute schedule.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     galio:{ tldr:"MR scaling, a taunt that catches dashes, and AoE your clone can't fool — the anti-LeBlanc statue; poke round-trips only and win a different lane with roams." },

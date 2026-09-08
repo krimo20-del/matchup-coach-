@@ -78,10 +78,10 @@ _supBase5({
   aheadTpl:"Ahead, harvest: X {E}'s duo off every threshold and cascade the resets into the map.",
   behindTpl:"Behind, fog the deficit: regenerate, fish patiently, and let one X chain reset the books.",
   spikeName:"first item",
-  runeReport:"Hail of Blades or Aftershock-less lethality lines: Sudden Impact, Eyeball Collection, Relentless Hunter; secondary Precision.",
+  runeReport:"Hail of Blades or Aftershock-less lethality lines: Sudden Impact, Sudden Impact, Relentless Hunter; secondary Precision.",
   itemReport:"World Atlas start. Profane-lethality lines, Mobility-Lucidity, then Serylda's paths — gold-share funds it.",
   redditLine:"fish from fog, X below the line, and reset where wards aren't — Pyke wins by sharing executions.",
-  load:{ sub:"r/pykemains", start:"World Atlas + potions", normalBack:"Serrated Dirk piece (≈800g)", antihealBack:"Executioner's piece vs sustain", antihealNote:"Anti-heal into their sustain.", firstItem:"Profane / Eclipse path", secondItem:"Serylda's path", boots:"Mobility / Lucidity", bootsVsAP:"Mercury's", bootsVsAD:"Steelcaps", spike:"First lethality item — chains delete and resets cascade.", runes:{ keystone:"Hail of Blades", primaryTree:"Domination", primary:["Sudden Impact","Eyeball Collection","Relentless Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] } },
+  load:{ sub:"r/pykemains", start:"World Atlas + potions", normalBack:"Serrated Dirk piece (≈800g)", antihealBack:"Executioner's piece vs sustain", antihealNote:"Anti-heal into their sustain.", firstItem:"Profane / Eclipse path", secondItem:"Serylda's path", boots:"Mobility / Lucidity", bootsVsAP:"Mercury's", bootsVsAD:"Steelcaps", spike:"First lethality item — chains delete and resets cascade.", runes:{ keystone:"Hail of Blades", primaryTree:"Domination", primary:["Sudden Impact","Sudden Impact","Relentless Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Adaptive Force","Adaptive Force","Health"] } },
   specials:{
     tahmkench:{ tldr:"His stomach un-executes the X mid-cast — force the devour with a feint dive, then harvest the cooldown." },
     morgana:{ tldr:"The black shield eats the hook and the stun — pop it before any chain or fish the other half of the duo." }

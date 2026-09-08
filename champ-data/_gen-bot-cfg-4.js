@@ -260,7 +260,7 @@ window.GEN_BOT_CFGS_4 = [
     bootsVsAP:"Mercury's Treads / Berserker's",
     bootsVsAD:"Plated Steelcaps / Berserker's",
     spike:"First item — the hop-DPS out-duels the role; cash the act.",
-    runes:{ keystone:"Hail of Blades", primaryTree:"Domination", primary:["Taste of Blood","Eyeball Collection","Treasure Hunter"], tree:"Precision", secondary:["Triumph","Coup de Grace"], shards:["Attack Speed","Adaptive Force","Health"] }
+    runes:{ keystone:"Hail of Blades", primaryTree:"Domination", primary:["Taste of Blood","Sudden Impact","Treasure Hunter"], tree:"Precision", secondary:["Triumph","Coup de Grace"], shards:["Attack Speed","Adaptive Force","Health"] }
   },
   specials:{
     heimerdinger:{ tldr:"The nest gives your hops nothing safe to weave toward — Rend-clear turrets at range and toss the engage only with the grenade down." },

@@ -373,7 +373,7 @@ window.GEN_CFGS_2 = [
   aheadTpl:"Ahead post-6, become the problem: blink onto {E} every time {K} is down, shove with E waves, and roam to mid with R — your gank arrives faster than wards report.",
   behindTpl:"Behind is your natural habitat — farm, stack Tear, hit the ROA timing, and re-enter the game at 11 as if the lane never happened.",
   spikeName:"Rod of Ages",
-  runeReport:"Fleet Footwork, Triumph, Legend: Tenacity, Last Stand; secondary Resolve — Second Wind + Bone Plating. Fleet plus Q shield is how you survive the bully phase.",
+  runeReport:"Fleet Footwork, Triumph, Legend: Haste, Last Stand; secondary Resolve — Second Wind + Bone Plating. Fleet plus Q shield is how you survive the bully phase.",
   summReport:"Flash + Teleport, non-negotiable — TP fixes the lane attrition that defines your early game and converts to map presence at 11.",
   itemReport:"Start Doran's Shield or Ring by lane. Tear early, Rod of Ages into Mercs or Sorcs, then Seraph's Embrace and Zhonya's.",
   jungleLine:"Pre-6 you NEED jungle attention — ward both brushes and ping every push. Post-6 return the favor: your R makes you the fastest follow-up in the game.",
@@ -390,7 +390,7 @@ window.GEN_CFGS_2 = [
     bootsVsAP:"Mercury's Treads",
     bootsVsAD:"Plated Steelcaps",
     spike:"Level 11 + Seraph's — the matchup table stops applying to you.",
-    runes:{ keystone:"Fleet Footwork", primaryTree:"Precision", primary:["Triumph","Legend: Tenacity","Last Stand"], tree:"Resolve", secondary:["Second Wind","Bone Plating"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Fleet Footwork", primaryTree:"Precision", primary:["Triumph","Legend: Haste","Last Stand"], tree:"Resolve", secondary:["Second Wind","Bone Plating"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     vladimir:{ tldr:"An AP scaler your Q literally eats — soak his poke for free and out-curve the curve king." },

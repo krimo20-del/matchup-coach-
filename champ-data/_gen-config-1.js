@@ -177,7 +177,7 @@ window.GEN_CFGS_1 = [
   aheadTpl:"Snowball through skirmishes — shove, roam with a stolen ult, and force {E} to choose between tower and teammates. Zone him off farm with the E2 threat.",
   behindTpl:"Behind, you're still a Hijack delivery system — farm safe, keep E for survival, and flip one fight with the best stolen R on the map.",
   spikeName:"Riftmaker",
-  runeReport:"Conqueror, Triumph, Legend: Tenacity, Last Stand; secondary Resolve — Second Wind + Unflinching. Conqueror plus the W heal is your extended-trade engine.",
+  runeReport:"Conqueror, Triumph, Legend: Haste, Last Stand; secondary Resolve — Second Wind + Unflinching. Conqueror plus the W heal is your extended-trade engine.",
   summReport:"Flash + Ignite for kill pressure at 6; swap to TP into hard-losing or heavy-scaling lanes.",
   itemReport:"Start Doran's Ring + 2 pots. First: Riftmaker into Mercs or Steelcaps; then Zhonya's and Cosmic Drive. Abyssal Mask vs AP.",
   jungleLine:"E2 is gank setup on demand — ping your jungler the moment {E} steps past river. A stolen ult doubles every 2v2.",
@@ -194,7 +194,7 @@ window.GEN_CFGS_1 = [
     bootsVsAP:"Mercury's Treads",
     bootsVsAD:"Plated Steelcaps",
     spike:"Cosmic Drive third — your chase and rotation uptime doubles.",
-    runes:{ keystone:"Conqueror", primaryTree:"Precision", primary:["Triumph","Legend: Tenacity","Last Stand"], tree:"Resolve", secondary:["Second Wind","Unflinching"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Conqueror", primaryTree:"Precision", primary:["Triumph","Legend: Haste","Last Stand"], tree:"Resolve", secondary:["Second Wind","Unflinching"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     malphite:{ tldr:"His R is the best steal in the game — bully the rock, take Unstoppable Force, and win every teamfight he starts." },

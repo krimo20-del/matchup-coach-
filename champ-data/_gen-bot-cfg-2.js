@@ -154,7 +154,7 @@ window.GEN_BOT_CFGS_2 = [
   aheadTpl:"Ahead, evolve the gap: zone {E} with plasma threat, dive every error, and snowball the evolutions into an unanswerable kit.",
   behindTpl:"Behind, the checkout line still moves: farm evolutions, mark their dives, and re-enter through one R flank that resets the lane's memory.",
   spikeName:"first evolve",
-  runeReport:"Hail of Blades or Lethal Tempo, Taste of Blood, Eyeball Collection, Treasure Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
+  runeReport:"Hail of Blades or Lethal Tempo, Taste of Blood, Sudden Impact, Treasure Hunter; secondary Precision — Presence of Mind + Coup de Grace.",
   summReport:"Flash + Heal standard; Cleanse into chain-CC lanes your dives can't survive.",
   itemReport:"Start Doran's Blade + pot. Kraken or Stat-stick first, Berserker's, then Guinsoo's-Zhonya lines by evolve path.",
   jungleLine:"Your W mark plus jungler CC is a guaranteed plasma detonation — ping dives on every fourth stack; the math is pre-done.",
@@ -171,7 +171,7 @@ window.GEN_BOT_CFGS_2 = [
     bootsVsAP:"Mercury's Treads / Berserker's",
     bootsVsAD:"Plated Steelcaps / Berserker's",
     spike:"First evolve + two items — the dive deletes whatever plasma marked.",
-    runes:{ keystone:"Hail of Blades", primaryTree:"Domination", primary:["Taste of Blood","Eyeball Collection","Treasure Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Attack Speed","Adaptive Force","Health"] }
+    runes:{ keystone:"Hail of Blades", primaryTree:"Domination", primary:["Taste of Blood","Sudden Impact","Treasure Hunter"], tree:"Precision", secondary:["Presence of Mind","Coup de Grace"], shards:["Attack Speed","Adaptive Force","Health"] }
   },
   specials:{
     caitlyn:{ tldr:"Her range taxes every plasma stack you try to earn — farm Q at max distance, never contest brush, and let the 6-spike R flip the geometry she rented." },

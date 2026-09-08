@@ -152,10 +152,10 @@ window.AATROX_JUGG_LOADOUTS = Object.assign(window.AATROX_JUGG_LOADOUTS || {}, {
     firstItem: "Spear of Shojin",
     secondItem: "Sundered Sky",
     boots: "Mercury's Treads",
-    spike: "Tenacity (Legend + Unflinching) cuts his E stun so your combo isn't wasted. Don't dump damage into his W grit bar.",
+    spike: "Tenacity (Mercs + the tenacity shard + Unflinching) cuts his E stun so your combo isn't wasted. Don't dump damage into his W grit bar.",
     runes: {
       keystone: "Conqueror",
-      primary: ["Triumph", "Legend: Tenacity", "Last Stand"],
+      primary: ["Triumph", "Legend: Haste", "Last Stand"],
       tree: "Resolve",
       secondary: ["Bone Plating", "Unflinching"],
       shards: ["Adaptive Force", "Adaptive Force", "Tenacity & Slow Resist"]

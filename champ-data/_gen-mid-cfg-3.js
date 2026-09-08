@@ -174,7 +174,7 @@ window.GEN_MID_CFGS_3 = [
   aheadTpl:"Ahead, become the map: W every objective setup, root every contest, and ascend into fights {E} has to take — the drain converts leads into inevitabilities.",
   behindTpl:"Behind, hold the line: Q-farm, root the dives, and ascend defensively — Swain from behind is still the best comeback frontline a mage roster can buy.",
   spikeName:"Liandry's",
-  runeReport:"Electrocute or Conqueror, Cheap Shot, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence. Conqueror feeds the drain-brawl identity.",
+  runeReport:"Electrocute or Conqueror, Cheap Shot, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence. Conqueror feeds the drain-brawl identity.",
   summReport:"Flash + Teleport standard; Ghost is the galaxy-brain pick for R-form chases; Ignite into lanes you plan to drain face-first.",
   itemReport:"Start Doran's Ring + 2 pots. Liandry's into Sorcerer's, then Rylai's and Zhonya's — HP items are damage items when your R scales off survival.",
   jungleLine:"Root-on-arrival makes every mid gank a kill, and your W scouts the enemy jungler for free — Swain mid is a vision-and-CC subscription his whole team benefits from.",
@@ -191,7 +191,7 @@ window.GEN_MID_CFGS_3 = [
     bootsVsAP:"Sorcerer's Shoes / Mercury's Treads",
     bootsVsAD:"Sorcerer's Shoes / Plated Steelcaps",
     spike:"Liandry's + Rylai's — the drain slows, burns, and out-heals everything that commits.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     xerath:{ tldr:"Pure artillery — he poke-wins every screen distance you don't collapse. Farm the deficit, root ONE mistake, and end the lane in the drain." },
@@ -274,9 +274,9 @@ window.GEN_MID_CFGS_3 = [
   aheadTpl:"Ahead, prosecute: zone {E} off CS with Q threat, stun every answer, and roam with pre-banked spheres — a fed Syndra turns rivers into sentencing hearings.",
   behindTpl:"Behind, poke is still free: chip from max Q range, hold E for their dives, and rebuild through the R executes their carries keep walking into.",
   spikeName:"Luden's",
-  runeReport:"Electrocute or First Strike, Cheap Shot / Magical Footwear, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence. Electrocute pays the QE pattern instantly.",
+  runeReport:"Electrocute or First Strike, Cheap Shot / Magical Footwear, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence. Electrocute pays the QE pattern instantly.",
   summReport:"Flash + Teleport standard; Ignite into lanes you intend to end by level 6 — Syndra's kill threat converts it better than most mages.",
-  itemReport:"Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive comps — buy the stopwatch at assassin-6.",
+  itemReport:"Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive comps — buy the Zhonya’s at assassin-6.",
   jungleLine:"Your QE is the cleanest gank-setup stun in mid — sphere down BEFORE the jungler arrives and the stun is point-and-click. R turns every 2v2 into a 2v1.",
   redditLine:"poke costs you nothing and the stun costs them everything — bank spheres, hold E, and count to three before pressing R.",
   load:{
@@ -291,7 +291,7 @@ window.GEN_MID_CFGS_3 = [
     bootsVsAP:"Sorcerer's Shoes / Mercury's Treads",
     bootsVsAD:"Sorcerer's Shoes / Plated Steelcaps",
     spike:"Luden's + Shadowflame — QE-stun into rotation is a guaranteed deletion on squishies.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     yasuo:{ tldr:"Wind Wall eats Q, E, and R spheres mid-flight — the counter-pick. Poke only through minion-line angles and stun the THIRD dash, not the first.",
@@ -375,9 +375,9 @@ window.GEN_MID_CFGS_3 = [
   aheadTpl:"Ahead, multiply: crash waves, wall-surf to every lane, and seed stones at each objective — a roaming Taliyah lead compounds faster than any lane bully's.",
   behindTpl:"Behind, the map still loves you: clear safely with Q, seed defensive stones, and spend the wall on your team's fights — Taliyah utility survives any deficit.",
   spikeName:"Luden's",
-  runeReport:"Electrocute or First Strike, Cheap Shot, Eyeball Collection, Relentless / Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence. Electrocute pays the W-E combo instantly.",
+  runeReport:"Electrocute or First Strike, Cheap Shot, Sudden Impact, Relentless / Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence. Electrocute pays the W-E combo instantly.",
   summReport:"Flash + Teleport or Ignite — TP doubles the roam thesis; Ignite converts the W-E burst into early deletions. Pick by how hard you intend to roam.",
-  itemReport:"Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — the stopwatch covers your cast-time windows.",
+  itemReport:"Start Doran's Ring + 2 pots. Luden's Companion into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — the Zhonya’s covers your cast-time windows.",
   jungleLine:"W-E on arrival is elite gank setup, and your wall turns every river fight into a 5v3 — ping your jungler the moment you hit 6; Taliyah-jungler duos win maps, not lanes.",
   redditLine:"fresh ground or no ground, shove the dash not the champion, and roam like the lane is a side quest — Taliyah wins games at bot lane.",
   load:{
@@ -392,7 +392,7 @@ window.GEN_MID_CFGS_3 = [
     bootsVsAP:"Sorcerer's Shoes / Mercury's Treads",
     bootsVsAD:"Sorcerer's Shoes / Plated Steelcaps",
     spike:"Luden's + Shadowflame — the W-E-Q geometry trade becomes a deletion.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     yasuo:{ tldr:"Wind Wall eats your Q stones but his dashes detonate your E — seed the minefield on the wave line and let his own mobility bill him.",

@@ -73,7 +73,7 @@ window.GEN_MID_CFGS_5 = [
   aheadTpl:"Ahead, hunt the map: shove with Q, dash-flank every river, and charm-pick {E}'s teammates until the lane lead is a game lead.",
   behindTpl:"Behind, play the safe pick you are: Q-farm, heal off waves, hold charm for dives — Ahri from behind still wins games with one flank charm.",
   spikeName:"Malignance",
-  runeReport:"Electrocute, Cheap Shot, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence. Electrocute pays the charm combo instantly.",
+  runeReport:"Electrocute, Cheap Shot, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence. Electrocute pays the charm combo instantly.",
   summReport:"Flash + Ignite into killable lanes, Flash + TP into scaling ones — your R already covers half of Flash's job description.",
   itemReport:"Start Doran's Ring + 2 pots. Malignance into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive comps.",
   jungleLine:"Charm-on-arrival makes any gank a kill, and your R follows the Flash they burn — ping your jungler at 6; Ahri ganks convert at the highest rate in mid.",
@@ -90,7 +90,7 @@ window.GEN_MID_CFGS_5 = [
     bootsVsAP:"Sorcerer's Shoes / Mercury's Treads",
     bootsVsAD:"Sorcerer's Shoes / Plated Steelcaps",
     spike:"Malignance + Shadowflame — every dash window is a full charm-kill combo.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     yasuo:{ tldr:"Wind Wall eats orb AND charm — bait it with a half-range Q, then charm his dash-chain only while the wall is down.",
@@ -174,7 +174,7 @@ window.GEN_MID_CFGS_5 = [
   aheadTpl:"Ahead, shrink the lane: hold the glow, zone {E} off CS by existing, and Flash-Tibbers the recovery attempt — fed Annie ends games at 20.",
   behindTpl:"Behind, the button still works: farm refunds, stack, and hold Flash-R for their carry — one bear on the right target resets any scoreline.",
   spikeName:"Stormsurge",
-  runeReport:"Electrocute, Cheap Shot, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Scorch. Electrocute completes the one-shot math.",
+  runeReport:"Electrocute, Cheap Shot, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Scorch. Electrocute completes the one-shot math.",
   summReport:"Flash + Ignite — Flash IS your engage range and Ignite signs the Tibbers math. TP only into lanes you can't fight.",
   itemReport:"Start Doran's Ring + 2 pots. Luden's or Stormsurge into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive — cast it mid-Tibbers.",
   jungleLine:"A stocked stun is the easiest gank setup in League — point, click, kill. Ping your jungler whenever the glow is up and {E} is past river.",
@@ -191,7 +191,7 @@ window.GEN_MID_CFGS_5 = [
     bootsVsAP:"Sorcerer's Shoes / Mercury's Treads",
     bootsVsAD:"Sorcerer's Shoes / Plated Steelcaps",
     spike:"Stormsurge + Shadowflame — Flash-Tibbers deletes carries from full health.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Scorch"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Scorch"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     katarina:{ tldr:"Point-and-click stun versus a channel-dependent blender — stun the Shunpo, Tibbers the Lotus, and she never finishes a combo all game.",
@@ -273,7 +273,7 @@ window.GEN_MID_CFGS_5 = [
   aheadTpl:"Ahead, pace the lane: pattern {E} off every contact, hop his answers, and drop R on each river fight — the zone converts leads into routs.",
   behindTpl:"Behind, pattern from safety: Q-recast farm, bank W for dives, and re-enter through zone fights your speed still wins.",
   spikeName:"Luden's",
-  runeReport:"Electrocute or Summon Aery, Cheap Shot, Eyeball Collection, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
+  runeReport:"Electrocute or Summon Aery, Cheap Shot, Sudden Impact, Ultimate Hunter; secondary Sorcery — Manaflow + Transcendence.",
   summReport:"Flash + Ignite into killable lanes; Flash + TP when the matchup is survival. The hop covers half your Flash jobs already.",
   itemReport:"Start Doran's Ring + 2 pots. Luden's into Sorcerer's, then Shadowflame and Rabadon's. Zhonya's vs dive.",
   jungleLine:"Your E knockback-slow is clean gank setup and the R zone traps the runback — ping your jungler post-6; zone fights are free wins.",
@@ -290,7 +290,7 @@ window.GEN_MID_CFGS_5 = [
     bootsVsAP:"Sorcerer's Shoes / Mercury's Treads",
     bootsVsAD:"Sorcerer's Shoes / Plated Steelcaps",
     spike:"Luden's + Shadowflame — the Q-E-Q pattern becomes half a health bar.",
-    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Eyeball Collection","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
+    runes:{ keystone:"Electrocute", primaryTree:"Domination", primary:["Cheap Shot","Sudden Impact","Ultimate Hunter"], tree:"Sorcery", secondary:["Manaflow Band","Transcendence"], shards:["Adaptive Force","Adaptive Force","Health"] }
   },
   specials:{
     yasuo:{ tldr:"Wind Wall eats your Q both directions and his dashes outpace your patterns — E his dash-chain and trade only behind the wall's cooldown.",

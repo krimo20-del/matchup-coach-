@@ -352,7 +352,7 @@
         "Now your sustain flips it — eat her burst, then Q-sweetspot + W-pull and out-heal the trade. She can't kill you.",
         "Drain-tank takes over: long fights are yours. Force extended trades where her burst-then-wait loses to your healing.",
         "Bait her E escape, then R + pull — without the hookshot reset she's dead. Your strongest kill window.",
-        "Your Eclipse/Goredrinker spike beats her first item in a sustained fight — keep forcing the all-in, deny the poke-and-reset.",
+        "Your Eclipse/Stridebreaker spike beats her first item in a sustained fight — keep forcing the all-in, deny the poke-and-reset.",
         "Two items in she flips it: R isolation + true damage shred you in a pick. You win lane; she wins the late side-lane 1v1."
       ]
     },

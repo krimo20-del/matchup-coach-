@@ -10,6 +10,19 @@
 //   green: champ-name | dominant/favored/peak/spike/stabilized/absolute...
 //   red:   respect/danger/avoid/caution/defensive/concede...
 //   amber: anything else (e.g. "Even Skirmish")
+//
+// DE-DUPLICATION (2026-09-08). The why-texts were two sentence frames per verdict band using
+// only YOUR plan and THEIR threat and tool, so a champion's 49 pages were the same paragraph
+// with the opponent's name swapped — "commit only when the camp state and HP bars agree with
+// you" shipped on 765 of them, and the level-1/2/3 rows were one sentence with the number
+// changed. Three things fixed that, and none of them touches a single `adv` label, so the
+// mirror gate and the app's colour tones are byte-for-byte unchanged:
+//   * four frames per band instead of two, plus per-level vocabulary (ARENA/CLOCK/TAKE/DENY/
+//     GAIN/CEDE) so the three early rows describe three different windows;
+//   * every frame splices the OPPONENT's own plan line for that level (pb.plan[i], and
+//     ub.plan at six), which is the phrase that actually varies from opponent to opponent;
+//   * foeVoice() re-voices that line for the page it lands on, and PLAIN_STAGE keeps the
+//     original frames for champions whose plan lines cannot be re-voiced.
 (function () {
   // ---- early-duel scores [lvl1, lvl2, lvl3], 0-10, community-consensus -------
   var S = {
@@ -404,32 +417,169 @@
 
   // ---- text builders ------------------------------------------------------------
   var LVL = ["level 1", "level 2", "level 3"];
+  // Per-level vocabulary. Without it the level-1, level-2 and level-3 rows are one
+  // sentence with the number swapped — the single biggest duplication complaint on the
+  // jungle pages. Each row now names its own window, camp state and prize.
+  var ARENA = ["at the first buff", "on the second camp", "at the opening scuttle"];
+  var CLOCK = ["before either of you has a second camp down", "with one camp still up on both sides", "as the first scuttle timer lands"];
+  var TAKE  = ["take the level-1 crossing", "take the level-2 skirmish", "take the level-3 river fight"];
+  var DENY  = ["skip the level-1 crossing", "refuse the level-2 skirmish", "give up the level-3 river fight"];
+  var GAIN  = ["a camp and a chunk of their health bar", "the second buff and the tempo that comes with it", "the first scuttle and the gank window behind it"];
+  var CEDE  = ["your opening camps", "the second buff", "the first scuttle"];
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-  function low(s) { return s.charAt(0).toLowerCase() + s.slice(1); }
+  // Phrases in P and U open either with an ordinary word (safe to lower-case when the
+  // phrase lands mid-sentence) or with an ability name / pronoun that must keep its
+  // capital — ": sonic Wave re-cast" was the old bug. LOWERABLE lists every ordinary
+  // opener actually used in the two tables; anything else, i.e. every ability name, is
+  // left exactly as written. _jg-label-text-fixes.js still runs its own repair pass
+  // afterwards, so both layers agree and the result is idempotent either way.
+  var LOWERABLE = {
+    "break": 1, "clear": 1, "close": 1, "commit": 1, "dash": 1, "disengage": 1, "dodge": 1,
+    "don't": 1, "fight": 1, "he's": 1, "her": 1, "his": 1, "hold": 1, "hug": 1, "interrupt": 1,
+    "invade": 1, "juke": 1, "keep": 1, "kill": 1, "never": 1, "pre-position": 1, "punish": 1,
+    "refuse": 1, "respect": 1, "she": 1, "sidestep": 1, "spread": 1, "stand": 1, "stay": 1,
+    "steal": 1, "step": 1, "stop": 1, "their": 1, "track": 1, "trade": 1, "wait": 1, "ward": 1,
+    "watch": 1
+  };
+  function low(s) {
+    var w = (String(s).match(/^[A-Za-z'’-]+/) || [""])[0];
+    if (!LOWERABLE[w.toLowerCase()]) return s;
+    return s.charAt(0).toLowerCase() + s.slice(1);
+  }
   function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
+
+  // ---- reading an enemy's own plan line on YOUR page ----------------------------
+  // P[c].plan and U[c].plan are written for c's own page, in the second person ("your
+  // buff", "lets you out-tempo"). Spliced raw onto the opponent's page they say "your"
+  // about the wrong champion, so foeVoice() turns them around: possessives become
+  // "their", subject "you" becomes "they", object "you" (after a preposition or a verb
+  // that takes one) becomes "them". Trailing imperative clauses — "— farm safe", "; keep
+  // refusing the 1v1" — are instructions to that champion's own pilot and are dropped;
+  // if nothing survives, the champion's threat line is used instead, since threat and
+  // tool are already written from the reader's side of the river.
+  var OBJ_BEFORE = /(?:into|for|at|on|with|against|to|of|than|near|behind|around|over|from|by|beat|beats|let|lets|make|makes|give|gives|force|forces|favor|favors|sustain|sustains|keep|keeps|delete|deletes|chunk|chunks|catch|catches|answer|answers|kite|kites|punish|punishes|out-trade|out-tempo)\s+$/i;
+  // A clause is kept only when it opens with something that still has a referent after the
+  // voice flip. Anything else is an instruction to that champion's own pilot ("— farm
+  // safe", "; convert W ganks instead") and is dropped.
+  var CARRIES = /^(?:[A-Z]|the|a|an|their|his|her|its|it|that|this|which|and|but|so|while|with|plus|every|any|no|both|full|four|all|max-range|pre-|river-|iso|dream|frenzy|packmates|boxes|clone|blob|human-form|effigy|double-|ablaze|wall-hop|brush-|boulder-)/;
+  // Some plan lines are honest about their own champion being weak ("champion duels are
+  // losers", "still don't win duels"). They read correctly on the page of a champion who
+  // beats them and contradict the verdict on the page of one who loses to them, so the
+  // losing side falls back to the threat line instead.
+  var SELF_DEPRECATING = /\b(?:don't|do not|isn't|is not|are not|aren't|cannot|can't|never want|losers?|below-rate|weakest|no real|not a duel|not duel|gank bait|bluff|wins nothing|buys time|farm machine|farms without fighting|not champions|only legal trade|is for ganks|helps the clear more|isn't online)\b/i;
+  function thirdPerson(s) {
+    s = s.replace(/\byours\b/gi, "theirs").replace(/\bYour\b/g, "Their").replace(/\byour\b/g, "their");
+    return s.replace(/\b[Yy]ou\b/g, function (m, off, full) {
+      return OBJ_BEFORE.test(full.slice(0, off)) ? "them" : "they";
+    });
+  }
+  function foeVoice(planLine, fallback, needStrong) {
+    var parts = String(planLine).split(/ — |; /);
+    var kept = [];
+    for (var k = 0; k < parts.length; k++) {
+      var c = parts[k].trim();
+      if (k > 0 && (!CARRIES.test(c) || c.split(/\s+/).length < 5)) continue;
+      kept.push(parts[k]);
+    }
+    if (!kept.length || !CARRIES.test(kept[0].trim())) return fallback;
+    var out = thirdPerson(kept.join(" — ")).replace(/[,;:]\s*$/, "");
+    if (out.split(/\s+/).length < 5) return fallback;
+    if (needStrong && SELF_DEPRECATING.test(out)) return fallback;
+    return out;
+  }
+
+  // Frames come in two families, one per verdict band.
+  //   FOE_STAGE — four frames that splice the OPPONENT's own plan line for this level.
+  //     That phrase is what actually changes from opponent to opponent, so these are what
+  //     stop a champion's 49 table rows from being one sentence with the name swapped.
+  //   PLAIN_STAGE — the original two frames, which use only your plan and their threat and
+  //     tool. Used for the handful of champions whose every plan line is an instruction to
+  //     their own pilot ("survive to six") and so cannot be re-voiced onto another page.
+  // Arguments throughout: (a, b, i, plan, foe, threat, tool).
+  var FOE_STAGE = [
+    [ // a dominant
+      function (a, b, i, plan, foe) { return cap(plan) + ". " + cap(foe) + ", and " + CLOCK[i] + " that is not an answer. " + cap(TAKE[i]) + " and make " + b + " path away from the camps you want."; },
+      function (a, b, i, plan, foe) { return cap(plan) + ". There is no version of this " + b + " wins right now — " + low(foe) + ", and that folds " + ARENA[i] + ". Show on their side of the river and take " + GAIN[i] + "."; },
+      function (a, b, i, plan, foe, threat) { return cap(plan) + ". Later in the game this bites, because " + low(threat) + ". But " + CLOCK[i] + " none of it is online, so " + TAKE[i] + " and tax every camp " + b + " concedes."; },
+      function (a, b, i, plan, foe) { return cap(plan) + ", while " + low(foe) + ". Only one of those wins " + ARENA[i] + ", so press it: " + TAKE[i] + ", then leave with " + GAIN[i] + "."; }
+    ],
+    [ // a favored
+      function (a, b, i, plan, foe) { return cap(plan) + ". " + cap(foe) + ", so this is an edge and not a blowout — " + TAKE[i] + " only with the HP and cooldown lead."; },
+      function (a, b, i, plan, foe) { return cap(plan) + ", but " + low(foe) + ". You still win the straight exchange " + ARENA[i] + "; keep it short, keep it decisive, and keep the scuttle line yours."; },
+      function (a, b, i, plan, foe, threat) { return cap(plan) + ". " + b + " can make it awkward — " + low(threat) + " — but not " + CLOCK[i] + ". Trade, then walk away with " + GAIN[i] + "."; },
+      function (a, b, i, plan, foe, threat, tool) { return cap(plan) + ". The margin is thin: " + low(foe) + ", and one slow camp on your side hands the window straight back, so keep the trade short. " + cap(tool) + "."; }
+    ],
+    [ // even
+      function (a, b, i, plan, foe) { return "Dead-even " + ARENA[i] + ": " + low(plan) + ", while " + low(foe) + ". Whoever arrives with more HP and cooldowns wins, so track their clear and pick the moment."; },
+      function (a, b, i, plan, foe, threat) { return "Neither side cleanly wins " + LVL[i] + " — " + low(threat) + ", but " + low(plan) + ". Trade only from full health; " + CLOCK[i] + " the first mis-step decides this, not the kits."; },
+      function (a, b, i, plan, foe) { return cap(foe) + ", and that is worth exactly what you bring: " + low(plan) + ". Contest " + CEDE[i] + " when your health bar is the higher one and not before."; },
+      function (a, b, i, plan, foe, threat, tool) { return "Even " + ARENA[i] + ", for a concrete reason — " + low(foe) + ", while " + low(plan) + ". " + cap(tool) + ", and let the camp timers choose the fight for you."; }
+    ],
+    [ // respect b
+      function (a, b, i, plan, foe, threat, tool) { return "At " + LVL[i] + " this window belongs to " + b + ": " + low(foe) + ", and " + low(threat) + ". " + cap(tool) + ". " + cap(DENY[i]) + " and bank tempo on the opposite side of the map."; },
+      function (a, b, i, plan, foe, threat) { return cap(threat) + " — " + a + " has no answer to that at " + LVL[i] + ". " + cap(foe) + " on their half of the map too, so " + DENY[i] + " and answer the pressure cross-map."; },
+      function (a, b, i, plan, foe, threat, tool) { return cap(foe) + ", and " + a + " has no clean answer to it " + ARENA[i] + " — " + low(threat) + ". " + cap(tool) + ", and give up " + CEDE[i] + " rather than the kill."; },
+      function (a, b, i, plan, foe, threat, tool) { return "The window " + ARENA[i] + " belongs to " + b + ": " + low(foe) + ". Your own line is real — " + low(plan) + " — but it arrives second here. " + cap(tool) + ", then " + DENY[i] + "."; }
+    ],
+    [ // danger
+      function (a, b, i, plan, foe, threat, tool) { return "Hard no-contest for " + a + " at " + LVL[i] + ": " + low(foe) + ", and " + low(threat) + ". " + cap(tool) + ". Path opposite, ward your entrances, and let the clock carry you to your own spike."; },
+      function (a, b, i, plan, foe, threat, tool) { return cap(threat) + ". " + cap(foe) + " on top of that, so " + LVL[i] + " is a straight stat check " + a + " loses — " + low(tool) + ", and give the river vision-line respect."; },
+      function (a, b, i, plan, foe, threat) { return b + " out-classes you " + ARENA[i] + " — " + low(foe) + ", and " + low(threat) + ". " + cap(DENY[i]) + ", full-clear away from them, and trade map pressure instead of health."; },
+      function (a, b, i, plan, foe, threat, tool) { return "Do not be seen " + ARENA[i] + ": " + low(threat) + ". On top of that, " + low(foe) + ", so they get there first. " + cap(tool) + ". " + cap(DENY[i]) + " and farm the opposite quadrant until your spike lands."; }
+    ]
+  ];
+  // Three frames each, all keyed off the level vocabulary, so even a champion that lands in
+  // this family does not get the same sentence three rows running.
+  var PLAIN_STAGE = [
+    [
+      function (a, b, i, plan) { return cap(plan) + ". " + b + "'s answer simply isn't there at " + LVL[i] + " — if you cross paths " + ARENA[i] + ", take the fight and tax the camps they leave behind."; },
+      function (a, b, i, plan) { return cap(plan) + ". There is no version of this exchange " + b + " wins right now, so play the aggressor: show on their side of the river and take " + GAIN[i] + "."; },
+      function (a, b, i, plan) { return cap(plan) + ", and " + CLOCK[i] + " " + b + " has nothing that trades back. " + cap(TAKE[i]) + " and make them path away from you."; }
+    ],
+    [
+      function (a, b, i, plan) { return cap(plan) + ". " + b + " can make this awkward but loses the straight exchange " + ARENA[i] + " — trade short, trade decisively, and keep the scuttle line yours."; },
+      function (a, b, i, plan) { return cap(plan) + ". You hold the edge over " + b + " " + ARENA[i] + ", not a blowout — " + TAKE[i] + " only when the camp state and HP bars agree with you."; },
+      function (a, b, i, plan, foe, threat, tool) { return cap(plan) + ", and " + CLOCK[i] + " that is the better half of the trade. Take it, then leave with " + GAIN[i] + ". " + cap(tool) + "."; }
+    ],
+    [
+      function (a, b, i, plan, foe, threat) { return "Dead-even " + ARENA[i] + ": " + low(plan) + ", while " + low(threat) + ". Whoever arrives with more HP and cooldowns wins — track their clear and choose the moment, not the coin-flip."; },
+      function (a, b, i, plan, foe, threat) { return "Neither side cleanly wins " + LVL[i] + " — " + low(threat) + ", but " + low(plan) + ". Trade only from full health; the first mis-step decides this, not the kits."; },
+      function (a, b, i, plan, foe, threat, tool) { return "Even " + ARENA[i] + ": " + low(plan) + ", and " + CLOCK[i] + " neither of you can force it. " + cap(tool) + ", and contest " + CEDE[i] + " only with the health lead."; }
+    ],
+    [
+      function (a, b, i, plan, foe, threat, tool) { return "At " + LVL[i] + " this window belongs to " + b + ", not " + a + ": " + low(threat) + ". " + cap(tool) + ". " + cap(DENY[i]) + " and bank tempo on the opposite side of the map."; },
+      function (a, b, i, plan, foe, threat, tool) { return cap(threat) + " — " + a + " has no answer to that at " + LVL[i] + ". " + cap(tool) + ", and answer their pressure cross-map instead of contesting it head-on."; },
+      function (a, b, i, plan, foe, threat, tool) { return "The window " + ARENA[i] + " is theirs: " + low(threat) + ". " + cap(tool) + ". " + cap(DENY[i]) + " and give up " + CEDE[i] + " rather than the kill."; }
+    ],
+    [
+      function (a, b, i, plan, foe, threat, tool) { return "Hard no-contest for " + a + " " + ARENA[i] + ": " + low(threat) + ", and at " + LVL[i] + " you lose this fight every single time. " + cap(tool) + ". Path opposite, ward your entrances, and let the clock carry you to your own spike."; },
+      function (a, b, i, plan, foe, threat, tool) { return cap(threat) + ". At " + LVL[i] + " this is a straight stat check " + a + " loses — " + low(tool) + ", and give the entire river vision-line respect."; },
+      function (a, b, i, plan, foe, threat, tool) { return "Do not be seen " + ARENA[i] + ": " + low(threat) + ", and " + CLOCK[i] + " you have nothing that answers it. " + cap(tool) + ". " + cap(DENY[i]) + " and farm the opposite quadrant."; }
+    ]
+  ];
+  // Try this level's plan line first, then the other two, so a champion with one awkward
+  // line still contributes something level-specific before the plain frames are reached.
+  function foeLine(pb, i, needStrong) {
+    for (var k = 0; k < 3; k++) {
+      var out = foeVoice(pb.plan[(i + k) % 3], null, needStrong);
+      if (out) return out;
+    }
+    return null;
+  }
 
   function buildStage(a, b, i) {
     if (a === b) return { adv: "Even Skirmish",
       why: "Mirror matchup — identical kits on identical timers. Whoever finishes camps first and arrives with the HP lead wins; trade only when both bars and cooldowns agree with you." };
     var d = score(a, b, i) - score(b, a, i);
     var pa = P[a], pb = P[b];
-    var v = hash(a + "|" + b + "|" + i) % 2;
     var plan = pa.plan[i], threat = pb.threat, tool = pb.tool;
-    if (d >= 2.25) return { adv: a + " Dominant", why: v === 0
-      ? cap(plan) + ". " + b + "'s answer simply isn't there at " + LVL[i] + " — if you cross paths at a buff or scuttle, take the fight. Make them path away and tax the camps they leave behind."
-      : cap(plan) + ". There is no version of this exchange " + b + " wins right now, so play the aggressor: show on their side of the river and force the concession." };
-    if (d >= 0.5) return { adv: a + " Favored", why: v === 0
-      ? cap(plan) + ". " + b + " can make this awkward but loses the straight exchange — take short, decisive trades and keep the scuttle line yours."
-      : cap(plan) + ". You hold the edge over " + b + " here, not a blowout — commit only when the camp state and HP bars agree with you." };
-    if (d > -0.5) return { adv: "Even Skirmish", why: v === 0
-      ? "Dead-even window: " + low(plan) + ", while " + low(threat) + ". Whoever arrives with more HP and cooldowns wins — track their clear and choose the moment, not the coin-flip."
-      : "Neither side cleanly wins " + LVL[i] + " — " + low(threat) + ", but " + low(plan) + ". Trade only from full health; the first mis-step decides this, not the kits." };
-    if (d > -2.25) return { adv: "Respect " + b, why: v === 0
-      ? "At " + LVL[i] + " this window belongs to " + b + ", not " + a + ": " + low(threat) + ". " + cap(tool) + ". Concede the first scuttle if they show and bank tempo on the opposite side of the map."
-      : cap(threat) + " — " + a + " should not pretend otherwise at " + LVL[i] + ". " + cap(tool) + ", and answer their pressure cross-map instead of contesting it head-on." };
-    return { adv: "Danger — Avoid " + b, why: v === 0
-      ? "Hard no-contest for " + a + ": " + low(threat) + ", and at " + LVL[i] + " you lose this fight every single time. " + cap(tool) + ". Path opposite, ward your entrances, and let the clock carry you to your own spike."
-      : cap(threat) + ". At " + LVL[i] + " this is a lose-every-time stat check for " + a + " — " + low(tool) + ", and give the entire river vision-line respect." };
+    // needStrong from the "even" band down: those frames assert the enemy's line is at
+    // least a match for yours, which a self-deprecating plan line would contradict.
+    var foe = foeLine(pb, i, d < 0.5);
+    var band = d >= 2.25 ? 0 : d >= 0.5 ? 1 : d > -0.5 ? 2 : d > -2.25 ? 3 : 4;
+    var adv = [a + " Dominant", a + " Favored", "Even Skirmish", "Respect " + b, "Danger — Avoid " + b][band];
+    var F = foe ? FOE_STAGE[band] : PLAIN_STAGE[band];
+    return { adv: adv, why: F[hash(a + "|" + b + "|" + i) % F.length](a, b, i, plan, foe, threat, tool) };
   }
 
   // ---- level-6 ult phrase table --------------------------------------------------
@@ -497,22 +647,49 @@
       why: "Mirror six — the same ultimate hits both sides of the river at the same minute. The spike belongs to whoever banks it first and spends it on an objective; track their level and refuse to fight a full-HP mirror with R up when yours is down." };
     var d = score(a, b, 3) - score(b, a, 3);
     var ua = U[a], ub = U[b];
-    var v = hash(a + "|" + b + "|ult") % 2;
-    if (d >= 2.25) return { adv: ua.ult + " Domination", why: v === 0
-      ? cap(ua.plan) + ". " + b + "'s six does not answer yours — the moment both ultimates are up, force the fight on a spawning objective and make them choose between the pit and their health bar."
-      : cap(ua.plan) + ". " + cap(ub.threat) + ", but in a straight post-6 duel that is not enough — you out-spike them at this breakpoint, so play the aggressor while it lasts." };
-    if (d >= 0.5) return { adv: ua.ult + " Favored", why: v === 0
-      ? cap(ua.plan) + ". " + cap(ub.threat) + " — respect that one window, but the six-spike comparison favors you: take the post-6 duel whenever HP bars start even."
-      : cap(ua.plan) + ". You win the breakpoint against " + b + ", not the whole game — cash the advantage on the first objective after both sides hit six." };
-    if (d > -0.5) return { adv: "Even Ult Window", why: v === 0
-      ? "Both sixes are real: " + low(ua.plan) + ", while " + low(ub.threat) + ". Whoever lands their ultimate first wins the window — track the level race and avoid being the one caught at five and a half."
-      : "Neither ultimate cleanly beats the other — " + low(ub.threat) + ", but " + low(ua.plan) + ". The breakpoint goes to whoever reaches it first with an objective on the map." };
-    if (d > -2.25) return { adv: "Respect " + shortName(b) + "'s R", why: v === 0
-      ? "The six-spike belongs to " + b + ", and " + a + "'s does not bridge the gap: " + low(ub.threat) + ". " + cap(ub.tool) + ". Your own ultimate is a tool here, not a trump card — spend it to escape or equalize, not to start fights."
-      : cap(ub.threat) + " — " + a + " loses the straight post-6 duel. " + cap(ub.tool) + ", and shift your pressure to the side of the map their ultimate is not on." };
-    return { adv: "Danger — " + shortName(b) + "'s R", why: v === 0
-      ? "Hard breakpoint loss for " + a + ": " + low(ub.threat) + ", and your six does not bridge the gap. " + cap(ub.tool) + ". Treat every post-6 river fight as theirs until your items arrive."
-      : cap(ub.threat) + ". At this breakpoint " + a + " simply does not duel " + b + " — " + low(ub.tool) + ", trade objectives cross-map, and let item spikes re-open the matchup." };
+    // ub.plan — what the OPPONENT's six actually does on their own page — was unused here,
+    // which is why every level-6 row of a champion read the same. Re-voiced it carries the
+    // per-enemy detail; when it cannot be re-voiced, the original two frames are used and
+    // the four that splice it are skipped, so nothing is ever said twice in one row.
+    var foePlan = foeVoice(ub.plan, null, d < 0.5);
+    var v = hash(a + "|" + b + "|ult") % (foePlan ? 4 : 2);
+    if (!foePlan) v += 4;
+    ub = { ult: ub.ult, threat: ub.threat, tool: ub.tool, plan: foePlan };
+    if (d >= 2.25) return { adv: ua.ult + " Domination", why:
+        v === 0 ? cap(ua.plan) + ". " + cap(ub.plan) + " on their side, and it still does not cover the gap — the moment both ultimates are up, force the fight on a spawning objective."
+      : v === 1 ? cap(ua.plan) + ". " + cap(ub.threat) + ", but in a straight post-6 duel that is not enough: you out-spike " + b + " at this breakpoint, so play the aggressor while it lasts."
+      : v === 2 ? cap(ua.plan) + ", while " + low(ub.plan) + ". Same minute, very different sizes of spike — take the first objective that spawns after both sixes land."
+      : v === 3 ? cap(ua.plan) + ". " + b + " has one answer of their own — " + low(ub.threat) + " — and it is not enough here. Make them spend " + ub.ult + " defensively, then collapse on the pit."
+      : v === 4 ? cap(ua.plan) + ". " + b + "'s six does not answer yours — the moment both ultimates are up, force the fight on a spawning objective and make them choose between the pit and their health bar."
+      :           cap(ua.plan) + ". " + cap(ub.threat) + ", but in a straight post-6 duel that is not enough — you out-spike them at this breakpoint, so play the aggressor while it lasts." };
+    if (d >= 0.5) return { adv: ua.ult + " Favored", why:
+        v === 0 ? cap(ua.plan) + ". " + cap(ub.threat) + " — respect that one window, but the six-spike comparison favors you: take the post-6 duel whenever HP bars start even."
+      : v === 1 ? cap(ua.plan) + ", while " + low(ub.plan) + ". You win the breakpoint against " + b + ", not the whole game — cash it on the first objective after both sides hit six."
+      : v === 2 ? cap(ua.plan) + ". " + cap(ub.plan) + ", so the margin is real but narrow: fight when your ultimate is up and " + ub.ult + " is the one on cooldown."
+      : v === 3 ? cap(ua.plan) + ". " + b + "'s six is not empty — " + low(ub.threat) + ". Take the duel from even health rather than from behind, and " + low(ub.tool) + "."
+      : v === 4 ? cap(ua.plan) + ". " + cap(ub.threat) + " — respect that one window, but the six-spike comparison favors you: take the post-6 duel whenever HP bars start even."
+      :           cap(ua.plan) + ". You win the breakpoint against " + b + ", not the whole game — cash the advantage on the first objective after both sides hit six." };
+    if (d > -0.5) return { adv: "Even Ult Window", why:
+        v === 0 ? "Both sixes are real: " + low(ua.plan) + ", while " + low(ub.plan) + ". Whoever lands their ultimate first wins the window — track the level race and never be the one caught at five and a half."
+      : v === 1 ? "Neither ultimate cleanly beats the other — " + low(ub.threat) + ", but " + low(ua.plan) + ". The breakpoint goes to whoever reaches it first with an objective on the map."
+      : v === 2 ? cap(ub.plan) + ", and " + ua.ult + " answers it almost exactly. Decide this one on setup — vision, numbers and cooldowns — not on the ultimate comparison."
+      : v === 3 ? "Level six changes both of you at once: " + low(ua.plan) + ", while " + low(ub.plan) + ". " + cap(ub.tool) + ", and let the objective timer say when to commit."
+      : v === 4 ? "Both sixes are real: " + low(ua.plan) + ", while " + low(ub.threat) + ". Whoever lands their ultimate first wins the window — track the level race and avoid being the one caught at five and a half."
+      :           "Neither ultimate cleanly beats the other — " + low(ub.threat) + ", but " + low(ua.plan) + ". The breakpoint goes to whoever reaches it first with an objective on the map." };
+    if (d > -2.25) return { adv: "Respect " + shortName(b) + "'s R", why:
+        v === 0 ? "The six-spike belongs to " + b + ", and " + a + "'s does not bridge the gap: " + low(ub.threat) + ". " + cap(ub.tool) + ". Your own ultimate is a tool here, not a trump card — spend it to escape or equalize, not to start fights."
+      : v === 1 ? cap(ub.threat) + " — " + a + " loses the straight post-6 duel. " + cap(ub.tool) + ", and shift your pressure to the side of the map " + ub.ult + " is not on."
+      : v === 2 ? cap(ub.plan) + ", which is the whole problem: " + low(ub.threat) + ". " + cap(ub.tool) + ", and spend " + ua.ult + " to equalize rather than to open."
+      : v === 3 ? b + " wins the breakpoint outright — " + low(ub.plan) + ", and " + low(ub.threat) + ". " + cap(ub.tool) + ", then trade objectives cross-map until your items land."
+      : v === 4 ? "The six-spike belongs to " + b + ", and " + a + "'s does not bridge the gap: " + low(ub.threat) + ". " + cap(ub.tool) + ". Your own ultimate is a tool here, not a trump card — spend it to escape or equalize, not to start fights."
+      :           cap(ub.threat) + " — " + a + " loses the straight post-6 duel. " + cap(ub.tool) + ", and shift your pressure to the side of the map their ultimate is not on." };
+    return { adv: "Danger — " + shortName(b) + "'s R", why:
+        v === 0 ? "Hard breakpoint loss for " + a + ": " + low(ub.threat) + ", and your six does not bridge the gap. " + cap(ub.tool) + ". Treat every post-6 river fight as theirs until your items arrive."
+      : v === 1 ? cap(ub.threat) + ". At this breakpoint " + a + " simply does not duel " + b + " — " + low(ub.tool) + ", trade objectives cross-map, and let item spikes re-open the matchup."
+      : v === 2 ? cap(ub.plan) + ", and " + a + " has nothing that answers it: " + low(ub.threat) + ". " + cap(ub.tool) + ", and refuse every river fight where " + ub.ult + " is up."
+      : v === 3 ? "Six is where this matchup breaks for " + a + " — " + low(ub.threat) + ", while " + low(ub.plan) + ". " + cap(ub.tool) + ". Farm the far side and come back at two items."
+      : v === 4 ? "Hard breakpoint loss for " + a + ": " + low(ub.threat) + ", and your six does not bridge the gap. " + cap(ub.tool) + ". Treat every post-6 river fight as theirs until your items arrive."
+      :           cap(ub.threat) + ". At this breakpoint " + a + " simply does not duel " + b + " — " + low(ub.tool) + ", trade objectives cross-map, and let item spikes re-open the matchup." };
   }
 
   // ---- apply (idempotent; retry loop per project convention) ---------------------

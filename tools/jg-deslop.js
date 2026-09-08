@@ -142,7 +142,9 @@ const SWAPS = [
   // Acting on that report would have corrupted 50 correct matchups. The kit file is the
   // authority, never an agent's recollection.
   ['Ice Pillar', 'Pillar of Ice'],                 // Trundle E
-  ['True Grit', 'Quickdraw'],                      // Graves E — the armour stacks are Quickdraw's
+  // "True Grit" is NOT stale: graves.json E reads "gain two stacks of True Grit" — it is the
+  // kit's name for the Quickdraw resist buff, so the text keeps it (an earlier pass swapped it
+  // to "Quickdraw" on a false premise; _jg-label-text-fixes.js re-capitalises it instead).
   ['Twin Bite', 'Emberstrike'],                    // Shyvana Q, pre-rework name
   ['Burnout', 'Inferno Aegis'],                    // Shyvana W, pre-rework name
   ['Flame Breath', 'Molten Burst'],                // Shyvana E, pre-rework name
@@ -204,7 +206,13 @@ const SWAPS = [
   ['Your camp clearing loops become entirely automated, allowing you to', 'Your clear is on autopilot, letting you'],
   ['Your clear velocity becomes entirely automated, allowing you to', 'Your clear is on autopilot, letting you'],
   ['Your camp clearing loops become highly automated, allowing you to', 'Your clear is on autopilot, letting you'],
-  ['Your camp clearing loops become incredibly fast, allowing you to', 'Your clear gets very fast, letting you'],
+  ['Your camp clearing loops become incredibly fast, allowing you to', 'Camps die fast now, letting you'],
+  // Second read of the same line: "Your clear is on autopilot, letting you instantly clear out
+  // both sides" says clear twice in one clause. These run after the three above, so a fresh
+  // regeneration lands here in one pass and text already written gets the same repair.
+  ['Your clear is on autopilot, letting you instantly clear out both sides', 'Your clear runs itself, so you can sweep both sides'],
+  ['Your clear is on autopilot, letting you clear out both sides in seconds', 'Your clear runs itself, so you can sweep both sides in seconds'],
+  ['Your clear gets very fast, letting you', 'Camps die fast now, letting you'],
   ['camp clearing loops', 'clear'],
   ['entirely automated', 'on autopilot'],
   ['highly automated', 'on autopilot'],
@@ -286,9 +294,10 @@ function applySwaps(s) {
   // A plain typo, 127 times, inside the shared tldr template ("clearing whole campss").
   // Several audits reviewed rows containing it and reported nothing to fix.
   // Naafiri W and Kayn P carry a leading "The" in the kit. Add it only when it is absent,
-  // so running twice cannot produce "The The".
-  out = out.replace(/(?<!The )Call of the Pack/g, 'The Call of the Pack');
-  out = out.replace(/(?<!The )Darkin Scythe/g, 'The Darkin Scythe');
+  // so running twice cannot produce "The The". The guard is case-insensitive on purpose:
+  // "from the Darkin Scythe passive" mid-sentence must not become "the The Darkin Scythe".
+  out = out.replace(/(?<![Tt]he )Call of the Pack/g, 'The Call of the Pack');
+  out = out.replace(/(?<![Tt]he )Darkin Scythe/g, 'The Darkin Scythe');
 
   const beforeTypo = out;
   out = out.replace(/campss/g, 'camps');

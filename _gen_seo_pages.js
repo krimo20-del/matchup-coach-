@@ -211,25 +211,57 @@ function appEntry(bag, bFile, bName) {
   return e && typeof e === 'object' ? e : null;
 }
 
-// ---------- ability kits (Data Dragon 16.15.1) ----------
-// The only authority for ability names. CHAMP_DATA's key.name is hand-written
-// ("Apprehend (Pull)", "Yordle Snap Traps", once just "Ultimate"); the app
-// swaps in the enemy-kit name for that slot at render time, so the static page
-// does the same from the kit file and takes the cooldown from there too.
+// ---------- ability kits (Data Dragon 16.15.1) + the app's ENEMY_KITS ----------
+// CHAMP_DATA's key.name is hand-written ("Apprehend (Pull)", "Yordle Snap
+// Traps", once just "Ultimate"); the app swaps in ENEMY_KITS[enemy][slot].n at
+// render time (champ-data/enemy-kits*.js, loaded in the sandbox above), so the
+// static page prints that same name and the reader sees one spelling in both
+// places. The kit file is the Data Dragon authority: it supplies the cooldown,
+// and wherever ENEMY_KITS still carries a pre-rework name (Jax's R is
+// Grandmaster-at-Arms, not Grandmaster's Might) the kit name wins and the clash is counted.
+// champ-data/_kits/ also holds 60 jade*.json files — pre-rework "Jade_" kits
+// (Kayle with Intervention, Sion with Cryptic Gaze) that sort before the real
+// file for every champion after "jade", so a first-file-wins index served 42
+// champions stale cooldowns and abilities that no longer exist. Skip them, and
+// make the gate prove none leaked in.
 const KITS = (() => {
   const by = {};
-  for (const f of fs.readdirSync('champ-data/_kits').filter(f => f.endsWith('.json') && !f.startsWith('_'))) {
+  for (const f of fs.readdirSync('champ-data/_kits').filter(f => f.endsWith('.json') && !f.startsWith('_') && !f.startsWith('jade'))) {
     const k = JSON.parse(fs.readFileSync('champ-data/_kits/' + f, 'utf8'));
-    if (!k || !Array.isArray(k.abilities)) continue;
+    if (!k || !Array.isArray(k.abilities) || /^Jade_/i.test(String(k.id))) continue;
     if (k.slug) by[k.slug] = by[k.slug] || k;
     if (k.name) by[slugNum(k.name)] = by[slugNum(k.name)] || k; // Wukong lives in monkeyking.json
   }
-  if (!by.darius || !by.wukong) throw new Error('champ-data/_kits: kit index incomplete');
+  if (!by.darius || !by.wukong || Object.values(by).some(k => /^Jade_/i.test(String(k.id)))) throw new Error('champ-data/_kits: kit index incomplete or a Jade_ kit leaked in');
   return by;
 })();
-function kitAbility(name, slot) {
+// Straight apostrophes throughout: the kit files write "Hounds' Pursuit", the
+// enemy kits "Hounds\u2019 Pursuit", and the page already says "Naafiri's W".
+const abName = s => String(s || '').replace(/\u2019/g, "'").replace(/\s+/g, ' ').trim();
+const kitStats = { fromEK: 0, fromKit: 0, clash: 0, clashSlots: {} };
+// Returns { names, cooldown, src } or null. src says where the printed name came
+// from: 'ek' = ENEMY_KITS (it equals the kit name or only appends a cue, as in
+// "Flash Frost (Stun)"), 'kit' = no ENEMY_KITS entry for the slot, 'clash' =
+// ENEMY_KITS disagrees with Data Dragon, so the kit name is printed instead.
+function kitAbility(name, slot, fileSlug) {
   const k = KITS[slugNum(name)] || KITS[slug(name)];
-  return k ? k.abilities.find(a => a.slot === slot && Array.isArray(a.names) && a.names.length) || null : null;
+  const kitAb = k ? k.abilities.find(a => a.slot === slot && Array.isArray(a.names) && a.names.length) || null : null;
+  const EK = APP.ENEMY_KITS || {};
+  const ek = EK[fileSlug || ''] || EK[slugNum(name)] || null;
+  const ekName = ek && ek[slot] && ek[slot].n ? abName(ek[slot].n) : '';
+  if (!kitAb && !ekName) return null;
+  const kitNames = kitAb ? kitAb.names.map(abName) : [];
+  const agree = !kitAb || ekName.toLowerCase().startsWith(kitNames[0].toLowerCase());
+  if (ekName && agree) return { names: [ekName], cooldown: kitAb ? kitAb.cooldown : null, src: 'ek' };
+  if (ekName) { const key = `${slugNum(name)}.${slot}`; kitStats.clashSlots[key] = kitStats.clashSlots[key] || `${key} ENEMY_KITS "${ekName}" vs kit "${kitNames.join(' / ')}"`; }
+  return { names: kitNames, cooldown: kitAb.cooldown, src: ekName ? 'clash' : 'kit' };
+}
+// Kit fact gate: the build cannot pass with stale or swapped kit data. A Jade_
+// file gives Kayle "Intervention" and Sion "Cryptic Gaze"; naafiri.json once had
+// W and R swapped. Both the printed name and the raw kit entry must be right.
+for (const [c, s, want] of [['Kayle', 'R', 'Divine Judgment'], ['Sion', 'Q', 'Decimating Smash'], ['Pantheon', 'W', 'Shield Vault'], ['Naafiri', 'W', "Hounds' Pursuit"], ['Naafiri', 'R', 'The Call of the Pack']]) {
+  const ab = kitAbility(c, s), raw = KITS[slugNum(c)].abilities.find(a => a.slot === s);
+  if (!ab || ab.names[0] !== want || !raw || abName(raw.names[0]) !== want) throw new Error(`kit fact gate FAILED: ${c} ${s} prints "${ab ? ab.names[0] : '(missing)'}", kit file says "${raw ? raw.names[0] : '(missing)'}", expected "${want}"`);
 }
 // "26/23.5/21/18.5/16" -> "26–16s". Charge abilities list a sub-second recast
 // (Caitlyn's trap: 0.5), which is not a cooldown anyone tracks, so omit those.
@@ -269,11 +301,16 @@ function glanceHtml(C, bFile, aName, bName) {
   const tldr = regender(d.tldr, she), dos = lines(d.dos), donts = lines(d.donts);
   if (!tldr && !dos.length && !donts.length) { glanceStats.noData++; return ''; }
   let track = '';
-  const ab = d.key && d.key.slot ? kitAbility(bName, d.key.slot) : null;
+  const ab = d.key && d.key.slot ? kitAbility(bName, d.key.slot, bFile) : null;
   if (ab) {
-    const cd = cdText(ab.cooldown);
-    track = `<p><b>Track:</b> ${esc(bName)}'s ${esc(d.key.slot)} — ${esc(ab.names.join(' / '))}${cd ? ` (${cd} cooldown)` : ''}.${d.key.note ? ' ' + esc(regender(d.key.note, she)) : ''}</p>`;
+    const cd = cdText(ab.cooldown), nm = ab.names.join(' / ');
+    // "Sear (Stun, 8–6s cooldown)", not "Sear (Stun) (8–6s cooldown)": an
+    // ENEMY_KITS cue already opens a parenthetical, so the cooldown joins it.
+    const named = !cd ? nm : /\)$/.test(nm) ? nm.replace(/\)$/, `, ${cd} cooldown)`) : `${nm} (${cd} cooldown)`;
+    track = `<p><b>Track:</b> ${esc(bName)}'s ${esc(d.key.slot)} — ${esc(named)}.${d.key.note ? ' ' + esc(regender(d.key.note, she)) : ''}</p>`;
     glanceStats.track++;
+    kitStats[ab.src === 'ek' ? 'fromEK' : 'fromKit']++;
+    if (ab.src === 'clash') kitStats.clash++;
   } else if (d.key && d.key.slot) glanceStats.noKit++;
   glanceStats.boxes++;
   const list = (h, xs) => xs.length ? `<div><h3>${h}</h3><ul>${xs.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : '';
@@ -358,14 +395,15 @@ footer{margin-top:44px;font-size:12.5px;color:#8a90a2;border-top:1px solid rgba(
 .linkgrid a{display:block;padding:8px 10px;border-radius:8px;background:#11131c;border:1px solid rgba(255,255,255,0.06)}
 @media(max-width:640px){.linkgrid{grid-template-columns:1fr 1fr}.build{grid-template-columns:84px 1fr}th,td{padding:8px 6px}}`;
 
-// Build gate on the SERP snippet: Google cuts descriptions near 155-160 chars
-// and titles near 60. Every page passes through shell(), so measure here and
-// fail the build at the end if a description runs long (titles are logged).
+// Build gate on the SERP snippet: Google cuts descriptions near 155 chars and
+// titles near 60 — the same limits the two ladders below aim for. Every page
+// passes through shell(), so measure here and fail the build at the end if a
+// description or a title runs long.
 const snippetStats = { descMax: 0, descMaxUrl: '', descOver: 0, titleMax: 0, titleMaxUrl: '', titleOver: 0 };
 // `jungle` pages carry no lolalytics sample, so their footer must not claim one.
 function shell(title, desc, canonical, jsonld, body, opts = {}) {
   if (desc.length > snippetStats.descMax) { snippetStats.descMax = desc.length; snippetStats.descMaxUrl = canonical; }
-  if (desc.length > 160) snippetStats.descOver++;
+  if (desc.length > 155) snippetStats.descOver++;
   if (title.length > snippetStats.titleMax) { snippetStats.titleMax = title.length; snippetStats.titleMaxUrl = canonical; }
   if (title.length > 60) snippetStats.titleOver++;
   const freshness = opts.jungle
@@ -414,7 +452,7 @@ function ownCls(owner, dispA, dispB) { return owner === dispA ? 'own-a' : owner 
 let pages = 0, laneMatchupPages = 0;
 const sitemap = [];
 const laneStats = {};
-const laneStat = k => laneStats[k] || (laneStats[k] = { derived: 0, suppressed: 0 });
+const laneStat = k => laneStats[k] || (laneStats[k] = { derived: 0, suppressed: 0, noGames: 0 });
 // The audit valued these as small, zero-script pages; the new sections must
 // not quietly grow one past the budget.
 const sizeStats = { max: 0, maxUrl: '' };
@@ -458,6 +496,13 @@ for (const L of LANES) {
         if (derived) laneStat(L.key).derived++;
       } else if (typeof wrA === 'number') { wr = wrA; games = gA; }
       else if (typeof wrRev === 'number') { wr = Math.round((100 - wrRev) * 100) / 100; games = gB; }
+      // A win rate with no game count behind it is a placeholder (Locke's lane
+      // entries sit at a flat 50%), not a measurement. Treat it as unknown here,
+      // so the page, its who-wins / counter / skill answers, the hardest-easiest
+      // lists and the hub all fall back to the window-based wording instead of
+      // printing a number nobody sampled — and no page ever prints an empty
+      // "( Emerald+ games, ...)" clause.
+      if (typeof wr === 'number' && !games) { wr = null; laneStat(L.key).noGames++; }
       POOL[L.key][a][bFile] = { wr, games };
     }
   }
@@ -534,9 +579,12 @@ for (const L of LANES) {
       // answer and counter answer, so no page can contradict itself.
       const wrKnown = typeof wr === 'number';
       const cls = favourCls(wr);
-      // Sample provenance, printed beside the headline number and in the
-      // who-wins answer so the reader can see what the percentage rests on.
-      const sample = `${gamesTxt ? `${gamesTxt} ` : ''}Emerald+ games, lolalytics, sampled ${WR_SAMPLED}`;
+      // Sample provenance. The full clause (source and date) is printed once, in
+      // the subtitle; the verdict and the who-wins answer cite the game count
+      // only, so one screen doesn't stack the same parenthetical three times.
+      // wrKnown implies a game count (see POOL), so neither form is ever empty.
+      const sample = `${gamesTxt} Emerald+ games, lolalytics, sampled ${WR_SAMPLED}`;
+      const over = `over ${gamesTxt} games`;
 
       // Verdict box — leads with the pooled number; the 7 windows are texture
       // from A's game plan, never a competing claim about who's favoured.
@@ -548,17 +596,17 @@ for (const L of LANES) {
           ? `${aName}'s game plan below claims ${nA} of the 7 stage windows`
           : `${bName} pressures ${nB} of the 7 stage windows in the plan below`);
       if (cls === 'counterA' || cls === 'edgeA') {
-        verdict = `${aName} is ${cls === 'edgeA' ? 'slightly ' : ''}favoured — ${wr}% win rate (${sample})${planNote ? `, and ${planNote}` : ''}.`;
+        verdict = `${aName} is ${cls === 'edgeA' ? 'slightly ' : ''}favoured — ${wr}% win rate ${over}${planNote ? `, and ${planNote}` : ''}.`;
         if (win && nA < nB) verdict = `The numbers ${cls === 'edgeA' ? 'lean slightly' : 'favour'} ${aName} (${wr}% win rate), even though ${bName} pressures ${nB} of the 7 stage windows — convert your windows below and the stats swing your way.`;
       } else if (cls === 'counterB' || cls === 'edgeB') {
-        verdict = `${bName} is ${cls === 'edgeB' ? 'slightly ' : ''}favoured — ${aName} wins ${cls === 'counterB' ? 'only ' : ''}${wr}% of games (${sample})${planNote && nB >= nA ? `, and ${planNote}` : ''}.${noWindows ? '' : ' Play it patient and win your windows.'}`;
+        verdict = `${bName} is ${cls === 'edgeB' ? 'slightly ' : ''}favoured — ${aName} wins ${cls === 'counterB' ? 'only ' : ''}${wr}% of ${gamesTxt} games${planNote && nB >= nA ? `, and ${planNote}` : ''}.${noWindows ? '' : ' Play it patient and win your windows.'}`;
         if (win && nA > nB) verdict = cls === 'counterB'
           ? `An uphill lane you can win — the numbers lean ${bName} (${aName} wins ${wr}%), but ${aName}'s plan below claims ${nA} of the 7 windows: convert them and the stats catch up to you.`
           : `A close lane that leans ${bName} on paper (${aName} wins ${wr}%), but ${aName}'s plan below claims ${nA} of the 7 windows: convert them and the stats catch up to you.`;
       } else if (cls === 'even') {
         verdict = (win && Math.abs(nA - nB) >= 2)
           ? `Statistically even (${wr}% win rate) — but the tempo isn't: ${planNote}. Whoever converts their windows wins.`
-          : `A genuine skill matchup — ${wr}% win rate (${sample}), decided window to window rather than at champion select.`;
+          : `A genuine skill matchup — ${wr}% win rate ${over}, decided window to window rather than at champion select.`;
       } else {
         verdict = win
           ? (noWindows
@@ -566,9 +614,9 @@ for (const L of LANES) {
             : Math.abs(nA - nB) >= 2
             ? `${nA > nB ? aName : bName} has the tempo edge — ${nA > nB ? `${aName}'s plan claims ${nA}` : `${bName} pressures ${nB}`} of the 7 stage windows.`
             : (evens >= 4
-              ? `Mostly even — ${evens} of the 7 windows are a coin flip; the decisive ${Math.max(nA, nB) === 1 ? 'window' : 'windows'} belong to ${nA >= nB ? aName : bName}.`
+              ? `Mostly even — ${evens} of the 7 windows are a coin flip; the decisive ${Math.max(nA, nB) === 1 ? 'window belongs' : 'windows belong'} to ${nA >= nB ? aName : bName}.`
               : `A genuine skill matchup — the favour swings window to window.`))
-          : 'Stage-by-stage skill matchup.';
+          : `No Emerald+ win-rate sample for ${aName} vs ${bName} on this patch — play it as a skill matchup and win the windows in the plan below.`;
       }
 
       // TITLE LADDER — target 60 chars, not 70.
@@ -589,19 +637,23 @@ for (const L of LANES) {
       // then shorten the trailing list; the "who wins" question always survives.
       const descQ = `Who wins ${aName} vs ${bName} in ${L.prose}?`;
       const descWr = wrKnown ? ` ${aName} wins ${wr}% of games` : '';
-      let desc = `${descQ}${descWr ? `${descWr}${gamesTxt ? ` across ${gamesTxt} Emerald+ games` : ''}.` : ''} How to beat ${bName} as ${aName}: stage-by-stage favour, power spikes and the full lane plan.`;
+      let desc = `${descQ}${descWr ? `${descWr} across ${gamesTxt} Emerald+ games.` : ''} How to beat ${bName} as ${aName}: stage-by-stage favour, power spikes and the full lane plan.`;
       if (desc.length > 155) desc = `${descQ}${descWr ? `${descWr}.` : ''} How to beat ${bName} as ${aName}: stage-by-stage favour, power spikes and the full lane plan.`;
       if (desc.length > 155) desc = `${descQ}${descWr ? `${descWr}.` : ''} How to beat ${bName} as ${aName}: stage-by-stage favour and the lane plan.`;
       if (desc.length > 155) desc = `${descQ}${descWr ? `${descWr}.` : ''} How to beat ${bName} as ${aName}.`;
 
       // Who-wins / skill-matchup / counter answers all derive from `cls`, so
       // they can never disagree with each other or with the verdict box.
-      const whoShort = cls === 'counterA' ? `${aName} — a ${wr}% win rate vs ${bName} in ${L.prose} (${sample}) is a real advantage.`
-        : cls === 'edgeA' ? `${aName}, slightly — a ${wr}% win rate edge (${sample}); execution can flip it.`
-        : cls === 'even' ? `Nobody on paper — a ${wr}% win rate (${sample}) makes this a coin flip decided by play, not champion select.`
-        : cls === 'edgeB' ? `${bName}, slightly — ${aName} wins ${wr}% of games (${sample}); winnable with the right plan.`
-        : cls === 'counterB' ? `${bName} — ${aName} wins only ${wr}% of games (${sample}), so ${aName} plays this as the disadvantaged side.`
-        : verdict;
+      const whoShort = cls === 'counterA' ? `${aName} — a ${wr}% win rate vs ${bName} in ${L.prose} ${over} is a real advantage.`
+        : cls === 'edgeA' ? `${aName}, slightly — a ${wr}% win rate edge ${over}; execution can flip it.`
+        : cls === 'even' ? `Nobody on paper — a ${wr}% win rate ${over} makes this a coin flip decided by play, not champion select.`
+        : cls === 'edgeB' ? `${bName}, slightly — ${aName} wins ${wr}% of ${gamesTxt} games; winnable with the right plan.`
+        : cls === 'counterB' ? `${bName} — ${aName} wins only ${wr}% of ${gamesTxt} games, so ${aName} plays this as the disadvantaged side.`
+        // No pooled number: say so, then point at the windows when the two
+        // sides' plans agree on a leader (the verdict cites the same count).
+        : `No sample yet — ${aName} vs ${bName} has no Emerald+ win-rate data for this patch; ${win && Math.abs(nA - nB) >= 2
+          ? `${nA > nB ? `${aName}'s plan below claims ${nA}` : `${bName} pressures ${nB}`} of the 7 stage windows, so ${nA > nB ? aName : bName} sets the tempo`
+          : 'treat it as a skill matchup and play the plan below'}.`;
       const skillAns = cls === 'even'
         ? `Yes — ${aName} vs ${bName} is a genuine skill matchup: ${wr}% win rate, and the favour swings window to window rather than being set at champion select.`
         : (cls === 'edgeA' || cls === 'edgeB')
@@ -613,7 +665,7 @@ for (const L of LANES) {
             ? `Yes — ${aName} vs ${bName} plays as a skill matchup: the favour swings window to window.`
             : `Not exactly — ${nA > nB ? `${aName}'s game plan claims ${nA}` : `${bName} pressures ${nB}`} of the 7 stage windows, so one side sets the lane's tempo.`)
           : '');
-      const counterAns = cls === 'counterA' ? `Statistically yes — ${aName} counters ${bName} in ${L.prose}, winning ${wr}% of games${gamesTxt ? ` over ${gamesTxt} Emerald+ games` : ''}.`
+      const counterAns = cls === 'counterA' ? `Statistically yes — ${aName} counters ${bName} in ${L.prose}, winning ${wr}% of ${gamesTxt} Emerald+ games.`
         : cls === 'edgeA' ? `Not a hard counter — ${aName} has a slight edge (${wr}% win rate), and play quality decides the rest.`
         : cls === 'even' ? `No hard counter either way — the ${aName} vs ${bName} win rate is ${wr}%, an even lane decided by execution.`
         : cls === 'edgeB' ? `No — if anything ${bName} has the slight edge (${aName} wins ${wr}%), though it stays close.`
@@ -716,7 +768,7 @@ ${crossLane}`;
   }
 }
 
-for (const [k, s] of Object.entries(laneStats)) console.log(`${k}: derived-mirror samples kept single ${s.derived} · window-count claims suppressed (mirrors disagree) ${s.suppressed}`);
+for (const [k, s] of Object.entries(laneStats)) console.log(`${k}: derived-mirror samples kept single ${s.derived} · window-count claims suppressed (mirrors disagree) ${s.suppressed} · win rates with no game count treated as unknown ${s.noGames}`);
 
 // ---------- JUNGLE guides ----------
 // Jungle isn't a lane matchup — it's jungler vs jungler, stored in JG_DB
@@ -749,21 +801,29 @@ for (const f of JG_FIX_LAYERS) {
 const JG_DB = JGW.JG_DB || {};
 const jgNames = Object.keys(JG_DB);
 // Mirrors the app's own advantage classifier so the guide agrees with the app.
+// Names match on word boundaries. Every JG_DB label spells the jungler out in
+// full — "Nunu & Willump Favored", "Respect Xin Zhao", "Danger — Avoid Rek'Sai",
+// "Respect Evelynn's R" — measured across all 652 distinct labels, no jungler is
+// ever shortened or aliased, so the display name is the whole vocabulary. A raw
+// substring test read every "Viego Favored" cell on a Vi page as Vi's window.
+const reEsc = s => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const nameRe = {};
+const hasName = (label, n) => (nameRe[n] = nameRe[n] || new RegExp('\\b' + reEsc(n) + '\\b', 'i')).test(label);
 function jgTone(adv, youName, foeName) {
   const a = (adv || '').toLowerCase();
-  const you = String(youName).toLowerCase(), foe = String(foeName || '').toLowerCase();
   // Check the OPPONENT first: a label like "Bel'Veth Favored" names them, not
   // you, and must read as pressure — otherwise the generic /favou?red/ test
   // below claims their window as yours.
-  if (foe && a.indexOf(foe) >= 0) return 'b';
-  if (a.indexOf(you) >= 0) return 'a';
+  if (foeName && hasName(a, String(foeName))) return 'b';
+  if (hasName(a, String(youName))) return 'a';
   if (/dominant|domination|favou?red|peak|spike|apex|predator|stabilized|playmaker|absolute/.test(a)) return 'a';
   if (/defensive|posture|caution|risk|danger|avoid|surviv|weak|vulnerab|passive|concede|respect/.test(a)) return 'b';
   return 's';
 }
 // Build gate: with the fix layers applied, no mirror pair may call BOTH junglers
-// favoured (or both hard). Measured 535 -> 0 both-favoured the day the layers were
-// wired in; a few pairs of slack covers hand edits, 535 can never pass again.
+// favoured (or both hard). Measured 535 -> 1 the day the layers were wired in (the
+// 1 was Vi vs Viego, a substring match) -> 0 with word-boundary names. Nothing is
+// tolerated: one clashing pair is a page that contradicts its own table.
 {
   const jgDiff = (rep, you, foe) => {
     const t = rep.stages.map(s => jgTone(s.adv, you, foe));
@@ -782,7 +842,7 @@ function jgTone(adv, youName, foeName) {
     }
   }
   console.log(`jungle mirror gate: ${clash} of ${pairs} pairs disagree${examples.length ? ' — ' + examples.join(', ') : ''}`);
-  if (clash > 5) throw new Error(`jungle mirror gate FAILED: ${clash} pairs both favoured / both hard — are the _jg-* fix layers loading?`);
+  if (clash > 0) throw new Error(`jungle mirror gate FAILED: ${clash} pairs both favoured / both hard — are the _jg-* fix layers loading?`);
 }
 // Jungle has no win-rate sample, so the hardest/easiest lists rank this
 // jungler's opponents by the window spread of the race plans instead.
@@ -796,6 +856,40 @@ function jgExtremesHtml(you, spreads, foe) {
   return `<h2>Hardest and easiest matchups for ${esc(you)} in the jungle</h2>
 <p class="sub">Ranked by the race windows in ${esc(you)}'s plans — the jungle race carries no win-rate sample.</p>
 <div class="cols"><div class="card"><h3>Hardest</h3><ul>${r.slice(0, 3).map(li).join('')}</ul></div><div class="card"><h3>Easiest</h3><ul>${r.slice(-3).reverse().map(li).join('')}</ul></div></div>`;
+}
+// Stage 5 ("First Item Spike") labels name the item the report's OWN jungler
+// completes first, and the build card lifts that label into "First item" the way
+// the app does. Not every label is an item, though: Elise's reports say "Elise
+// Power Spike", Evelynn-vs-Elise carries Elise's spike, all 49 reports against
+// Locke describe HIS "Lich Bane / Shadowflame Spike", and a few read "Tank Item
+// Spike", "Even" or "Mirror". So learn each jungler's own labels first (the item
+// their own reports name at least three times), then only lift a label that is
+// this jungler's window, is not a jungler's name or a placeholder, and is not
+// the opponent's own item; anything else falls back to the JG_LOADOUTS item.
+const jgOwnItems = {};
+for (const you of jgNames) {
+  const n = {};
+  for (const foe of Object.keys(JG_DB[you] || {})) {
+    const s5 = foe !== you && JG_DB[you][foe] && JG_DB[you][foe].stages ? JG_DB[you][foe].stages[5] : null;
+    if (s5) n[s5.adv] = (n[s5.adv] || 0) + 1;
+  }
+  jgOwnItems[you] = new Set(Object.keys(n).filter(k => n[k] >= 3));
+}
+const jgNameRe = new RegExp('\\b(' + jgNames.map(reEsc).join('|') + ')\\b', 'i');
+const NOT_ITEM = /\b(power|even|mirror|whoever|tank item|utility item|ap item)\b/i;
+const jgItemStats = { lifted: 0, fallback: 0, examples: [] };
+function jgFirstItem(you, foe, s5, tone) {
+  const raw = s5 && /item/i.test(String(s5.stage)) ? tidy(String(s5.adv).replace(/\s*Spike$/i, '')) : '';
+  if (!raw) return '';
+  const label = String(s5.adv);
+  const foeOwn = !!jgOwnItems[foe] && jgOwnItems[foe].has(label) && !jgOwnItems[you].has(label);
+  if (tone !== 'a' || jgNameRe.test(raw) || NOT_ITEM.test(raw) || foeOwn) {
+    jgItemStats.fallback++;
+    if (jgItemStats.examples.length < 6) jgItemStats.examples.push(`${you} vs ${foe} "${label}"`);
+    return '';
+  }
+  jgItemStats.lifted++;
+  return raw;
 }
 let jgPages = 0;
 for (const you of jgNames) {
@@ -824,9 +918,11 @@ for (const you of jgNames) {
     // race even though 4 < 5 (the old threshold called it a skill matchup).
     const spread = greens - reds;
     const diff = spread >= 3 ? 'FAVOURED' : spread <= -3 ? 'HARD' : 'SKILL';
-    const s5 = rep.stages[5];
-    const dbItem = s5 && /item/i.test(String(s5.stage)) ? tidy(String(s5.adv).replace(/\s*Spike$/i, '')) : '';
+    const dbItem = JL ? jgFirstItem(you, foe, rep.stages[5], tones[5]) : '';
     const jl = JL && JL.start && (dbItem || JL.firstItem) ? Object.assign({}, JL, { firstItem: dbItem || JL.firstItem }) : null;
+    // Build gate: a "First item" that names a jungler or a placeholder is the
+    // race label leaking through, whichever source it came from.
+    if (jl && (jgNameRe.test(jl.firstItem) || NOT_ITEM.test(jl.firstItem))) throw new Error(`jungle build gate FAILED: ${you} vs ${foe} first item "${jl.firstItem}" is not an item`);
     const jShe = isFemale(foe);
     const jRunesQ = `What runes does ${you} take vs ${foe}?`, jBuildQ = `What should ${you} build vs ${foe}?`;
     const jRunesA = jl ? runeAnswer(jl, you, foe) : '', jBuildA = jl ? buildAnswer(jl, you, foe, jShe) : '';
@@ -934,6 +1030,7 @@ ${jgMore ? `<p class="sub">More ${esc(you)} jungle matchups: ${jgMore}</p>` : ''
   sitemap.push(canonical);
 }
 console.log('jungle guide pages:', jgPages, '(+ ' + jgNames.length + ' champion hubs)');
+console.log(`jungle first item: lifted from the race label ${jgItemStats.lifted} · JG_LOADOUTS fallback ${jgItemStats.fallback}${jgItemStats.examples.length ? ' — e.g. ' + jgItemStats.examples.join(', ') : ''}`);
 
 // ---------- champ hubs ----------
 for (const L of LANES) {
@@ -1017,9 +1114,10 @@ const sm = `<?xml version="1.0" encoding="UTF-8"?>
 fs.writeFileSync('sitemap.xml', sm);
 
 // ---------- snippet gate ----------
-console.log(`meta description max ${snippetStats.descMax} chars (${snippetStats.descMaxUrl}) · over 160: ${snippetStats.descOver}`);
+console.log(`meta description max ${snippetStats.descMax} chars (${snippetStats.descMaxUrl}) · over 155: ${snippetStats.descOver}`);
 console.log(`title max ${snippetStats.titleMax} chars (${snippetStats.titleMaxUrl}) · over 60: ${snippetStats.titleOver}`);
-if (snippetStats.descOver > 0) throw new Error(`snippet gate FAILED: ${snippetStats.descOver} meta descriptions exceed 160 chars (max ${snippetStats.descMax} at ${snippetStats.descMaxUrl})`);
+if (snippetStats.descOver > 0) throw new Error(`snippet gate FAILED: ${snippetStats.descOver} meta descriptions exceed 155 chars (max ${snippetStats.descMax} at ${snippetStats.descMaxUrl})`);
+if (snippetStats.titleOver > 0) throw new Error(`snippet gate FAILED: ${snippetStats.titleOver} titles exceed 60 chars (max ${snippetStats.titleMax} at ${snippetStats.titleMaxUrl})`);
 
 // ---------- section coverage + size gate ----------
 // The at-a-glance box and the build card are guarded per pair, so a data
@@ -1029,6 +1127,10 @@ if (snippetStats.descOver > 0) throw new Error(`snippet gate FAILED: ${snippetSt
 const lanePages = laneMatchupPages;
 console.log(`sections: at-a-glance ${glanceStats.boxes} of ${lanePages} lane pages (no data ${glanceStats.noData}, track line ${glanceStats.track}, kit missing ${glanceStats.noKit}, draft lines dropped ${glanceStats.dropped}, lines regendered for female opponents ${glanceStats.regendered}) · build cards ${glanceStats.builds} (no loadout ${glanceStats.noLoadout}) · hardest/easiest lists ${glanceStats.extremes || 0}`);
 if (glanceStats.boxes < lanePages * 0.9) throw new Error(`section gate FAILED: at-a-glance box on only ${glanceStats.boxes} of ${lanePages} lane pages — is CHAMP_DATA loading?`);
+// Which file the tracked ability's name came from, and where the app's ENEMY_KITS
+// still disagrees with Data Dragon (the kit name is what those pages print).
+const clashSlots = Object.values(kitStats.clashSlots);
+console.log(`track ability name: from ENEMY_KITS ${kitStats.fromEK} pages · from the kit file ${kitStats.fromKit} (ENEMY_KITS disagrees with the kit on ${kitStats.clash} pages, ${clashSlots.length} slots${clashSlots.length ? ': ' + clashSlots.join('; ') : ''})`);
 console.log(`largest page ${(sizeStats.max / 1024).toFixed(1)} KB (${sizeStats.maxUrl})`);
 if (sizeStats.max > 60 * 1024) throw new Error(`size gate FAILED: ${sizeStats.maxUrl} is ${(sizeStats.max / 1024).toFixed(1)} KB`);
 

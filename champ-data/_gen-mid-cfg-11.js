@@ -81,7 +81,7 @@ window.GEN_MID_CFGS_11 = [
   load:{
     sub:"r/GalioMains",
     start:"Doran's Shield + Health Potion",
-    normalBack:"Bami's Cinder / Spectre's Cowl piece (≈1000g)",
+    normalBack:"Giant's Belt / Spectre's Cowl piece (≈1000g)",
     antihealBack:"Oblivion Orb (≈800g) — cuts his sustain",
     antihealNote:"Oblivion Orb early into his sustain.",
     firstItem:"Hollow Radiance / Riftmaker",

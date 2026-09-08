@@ -6,7 +6,7 @@ window.CHAMP_CONFIGS_MID = Object.assign(window.CHAMP_CONFIGS_MID || {}, {
     lateSwing: 'Late Galio is the anti-engage \u2014 taunt their dive, shield the magic, R the lonely teammate.', spikeLine: 'First MR item online \u2014 AP trades become donations.',
     spikeItem: 'First item spike \u2014 the taunt rotation chunks.', lvl6Spike: 'Hero\u2019s Entrance online \u2014 every shoved side lane is your teleport gym.',
     fbVerb: 'taunt the commit and rotate him down', fbAction: 'shield the poke and taunt the step-up', fbDo: 'Trade behind the shield \u2014 the passive is the matchup vs AP', dosTail: 'Park the wave middle before every R \u2014 the channel costs two waves if you cast it from a crashing lane.',
-    buildStart: ['Doran\u2019s Shield + Health Potion', 'Bami\u2019s / Cowl piece'],
+    buildStart: ['Doran\u2019s Shield + Health Potion', 'Giant\u2019s Belt / Cowl piece'],
     buildCore: ['Mercury\u2019s Treads', 'Hollow Radiance / Riftmaker', 'Abyssal Mask'],
     skillSeq: ['Q', 'E', 'W', 'Q', 'Q', 'R', 'Q', 'W', 'Q', 'W', 'R', 'W', 'W', 'E', 'E', 'R', 'E', 'E'],
     skillLegend: [

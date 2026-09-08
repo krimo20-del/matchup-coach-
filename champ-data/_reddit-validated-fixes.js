@@ -5,9 +5,11 @@
 // corrects the VERDICT (diff) + the 7-stage FAVOUR WINDOWS where the generated
 // data was wrong. Where a real win rate is known it is also written to
 // window.MC_REAL_WR so the app shows the REAL number (not the verdict estimate)
-// AND the verdict is derived from that number, so they can never disagree —
-// with one exception: when both seats' own numbers claim the same side is
-// favoured and the pooled rate is near 50, both seats read EVEN (diffFromPair).
+// AND the verdict is derived from that number, so they can never disagree.
+// When both seats' own numbers claim the same side is favoured and the pooled
+// rate is near 50, both seats show the pooled rate instead (shownWr) and take
+// its verdict, so the number on each page still agrees with its verdict and
+// the two pages sum to 100.
 //
 // `win` (optional) = who owns each lane stage, in order:
 //   [Level 1, Level 2, Level 3, Levels 4-5, Level 6, First item, 2+ items]
@@ -163,23 +165,31 @@
   var SCALER = { vladimir: 1, kassadin: 1, nasus: 1, chogath: 1, camille: 1, vayne: 1, kayle: 1, ryze: 1, gangplank: 1, kled: 1, cassiopeia: 1, yorick: 1, akali: 1, gwen: 1, ksante: 1, yasuo: 1 };
   function diffFromWr(wr) { return wr >= 52.5 ? 'FAVOURED' : wr >= 48.5 ? 'EVEN' : wr >= 45.5 ? 'TRICKY' : 'HARD'; }
   function mirrorDiff(d) { return d === 'FAVOURED' ? 'TRICKY' : d === 'EVEN' ? 'EVEN' : 'FAVOURED'; }
-  // Verdict for champ-vs-enemy given BOTH sides' own lolalytics numbers. The
-  // two pages are independent samples that do not sum to 100, so a pair can
-  // read 53.1% from one seat and 53.4% from the other and label itself
-  // FAVOURED from both. When the two directions disagree on who is favoured
-  // and the pooled rate ((wrAB + (100 - wrBA)) / 2) sits in the EVEN band
-  // from either seat (within 2.5 points of 50, so both seats get the same
-  // answer), both seats read EVEN. Anything else keeps its own number's
-  // verdict — pooling everywhere would flip calls the hand-written prose was
-  // built on.
-  function diffFromPair(wr, rev) {
-    var da = diffFromWr(wr);
-    if (typeof rev !== 'number') return da;
-    var db = diffFromWr(rev);
-    var clash = (da === 'FAVOURED' && db === 'FAVOURED') || (da === 'HARD' && db === 'HARD');
-    if (!clash) return da;
-    var pooled = (wr + (100 - rev)) / 2;
-    return Math.abs(pooled - 50) < 2.5 ? 'EVEN' : da;
+  // The two pages of a pair are independent lolalytics samples that do not sum
+  // to 100, so a pair can read 53.1% from one seat and 53.4% from the other and
+  // label itself FAVOURED from both (or HARD from both). That is a clash.
+  function pairClash(wr, rev) {
+    if (typeof rev !== 'number') return false;
+    var da = diffFromWr(wr), db = diffFromWr(rev);
+    return (da === 'FAVOURED' && db === 'FAVOURED') || (da === 'HARD' && db === 'HARD');
+  }
+  // The number a seat shows: its own lolalytics rate, unless the pair is a
+  // clash whose pooled rate ((wrAB + (100 - wrBA)) / 2) sits within 2.5 points
+  // of 50 — then both seats show the pooled rate, and the verdict diffFromWr
+  // gives THAT number, so number and badge agree on every page and the two
+  // pages land on EVEN/EVEN or EVEN/TRICKY instead of both claiming the lane.
+  // The pooled rate is rounded once, from the seat whose key sorts first, and
+  // mirrored for the other, so the two pages sum to exactly 100 (rounding each
+  // seat's own pooled value can land on x.x5 and give 100.1). A clash further
+  // from 50 keeps both own numbers: pooling there would let one seat's small
+  // sample drag the other to a HARD it cannot defend, and pooling everywhere
+  // would flip calls the hand-written prose was built on.
+  function shownWr(champ, en, wr, rev) {
+    if (!pairClash(wr, rev)) return wr;
+    var r1 = function (x) { return Math.round(x * 10) / 10; };
+    var first = champ.replace(/_(mid|bot|sup)$/, '') < en;
+    var pooled = first ? r1((wr + (100 - rev)) / 2) : r1(100 - r1((rev + (100 - wr)) / 2));
+    return Math.abs(pooled - 50) < 2.5 ? pooled : wr;
   }
   // The other seat's own number: lane tables are keyed bare for top and
   // suffixed for the other lanes (ahri_mid, caitlyn_bot, lulu_sup), each
@@ -210,7 +220,10 @@
     Object.keys(ext).forEach(function (c) { ALL[c] = Object.assign({}, ALL[c] || {}, ext[c]); });
     function ingest(champ, m) {
       Object.keys(m).forEach(function (en) {
-        var wr = m[en], da = diffFromPair(wr, reverseWr(ALL, champ, en));
+        // A near-50 clash shows the pooled rate, not the seat's own 61.95%
+        // beside an EVEN badge (the other seat shows 100 minus it); the verdict
+        // always follows the number that is shown.
+        var wr = shownWr(champ, en, m[en], reverseWr(ALL, champ, en)), da = diffFromWr(wr);
         window.MC_REAL_WR[champ] = window.MC_REAL_WR[champ] || {}; window.MC_REAL_WR[champ][en] = wr; REAL[champ + '|' + en] = 1;
         window.MC_REAL_WR[en] = window.MC_REAL_WR[en] || {};
         if (!REAL[en + '|' + champ]) window.MC_REAL_WR[en][champ] = Math.round((100 - wr) * 10) / 10;

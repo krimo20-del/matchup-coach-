@@ -284,7 +284,7 @@ window.GEN_CFGS_1 = [
   load:{
     sub:"r/SejuaniMains",
     start:"Doran's Shield + 1 Health Potion",
-    normalBack:"Bami's Cinder (≈900g) — wave control online",
+    normalBack:"Giant's Belt (≈900g) — Sunfire Aegis piece",
     antihealBack:"Bramble Vest (≈800g) — cuts his healing",
     antihealNote:"Bramble Vest early into his sustain.",
     firstItem:"Sunfire Aegis",

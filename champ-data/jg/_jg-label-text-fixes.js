@@ -29,10 +29,12 @@
    follows the name because the name alone is an everyday word ("Despair tank", "Rampage spam",
    "Consume chunks"). Idempotent by construction.
 
-   STALE NAMES in the same phrase table: "True Grit" (Graves' pre-rework passive — the armour is
-   Quickdraw's), "Burnout" and "Twin Bite" (Shyvana pre-rework W and Q; the kit carries Inferno Aegis
-   and Emberstrike). tools/jg-deslop.js already renames them in the base files; STALE does the same
-   for the text that layer builds, so the app never shows a name Data Dragon does not know. */
+   STALE NAMES in the same phrase table: "Burnout" and "Twin Bite" (Shyvana pre-rework W and Q; the
+   kit carries Inferno Aegis and Emberstrike). tools/jg-deslop.js already renames them in the base
+   files; STALE does the same for the text that layer builds, so the app never shows a name Data
+   Dragon does not know. "True Grit" is NOT stale — champ-data/_kits/graves.json E reads "gain two
+   stacks of True Grit", so it is the kit's own name for the Quickdraw resist buff. It sits in NAMES
+   (": true Grit" gets its capital back) and is never swapped out. */
 (function () {
   var FIX = {
     "Vi": { "Viego": { "1": "Respect the Skirmish", "2": "Respect — Path Opposite", "3": "Respect — Path Opposite", "6": "Danger — Outscaled Late" } }
@@ -45,22 +47,20 @@
     "Curse of the Sad Mummy", "Daisy", "Dance of Arrows", "Dark Binding", "Deceive", "Defensive Ball Curl",
     "Demon Shade", "Denting Blows", "Despair tank", "Dragon Strike", "Dragon's Descent", "Drunken Rage",
     "Duskbringer", "E", "Elastic Slingshot", "Eternal Hunger", "Explosive Cask", "Frozen Domain",
-    "Glacial Prison", "Grandmaster's Might", "Highlander", "Impale", "Infinite Duress", "Lamb's Respite",
+    "Glacial Prison", "Grandmaster-at-Arms", "Highlander", "Impale", "Infinite Duress", "Lamb's Respite",
     "Lay Waste", "Let's Bounce", "Lilting Lullaby", "Meditate", "Moonfall", "Nature's Grasp",
     "Onslaught of Shadows", "Pale Cascade", "Parallel Convergence", "Paranoia", "Permafrost", "Phase Dive",
     "Pillar", "Powerball", "Primal Howl", "Purgatory", "Pyroclasm", "Q", "Quickdraw", "Ragnarok", "Rake",
     "Rampage spam", "Reaping Slash", "Requiem", "Seismic Bastion", "Shadow Assault", "Shattered Earth",
     "Sky Splitter", "Smoke Screen", "Soaring Slam", "Sonic Wave", "Soul Shackles", "Spectral Maw",
     "Spirit of Dread", "Stranglethorns", "Subjugate", "Supreme Display of Talent", "Terrashape", "Terrify",
-    "Thrill of the Hunt", "Timewinder", "Triggerseed", "Twisted Advance", "Umbra Blades", "Umbral Trespass",
+    "Thrill of the Hunt", "Timewinder", "Triggerseed", "True Grit", "Twisted Advance", "Umbra Blades", "Umbral Trespass",
     "Undertow", "Unspeakable Horror", "Vicious Strikes", "Void Rush", "Void Spike", "Void Surge", "W",
     "Wall of Pain", "Watch Out", "Weaver's Wall", "Wind Becomes Lightning", "Wolf's Frenzy", "Wuju Style"
   ];
-  // [what the headsup layer writes, what the kit calls it] — first the one phrase that would
-  // otherwise read "Quickdraw (E) Quickdraw armor", then the bare names (either capital).
+  // [what the headsup layer writes, what the kit calls it] — the Shyvana pre-rework names only
+  // (either capital). Graves' "True Grit" is a real kit name and is handled by NAMES above.
   var STALE = [
-    [/Quickdraw \(E\) [Tt]rue Grit armor/g, "Quickdraw (E) armor"],
-    [/[Tt]rue Grit/g, "Quickdraw"],
     [/[Bb]urnout/g, "Inferno Aegis"],
     [/[Tt]win Bite/g, "Emberstrike"]
   ];

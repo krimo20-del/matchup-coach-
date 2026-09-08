@@ -289,8 +289,11 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
   /* Home hero: its glow/grid decoration reaches 120px past the section on both
      sides (inset:-40px -120px), which is 495px of scrollWidth on a 375px phone.
      Clip sideways only — plain overflow:hidden would also cut off the champion
-     autocomplete dropdowns that hang below the search row. */
-  [style*="padding:54px 28px 30px"], [style*="padding: 54px 28px 30px"] { overflow-x: clip; }
+     autocomplete dropdowns that hang below the search row. Phones only: on a
+     desktop the overhang is where the floating ability badges and orbs live. */
+  @media (max-width: 640px) {
+    [style*="padding:54px 28px 30px"], [style*="padding: 54px 28px 30px"] { overflow-x: clip; }
+  }
   /* Home: the free-sample caption ("every matchup for these champions — a new one
      per role every 24h") is a nowrap span that runs 21px past a 360px screen. */
   @media (max-width: 480px) {
@@ -1150,6 +1153,13 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
       <span style="font-size:13px; font-weight:600; color:#ffd2d6;">{{ payErr }}</span>
     </div>
   </sc-if>
+  <!-- Progress, not an error: shown while the app waits for the payment server. -->
+  <sc-if value="{{ hasPayInfo }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ dismissPay }}" style="position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:200; max-width:92vw; display:flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; background:linear-gradient(180deg,#12283a,#0c1a27); border:1px solid rgba(70,198,245,0.5); box-shadow:0 16px 40px -16px rgba(0,0,0,0.8); cursor:pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#46c6f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 7v5l3 2"></path></svg>
+      <span style="font-size:13px; font-weight:600; color:#bfe4f5;">{{ payInfo }}</span>
+    </div>
+  </sc-if>
 
   <!-- ===== LANDING / HOME ===== -->
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
@@ -1872,6 +1882,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
             </div>
             <div style="font-family:'Chakra Petch',sans-serif; font-size:8px; letter-spacing:0.6px; color:#6b7185; font-weight:700; white-space:nowrap;">{{ patch }}</div>
             <div style="display:{{ wrSampleDisp }}; font-family:'Chakra Petch',sans-serif; font-size:7.5px; letter-spacing:0.3px; color:#e8b84b; font-weight:700; white-space:nowrap; margin-top:1px;">{{ wrSample }}</div>
+            <div style="display:{{ wrNoteDisp }}; max-width:150px; font-family:'Chakra Petch',sans-serif; font-size:7.5px; letter-spacing:0.3px; line-height:1.4; color:#8a90a2; font-weight:700; text-align:center; margin-top:1px;">{{ wrNote }}</div>
           </div>
         </div>
 
@@ -3763,7 +3774,7 @@ class Component extends DCLogic {
     authMode: 'login', auName: '', auPass: '', auPass2: '', auTrap: '', auShowPw: false, auRemember: true, auErr: '', auNotice: '', auBusy: false,
     pendingPlan: '', plan: 'all', planRole: 'top', paywallRole: '', planChamp: 'Aatrox', coStyle: 'embedded',
     founders: null, serverWeek: null, pendingMU: null, googleClientId: null,
-    stripeEnabled: false, earlyAccess: true, payOk: false, payErr: '', stripeBusy: false,
+    stripeEnabled: false, earlyAccess: true, payOk: false, payErr: '', payInfo: '', stripeBusy: false,
     heroYou: '', heroFoe: '', heroErr: '', heroYouOpen: false, heroFoeOpen: false,
     jgSeenAt: null, jgSeenSide: '', jgClock: 0,
     homeJgYou: '', homeJgFoe: '', homeTrackJg: '',
@@ -3919,8 +3930,12 @@ class Component extends DCLogic {
       else { sessionStorage.setItem('mc_session', raw); localStorage.removeItem('mc_session'); }
     } catch (e) {}
   }
-  openAuth(mode, notice) { this.setState({ view: 'auth', authMode: mode || 'login', auErr: '', auNotice: notice || '', auPass: '', auPass2: '' }); this._top(); this._nav(); }
-  authSwitch(mode) { this.setState({ authMode: mode, auErr: '', auNotice: '' }); }
+  // Opening or switching the form cancels a pending server-wake retry: the
+  // armed timer would otherwise re-run the OLD action (say, Sign in) against
+  // the new form's fields, and the button would read "Retry" with nothing to
+  // explain what it retries.
+  openAuth(mode, notice) { clearTimeout(this._wakeT); this._wakeTries = 0; this.setState({ view: 'auth', authMode: mode || 'login', auErr: '', auNotice: notice || '', auPass: '', auPass2: '', auWaking: false }); this._top(); this._nav(); }
+  authSwitch(mode) { clearTimeout(this._wakeT); this._wakeTries = 0; this.setState({ authMode: mode, auErr: '', auNotice: '', auWaking: false }); }
   // API-first auth: when the backend answers /api/health the server owns
   // accounts/sessions; otherwise fall back to the localStorage demo store \u2014
   // from file:// only. On the web a "no" from /api/health means the backend is
@@ -3934,16 +3949,28 @@ class Component extends DCLogic {
   // The server said no while we are on the web. Say so, then re-probe in the
   // background and re-run the action once it answers (a false probe is never
   // memoised by api-client.js, so the Sign in / Create account button is the
-  // manual retry too). Capped so a server that is really down stops nagging.
+  // manual retry too). A probe that says no again comes straight back here, so
+  // the loop really runs 3 rounds (3s wait + probe each) before it stops and
+  // asks for a click \u2014 a server that is really down must not nag forever.
   _serverWaking(retry) {
+    // _withApi takes its onLocal branch when api-client.js never loaded: then
+    // there is nothing to probe, so say so instead of arming a timer that throws.
+    if (!window.MC_API) { this.setState({ auBusy: false, auWaking: false, auErr: 'Could not reach the server \u2014 refresh the page and try again.' }); return; }
     this._wakeTries = (this._wakeTries || 0) + 1;
     var again = this._wakeTries <= 3;
     this.setState({ auBusy: false, auWaking: true, auErr: again ? 'Server is waking up \u2014 try again in a few seconds. Retrying\u2026' : 'Server is still waking up \u2014 hit Retry in a few seconds.' });
     clearTimeout(this._wakeT);
     if (!again) { this._wakeTries = 0; return; }
+    // A probe can be in flight for ~7s; if the form changed meanwhile (Sign in
+    // -> Create account), drop the result rather than re-run the old action.
+    var mode = this.state.authMode;
+    var live = () => this.state.view === 'auth' && this.state.authMode === mode && !this.state.auBusy;
     this._wakeT = setTimeout(() => {
-      if (this.state.view !== 'auth' || this.state.auBusy) return;
-      window.MC_API.available().then(ok => { if (ok && this.state.view === 'auth' && !this.state.auBusy) retry(); });
+      if (!live()) return;
+      window.MC_API.available().then(ok => {
+        if (!live()) return;
+        if (ok) retry(); else this._serverWaking(retry);
+      });
     }, 3000);
   }
   doLogin() {
@@ -4036,8 +4063,10 @@ class Component extends DCLogic {
     // On the web stripeEnabled is only false because /api/config has not
     // landed yet (or the API was down at load) — wait for it, then Stripe.
     // The demo card form below is file:// only.
+    // payOk off: the welcome banner and the "connecting" banner share the same
+    // fixed slot at the top of the page, and the connecting one matters more.
     if (pp && this._onWeb()) {
-      this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '', view: 'home' });
+      this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '', view: 'home', payOk: false });
       this._awaitPayment(pp);
       return;
     }
@@ -4050,7 +4079,8 @@ class Component extends DCLogic {
       window.MC_API.clearToken();
     }
     try { localStorage.removeItem('mc_session'); sessionStorage.removeItem('mc_session'); } catch (e) {}
-    this.setState({ user: null, view: 'home' });
+    // Signing out also ends a pending payment wait (see _awaitPayment).
+    this.setState({ user: null, view: 'home', payInfo: '' });
   }
   // Normalize the two level-table row shapes into {label, who} where who is
   // 'A' (your window), 'E' (his), or 'X' (skill/even). The phMap shape carries
@@ -4179,19 +4209,25 @@ class Component extends DCLogic {
     if (this._payWait) return;
     this._payWait = true;
     var pp = this._planParts(p);
-    this.setState({ showPaywall: false, plan: p, planRole: pp.role || this.state.planRole, payErr: 'Connecting to payment server…' });
+    this.setState({ showPaywall: false, plan: p, planRole: pp.role || this.state.planRole, payErr: '', payInfo: 'Connecting to payment server…' });
+    // The wait can run ~30s. It only ends in a redirect to Stripe while the
+    // buyer still wants it: a dismissed banner or a sign-out cancels the wait,
+    // so nobody gets sent to Stripe half a minute later while reading a matchup.
+    var wanted = () => !!this.state.user && !!this.state.payInfo;
     var go = (tries) => {
+      if (!wanted()) { this._payWait = false; if (this.state.payInfo) this.setState({ payInfo: '' }); return; }
       window.MC_API.available().then(ok => {
+        if (!wanted()) { this._payWait = false; if (this.state.payInfo) this.setState({ payInfo: '' }); return; }
         if (ok) {
           window.MC_API.get('/config')
             .then(c => { if (c.stripeEnabled) this.setState({ stripeEnabled: true }); })
             .catch(() => {})
-            .then(() => { this._payWait = false; this.setState({ payErr: '' }); this.stripeCheckout(p); });
+            .then(() => { this._payWait = false; var still = wanted(); this.setState({ payInfo: '' }); if (still) this.stripeCheckout(p); });
           return;
         }
         if (tries < 3) { setTimeout(() => go(tries + 1), 3000); return; }
         this._payWait = false;
-        this.setState({ payErr: 'Payment server is still waking up — try again in a few seconds.' });
+        this.setState({ payInfo: '', payErr: 'Payment server is still waking up — try again in a few seconds.' });
       });
     };
     go(1);
@@ -7868,7 +7904,7 @@ class Component extends DCLogic {
         var JIh = window.JUNGLE_INTEL || {};
         var jgTimers = Object.keys(JIh).filter(function(k, i, ks){ return ks.findIndex(function(j){ return JIh[j] === JIh[k]; }) === i; }).length;
         var fmt = function(n){ return n.toLocaleString('en-US'); };
-        var matchups = total ? (Math.floor(total / 100) * 100) : 11600;
+        var matchups = total ? (Math.floor(total / 100) * 100) : 11800;
         // Every matchup is graded across 7 lane stages (level 1 → 2+ items), so
         // the depth stat = matchups x 7 power-spike windows.
         var windows = Math.floor(matchups * 7 / 1000) * 1000;
@@ -7876,7 +7912,7 @@ class Component extends DCLogic {
           { n: '170+', t: 'champions covered' },
           { n: fmt(matchups) + '+', t: 'matchups covered' },
           { n: fmt(windows) + '+', t: 'power-spike windows mapped' },
-          { n: jgTimers ? String(jgTimers) : '49', t: 'jungle timers tracked' }
+          { n: jgTimers ? String(jgTimers) : '50', t: 'jungle timers tracked' }
         ];
       })(this),
       // Hero matchup box — wired inputs with autocomplete; Enter analyzes.
@@ -7917,13 +7953,26 @@ class Component extends DCLogic {
         // panel never shows the top-lane number while /api/wr is still loading.
         var suf = ({ mid: '_mid', bot: '_bot', support: '_sup' })[self.state.role] || '';
         var num = function (m, a, b) { return (m[a] && typeof m[a][b] === 'number') ? m[a][b] : null; };
-        var pick = function (m) {
-          var v = suf ? num(m, sl(you) + suf, sl(foe)) : null;
-          if (v == null && suf) v = num(m, sl(you), sl(foe) + suf);
-          return v != null ? v : num(m, sl(you), sl(foe));
+        // The key pair this seat's number lives under in a lane-keyed map, so the
+        // bundled table and the raw MC_WR_TABLES entry are read at the same key.
+        var keysIn = function (m) {
+          var a = sl(you), b = sl(foe);
+          if (suf && num(m, a + suf, b) != null) return [a + suf, b];
+          if (suf && num(m, a, b + suf) != null) return [a, b + suf];
+          return num(m, a, b) != null ? [a, b] : null;
         };
-        var live = num(LWR, sl(you), sl(foe));
-        var real = live != null ? live : pick(WR);
+        var pick = function (m) { var k = keysIn(m); return k ? m[k[0]][k[1]] : null; };
+        var bundled = pick(WR);
+        // A pair the fixes layer POOLED (its bundled number differs from the seat's
+        // raw MC_WR_TABLES entry) keeps the pooled number: the badge and the verdict
+        // prose were built on it, and the raw own number (61.95% beside EVEN) is
+        // exactly what pooling removed. A live number would put it straight back,
+        // so the live override is skipped for those pairs.
+        var bk = keysIn(WR), RAWT = window.MC_WR_TABLES || {};
+        var raw = bk ? num(RAWT, bk[0], bk[1]) : null;
+        var pooled = raw != null && Math.abs(raw - bundled) > 0.05;
+        var live = pooled ? null : num(LWR, sl(you), sl(foe));
+        var real = live != null ? live : bundled;
         var isLive = live != null;
         var base, isReal = false;
         if (real != null) { base = real; isReal = true; }
@@ -7944,8 +7993,19 @@ class Component extends DCLogic {
         var GG = window.MC_REAL_GAMES || {};
         var games = isReal ? pick(GG) : null;
         var limited = games != null && games < 100;
+        // The badge (MU.difficulty) is built on the bundled July sample, never on the
+        // live number. When the live number lands in a different band (the fixes
+        // layer's thresholds: FAVOURED >= 52.5, EVEN >= 48.5, TRICKY >= 45.5, HARD
+        // below) say so under it, so a live 53.4% above an EVEN badge reads as two
+        // samples rather than a contradiction. The badge itself is left alone —
+        // the verdict prose on the page is written to it.
+        var band = function (w) { return w >= 52.5 ? 'FAVOURED' : w >= 48.5 ? 'EVEN' : w >= 45.5 ? 'TRICKY' : 'HARD'; };
+        var badgeTok = String(MU.difficulty || '').split(' ')[0].toUpperCase();
+        var badgeBand = /^(FAVOURED|EVEN|TRICKY|HARD)$/.test(badgeTok) ? badgeTok : (bundled != null ? band(bundled) : null);
+        var note = (isLive && bundled != null && badgeBand && band(live) !== badgeBand) ? ('July sample: ' + bundled.toFixed(1) + '% · badge based on the sample') : '';
         return { wrA: wrA + '%', wrB: wrB + '%', wrLabel: isLive ? 'WIN RATE · LOLALYTICS LIVE' : (isReal ? 'WIN RATE · LOLALYTICS' : 'EST. WIN RATE'), wrATone: base >= 50.5 ? '#3ddc97' : base <= 49.5 ? '#ff5d6c' : '#e8b84b', wrBTone: base >= 50.5 ? '#ff5d6c' : base <= 49.5 ? '#3ddc97' : '#e8b84b', wrAPct: Math.round(base),
-          wrSample: limited ? ('⚠ limited sample · ' + games + ' games') : '', wrSampleDisp: limited ? 'block' : 'none' };
+          wrSample: limited ? ('⚠ limited sample · ' + games + ' games') : '', wrSampleDisp: limited ? 'block' : 'none',
+          wrNote: note, wrNoteDisp: note ? 'block' : 'none' };
       })(this),
       ticker: (function(){
         // Verdicts are from the FIRST champion's point of view \u2014 say so on the
@@ -7974,8 +8034,8 @@ class Component extends DCLogic {
         var laners = ['Aatrox', 'Darius', 'Garen', 'Fiora', 'Camille', 'Riven', 'Sett', 'Mordekaiser', 'Ahri', 'Zed', 'Yasuo', 'Yone', 'Sylas', 'Katarina', 'Syndra', 'Orianna', 'Caitlyn', 'Jinx', 'Jhin', 'Kai\'Sa', 'Ezreal', 'Lucian', 'Vayne', 'Draven', 'Thresh', 'Lulu', 'Leona', 'Nautilus', 'Morgana', 'Karma', 'Senna', 'Pyke'];
         return laners.concat(laners).map(function(n){ return { name: n }; });
       })(),
-      payOk: this.state.payOk, payErr: this.state.payErr, hasPayErr: !!this.state.payErr,
-      dismissPay: () => this.setState({ payOk: false, payErr: '' }),
+      payOk: this.state.payOk, payErr: this.state.payErr, hasPayErr: !!this.state.payErr, payInfo: this.state.payInfo, hasPayInfo: !!this.state.payInfo,
+      dismissPay: () => this.setState({ payOk: false, payErr: '', payInfo: '' }),
       // Home: enemy-jungle tracker for laners.
       jgTracker: (function(self){
         var s = self.state, active = s.jgSeenAt != null, t = s.jgClock || 0;

@@ -359,7 +359,15 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
   @media (max-width: 480px) {
     [style*="font-size:11.5px; color:#7d8499; white-space:nowrap"],
     [style*="font-size: 11.5px; color: rgb(125, 132, 153); white-space: nowrap"] { white-space: normal !important; }
+    /* Paywall free-pick line: drop below the close button instead of being
+       squeezed beside it on a phone. */
+    [data-mc-pwpick] { margin: 36px 0 16px 0 !important; }
+    [data-mc-pwpick] + [data-mc-pwpick] { margin-top: 0 !important; }
   }
+  /* Free-pick sheet: its primary button is focused programmatically on open, so
+     show the ring on plain :focus; the other controls on keyboard focus. */
+  #mc-pick-unlock:focus { outline: 2px solid #fff; outline-offset: 2px; }
+  [aria-labelledby="mc-pick-title"] button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 </style>
 <script src="./image-slot.js"></script>
 <script src="./champ-art.js"></script>
@@ -1407,7 +1415,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
 
     <section style="max-width:1180px; margin:0 auto; padding:8px 28px 72px;">
       <sc-if value="{{ isStepRole }}" hint-placeholder-val="{{ true }}">
-        <div style="text-align:center; margin-bottom:22px;">
+        <div id="mc-role-pick" style="text-align:center; margin-bottom:22px;">
           <div style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:24px; color:#f4efe8;">Pick your role</div>
           <div style="margin-top:6px; font-size:14px; color:#8a90a2;">Then choose your champion and your lane opponent.</div>
           <div style="margin:14px auto 0; max-width:620px; padding:12px 18px; border-radius:12px; background:rgba(240,205,114,0.07); border:1px solid rgba(240,205,114,0.2);">
@@ -1465,6 +1473,26 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
             </sc-for>
           </div>
           <div style="margin-top:10px; text-align:center; font-size:11.5px; color:#7d8499;">Tap a <span style="color:#7fe3b8; font-weight:700;">sample</span> to read a full matchup guide free, no signup — see exactly how deep every guide goes.</div>
+          <!-- daily free pick: one matchup of the account's choice per UTC day.
+               Below the champion tiles, so the header above describes only them. -->
+          <div style="display:flex; align-items:center; gap:10px 14px; flex-wrap:wrap; margin-top:16px; padding:12px 14px; border-radius:14px; border:1px solid rgba(232,184,75,0.35); background:linear-gradient(180deg,rgba(232,184,75,0.08),#0d0f16);">
+            <span style="flex:0 0 auto; font-family:'Chakra Petch',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.6px; color:#f0cd72; padding:3px 8px; border-radius:6px; background:rgba(240,205,114,0.1); border:1px solid rgba(240,205,114,0.35); white-space:nowrap;">DAILY FREE PICK</span>
+            <sc-if value="{{ freePickOut }}" hint-placeholder-val="{{ false }}">
+              <span style="flex:1 1 220px; min-width:0; font-size:13px; line-height:1.45; color:#e8dcc2; font-weight:600;">Create a free account and pick any matchup free every day.</span>
+              <button onClick="{{ freePickSignup }}" style="flex:0 0 auto; min-height:42px; padding:9px 16px; border-radius:10px; cursor:pointer; background:linear-gradient(180deg,#f3cf6e,#e8b84b); border:1px solid rgba(232,184,75,0.9); color:#1a1303; font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;">Create free account</button>
+            </sc-if>
+            <sc-if value="{{ freePickOpen }}" hint-placeholder-val="{{ false }}">
+              <span style="flex:1 1 220px; min-width:0; font-size:13px; line-height:1.45; color:#e8dcc2; font-weight:600;">Pick any matchup — your free one today is still available.</span>
+              <button onClick="{{ chooseFreePick }}" style="flex:0 0 auto; min-height:42px; padding:9px 16px; border-radius:10px; cursor:pointer; background:rgba(232,184,75,0.1); border:1px solid rgba(232,184,75,0.55); color:#f0cd72; font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;" style-hover="background:rgba(232,184,75,0.18); border-color:rgba(232,184,75,0.85);">Choose a matchup ↑</button>
+            </sc-if>
+            <sc-if value="{{ freePickUsed }}" hint-placeholder-val="{{ false }}">
+              <span style="flex:1 1 220px; min-width:0; display:flex; flex-direction:column; gap:2px;">
+                <span style="font-size:13px; line-height:1.45; color:#e8dcc2; font-weight:600;">Your free matchup today: <span style="color:#fff; font-weight:800;">{{ freePickLabel }}</span></span>
+                <span style="font-size:11.5px; color:#8a90a2;">Your next free pick unlocks in <span style="white-space:nowrap;">{{ freePickCountdown }}</span></span>
+              </span>
+              <button onClick="{{ openFreePick }}" style="flex:0 0 auto; min-height:42px; padding:9px 16px; border-radius:10px; cursor:pointer; background:rgba(61,220,151,0.1); border:1px solid rgba(61,220,151,0.5); color:#7fe3b8; font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;" style-hover="background:rgba(61,220,151,0.18); border-color:rgba(61,220,151,0.8);">Open it →</button>
+            </sc-if>
+          </div>
         </div>
         </sc-if>
 
@@ -3779,6 +3807,20 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
       <div onClick="{{ noop }}" style="width:100%; max-width:880px; max-height:90vh; overflow:auto; border-radius:22px; padding:1px; background:linear-gradient(160deg,rgba(232,184,75,0.6),rgba(70,198,245,0.3));">
         <div style="position:relative; border-radius:21px; background:linear-gradient(180deg,#15161e,#0d0f16); padding:30px;">
           <button onClick="{{ closePaywall }}" style="position:absolute; top:18px; right:18px; width:34px; height:34px; border-radius:9px; border:1px solid rgba(255,255,255,0.1); background:#11131c; color:#aab0c2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:rgba(255,255,255,0.3); color:#fff;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
+          <sc-if value="{{ showPwPick }}" hint-placeholder-val="{{ false }}">
+            <div data-mc-pwpick="1" style="display:flex; align-items:center; gap:6px 12px; flex-wrap:wrap; margin:0 44px 16px 0; padding:10px 14px; border-radius:12px; border:1px solid rgba(61,220,151,0.35); background:rgba(61,220,151,0.07);">
+              <span style="flex:1 1 200px; min-width:0; display:flex; flex-direction:column; gap:2px;">
+                <span style="font-size:13px; line-height:1.45; color:#d9f3e7; font-weight:600;">Today’s free matchup: <span style="color:#fff; font-weight:800;">{{ pwPickLabel }}</span> — <button onClick="{{ openPwPick }}" style="background:none; border:none; padding:0; min-height:28px; cursor:pointer; font-family:'Manrope',sans-serif; font-size:13px; font-weight:800; color:#7fe3b8; text-decoration:underline;" style-hover="color:#b6f0d6;">open it</button></span>
+                <span style="font-size:11.5px; color:#8a90a2;">Your next free pick unlocks in <span style="white-space:nowrap;">{{ pwPickCountdown }}</span></span>
+              </span>
+            </div>
+          </sc-if>
+          <sc-if value="{{ showPwPickOffer }}" hint-placeholder-val="{{ false }}">
+            <div data-mc-pwpick="1" style="display:flex; align-items:center; gap:6px 12px; flex-wrap:wrap; margin:0 44px 16px 0; padding:10px 14px; border-radius:12px; border:1px solid rgba(61,220,151,0.35); background:rgba(61,220,151,0.07);">
+              <span style="flex:1 1 200px; min-width:0; font-size:13px; line-height:1.45; color:#d9f3e7; font-weight:600;">Today’s free pick is still unused.</span>
+              <button onClick="{{ pickSheetUnlock }}" style="flex:0 0 auto; max-width:100%; min-height:42px; padding:9px 14px; border-radius:10px; cursor:pointer; background:rgba(61,220,151,0.12); border:1px solid rgba(61,220,151,0.55); color:#7fe3b8; font-family:'Manrope',sans-serif; font-weight:800; font-size:13px; text-align:left;" style-hover="background:rgba(61,220,151,0.2); border-color:rgba(61,220,151,0.85);">Use today’s free pick on {{ pwPickOfferLabel }}</button>
+            </div>
+          </sc-if>
           <span style="display:inline-block; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; letter-spacing:1px; color:#f0cd72;">UNLOCK MATCHUPCOACH</span>
           <h2 style="margin:10px 0 6px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:26px; color:#fff;">{{ paywallTitle }}</h2>
           <p style="margin:0 0 26px; font-size:14px; line-height:1.5; color:#aab0c2; max-width:620px;">{{ paywallSub }}</p>
@@ -3815,6 +3857,34 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
       </div>
     </div>
   </sc-if>
+
+  <!-- ===== FREE-PICK CHOICE SHEET (signed-in, today's free pick unused) ===== -->
+  <sc-if value="{{ showPickSheet }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePickSheet }}" style="position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; padding:16px; background:rgba(5,6,10,0.8); backdrop-filter:blur(7px);">
+      <div onClick="{{ noop }}" role="dialog" aria-modal="true" aria-labelledby="mc-pick-title" style="width:100%; max-width:460px; max-height:90vh; overflow:auto; box-sizing:border-box; border-radius:22px; padding:1px; background:linear-gradient(160deg,rgba(232,184,75,0.6),rgba(70,198,245,0.3));">
+        <div style="position:relative; border-radius:21px; background:linear-gradient(180deg,#15161e,#0d0f16); padding:24px 22px 22px;">
+          <button onClick="{{ closePickSheet }}" aria-label="Close" style="position:absolute; top:12px; right:12px; width:42px; height:42px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:#11131c; color:#aab0c2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:rgba(255,255,255,0.3); color:#fff;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
+          <span style="display:inline-block; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; letter-spacing:1px; color:#7fe3b8;">🎁 DAILY FREE PICK</span>
+          <h2 id="mc-pick-title" style="margin:10px 48px 8px 0; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:22px; line-height:1.2; color:#fff;">Use today’s free matchup?</h2>
+          <p style="margin:0 0 20px; font-size:14px; line-height:1.55; color:#aab0c2;">{{ pickSheetBody }}</p>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <button id="mc-pick-unlock" onClick="{{ pickSheetUnlock }}" style="width:100%; min-height:46px; padding:12px 14px; border-radius:11px; cursor:pointer; background:linear-gradient(180deg,#f3cf6e,#e8b84b); border:1px solid rgba(232,184,75,0.9); color:#1a1303; font-family:'Manrope',sans-serif; font-weight:800; font-size:14px;">Unlock free for today</button>
+            <button onClick="{{ pickSheetPlans }}" style="width:100%; min-height:44px; padding:11px 14px; border-radius:11px; cursor:pointer; background:#11131c; border:1px solid rgba(255,255,255,0.14); color:#c7ccdb; font-family:'Manrope',sans-serif; font-weight:700; font-size:13.5px;" style-hover="border-color:rgba(255,255,255,0.3); color:#fff;">See plans</button>
+          </div>
+          <p style="margin:10px 0 0; font-size:11.5px; line-height:1.45; color:#7d8499; text-align:center;">Locked in once unlocked — your next free pick is at {{ pickSheetReset }}.</p>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===== FREE-PICK CLAIMED STRIP (6s, dismissible) ===== -->
+  <sc-if value="{{ freePickToast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" aria-live="polite" onClick="{{ dismissPickToast }}" style="position:fixed; left:50%; bottom:max(16px, env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:190; width:max-content; max-width:calc(100vw - 24px); box-sizing:border-box; display:flex; align-items:center; gap:10px; padding:10px 8px 10px 14px; border-radius:12px; background:linear-gradient(180deg,#13351f,#0d2417); border:1px solid rgba(61,220,151,0.5); box-shadow:0 16px 40px -16px rgba(0,0,0,0.8); cursor:pointer;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3ddc97" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><path d="M20 6L9 17l-5-5"></path></svg>
+      <span style="flex:1 1 0%; min-width:0; font-size:12.5px; line-height:1.4; font-weight:700; color:#bfeed6;">{{ freePickToastText }}</span>
+      <button onClick="{{ dismissPickToast }}" aria-label="Dismiss" style="flex:0 0 auto; width:42px; height:42px; border-radius:9px; border:none; background:transparent; color:#7fe3b8; cursor:pointer; display:flex; align-items:center; justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
+    </div>
+  </sc-if>
 </div>
 </x-dc></template>
 <script>
@@ -3830,6 +3900,8 @@ class Component extends DCLogic {
   state = {
     view: 'home',
     showPaywall: false,
+    showPickSheet: false,
+    freePickToast: false,
     homeStep: 'role',
     role: '',
     myChamp: '',
@@ -3874,6 +3946,8 @@ class Component extends DCLogic {
     this._onPop = (e) => {
       if (!(e.state && e.state.mc)) return;
       var mc = e.state.mc;
+      // The free-pick sheet belongs to the view it was offered on — Back/Forward drops it.
+      if (this.state.showPickSheet) this.setState({ showPickSheet: false, pendingMU: null });
       // Back/Forward restores snapshots directly, so re-run the entitlement
       // check a demo view originally passed through openGen/openJg — the daily
       // free champion may have rotated, or the plan may have lapsed/shrunk
@@ -3883,9 +3957,11 @@ class Component extends DCLogic {
         var u = this.state.user;
         // Today's featured sample pairing is free for everyone, signed-out
         // included — same rule as _gated, so Back into it never kicks home.
+        // The account's daily free pick (one exact matchup) stays open all day too.
         var covered = (u && u.plan && this._planCovers(u.plan, laneRole))
           || (u && this.dailyFreeChamps(laneRole).indexOf(mc.myChamp) !== -1)
-          || this._isSampleToday(laneRole, mc.myChamp, mc.enemyChamp);
+          || this._isSampleToday(laneRole, mc.myChamp, mc.enemyChamp)
+          || (u && this._isFreePick(laneRole, mc.myChamp, mc.enemyChamp));
         if (!covered) { this.setState({ view: 'home', homeStep: 'role' }); this._top(); return; }
         this.setState(mc); this._top();
         this.loadComments(mc.myChamp, mc.enemyChamp, mc.role);
@@ -3898,6 +3974,20 @@ class Component extends DCLogic {
       this.setState(mc); this._top();
     };
     window.addEventListener('popstate', this._onPop);
+    // Escape closes the sheet; Tab / Shift+Tab stay inside it (aria-modal).
+    this._onPickKey = (e) => {
+      if (!e || !this.state.showPickSheet) return;
+      if (e.key === 'Escape') { this.closePickSheet(); return; }
+      if (e.key !== 'Tab') return;
+      var dlg = document.querySelector('[aria-labelledby="mc-pick-title"]');
+      var btns = dlg ? Array.prototype.slice.call(dlg.querySelectorAll('button')) : [];
+      if (!btns.length) return;
+      var i = btns.indexOf(document.activeElement);
+      var next = e.shiftKey ? (i <= 0 ? btns.length - 1 : i - 1) : (i === -1 || i === btns.length - 1 ? 0 : i + 1);
+      e.preventDefault();
+      btns[next].focus();
+    };
+    window.addEventListener('keydown', this._onPickKey);
     // Any signed-in server action refused with 401 (checkout, billing portal,
     // notes, /me) drops the stale session — see _dropSession. Wrong-password
     // and Google refusals are 401s too, but they are not session problems.
@@ -3980,7 +4070,7 @@ class Component extends DCLogic {
   // jungler; we count up and tell laners when the cross-map gank window opens.
   jgSpot(side) { this.setState({ jgSeenSide: side, jgSeenAt: Date.now(), jgClock: 0 }); }
   jgReset() { this.setState({ jgSeenSide: '', jgSeenAt: null, jgClock: 0 }); }
-  componentWillUnmount() { clearInterval(this._t); clearInterval(this._gsi); clearTimeout(this._wakeT); window.removeEventListener('popstate', this._onPop); window.removeEventListener('mc:unauthorized', this._onUnauth); }
+  componentWillUnmount() { clearInterval(this._t); clearInterval(this._gsi); clearTimeout(this._wakeT); window.removeEventListener('popstate', this._onPop); window.removeEventListener('mc:unauthorized', this._onUnauth); window.removeEventListener('keydown', this._onPickKey); clearTimeout(this._pickToastT); }
   // Universal scroll-to-top: whenever the NAVIGATION identity changes (a new
   // matchup, lane, champion, jungler, screen, or home step) jump to the top —
   // so every view always loads from the top, no matter which picker/tab/picture
@@ -3991,6 +4081,20 @@ class Component extends DCLogic {
     // This framework doesn't pass prevState to componentDidUpdate, so we track
     // the navigation key on the instance and scroll to top whenever it changes.
     var s = this.state;
+    // Free-pick sheet: move focus onto its primary button once when it opens,
+    // and hand it back to whatever had it when the sheet closes (if that is
+    // still on the page and no other dialog took over).
+    if (s.showPickSheet && !this._pickFocus) {
+      this._pickFocus = true;
+      this._pickPrevFocus = document.activeElement;
+      setTimeout(function(){ var b = document.getElementById('mc-pick-unlock'); if (b) b.focus(); }, 0);
+    } else if (!s.showPickSheet && this._pickFocus) {
+      this._pickFocus = false;
+      var prev = this._pickPrevFocus; this._pickPrevFocus = null;
+      if (prev && prev !== document.body && prev.focus && !s.showPaywall) {
+        setTimeout(function(){ if (document.body.contains(prev)) { try { prev.focus({ preventScroll: true }); } catch (e) {} } }, 0);
+      }
+    }
     var key = [s.view, s.role, s.homeStep, s.myChamp, s.enemyChamp, s.matchup, s.authMode].join('|');
     if (this._navKey == null) { this._navKey = key; return; }
     if (key !== this._navKey) { this._navKey = key; this._top(); }
@@ -4123,7 +4227,13 @@ class Component extends DCLogic {
     var pp = this.state.pendingPlan, mu = this.state.pendingMU;
     if (mu) {
       this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '', pendingMU: null });
+      // They signed up FOR this matchup: if today's free pick is unused, the
+      // resumed _gated claims it straight away instead of offering the sheet.
+      // Never when a plan purchase is also pending — a buyer must reach plans,
+      // not be parked in a free matchup (the resumed _gated shows the paywall).
+      this._autoClaimPick = !pp;
       this._resumeMU(mu);
+      this._autoClaimPick = false;
       return;
     }
     if (pp === 'free') {
@@ -4156,7 +4266,9 @@ class Component extends DCLogic {
     }
     try { localStorage.removeItem('mc_session'); sessionStorage.removeItem('mc_session'); } catch (e) {}
     // Signing out also ends a pending payment wait (see _awaitPayment).
-    this.setState({ user: null, view: 'home', payInfo: '' });
+    // It also forgets a gated matchup, so the next sign-in on this device never
+    // auto-spends a free pick on something this account was only shown.
+    this.setState({ user: null, view: 'home', payInfo: '', pendingMU: null, showPickSheet: false });
   }
   // Normalize the two level-table row shapes into {label, who} where who is
   // 'A' (your window), 'E' (his), or 'X' (skill/even). The phMap shape carries
@@ -4245,6 +4357,127 @@ class Component extends DCLogic {
     var self = this;
     return ['top', 'jungle', 'mid', 'bot', 'support'].map(function(role){ return { role: role, champs: self.dailyFreeChamps(role) }; });
   }
+  // ---- daily free pick ----
+  // On top of the rotation: every signed-in account picks ONE exact matchup
+  // (lane + you + enemy; the mirror direction is a different matchup) free per
+  // UTC day — same boundary as _dayIndex. Locked once picked. The paywall is
+  // client-side anyway, so the pick lives in localStorage per account:
+  // mc_free_pick_v1 = { [accountKey]: { day, kind, role, you, enemy } }.
+  // /api/me users are { name, plan, google } today; prefer an id if one appears.
+  // A Google account's name is its given name, so the auth type is part of the
+  // key: password user "kris" and Google user "Kris" never share a pick.
+  _freePickKey(u) {
+    if (!u) return '';
+    if (u.id != null && u.id !== '') return 'id:' + String(u.id).trim().toLowerCase();
+    var n = String(u.name || '').trim().toLowerCase();
+    if (n) return (u.google ? 'g:' : 'u:') + n;
+    var e = String(u.email || '').trim().toLowerCase();
+    return e ? 'e:' + e : '';
+  }
+  _readFreePicks() {
+    var o = {};
+    try {
+      var s = JSON.parse(localStorage.getItem('mc_free_pick_v1') || '{}');
+      if (s && typeof s === 'object' && !Array.isArray(s)) o = s;
+    } catch (e) {}
+    // Storage blocked or full (private mode, quota): a claim this page made is
+    // kept in memory and must still count, or Unlock would re-offer the sheet
+    // forever. Per account the newer day wins; on the same day, memory wins.
+    var mem = this._freePicksMem;
+    if (mem) {
+      o = Object.assign({}, o);
+      for (var k in mem) { if (mem[k] && (!o[k] || !(o[k].day > mem[k].day))) o[k] = mem[k]; }
+    }
+    return o;
+  }
+  // Today's pick record for the signed-in user, or null (none / an old day).
+  _freePickToday() {
+    var k = this._freePickKey(this.state.user);
+    if (!k) return null;
+    var r = this._readFreePicks()[k];
+    return (r && r.day === this._dayIndex() && r.role && r.you && r.enemy) ? r : null;
+  }
+  _isFreePick(role, you, enemy) {
+    var r = this._freePickToday();
+    return !!r && r.role === role && r.you === you && r.enemy === enemy;
+  }
+  // A _gated pending object as one exact matchup ('pick' plays the champion
+  // already chosen on the home picker, in the picker's lane).
+  _pendingMatchup(pending) {
+    if (!pending) return null;
+    var role = this._pendingRole(pending);
+    var you = pending.you || (pending.kind === 'pick' ? this.state.myChamp : '');
+    if (!you || !pending.enemy) return null;
+    return { kind: role === 'jungle' ? 'jg' : 'gen', role: role, you: you, enemy: pending.enemy };
+  }
+  // Claim today's pick for this matchup. Never swaps a pick already made today
+  // (returns whether the pending matchup IS that pick). Past days are dropped.
+  _claimFreePick(pending) {
+    var k = this._freePickKey(this.state.user), mu = this._pendingMatchup(pending);
+    if (!k || !mu) return false;
+    var cur = this._freePickToday();
+    if (cur) return this._isFreePick(mu.role, mu.you, mu.enemy);
+    var day = this._dayIndex(), all = this._readFreePicks(), keep = {};
+    for (var id in all) { if (all[id] && all[id].day === day) keep[id] = all[id]; }
+    keep[k] = { day: day, kind: mu.kind, role: mu.role, you: mu.you, enemy: mu.enemy };
+    this._freePicksMem = keep;
+    try { localStorage.setItem('mc_free_pick_v1', JSON.stringify(keep)); } catch (e) {}
+    // Tell them the pick was spent (auto-claim after signup has no other cue).
+    this.setState({ freePickToast: true });
+    clearTimeout(this._pickToastT);
+    this._pickToastT = setTimeout(() => { if (this.state.freePickToast) this.setState({ freePickToast: false }); }, 6000);
+    return true;
+  }
+  dismissPickToast() { clearTimeout(this._pickToastT); this.setState({ freePickToast: false }); }
+  // Local clock time of the next 00:00 UTC ("8:00 PM"), and the live time left.
+  _freePickResetText() {
+    try { return new Date((this._dayIndex() + 1) * 864e5).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); } catch (e) { return '00:00 UTC'; }
+  }
+  _freePickCountdown() {
+    var left = (this._dayIndex() + 1) * 864e5 - Date.now();
+    if (left < 6e4) return 'under a minute';
+    var h = Math.floor(left / 36e5), m = Math.floor((left % 36e5) / 6e4);
+    return h ? h + 'h ' + m + 'm' : m + 'm';
+  }
+  // "<You> vs <Enemy> · <Lane>" for a stored pick or a pending matchup.
+  _freePickLabel(r) {
+    if (!r) return '';
+    var RLL = { top: 'Top', jungle: 'Jungle', mid: 'Mid', bot: 'Bot', support: 'Support' };
+    return r.you + ' vs ' + r.enemy + ' · ' + (RLL[r.role] || r.role);
+  }
+  // Re-open today's pick from the home card / paywall line (_gated honours it).
+  openFreePick() {
+    var r = this._freePickToday();
+    if (!r) return;
+    this.setState({ showPaywall: false, showPickSheet: false, pendingMU: null });
+    if (r.role === 'jungle') this.openJg(r.you, r.enemy);
+    else this.openGen(r.role, r.you, r.enemy);
+  }
+  // Home card (pick unused): back up to the role picker to choose a matchup.
+  chooseFreePick() {
+    this.setState({ view: 'home', homeStep: 'role' });
+    setTimeout(() => {
+      var el = document.getElementById('mc-role-pick');
+      // Land the heading just below the sticky header (taller on phones).
+      var hd = document.querySelector('header');
+      if (el) el.style.scrollMarginTop = Math.round((hd ? hd.getBoundingClientRect().height : 70) + 12) + 'px';
+      if (el && el.scrollIntoView) el.scrollIntoView({ block: 'start' });
+      else this._top();
+    }, 0);
+  }
+  // Choice sheet (and the paywall's "use today's free pick" line): claim +
+  // open through the same resume path the paywall uses.
+  pickSheetUnlock() {
+    var mu = this.state.pendingMU;
+    this.setState({ showPickSheet: false, showPaywall: false, pendingMU: null });
+    if (mu && this._claimFreePick(mu)) { this._resumeMU(mu); return; }
+    // The pick went to another matchup meanwhile (another tab) — plans instead.
+    if (mu) { this.setState({ pendingMU: mu, showPaywall: true }); this._nav(); }
+  }
+  // See plans keeps pendingMU so the paywall can still resume / offer the pick.
+  pickSheetPlans() { this.setState({ showPickSheet: false, showPaywall: true }); }
+  // Declining forgets the matchup: a later sign-in must not auto-claim it.
+  closePickSheet() { this.setState({ showPickSheet: false, pendingMU: null }); }
   weekChamp() { return this.dailyFreeChamp('top'); }
   claimFree() {
     var champ = this.weekChamp();
@@ -4264,7 +4497,9 @@ class Component extends DCLogic {
     // Signed-out users create an account first, then land back here via
     // pendingPlan; signed-in users go straight to payment.
     if (!this.state.user) {
-      this.setState({ showPaywall: false, pendingPlan: p });
+      // A purchase is now the intent: drop any gated matchup so signup lands
+      // in checkout, never in an auto-claimed free pick.
+      this.setState({ showPaywall: false, pendingPlan: p, pendingMU: null });
       this.openAuth('signup', 'Create your account to finish checkout — plans start at $1.99/month.');
     } else if (this.state.stripeEnabled) {
       this.stripeCheckout(p);
@@ -4315,7 +4550,7 @@ class Component extends DCLogic {
   _dropSession() {
     if (window.MC_API) window.MC_API.clearToken();
     try { localStorage.removeItem('mc_session'); sessionStorage.removeItem('mc_session'); } catch (e) {}
-    if (this.state.user) this.setState({ user: null });
+    if (this.state.user) this.setState({ user: null, showPickSheet: false });
   }
   // Real payment: hand off to Stripe's hosted Checkout page.
   stripeCheckout(p) {
@@ -4424,6 +4659,10 @@ class Component extends DCLogic {
     // users create an account first; signed-in users without (enough) plan see
     // the plan picker. pendingMU resumes the exact matchup after purchase.
     var u = this.state.user;
+    // One-shot flag from _finishAuth: read and clear up front so it can never
+    // leak into a later, unrelated open.
+    var autoClaim = !!this._autoClaimPick;
+    this._autoClaimPick = false;
     var laneRole = this._pendingRole(pending);
     if (u && u.plan && this._planCovers(u.plan, laneRole)) return false;
     // Free tier: any signed-in account gets a free champion PER ROLE each day
@@ -4435,8 +4674,23 @@ class Component extends DCLogic {
     // whatever the entry path, so shared/reloaded sample URLs never gate.
     var enemyName = pending && pending.enemy;
     if (enemyName && this._isSampleToday(laneRole, youChamp, enemyName)) return false;
-    this.setState({ pendingMU: pending });
-    if (!u) this.openAuth('signup', 'Create a free account — a free champion in every role, every day, plans from $1.99/month.');
+    // Daily free pick (signed-in, no plan covering this lane): today's pick is
+    // open by every path; an unused pick is offered on the sheet (or claimed
+    // outright right after signup); a used one leaves the paywall, which then
+    // shows the pick and its countdown (renderVals: pwPick*).
+    var mu = u ? this._pendingMatchup(pending) : null;
+    if (mu) {
+      if (this._isFreePick(mu.role, mu.you, mu.enemy)) return false;
+      if (!this._freePickToday()) {
+        if (autoClaim && this._claimFreePick(mu)) return false;
+        this.setState({ pendingMU: pending, paywallRole: laneRole, showPaywall: false, showPickSheet: true }); this._nav();
+        return true;
+      }
+    }
+    // A signed-out stop makes this matchup the intent: an older plan click that
+    // never finished signup must not ride along (see _finishAuth).
+    this.setState(u ? { pendingMU: pending } : { pendingMU: pending, pendingPlan: '' });
+    if (!u) this.openAuth('signup', 'Create a free account — pick any matchup free every day, plus a free champion in every role. Plans from $1.99/month.');
     else { this.setState({ showPaywall: true, paywallRole: laneRole }); this._nav(); }
     return true;
   }
@@ -4453,7 +4707,8 @@ class Component extends DCLogic {
   buyPlan(p) {
     var u = this.state.user;
     if (!u) {
-      this.setState({ pendingPlan: p });
+      // Purchase intent replaces any gated matchup (see choosePlan).
+      this.setState({ pendingPlan: p, pendingMU: null });
       this.openAuth('signup', 'Create your account to finish checkout — plans start at $1.99/month.');
       return;
     }
@@ -7819,7 +8074,7 @@ class Component extends DCLogic {
           isAuLogin: m === 'login', isAuSignup: m === 'signup', isAuForgot: m === 'forgot',
           auShowGoogle: m !== 'forgot' && !!st.googleClientId, auShowPass: m !== 'forgot',
           authTitle: m === 'login' ? 'Welcome back' : m === 'signup' ? 'Create your account' : 'Reset your password',
-          authSub: m === 'login' ? 'Sign in to keep your matchup prep in one place.' : m === 'signup' ? 'Create your account, then pick your plan \u2014 Lane Pass $1.99/mo, All Lanes $3.99/mo, or $24.99/yr.' : 'Enter your username and we\u2019ll send a reset link to its email.',
+          authSub: m === 'login' ? 'Sign in to keep your matchup prep in one place.' : m === 'signup' ? 'Free to join \u2014 pick any matchup free every day. Upgrade any time: Lane Pass $1.99/mo, All Lanes $3.99/mo, or $24.99/yr.' : 'Enter your username and we\u2019ll send a reset link to its email.',
           auName: st.auName, setAuName: (e) => self.setState({ auName: e.target.value }),
           auPass: st.auPass, setAuPass: (e) => self.setState({ auPass: e.target.value }),
           auPass2: st.auPass2, setAuPass2: (e) => self.setState({ auPass2: e.target.value }),
@@ -8136,6 +8391,23 @@ class Component extends DCLogic {
       // Home: today's free champions — ONE per role, 24h rotation. Hidden for
       // plan holders (they already have more than the free tier).
       showFreeToday: !(this.state.user && this.state.user.plan),
+      // Home: the daily free pick, inside the same section (so plan holders
+      // never see it). Three states: signed-out / pick unused / pick used.
+      freePickOut: !this.state.user,
+      freePickOpen: !!this.state.user && !this._freePickToday(),
+      freePickUsed: !!this.state.user && !!this._freePickToday(),
+      freePickLabel: this._freePickLabel(this._freePickToday()),
+      chooseFreePick: () => this.chooseFreePick(),
+      // Strip shown for 6s after a claim (sheet unlock or auto-claim at signup).
+      freePickToast: !!this.state.freePickToast && !!this._freePickToday(),
+      freePickToastText: (function(self){
+        var r = self._freePickToday();
+        return r ? 'Unlocked with today\u2019s free pick \u2014 open until ' + self._freePickResetText() + '. Next pick in ' + self._freePickCountdown() + '.' : '';
+      })(this),
+      dismissPickToast: () => this.dismissPickToast(),
+      freePickCountdown: this._freePickCountdown(),
+      openFreePick: () => this.openFreePick(),
+      freePickSignup: () => this.openAuth('signup', 'Create a free account — pick any matchup free every day, plus a free champion in every role. Plans from $1.99/month.'),
       freeToday: (function(self){
         var ACC = { top: '#f0883d', jungle: '#3ddc97', mid: '#46c6f5', bot: '#ff8bd0', support: '#9b8cff' };
         var LBL = { top: 'TOP', jungle: 'JG', mid: 'MID', bot: 'ADC', support: 'SUP' };
@@ -8167,7 +8439,7 @@ class Component extends DCLogic {
                 },
                 onClick: function(){
                   // The full rotation (any opponent) needs a free account.
-                  if (!self.state.user) { self.openAuth('signup', 'Create a free account to study today’s free champions — one per role, refreshed every 24 hours.'); return; }
+                  if (!self.state.user) { self.openAuth('signup', 'Create a free account to study today’s free champions — one per role, refreshed every 24 hours — and pick any matchup free every day.'); return; }
                   if (x.role === 'jungle') { self.openJg(ch, opp || "Kha'Zix", true); } else { self.setState({ role: x.role, myChamp: ch, homeStep: 'enemy', search: '', view: 'home' }); self._top(); }
                 } };
             }) };
@@ -8243,7 +8515,37 @@ class Component extends DCLogic {
         });
       })(this),
       paywallTitle: 'Pick your membership',
-      paywallSub: 'Lane Pass $1.99/mo (one lane) · All Lanes $3.99/mo · or $24.99/yr annual. Cancel anytime. Not ready? Your account still gets a free champion in every role, rotating every 24 hours.',
+      paywallSub: 'Lane Pass $1.99/mo (one lane) · All Lanes $3.99/mo · or $24.99/yr annual. Cancel anytime. Not ready? Your free account unlocks one matchup of your choice every day, plus a free champion in every role.',
+      // Paywall top line: today's free pick is already spent on another
+      // matchup — link back to it and count down to the next one (live: the
+      // 1s clock tick re-renders). Not for plans covering the pick's lane.
+      showPwPick: (function(self){
+        var u = self.state.user, r = self._freePickToday();
+        return !!(u && r && !(u.plan && self._planCovers(u.plan, r.role)));
+      })(this),
+      pwPickLabel: this._freePickLabel(this._freePickToday()),
+      // Paywall offer line: signed-in, today's pick unused, and the paywall was
+      // reached from a gated matchup (e.g. "See plans" on the sheet) - the pick
+      // can still be spent on that matchup from here.
+      showPwPickOffer: (function(self){
+        var u = self.state.user, mu = self._pendingMatchup(self.state.pendingMU);
+        return !!(u && mu && !self._freePickToday() && !(u.plan && self._planCovers(u.plan, mu.role)));
+      })(this),
+      pwPickOfferLabel: this._freePickLabel(this._pendingMatchup(this.state.pendingMU)),
+      pwPickCountdown: this._freePickCountdown(),
+      openPwPick: () => this.openFreePick(),
+      // Free-pick choice sheet (signed-in, pick unused) — see _gated.
+      showPickSheet: this.state.showPickSheet,
+      pickSheetBody: (function(self){
+        var mu = self._pendingMatchup(self.state.pendingMU);
+        if (!mu) return '';
+        var RLL = { top: 'Top', jungle: 'Jungle', mid: 'Mid', bot: 'Bot', support: 'Support' };
+        return mu.you + ' vs ' + mu.enemy + ' · ' + (RLL[mu.role] || mu.role) + '. You get one matchup of your choice free every day. This one stays open until ' + self._freePickResetText() + '.';
+      })(this),
+      pickSheetUnlock: () => this.pickSheetUnlock(),
+      pickSheetPlans: () => this.pickSheetPlans(),
+      closePickSheet: () => this.closePickSheet(),
+      pickSheetReset: this._freePickResetText(),
       tiers: (function(self){
         var RLL = { top: 'Top', jungle: 'Jungle', mid: 'Mid', bot: 'Bot', support: 'Support' };
         var wantRole = self.state.paywallRole || self.state.role || 'top';
@@ -8610,7 +8912,7 @@ class Component extends DCLogic {
         if (!this.state.user) {
           // Keep the purchase intent through signup (pendingPlan), or the new
           // account lands on home with the promised jungle offer lost.
-          this.setState({ pendingPlan: 'lane:jungle' });
+          this.setState({ pendingPlan: 'lane:jungle', pendingMU: null });
           this.openAuth('signup', 'Create your account, then pick a plan — the Jungle Lane Pass is $1.99/month.');
           return;
         }

@@ -162,6 +162,10 @@
     hostEl.id = "dc-root";
     dc.replaceWith(hostEl);
     doc.body.classList.add("mc-booted"); // hides the static boot shell in MatchupCoach.dc.html
+    // Remove it too, not just hide it: the shell carries its own <h1> for crawlers that do not
+    // run scripts, and leaving it in the DOM gives a rendering crawler two h1s on the homepage.
+    const bootShell = doc.querySelector(".mc-boot-shell");
+    if (bootShell) bootShell.remove();
     if (!parsed.preview) {
       const s = doc.createElement("style");
       s.textContent = FULL_PAGE_CSS;

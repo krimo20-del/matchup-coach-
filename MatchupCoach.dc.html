@@ -194,7 +194,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
     [style*="grid-template-columns"][style*="auto-fit"] {
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)) !important;
     }
-    /* Home page: the role picker (TOP/JG/MID/ADC/SUP) and free-sample grids pin
+    /* Home page: the role picker (TOP/JG/MID/ADC/SUP) grid pins
        5 fixed columns, which squeezes each card to ~53px on a phone. Go 2-up so
        every card keeps a readable width and the row fits the viewport. */
     [style*="grid-template-columns:repeat(5,1fr)"],
@@ -354,8 +354,8 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
   @media (max-width: 640px) {
     [style*="padding:54px 28px 30px"], [style*="padding: 54px 28px 30px"] { overflow-x: clip; }
   }
-  /* Home: the free-sample caption ("every matchup for these champions — a new one
-     per role every 24h") is a nowrap span that runs 21px past a 360px screen. */
+  /* Home: the iconic-matchups caption ("One legendary matchup per role, free for
+     everyone — a new set every day.") is a nowrap span that would run past a phone. */
   @media (max-width: 480px) {
     [style*="font-size:11.5px; color:#7d8499; white-space:nowrap"],
     [style*="font-size: 11.5px; color: rgb(125, 132, 153); white-space: nowrap"] { white-space: normal !important; }
@@ -363,6 +363,23 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
        squeezed beside it on a phone. */
     [data-mc-pwpick] { margin: 36px 0 16px 0 !important; }
     [data-mc-pwpick] + [data-mc-pwpick] { margin-top: 0 !important; }
+  }
+  /* Home iconic-matchup tiles: while the grid is ONE column, lay each tile out
+     sideways (art left; lane + chip over the names right) so the five tiles
+     stay short. Keyed on the grid's own width, not the viewport: the phone
+     rule above pairs tiles up at 2 x 210px + 9px gap = 429px, and where that
+     happens in viewport terms shifts with scrollbar width (a 500px media query
+     squeezed the sideways layout into 2-up 212px tiles, which overflowed).
+     Children: 1 = lane/chip row, 2 = art row, 3 = names. */
+  [data-mc-iconic-grid] { container-type: inline-size; }
+  @container (max-width: 428px) {
+    [data-mc-iconic] {
+      display: grid !important; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto;
+      column-gap: 12px !important; row-gap: 4px !important; align-items: center; text-align: left !important; padding: 10px 12px !important;
+    }
+    [data-mc-iconic] > :nth-child(1) { grid-column: 2; grid-row: 1; flex-wrap: nowrap !important; }
+    [data-mc-iconic] > :nth-child(2) { grid-column: 1; grid-row: 1 / span 2; flex-wrap: nowrap !important; }
+    [data-mc-iconic] > :nth-child(3) { grid-column: 2; grid-row: 2; }
   }
   /* Free-pick sheet: its primary button is focused programmatically on open, so
      show the ring on plain :focus; the other controls on keyboard focus. */
@@ -500,6 +517,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
 <script src="./champ-data/loadouts-by-class.js"></script>
 <script src="./champ-data/champ-gender.js"></script>
 <script src="./champ-data/rosters.js"></script>
+<script src="./champ-data/iconic-matchups.js"></script>
 <script src="./champ-data/jungle-intel.js"></script>
 <script src="./champ-data/jungle-intel-lanes.js"></script>
 <script src="./champ-data/jungle-intel-2.js"></script>
@@ -1577,42 +1595,39 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
         </div>
         <div style="text-align:center; margin-top:16px; font-size:12.5px; color:#7d8499;">All five roles live — every champion, every lane matchup.</div>
 
-        <!-- ===== FREE TODAY — 1 champion per role (free account · 24h rotation) ===== -->
+        <!-- ===== TODAY'S ICONIC MATCHUPS — 1 per role, free for everyone (24h UTC rotation) ===== -->
         <sc-if value="{{ showFreeToday }}" hint-placeholder-val="{{ true }}">
         <div style="margin-top:34px;">
+          <sc-if value="{{ showIconic }}" hint-placeholder-val="{{ true }}">
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
-            <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:16px; color:#f4efe8; letter-spacing:0.3px;">🎁 Free champions today</span>
-            <span style="font-family:'Chakra Petch',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.6px; color:#3ddc97; padding:3px 8px; border-radius:6px; background:rgba(61,220,151,0.12); border:1px solid rgba(61,220,151,0.32); white-space:nowrap;">FREE WITH ANY ACCOUNT</span>
+            <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:16px; color:#f4efe8; letter-spacing:0.3px;">⚔️ Today’s iconic matchups</span>
+            <span style="font-family:'Chakra Petch',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.6px; color:#3ddc97; padding:3px 8px; border-radius:6px; background:rgba(61,220,151,0.12); border:1px solid rgba(61,220,151,0.32); white-space:nowrap;">FREE FOR EVERYONE</span>
             <span style="flex:1; height:1px; background:rgba(255,255,255,0.07);"></span>
-            <span style="font-size:11.5px; color:#7d8499; white-space:nowrap;">every matchup for these champions — a new one per role every 24h</span>
+            <span style="font-size:11.5px; color:#7d8499; white-space:nowrap;">One legendary matchup per role, free for everyone — a new set every day.</span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:9px;">
-            <sc-for list="{{ freeToday }}" as="fr" hint-placeholder-count="5">
-              <div style="display:flex; flex-direction:column; gap:8px; padding:12px 10px; border-radius:14px; border:1px solid rgba(255,255,255,0.08); border-top:2.5px solid {{ fr.accent }}; background:linear-gradient(180deg,#13151f,#0c0e15);">
-                <span style="text-align:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:10px; letter-spacing:0.8px; color:{{ fr.accent }};">{{ fr.label }}</span>
-                <sc-for list="{{ fr.champs }}" as="fc" hint-placeholder-count="3">
-                  <button onClick="{{ fc.onClick }}" style="display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.04); cursor:pointer; font-family:'Manrope',sans-serif; text-align:left; min-width:0;" style-hover="border-color:#3ddc97; background:rgba(61,220,151,0.08);">
-                    <span data-champ-icon="{{ fc.champ }}" style="flex:0 0 auto; width:30px; height:30px; border-radius:8px; background:#1c2030; border:1px solid rgba(255,255,255,0.14);"></span>
-                    <span style="min-width:0; display:flex; flex-direction:column;">
-                      <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:#eef0f6; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ fc.champ }}</span>
-                      <span style="font-size:10px; color:#7d8499;">tap → pick opponent</span>
-                    </span>
-                  </button>
-                  <button onClick="{{ fc.openSample }}" style="display:flex; align-items:center; justify-content:space-between; gap:7px; padding:7px 10px; border-radius:10px; border:1px dashed rgba(61,220,151,0.45); background:rgba(61,220,151,0.06); cursor:pointer; font-family:'Manrope',sans-serif; min-width:0;" style-hover="background:rgba(61,220,151,0.14); border-color:rgba(61,220,151,0.8);">
-                    <span style="min-width:0; font-size:11px; font-weight:700; color:#7fe3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ fc.sampleLabel }}</span>
-                    <span style="flex:0 0 auto; font-family:'Chakra Petch',sans-serif; font-size:8px; font-weight:700; letter-spacing:0.5px; color:#3ddc97;">NO SIGNUP</span>
-                  </button>
-                </sc-for>
-              </div>
+          <div data-mc-iconic-grid="1" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:9px;">
+            <sc-for list="{{ iconicTiles }}" as="ic" hint-placeholder-count="5">
+              <button onClick="{{ ic.onClick }}" aria-label="{{ ic.aria }}" data-mc-iconic="{{ ic.role }}" style="display:flex; flex-direction:column; align-items:stretch; gap:10px; min-width:0; min-height:42px; padding:12px 10px; border-radius:14px; border:1px solid rgba(255,255,255,0.08); border-top:2.5px solid {{ ic.accent }}; background:linear-gradient(180deg,#13151f,#0c0e15); cursor:pointer; font-family:'Manrope',sans-serif; text-align:center;" style-hover="border-color:#3ddc97; background:linear-gradient(180deg,#15201c,#0c0e15);">
+                <span style="display:flex; align-items:center; justify-content:space-between; gap:6px; min-width:0;">
+                  <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:10px; letter-spacing:0.8px; color:{{ ic.accent }};">{{ ic.label }}</span>
+                  <span style="flex:0 0 auto; font-family:'Chakra Petch',sans-serif; font-size:8.5px; font-weight:700; letter-spacing:0.5px; color:#3ddc97; background:rgba(61,220,151,0.12); border:1px solid rgba(61,220,151,0.4); border-radius:5px; padding:1px 6px; white-space:nowrap;">FREE TODAY</span>
+                </span>
+                <span style="display:flex; align-items:center; justify-content:center; gap:8px;">
+                  <span data-champ-icon="{{ ic.you }}" style="flex:0 0 auto; width:40px; height:40px; border-radius:10px; background:#1c2030; border:1px solid {{ ic.accent }}66;"></span>
+                  <span style="flex:0 0 auto; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:10px; letter-spacing:0.6px; color:#7d8499;">VS</span>
+                  <span data-champ-icon="{{ ic.enemy }}" style="flex:0 0 auto; width:40px; height:40px; border-radius:10px; background:#1c2030; border:1px solid rgba(255,93,108,0.45);"></span>
+                </span>
+                <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12.5px; line-height:1.3; color:#eef0f6; overflow-wrap:anywhere;">{{ ic.title }}</span>
+              </button>
             </sc-for>
           </div>
-          <div style="margin-top:10px; text-align:center; font-size:11.5px; color:#7d8499;">Tap a <span style="color:#7fe3b8; font-weight:700;">sample</span> to read a full matchup guide free, no signup — see exactly how deep every guide goes.</div>
+          </sc-if>
           <!-- daily free pick: one matchup of the account's choice per UTC day.
-               Below the champion tiles, so the header above describes only them. -->
+               Below the iconic tiles, so the header above describes only them. -->
           <div style="display:flex; align-items:center; gap:10px 14px; flex-wrap:wrap; margin-top:16px; padding:12px 14px; border-radius:14px; border:1px solid rgba(232,184,75,0.35); background:linear-gradient(180deg,rgba(232,184,75,0.08),#0d0f16);">
             <span style="flex:0 0 auto; font-family:'Chakra Petch',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.6px; color:#f0cd72; padding:3px 8px; border-radius:6px; background:rgba(240,205,114,0.1); border:1px solid rgba(240,205,114,0.35); white-space:nowrap;">DAILY FREE PICK</span>
             <sc-if value="{{ freePickOut }}" hint-placeholder-val="{{ false }}">
-              <span style="flex:1 1 220px; min-width:0; font-size:13px; line-height:1.45; color:#e8dcc2; font-weight:600;">Create a free account and pick any matchup free every day.</span>
+              <span style="flex:1 1 220px; min-width:0; font-size:13px; line-height:1.45; color:#e8dcc2; font-weight:600;">Create a free account and pick any other matchup free every day.</span>
               <button onClick="{{ freePickSignup }}" style="flex:0 0 auto; min-height:42px; padding:9px 16px; border-radius:10px; cursor:pointer; background:linear-gradient(180deg,#f3cf6e,#e8b84b); border:1px solid rgba(232,184,75,0.9); color:#1a1303; font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;">Create free account</button>
             </sc-if>
             <sc-if value="{{ freePickOpen }}" hint-placeholder-val="{{ false }}">
@@ -1621,7 +1636,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
             </sc-if>
             <sc-if value="{{ freePickUsed }}" hint-placeholder-val="{{ false }}">
               <span style="flex:1 1 220px; min-width:0; display:flex; flex-direction:column; gap:2px;">
-                <span style="font-size:13px; line-height:1.45; color:#e8dcc2; font-weight:600;">Your free matchup today: <span style="color:#fff; font-weight:800;">{{ freePickLabel }}</span></span>
+                <span style="font-size:13px; line-height:1.45; color:#e8dcc2; font-weight:600;">Your free pick today: <span style="color:#fff; font-weight:800;">{{ freePickLabel }}</span></span>
                 <span style="font-size:11.5px; color:#8a90a2;">Your next free pick unlocks in <span style="white-space:nowrap;">{{ freePickCountdown }}</span></span>
               </span>
               <button onClick="{{ openFreePick }}" style="flex:0 0 auto; min-height:42px; padding:9px 16px; border-radius:10px; cursor:pointer; background:rgba(61,220,151,0.1); border:1px solid rgba(61,220,151,0.5); color:#7fe3b8; font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;" style-hover="background:rgba(61,220,151,0.18); border-color:rgba(61,220,151,0.8);">Open it →</button>
@@ -3789,14 +3804,14 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
               <div class="mc-ac-label">MEMBERSHIP</div>
               <h2 id="mc-ac-free-title" class="mc-ac-planname">Free account</h2>
               <div class="mc-ac-badge" data-kind="free"><span>Free plan</span></div>
-              <p class="mc-ac-sub">A free champion in every role, today’s sample matchup, and one matchup of your choice every day.</p>
+              <p class="mc-ac-sub">Today’s iconic matchups (one per role) are free for everyone, and your free account unlocks one matchup of your choice every day.</p>
               <div class="mc-ac-pick">
                 <sc-if value="{{ freePickOpen }}" hint-placeholder-val="{{ false }}">
                   <span class="mc-ac-pick-text"><span>Your free pick today is still available — pick any matchup.</span><span style="font-size:11.5px; color:#8a90a2;">A new free pick every day.</span></span>
                   <button class="mc-ac-btn mc-ac-secondary" onClick="{{ acChooseFreePick }}">Choose a matchup</button>
                 </sc-if>
                 <sc-if value="{{ freePickUsed }}" hint-placeholder-val="{{ false }}">
-                  <span class="mc-ac-pick-text"><span>Your free matchup today: <span style="color:#fff; font-weight:800;">{{ freePickLabel }}</span></span><span style="font-size:11.5px; color:#8a90a2;">Your next free pick unlocks in <span style="white-space:nowrap;">{{ freePickCountdown }}</span></span></span>
+                  <span class="mc-ac-pick-text"><span>Your free pick today: <span style="color:#fff; font-weight:800;">{{ freePickLabel }}</span></span><span style="font-size:11.5px; color:#8a90a2;">Your next free pick unlocks in <span style="white-space:nowrap;">{{ freePickCountdown }}</span></span></span>
                   <button class="mc-ac-btn mc-ac-secondary" onClick="{{ openFreePick }}">Open it →</button>
                 </sc-if>
               </div>
@@ -4074,7 +4089,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
           <sc-if value="{{ showPwPick }}" hint-placeholder-val="{{ false }}">
             <div data-mc-pwpick="1" style="display:flex; align-items:center; gap:6px 12px; flex-wrap:wrap; margin:0 44px 16px 0; padding:10px 14px; border-radius:12px; border:1px solid rgba(61,220,151,0.35); background:rgba(61,220,151,0.07);">
               <span style="flex:1 1 200px; min-width:0; display:flex; flex-direction:column; gap:2px;">
-                <span style="font-size:13px; line-height:1.45; color:#d9f3e7; font-weight:600;">Today’s free matchup: <span style="color:#fff; font-weight:800;">{{ pwPickLabel }}</span> — <button onClick="{{ openPwPick }}" style="background:none; border:none; padding:0; min-height:28px; cursor:pointer; font-family:'Manrope',sans-serif; font-size:13px; font-weight:800; color:#7fe3b8; text-decoration:underline;" style-hover="color:#b6f0d6;">open it</button></span>
+                <span style="font-size:13px; line-height:1.45; color:#d9f3e7; font-weight:600;">Your free pick today: <span style="color:#fff; font-weight:800;">{{ pwPickLabel }}</span> — <button onClick="{{ openPwPick }}" style="background:none; border:none; padding:0; min-height:28px; cursor:pointer; font-family:'Manrope',sans-serif; font-size:13px; font-weight:800; color:#7fe3b8; text-decoration:underline;" style-hover="color:#b6f0d6;">open it</button></span>
                 <span style="font-size:11.5px; color:#8a90a2;">Your next free pick unlocks in <span style="white-space:nowrap;">{{ pwPickCountdown }}</span></span>
               </span>
             </div>
@@ -4130,7 +4145,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
         <div style="position:relative; border-radius:21px; background:linear-gradient(180deg,#15161e,#0d0f16); padding:24px 22px 22px;">
           <button onClick="{{ closePickSheet }}" aria-label="Close" style="position:absolute; top:12px; right:12px; width:42px; height:42px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:#11131c; color:#aab0c2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:rgba(255,255,255,0.3); color:#fff;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
           <span style="display:inline-block; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; letter-spacing:1px; color:#7fe3b8;">🎁 DAILY FREE PICK</span>
-          <h2 id="mc-pick-title" style="margin:10px 48px 8px 0; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:22px; line-height:1.2; color:#fff;">Use today’s free matchup?</h2>
+          <h2 id="mc-pick-title" style="margin:10px 48px 8px 0; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:22px; line-height:1.2; color:#fff;">Use today’s free pick?</h2>
           <p style="margin:0 0 20px; font-size:14px; line-height:1.55; color:#aab0c2;">{{ pickSheetBody }}</p>
           <div style="display:flex; flex-direction:column; gap:10px;">
             <button id="mc-pick-unlock" onClick="{{ pickSheetUnlock }}" style="width:100%; min-height:46px; padding:12px 14px; border-radius:11px; cursor:pointer; background:linear-gradient(180deg,#f3cf6e,#e8b84b); border:1px solid rgba(232,184,75,0.9); color:#1a1303; font-family:'Manrope',sans-serif; font-weight:800; font-size:14px;">Unlock free for today</button>
@@ -4254,7 +4269,7 @@ class Component extends DCLogic {
     user: null,
     authMode: 'login', auName: '', auPass: '', auPass2: '', auTrap: '', auShowPw: false, auRemember: true, auErr: '', auNotice: '', auBusy: false,
     pendingPlan: '', plan: 'all', planRole: 'top', paywallRole: '', planChamp: 'Aatrox', coStyle: 'embedded',
-    founders: null, serverWeek: null, pendingMU: null, googleClientId: null,
+    founders: null, pendingMU: null, googleClientId: null,
     stripeEnabled: false, earlyAccess: true, payOk: false, payErr: '', payInfo: '', stripeBusy: false,
     heroYou: '', heroFoe: '', heroErr: '', heroYouOpen: false, heroFoeOpen: false,
     jgSeenAt: null, jgSeenSide: '', jgClock: 0,
@@ -4305,18 +4320,17 @@ class Component extends DCLogic {
       }
       try { if (document.title === 'Account | MatchupCoach.gg') document.title = 'MatchupCoach.gg — LoL Loading-Screen Coach'; } catch (x) {}
       // Back/Forward restores snapshots directly, so re-run the entitlement
-      // check a demo view originally passed through openGen/openJg — the daily
-      // free champion may have rotated, or the plan may have lapsed/shrunk
+      // check a demo view originally passed through openGen/openJg — today's
+      // iconic matchups may have rotated, or the plan may have lapsed/shrunk
       // since the snapshot was pushed. Uncovered restores land on home.
       if (mc.view === 'demo' && mc.myChamp && mc.enemyChamp) {
         var laneRole = mc.role || 'top';
         var u = this.state.user;
-        // Today's featured sample pairing is free for everyone, signed-out
-        // included — same rule as _gated, so Back into it never kicks home.
+        // Today's iconic matchup (either direction) is free for everyone,
+        // signed-out included — same rule as _gated, so Back into it never kicks home.
         // The account's daily free pick (one exact matchup) stays open all day too.
         var covered = (u && u.plan && this._planCovers(u.plan, laneRole))
-          || (u && this.dailyFreeChamps(laneRole).indexOf(mc.myChamp) !== -1)
-          || this._isSampleToday(laneRole, mc.myChamp, mc.enemyChamp)
+          || this._isIconicToday(laneRole, mc.myChamp, mc.enemyChamp)
           || (u && this._isFreePick(laneRole, mc.myChamp, mc.enemyChamp));
         if (!covered) { this.setState({ view: 'home', homeStep: 'role' }); this._top(); return; }
         this.setState(mc); this._top();
@@ -4374,10 +4388,9 @@ class Component extends DCLogic {
     if (_gcid) { (function(self, gid){ self.setState({ googleClientId: gid }); var s = document.createElement('script'); s.src = 'https://accounts.google.com/gsi/client'; s.async = true; document.head.appendChild(s); self._gsi = setInterval(function(){ var el = document.getElementById('mc-gsi'); var g = window.google && window.google.accounts && window.google.accounts.id; if (!el || el.childElementCount > 0 || !g) return; if (!self._gsiInit) { g.initialize({ client_id: gid, callback: function(r){ self._googleCred(r && r.credential); } }); self._gsiInit = true; } g.renderButton(el, { theme: 'outline', size: 'large', text: 'continue_with', shape: 'pill', width: 300 }); }, 250); })(this, _gcid); }
     if (window.MC_API) window.MC_API.available().then(ok => {
       if (!ok) return;
-      // Server is authoritative: live founder ladder, weekly rotation index,
+      // Server is authoritative: live founder ladder
       // and the session behind any stored token (overrides the local copy).
       window.MC_API.get('/founders').then(f => this.setState({ founders: f })).catch(() => {});
-      window.MC_API.get('/weekchamp').then(w => this.setState({ serverWeek: w.week })).catch(() => {});
       window.MC_API.get('/config').then(c => {
         if (c.stripeEnabled) this.setState({ stripeEnabled: true });
         if (typeof c.earlyAccess === 'boolean') this.setState({ earlyAccess: c.earlyAccess });
@@ -4737,56 +4750,40 @@ class Component extends DCLogic {
     else tail = win ? 'Your window\u2019s ' + win.toLowerCase() + '.' : 'Don\u2019t force the flat all-in.';
     return lead + 'The plan: ' + wc + '. ' + tail;
   }
-  // Free-tier rotation index \u2014 one whole-day step (UTC), so the free champions
-  // (one per role) and the featured samples refresh once per day.
+  // Free-tier rotation index \u2014 one whole-day step (UTC), so today's iconic
+  // matchups (one per role) and the daily free pick refresh once per day.
   _dayIndex() { return Math.floor(Date.now() / 864e5); }
-  // Today's free champion(s) for a given role — FREE_PER_ROLE per day, rotating
-  // every 24h (UTC). Deterministic — every visitor sees the same champion(s),
-  // no server involved. Kris's ruling 2026-08-06: ONE per role (was briefly 3);
-  // to change the count, edit FREE_PER_ROLE — the rest of the plumbing is
-  // array-based and adapts.
-  dailyFreeChamps(role) {
-    var FREE_PER_ROLE = 1;
-    var R = window.ROSTERS || {};
-    var pool = (R[role] || []).reduce(function(a, g){ return a.concat(g.c); }, []);
-    if (!pool.length) return ['Aatrox'];
-    pool = pool.slice().sort();
-    var n = pool.length;
-    var d = this._dayIndex() + (role.charCodeAt(0) * 7); // offset so roles don't all land on the same index
-    var base = ((d % n) + n) % n;
-    var out = [];
-    for (var i = 0; i < FREE_PER_ROLE && i < n; i++) out.push(pool[(base + Math.floor((i * n) / FREE_PER_ROLE) + (i ? 1 : 0)) % n]);
-    // de-dupe tiny pools where the offsets can collide
-    return out.filter(function(c, i2){ return out.indexOf(c) === i2; });
+  // ---- today's iconic matchups ----
+  // Kris's ruling 2026-09-13: the free showcase is ONE iconic matchup per role
+  // per UTC day, free for everyone (signed-out included), both directions. The
+  // pool is window.MC_ICONIC (champ-data/iconic-matchups.js: ten [you, enemy]
+  // display-name pairs per role). Each role carries a small fixed offset so the
+  // five lanes do not all sit on the same slot of their pools. This REPLACED the
+  // rotating free champion per role and the daily sample pairing. Missing pool
+  // (script failed to load) = no free iconic access, never a crash.
+  iconicToday(role) {
+    var P = window.MC_ICONIC, pool = P && role ? P[role] : null;
+    if (!Array.isArray(pool) || !pool.length) return null;
+    var ROLE_OFFSET = { top: 0, jungle: 3, mid: 6, bot: 1, support: 8 };
+    var n = pool.length, d = this._dayIndex() + (ROLE_OFFSET[role] || 0);
+    var p = pool[((d % n) + n) % n];
+    return (Array.isArray(p) && p[0] && p[1]) ? [String(p[0]), String(p[1])] : null;
   }
-  // Back-compat: the first of today's trio (claimFree/weekChamp use it).
-  dailyFreeChamp(role) { return this.dailyFreeChamps(role)[0]; }
-  // TRUE iff (you vs enemy) is today's featured SAMPLE pairing for the role —
-  // the EXACT arithmetic of the freeToday renderVal's sample-opponent pick, so
-  // a shared /matchup URL re-entering through _openFromUrl → openGen/openJg
-  // stays ungated for everyone (signed-out included), same as the home tile.
-  _isSampleToday(role, you, enemy) {
-    if (!role || !you || !enemy) return false;
-    if (you !== this.dailyFreeChamps(role)[0]) return false;
-    var day = this._dayIndex(), opp = '';
-    if (role === 'jungle') {
-      var jk = (window.JG_DB && window.JG_DB[you]) ? Object.keys(window.JG_DB[you]).sort() : [];
-      opp = jk.length ? jk[day % jk.length] : "Kha'Zix";
-    } else {
-      var R = window.ROSTERS || {};
-      var pool = (R[role] || []).reduce(function(a, g){ return a.concat(g.c); }, []).sort();
-      if (pool.length > 1) {
-        var oi = (day + 7) % pool.length;
-        if (pool[oi] === you) oi = (oi + 1) % pool.length;
-        opp = pool[oi];
-      }
-    }
-    return !!opp && enemy === opp;
+  // TRUE iff a vs b is today's iconic matchup for the role, in EITHER direction.
+  // _gated and _onPop both use it, so every entry path (home tile, picker, deep
+  // link, reload, Back/Forward) agrees and it never spends the daily free pick.
+  _isIconicToday(role, a, b) {
+    if (!role || !a || !b) return false;
+    var p = this.iconicToday(role);
+    return !!p && ((p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
   }
-  // The free champions available today, one per role.
-  freeTodayList() {
+  // Today's five iconic matchups (roles without a pool are left out).
+  iconicTodayList() {
     var self = this;
-    return ['top', 'jungle', 'mid', 'bot', 'support'].map(function(role){ return { role: role, champs: self.dailyFreeChamps(role) }; });
+    return ['top', 'jungle', 'mid', 'bot', 'support'].map(function(role){
+      var p = self.iconicToday(role);
+      return p ? { role: role, you: p[0], enemy: p[1] } : null;
+    }).filter(Boolean);
   }
   // ---- daily free pick ----
   // On top of the rotation: every signed-in account picks ONE exact matchup
@@ -4846,6 +4843,9 @@ class Component extends DCLogic {
   _claimFreePick(pending) {
     var k = this._freePickKey(this.state.user), mu = this._pendingMatchup(pending);
     if (!k || !mu) return false;
+    // Today's iconic matchup is already free for everyone: open it without
+    // spending the pick (e.g. a sheet left open across UTC midnight).
+    if (this._isIconicToday(mu.role, mu.you, mu.enemy)) return true;
     var cur = this._freePickToday();
     if (cur) return this._isFreePick(mu.role, mu.you, mu.enemy);
     var day = this._dayIndex(), all = this._readFreePicks(), keep = {};
@@ -4909,14 +4909,6 @@ class Component extends DCLogic {
   pickSheetPlans() { this.setState({ showPickSheet: false, showPaywall: true }); }
   // Declining forgets the matchup: a later sign-in must not auto-claim it.
   closePickSheet() { this.setState({ showPickSheet: false, pendingMU: null }); }
-  weekChamp() { return this.dailyFreeChamp('top'); }
-  claimFree() {
-    var champ = this.weekChamp();
-    var R = window.ROSTERS || {}, role = 'top';
-    for (var r in R) { if ((R[r] || []).some(g => g.c.indexOf(champ) !== -1)) { role = r; break; } }
-    this.setState({ showPaywall: false, view: 'home', homeStep: 'enemy', role: role, myChamp: champ, search: '' });
-    window.scrollTo(0, 0);
-  }
   // Plan keys: 'all' ($3.99/mo, every lane), 'year' ($24.99/yr, every lane),
   // 'lane:<role>' ($1.99/mo, one lane). _planParts splits the compound key.
   _planParts(p) {
@@ -5097,15 +5089,12 @@ class Component extends DCLogic {
     this._autoClaimPick = false;
     var laneRole = this._pendingRole(pending);
     if (u && u.plan && this._planCovers(u.plan, laneRole)) return false;
-    // Free tier: any signed-in account gets a free champion PER ROLE each day
-    // (24h UTC rotation). Playing AS today's free champ opens all of that
-    // champion's matchups in that lane — enemy switching included.
+    // Today's ICONIC matchup for this lane (either direction) is free for
+    // EVERYONE, signed-out included, whatever the entry path — checked before
+    // the daily free pick so opening it never spends (or offers) the pick.
     var youChamp = pending && (pending.you || (pending.kind === 'pick' ? this.state.myChamp : ''));
-    if (u && youChamp && this.dailyFreeChamps(laneRole).indexOf(youChamp) !== -1) return false;
-    // Today's featured SAMPLE pairing is free for EVERYONE (signed-out too) —
-    // whatever the entry path, so shared/reloaded sample URLs never gate.
     var enemyName = pending && pending.enemy;
-    if (enemyName && this._isSampleToday(laneRole, youChamp, enemyName)) return false;
+    if (youChamp && enemyName && this._isIconicToday(laneRole, youChamp, enemyName)) return false;
     // Daily free pick (signed-in, no plan covering this lane): today's pick is
     // open by every path; an unused pick is offered on the sheet (or claimed
     // outright right after signup); a used one leaves the paywall, which then
@@ -5122,7 +5111,7 @@ class Component extends DCLogic {
     // A signed-out stop makes this matchup the intent: an older plan click that
     // never finished signup must not ride along (see _finishAuth).
     this.setState(u ? { pendingMU: pending } : { pendingMU: pending, pendingPlan: '' });
-    if (!u) this.openAuth('signup', 'Create a free account — pick any matchup free every day, plus a free champion in every role. Plans from $1.99/month.');
+    if (!u) this.openAuth('signup', 'Create a free account — pick any matchup free every day. Today’s iconic matchups are free for everyone. Plans from $1.99/month.');
     else { this.setState({ showPaywall: true, paywallRole: laneRole }); this._nav(); }
     return true;
   }
@@ -5745,8 +5734,8 @@ class Component extends DCLogic {
   closePaywall() { this.setState({ showPaywall: false }); }
   setRole(r) { this.setState({ role: r, homeStep: 'you', search: '' }); }
   pickYou(c) { this.setState({ myChamp: c, homeStep: 'enemy', search: '' }); }
-  // The free-champion path lives inside _gated now (and requires an account —
-  // the old freePick bypass let signed-out visitors straight through).
+  // Every free path (today's iconic matchup, the daily free pick) lives inside
+  // _gated — the old freePick bypass let signed-out visitors straight through.
   pickEnemy(c) { if (this._gated({ kind: 'pick', enemy: c })) return; this.setState({ enemyChamp: c, view: 'demo', matchup: 'gen', level: '1', wave: 'recall', teamMode: 'fb', seconds: 80, cds: { Q: 0, W: 0, E: 0, R: 0 } }); this._top(); this._nav(); this.loadComments(this.state.myChamp, c, this.state.role); this.refreshLiveWr(this.state.myChamp, c, this.state.role); }
   backStep() { this.setState(s => ({ homeStep: s.homeStep === 'enemy' ? 'you' : 'role', search: '' })); }
   setSearch(e) { this.setState({ search: e.target.value }); }
@@ -8980,7 +8969,7 @@ class Component extends DCLogic {
           auShowGoogle: m !== 'forgot' && !!st.googleClientId, auShowPass: m !== 'forgot',
           authTitle: m === 'login' ? 'Welcome back' : m === 'signup' ? 'Create your account' : 'Reset your password',
           // Signing up to buy a plan (pendingPlan) while trials are on: say what the account is for.
-          authSub: m === 'login' ? (st.acPending ? 'Sign in to see your plan, update your card, change plans or cancel.' : 'Sign in to keep your matchup prep in one place.') : m === 'signup' ? ((st.pendingPlan && st.pendingPlan !== 'free' && self._trialOffer()) ? 'Create your free account to start your 7-day free trial.' : 'Free to join \u2014 pick any matchup free every day. Upgrade any time: Lane Pass $1.99/mo, All Lanes $3.99/mo, or $24.99/yr.') : 'Enter your username and we\u2019ll send a reset link to its email.',
+          authSub: m === 'login' ? (st.acPending ? 'Sign in to see your plan, update your card, change plans or cancel.' : 'Sign in to keep your matchup prep in one place.') : m === 'signup' ? ((st.pendingPlan && st.pendingPlan !== 'free' && self._trialOffer()) ? 'Create your free account to start your 7-day free trial.' : 'Free to join. Upgrade any time: Lane Pass $1.99/mo, All Lanes $3.99/mo, or $24.99/yr.') : 'Enter your username and we\u2019ll send a reset link to its email.',
           authCancelLine: self._trialOffer() ? 'Cancel anytime in Account \u2014 you keep access until the end of your free trial or billing period, and you\u2019re never charged if you cancel during the trial.' : 'Cancel anytime \u2014 you keep full access until the end of the billing period.',
           auName: st.auName, setAuName: (e) => self.setState({ auName: e.target.value }),
           auPass: st.auPass, setAuPass: (e) => self.setState({ auPass: e.target.value }),
@@ -9123,7 +9112,7 @@ class Component extends DCLogic {
           aInit: init(l), bInit: init(r) };
       });
         // RETIRED 2026-08-06 (Kris): the no-signup sample tiles are gone — the
-        // free tier (one free champion per role daily, account required) is the
+        // home "Today's iconic matchups" section (iconicTodayList) is the
         // acquisition path now. SHOWPOOL kept for reference; nothing renders it.
         return [];
       })(),
@@ -9303,9 +9292,10 @@ class Component extends DCLogic {
           })
         };
       })(this),
-      // Home: today's free champions — ONE per role, 24h rotation. Hidden for
+      // Home: today's iconic matchups + the daily free pick card. Hidden for
       // plan holders (they already have more than the free tier).
       showFreeToday: !(this.state.user && this.state.user.plan),
+      showIconic: this.iconicTodayList().length > 0,
       // Home: the daily free pick, inside the same section (so plan holders
       // never see it). Three states: signed-out / pick unused / pick used.
       freePickOut: !this.state.user,
@@ -9322,42 +9312,22 @@ class Component extends DCLogic {
       dismissPickToast: () => this.dismissPickToast(),
       freePickCountdown: this._freePickCountdown(),
       openFreePick: () => this.openFreePick(),
-      freePickSignup: () => this.openAuth('signup', 'Create a free account — pick any matchup free every day, plus a free champion in every role. Plans from $1.99/month.'),
-      freeToday: (function(self){
+      freePickSignup: () => this.openAuth('signup', 'Create a free account — pick any matchup free every day. Today’s iconic matchups are free for everyone. Plans from $1.99/month.'),
+      // Home: today's iconic matchups — one per role, free for everyone, new set
+      // every UTC day (iconicToday). Tiles open through openGen/openJg WITHOUT the
+      // free flag: _gated honours _isIconicToday, so the tile, a reload, a shared
+      // link and Back/Forward all run the same check.
+      iconicTiles: (function(self){
         var ACC = { top: '#f0883d', jungle: '#3ddc97', mid: '#46c6f5', bot: '#ff8bd0', support: '#9b8cff' };
-        var LBL = { top: 'TOP', jungle: 'JG', mid: 'MID', bot: 'ADC', support: 'SUP' };
-        var day = self._dayIndex();
-        return self.freeTodayList().map(function(x){
+        var LBL = { top: 'TOP', jungle: 'JUNGLE', mid: 'MID', bot: 'ADC', support: 'SUPPORT' };
+        return self.iconicTodayList().map(function(x){
           return { role: x.role, label: LBL[x.role] || x.role.toUpperCase(), accent: ACC[x.role] || '#7fe3b8',
-            champs: x.champs.map(function(ch){
-              // SAMPLE opponent for this free champ — deterministic daily pick
-              // from the same role, so every visitor sees the same pairing and
-              // it rotates with the champion. Opens WITHOUT an account ("see
-              // how in-depth it is"); everything else needs the free account.
-              var opp = '';
-              if (x.role === 'jungle') {
-                var jk = (window.JG_DB && window.JG_DB[ch]) ? Object.keys(window.JG_DB[ch]).sort() : [];
-                opp = jk.length ? jk[day % jk.length] : "Kha'Zix";
-              } else {
-                var R = window.ROSTERS || {};
-                var pool = (R[x.role] || []).reduce(function(a, g){ return a.concat(g.c); }, []).sort();
-                if (pool.length > 1) {
-                  var oi = (day + 7) % pool.length;
-                  if (pool[oi] === ch) oi = (oi + 1) % pool.length;
-                  opp = pool[oi];
-                }
-              }
-              return { champ: ch, opp: opp, sampleLabel: 'Sample: vs ' + opp + ' →',
-                openSample: function(){
-                  if (x.role === 'jungle') self.openJg(ch, opp, true);
-                  else self.openGen(x.role, ch, opp, true);
-                },
-                onClick: function(){
-                  // The full rotation (any opponent) needs a free account.
-                  if (!self.state.user) { self.openAuth('signup', 'Create a free account to study today’s free champions — one per role, refreshed every 24 hours — and pick any matchup free every day.'); return; }
-                  if (x.role === 'jungle') { self.openJg(ch, opp || "Kha'Zix", true); } else { self.setState({ role: x.role, myChamp: ch, homeStep: 'enemy', search: '', view: 'home' }); self._top(); }
-                } };
-            }) };
+            you: x.you, enemy: x.enemy, title: x.you + ' vs ' + x.enemy,
+            aria: (LBL[x.role] || x.role) + ': ' + x.you + ' vs ' + x.enemy + ' — free today',
+            onClick: function(){
+              if (x.role === 'jungle') self.openJg(x.you, x.enemy);
+              else self.openGen(x.role, x.you, x.enemy);
+            } };
         });
       })(this),
       // Home: ENEMY-JG TRACKER for laners — pick the enemy jungler, get their
@@ -9430,7 +9400,7 @@ class Component extends DCLogic {
         });
       })(this),
       paywallTitle: 'Pick your membership',
-      paywallSub: (this._trialOffer() ? 'Start any plan with a 7-day free trial. ' : '') + 'Lane Pass $1.99/mo (one lane) · All Lanes $3.99/mo · or $24.99/yr annual. Cancel anytime. Not ready? Your free account unlocks one matchup of your choice every day, plus a free champion in every role.',
+      paywallSub: (this._trialOffer() ? 'Start any plan with a 7-day free trial. ' : '') + 'Lane Pass $1.99/mo (one lane) · All Lanes $3.99/mo · or $24.99/yr annual. Cancel anytime. Not ready? Today’s iconic matchups (one per role) are free for everyone, and your free account unlocks one matchup of your choice every day.',
       // Paywall top line: today's free pick is already spent on another
       // matchup — link back to it and count down to the next one (live: the
       // 1s clock tick re-renders). Not for plans covering the pick's lane.

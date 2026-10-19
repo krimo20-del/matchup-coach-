@@ -577,6 +577,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
 <script src="./champ-data/jg/_jg-label-text-fixes.js"></script>
 <script src="./champ-data/aatrox-jugg-loadouts.js"></script>
 <script src="./champ-data/aatrox-loadouts-extra.js"></script>
+<script src="./champ-data/masteryi-loadouts.js"></script>
 <script src="./champ-data/camille-loadouts.js"></script>
 <script src="./champ-data/darius-loadouts.js"></script>
 <script src="./champ-data/drmundo-loadouts.js"></script>
@@ -2026,6 +2027,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
             <a href="/matchup/bot/" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Bot</a>
             <a href="/matchup/support/" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Support</a>
             <button onClick="{{ openLogin }}" style="background:none; border:none; padding:0; cursor:pointer; font-size:12.5px; font-weight:700; color:#8a90a2; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Account</button>
+            <a href="/methodology" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Methodology</a>
             <a href="/terms" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Terms</a>
             <a href="/privacy" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Privacy</a>
             <a href="/refund" style="font-size:12.5px; font-weight:700; color:#8a90a2; text-decoration:none; font-family:'Manrope',sans-serif;" style-hover="color:#f0cd72;">Refund</a>
@@ -5654,7 +5656,14 @@ class Component extends DCLogic {
     var lm = /^\/matchup\/(top|mid|bot|support|jungle)\/(.+?)-vs-(.+?)\/open\/?$/.exec(path);
     var forcedRole = null, m;
     if (lm) { forcedRole = lm[1]; m = [lm[0], lm[2], lm[3]]; }
-    else m = /^\/matchup\/(?:leagueoflegends\/lol\/)?(.+?)-vs-(.+?)\/?$/.exec(path);
+    // Lane-less pair link, the shape every old shared link uses. The /open suffix
+    // is optional because netlify.toml 301s /matchup/<a>-vs-<b> to
+    // /matchup/<a>-vs-<b>/open, so a legacy link arrives here already rewritten;
+    // without it the second champion resolved as "darius/open" and nothing opened.
+    // The champion halves are [^/] so the pattern still cannot span path segments:
+    // /matchup/top/aatrox-vs-darius/ is a real static guide, not an app deep link,
+    // and used to mis-read as the champion "top/aatrox".
+    else m = /^\/matchup\/(?:leagueoflegends\/lol\/)?([^\/]+?)-vs-([^\/]+?)(?:\/open)?\/?$/.exec(path);
     if (!m) return;
     var deslug = function(s){ return s.replace(/-/g, ' '); };
     var tries = 0, self = this;
@@ -8555,7 +8564,48 @@ class Component extends DCLogic {
         loadout: (function(){
           var L = (window.JG_LOADOUTS || {})[you];
           if (!L) return null;
-          var dbItem = jStages[5] ? jStages[5].adv.replace(/\s*Spike$/i, '') : '';
+          // Stage 5 ("First Item Spike") labels name the item this jungler completes
+          // first, and the build card lifts that label into "First item". Not every
+          // label is an item, though: Elise's reports read "Elise Power Spike", every
+          // report against Locke describes HIS "Lich Bane / Shadowflame Spike", and a
+          // few say "Tank Item Spike", "Even" or "Mirror". Same guard the static
+          // guides use (_gen_seo_pages.js jgFirstItem): learn each jungler's own
+          // labels first (the item their own reports name at least three times), then
+          // lift a label only when the stage really is an item stage, the window is
+          // this jungler's, the text is not a jungler's name or a placeholder, and the
+          // item is not the opponent's own. Anything else falls back to the
+          // JG_LOADOUTS item, exactly as the guides fall back.
+          var esc = function(s){ return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); };
+          var JG = window.JG_DB || {}, C = window._jgItemGuard;
+          if (!C || C.db !== JG) {
+            var names = Object.keys(JG), own = {};
+            names.forEach(function(n){
+              var seen = {};
+              Object.keys(JG[n] || {}).forEach(function(f){
+                var st = f !== n && JG[n][f] && JG[n][f].stages ? JG[n][f].stages[5] : null;
+                if (st) seen[st.adv] = (seen[st.adv] || 0) + 1;
+              });
+              own[n] = Object.keys(seen).filter(function(k){ return seen[k] >= 3; });
+            });
+            C = window._jgItemGuard = {
+              db: JG, own: own,
+              nameRe: new RegExp('\\b(' + names.map(esc).join('|') + ')\\b', 'i'),
+              notItem: /\b(power|even|mirror|whoever|tank item|utility item|ap item)\b/i
+            };
+          }
+          var s5 = jStages[5], label = s5 ? String(s5.adv) : '';
+          // The generator's own tone test, which reads the OPPONENT's name first: a
+          // label like "Bel'Veth Favored" on a Bel'Veth page is pressure, not a window.
+          var low = label.toLowerCase();
+          var wb = function(n){ return new RegExp('\\b' + esc(n) + '\\b', 'i').test(low); };
+          var tone5 = wb(foe) ? 'b'
+            : wb(you) ? 'a'
+            : /dominant|domination|favou?red|peak|spike|apex|predator|stabilized|playmaker|absolute/.test(low) ? 'a'
+            : /defensive|posture|caution|risk|danger|avoid|surviv|weak|vulnerab|passive|concede|respect/.test(low) ? 'b'
+            : 's';
+          var raw = s5 && /item/i.test(String(s5.stage)) ? label.replace(/\s*Spike$/i, '').replace(/\s+/g, ' ').trim() : '';
+          var foeOwn = !!(C.own[foe] && C.own[foe].indexOf(label) >= 0 && (C.own[you] || []).indexOf(label) < 0);
+          var dbItem = (!raw || tone5 !== 'a' || C.nameRe.test(raw) || C.notItem.test(raw) || foeOwn) ? '' : raw;
           var wr = jDiff === 'HARD MATCHUP' ? '\u224847% (Emerald+) \u2014 uphill race' : jDiff === 'FAVOURED MATCHUP' ? '\u224853% (Emerald+) \u2014 favoured race' : '\u224850% \u2014 decided by tempo';
           return Object.assign({}, L, { firstItem: dbItem || L.firstItem, wr: wr, diff: jDiff });
         })(),

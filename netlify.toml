@@ -27,6 +27,17 @@
     # already sets both from server.js; Netlify sends neither by default).
     X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
+    # Send the full URL only to matchupcoach.gg itself; cross-origin requests
+    # (the Data Dragon images, Stripe's hosted checkout, any outbound click)
+    # get the bare origin. Browsers that ignore it fall back to their own
+    # default, which is already this value in every current browser.
+    # Deliberately NOT set here: Content-Security-Policy — the app is one HTML
+    # file of inline scripts plus CDN dependencies, so any honest policy would
+    # need 'unsafe-inline' and would protect nothing while risking a blank site.
+    # Also deliberately not set: HSTS includeSubDomains — the API runs on a
+    # different host and other subdomains are not all HTTPS-only, so the flag
+    # would promise something this deploy does not control.
+    Referrer-Policy = "strict-origin-when-cross-origin"
 
 # The self-healing build stamp must never be cached — it's how a stale page
 # learns a new build shipped and reloads itself.
@@ -34,6 +45,13 @@
   for = "/build.txt"
   [headers.values]
     Cache-Control = "no-store, max-age=0"
+
+# Netlify has no built-in type for .webmanifest, so it shipped as
+# application/octet-stream and browsers ignored the install metadata.
+[[headers]]
+  for = "/site.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
 
 # Proxy the API to the Render backend (200 = rewrite/proxy, not a redirect).
 [[redirects]]
@@ -53,6 +71,42 @@
   from = "/"
   to = "/MatchupCoach.dc.html"
   status = 200
+  force = true
+
+# ONE URL FOR THE HOMEPAGE. Three other URLs served or reached the same document:
+# /index.html (the physical meta-refresh stub), /MatchupCoach.dc.html (which
+# Netlify pretty-URLs down to the lowercase extensionless form) and
+# /matchupcoach.dc itself. All three carried canonical https://matchupcoach.gg/,
+# so nothing was mis-indexed, but each was a crawlable duplicate of the domain's
+# strongest URL. Send them all to / for good. force = true is REQUIRED on each:
+# a real file is served at every one of these paths, and without force Netlify
+# serves the file and the rule never fires. The rewrite above is unaffected —
+# Netlify matches the redirect rules against the INCOMING request only and never
+# re-runs them on a rewrite's destination (the same reason the standard
+# "/* -> /index.html 200" SPA fallback does not loop), so / still rewrites to
+# MatchupCoach.dc.html with the query string intact.
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/MatchupCoach.dc.html"
+  to = "/"
+  status = 301
+  force = true
+# Same file, lowercased: Netlify normalises asset paths to lower case, which is
+# why the live 301 from /MatchupCoach.dc.html landed on /matchupcoach.dc. Cover
+# both the lowercase .html spelling and the extensionless pretty URL.
+[[redirects]]
+  from = "/matchupcoach.dc.html"
+  to = "/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/matchupcoach.dc"
+  to = "/"
+  status = 301
   force = true
 
 # Matchup deep links (/matchup/a-vs-b and /matchup/leagueoflegends/lol/a-vs-b)
@@ -81,11 +135,30 @@
   from = "/account"
   to = "/MatchupCoach.dc.html"
   status = 200
-# Legacy lane-less shared links (/matchup/a-vs-b) still load the app…
+# Legacy lane-less shared links (/matchup/a-vs-b) no longer serve the app shell
+# at their own URL. They used to (status = 200), which meant EVERY one-segment
+# path under /matchup/ — /matchup/foo just as much as a real pair — answered 200
+# with the 787 KB homepage shell canonicalised to /. That is an unbounded space
+# of crawlable soft-404s and duplicates of the homepage.
+# Now the URL 301s to the /open deep link instead. The app resolves /open exactly
+# as it resolved the lane-less path (_openFromUrl reads either shape), so every
+# old shared link still opens its matchup — and robots.txt already disallows
+# /matchup/*/open, so the shell is no longer reachable by a crawler at all: the
+# 301 destination is blocked, so the source URL is dropped rather than indexed as
+# another copy of the homepage. Lane hubs (/matchup/top/) and /matchup/ itself are
+# real files and win over this non-forced rule, so they are untouched.
+# KNOWN LIMIT: this fires for any one-segment path, not only "a-vs-b" pairs.
+# Netlify's matcher cannot test a substring inside a path segment — verified
+# against netlify-redirector: "/matchup/:a-vs-:b" silently degrades to
+# "/matchup/:a" (it matched /matchup/foo) and "/matchup/*-vs-*" never matches at
+# all. Sending only real pairs here and letting everything else fall through to
+# the 404 below needs one literal rule per pair, i.e. a generated _redirects file
+# from _gen_seo_pages.js. Until that exists, a junk lane-less URL lands on a
+# robots-disallowed /open rather than a 404 — no longer a crawlable 200.
 [[redirects]]
   from = "/matchup/:slug"
-  to = "/MatchupCoach.dc.html"
-  status = 200
+  to = "/matchup/:slug/open"
+  status = 301
 # …but any other unknown matchup URL is a REAL 404 now. Without this, every
 # nonexistent guide URL soft-200'd into the 756KB app shell — crawl waste and
 # soft-404s in Search Console. Physical guide pages always win over these
@@ -145,6 +218,11 @@
 [[redirects]]
   from = "/cancel.html"
   to = "/cancel"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/methodology.html"
+  to = "/methodology"
   status = 301
   force = true
 

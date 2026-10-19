@@ -7,7 +7,6 @@ const fs = require('fs');
 const path = require('path');
 
 const ORIGIN = 'https://matchupcoach.gg';
-const TODAY = new Date().toISOString().slice(0, 10); // build date — never freeze this
 const slug = n => n.toLowerCase().replace(/[^a-z]/g, '');
 const urlslug = n => n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -38,6 +37,12 @@ const LIVE_PATCH = '26.15';
 // win rates were sampled. These are CONTENT facts, not build facts — never wire
 // them to TODAY. A dateModified/lastmod that moves on every rebuild is a false
 // freshness signal to search engines and a false "Updated <date>" to readers.
+// 2026-09-23: bumped again, and again because the CONTENT changed, not the build.
+// This round rewrote the early-game and jungle first-clear paragraphs, added the
+// runes/build cards that 2,171 pages were missing, rebuilt the hub pages, and
+// changed what every guide says about price and access (the free tier, the trial
+// and the iconic rotation). That is a material change on all 12,092 pages, so the
+// date moves once, here, and the whole sitemap moves with it.
 // 2026-09-07: bumped because the content GENUINELY changed, not because of a rebuild.
 // Since 2026-08-24 the mid (2,070), bot (870), support (1,260) and jungle (2,499)
 // matchups were all audited and shipped — 6,699 matchups of real content change — plus
@@ -46,8 +51,20 @@ const LIVE_PATCH = '26.15';
 // Riot's kit data. Leaving this at 2026-08-24 told Google that 12,096 pages were
 // unchanged, so none of that work was a reason to recrawl. The rule above still holds:
 // bump this when the DATA changes, never on a rebuild.
-const DATA_MODIFIED = '2026-09-07';
+const DATA_MODIFIED = '2026-09-23';
 const WR_SAMPLED = 'July 2026';
+// One string, printed under every guide's subtitle and used nowhere else, so the
+// "when was this last touched" question has the same answer on all 12,092 pages.
+// Jungle carries no win-rate sample (see the jungle note below), so it says so
+// rather than borrowing the lane sample date.
+const trustLine = jungle => jungle
+  ? `Updated ${DATA_MODIFIED} · no win-rate sample for jungle pairs · reviewed on patch ${LIVE_PATCH}`
+  : `Updated ${DATA_MODIFIED} · win rates sampled ${WR_SAMPLED} · reviewed on patch ${LIVE_PATCH}`;
+// Printed once in the verdict box of every jungle guide. The lane guides lead
+// with a pooled Emerald+ win rate; the jungle data has no such sample, and a
+// reader who has just come from a lane guide needs telling why the number is
+// missing rather than being left to assume it was forgotten.
+const JG_NO_WR = 'Jungle guides are a stage-by-stage race read: there is no Emerald+ win-rate sample for jungler-vs-jungler pairs, unlike the lane guides.';
 const STAGES = ['Level 1', 'Level 2', 'Level 3', 'Levels 4-5', 'Level 6', 'First item', 'Two+ items'];
 
 // ---------- load all lane data ----------
@@ -253,6 +270,57 @@ function appEntry(bag, bFile, bName) {
   return e && typeof e === 'object' ? e : null;
 }
 
+// ---------- iconic matchups (the free daily showcase) ----------
+// champ-data/iconic-matchups.js is loaded in the sandbox above with the rest of
+// the app data, so window.MC_ICONIC is already here. Ten pairs per role; one pair
+// per role per UTC day is free for everyone with no account, both directions, so
+// the pool is exactly 100 pages. Those pages say so, and the hubs link them.
+// The names are the app's display names, which is also what urlslug() turns into
+// the page path — but nothing enforces that, and a single typo in the pool would
+// silently produce a badge on no page and a hub link to a 404. So every URL built
+// here is checked against the set of pages the build actually wrote (the gate at
+// the bottom), and the build fails if one is missing.
+const ICONIC = (() => {
+  const src = APP.MC_ICONIC;
+  if (!src || typeof src !== 'object') throw new Error('champ-data/iconic-matchups.js: window.MC_ICONIC did not load');
+  const byLane = {}, urls = new Map(), byChamp = {};
+  let pairs = 0;
+  for (const lane of Object.keys(src)) {
+    const list = Array.isArray(src[lane]) ? src[lane] : [];
+    if (!list.length) throw new Error(`iconic pool: lane "${lane}" is empty`);
+    byLane[lane] = []; byChamp[lane] = {};
+    for (const p of list) {
+      if (!Array.isArray(p) || p.length !== 2 || !p[0] || !p[1] || p[0] === p[1]) throw new Error(`iconic pool: ${lane} has a malformed pair ${JSON.stringify(p)}`);
+      const [a, b] = p;
+      const uA = `/matchup/${lane}/${urlslug(a)}-vs-${urlslug(b)}/`, uB = `/matchup/${lane}/${urlslug(b)}-vs-${urlslug(a)}/`;
+      const row = { lane, a, b, uA, uB };
+      byLane[lane].push(row); pairs++;
+      urls.set(uA, row); urls.set(uB, row);
+      for (const n of [a, b]) (byChamp[lane][n] = byChamp[lane][n] || []).push(row);
+    }
+  }
+  console.log(`iconic pool: ${pairs} pairs across ${Object.keys(byLane).length} roles · ${urls.size} pages free on their rotation day`);
+  return { byLane, urls, byChamp, pairs };
+})();
+// The sentence every one of those 100 pages carries, under the badge. It states
+// the two facts a reader needs: how big the pool is, and what "free" means here.
+function iconicHtml(lane, url, laneWord) {
+  if (!ICONIC.urls.has(url)) return '';
+  iconicStats.badged++;
+  const n = ICONIC.byLane[lane].length;
+  return `<p class="iconic">Iconic matchup</p>
+<p class="iconic-why">One of the ${n} flagship ${laneWord} matchups. On its day in the rotation this guide is free to everyone in full, with no account and no payment — one matchup per role comes up free every day, both directions.</p>`;
+}
+// The "Iconic matchups" block for a hub. `rows` are ICONIC pair rows; both
+// directions are linked because both are free on the same day.
+function iconicBlock(rows, heading) {
+  if (!rows || !rows.length) return '';
+  const li = r => `<li><a href="${r.uA}">${esc(r.a)} vs ${esc(r.b)}</a> · <a href="${r.uB}">${esc(r.b)} vs ${esc(r.a)}</a></li>`;
+  return `<h2>Iconic matchups</h2>
+<p class="sub">${heading}</p>
+<ul>${rows.map(li).join('')}</ul>`;
+}
+
 // ---------- ability kits (Data Dragon 16.15.1) + the app's ENEMY_KITS ----------
 // CHAMP_DATA's key.name is hand-written ("Apprehend (Pull)", "Yordle Snap
 // Traps", once just "Ultimate"); the app swaps in ENEMY_KITS[enemy][slot].n at
@@ -334,6 +402,19 @@ function regender(s, she) {
 // One CHAMP_DATA line is an abandoned draft ("...wait, wrong artist —"). Drop
 // any line that reads like one rather than print it.
 const DRAFT = /wait, wrong|wrong artist|edit this|\bTODO\b|placeholder|lorem ipsum|\[[A-Za-z ]+\]/i;
+// The Track line's facts, shared by the at-a-glance box and the FAQ answers so
+// both print the same ability, slot and cooldown. No counters here — the box
+// counts what it prints. Null when the page has no Track line.
+function trackOf(C, bFile, bName) {
+  const d = appEntry(APP.CHAMP_DATA[C.key], bFile, bName);
+  const ab = d && d.key && d.key.slot ? kitAbility(bName, d.key.slot, bFile) : null;
+  if (!ab) return null;
+  const cd = cdText(ab.cooldown), nm = ab.names.join(' / ');
+  // "Sear (Stun, 8–6s cooldown)", not "Sear (Stun) (8–6s cooldown)": an
+  // ENEMY_KITS cue already opens a parenthetical, so the cooldown joins it.
+  const named = !cd ? nm : /\)$/.test(nm) ? nm.replace(/\)$/, `, ${cd} cooldown)`) : `${nm} (${cd} cooldown)`;
+  return { ab, slot: d.key.slot, cd, nm, bare: nm.replace(/\s*\([^)]*\)$/, ''), named };
+}
 function glanceHtml(C, bFile, aName, bName) {
   const d = appEntry(APP.CHAMP_DATA[C.key], bFile, bName);
   if (!d) { glanceStats.noData++; return ''; }
@@ -343,13 +424,10 @@ function glanceHtml(C, bFile, aName, bName) {
   const tldr = regender(d.tldr, she), dos = lines(d.dos), donts = lines(d.donts);
   if (!tldr && !dos.length && !donts.length) { glanceStats.noData++; return ''; }
   let track = '';
-  const ab = d.key && d.key.slot ? kitAbility(bName, d.key.slot, bFile) : null;
+  const tk = trackOf(C, bFile, bName);
+  const ab = tk && tk.ab;
   if (ab) {
-    const cd = cdText(ab.cooldown), nm = ab.names.join(' / ');
-    // "Sear (Stun, 8–6s cooldown)", not "Sear (Stun) (8–6s cooldown)": an
-    // ENEMY_KITS cue already opens a parenthetical, so the cooldown joins it.
-    const named = !cd ? nm : /\)$/.test(nm) ? nm.replace(/\)$/, `, ${cd} cooldown)`) : `${nm} (${cd} cooldown)`;
-    track = `<p><b>Track:</b> ${esc(bName)}'s ${esc(d.key.slot)} — ${esc(named)}.${d.key.note ? ' ' + esc(regender(d.key.note, she)) : ''}</p>`;
+    track = `<p><b>Track:</b> ${esc(bName)}'s ${esc(d.key.slot)} — ${esc(tk.named)}.${d.key.note ? ' ' + esc(regender(d.key.note, she)) : ''}</p>`;
     glanceStats.track++;
     kitStats[ab.src === 'ek' ? 'fromEK' : 'fromKit']++;
     if (ab.src === 'clash') kitStats.clash++;
@@ -394,66 +472,208 @@ function buildCard(l, bName, she) {
 <div class="card"><dl class="build">${rows}</dl></div>`;
 }
 // The two loadout FAQ answers: one or two sentences straight from the entry.
-function runeAnswer(l, aName, bName) {
+// `item` is the build card's first item (short form); when given it closes the
+// answer, since the rune page and the first buy are the two halves of one card.
+function runeAnswer(l, aName, bName, item) {
   const r = runeParts(l.runes);
   if (!r) return '';
-  if (!r.keystone) return `${aName} runs ${r.line} vs ${bName}.`;
-  return `${aName} takes ${r.keystone}${r.pt ? ` on the ${r.pt} tree` : ''}${r.prim.length ? ` with ${listEn(r.prim)}` : ''}${r.st ? `, and ${r.st} secondary${r.sec.length ? ` (${listEn(r.sec)})` : ''}` : ''} vs ${bName}.`;
+  const tail = item ? ` vs ${bName}, with ${item} as the first item.` : ` vs ${bName}.`;
+  if (item) faqClauseStats.runes++;
+  if (!r.keystone) return `${aName} runs ${r.line}${tail}`;
+  return `${aName} takes ${r.keystone}${r.pt ? ` on the ${r.pt} tree` : ''}${r.prim.length ? ` with ${listEn(r.prim)}` : ''}${r.st ? `, and ${r.st} secondary${r.sec.length ? ` (${listEn(r.sec)})` : ''}` : ''}${tail}`;
 }
 function buildAnswer(l, aName, bName, she) {
   const g = s => regender(s, she);
   return `Start ${g(l.start)}${l.firstBack ? ` and back for ${g(l.firstBack)}` : ''}. Build ${g(l.firstItem)} first${l.secondItem ? `, then ${g(l.secondItem)}` : ''}${l.boots ? `, with ${g(l.boots)}` : ''}.`;
 }
+// ---------- page-specific FAQ clauses ----------
+// The who-wins / skill / counter / runes answers are sentence templates keyed on
+// the favour class, so with the names and numbers masked one of them used to
+// cover 6,266 pages. Each now carries one clause lifted from data the same page
+// prints: the Track line (ability + cooldown), the favour table's windows, or the
+// build card's first item. Nothing here is written for the answer — every noun
+// in these clauses is a cell the reader can find above the Q&A block.
+// Table stage indices as reading ranges: [0,1,2] -> "levels 1–3", [4,5,6] ->
+// "level 6 onward", [5] -> "first item".
+const STAGE_LV = [[1, 1], [2, 2], [3, 3], [4, 5], [6, 6]];
+function stageRuns(idx) {
+  const runs = [];
+  for (const i of idx.slice().sort((x, y) => x - y)) {
+    const r = runs[runs.length - 1];
+    if (r && r[1] === i - 1) r[1] = i; else runs.push([i, i]);
+  }
+  return listEn(runs.map(([i, j]) => {
+    if (i === 6) return 'two+ items';
+    if (i === 5) return j === 6 ? 'first item onward' : 'first item';
+    const lo = STAGE_LV[i][0];
+    if (j === 6) return `level ${lo} onward`;
+    if (j === 5) return lo === 6 ? 'level 6 and first item' : `level ${lo} through first item`;
+    const hi = STAGE_LV[j][1];
+    return lo === hi ? `level ${lo}` : `levels ${lo}–${hi}`;
+  }));
+}
+// Build-card first item without its aside: "Profane Hydra (Spear of Shojin for
+// the safer sustain line)" -> "Profane Hydra".
+const itemShort = s => tidy(String(s || '').replace(/\s*\(.*$/, '').replace(/\s+[—–-]\s.*$/, ''));
+const faqClauseStats = { who: 0, skill: 0, counter: 0, runes: 0, jgWho: 0, jgSkill: 0, jgRunes: 0, bare: 0 };
+// Append a clause to an answer that ends in a full stop.
+const withClause = (ans, clause) => !ans || !clause ? ans : `${ans.replace(/\s+$/, '')} ${clause}`;
 
 // ---------- page skeleton ----------
-const CSS = `*{box-sizing:border-box}body{margin:0;background:#0d0f16;color:#e7eaf2;font-family:'Manrope',system-ui,'Segoe UI',sans-serif;line-height:1.6}
+// The Google Fonts stylesheet is the page's only external resource and was the
+// only thing blocking the first paint. It is now preloaded and applied
+// asynchronously (see FONT_LINKS), which means the first paint happens in the
+// fallback face — so the fallback has to occupy the same space as the web font,
+// or every page reflows the moment the swap lands.
+// Two local-only @font-face rules do that. They point at faces every machine
+// already has (Segoe UI on Windows, Helvetica/Arial elsewhere) and are scaled so
+// their x-height matches the web font's: Manrope's x-height is 53.8% of its em
+// against Arial's 51.9%, hence size-adjust 103.7%, with the ascent and descent
+// overrides divided by the same factor so the line box does not move either.
+// Chakra Petch is the narrower display face at 50.0%, hence 96.4%.
+// Nothing here downloads: `local()` sources only, so a missing family simply
+// falls through to the next name in the stack.
+const FONT_FALLBACK = `@font-face{font-family:'Manrope Local';src:local('Segoe UI'),local('Helvetica Neue'),local('Arial');size-adjust:103.7%;ascent-override:97.0%;descent-override:28.1%;line-gap-override:0%}
+@font-face{font-family:'Chakra Local';src:local('Segoe UI Semibold'),local('Segoe UI'),local('Helvetica Neue'),local('Arial');size-adjust:96.4%;ascent-override:103.7%;descent-override:25.9%;line-gap-override:0%}`;
+const CSS = FONT_FALLBACK + `
+*{box-sizing:border-box}body{margin:0;background:#0d0f16;color:#e7eaf2;font-family:'Manrope','Manrope Local',system-ui,'Segoe UI',sans-serif;line-height:1.6}
 a{color:#3ddc97;text-decoration:none}a:hover{text-decoration:underline}
 .wrap{max-width:880px;margin:0 auto;padding:28px 18px 60px}
 header.site{display:flex;align-items:center;gap:10px;margin-bottom:26px;flex-wrap:wrap}
-.logo{font-family:'Chakra Petch',sans-serif;font-weight:800;font-size:19px;color:#f4efe8}.logo b{color:#e8b84b}
+.logo{font-family:'Chakra Petch','Chakra Local',sans-serif;font-weight:700;font-size:19px;color:#f4efe8}.logo b{color:#e8b84b}
 .crumbs{font-size:12.5px;color:#8a90a2;margin-bottom:14px}.crumbs a{color:#8a90a2}
-h1{font-family:'Chakra Petch',sans-serif;font-size:30px;margin:0 0 6px;color:#fff}
-h2{font-family:'Chakra Petch',sans-serif;font-size:20px;margin:34px 0 10px;color:#f0cd72}
+h1{font-family:'Chakra Petch','Chakra Local',sans-serif;font-size:30px;margin:0 0 6px;color:#fff}
+h2{font-family:'Chakra Petch','Chakra Local',sans-serif;font-size:20px;margin:34px 0 10px;color:#f0cd72}
 .sub{color:#8a90a2;font-size:14.5px;margin-bottom:18px}
 .verdict{border-radius:14px;padding:16px 18px;background:#11131c;border:1px solid rgba(255,255,255,0.08);border-left:4px solid #3ddc97;font-size:15.5px;margin:18px 0}
 table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0}
 th,td{padding:9px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.07)}
-th{font-family:'Chakra Petch',sans-serif;font-size:11px;letter-spacing:0.6px;color:#8a90a2}
+th{font-family:'Chakra Petch','Chakra Local',sans-serif;font-size:11px;letter-spacing:0.6px;color:#8a90a2}
 .own-a{color:#3ddc97;font-weight:700}.own-b{color:#ff5d6c;font-weight:700}.own-s{color:#e8b84b;font-weight:700}
 ul{padding-left:22px}li{margin:7px 0}
-.cta{display:inline-block;margin:20px 0;padding:13px 22px;border-radius:12px;background:linear-gradient(180deg,#f0cd72,#e8b84b);color:#1c1206;font-weight:800;font-family:'Chakra Petch',sans-serif}
+.cta{display:inline-block;margin:20px 0;padding:13px 22px;border-radius:12px;background:linear-gradient(180deg,#f0cd72,#e8b84b);color:#1c1206;font-weight:700;font-family:'Chakra Petch','Chakra Local',sans-serif}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:640px){.cols{grid-template-columns:1fr}}
 .card{border-radius:14px;background:#11131c;border:1px solid rgba(255,255,255,0.08);padding:15px 17px}
-.card h3{margin:0 0 8px;font-family:'Chakra Petch',sans-serif;font-size:14px;color:#dfe2ec}
-h3.qa-q{font-family:'Chakra Petch',sans-serif;font-size:15px;margin:18px 0 6px;color:#dfe2ec}
+.card h3{margin:0 0 8px;font-family:'Chakra Petch','Chakra Local',sans-serif;font-size:14px;color:#dfe2ec}
+h3.qa-q{font-family:'Chakra Petch','Chakra Local',sans-serif;font-size:15px;margin:18px 0 6px;color:#dfe2ec}
 footer{margin-top:44px;font-size:12.5px;color:#8a90a2;border-top:1px solid rgba(255,255,255,0.07);padding-top:16px}
 .linkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;font-size:14px}
 .gate{margin:26px 0;padding:22px 24px;border-radius:16px;border:1px solid rgba(240,205,114,0.4);background:linear-gradient(180deg,rgba(240,205,114,0.07),#11131c);text-align:center}
-.gate-h{font-family:'Chakra Petch',sans-serif;font-weight:800;font-size:20px;color:#f6f1ea}
+.gate-h{font-family:'Chakra Petch','Chakra Local',sans-serif;font-weight:700;font-size:20px;color:#f6f1ea}
 .gate-p{color:#c7c2b4;font-size:14px;line-height:1.6;margin:8px auto 4px;max-width:620px}
 .gate-note{color:#8a90a2;font-size:12px;line-height:1.6;margin-top:6px}
 .glance .tldr{font-size:15.5px;font-weight:600;margin:0 0 8px}.glance p{margin:0 0 8px}.glance .cols{gap:4px 14px}.glance ul{margin:0}.glance li{margin:4px 0;font-size:14px}
-.build{display:grid;grid-template-columns:96px 1fr;gap:6px 14px;margin:0;font-size:14.5px}.build dt{font-family:'Chakra Petch',sans-serif;font-size:11px;letter-spacing:0.6px;text-transform:uppercase;color:#8a90a2;padding-top:3px}.build dd{margin:0}
-.linkgrid a{display:block;padding:8px 10px;border-radius:8px;background:#11131c;border:1px solid rgba(255,255,255,0.06)}
+.build{display:grid;grid-template-columns:96px 1fr;gap:6px 14px;margin:0;font-size:14.5px}.build dt{font-family:'Chakra Petch','Chakra Local',sans-serif;font-size:11px;letter-spacing:0.6px;text-transform:uppercase;color:#8a90a2;padding-top:3px}.build dd{margin:0}
+.tscroll{overflow-x:auto;max-width:100%}.linkgrid a{display:block;padding:8px 10px;border-radius:8px;background:#11131c;border:1px solid rgba(255,255,255,0.06)}
+.iconic{display:inline-block;margin:0 0 6px;padding:4px 11px;border-radius:999px;border:1px solid rgba(240,205,114,0.5);background:rgba(240,205,114,0.1);color:#f0cd72;font-family:'Chakra Petch','Chakra Local',sans-serif;font-size:11.5px;letter-spacing:0.7px;text-transform:uppercase}
+.iconic-why{color:#c7c2b4;font-size:13.5px;margin:0 0 12px}
+.gate-free{color:#c7c2b4;font-size:13.5px;line-height:1.6;margin:6px auto 0;max-width:620px}
+.trust{color:#8a90a2;font-size:12.5px;margin:-10px 0 16px}
+/* 42px tap targets. The footer and the breadcrumb are the two link runs a phone
+   user actually aims at, and both were 20px tall text links sitting a few pixels
+   apart. 22px line box + 10px top and bottom is 42px, without moving the text. */
+footer a,.crumbs a{display:inline-block;line-height:22px;padding:10px 6px;min-height:42px}
+.crumbs a:first-child{padding-left:0}
 @media(max-width:640px){.linkgrid{grid-template-columns:1fr 1fr}.build{grid-template-columns:84px 1fr}th,td{padding:8px 6px}}`;
+// Non-blocking web fonts. The preload starts the download at the same moment the
+// old <link rel=stylesheet> would have, but the stylesheet is applied with
+// media="print" so it never holds up the first paint, and the onload flips it to
+// all once it has arrived. The <noscript> copy keeps the fonts for a reader with
+// scripting off — these pages carry no other script, so that reader is otherwise
+// served a page that is complete apart from its typefaces.
+const FONT_HREF = 'https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap';
+const FONT_LINKS = `<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="${FONT_HREF}">
+<link rel="stylesheet" href="${FONT_HREF}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="${FONT_HREF}"></noscript>`;
+
+// ---------- the gate's call to action ----------
+// The button used to read "Read the full guide — plans from $1.99/month", which
+// asked a first-time visitor off a Reddit link to decide about money before they
+// had read anything. There are now three ways in that cost nothing, and the
+// cheapest of them needs no account at all, so the button leads with that and the
+// prices sit underneath where they belong. The link target and rel are unchanged:
+// still the app's /open URL, still nofollow, because robots.txt disallows it.
+// Prices are the live ones and are written in exactly one place, here.
+const PRICES = 'Lane Pass $1.99/mo · All Lanes $3.99/mo · Annual $24.99/yr. Renews automatically — cancel anytime.';
+function ctaHtml(openUrl) {
+  return `<a class="cta" rel="nofollow" href="${openUrl}">Unlock this matchup free →</a>
+  <p class="gate-free">A free account unlocks one matchup of your choice every day. Today's five iconic matchups — one per role, both directions — are free for everyone, with no account at all. Members read every matchup from $1.99/month, and a new member's first 7 days are free.</p>
+  <p class="gate-note">🔒 Secure checkout · 💰 7-day free trial for new members, and a 7-day money-back guarantee on your first payment · ✋ Cancel anytime<br>${PRICES}</p>`;
+}
+
+// ---------- publisher identity ----------
+// One Organization node, one @id, on all 12,092 pages. Before this, every page
+// declared its own anonymous Organization twice (author and publisher), so
+// nothing tied the 12,092 declarations together and Google had no node to attach
+// a knowledge panel or a logo to. The @id is a fragment on the origin, which is
+// the stable form: it survives the page being re-rendered, re-titled or moved.
+// The logo is the real file in the repo at its real pixel size — Google rejects a
+// publisher logo whose dimensions are wrong or missing.
+const ORG_ID = `${ORIGIN}/#organization`;
+const ORG = { '@type': 'Organization', '@id': ORG_ID, name: 'MatchupCoach.gg', url: ORIGIN,
+  logo: { '@type': 'ImageObject', '@id': `${ORIGIN}/#logo`, url: `${ORIGIN}/logo-matchupcoach.png`, contentUrl: `${ORIGIN}/logo-matchupcoach.png`, width: 900, height: 240, caption: 'MatchupCoach.gg' } };
+// Articles point at the node above rather than repeating it.
+const ORG_REF = { '@id': ORG_ID };
 
 // Build gate on the SERP snippet: Google cuts descriptions near 155 chars and
 // titles near 60 — the same limits the two ladders below aim for. Every page
 // passes through shell(), so measure here and fail the build at the end if a
 // description or a title runs long.
-const snippetStats = { descMax: 0, descMaxUrl: '', descOver: 0, titleMax: 0, titleMaxUrl: '', titleOver: 0 };
+const snippetStats = { descMax: 0, descMaxUrl: '', descOver: 0, descMin: 1e9, descMinUrl: '', descShort: 0, titleMax: 0, titleMaxUrl: '', titleOver: 0 };
+// Pick the richest description that still fits the snippet. Candidates are
+// written longest first; the first one at or under 155 characters wins, so a
+// page with a big sample and a decisive stage spends the whole budget and a page
+// with neither still gets a sentence rather than a truncation. Replaces the old
+// "start long, shorten five times" ladders, which only ever removed text and so
+// left 1,480 descriptions sitting under 120 characters.
+// `extras` are optional clauses used only to top a short result back up towards
+// the floor: the candidate list is a preference order, so its rungs step down in
+// chunks and a page whose richest rung just missed 155 can land well under 120.
+// Each extra is appended only if it is not already in the sentence and still fits.
+function pickDesc(candidates, extras = []) {
+  const fit = candidates.filter(d => d && d.length <= 155);
+  let d = fit.length ? fit[0] : String(candidates[candidates.length - 1] || '').slice(0, 155);
+  for (const x of extras) {
+    if (d.length >= DESC_MIN) break;
+    if (!x || d.includes(x.trim())) continue;
+    if (d.length + x.length <= 155) d += x;
+  }
+  return d;
+}
 // Title ladder + description ladder coverage, and the two invariants that keep
 // them honest: no two pages may share a title, and every FAQ question in the
 // ld+json must be a heading a reader can actually see on the page.
-const ladderStats = { howToPlay: 0, patch: 0, titles: new Map(), dupes: 0, dupeEx: [], faqPages: 0, faqQs: 0, faqMissing: 0, faqEx: [] };
+const ladderStats = { howToPlay: 0, patch: 0, patchEx: [], dec: 0, decSup: 0, descs: new Map(), descDupes: 0, descDupeEx: [], titles: new Map(), dupes: 0, dupeEx: [], faqPages: 0, faqQs: 0, faqMissing: 0, faqEx: [], ansMissing: 0, ansEx: [], tpl: new Map() };
+// Largest FAQ answer template allowed, in pages (names and numbers masked).
+const FAQ_TEMPLATE_MAX = 500;
 // `jungle` pages carry no lolalytics sample, so their footer must not claim one.
 function shell(title, desc, canonical, jsonld, body, opts = {}) {
   if (desc.length > snippetStats.descMax) { snippetStats.descMax = desc.length; snippetStats.descMaxUrl = canonical; }
   if (desc.length > 155) snippetStats.descOver++;
+  if (desc.length < snippetStats.descMin) { snippetStats.descMin = desc.length; snippetStats.descMinUrl = canonical; }
+  if (desc.length < DESC_MIN) snippetStats.descShort++;
   if (title.length > snippetStats.titleMax) { snippetStats.titleMax = title.length; snippetStats.titleMaxUrl = canonical; }
   if (title.length > 60) snippetStats.titleOver++;
   if (/How to Play/.test(title)) ladderStats.howToPlay++;
-  if (/ on patch /.test(desc)) ladderStats.patch++;
+  // Snippet honesty gate: no patch number may appear in a title or a description.
+  // The win rates behind these pages were sampled once, in July 2026; a snippet
+  // naming a patch either claims a freshness the sample does not have or
+  // advertises a stale one next to a competitor's current number. The page's own
+  // trust line still states the sample month and the reviewed patch.
+  if (/patch\s*\d/i.test(desc) || /patch\s*\d/i.test(title)) {
+    ladderStats.patch++;
+    if (ladderStats.patchEx.length < 3) ladderStats.patchEx.push(`${canonical} — "${/patch\s*\d/i.test(title) ? title : desc}"`);
+  }
+  // The decisive-stage clause, and the pages where it is correctly suppressed.
+  if (/ turns .+'s way at /.test(desc)) ladderStats.dec++;
+  // Mirror pages must not share a snippet: /a-vs-b/ and /b-vs-a/ are two URLs
+  // competing for the same query, and two identical descriptions make them one
+  // duplicate in Google's eyes.
+  const descAt = ladderStats.descs.get(desc);
+  if (descAt) { ladderStats.descDupes++; if (ladderStats.descDupeEx.length < 3) ladderStats.descDupeEx.push(`"${desc.slice(0, 60)}…" — ${descAt} and ${canonical}`); }
+  else ladderStats.descs.set(desc, canonical);
   const firstAt = ladderStats.titles.get(title);
   if (firstAt) { ladderStats.dupes++; if (ladderStats.dupeEx.length < 3) ladderStats.dupeEx.push(`"${title}" — ${firstAt} and ${canonical}`); }
   else ladderStats.titles.set(title, canonical);
@@ -464,8 +684,17 @@ function shell(title, desc, canonical, jsonld, body, opts = {}) {
   const faqQs = ((jsonld['@graph'] || []).find(x => x['@type'] === 'FAQPage') || {}).mainEntity || [];
   if (faqQs.length) {
     ladderStats.faqPages++;
+    const masked = new Set();
     for (const q of faqQs) {
       ladderStats.faqQs++;
+      const ans = String(q.acceptedAnswer && q.acceptedAnswer.text || '');
+      // The answer Google may lift must be on the page word for word.
+      if (!body.includes(`${esc(ans)}</p>`)) { ladderStats.ansMissing++; if (ladderStats.ansEx.length < 3) ladderStats.ansEx.push(`${canonical} — "${ans.slice(0, 80)}"`); }
+      // Answer template: both champion names and every number masked.
+      let t = ans;
+      for (const n of (opts.names || []).slice().sort((x, y) => y.length - x.length)) t = t.split(n).join('<C>');
+      t = t.replace(/\d[\d,.]*/g, '<n>');
+      if (!masked.has(t)) { masked.add(t); ladderStats.tpl.set(t, (ladderStats.tpl.get(t) || 0) + 1); }
       if (body.includes(`>${esc(q.name)}</h2>`) || body.includes(`>${esc(q.name)}</h3>`)) continue;
       ladderStats.faqMissing++;
       if (ladderStats.faqEx.length < 3) ladderStats.faqEx.push(`${canonical} — "${q.name}"`);
@@ -483,9 +712,7 @@ function shell(title, desc, canonical, jsonld, body, opts = {}) {
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${canonical}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+${FONT_LINKS}
 <meta name="theme-color" content="#0d0f16">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="MatchupCoach.gg">
@@ -505,7 +732,7 @@ function shell(title, desc, canonical, jsonld, body, opts = {}) {
 <div class="wrap">
 <header class="site"><a class="logo" href="/">Matchup<b>Coach</b>.gg</a></header>
 ${body}
-<footer>MatchupCoach.gg — Challenger-level matchup coaching for every champion, every lane. <a href="/matchup/">All matchup guides</a> · <a href="/">Open the interactive coach</a><br>${freshness} MatchupCoach.gg isn't endorsed by Riot Games.<br><a href="/terms">Terms</a> · <a href="/privacy">Privacy</a> · <a href="/cookies">Cookies</a> · <a href="/refund">Refunds</a> · <a href="/cancel">How to cancel</a> · <a href="/contact">Contact</a></footer>
+<footer>MatchupCoach.gg — Challenger-level matchup coaching for every champion, every lane. <a href="/matchup/">All matchup guides</a> · <a href="/">Open the interactive coach</a><br>${freshness} <a href="/methodology">How we work these out</a>. MatchupCoach.gg isn't endorsed by Riot Games.<br><a href="/methodology">Methodology</a> · <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a> · <a href="/cookies">Cookies</a> · <a href="/refund">Refunds</a> · <a href="/cancel">How to cancel</a> · <a href="/contact">Contact</a></footer>
 </div>
 </body>
 </html>`;
@@ -519,6 +746,14 @@ let pages = 0, laneMatchupPages = 0;
 // reads for free, and a 30-word answer to "how to beat B as A" is thin against a
 // SERP of 800-word guides. Counted so the content work has a number to move.
 const earlyWords = { total: 0, short: 0, jgTotal: 0, jgShort: 0 };
+// Opponent-hub links (one per guide) and iconic badges, counted so the gates at
+// the bottom can prove both landed rather than silently reaching nobody.
+const oppHubStats = { lane: 0, laneMissing: 0, jg: 0, jgMissing: 0 };
+const iconicStats = { badged: 0, hubBlocks: 0 };
+// Snippet floor. Google will show ~155 characters; a 90-character description
+// hands back two thirds of that space for nothing. 120 is the floor the ladders
+// below aim at, and descShort counts what still lands under it.
+const DESC_MIN = 120;
 const sitemap = [];
 const laneStats = {};
 const laneStat = k => laneStats[k] || (laneStats[k] = { derived: 0, suppressed: 0, noGames: 0, caveat: 0, sweep: 0 });
@@ -555,6 +790,8 @@ const RETIRED = [
 const RETIRED_ALLOWANCE = {};
 const retiredStats = { pages: {}, src: {} };
 const linkGraph = { inbound: {}, written: new Set() };
+// Counted on every page this build writes, for the gates at the bottom.
+const built = { trust: 0, method: 0, iconic: 0, jgNoWr: 0, asyncFont: 0, blockingFont: 0 };
 const hubStats = { hubs: 0, title: 0, h1: 0, body: 0, missing: [] };
 function outWrite(rel, html, src) {
   const full = path.join('matchup', rel);
@@ -563,6 +800,17 @@ function outWrite(rel, html, src) {
   if (html.length > sizeStats.max) { sizeStats.max = html.length; sizeStats.maxUrl = rel; }
   const url = '/matchup/' + rel.replace(/index\.html$/, '');
   linkGraph.written.add(url);
+  // Counted on the built HTML rather than at the call site, so a template change
+  // that dropped one of these would show up as a number, not as silence.
+  if (html.includes('<p class="trust">')) built.trust++;
+  if (html.includes('href="/methodology"')) built.method++;
+  if (html.includes('<p class="iconic">')) built.iconic++;
+  if (html.includes(JG_NO_WR)) built.jgNoWr++;
+  if (html.includes('rel="preload" as="style"') && html.includes(`media="print" onload="this.media='all'"`)) built.asyncFont++;
+  // The <noscript> copy is deliberately a plain stylesheet link — it is not
+  // parsed at all unless scripting is off — so it is stripped before the test.
+  const headOnly = html.slice(0, html.indexOf('</head>')).replace(/<noscript>[\s\S]*?<\/noscript>/g, '');
+  if (/<link(?![^>]*\bmedia=)[^>]*rel="stylesheet"/.test(headOnly)) built.blockingFont++;
   for (const m of html.matchAll(/href="(\/matchup\/[^"]*\/)"/g)) if (m[1] !== url) linkGraph.inbound[m[1]] = (linkGraph.inbound[m[1]] || 0) + 1;
   for (const [name, re] of RETIRED) {
     if (!re.test(html)) continue;
@@ -834,22 +1082,66 @@ for (const L of LANES) {
       if (title.length > 60) title = `${aName} vs ${bName} ${L.short}: Who Wins? | MatchupCoach.gg`;
       if (title.length > 60) title = `${aName} vs ${bName} ${L.short} Matchup: Who Wins?`;
       if (title.length > 60) title = `${aName} vs ${bName} ${L.short}: Who Wins?`;
-      // DESCRIPTION LADDER — 155 chars max. The old single template ran long on
-      // 11,768 of 11,854 lane pages (avg 185). Drop the sample-size clause first,
-      // then shorten the trailing list; the "who wins" question always survives.
-      // The patch rides in the same clause: a snippet reading "on patch 26.15"
-      // against a competitor's "Patch 26.17" is a click lost before the page is
-      // ever fetched, and the number costs 15 characters. It is the last thing
-      // dropped, below the win rate and below the trailing list.
-      const descQ = `Who wins ${aName} vs ${bName} in ${L.prose}?`;
-      const descWr = wrKnown ? ` ${aName} wins ${wr}% of games` : '';
-      const beat = `How to beat ${bName} as ${aName} on patch ${LIVE_PATCH}`;
-      let desc = `${descQ}${descWr ? `${descWr} across ${gamesTxt} Emerald+ games.` : ''} ${beat}: stage-by-stage favour, power spikes and the full lane plan.`;
-      if (desc.length > 155) desc = `${descQ}${descWr ? `${descWr}.` : ''} ${beat}: stage-by-stage favour, power spikes and the full lane plan.`;
-      if (desc.length > 155) desc = `${descQ}${descWr ? `${descWr}.` : ''} ${beat}: stage-by-stage favour and the lane plan.`;
-      if (desc.length > 155) desc = `${descQ}${descWr ? `${descWr}.` : ''} ${beat}: the favour timeline and the lane plan.`;
-      if (desc.length > 155) desc = `${descQ}${descWr ? `${descWr}.` : ''} ${beat}.`;
-      if (desc.length > 155) desc = `${descQ}${descWr ? `${descWr}.` : ''} How to beat ${bName} as ${aName}.`;
+      // DESCRIPTION — 155 chars max, 120 aimed at as a floor.
+      // The old ladder only ever removed text, so pages with a short name pair
+      // and no win rate settled at 90-odd characters and gave a third of the
+      // snippet back. Every candidate below is built from data this page already
+      // prints — the pooled sample, and the stage where its own favour table
+      // turns — and pickDesc takes the longest one that still fits.
+      // The opening clause names the champions in reading order, so a mirror
+      // pair reads "Playing Aatrox into Darius" on one page and "Playing Darius
+      // into Aatrox" on the other instead of two snippets that scan the same.
+      // The patch stays in the "how to beat" clause: a snippet showing an old
+      // patch against a competitor's current one loses the click before the page
+      // is ever fetched.
+      const dLead = `Playing ${aName} into ${bName} in ${L.prose}?`;
+      // Three lengths of the same fact, so a long name pair gives up precision
+      // one word at a time instead of dropping the sample size altogether. The
+      // sample size is the number no competitor's snippet carries, so it is the
+      // last thing to go.
+      const wrC = wrKnown ? ` ${aName} wins ${wr}% of ${gamesTxt} Emerald+ games.` : '';
+      const wrC15 = wrKnown ? ` ${aName} wins ${wr}% of ${gamesTxt} games.` : '';
+      const wrC2 = wrKnown ? ` ${aName} wins ${wr}%.` : '';
+      // The decisive stage, read off the table this page prints: the first window
+      // the table hands to whichever side it favours overall.
+      // Two things the first version of this clause got wrong, on 4,262 pages
+      // between them:
+      //  * A table whose favoured side already owns row 1 never "turns" — it
+      //    starts there. Saying it turns at level 1 is false on the page's own
+      //    table, so the clause is suppressed whenever the favoured side owns
+      //    the first window (decIdx === 0) and the budget goes to another clause.
+      //  * Unattributed, "the favour table turns at level 3" reads as turning
+      //    towards the champion the sentence opened with. On every page whose
+      //    table leans to the opponent that pointed the reader at the wrong
+      //    side, so the side is now named outright. The table and the pooled
+      //    sample still disagree on some pages — this names what the TABLE says,
+      //    which is what the sentence claims to be reading.
+      const decIdx = !winRaw ? -1 : tableA > tableB ? winRaw.indexOf(aName) : tableB > tableA ? winRaw.indexOf(bName) : -1;
+      const decName = tableA > tableB ? aName : bName;
+      if (decIdx === 0) ladderStats.decSup++;
+      const dec = decIdx >= 1 ? ` The favour table turns ${decName}'s way at ${STAGES[decIdx].toLowerCase()}.`
+        : winRaw && tableA === 0 && tableB === 0 ? ' Every window in the favour table is even.' : '';
+      // No patch number in the snippet. The win rates were sampled in July 2026
+      // and have not been re-sampled since, so a snippet naming the live patch
+      // would be claiming a freshness the data does not have — and naming the
+      // stale one advertises it. The honest provenance stays on the page, where
+      // the trust line prints the sample month and the patch the content was
+      // reviewed against.
+      const beat = ` How to beat ${bName} as ${aName}.`;
+      const tail = ' Stage-by-stage favour, runes, build and the lane plan.';
+      const tail2 = ' Stage-by-stage favour and the lane plan.';
+      // Preference order, richest first; the first candidate that fits wins.
+      // Dropping the patch number gave every rung 15 characters back, so the
+      // rungs that existed only as patchless fallbacks are gone — they were
+      // duplicates of the rungs above them.
+      const desc = pickDesc([
+        dLead + wrC + dec + beat + tail, dLead + wrC + dec + beat + tail2, dLead + wrC + dec + beat,
+        dLead + wrC15 + dec + beat, dLead + wrC + beat + tail, dLead + wrC + beat + tail2,
+        dLead + wrC + beat, dLead + wrC15 + beat + tail2, dLead + wrC2 + dec + beat,
+        dLead + wrC15 + beat, dLead + dec + beat + tail, dLead + wrC2 + beat,
+        dLead + dec + beat + tail2, dLead + dec + beat, dLead + beat + tail,
+        dLead + beat + tail2, dLead + beat,
+      ], [dec, tail, tail2, ' Runes, build and the full lane plan.', ' Runes, build and the lane plan.', wrC2]);
 
       // Who-wins / skill-matchup / counter answers all derive from `cls`, so
       // they can never disagree with each other or with the verdict box.
@@ -882,11 +1174,37 @@ for (const L of LANES) {
         : cls === 'counterB' ? `No — ${bName} counters ${aName} (${aName} wins only ${wr}% of games). Play it as the disadvantaged side and lean on the windows in the plan.`
         : '';
 
+      // Page-specific clauses (see "page-specific FAQ clauses" above). Every
+      // fact comes from a block this page prints: the Track line, the favour
+      // table (A's own plan, read as printed) and the build card.
+      const she = isFemale(bName);
+      const lo = loadoutOf(C, bFile, bName);
+      const tk = trackOf(C, bFile, bName);
+      const item = lo ? itemShort(regender(lo.firstItem, she)) : '';
+      const tA = winRaw ? [0, 1, 2, 3, 4, 5, 6].filter(i => winRaw[i] === aName) : [];
+      const tB = winRaw ? [0, 1, 2, 3, 4, 5, 6].filter(i => winRaw[i] === bName) : [];
+      // Who wins: the first-item row of the table, named with the item the build card buys.
+      const whoClause = winRaw && item
+        ? `At first item — ${item} on the build card — the table below ${winRaw[5] === aName ? `puts ${aName} ahead` : winRaw[5] === bName ? `puts ${bName} ahead` : 'calls the window even'}.`
+        : tk ? `${bName}'s ${tk.slot}, ${tk.bare}, is the ability the at-a-glance box has you track.` : '';
+      // Skill matchup: execution means playing the tracked cooldown.
+      const skillClause = tk ? `Play around ${bName}'s ${tk.slot}, ${tk.named}.`
+        : item ? `${aName}'s build card opens with ${item}.` : '';
+      // Counter: where the opponent's windows are in the table, and the ability to track through them.
+      const trackTail = tk ? ` ${tk.bare} (${tk.slot})` : '';
+      const counterClause = !winRaw ? (tk ? `Track ${bName}'s ${tk.slot}, ${tk.bare}, before you commit.` : '')
+        : tB.length ? `${bName} owns ${stageRuns(tB)} in the table below${tk ? ` — track${trackTail} through ${tB.some((x, k) => k && x !== tB[k - 1] + 1) ? 'those windows' : 'that stretch'}` : item ? `, and ${aName}'s build card opens with ${item}` : ''}.`
+        : tA.length ? `${bName} owns no window outright in the table below, while ${aName} owns ${stageRuns(tA)}${tk ? ` — still track${trackTail}` : item ? `, starting from ${item} on the build card` : ''}.`
+        : `Every window in the table below is even${tk ? `, so the trades come down to ${bName}'s${trackTail}` : item ? `, and ${aName}'s build card opens with ${item}` : ''}.`;
+      const whoAns = withClause(whoShort, whoClause), skillA = withClause(skillAns, skillClause), counterA = withClause(counterAns, counterClause);
+      if (whoClause) faqClauseStats.who++; else faqClauseStats.bare++;
+      if (skillAns && skillClause) faqClauseStats.skill++;
+      if (counterAns && counterClause) faqClauseStats.counter++;
       // FAQ JSON-LD from the bespoke data
       const faq = [];
-      faq.push({ '@type': 'Question', name: `Who wins ${aName} vs ${bName} in ${L.prose}?`, acceptedAnswer: { '@type': 'Answer', text: whoShort } });
-      if (skillAns) faq.push({ '@type': 'Question', name: `Is ${aName} vs ${bName} a skill matchup?`, acceptedAnswer: { '@type': 'Answer', text: skillAns } });
-      if (counterAns) faq.push({ '@type': 'Question', name: `Does ${aName} counter ${bName}?`, acceptedAnswer: { '@type': 'Answer', text: counterAns } });
+      faq.push({ '@type': 'Question', name: `Who wins ${aName} vs ${bName} in ${L.prose}?`, acceptedAnswer: { '@type': 'Answer', text: whoAns } });
+      if (skillA) faq.push({ '@type': 'Question', name: `Is ${aName} vs ${bName} a skill matchup?`, acceptedAnswer: { '@type': 'Answer', text: skillA } });
+      if (counterA) faq.push({ '@type': 'Question', name: `Does ${aName} counter ${bName}?`, acceptedAnswer: { '@type': 'Answer', text: counterA } });
       // "How to beat <B> as <A>" is a named target query and was living only in
       // the meta description — the body said "How to win lane as <A> against
       // <B>", which is the same intent in words nobody searches. ONE string feeds
@@ -896,10 +1214,8 @@ for (const L of LANES) {
       if (e.early) faq.push({ '@type': 'Question', name: earlyQ, acceptedAnswer: { '@type': 'Answer', text: e.early } });
       // Runes and build come from the loadout entry; the card above the gate is
       // the visible answer, so both questions are only asked when it exists.
-      const she = isFemale(bName);
-      const lo = loadoutOf(C, bFile, bName);
       const runesQ = `What runes does ${aName} take vs ${bName}?`, buildQ = `What should ${aName} build vs ${bName}?`;
-      const runesA = lo ? runeAnswer(lo, aName, bName) : '', buildA = lo ? buildAnswer(lo, aName, bName, she) : '';
+      const runesA = lo ? runeAnswer(lo, aName, bName, item) : '', buildA = lo ? buildAnswer(lo, aName, bName, she) : '';
       if (runesA) faq.push({ '@type': 'Question', name: runesQ, acceptedAnswer: { '@type': 'Answer', text: runesA } });
       if (buildA) faq.push({ '@type': 'Question', name: buildQ, acceptedAnswer: { '@type': 'Answer', text: buildA } });
       // NOTE: mid/late are members-only on this page, so they are deliberately
@@ -907,7 +1223,8 @@ for (const L of LANES) {
       const jsonld = {
         '@context': 'https://schema.org',
         '@graph': [
-          { '@type': 'Article', headline: `${aName} vs ${bName} — ${L.label} Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: PUBLISHED, dateModified: DATA_MODIFIED, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
+          { '@type': 'Article', headline: `${aName} vs ${bName} — ${L.label} Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: PUBLISHED, dateModified: DATA_MODIFIED, author: ORG_REF, publisher: ORG_REF, mainEntityOfPage: canonical },
+          ORG,
           { '@type': 'FAQPage', mainEntity: faq },
           { '@type': 'BreadcrumbList', itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Matchups', item: ORIGIN + '/matchup/' },
@@ -935,9 +1252,9 @@ ${caveat}<table><tr><th>Stage</th><th>Favoured</th><th>Why</th></tr>` +
       // Visible Q&A mirroring the FAQ schema (minus the early-game answer,
       // which is the section above) — targets "who wins / skill matchup /
       // counter" searches and the People-Also-Ask box.
-      const qa = [[`Who wins ${aName} vs ${bName} in ${L.prose}?`, whoShort]];
-      if (skillAns) qa.push([`Is ${aName} vs ${bName} a skill matchup?`, skillAns]);
-      if (counterAns) qa.push([`Does ${aName} counter ${bName}?`, counterAns]);
+      const qa = [[`Who wins ${aName} vs ${bName} in ${L.prose}?`, whoAns]];
+      if (skillA) qa.push([`Is ${aName} vs ${bName} a skill matchup?`, skillA]);
+      if (counterA) qa.push([`Does ${aName} counter ${bName}?`, counterA]);
       if (runesA) qa.push([runesQ, runesA]);
       if (buildA) qa.push([buildQ, buildA]);
       const qaHtml = `<h2>Common questions</h2>` + qa.map(([q, ans]) => `<h3 class="qa-q">${esc(q)}</h3><p>${esc(ans)}</p>`).join('');
@@ -966,11 +1283,21 @@ ${caveat}<table><tr><th>Stage</th><th>Favoured</th><th>Why</th></tr>` +
       // build, the stage-by-stage favour table, the full early-game plan and
       // this champion's hardest/easiest lanes — then hands the rest (mid/late
       // execution, spikes, win conditions) to the membership.
+      // Every guide linked its own champion's hub and never the opponent's, so a
+      // reader who has just decided the lane is unwinnable had no route to the
+      // other side's guides, and each hub could only be reached from the ~70
+      // pages of its own champion. The opponent's hub exists whenever the
+      // opponent is in this lane's roster, which is what the guard checks.
+      const oppHub = D.champs[b]
+        ? `<br><a href="/matchup/${L.key}/${uB}/">All ${esc(bName)} ${L.prose} matchups →</a>`
+        : '';
+      if (oppHub) oppHubStats.lane++; else oppHubStats.laneMissing++;
       const body = `
 <nav class="crumbs"><a href="/matchup/">Matchups</a> › <a href="/matchup/${L.key}/">${L.label}</a> › ${esc(aName)} vs ${esc(bName)}</nav>
-<h1>${esc(aName)} vs ${esc(bName)} — ${L.label} Matchup Guide</h1>
-<p class="sub">How to win lane as ${esc(aName)} against ${esc(bName)}${wrKnown ? ` · ${wr}% win rate (${esc(sample)})` : ''} · Matchup data reviewed on patch ${LIVE_PATCH}</p>
-<div class="verdict"><b>Verdict:</b> ${esc(verdict)}</div>
+${iconicHtml(L.key, `/matchup/${L.key}/${uA}-vs-${uB}/`, L.prose)}<h1>${esc(aName)} vs ${esc(bName)} — ${L.label} Matchup Guide</h1>
+<p class="sub">How to win lane as ${esc(aName)} against ${esc(bName)}${wrKnown ? ` · ${wr}% win rate (${esc(sample)})` : ''}</p>
+<p class="trust">${esc(trustLine(false))} · <a href="/methodology">How we work this out</a></p>
+<div class="verdict"><b>Verdict:</b> ${esc(verdict)} <a href="/methodology">How we work this out</a>.</div>
 ${glanceHtml(C, bFile, aName, bName)}
 ${lo ? buildCard(lo, bName, she) : ''}
 ${tl}
@@ -979,17 +1306,16 @@ ${extremesHtml(L, D, a, C, aName, bFile)}
 <div class="gate">
   <div class="gate-h">Read the rest of this matchup</div>
   <p class="gate-p">The full ${esc(aName)} vs ${esc(bName)} report continues with the <b>mid-game plan</b>, the <b>late-game and teamfight plan</b>, every <b>power spike</b> to play around, and the <b>win conditions</b> for both sides — plus cooldown tracking and the live enemy-jungle tracker inside the app.</p>
-  <a class="cta" rel="nofollow" href="/matchup/${L.key}/${uA}-vs-${uB}/open">Read the full guide — plans from $1.99/month →</a>
-  <p class="gate-note">🔒 Secure checkout · 💰 7-day money-back guarantee on your first payment · ✋ Cancel anytime<br>Lane Pass $1.99/mo · All Lanes $3.99/mo · Annual $24.99/yr. Renews automatically — cancel anytime.</p>
+  ${ctaHtml(`/matchup/${L.key}/${uA}-vs-${uB}/open`)}
 </div>
 ${qaHtml}
 <h2>Related guides</h2>
 <p>${eRev ? `<a href="/matchup/${L.key}/${uB}-vs-${uA}/">Playing the other side? ${esc(bName)} vs ${esc(aName)} guide →</a><br>` : ''}
-<a href="/matchup/${L.key}/${uA}/">All ${esc(aName)} ${L.prose} matchups →</a></p>
+<a href="/matchup/${L.key}/${uA}/">All ${esc(aName)} ${L.prose} matchups →</a>${oppHub}</p>
 ${moreOpps ? `<p class="sub">More ${esc(aName)} ${L.prose} matchups: ${moreOpps}</p>` : ''}
 ${crossLane}`;
 
-      outWrite(rel, shell(title, desc, canonical, jsonld, body), `${L.dir}/${C.fileSlug}.js entry a="${C.key}" b="${bFile}"`);
+      outWrite(rel, shell(title, desc, canonical, jsonld, body, { names: [aName, bName] }), `${L.dir}/${C.fileSlug}.js entry a="${C.key}" b="${bFile}"`);
       sitemap.push(canonical);
       laneMatchupPages++;
       earlyWords.total++;
@@ -1122,10 +1448,11 @@ function jgFirstItem(you, foe, s5, tone) {
   return raw;
 }
 let jgPages = 0;
+const JG_SPREADS = {}; // jungler -> opponent -> { greens, reds, spread }, for the jungle hub and /matchup/
 for (const you of jgNames) {
   const opps = Object.keys(JG_DB[you] || {});
   // Window spread per opponent, for the hardest/easiest lists on every page of this jungler.
-  const spreads = {};
+  const spreads = JG_SPREADS[you] = {};
   for (const foe of opps) {
     const rep = JG_DB[you][foe];
     if (foe === you || !rep || !rep.stages || !rep.stages.length) continue;
@@ -1155,7 +1482,9 @@ for (const you of jgNames) {
     if (jl && (jgNameRe.test(jl.firstItem) || NOT_ITEM.test(jl.firstItem))) throw new Error(`jungle build gate FAILED: ${you} vs ${foe} first item "${jl.firstItem}" is not an item`);
     const jShe = isFemale(foe);
     const jRunesQ = `What runes does ${you} take vs ${foe}?`, jBuildQ = `What should ${you} build vs ${foe}?`;
-    const jRunesA = jl ? runeAnswer(jl, you, foe) : '', jBuildA = jl ? buildAnswer(jl, you, foe, jShe) : '';
+    const jItem = jl ? itemShort(regender(jl.firstItem, jShe)) : '';
+    const jRunesA = jl ? runeAnswer(jl, you, foe, jItem) : '', jBuildA = jl ? buildAnswer(jl, you, foe, jShe) : '';
+    if (jItem && jRunesA) { faqClauseStats.runes--; faqClauseStats.jgRunes++; }
     // Phrased from this page's race plan — the mirror page has its own plan.
     const verdict = diff === 'FAVOURED'
       ? `${you}'s race plan controls ${greens} of the 7 windows — ${you} holds the tempo advantage in this jungle matchup.`
@@ -1170,16 +1499,35 @@ for (const you of jgNames) {
     if (title.length > 60) title = `${you} vs ${foe} Jungle: Who Wins? | MatchupCoach.gg`;
     if (title.length > 60) title = `${you} vs ${foe} Jungle Matchup: Who Wins?`;
     if (title.length > 60) title = `${you} vs ${foe} Jungle: Who Wins?`;
-    // Same 155-char budget as the lane pages: shorten the trailing list first,
-    // then the patch, which is the click-through signal against a competitor
-    // snippet showing a newer number.
-    const jgDescQ = `Who wins ${you} vs ${foe} in the jungle? ${diff === 'FAVOURED' ? `${you}'s race plan controls ${greens} of 7 windows.` : diff === 'HARD' ? `${foe} pressures ${reds} of 7 windows.` : 'A window-to-window skill matchup.'}`;
-    const jgBeat = `How to beat ${foe} as ${you} on patch ${LIVE_PATCH}`;
-    let desc = `${jgDescQ} ${jgBeat}: first clear, pathing, the level-by-level race and objective control.`;
-    if (desc.length > 155) desc = `${jgDescQ} ${jgBeat}: first clear, pathing and the level-by-level race.`;
-    if (desc.length > 155) desc = `${jgDescQ} ${jgBeat}: the first clear and the race.`;
-    if (desc.length > 155) desc = `${jgDescQ} ${jgBeat}.`;
-    if (desc.length > 155) desc = `${jgDescQ} How to beat ${foe} as ${you}.`;
+    // Same 155-char budget and the same 120-char floor as the lane pages, and the
+    // same reason for leading with the reading order: the mirror page of this one
+    // opens "Playing <foe> into <you>". Jungle has no win rate to spend the budget
+    // on, so the sample clause is replaced by the window split and the stage where
+    // the race turns — both read straight off the table below.
+    const jgLead = `Playing ${you} into ${foe} in the jungle?`;
+    const jgSplit = ` ${diff === 'FAVOURED' ? `${you}'s race plan controls ${greens} of 7 windows.` : diff === 'HARD' ? `${foe} pressures ${reds} of 7 windows.` : `A window-to-window race, ${greens} to ${reds}.`}`;
+    // The stage the race turns on: the first row the table gives to whichever
+    // jungler owns more of them. Same two corrections as the lane clause — a
+    // race whose leader already owns the first window does not turn, it starts
+    // that way, so the clause is suppressed; and "it turns at" named no side, so
+    // on every page whose race leans to the opponent the reader read it the
+    // wrong way round. The jungler is now named.
+    const jgDecIdx = greens > reds ? tones.indexOf('a') : reds > greens ? tones.indexOf('b') : -1;
+    if (jgDecIdx === 0) ladderStats.decSup++;
+    const jgDec = jgDecIdx >= 1 && rep.stages[jgDecIdx] ? ` The race turns ${greens > reds ? you : foe}'s way at ${String(rep.stages[jgDecIdx].stage).toLowerCase()}.` : '';
+    // No patch number in the snippet — see the lane builder.
+    const jgBeat = ` How to beat ${foe} as ${you}.`;
+    const jgTail = ' First clear, pathing, the level-by-level race and objective control.';
+    const jgTail2 = ' First clear, pathing and the race.';
+    // Same preference order as the lane pages: richest first, and the same two
+    // now-duplicate patchless fallbacks dropped.
+    const desc = pickDesc([
+      jgLead + jgSplit + jgDec + jgBeat + jgTail, jgLead + jgSplit + jgDec + jgBeat + jgTail2,
+      jgLead + jgSplit + jgBeat + jgTail, jgLead + jgSplit + jgDec + jgBeat,
+      jgLead + jgSplit + jgBeat + jgTail2, jgLead + jgDec + jgBeat + jgTail,
+      jgLead + jgSplit + jgBeat, jgLead + jgBeat + jgTail, jgLead + jgBeat + jgTail2,
+      jgLead + jgBeat,
+    ], [jgDec, jgTail, jgTail2, jgSplit, ' Runes, build and the race plan.']);
     const rows = rep.stages.map((s, i) => `<tr><td>${esc(s.stage)}</td><td class="own-${tones[i]}">${esc(String(s.adv).replace(/Favored/g, 'Favoured'))}</td><td>${esc(s.why || '')}</td></tr>`).join('');
     const jgSkill = diff === 'SKILL'
       ? `Yes — ${you} vs ${foe} plays as a skill matchup: the jungle race swings window to window, and the better first clear usually sets the tone.`
@@ -1193,7 +1541,23 @@ for (const you of jgNames) {
     // ONE list feeds both the visible Q&A and the FAQ JSON-LD, so the schema
     // question text always equals the heading on the page. The clear-and-path
     // answer is the H2 section above the gate; its heading is the same string.
-    const jgQaRows = [[`Who wins ${you} vs ${foe} in the jungle?`, jgWho], [`Is ${you} vs ${foe} a skill matchup?`, jgSkill]];
+    // Page-specific clauses, read off this page's race table as printed.
+    // Who wins: the first-item row, whose label names the item or the spike.
+    // Skill matchup: which named stages each jungler owns in the table.
+    const jgLabel = s => String(s.adv).replace(/Favored/g, 'Favoured');
+    const s5 = rep.stages[5] || rep.stages[rep.stages.length - 1];
+    const t5 = tones[rep.stages.indexOf(s5)];
+    const jgWhoClause = s5 ? `The ${s5.stage} row reads "${jgLabel(s5)}"${t5 === 'a' ? `, a window for ${you}` : t5 === 'b' ? `, a window for ${foe}` : ', a window for neither side'}.` : '';
+    const jgStages = tone => rep.stages.filter((s, i) => tones[i] === tone).map(s => s.stage);
+    const gA = jgStages('a'), gB = jgStages('b');
+    const rowsOf = xs => `the ${listEn(xs)} row${xs.length > 1 ? 's' : ''}`;
+    const jgSkillClause = gA.length && gB.length ? `In the table, ${you} owns ${rowsOf(gA)} and ${foe} owns ${rowsOf(gB)}.`
+      : gA.length ? `In the table, ${you} owns ${rowsOf(gA)} and ${foe} owns no row outright.`
+      : gB.length ? `In the table, ${foe} owns ${rowsOf(gB)} and ${you} owns no row outright.`
+      : `Every row in the table, ${rep.stages[0].stage} to ${rep.stages[rep.stages.length - 1].stage}, is even.`;
+    if (jgWhoClause) faqClauseStats.jgWho++;
+    faqClauseStats.jgSkill++;
+    const jgQaRows = [[`Who wins ${you} vs ${foe} in the jungle?`, withClause(jgWho, jgWhoClause)], [`Is ${you} vs ${foe} a skill matchup?`, withClause(jgSkill, jgSkillClause)]];
     if (jRunesA) jgQaRows.push([jRunesQ, jRunesA]);
     if (jBuildA) jgQaRows.push([jBuildQ, jBuildA]);
     // Same rename as the lane pages: the phrase people search, on the heading
@@ -1212,8 +1576,17 @@ for (const you of jgNames) {
       if (f !== foe && !jgNear.includes(f)) jgNear.push(f);
     }
     const jgMore = jgNear.map(f => `<a href="/matchup/jungle/${uA}-vs-${urlslug(f)}/">vs ${esc(f)}</a>`).join(' · ');
+    // The opponent's own hub, same as the lane guides. Every JG_DB opponent is a
+    // jungler with a hub of its own, but the guard is kept so a data change that
+    // introduced a one-sided entry would show up in the count rather than as a
+    // link to a page that was never written.
+    const jgOppHub = JG_DB[foe]
+      ? `<br><a href="/matchup/jungle/${uB}/">All ${esc(foe)} jungle matchups →</a>`
+      : '';
+    if (jgOppHub) oppHubStats.jg++; else oppHubStats.jgMissing++;
     const jsonld = { '@context': 'https://schema.org', '@graph': [
-      { '@type': 'Article', headline: `${you} vs ${foe} — Jungle Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: PUBLISHED, dateModified: DATA_MODIFIED, author: { '@type': 'Organization', name: 'MatchupCoach.gg' }, publisher: { '@type': 'Organization', name: 'MatchupCoach.gg', url: ORIGIN }, mainEntityOfPage: canonical },
+      { '@type': 'Article', headline: `${you} vs ${foe} — Jungle Matchup Guide`, description: desc, image: ORIGIN + '/og-image.png', datePublished: PUBLISHED, dateModified: DATA_MODIFIED, author: ORG_REF, publisher: ORG_REF, mainEntityOfPage: canonical },
+          ORG,
       { '@type': 'FAQPage', mainEntity: faq },
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Matchups', item: ORIGIN + '/matchup/' },
@@ -1222,9 +1595,10 @@ for (const you of jgNames) {
     ] };
     const body = `
 <nav class="crumbs"><a href="/matchup/">Matchups</a> › <a href="/matchup/jungle/">Jungle</a> › ${esc(you)} vs ${esc(foe)}</nav>
-<h1>${esc(you)} vs ${esc(foe)} — Jungle Matchup Guide</h1>
-<p class="sub">How to win the jungle race as ${esc(you)} against ${esc(foe)} · Matchup data reviewed on patch ${LIVE_PATCH}</p>
-<div class="verdict"><b>Verdict:</b> ${esc(verdict)}</div>
+${iconicHtml('jungle', `/matchup/jungle/${uA}-vs-${uB}/`, 'jungle')}<h1>${esc(you)} vs ${esc(foe)} — Jungle Matchup Guide</h1>
+<p class="sub">How to win the jungle race as ${esc(you)} against ${esc(foe)}</p>
+<p class="trust">${esc(trustLine(true))} · <a href="/methodology">How we work this out</a></p>
+<div class="verdict"><b>Verdict:</b> ${esc(verdict)}<br>${esc(JG_NO_WR)} <a href="/methodology">How we work this out</a>.</div>
 <h2>The jungle race — the windows in ${esc(you)}'s plan</h2>
 <p class="sub">Read from ${esc(you)}'s seat: the race windows this plan plays for against ${esc(foe)}.</p>
 <table><tr><th>Stage</th><th>Read</th><th>Why</th></tr>${rows}</table>
@@ -1234,15 +1608,14 @@ ${jgExtremesHtml(you, spreads, foe)}
 <div class="gate">
   <div class="gate-h">Read the rest of this matchup</div>
   <p class="gate-p">The full ${esc(you)} vs ${esc(foe)} report continues with <b>scuttle &amp; dragon rules</b>, <b>invade windows and safety boundaries</b>, the <b>top-side objective fight</b>, <b>macro rotations</b> and the <b>win condition</b> — plus the live enemy-jungle tracker that shows their start, clear and gank timers in game.</p>
-  <a class="cta" rel="nofollow" href="/matchup/jungle/${uA}-vs-${uB}/open">Read the full guide — plans from $1.99/month →</a>
-  <p class="gate-note">🔒 Secure checkout · 💰 7-day money-back guarantee on your first payment · ✋ Cancel anytime<br>Lane Pass $1.99/mo · All Lanes $3.99/mo · Annual $24.99/yr. Renews automatically — cancel anytime.</p>
+  ${ctaHtml(`/matchup/jungle/${uA}-vs-${uB}/open`)}
 </div>
 ${jgQa}
 <h2>Related guides</h2>
 <p><a href="/matchup/jungle/${uB}-vs-${uA}/">Playing the other side? ${esc(foe)} vs ${esc(you)} guide →</a><br>
-<a href="/matchup/jungle/${uA}/">All ${esc(you)} jungle matchups →</a></p>
+<a href="/matchup/jungle/${uA}/">All ${esc(you)} jungle matchups →</a>${jgOppHub}</p>
 ${jgMore ? `<p class="sub">More ${esc(you)} jungle matchups: ${jgMore}</p>` : ''}`;
-    outWrite(`jungle/${uA}-vs-${uB}/index.html`, shell(title, desc, canonical, jsonld, body, { jungle: true }), `champ-data/jg/*.js JG_DB["${you}"]["${foe}"]`);
+    outWrite(`jungle/${uA}-vs-${uB}/index.html`, shell(title, desc, canonical, jsonld, body, { jungle: true, names: [you, foe] }), `champ-data/jg/*.js JG_DB["${you}"]["${foe}"]`);
     sitemap.push(canonical);
     jgPages++;
     earlyWords.jgTotal++;
@@ -1251,8 +1624,9 @@ ${jgMore ? `<p class="sub">More ${esc(you)} jungle matchups: ${jgMore}</p>` : ''
   // jungle champion hub — the count is the guides actually listed (self excluded).
   const uA = urlslug(you);
   const canonical = `${ORIGIN}/matchup/jungle/${uA}/`;
-  const jgOpps = opps.filter(f => f !== you).sort();
-  const links = jgOpps.map(f => `<a href="/matchup/jungle/${uA}-vs-${urlslug(f)}/">${esc(you)} vs ${esc(f)}</a>`).join('');
+  // Only opponents this build actually wrote a guide for: an entry with no race
+  // stages produces no page, and the hub used to link it anyway.
+  const jgOpps = opps.filter(f => f !== you && spreads[f]).sort();
   // "<jungler> counters" is the query this page answers and never used to say.
   // The ranking is the same window spread the guides print, hardest first.
   const jgRank = Object.keys(spreads).sort((x, y) => (spreads[x].spread - spreads[y].spread) || (spreads[y].reds - spreads[x].reds) || x.localeCompare(y));
@@ -1266,27 +1640,158 @@ ${jgMore ? `<p class="sub">More ${esc(you)} jungle matchups: ${jgMore}</p>` : ''
   if (desc.length > 155) desc = `Who counters ${you} in the jungle? Hardest: ${jgHard.join(', ')}. Easiest: ${jgEasy.join(', ')}. All ${jgOpps.length} jungle guides.`;
   if (desc.length > 155) desc = `Who counters ${you} in the jungle? Hardest: ${jgHard.join(', ')}. All ${jgOpps.length} jungle matchup guides: first clear, pathing and the race.`;
   if (desc.length > 155) desc = `Who counters ${you} in the jungle? All ${jgOpps.length} matchup guides: the level-by-level race, first clear, pathing and objective control.`;
+  // The 50 jungle champion hubs used to be one sentence over a grid of 49 links,
+  // while the 235 lane champion hubs carried a ranked table with a number on every
+  // row. Nothing was missing from the data — the window spread behind each race is
+  // already computed above for the hardest/easiest lists on the guides — it was
+  // just never printed here. So the intro names the extremes with their splits,
+  // and the table below lists every opponent with the same split and the same
+  // favour call the guide itself makes (spread of 3+ windows, exactly as the
+  // guide's FAVOURED / HARD / SKILL classification).
+  const jgWin = f => `${spreads[f].greens} window${spreads[f].greens === 1 ? '' : 's'} to ${spreads[f].reds}`;
+  const jgSay = f => `${f} (${jgWin(f)})`;
   const jgIntro = jgRank.length >= 6
-    ? `<p>The junglers that counter ${esc(you)} hardest are ${esc(listEn(jgHard))} — they pressure the most windows in the race. The easiest matchups are ${esc(listEn(jgEasy))}.</p>`
+    ? `<p>The junglers that counter ${esc(you)} hardest are ${esc(listEn(jgHard.map(jgSay)))} — they pressure the most windows in the race, counted as the windows ${esc(you)}'s own plan claims against theirs. The easiest matchups are ${esc(listEn(jgEasy.map(jgSay)))}.</p>`
     : `<p>Every researched ${esc(you)} jungle matchup — who counters ${esc(you)}, who ${esc(you)} beats, and how each race plays out window by window.</p>`;
-  outWrite(`jungle/${uA}/index.html`, shell(title, desc, canonical, { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical }, `
+  const jgHubRows = jgRank.map(f => {
+    const s = spreads[f];
+    const lab = s.spread >= 3 ? { cls: 'own-a', text: `${you} favoured` } : s.spread <= -3 ? { cls: 'own-b', text: `${f} favoured` } : { cls: 'own-s', text: 'Even race' };
+    return `<tr><td><a href="/matchup/jungle/${uA}-vs-${urlslug(f)}/">${esc(you)} vs ${esc(f)}</a></td><td>${esc(jgWin(f))}</td><td>${s.spread > 0 ? '+' : ''}${s.spread}</td><td class="${lab.cls}">${esc(lab.text)}</td></tr>`;
+  }).join('');
+  const jgIconic = iconicBlock((ICONIC.byChamp.jungle || {})[you], `${esc(you)} is in the free iconic rotation. On its day each of these races is free to everyone, both directions, with no account.`);
+  if (jgIconic) iconicStats.hubBlocks++;
+  outWrite(`jungle/${uA}/index.html`, shell(title, desc, canonical, { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical, publisher: ORG }, `
 <nav class="crumbs"><a href="/matchup/">Matchups</a> › <a href="/matchup/jungle/">Jungle</a> › ${esc(you)}</nav>
 <h1>${esc(you)} Jungle counters and matchups</h1>
 ${jgIntro}
-<p class="sub">${jgOpps.length} researched jungle-vs-jungle guides for ${esc(you)}, ranked by the windows each race plan claims.</p>
-<div class="linkgrid">${links}</div>`, { jungle: true }));
+<p class="trust">${esc(trustLine(true))} · <a href="/methodology">How we work this out</a></p>
+${jgIconic}
+<h2>Every ${esc(you)} jungle matchup, hardest race first</h2>
+<p class="sub">${jgRank.length} researched jungle-vs-jungle guides for ${esc(you)}. "Windows" is how many of the 7 race stages each side's plan claims; a gap of 3 or more is what a guide calls favoured.</p>
+<div class="tscroll"><table class="hub"><tr><th>Matchup</th><th>Windows</th><th>Spread</th><th>Favour</th></tr>${jgHubRows}</table></div>`, { jungle: true }));
   sitemap.push(canonical);
 }
+// ---------- category data for the lane hubs, the jungle hub and /matchup/ ----------
+// Everything these pages say is computed here from the same POOL and window
+// spreads the guides print, so a hub can never quote a number its guides don't.
+const fmtN = n => Number(n).toLocaleString('en-US');
+const pctOf = (k, n) => n ? Math.round((100 * k) / n) : 0;
+// Jungle: one row per pairing, told from the side whose plan claims more windows.
+const JG_SUM = (() => {
+  const races = [], byPair = new Map(), per = {};
+  for (const you of jgNames) {
+    const sp = JG_SPREADS[you] || {};
+    const foes = Object.keys(sp);
+    per[you] = { n: foes.length, fav: foes.filter(f => sp[f].spread >= 3).length, hard: foes.filter(f => sp[f].spread <= -3).length };
+    per[you].skill = per[you].n - per[you].fav - per[you].hard;
+    per[you].rank = foes.sort((x, y) => (sp[x].spread - sp[y].spread) || (sp[y].reds - sp[x].reds) || x.localeCompare(y));
+    for (const foe of foes) {
+      const r = Object.assign({ you, foe, url: `/matchup/jungle/${urlslug(you)}-vs-${urlslug(foe)}/` }, sp[foe]);
+      races.push(r);
+      const key = [you, foe].sort().join('|'), cur = byPair.get(key);
+      if (!cur || r.spread > cur.spread || (r.spread === cur.spread && r.greens > cur.greens)) byPair.set(key, r);
+    }
+  }
+  const pairs = [...byPair.values()].sort((x, y) => (y.spread - x.spread) || (y.greens - x.greens) || x.you.localeCompare(y.you));
+  const has = new Set(races.map(r => r.url));
+  // The widest gaps are dozens of 7-0 ties, most of them one jungler's; cap each
+  // jungler at two rows so a top-N list walks more of the roster.
+  const seenYou = {}, spread2 = pairs.filter(r => (seenYou[r.you] = (seenYou[r.you] || 0) + 1) <= 2);
+  const sweeps = pairs.filter(r => r.spread === 7), sweepBy = {};
+  for (const r of sweeps) sweepBy[r.you] = (sweepBy[r.you] || 0) + 1;
+  const sweepTop = Object.keys(sweepBy).sort((x, y) => (sweepBy[y] - sweepBy[x]) || x.localeCompare(y))[0] || '';
+  return { races, pairs, spread2, sweeps: sweeps.length, sweepTop, sweepTopN: sweepBy[sweepTop] || 0, per, has,
+    fav: races.filter(r => r.spread >= 3).length, hard: races.filter(r => r.spread <= -3).length };
+})();
+const jgRaceTxt = r => `${r.greens} windows to ${r.reds}`;
+// Lane: one row per pairing with a pooled sample, told from the side the sample favours.
+function laneSummary(L) {
+  const D = DATA[L.key];
+  const has = new Set(), byPair = new Map(), allPairs = new Set(), per = {};
+  let guides = 0;
+  for (const a of Object.keys(D.champs)) {
+    const C = D.champs[a], aName = D.dispBy[a], bFs = Object.keys(C.entries);
+    if (!bFs.length) continue;
+    per[aName] = { n: 0, games: 0, fav: 0, hard: 0, slug: a, C };
+    for (const bF of bFs) {
+      const bName = dispOf(D, bF), key = [aName, bName].sort().join('|');
+      const url = `/matchup/${L.key}/${urlslug(aName)}-vs-${urlslug(bName)}/`;
+      has.add(url); allPairs.add(key); guides++;
+      const p = POOL[L.key][a][bF];
+      if (typeof p.wr !== 'number' || !p.games) continue;
+      const pc = per[aName]; pc.n++; pc.games += p.games;
+      const cls = favourCls(p.wr);
+      if (cls === 'counterA') pc.fav++; else if (cls === 'counterB') pc.hard++;
+      const row = { aName, bName, wr: p.wr, games: p.games, url, back: `/matchup/${L.key}/${urlslug(bName)}-vs-${urlslug(aName)}/` };
+      const cur = byPair.get(key);
+      if (!cur || p.wr > cur.wr) byPair.set(key, row);
+    }
+  }
+  const pairs = [...byPair.values()];
+  const byGames = pairs.slice().sort((x, y) => (y.games - x.games) || x.aName.localeCompare(y.aName));
+  const gamesSorted = pairs.map(p => p.games).sort((x, y) => x - y);
+  const median = gamesSorted.length ? gamesSorted[Math.floor(gamesSorted.length / 2)] : 0;
+  const total = pairs.reduce((s, p) => s + p.games, 0);
+  const cnt = c => pairs.filter(p => favourCls(p.wr) === c).length;
+  // "Most one-sided" only among pairings with a real sample: the lane median, in round hundreds.
+  const minGames = Math.max(100, Math.floor(median / 100) * 100);
+  const lopsided = pairs.filter(p => p.games >= minGames).sort((x, y) => (y.wr - x.wr) || (y.games - x.games));
+  const champs = Object.keys(per).length;
+  const mostPlayedChamps = Object.keys(per).sort((x, y) => (per[y].games - per[x].games) || x.localeCompare(y));
+  return { D, has, pairs, byGames, median, total, champs, guides, allPairs: allPairs.size, per, mostPlayedChamps,
+    counter: cnt('counterA'), edge: cnt('edgeA'), even: cnt('even'), minGames, lopsided };
+}
+const LANE_SUM = {};
+for (const L of LANES) LANE_SUM[L.key] = laneSummary(L);
+// "Ahri vs Zed" linked, then the other side's guide when it exists.
+const pairLink = (S, p) => `<a href="${p.url}">${esc(p.aName)} vs ${esc(p.bName)}</a>`;
+const backLink = (S, p) => S.has.has(p.back) ? `<a href="${p.back}">${esc(p.bName)}'s side</a>` : '—';
+const itemListLd = rows => ({ '@type': 'ItemList', numberOfItems: rows.length, itemListElement: rows.map((r, i) => ({ '@type': 'ListItem', position: i + 1, name: r.name, url: ORIGIN + r.url })) });
+
 // jungle lane hub
 {
   const canonical = `${ORIGIN}/matchup/jungle/`;
   const title = 'Jungle Counters & Matchup Guides | MatchupCoach.gg';
-  const desc = `Who counters who in the jungle? Matchup guides for all ${jgNames.length} junglers — the level-by-level race, first clears, pathing and objective control.`;
+  const J = JG_SUM, racesN = J.races.length;
+  const skillN = racesN - J.fav - J.hard;
+  const top = J.spread2.slice(0, 10);
+  const byFav = jgNames.slice().sort((x, y) => (J.per[y].fav - J.per[x].fav) || (J.per[x].hard - J.per[y].hard) || x.localeCompare(y));
+  const byHard = jgNames.slice().sort((x, y) => (J.per[y].hard - J.per[x].hard) || (J.per[x].fav - J.per[y].fav) || x.localeCompare(y));
+  const bySkill = jgNames.slice().sort((x, y) => (J.per[y].skill - J.per[x].skill) || x.localeCompare(y));
+  const fv = byFav[0], hd = byHard[0], sk = bySkill[0];
+  let desc = `Who counters who in the jungle? ${fmtN(racesN)} guides for ${jgNames.length} junglers: who owns each of the 7 race windows, the first clear and pathing.`;
+  if (desc.length > 155) desc = `Who counters who in the jungle? ${fmtN(racesN)} guides for ${jgNames.length} junglers — the level-by-level race, first clears and pathing.`;
+  const overview = `<p>This hub covers ${jgNames.length} junglers with ${fmtN(racesN)} jungle guides, one for each side of ${fmtN(J.pairs.length)} pairings. `
+    + `No Emerald+ win-rate sample exists in this site's data for jungler-vs-jungler pairs, so every guide ranks its race by who owns the 7 stage windows instead of by a win rate. `
+    + `${fmtN(J.fav)} guides (${pctOf(J.fav, racesN)}%) have your jungler ahead by 3 or more windows, ${fmtN(J.hard)} have you behind by 3 or more, and ${fmtN(skillN)} sit within 2 windows either way. `
+    + (J.sweeps ? `${J.sweeps} pairings are a clean sweep, one jungler owning all 7 windows, and ${esc(J.sweepTop)} holds ${J.sweepTopN} of those. ` : `The most one-sided races are ${esc(listEn(J.pairs.slice(0, 3).map(r => `${r.you} vs ${r.foe} (${jgRaceTxt(r)})`)))}. `)
+    + `${esc(fv)} is ahead by 3+ windows in ${J.per[fv].fav} of its ${J.per[fv].n} races, the most of any jungler, while ${esc(hd)} is behind by 3+ in ${J.per[hd].hard} of ${J.per[hd].n}. `
+    + `${esc(sk)} plays the closest races: ${J.per[sk].skill} of its ${J.per[sk].n} are within 2 windows.</p>`;
+  const topRows = top.map(r => `<tr><td><a href="${r.url}">${esc(r.you)} vs ${esc(r.foe)}</a></td><td>${esc(jgRaceTxt(r))}</td><td>${J.has.has(`/matchup/jungle/${urlslug(r.foe)}-vs-${urlslug(r.you)}/`) ? `<a href="/matchup/jungle/${urlslug(r.foe)}-vs-${urlslug(r.you)}/">${esc(r.foe)}'s side</a>` : '—'}</td></tr>`).join('');
+  const hardRows = byFav.slice(0, 10).map(n => {
+    const P = J.per[n], foe = P.rank[0], s = JG_SPREADS[n][foe];
+    const ties = P.rank.filter(f => f !== foe && JG_SPREADS[n][f].spread === s.spread && JG_SPREADS[n][f].reds === s.reds).length;
+    const read = s.spread < 0 ? `${foe} leads, ${s.reds} windows to ${s.greens}` : s.spread > 0 ? `${n} still leads, ${s.greens} windows to ${s.reds}` : `level, ${s.greens} windows each`;
+    return `<tr><td><a href="/matchup/jungle/${urlslug(n)}/">${esc(n)}</a></td><td>${P.fav} of ${P.n}</td><td><a href="/matchup/jungle/${urlslug(n)}-vs-${urlslug(foe)}/">${esc(n)} vs ${esc(foe)}</a></td><td>${esc(`${read}${ties ? ` (${ties} more race${ties > 1 ? 's' : ''} at that spread)` : ''}`)}</td></tr>`;
+  }).join('');
   const links = jgNames.slice().sort().map(n => `<a href="/matchup/jungle/${urlslug(n)}/">${esc(n)}</a>`).join('');
-  outWrite('jungle/index.html', shell(title, desc, canonical, { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical }, `
+  const jgLaneIconic = iconicBlock(ICONIC.byLane.jungle, `One of these races is free to everyone every day, both directions, with no account — the rotation moves on at midnight UTC and comes back round every ${ICONIC.byLane.jungle.length} days.`);
+  if (jgLaneIconic) iconicStats.hubBlocks++;
+  const jsonld = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical, publisher: ORG,
+    mainEntity: itemListLd(top.map(r => ({ name: `${r.you} vs ${r.foe}`, url: r.url }))) };
+  outWrite('jungle/index.html', shell(title, desc, canonical, jsonld, `
 <nav class="crumbs"><a href="/matchup/">Matchups</a> › Jungle</nav>
 <h1>Jungle Counters &amp; Matchup Guides</h1>
-<p class="sub">Your lane is the whole map — and your opponent is their jungler. Pick your jungler to see who counters them and who counters you.</p>
+${overview}
+<p class="trust">${esc(trustLine(true))} · <a href="/methodology">How we work this out</a></p>
+${jgLaneIconic}
+<h2>Most one-sided jungle races</h2>
+<p class="sub">The 10 pairings with the widest window gap, at most two per jungler, told from the side that owns more windows.</p>
+<div class="tscroll"><table><tr><th>Race</th><th>Windows</th><th>Other side</th></tr>${topRows}</table></div>
+<h2>Hardest counters for the 10 junglers with the most favoured races</h2>
+<p class="sub">Each jungler's worst race by window spread — the same ranking its own counters page uses.</p>
+<div class="tscroll"><table><tr><th>Jungler</th><th>Favoured races</th><th>Hardest race</th><th>Race read</th></tr>${hardRows}</table></div>
+<h2>All ${jgNames.length} junglers</h2>
 <div class="linkgrid">${links}</div>`, { jungle: true }));
   sitemap.push(canonical);
 }
@@ -1311,6 +1816,8 @@ for (const L of LANES) {
     }).join('');
     const ranked = rankedOpps(L, D, a, C);
     const say = x => `${x.name} (${x.wr}%)`;
+    const hubIconic = iconicBlock((ICONIC.byChamp[L.key] || {})[aName], `${esc(aName)} is in the free iconic rotation. On its day each of these matchups is free to everyone, both directions, with no account.`);
+    if (hubIconic) iconicStats.hubBlocks++;
     // "<champion> counters" is the highest-volume query this site can answer, and
     // the hub already holds the answer — the three lowest pooled win rates, with
     // sample sizes. It just used to call it something else, so the page went to
@@ -1331,13 +1838,16 @@ for (const L of LANES) {
     if (desc.length > 155) desc = `Who counters ${aName} ${L.prose}? Hardest: ${names3(hard)}. Easiest: ${names3(easy)}. All ${opps.length} guides.`;
     if (desc.length > 155) desc = `Who counters ${aName} ${L.prose}? Hardest: ${names3(hard)}. All ${opps.length} matchup guides with win rates and game plans.`;
     if (desc.length > 155) desc = `Who counters ${aName} ${L.prose}? All ${opps.length} matchup guides: who wins, the favour timeline and the game plan.`;
-    const jsonld = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical };
+    const jsonld = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical, publisher: ORG };
     const body = `
 <nav class="crumbs"><a href="/matchup/">Matchups</a> › <a href="/matchup/${L.key}/">${L.label}</a> › ${esc(aName)}</nav>
 <h1>${esc(aName)} ${laneH} counters and matchups</h1>
 ${intro}
-<p class="sub">${opps.length} researched matchup guides for ${esc(aName)} in ${L.prose}, most-played first. Win rates are ${esc(aName)}'s side, pooled Emerald+ games sampled ${WR_SAMPLED}.</p>
-<table class="hub"><tr><th>Matchup</th><th>Win rate</th><th>Games</th><th>Favour</th></tr>${rows}</table>`;
+<p class="trust">${esc(trustLine(false))} · <a href="/methodology">How we work this out</a></p>
+${hubIconic}
+<h2>Every ${esc(aName)} ${L.prose} matchup, most-played first</h2>
+<p class="sub">${opps.length} researched matchup guides for ${esc(aName)} in ${L.prose}. Win rates are ${esc(aName)}'s side, pooled Emerald+ games sampled ${WR_SAMPLED}.</p>
+<div class="tscroll"><table class="hub"><tr><th>Matchup</th><th>Win rate</th><th>Games</th><th>Favour</th></tr>${rows}</table></div>`;
     outWrite(`${L.key}/${uA}/index.html`, shell(title, desc, canonical, jsonld, body));
     sitemap.push(canonical);
   }
@@ -1351,54 +1861,194 @@ for (const L of LANES) {
   // 60-char budget: "Bot Lane (ADC)" pushes the full form to 64, so it drops the tagline.
   let title = `${L.label} Counters & Matchup Guides | MatchupCoach.gg`;
   if (title.length > 60) title = `${L.label} Counters & Matchups | MatchupCoach.gg`;
-  const desc = `Who counters who in League of Legends ${L.prose}? Matchup guides for all ${D.names.length} champions — win rates, power spikes and stage-by-stage game plans.`;
+  const S = LANE_SUM[L.key];
+  const champWord = L.key === 'support' ? 'supports' : `${L.prose} champions`;
+  let desc = `Who counters who in ${L.prose}? ${fmtN(S.guides)} guides for ${S.champs} champions from ${fmtN(S.total)} pooled Emerald+ games: win rates, counters and game plans.`;
+  if (desc.length > 155) desc = `Who counters who in ${L.prose}? ${fmtN(S.guides)} guides for ${S.champs} champions from ${fmtN(S.total)} pooled Emerald+ games.`;
+  if (desc.length > 155) desc = `Who counters who in League of Legends ${L.prose}? Matchup guides for all ${D.names.length} champions — win rates, power spikes and game plans.`;
+  // Overview: every clause is a count or a pairing from LANE_SUM.
+  const mp = S.byGames[0], topC = S.mostPlayedChamps[0];
+  const favC = Object.keys(S.per).filter(n => S.per[n].n).sort((x, y) => (S.per[y].fav - S.per[x].fav) || (S.per[x].hard - S.per[y].hard) || x.localeCompare(y))[0];
+  const hardC = Object.keys(S.per).filter(n => S.per[n].n).sort((x, y) => (S.per[y].hard - S.per[x].hard) || (S.per[x].fav - S.per[y].fav) || x.localeCompare(y))[0];
+  const unsampled = S.allPairs - S.pairs.length;
+  const lop = S.lopsided.slice(0, 3).map(p => `${p.aName} over ${p.bName} (${p.wr}% across ${fmtN(p.games)} games)`);
+  const overview = `<p>This hub covers ${S.champs} ${champWord} with ${fmtN(S.guides)} matchup guides, one for each side of ${fmtN(S.allPairs)} pairings. `
+    + `${fmtN(S.pairs.length)} of those pairings carry a pooled Emerald+ win-rate sample from lolalytics, taken ${WR_SAMPLED}: ${fmtN(S.total)} games in all, a median of ${fmtN(S.median)} per pairing${unsampled ? `, with ${unsampled} still unsampled` : ''}. `
+    + `${fmtN(S.counter)} pairings (${pctOf(S.counter, S.pairs.length)}%) clear the 5-point edge a guide calls a counter, ${fmtN(S.edge)} lean one way by less than that, and ${fmtN(S.even)} sit within 0.75 points of 50%. `
+    + (lop.length ? `Among pairings with at least ${fmtN(S.minGames)} games, the most one-sided are ${esc(listEn(lop))}. ` : '')
+    + `The most-played pairing is ${esc(mp.aName)} vs ${esc(mp.bName)} at ${fmtN(mp.games)} games, and ${esc(topC)} shows up in the most sampled games: ${fmtN(S.per[topC].games)} across ${S.per[topC].n} matchups. `
+    + `${esc(favC)} holds a 5-point edge in ${S.per[favC].fav} of its ${S.per[favC].n} sampled matchups, the most in the lane, while ${esc(hardC)} is on the wrong side of that line in ${S.per[hardC].hard} of ${S.per[hardC].n}.</p>`;
+  const laneIconic = iconicBlock(ICONIC.byLane[L.key], `One of these matchups is free to everyone every day, both directions, with no account — the rotation moves on at midnight UTC and comes back round every ${(ICONIC.byLane[L.key] || []).length} days.`);
+  if (laneIconic) iconicStats.hubBlocks++;
+  const top10 = S.byGames.slice(0, 10);
+  const mpRows = top10.map(p => `<tr><td>${pairLink(S, p)}</td><td>${p.wr}%</td><td>${fmtN(p.games)}</td><td>${backLink(S, p)}</td></tr>`).join('');
+  const hardRows = S.mostPlayedChamps.slice(0, 10).map(n => {
+    const P = S.per[n], r = rankedOpps(L, D, P.slug, P.C)[0];
+    if (!r) return '';
+    return `<tr><td><a href="/matchup/${L.key}/${urlslug(n)}/">${esc(n)}</a></td><td>${fmtN(P.games)}</td><td><a href="/matchup/${L.key}/${urlslug(n)}-vs-${urlslug(r.name)}/">${esc(n)} vs ${esc(r.name)}</a>${r.wr >= 50 ? ' (no sampled matchup below 50%)' : ''}</td><td>${r.wr}%</td><td>${fmtN(r.games)}</td></tr>`;
+  }).join('');
+  const jsonld = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical, publisher: ORG,
+    mainEntity: itemListLd(top10.map(p => ({ name: `${p.aName} vs ${p.bName}`, url: p.url }))) };
   const body = `
 <nav class="crumbs"><a href="/matchup/">Matchups</a> › ${L.label}</nav>
 <h1>${L.label} Counters &amp; Matchup Guides</h1>
-<p class="sub">Pick your champion — who counters them, who they counter, and how every matchup plays out.</p>
+${overview}
+<p class="trust">${esc(trustLine(false))} · <a href="/methodology">How we work this out</a></p>
+${laneIconic}
+<h2>Most-played ${L.prose} matchups</h2>
+<p class="sub">The 10 pairings with the most pooled Emerald+ games, sampled ${WR_SAMPLED}. The win rate is the first-named champion's.</p>
+<div class="tscroll"><table><tr><th>Matchup</th><th>Win rate</th><th>Games</th><th>Other side</th></tr>${mpRows}</table></div>
+<h2>Hardest counters for the 10 most-played ${champWord}</h2>
+<p class="sub">Each champion's lowest pooled win rate — the same ranking its own counters page leads with. Check the games column before trusting a small sample.</p>
+<div class="tscroll"><table><tr><th>Champion</th><th>Sampled games</th><th>Hardest matchup</th><th>Win rate</th><th>Games</th></tr>${hardRows}</table></div>
+<h2>All ${D.names.length} ${champWord}</h2>
 <div class="linkgrid">${links}</div>`;
-  outWrite(`${L.key}/index.html`, shell(title, desc, canonical, { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical }, body));
+  outWrite(`${L.key}/index.html`, shell(title, desc, canonical, jsonld, body));
   sitemap.push(canonical);
 }
 {
   const canonical = `${ORIGIN}/matchup/`;
   const title = 'LoL Counters & Matchup Guides — Every Lane | MatchupCoach.gg'; // 59 chars
-  const desc = 'Who counters who in League of Legends? Researched matchup guides for every champion in top, mid, bot, support and jungle — win rates and game plans.';
-  const counts = LANES.map(L => `<a href="/matchup/${L.key}/">${L.label} — ${DATA[L.key].names.length} champions</a>`)
-    .concat(jgNames.length ? [`<a href="/matchup/jungle/">Jungle — ${jgNames.length} junglers</a>`] : [])
-    .join('<br>');
+  const laneGuides = LANES.reduce((s, L) => s + LANE_SUM[L.key].guides, 0);
+  let desc = `Who counters who in League of Legends? ${fmtN(laneGuides + jgPages)} matchup guides across top, mid, bot, support and jungle — win rates, counters and game plans.`;
+  if (desc.length > 155) desc = 'Who counters who in League of Legends? Researched matchup guides for every champion in top, mid, bot, support and jungle — win rates and game plans.';
+  // Sitewide most-played: every lane's pairings on one scale, lane named per row.
+  const all = LANES.flatMap(L => LANE_SUM[L.key].pairs.map(p => Object.assign({ L }, p))).sort((x, y) => (y.games - x.games) || x.aName.localeCompare(y.aName));
+  const top25 = all.slice(0, 25);
+  const laneBlocks = LANES.map(L => {
+    const S = LANE_SUM[L.key];
+    const lis = S.byGames.slice(0, 5).map(p => `<li>${pairLink(S, p)} — ${esc(p.aName)} wins ${p.wr}% of ${fmtN(p.games)} games</li>`).join('');
+    return `<h2>${L.label}: the 5 most-played matchups</h2>
+<p class="sub">${S.champs} champions, ${fmtN(S.guides)} guides, ${fmtN(S.total)} pooled games · <a href="/matchup/${L.key}/">All ${L.prose} counters and matchups →</a></p>
+<ul>${lis}</ul>`;
+  }).join('\n');
+  const jgBlock = jgNames.length ? `<h2>Jungle: the 5 most one-sided races</h2>
+<p class="sub">${jgNames.length} junglers, ${fmtN(jgPages)} guides, ranked by stage windows — no win-rate sample exists for jungle pairs · <a href="/matchup/jungle/">All jungle counters and matchups →</a></p>
+<ul>${JG_SUM.spread2.slice(0, 5).map(r => `<li><a href="${r.url}">${esc(r.you)} vs ${esc(r.foe)}</a> — ${esc(r.you)}'s plan owns ${esc(jgRaceTxt(r))}</li>`).join('')}</ul>` : '';
+  const t25 = top25.map(p => `<li>${pairLink(LANE_SUM[p.L.key], p)} (${p.L.short}) — ${esc(p.aName)} wins ${p.wr}% of ${fmtN(p.games)} games</li>`).join('');
   const body = `
 <h1>League of Legends Counters &amp; Matchup Guides</h1>
 <p class="sub">Every champion, every lane — who counters who, researched stage-by-stage.</p>
-<p style="font-size:17px;line-height:2.2">${counts}</p>
+<p class="trust">${esc(trustLine(false))} · <a href="/methodology">How we work this out</a></p>
+<p>${fmtN(laneGuides)} lane guides each open with a verdict from the pooled Emerald+ win rate, the enemy ability to track, runes and build, a 7-stage favour table and the early-game plan; the ${fmtN(jgPages)} jungle guides trade the win rate for the 7-window race and the first clear.</p>
+${laneBlocks}
+${jgBlock}
+<h2>The 25 most-played matchups on the site</h2>
+<p class="sub">Every lane on one scale, by pooled Emerald+ games sampled ${WR_SAMPLED}; the win rate is the first-named champion's. Top-lane samples count each game once, while mid, bot and support add both sides' pulls together, so those lanes run higher (${LANES.map(L => `${L.short} median ${fmtN(LANE_SUM[L.key].median)}`).join(', ')}).</p>
+<ol>${t25}</ol>
 <a class="cta" href="/">▶ Open the interactive coach</a>`;
-  outWrite('index.html', shell(title, desc, canonical, { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical }, body));
+  const jsonld = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description: desc, url: canonical, publisher: ORG,
+    mainEntity: itemListLd(top25.map(p => ({ name: `${p.aName} vs ${p.bName} (${p.L.short})`, url: p.url }))) };
+  outWrite('index.html', shell(title, desc, canonical, jsonld, body));
   sitemap.push(canonical);
 }
 
+// ---------- hand-written static pages ----------
+// /methodology is not generated here — it ships as methodology.html at the repo
+// root — but every one of the built guides links to it twice (trust line and
+// footer) and it is the page that explains where the win rates come from. A page
+// that many internal links point at, and that carries its own canonical, has to
+// be crawlable from the sitemap; it was missing for the whole of the first
+// indexable release. No trailing slash, to match the canonical the file declares.
+// It takes DATA_MODIFIED like every other URL: it describes the data pipeline, so
+// it is stale exactly when the data is.
+sitemap.push(`${ORIGIN}/methodology`);
+
 // ---------- sitemap ----------
-// The root keeps TODAY/daily because the homepage genuinely changes every day —
-// it rotates the free champion per role on a 24h cycle. Every /matchup/ guide
-// uses DATA_MODIFIED instead: those pages only change when champ-data changes,
-// and stamping them with the build date is a freshness claim we can't back up.
+// Every URL, including the root, carries DATA_MODIFIED. The root used to carry
+// the build date because the homepage rotates its free matchups daily — but the
+// build machine's "today" in UTC is regularly AHEAD of the crawler's, so the
+// homepage shipped a lastmod in the future, which is a bad-data signal rather
+// than a freshness one. The rotation is a view of content that already exists;
+// the content itself changes when champ-data changes, which is what DATA_MODIFIED
+// tracks. changefreq still tells crawlers the homepage is worth a daily look.
 const sm = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>${ORIGIN}/</loc><lastmod>${TODAY}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+<url><loc>${ORIGIN}/</loc><lastmod>${DATA_MODIFIED}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
 ` + sitemap.map(u => `<url><loc>${u}</loc><lastmod>${DATA_MODIFIED}</lastmod><changefreq>monthly</changefreq><priority>${u.endsWith('/matchup/') ? '0.9' : /\/matchup\/[a-z]+\/$/.test(u) ? '0.8' : u.includes('-vs-') ? '0.7' : '0.6'}</priority></url>`).join('\n') + '\n</urlset>\n';
 fs.writeFileSync('sitemap.xml', sm);
 
+// ---------- sitemap gate ----------
+// The trust gate above proves every page LINKS to /methodology; this proves the
+// page it links to is itself crawlable. Counted from the written XML rather than
+// from the array, so a template change that drops URLs is caught too: one <loc>
+// per built page, plus the root and plus /methodology.
+{
+  const smUrls = (sm.match(/<loc>/g) || []).length;
+  const STATIC = 2; // the root and /methodology
+  if (!sm.includes(`<loc>${ORIGIN}/methodology</loc>`)) throw new Error('sitemap gate FAILED: /methodology is linked from every page but is not in sitemap.xml');
+  if (smUrls !== pages + STATIC) throw new Error(`sitemap gate FAILED: sitemap.xml has ${smUrls} URLs for ${pages} built pages — expected ${pages + STATIC} (every page, plus the root and /methodology)`);
+  console.log(`sitemap: ${smUrls} URLs — ${pages} built pages + the root + /methodology, every lastmod ${DATA_MODIFIED}`);
+}
+
 // ---------- snippet gate ----------
-console.log(`meta description max ${snippetStats.descMax} chars (${snippetStats.descMaxUrl}) · over 155: ${snippetStats.descOver}`);
+console.log(`meta description max ${snippetStats.descMax} chars (${snippetStats.descMaxUrl}) · over 155: ${snippetStats.descOver} · min ${snippetStats.descMin} chars (${snippetStats.descMinUrl}) · under ${DESC_MIN}: ${snippetStats.descShort}`);
 console.log(`title max ${snippetStats.titleMax} chars (${snippetStats.titleMaxUrl}) · over 60: ${snippetStats.titleOver}`);
 if (snippetStats.descOver > 0) throw new Error(`snippet gate FAILED: ${snippetStats.descOver} meta descriptions exceed 155 chars (max ${snippetStats.descMax} at ${snippetStats.descMaxUrl})`);
 if (snippetStats.titleOver > 0) throw new Error(`snippet gate FAILED: ${snippetStats.titleOver} titles exceed 60 chars (max ${snippetStats.titleMax} at ${snippetStats.titleMaxUrl})`);
 console.log(`title ladder: "How to Play" in ${ladderStats.howToPlay} of ${pages} titles · duplicate titles ${ladderStats.dupes}${ladderStats.dupeEx.length ? ' — ' + ladderStats.dupeEx.join('; ') : ''}`);
 if (ladderStats.dupes > 0) throw new Error(`title gate FAILED: ${ladderStats.dupes} duplicate titles — ${ladderStats.dupeEx.join('; ')}`);
-console.log(`description ladder: patch ${LIVE_PATCH} named in ${ladderStats.patch} of ${pages} descriptions`);
+console.log(`description ladder: decisive-stage clause on ${ladderStats.dec} of ${pages} descriptions (suppressed on ${ladderStats.decSup} where the favoured side already owns the first window) · duplicate descriptions ${ladderStats.descDupes}${ladderStats.descDupeEx.length ? ' — ' + ladderStats.descDupeEx.join('; ') : ''}`);
+console.log(`snippet patch gate: titles or descriptions naming a patch number ${ladderStats.patch} of ${pages} (page trust line still reads "reviewed on patch ${LIVE_PATCH}")`);
+if (ladderStats.patch) throw new Error(`snippet patch gate FAILED: ${ladderStats.patch} titles/descriptions name a patch number — the win rates were sampled ${WR_SAMPLED} and have not been re-sampled: ${ladderStats.patchEx.join('; ')}`);
 console.log(`FAQ/heading invariant: ${ladderStats.faqQs} questions on ${ladderStats.faqPages} pages · questions with no matching visible heading ${ladderStats.faqMissing}${ladderStats.faqEx.length ? ' — ' + ladderStats.faqEx.join('; ') : ''}`);
 if (ladderStats.faqMissing > 0) throw new Error(`FAQ gate FAILED: ${ladderStats.faqMissing} schema questions are not visible headings — ${ladderStats.faqEx.join('; ')}`);
+console.log(`FAQ answer invariant: answers not printed verbatim on their page ${ladderStats.ansMissing}${ladderStats.ansEx.length ? ' — ' + ladderStats.ansEx.join('; ') : ''}`);
+if (ladderStats.ansMissing > 0) throw new Error(`FAQ gate FAILED: ${ladderStats.ansMissing} schema answers are not visible on the page — ${ladderStats.ansEx.join('; ')}`);
+{
+  const tpls = [...ladderStats.tpl.entries()].sort((x, y) => y[1] - x[1]);
+  const [topT, topN] = tpls[0] || ['', 0];
+  console.log(`FAQ answer templates (names + numbers masked): ${tpls.length} distinct on ${ladderStats.faqPages} pages · largest covers ${topN} pages (limit ${FAQ_TEMPLATE_MAX}): "${topT.slice(0, 140)}${topT.length > 140 ? '…' : ''}" · over the limit ${tpls.filter(x => x[1] > FAQ_TEMPLATE_MAX).length} · page-specific clauses: who ${faqClauseStats.who} (bare ${faqClauseStats.bare}) · skill ${faqClauseStats.skill} · counter ${faqClauseStats.counter} · runes ${faqClauseStats.runes} · jungle who ${faqClauseStats.jgWho} · jungle skill ${faqClauseStats.jgSkill} · jungle runes ${faqClauseStats.jgRunes}`);
+  if (topN > FAQ_TEMPLATE_MAX) throw new Error(`FAQ template gate FAILED: one answer template covers ${topN} pages (limit ${FAQ_TEMPLATE_MAX}) — "${topT}"`);
+}
 console.log(`hub "counter" coverage: title ${hubStats.title}/${hubStats.hubs} · H1 ${hubStats.h1}/${hubStats.hubs} · body ${hubStats.body}/${hubStats.hubs}${hubStats.missing.length ? ' — missing on ' + hubStats.missing.join(', ') : ''}`);
 if (hubStats.title < hubStats.hubs || hubStats.h1 < hubStats.hubs || hubStats.body < hubStats.hubs) throw new Error(`hub gate FAILED: "counter" missing from ${hubStats.hubs - Math.min(hubStats.title, hubStats.h1, hubStats.body)} hubs — ${hubStats.missing.join(', ')}`);
+
+// ---------- iconic matchup gate ----------
+// A pool name that does not resolve to a page is the failure this gate exists
+// for: the badge would appear on nothing and every hub would link a 404. Both
+// directions of all pairs must be pages this build wrote, and the badge count
+// must equal the pool size exactly — one too few means a page missed it.
+{
+  const missing = [...ICONIC.urls.keys()].filter(u => !linkGraph.written.has(u));
+  console.log(`iconic matchups: ${ICONIC.pairs} pairs · ${ICONIC.urls.size} pages in the pool · badge printed on ${built.iconic} · "Iconic matchups" blocks on ${iconicStats.hubBlocks} hubs · pool names with no page ${missing.length}${missing.length ? ' — ' + missing.slice(0, 5).join(', ') : ''}`);
+  if (missing.length) throw new Error(`iconic gate FAILED: ${missing.length} iconic pool entries do not resolve to a built page — ${missing.slice(0, 8).join(', ')}`);
+  if (built.iconic !== ICONIC.urls.size) throw new Error(`iconic gate FAILED: badge on ${built.iconic} pages, pool is ${ICONIC.urls.size}`);
+}
+
+// ---------- trust, methodology and jungle win-rate gates ----------
+// Every page carries the "Updated … · reviewed on patch …" line and a link to
+// /methodology; every jungle guide says once, in the verdict box, why it has no
+// win rate. These are one-line claims that are easy to lose in a template edit,
+// so they are counted rather than trusted.
+console.log(`trust line: on ${built.trust} of ${pages} pages · /methodology linked on ${built.method} · jungle "no win-rate sample" line on ${built.jgNoWr} of ${jgPages} jungle guides · opponent champion-hub link on ${oppHubStats.lane} lane guides (${oppHubStats.laneMissing} opponents with no hub) and ${oppHubStats.jg} jungle guides (${oppHubStats.jgMissing} missing)`);
+if (built.method < pages) throw new Error(`trust gate FAILED: /methodology not linked on ${pages - built.method} pages`);
+if (built.trust < pages) throw new Error(`trust gate FAILED: the "Updated …" line is missing from ${pages - built.trust} pages`);
+if (built.jgNoWr !== jgPages) throw new Error(`jungle win-rate gate FAILED: the no-sample line is on ${built.jgNoWr} of ${jgPages} jungle guides`);
+if (oppHubStats.laneMissing + oppHubStats.jgMissing > 0) throw new Error(`related-guides gate FAILED: ${oppHubStats.laneMissing + oppHubStats.jgMissing} guides have an opponent with no champion hub to link`);
+
+// ---------- render-blocking resource gate ----------
+// The Google Fonts stylesheet was the only thing standing between the request and
+// the first paint. It is now preloaded and applied with the media="print" swap,
+// and no page may reintroduce a plain stylesheet link.
+console.log(`fonts: non-blocking preload + media swap on ${built.asyncFont} of ${pages} pages · render-blocking stylesheet links ${built.blockingFont}`);
+if (built.asyncFont !== pages || built.blockingFont > 0) throw new Error(`font gate FAILED: async font links on ${built.asyncFont} of ${pages} pages, ${built.blockingFont} still render-blocking`);
+
+// ---------- structured-data publisher gate ----------
+// One Organization node with one stable @id, and a publisher logo on the Article.
+{
+  const html = fs.readFileSync(path.join('matchup', 'top/aatrox-vs-darius/index.html'), 'utf8');
+  const ld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  const org = (ld['@graph'] || []).find(x => x['@type'] === 'Organization');
+  const art = (ld['@graph'] || []).find(x => x['@type'] === 'Article');
+  const faq = (ld['@graph'] || []).find(x => x['@type'] === 'FAQPage');
+  const ok = org && org['@id'] === ORG_ID && org.logo && org.logo.url && org.logo.width && org.logo.height
+    && art && art.publisher && art.publisher['@id'] === ORG_ID && art.author && art.author['@id'] === ORG_ID
+    && faq && Array.isArray(faq.mainEntity) && faq.mainEntity.length >= 3
+    && faq.mainEntity.every(q => q['@type'] === 'Question' && q.name && q.acceptedAnswer && q.acceptedAnswer['@type'] === 'Answer' && q.acceptedAnswer.text);
+  console.log(`structured data: Organization @id ${org ? org['@id'] : '(missing)'} · publisher logo ${org && org.logo ? `${org.logo.url} ${org.logo.width}x${org.logo.height}` : '(missing)'} · Article publisher/author reference it ${!!(art && art.publisher && art.publisher['@id'] === ORG_ID)} · FAQPage entries ${faq ? faq.mainEntity.length : 0}`);
+  if (!ok) throw new Error('structured-data gate FAILED: Organization @id, publisher logo, Article references or FAQPage shape is wrong on /matchup/top/aatrox-vs-darius/');
+}
 
 // ---------- verdict coherence gate ----------
 console.log(`verdict gate: ${verdictStats.contra} of ${verdictStats.checked} lane verdicts pair a "favoured" clause with a stage-window clause pointing the other way${verdictStats.examples.length ? ' — ' + verdictStats.examples.join(' | ') : ''}`);
@@ -1449,6 +2099,27 @@ if (sizeStats.max > 60 * 1024) throw new Error(`size gate FAILED: ${sizeStats.ma
 // Six representative pages (one per lane, a jungle guide, a champion hub): the
 // ld+json block must parse, every guide must carry its FAQ, and no page may
 // repeat an H2 — the new sections each add one.
+// Category pages: the lane hubs, the jungle hub and /matchup/ are link hubs for
+// thousands of guides, so they have to carry real content, one ItemList each, and
+// no repeated H2.
+{
+  const words = h => h.replace(/<head>[\s\S]*?<\/head>/, '').replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '')
+    .replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/g, ' ').split(/\s+/).filter(w => /[A-Za-z0-9]/.test(w)).length;
+  const out = [];
+  for (const p of ['', ...LANES.map(L => L.key), 'jungle']) {
+    const html = fs.readFileSync(path.join('matchup', p, 'index.html'), 'utf8');
+    const ld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+    const items = ld.mainEntity && ld.mainEntity['@type'] === 'ItemList' ? ld.mainEntity.itemListElement.length : 0;
+    const h2s = [...html.matchAll(/<h2>(.*?)<\/h2>/g)].map(x => x[1]);
+    const intro = (html.match(/<\/h1>\s*<p>([\s\S]*?)<\/p>/) || ['', ''])[1];
+    const introWords = intro.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+    out.push(`/matchup/${p ? p + '/' : ''} ${words(html)} words (overview ${introWords}) · ${items} ItemList entries · ${h2s.length} H2s`);
+    if (ld['@type'] !== 'CollectionPage' || items < 5) throw new Error(`category gate FAILED: /matchup/${p}/ ld+json is ${ld['@type']} with ${items} ItemList entries`);
+    if (new Set(h2s).size !== h2s.length) throw new Error(`heading gate FAILED: duplicate H2 on /matchup/${p}/ — ${h2s.join(' | ')}`);
+    if (p && (introWords < 120 || introWords > 180)) throw new Error(`category gate FAILED: /matchup/${p}/ overview is ${introWords} words (want 120-180)`);
+  }
+  console.log(`category pages: ${out.join(' · ')}`);
+}
 for (const p of ['top/aatrox-vs-darius', 'mid/ahri-vs-zed', 'bot/jinx-vs-caitlyn', 'support/thresh-vs-lulu', 'jungle/lee-sin-vs-graves', 'top/aatrox']) {
   const html = fs.readFileSync(path.join('matchup', p, 'index.html'), 'utf8');
   const m = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);

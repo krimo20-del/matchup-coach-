@@ -10,6 +10,19 @@
 //                 'off' rejects paid checkout with a friendly message —
 //                 use until real payments (Stripe) are wired.
 //   STRIPE_TRIAL_DAYS / STRIPE_TRIAL_NO_CARD — first-time free trial (see below).
+//   EVENT_STATS_KEY  shared secret for GET /api/ev/stats, the read side of the
+//                 first-party funnel counter. UNSET = the endpoint does not
+//                 exist (404), which is the default: it is never open. Read it
+//                 with  curl -H "X-Metrics-Key: <secret>" https://matchupcoach.gg/api/ev/stats
+//   EV_DAILY_CAP  max /api/ev events this process will count in one UTC day
+//                 (default 20000). Past the cap the request is still answered
+//                 204 and the event is silently dropped, so a bot flood cannot
+//                 grow events.json or burn CPU. Per PROCESS, not per user.
+//   RESET_OUTBOX  '1' writes issued password-reset tokens to
+//                 server-data/reset-outbox.json for the operator to deliver by
+//                 hand. Default OFF, because there is no mail transport in this
+//                 repo: with it off, /api/reset/request mints nothing and says
+//                 so. See "password reset" below.
 'use strict';
 const http = require('http');
 const https = require('https');
@@ -103,6 +116,11 @@ function saveJson(name, obj) {
   fs.writeFileSync(tmp, JSON.stringify(obj, null, 2));
   fs.renameSync(tmp, f); // atomic-ish: never leaves a half-written file
 }
+// Own-property test. Plain `map[k]` answers for INHERITED keys too, so a
+// caller sending '__proto__', 'constructor' or 'toString' as a plan name, an
+// event name or a username gets a truthy hit on an allow-list it is not on.
+// Every lookup below that is keyed by something off the wire goes through this.
+const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 const users = loadJson('users.json', {});
 const sessions = loadJson('sessions.json', {});
 const founders = loadJson('founders.json', { claimed: 0 });
@@ -119,6 +137,95 @@ const liveWr = loadJson('live-wr.json', {}); // '<lane>:<a>:<b>' -> { wr, games,
     if (!sessions[t] || sessions[t].exp < nowStart) { delete sessions[t]; swept = true; }
   }
   if (swept) saveJson('sessions.json', sessions);
+}
+
+// ---------- funnel counter (first-party, aggregate-only) ----------
+// Why this exists: as of 2026-09-23 the site had 129 Search Console clicks and
+// 90,700 impressions since Aug 5, exactly one subscription ever, and NO
+// analytics of any kind. With no denominators the conversion rate is formally
+// unknowable (95% CI 0.02%–4.4%), so there is nothing to act on. This is the
+// smallest thing that fixes that without adding a third-party script, a tracker,
+// a CDN or a SaaS dependency: a POST of an event NAME, counted per UTC day.
+//
+// What is stored: integers. events.json holds { days: { 'YYYY-MM-DD': { name: n } } }
+// and nothing else. No IP, no user agent, no user id, no session, no referrer,
+// no free text, no per-visitor record of any kind — there is no row a person
+// could be recognised in, because there are no rows. Two low-cardinality tags
+// are allowed (lane, plan) and are folded into the key as 'event.lane.top', so
+// the worst case is a few hundred integers per day.
+//
+// The nine events are the funnel, in order, and each one exists to supply a
+// denominator the next step is measured against:
+//   guide_view      a static SEO guide page was viewed      (all the traffic there is)
+//   app_open        the app was opened from a guide CTA     (guide -> app)
+//   app_ready       the app finished booting                (opens that survive the load)
+//   matchup_view    a matchup was actually read             (boots that reach the product)
+//   daily_pick      the free daily pick was claimed         (reads that hit the paywall edge)
+//   signup_shown    the signup form was shown               (paywall -> intent)
+//   signup_done     an account was created                  (intent -> account)
+//   checkout_start  checkout was started                    (account -> buying)
+//   checkout_done   checkout completed                      (buying -> paid)
+// The last three are ALSO counted server-side, where the truth is, under
+// srv_signup / srv_checkout_start / srv_checkout_done. Those names are not on
+// the client allow-list and are refused from /api/ev, so nothing double-counts;
+// comparing the pair measures how much of the client signal ad blockers eat.
+const EV_NAMES = {
+  guide_view: 1, app_open: 1, app_ready: 1, matchup_view: 1, daily_pick: 1,
+  signup_shown: 1, signup_done: 1, checkout_start: 1, checkout_done: 1
+};
+// Server-recorded twins — countEvent() only, never accepted over the wire.
+const EV_SERVER_NAMES = { srv_signup: 1, srv_checkout_start: 1, srv_checkout_done: 1 };
+// The only two tags. Both are closed sets, so the key space stays tiny and no
+// caller can smuggle free text (or an identifier) in through a tag value.
+const EV_TAGS = {
+  lane: { top: 1, mid: 1, bot: 1, support: 1, jungle: 1 },
+  plan: { lane: 1, all: 1, year: 1 }
+};
+const EV_CAP_ENV = parseInt(process.env.EV_DAILY_CAP, 10);
+const EV_DAILY_CAP = Number.isFinite(EV_CAP_ENV) && EV_CAP_ENV >= 0 ? EV_CAP_ENV : 20000;
+const EVENT_STATS_KEY = process.env.EVENT_STATS_KEY || '';
+const EV_KEEP_DAYS = 180;      // older days are dropped on write; the file stays small
+const EV_FLUSH_MS = 5000;      // batch disk writes: a burst of events is ONE fsync
+const evStore = loadJson('events.json', { days: {} });
+if (!evStore.days || typeof evStore.days !== 'object') evStore.days = {};
+let evCounted = 0;             // events counted today, this process (the cap)
+let evCapDay = '';
+let evDirty = false, evTimer = null;
+const evDay = () => new Date().toISOString().slice(0, 10);
+function evFlush() {
+  if (evTimer) { clearTimeout(evTimer); evTimer = null; }
+  if (!evDirty) return;
+  evDirty = false;
+  const days = Object.keys(evStore.days).sort();
+  for (let i = 0; i < days.length - EV_KEEP_DAYS; i++) delete evStore.days[days[i]];
+  try { saveJson('events.json', evStore); } catch (e) { /* counting must never break a request */ }
+}
+// Count one event. Synchronous work is a couple of property writes; the disk
+// write is debounced and the timer is unref'd, so this never blocks, never
+// delays a response, and never holds the process open at shutdown.
+function countEvent(name, tags) {
+  try {
+    if (!has(EV_NAMES, name) && !has(EV_SERVER_NAMES, name)) return false;
+    const day = evDay();
+    if (day !== evCapDay) { evCapDay = day; evCounted = 0; }
+    if (evCounted >= EV_DAILY_CAP) return false;
+    evCounted++;
+    const bucket = has(evStore.days, day) ? evStore.days[day] : (evStore.days[day] = Object.create(null));
+    bucket[name] = ((has(bucket, name) ? bucket[name] : 0) | 0) + 1;
+    if (tags) {
+      for (const t of Object.keys(EV_TAGS)) {
+        const v = tags[t];
+        if (v && has(EV_TAGS[t], v)) { const k = name + '.' + t + '.' + v; bucket[k] = ((has(bucket, k) ? bucket[k] : 0) | 0) + 1; }
+      }
+    }
+    evDirty = true;
+    if (!evTimer) { evTimer = setTimeout(evFlush, EV_FLUSH_MS); if (evTimer.unref) evTimer.unref(); }
+    return true;
+  } catch (e) { return false; }
+}
+process.on('exit', evFlush);
+for (const sig of ['SIGTERM', 'SIGINT']) {
+  process.on(sig, () => { evFlush(); process.exit(0); });
 }
 
 // ---------- live win rate (lolalytics, weekly per matchup) ----------
@@ -146,6 +253,67 @@ function safeEq(a, b) {
   return ba.length === bb.length && crypto.timingSafeEqual(ba, bb);
 }
 
+// ---------- password reset (token-based, address-bound) ----------
+// The live app told people to "email support@matchupcoach.gg from any address
+// with your username and we'll reset it for you". That is an account-takeover
+// path: anyone who can read a username can mail in and take the account. It
+// also could not be fixed, because POST /api/signup recorded no address at all
+// — there was nothing to check a request against.
+//
+// Fix, server side: an account may record ONE email address (optional at
+// signup, settable later from the Account page, and changing it costs the
+// current password). A reset is then only possible for an account that has an
+// address recorded, and only by presenting a token that was issued to that
+// address. Username alone is never enough again.
+//
+// Delivery: this repo has no mail transport and adding a SaaS one is out of
+// scope, so there is no channel to send the token over. Rather than promise a
+// mail nobody sends, /api/reset/request mints a token ONLY when a delivery
+// channel exists (RESET_OUTBOX=1 writes it to server-data/reset-outbox.json for
+// the operator to pass on out of band) and otherwise says plainly that resets
+// are not available yet. The token NEVER appears in an API response — handing
+// it back to the requester would rebuild the hole this closes.
+const RESET_OUTBOX_ON = process.env.RESET_OUTBOX === '1';
+const RESET_TTL_MS = 30 * 60e3;   // a reset token is good for 30 minutes, once
+const resets = loadJson('resets.json', {});   // sha256(token) -> { user, exp }
+const sha256 = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
+const emailOk = (s) => /^[^@\s]{1,64}@[^@\s.]+(\.[^@\s.]+)+$/.test(s) && s.length <= 190;
+const normEmail = (s) => String(s || '').trim().toLowerCase();
+// "k•••@g•••.com" — enough for a person to recognise their own address, not
+// enough to be an address. Only ever returned to that account's own session.
+function maskEmail(e) {
+  const at = String(e || '').indexOf('@');
+  if (at < 1) return '';
+  const user = e.slice(0, at), host = e.slice(at + 1), dot = host.indexOf('.');
+  return user[0] + '•••@' + host[0] + '•••' + (dot > 0 ? host.slice(dot) : '');
+}
+function resetSweep() {
+  const now = Date.now();
+  let dirty = false;
+  for (const h of Object.keys(resets)) {
+    if (!resets[h] || !(resets[h].exp > now)) { delete resets[h]; dirty = true; }
+  }
+  return dirty;
+}
+{ if (resetSweep()) saveJson('resets.json', resets); }
+// Hand a freshly minted token to the only delivery channel there is. Returns
+// false when there is none, and the caller then throws the token away.
+function deliverResetToken(userKey, token, exp) {
+  if (!RESET_OUTBOX_ON) return false;
+  try {
+    const box = loadJson('reset-outbox.json', []);
+    // The outbox records the account key, the token and its expiry — never the
+    // address, never an IP, never anything else about the request.
+    box.push({ user: userKey, token, exp, issued: Date.now() });
+    while (box.length > 200) box.shift();
+    saveJson('reset-outbox.json', box);
+    return true;
+  } catch (e) { return false; }
+}
+// Same sentence everywhere, and it only claims what the server can actually do.
+const RESET_UNAVAILABLE_MSG = 'Password reset needs an email address recorded on the account, and reset emails are not switched on yet. If you can still sign in, add an address on the Account page so a reset is possible later. If you cannot, email support@matchupcoach.gg - an account with no recorded address cannot be reset.';
+const RESET_SENT_MSG = 'If that username has that email address recorded on it, a reset link is on its way to that address. Nothing is sent to any other address.';
+
 // ---------- helpers ----------
 // Membership state shown to the frontend. earlyAccess is pinned false and the
 // legacy price fields describe the all-lanes monthly plan so cached pre-rework
@@ -172,7 +340,7 @@ const stripeId = (v) => (typeof v === 'string' && v) || (v && typeof v === 'obje
 function fulfillStripeSession(sid, sess) {
   if (fulfilled[sid]) return false;
   const key = sess.client_reference_id;
-  const u = users[key];
+  const u = has(users, key) ? users[key] : null;
   if (!u) return false;
   // Ordering guard: Stripe retries webhook deliveries for days. If a STALE
   // paid session (created before the currently-stored plan was purchased)
@@ -245,6 +413,11 @@ function fulfillStripeSession(sid, sess) {
   u.plan = planObj; saveJson('users.json', users);
   if (trimTo) trimRepeatTrial(u, planObj.subId, trimTo);
   if (oldSub && planObj.subId && oldSub !== planObj.subId && STRIPE_ON) cancelStripeSub(u, oldSub);
+  // Server-truth bottom of the funnel: a checkout actually unlocked a plan.
+  // Fulfillment is idempotent (the fulfilled[sid] guard above returns early),
+  // so the confirm call and the webhook for the same session count once.
+  // Plan/lane only, and only the fact that one happened.
+  countEvent('srv_checkout_done', { plan: PLAN_KEY_OF_TYPE[planObj.type] || '', lane: planObj.role || '' });
   return true;
 }
 // Cut a repeat trial (see fulfillStripeSession) with trial_end on the
@@ -299,7 +472,11 @@ function trialEligible(u) {
 }
 // trialEligible/trialDays are additive: the frontend shows "Start 7-day free
 // trial" only when the server says this account would actually get one.
-const publicUser = (u) => ({ name: u.name, plan: u.plan || null, google: !!u.google, trialEligible: trialEligible(u), trialDays: STRIPE_TRIAL_DAYS });
+// emailSet/emailHint are additive and only ever go back to that account's OWN
+// session (every publicUser caller is authenticated as that user). They let the
+// app say "reset goes to k•••@g•••.com" / "add an address" without the app ever
+// holding the address itself.
+const publicUser = (u) => ({ name: u.name, plan: u.plan || null, google: !!u.google, trialEligible: trialEligible(u), trialDays: STRIPE_TRIAL_DAYS, emailSet: !!u.email, emailHint: u.email ? maskEmail(u.email) : null });
 // Does this Checkout Session unlock the plan? 'paid' as always. A trial
 // checkout has nothing to charge today, so Stripe may complete it with
 // payment_status 'no_payment_required' — accept that ONLY for a subscription-
@@ -657,10 +834,10 @@ function authUser(req) {
   const h = req.headers.authorization || '';
   if (!h.startsWith('Bearer ')) return null;
   const tok = h.slice(7);
-  const s = sessions[tok];
+  const s = has(sessions, tok) ? sessions[tok] : null;
   if (!s) return null;
   if (s.exp < Date.now()) { delete sessions[tok]; saveJson('sessions.json', sessions); return null; }
-  const u = users[s.user];
+  const u = has(users, s.user) ? users[s.user] : null;
   if (u) u.key = s.user;
   return u || null;
 }
@@ -967,6 +1144,46 @@ async function handleApi(req, res, pathname, ip) {
   if (route === 'GET /api/health') return sendJson(res, 200, { ok: true, ts: Date.now() });
   if (route === 'GET /api/config') return sendJson(res, 200, Object.assign({ googleClientId: GOOGLE_CLIENT_ID || null, stripeEnabled: STRIPE_ON, trialDays: STRIPE_TRIAL_DAYS }, memberState()));
   if (route === 'GET /api/founders') return sendJson(res, 200, founderState());
+
+  // ---------- funnel counter: write ----------
+  // Tiny beacon. Body is {e:'<allow-listed name>', lane?:'top', plan?:'all'} and
+  // nothing else is read off the request — not the IP, not the user agent, not
+  // the session, not the referrer. Answers 204 with no body so navigator
+  // .sendBeacon and a plain fetch both work and neither waits on anything.
+  if (route === 'POST /api/ev') {
+    const b = await readBody(req);
+    const name = String(b.e || b.name || '');
+    // Allow-list, not a filter: an unknown (or server-only) name is refused
+    // outright rather than stored, so the key space can never be grown by a
+    // caller and no free text can reach the file.
+    if (!has(EV_NAMES, name)) return sendJson(res, 400, { error: 'Unknown event.' });
+    countEvent(name, { lane: String(b.lane || ''), plan: String(b.plan || '') });
+    res.writeHead(204); return res.end();
+  }
+
+  // ---------- funnel counter: read ----------
+  // No dashboard, no third party: curl the aggregate out with the shared
+  // secret. With EVENT_STATS_KEY unset this endpoint does not exist at all
+  // (404, same as any unknown path) — it is never open, not even briefly.
+  if (route === 'GET /api/ev/stats') {
+    if (!EVENT_STATS_KEY) return sendJson(res, 404, { error: 'No such endpoint.' });
+    const given = String(req.headers['x-metrics-key'] || '');
+    if (!given || !safeEq(given, EVENT_STATS_KEY)) return sendJson(res, 401, { error: 'Bad key.' });
+    evFlush(); // the file on disk and the answer agree
+    const q = (function () { try { return new URL(req.url, 'http://x').searchParams; } catch (e) { return new URLSearchParams(); } })();
+    const want = Math.max(1, Math.min(EV_KEEP_DAYS, parseInt(q.get('days'), 10) || 30));
+    const all = Object.keys(evStore.days).sort();
+    const days = {}, totals = {};
+    for (const d of all.slice(-want)) {
+      days[d] = evStore.days[d];
+      for (const k of Object.keys(evStore.days[d])) totals[k] = (has(totals, k) ? totals[k] : 0) + evStore.days[d][k];
+    }
+    return sendJson(res, 200, {
+      events: Object.keys(EV_NAMES), serverEvents: Object.keys(EV_SERVER_NAMES),
+      dailyCap: EV_DAILY_CAP, countedThisProcessToday: evCounted, capHit: evCounted >= EV_DAILY_CAP,
+      daysKept: all.length, totals, days
+    });
+  }
   if (route === 'GET /api/weekchamp') {
     // Tuesday-anchored UTC week index; the client maps index -> champion pool.
     const anchor = Date.UTC(2026, 5, 9); // Tue Jun 9 2026 — keep in sync with weekChamp() in the app
@@ -988,11 +1205,21 @@ async function handleApi(req, res, pathname, ip) {
     if (!/^[A-Za-z0-9 ._-]+$/.test(name)) return sendJson(res, 400, { error: 'Letters, numbers, spaces, dots and dashes only.' });
     if (pass.length < 6) return sendJson(res, 400, { error: 'Password needs at least 6 characters.' });
     if (pass.length > 128) return sendJson(res, 400, { error: 'Password must be 128 characters or fewer.' });
+    // Optional email. Optional on purpose: requiring one would cost signups on
+    // a site with 129 clicks to its name, and the account works without it. But
+    // it is the ONLY thing that makes a password reset possible (see the reset
+    // section), so an account without one is told so rather than promised a
+    // reset that cannot happen. A bad address is refused rather than stored
+    // silently, otherwise the account believes it has a reset path and doesn't.
+    const email = normEmail(b.email);
+    if (email && !emailOk(email)) return sendJson(res, 400, { error: 'That email address does not look right - check it, or leave it blank.' });
     const key = name.toLowerCase();
-    if (users[key]) return sendJson(res, 409, { error: 'That username is taken - sign in instead.' });
+    if (has(users, key)) return sendJson(res, 409, { error: 'That username is taken - sign in instead.' });
     const salt = newSalt();
     users[key] = { name, salt, hash: hashPw(pass, salt), plan: null, google: false, created: Date.now() };
+    if (email) users[key].email = email;
     saveJson('users.json', users);
+    countEvent('srv_signup');
     return sendJson(res, 200, { token: newSession(key), user: publicUser(users[key]) });
   }
 
@@ -1000,7 +1227,7 @@ async function handleApi(req, res, pathname, ip) {
     if (throttled(ip)) return sendJson(res, 429, { error: 'Too many attempts - wait a minute and try again.' });
     const b = await readBody(req);
     const key = String(b.name || '').trim().toLowerCase();
-    const u = users[key];
+    const u = has(users, key) ? users[key] : null;
     if (!u) return sendJson(res, 404, { error: 'No account found with that username - create one below.' });
     if (u.google && !u.hash) return sendJson(res, 400, { error: 'That account uses Google sign-in - use the Google button above.' });
     if (!safeEq(hashPw(String(b.pass || ''), u.salt), u.hash)) return sendJson(res, 401, { error: 'Wrong password - try again, or reset it below.' });
@@ -1043,6 +1270,110 @@ async function handleApi(req, res, pathname, ip) {
     const h = req.headers.authorization || '';
     if (h.startsWith('Bearer ')) { delete sessions[h.slice(7)]; saveJson('sessions.json', sessions); }
     return sendJson(res, 200, { ok: true });
+  }
+
+  // ---------- recovery address (Account page) ----------
+  // Read side: the account's own session asks what it has. Never the address
+  // itself, only "is one set" and a mask the owner can recognise.
+  if (route === 'GET /api/account/email') {
+    const u = authUser(req);
+    if (!u) return sendJson(res, 401, { error: 'Not signed in.' });
+    return sendJson(res, 200, {
+      emailSet: !!u.email, emailHint: u.email ? maskEmail(u.email) : null,
+      resetAvailable: !!u.email && RESET_OUTBOX_ON,
+      message: u.email
+        ? (RESET_OUTBOX_ON ? 'A password reset can be sent to this address.' : RESET_UNAVAILABLE_MSG)
+        : 'No email address is recorded, so this account cannot be password-reset. Add one to make a reset possible.'
+    });
+  }
+  // Write side. Setting or clearing the recovery address costs the CURRENT
+  // password: a stolen or borrowed session must not be able to point the reset
+  // path at an attacker's address, which would turn session theft into
+  // permanent account theft. Google-only accounts have no password to ask for;
+  // their address came from Google and re-authenticating is the Google button.
+  if (route === 'POST /api/account/email') {
+    if (throttled(ip)) return sendJson(res, 429, { error: 'Too many attempts - wait a minute and try again.' });
+    const u = authUser(req);
+    if (!u) return sendJson(res, 401, { error: 'Not signed in.' });
+    const b = await readBody(req);
+    if (u.hash && !safeEq(hashPw(String(b.pass || ''), u.salt), u.hash)) {
+      return sendJson(res, 401, { error: 'Wrong password - enter your current password to change this.' });
+    }
+    const email = normEmail(b.email);
+    if (email && !emailOk(email)) return sendJson(res, 400, { error: 'That email address does not look right.' });
+    if (email) users[u.key].email = email; else delete users[u.key].email;
+    saveJson('users.json', users);
+    // Any reset token already outstanding was issued to the OLD address.
+    let dropped = false;
+    for (const h of Object.keys(resets)) if (resets[h] && resets[h].user === u.key) { delete resets[h]; dropped = true; }
+    if (dropped) saveJson('resets.json', resets);
+    return sendJson(res, 200, {
+      user: publicUser(users[u.key]), emailSet: !!email, emailHint: email ? maskEmail(email) : null,
+      message: email
+        ? (RESET_OUTBOX_ON ? 'Saved. A password reset can now be sent to that address.' : 'Saved. ' + RESET_UNAVAILABLE_MSG)
+        : 'Removed. With no address recorded, this account cannot be password-reset.'
+    });
+  }
+
+  // ---------- password reset ----------
+  // Step 1: ask for a reset. Username AND the address recorded on that account
+  // must both match, and the answer is the SAME whether they did or not, so
+  // this cannot be used to discover which usernames exist or what address an
+  // account carries. The token is never in the response.
+  if (route === 'POST /api/reset/request') {
+    if (throttled(ip)) return sendJson(res, 429, { error: 'Too many attempts - wait a minute and try again.' });
+    const b = await readBody(req);
+    const key = String(b.name || '').trim().toLowerCase();
+    const email = normEmail(b.email);
+    // No channel to deliver a token over: say so plainly instead of minting a
+    // token nobody can receive. Same answer for every input, as above.
+    if (!RESET_OUTBOX_ON) return sendJson(res, 200, { ok: false, sent: false, message: RESET_UNAVAILABLE_MSG });
+    const u = has(users, key) ? users[key] : null;
+    const match = !!u && !!u.email && !!email && u.email === email && !!u.hash;
+    if (match) {
+      if (resetSweep()) saveJson('resets.json', resets);
+      const token = newToken();
+      const exp = Date.now() + RESET_TTL_MS;
+      if (deliverResetToken(key, token, exp)) {
+        resets[sha256(token)] = { user: key, exp };
+        saveJson('resets.json', resets);
+      }
+    }
+    return sendJson(res, 200, { ok: true, sent: true, message: RESET_SENT_MSG, expiresInMinutes: RESET_TTL_MS / 60e3 });
+  }
+  // Step 2: is this token still good? Used by the reset page before it shows a
+  // new-password field. Does not consume the token.
+  if (route === 'POST /api/reset/verify') {
+    if (throttled(ip)) return sendJson(res, 429, { error: 'Too many attempts - wait a minute and try again.' });
+    const b = await readBody(req);
+    const rh = sha256(String(b.token || ''));
+    const rec = has(resets, rh) ? resets[rh] : null;
+    if (!rec || !(rec.exp > Date.now()) || !has(users, rec.user)) return sendJson(res, 400, { error: 'That reset link has expired or already been used - request a new one.' });
+    return sendJson(res, 200, { ok: true, name: users[rec.user].name, expires: rec.exp });
+  }
+  // Step 3: spend the token and set the new password. One use, and every
+  // existing session for that account is dropped — a reset has to evict
+  // whoever prompted it, or the reset achieves nothing.
+  if (route === 'POST /api/reset/confirm') {
+    if (throttled(ip)) return sendJson(res, 429, { error: 'Too many attempts - wait a minute and try again.' });
+    const b = await readBody(req);
+    const h = sha256(String(b.token || ''));
+    const rec = has(resets, h) ? resets[h] : null;
+    if (!rec || !(rec.exp > Date.now()) || !has(users, rec.user)) return sendJson(res, 400, { error: 'That reset link has expired or already been used - request a new one.' });
+    const pass = String(b.pass || '');
+    if (pass.length < 6) return sendJson(res, 400, { error: 'Password needs at least 6 characters.' });
+    if (pass.length > 128) return sendJson(res, 400, { error: 'Password must be 128 characters or fewer.' });
+    const uk = rec.user;
+    const salt = newSalt();
+    users[uk].salt = salt;
+    users[uk].hash = hashPw(pass, salt);
+    saveJson('users.json', users);
+    delete resets[h];
+    resetSweep();
+    saveJson('resets.json', resets);
+    for (const t of Object.keys(sessions)) if (sessions[t] && sessions[t].user === uk) delete sessions[t];
+    saveJson('sessions.json', sessions);
+    return sendJson(res, 200, { ok: true, message: 'Password changed. Sign in with your new password - any other devices were signed out.' });
   }
 
   // ---------- matchup comments (per-matchup discussion thread) ----------
@@ -1174,9 +1505,9 @@ async function handleApi(req, res, pathname, ip) {
     if (STRIPE_ON) return sendJson(res, 403, { error: 'Checkout is handled by Stripe - use the payment page.' });
     if (PAYMENTS_MODE === 'off') return sendJson(res, 503, { error: 'Payments are temporarily unavailable - try again shortly.' });
     const db = await readBody(req);
-    const planKey = PLANS[db.plan] ? db.plan : 'all';
+    const planKey = has(PLANS, db.plan) ? db.plan : 'all';
     const spec = PLANS[planKey];
-    const demoRole = ROLES[db.role] ? db.role : 'top';
+    const demoRole = has(ROLES, db.role) ? db.role : 'top';
     // Same guard as the real Stripe checkout — the demo must mirror it.
     const demoGuardErr = repurchaseBlock(u.plan, planKey, planKey === 'lane' ? demoRole : '');
     if (demoGuardErr) return sendJson(res, 400, { error: demoGuardErr });
@@ -1209,9 +1540,9 @@ async function handleApi(req, res, pathname, ip) {
     if (!u) return sendJson(res, 401, { error: 'Sign in to check out.' });
     if (!STRIPE_ON) return sendJson(res, 503, { error: 'Payments are not switched on yet.' });
     const cb = await readBody(req);
-    const planKey = PLANS[cb.plan] ? cb.plan : 'all';
+    const planKey = has(PLANS, cb.plan) ? cb.plan : 'all';
     const spec = PLANS[planKey];
-    const role = planKey === 'lane' ? (ROLES[cb.role] ? cb.role : '') : '';
+    const role = planKey === 'lane' ? (has(ROLES, cb.role) ? cb.role : '') : '';
     if (planKey === 'lane' && !role) return sendJson(res, 400, { error: 'Pick a lane for the Lane Pass.' });
     const guardErr = repurchaseBlock(u.plan, planKey, role);
     if (guardErr) return sendJson(res, 400, { error: guardErr });
@@ -1236,7 +1567,8 @@ async function handleApi(req, res, pathname, ip) {
     // trial. Two checkout tabs opened while eligible can both complete as
     // trials; the second replaces the first (upgrade path), so the most extra
     // free time possible is the <=24h a Checkout Session stays open.
-    if (trialEligible(u)) {
+    const willTrial = trialEligible(u);
+    if (willTrial) {
       params['subscription_data[trial_period_days]'] = STRIPE_TRIAL_DAYS;
       params['metadata[trial]'] = '1';
       if (STRIPE_TRIAL_NO_CARD) {
@@ -1244,6 +1576,47 @@ async function handleApi(req, res, pathname, ip) {
         params['subscription_data[trial_settings][end_behavior][missing_payment_method]'] = 'cancel';
       }
     }
+    // ---- Reassurance on the Stripe page ----
+    // The session used to be created bare: no custom_text, no consent, no
+    // prefilled email. A stranger's card page with no statement of what happens
+    // next is where a $1.99 subscription dies. Every sentence below is checked
+    // against the published pages and says nothing they do not:
+    //   trial          terms.html §4 "Free trial": 7 days, card required, "We do
+    //                  not charge it during the trial", plan starts automatically
+    //   cancel         terms.html §5: cancel any time from the Account page;
+    //                  takes effect at the end of the period; access until then
+    //   money-back     refund.html §1: FIRST subscription payment, 7 days,
+    //                  email support and it is refunded in full — once per
+    //                  customer, so it is only claimed on a first subscription
+    // No dollar amount is restated here on purpose: Stripe already shows the
+    // authoritative amount on the same page, and a second copy in our own text
+    // is one more thing that can drift out of step with the price ID.
+    const lines = [];
+    if (willTrial) {
+      lines.push(STRIPE_TRIAL_NO_CARD
+        ? 'Free for ' + STRIPE_TRIAL_DAYS + ' days. Nothing is charged today.'
+        : 'Free for ' + STRIPE_TRIAL_DAYS + ' days - your card is not charged during the trial. When the trial ends your plan starts automatically and renews until you cancel.');
+    } else {
+      lines.push('Your plan starts today and renews automatically until you cancel.');
+    }
+    lines.push('Cancel any time from your Account page. Cancelling takes effect at the end of the current period and you keep access until then.');
+    // refund.html §1: the guarantee is once per customer, on the first payment
+    // of a FIRST subscription. An upgrade or a returning subscriber is neither,
+    // so they are not told they have it.
+    if (!u.plan && !u.pastPlan) {
+      lines.push('Your first payment is covered by our 7-day money-back guarantee: email support@matchupcoach.gg within 7 days of it and we will refund it in full.');
+    }
+    params['custom_text[submit][message]'] = lines.join(' ').slice(0, 1200);
+    // Terms checkbox, pointing at the live page. Stripe renders the checkbox
+    // and takes the ToS URL from the account's public business information;
+    // this message carries the actual link so the buyer can read it from here.
+    params['consent_collection[terms_of_service]'] = 'required';
+    params['custom_text[terms_of_service_acceptance][message]'] =
+      ('I agree to the MatchupCoach.gg [Terms of Service](' + PUBLIC_URL + '/terms) and [Refund Policy](' + PUBLIC_URL + '/refund).').slice(0, 1200);
+    // Prefill the email when the account records one, so the buyer does not
+    // retype it. Stripe rejects customer_email together with an existing
+    // customer (the customer already carries the address), so it is only sent
+    // when we are not reusing one.
     // Reuse the buyer's existing Stripe customer so an upgrade's new
     // subscription lands on the SAME customer as the old one — that keeps the
     // billing portal able to show (and cancel) everything they're paying for.
@@ -1251,8 +1624,23 @@ async function handleApi(req, res, pathname, ip) {
     // auto-cancel left an orphaned sub the portal could never reach.
     const existingCust = u.plan && typeof u.plan.custId === 'string' && /^cus_/.test(u.plan.custId) ? u.plan.custId : '';
     if (existingCust) params.customer = existingCust;
+    else if (u.email && emailOk(u.email)) params.customer_email = u.email;
     try {
       let r = await stripeApi('POST', '/v1/checkout/sessions', params);
+      // consent_collection[terms_of_service]='required' needs a Terms of
+      // service link set in Stripe's public business information. If that has
+      // not been filled in yet, Stripe refuses the session — and a checkout
+      // that 400s is far worse than a checkout without a tick box. So on that
+      // one specific complaint, drop the consent fields and try again; the
+      // custom_text reassurance and the /terms link in it still stand.
+      const consentUnset = r.status >= 400 && r.json && r.json.error &&
+        (/consent_collection/.test(r.json.error.param || '') || /terms.of.service/i.test(r.json.error.message || ''));
+      if (consentUnset) {
+        logStripeErr('POST /api/stripe/checkout consent_collection (set the Terms of service URL in Stripe public business info)', r);
+        delete params['consent_collection[terms_of_service]'];
+        delete params['custom_text[terms_of_service_acceptance][message]'];
+        r = await stripeApi('POST', '/v1/checkout/sessions', params);
+      }
       // Stale/deleted customer id must not block a purchase — retry fresh.
       // ONLY for that cause (resource_missing): retrying every 4xx/5xx without
       // `customer` minted a duplicate Stripe customer on a transient 429/500,
@@ -1264,6 +1652,10 @@ async function handleApi(req, res, pathname, ip) {
         r = await stripeApi('POST', '/v1/checkout/sessions', params);
       }
       if (r.status >= 400 || !r.json.url) return sendJson(res, 502, { error: (r.json.error && r.json.error.message) || 'Stripe could not start checkout.' });
+      // Server-truth funnel step: a Stripe session really was created. Counted
+      // here rather than trusting the client's checkout_start, which an ad
+      // blocker can eat. Plan/lane only — no buyer, no id, no amount.
+      countEvent('srv_checkout_start', { plan: planKey, lane: role });
       return sendJson(res, 200, { url: r.json.url });
     } catch (e) { return sendJson(res, 502, { error: 'Could not reach Stripe.' }); }
   }

@@ -172,7 +172,7 @@ window.GEN_MID_CFGS_4 = [
   aheadTpl:"Ahead, compound the interest: zone {E} off CS with Q threat, R every skirmish clump, and force the extended fights your kit literally banks.",
   behindTpl:"Behind, nothing changed: Q-farm, pool the dives, hit item timings — Vladimir from behind at 30 minutes is ahead; protect the curve and stop donating.",
   spikeName:"Riftmaker",
-  runeReport:"Phase Rush (kite/escape) or Predator roam builds; Manaflow replaced — take Nimbus Cloak + Transcendence, Scorch; secondary Resolve — Bone Plating + Overgrowth into dive.",
+  runeReport:"Phase Rush (kite/escape) or First Strike (roam builds); Manaflow replaced — take Nimbus Cloak + Transcendence, Scorch; secondary Resolve — Bone Plating + Overgrowth into dive.",
   summReport:"Flash + Ghost or Flash + Ignite — Ghost converts the drain-chase identity; Ignite turns the level-6 invert into a guarantee. TP if the lane is pure survival.",
   itemReport:"Start Doran's Shield or Ring + pots. Riftmaker into Sorcerer's/Swifties, then Cosmic Drive and Rabadon's. Zhonya's-Protobelt lines exist into dive — no mana items, ever.",
   jungleLine:"You set up ganks by existing — every {E} who plays correctly against Vlad shoves, and shoved lanes are gank lanes. Pool guarantees you survive the counter-gank math.",

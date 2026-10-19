@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology — MatchupCoach.gg</title>
+<meta name="description" content="Where MatchupCoach's win rates, stage windows and ability facts come from, the checks the build runs on them, and what the free and paid tiers include.">
+<link rel="canonical" href="https://matchupcoach.gg/methodology">
+<style>
+  body{margin:0;background:#0b0908;color:#cdd2dd;font-family:system-ui,-apple-system,Segoe UI,Manrope,sans-serif;line-height:1.7}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 90px}
+  h1{color:#f4efe8;font-size:32px;margin:0 0 4px}
+  h2{color:#f0cd72;font-size:19px;margin:36px 0 8px}
+  h3{color:#e7e2d8;font-size:15px;margin:20px 0 6px}
+  a{color:#46c6f5}
+  ul{padding-left:20px}
+  li{margin:5px 0}
+  .muted{color:#8a90a2;font-size:13px}
+  .box{background:#11131c;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;margin:18px 0}
+  strong{color:#eef0f6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Methodology</h1>
+  <p class="muted">MatchupCoach.gg · Matchup data reviewed on patch 26.15 · Win rates sampled July 2026 · Last updated: September 23, 2026</p>
+
+  <p>This page says where every number and every ability fact on a matchup guide comes from, and what the site checks before a page is allowed to publish. It describes what the code actually does. If something here does not match what you see on a guide, that is a bug worth reporting — see <a href="#errors">Reporting an error</a> at the bottom.</p>
+
+  <h2>1. Where the win rates come from</h2>
+  <p>Lane win rates are sampled from <strong>lolalytics</strong>, restricted to <strong>Emerald rank and above</strong>. The sample was taken in <strong>July 2026</strong>, and the written content is reviewed against <strong>patch 26.15</strong>. Both of those facts are printed directly under the heading of every guide, so you never have to come here to find out how old a number is.</p>
+  <p>Every guide also shows the <strong>number of games</strong> behind its win rate. A percentage over a few hundred games and a percentage over a few tens of thousands are not the same claim, and the site does not hide the difference.</p>
+  <div class="box">
+    <p><strong>The dates do not move when the site is rebuilt.</strong> The sample date and the "data updated" date change only when the underlying matchup data genuinely changes. Rebuilding the 12,000-odd pages does not touch them. A date that ticked forward on every deploy would be a false freshness signal to search engines and a false "updated" line to you.</p>
+  </div>
+
+  <h2>2. Both directions of a matchup share one number</h2>
+  <p>A matchup has two pages: Darius vs Garen and Garen vs Darius. Each one starts from a separate data pull — Darius's sample of that lane, and Garen's. Published raw, those two samples can both read above 50%, and then the two pages contradict each other.</p>
+  <p>So the site does not publish either raw number. It <strong>pools the two samples into one figure</strong>, weighted by how many games each side contributed, with the opposing side's number flipped first. That one figure is computed once per pair and then used everywhere it appears: the verdict at the top of the page, the hardest/easiest lists, and the champion hub table. The result is that the two directions of a matchup are exact complements by construction, and both cite the same combined game count. They cannot disagree.</p>
+  <ul>
+    <li><strong>Top lane is counted once, not twice.</strong> In the top-lane data the reverse direction is stored as the exact complement of the <em>same</em> sample — identical game count, win rates summing to 100. There is nothing to pool there, so the games are counted once rather than added to themselves.</li>
+    <li><strong>A win rate with no games behind it is treated as unknown.</strong> A few entries carry a flat percentage with no sample attached. That is a placeholder, not a measurement, so the build discards it and the page falls back to the stage-window wording below instead of printing a number nobody measured.</li>
+  </ul>
+  <h3>What counts as a counter</h3>
+  <p>One rule decides the wording everywhere on a page, so the verdict, the "does X counter Y?" answer, the "is this a skill matchup?" answer and the hub's favour column can never say different things:</p>
+  <ul>
+    <li><strong>Counter</strong> — 5 points or more of edge (55% / 45% or wider).</li>
+    <li><strong>Leans</strong> — between 0.75 and 5 points.</li>
+    <li><strong>Even</strong> — inside 0.75 points either way.</li>
+  </ul>
+  <p>A 52% lane is an edge, not a counter, and the site will not call it one.</p>
+
+  <h2>3. What a "stage window" is</h2>
+  <p>A win rate tells you how a lane ends, not when it is decided. Every lane guide also carries a seven-row table that splits the lane into the moments where the advantage actually changes hands:</p>
+  <ul>
+    <li>Level 1</li>
+    <li>Level 2</li>
+    <li>Level 3</li>
+    <li>Levels 4-5</li>
+    <li>Level 6</li>
+    <li>First item</li>
+    <li>Two or more items</li>
+  </ul>
+  <p>Each row names the champion the lane favours in that window — or marks it <strong>Even / skill</strong> when neither side has a structural advantage — and gives one line saying why. The table is read from the seat of the first-named champion, which is the champion you are playing on that page.</p>
+  <p>Two rules keep the table honest against the number above it:</p>
+  <ul>
+    <li><strong>The windows never overrule the sample.</strong> When the table leans one way and the pooled win rate leans the other, the page prints a line under the table saying so in plain words — this is your own plan, and across the pooled games the lane is something else. It does not quietly pick whichever one sounds better.</li>
+    <li><strong>Disagreeing mirrors are dropped, not averaged.</strong> If a pair's two pages disagree about who leads the windows, the build refuses to use the window counts in the verdict at all and leans on the pooled number, which is shared by construction.</li>
+  </ul>
+
+  <h2>4. Why jungle guides have no win rate</h2>
+  <p>This site's data holds <strong>no Emerald+ win-rate sample for jungler-versus-jungler pairs</strong>. Jungle matchups are not a lane duel with a clean sample — the two junglers may barely meet — and inventing a number for them would be worse than having none.</p>
+  <p>So a jungle guide does not show a win rate anywhere. It ranks the matchup by <strong>who owns each of the seven windows</strong>, and by the first clear and the pathing that follows from it. The line directly under a jungle page's heading states that it carries no win-rate sample, rather than leaving a gap you have to interpret.</p>
+  <p>One build check guards this: for any pair of junglers, the two pages may not both declare their own jungler favoured. If they do, the build fails and nothing ships.</p>
+
+  <h2>5. Where the ability facts come from</h2>
+  <p>Ability names and cooldowns come from <strong>Riot's Data Dragon</strong> champion data (version 16.15.1), stored per champion in the site's kit files. Data Dragon is the authority: where the app's own written label for an ability disagrees with the kit file — usually because the label predates a rework — the kit name is what gets printed, so you see one spelling for an ability across the whole site.</p>
+  <h3>Removed runes and items cannot come back</h3>
+  <p>Riot retires runes and items, and old advice rots quietly. The build defends against that by reading the <strong>finished HTML of every page</strong> — the one place the written content, the rune and build cards and the jungle reports all end up together — and searching it for 16 retired rune and item names. The tolerance is zero: if any of them appears on any page, the build fails and names the file the text came from, so the deploy stops and the previous site stays live. The same build refuses to publish a page whose advice is only a placeholder.</p>
+
+  <h2>6. What is free and what a membership adds</h2>
+  <h3>Free for everyone, no account</h3>
+  <p><strong>Today's iconic matchups</strong> — one matchup for each of the five roles (top, jungle, mid, bot, support), five in all, free to read in full every day. Both directions of each one are open, so you can read it from either champion's seat. The set rotates daily through a pool of the best-known rivalries in each role, which are also the guides that get the deepest and most carefully checked writing.</p>
+  <h3>Free account</h3>
+  <p>A free account adds <strong>one matchup of your own choice per day</strong> on top of the five iconic ones. Nothing is charged and no card is involved.</p>
+  <h3>Membership</h3>
+  <p>A membership removes the daily limit: every matchup, every day, including the runes and build card, the full stage-by-stage plan and the rest of each guide. A Lane Pass covers one lane of your choice; All Lanes covers all five. First-time members can start any plan with a 7-day free trial, and you can cancel at any time from your <a href="/account">Account page</a>. Current prices are shown at checkout and in our <a href="/terms">Terms</a>.</p>
+
+  <h2>7. What this is not</h2>
+  <div class="box">
+    <p>These guides are information and analysis, not a promise. The win rates are a sample of past games at one rank band on one patch, not a prediction of yours, and no page here claims that reading it will raise your rank. Game balance moves, and a page is only as current as the sample date and patch printed on it.</p>
+  </div>
+  <p>MatchupCoach.gg is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</p>
+
+  <h2 id="errors">8. Reporting an error</h2>
+  <p>If a guide states a cooldown, an ability name, a rune, an item or a win rate that you can show is wrong, send it to <a href="mailto:support@matchupcoach.gg">support@matchupcoach.gg</a>. Please include <strong>the page URL</strong> and <strong>the exact sentence</strong>, and what it should say instead. Data-level corrections are fixed at the source and reach every page that repeats them on the next build.</p>
+
+  <p class="muted" style="margin-top:40px"><a href="/">← Back to MatchupCoach</a> · <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a> · <a href="/refund">Refund</a> · <a href="/cookies">Cookies</a> · <a href="/contact">Contact</a></p>
+  <p class="muted"><a href="/matchup/">All matchup guides</a> · <a href="/matchup/top/">Top</a> · <a href="/matchup/mid/">Mid</a> · <a href="/matchup/bot/">Bot</a> · <a href="/matchup/support/">Support</a> · <a href="/matchup/jungle/">Jungle</a></p>
+</div>
+</body>
+</html>

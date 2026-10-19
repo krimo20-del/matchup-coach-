@@ -131,6 +131,14 @@
 <!-- Google Sign-In client ID (public/safe to ship). Hardcoded so the
      "Continue with Google" button renders even when the page is served
      statically / the /api/config call isn't reachable on this origin. -->
+<script>
+/* FREE FOR ALL — set 2026-10-19. Every matchup, every lane, the jungle tracker: free,
+   no account, no card. Flip this to false to put the paywall back exactly as it was;
+   each gate below reads it rather than being deleted, so nothing has to be rebuilt.
+   The Stripe/plan code is intentionally left in place so the one existing subscriber
+   keeps their Account page and their Cancel button. */
+window.MC_FREE_FOR_ALL = true;
+</script>
 <script>window.MC_GOOGLE_CLIENT_ID = "993471719983-g8fkkrqom5ap0f7pdf7tkg63v86d77l4.apps.googleusercontent.com";
 // Release version — bump this ONE line each batched deploy (v2.5, v2.6…).
 // Logged to console so you can confirm which build is actually live after publishing.
@@ -1495,7 +1503,7 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
       <sc-if value="{{ hasHeroErr }}" hint-placeholder-val="{{ false }}">
         <div style="margin:10px auto 0; max-width:740px; font-size:12.5px; font-weight:700; color:#ff8b96;">{{ heroErr }}</div>
       </sc-if>
-      <sc-if value="{{ showFounderOffer }}" hint-placeholder-val="{{ true }}"><div style="margin-top:12px; font-size:12.5px; color:#7d8499;">{{ heroPlanLine }}</div></sc-if>
+      <div style="margin-top:12px; font-size:12.5px; color:#7d8499;">{{ heroPlanLine }}</div>
       </div>
     </section>
 
@@ -1623,26 +1631,6 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
             </sc-for>
           </div>
           </sc-if>
-          <!-- daily free pick: one matchup of the account's choice per UTC day.
-               Below the iconic tiles, so the header above describes only them. -->
-          <div style="display:flex; align-items:center; gap:10px 14px; flex-wrap:wrap; margin-top:16px; padding:12px 14px; border-radius:14px; border:1px solid rgba(232,184,75,0.35); background:linear-gradient(180deg,rgba(232,184,75,0.08),#0d0f16);">
-            <span style="flex:0 0 auto; font-family:'Chakra Petch',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.6px; color:#f0cd72; padding:3px 8px; border-radius:6px; background:rgba(240,205,114,0.1); border:1px solid rgba(240,205,114,0.35); white-space:nowrap;">DAILY FREE PICK</span>
-            <sc-if value="{{ freePickOut }}" hint-placeholder-val="{{ false }}">
-              <span style="flex:1 1 220px; min-width:0; font-size:13px; line-height:1.45; color:#e8dcc2; font-weight:600;">Create a free account and pick any other matchup free every day.</span>
-              <button onClick="{{ freePickSignup }}" style="flex:0 0 auto; min-height:42px; padding:9px 16px; border-radius:10px; cursor:pointer; background:linear-gradient(180deg,#f3cf6e,#e8b84b); border:1px solid rgba(232,184,75,0.9); color:#1a1303; font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;">Create free account</button>
-            </sc-if>
-            <sc-if value="{{ freePickOpen }}" hint-placeholder-val="{{ false }}">
-              <span style="flex:1 1 220px; min-width:0; font-size:13px; line-height:1.45; color:#e8dcc2; font-weight:600;">Pick any matchup — your free one today is still available.</span>
-              <button onClick="{{ chooseFreePick }}" style="flex:0 0 auto; min-height:42px; padding:9px 16px; border-radius:10px; cursor:pointer; background:rgba(232,184,75,0.1); border:1px solid rgba(232,184,75,0.55); color:#f0cd72; font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;" style-hover="background:rgba(232,184,75,0.18); border-color:rgba(232,184,75,0.85);">Choose a matchup ↑</button>
-            </sc-if>
-            <sc-if value="{{ freePickUsed }}" hint-placeholder-val="{{ false }}">
-              <span style="flex:1 1 220px; min-width:0; display:flex; flex-direction:column; gap:2px;">
-                <span style="font-size:13px; line-height:1.45; color:#e8dcc2; font-weight:600;">Your free pick today: <span style="color:#fff; font-weight:800;">{{ freePickLabel }}</span></span>
-                <span style="font-size:11.5px; color:#8a90a2;">Your next free pick unlocks in <span style="white-space:nowrap;">{{ freePickCountdown }}</span></span>
-              </span>
-              <button onClick="{{ openFreePick }}" style="flex:0 0 auto; min-height:42px; padding:9px 16px; border-radius:10px; cursor:pointer; background:rgba(61,220,151,0.1); border:1px solid rgba(61,220,151,0.5); color:#7fe3b8; font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;" style-hover="background:rgba(61,220,151,0.18); border-color:rgba(61,220,151,0.8);">Open it →</button>
-            </sc-if>
-          </div>
         </div>
         </sc-if>
 
@@ -2590,11 +2578,11 @@ try { console.log("%cMatchupCoach " + window.MC_VERSION, "color:#46c6f5;font-wei
     <section style="margin-top:30px;">
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px; flex-wrap:wrap;">
         <span style="display:inline-flex; align-items:center; gap:7px; padding:5px 12px; border-radius:999px; background:linear-gradient(180deg,rgba(232,184,75,0.18),rgba(232,184,75,0.06)); border:1px solid rgba(232,184,75,0.42); color:#f0cd72; font-size:11px; font-weight:700; letter-spacing:0.7px; font-family:'Chakra Petch',sans-serif;">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11V8a5 5 0 0 1 9.9-1"></path><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M12 15v2"></path></svg>
-          ADVANCED TIER · UNLOCKED
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 6.2L21 10.3l-4.8 4.3 1.3 6.4L12 17.8 6.5 21l1.3-6.4L3 10.3l6.6-1.1z"></path></svg>
+          DEEP DIVE
         </span>
-        <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:21px;">Ultimate {{ champA.name }} Pass</span>
-        <span style="font-size:13px; color:#8a90a2;">Everything below is included with your membership.</span>
+        <span style="font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:21px;">Ultimate {{ champA.name }} Deep Dive</span>
+        <span style="font-size:13px; color:#8a90a2;">Everything below is free, like the rest of the site.</span>
       </div>
     </section>
 
@@ -4676,7 +4664,7 @@ class Component extends DCLogic {
     // legacy) — terms.html §4. Never send it straight into a checkout that bills
     // today: show the plans again (plain buy labels for this account) so the
     // member chooses knowingly.
-    if (pp && pp !== 'free' && u && u.trialEligible !== true && (this.state.trialDays | 0) > 0) {
+    if (!window.MC_FREE_FOR_ALL && pp && pp !== 'free' && u && u.trialEligible !== true && (this.state.trialDays | 0) > 0) {
       // An account that already holds a plan changes it from Account (no paywall pitch).
       if (u.plan) this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '', view: 'home', payInfo: 'You’re signed in. Your account already has a plan, so nothing was bought — you can change it any time in Account.' });
       else this.setState({ user: u, auPass: '', auPass2: '', auErr: '', auNotice: '', pendingPlan: '', view: 'home', showPaywall: true, payInfo: 'This account has already used its free trial or had a membership, so plans start billing today. Pick a plan to continue.' });
@@ -5081,6 +5069,9 @@ class Component extends DCLogic {
     return pending.role || this.state.role || 'top';
   }
   _gated(pending) {
+    // FREE FOR ALL: nothing is gated. Everything below is the old plan logic, kept so
+    // flipping window.MC_FREE_FOR_ALL back to false restores it untouched.
+    if (window.MC_FREE_FOR_ALL) return false;
     // Access requires a plan that covers the lane being opened. Signed-out
     // users create an account first; signed-in users without (enough) plan see
     // the plan picker. pendingMU resumes the exact matchup after purchase.
@@ -5739,7 +5730,7 @@ class Component extends DCLogic {
   goHome() { this.setState({ view: 'home', homeStep: 'role', role: '', myChamp: '', enemyChamp: '', search: '', enemyJg: '' }); this._top(); this._nav(); }
   setJg(k) { this.setState(s => ({ enemyJg: s.enemyJg === k ? '' : k })); }
   setMyJg(k) { this.setState(s => ({ myJg: s.myJg === k ? '' : k })); }
-  openPaywall() { this.setState({ showPaywall: true }); }
+  openPaywall() { if (window.MC_FREE_FOR_ALL) return; this.setState({ showPaywall: true }); }
   closePaywall() { this.setState({ showPaywall: false }); }
   setRole(r) { this.setState({ role: r, homeStep: 'you', search: '' }); }
   pickYou(c) { this.setState({ myChamp: c, homeStep: 'enemy', search: '' }); }
@@ -8416,7 +8407,7 @@ class Component extends DCLogic {
     // The full tracker is a jungle entitlement: jungle Lane Pass, all-lanes,
     // or legacy full-access. A $1.99 TOP pass gets the one-per-group preview —
     // exactly what the paywall's 'Jungle tracker teasers' perk promises.
-    const jgHomeLocked = !(this.state.user && this.state.user.plan && this._planCovers(this.state.user.plan, 'jungle'));
+    const jgHomeLocked = !window.MC_FREE_FOR_ALL && !(this.state.user && this.state.user.plan && this._planCovers(this.state.user.plan, 'jungle'));
     // Distinct entries, not keys — JI.nunuwillump is an alias of JI.nunu.
     const jgDistinct = Object.keys(JI).filter((k, i, ks) => ks.findIndex(j => JI[j] === JI[k]) === i).length;
     const jgLockedCount = Math.max(0, jgDistinct - FREE_JG.length);
@@ -8897,7 +8888,7 @@ class Component extends DCLogic {
           acErr: st.acErr,
           acRetry: () => self.loadAccount(),
           acShowPlan: onAccount && !!U && hasPlan,
-          acShowFree: onAccount && !!U && !!S && !hasPlan,
+          acShowFree: !window.MC_FREE_FOR_ALL && onAccount && !!U && !!S && !hasPlan,
           acPlanName: planName,
           acHasPrice: !!priceLine, acPriceLine: priceLine,
           acBadgeKind: kind, acBadgeText: badge,
@@ -8964,7 +8955,7 @@ class Component extends DCLogic {
         };
       })(this),
       // Existing members must not be shown the plan-picker pitch.
-      showFounderOffer: !(this.state.user && this.state.user.plan),
+      showFounderOffer: !window.MC_FREE_FOR_ALL && !(this.state.user && this.state.user.plan),
       cmtSignedIn: !!this.state.user,
       cmtSignedOut: !this.state.user,
       cmtText: this.state.cmtText,
@@ -9019,7 +9010,7 @@ class Component extends DCLogic {
           auShowGoogle: m !== 'forgot' && !!st.googleClientId, auShowPass: m !== 'forgot',
           authTitle: m === 'login' ? 'Welcome back' : m === 'signup' ? 'Create your account' : 'Reset your password',
           // Signing up to buy a plan (pendingPlan) while trials are on: say what the account is for.
-          authSub: m === 'login' ? (st.acPending ? 'Sign in to see your plan, update your card, change plans or cancel.' : 'Sign in to keep your matchup prep in one place.') : m === 'signup' ? ((st.pendingPlan && st.pendingPlan !== 'free' && self._trialOffer()) ? 'Create your free account to start your 7-day free trial.' : 'Free to join. Upgrade any time: Lane Pass $1.99/mo, All Lanes $3.99/mo, or $24.99/yr.') : 'Enter your username and we\u2019ll send a reset link to its email.',
+          authSub: m === 'login' ? (st.acPending ? 'Sign in to see your plan, update your card, change plans or cancel.' : 'Sign in to keep your matchup prep in one place.') : m === 'signup' ? ((st.pendingPlan && st.pendingPlan !== 'free' && self._trialOffer()) ? 'Create your free account to start your 7-day free trial.' : (window.MC_FREE_FOR_ALL ? 'Everything is already free — an account just keeps your matchup prep and comments in one place.' : 'Free to join. Upgrade any time: Lane Pass $1.99/mo, All Lanes $3.99/mo, or $24.99/yr.')) : 'Enter your username and we\u2019ll send a reset link to its email.',
           authCancelLine: self._trialOffer() ? 'Cancel anytime in Account \u2014 you keep access until the end of your free trial or billing period, and you\u2019re never charged if you cancel during the trial.' : 'Cancel anytime \u2014 you keep full access until the end of the billing period.',
           auName: st.auName, setAuName: (e) => self.setState({ auName: e.target.value }),
           auPass: st.auPass, setAuPass: (e) => self.setState({ auPass: e.target.value }),
@@ -9211,7 +9202,7 @@ class Component extends DCLogic {
       buyYearLabel: this._trialOffer() ? 'Start 7-day free trial' : 'Get the Annual Pass – $24.99/yr',
       laneStartLabel: this._trialOffer() ? 'START 7-DAY FREE TRIAL — PICK YOUR LANE' : 'PICK YOUR LANE TO START',
       trialLineLane: this._trialLine('lane'), trialLineAll: this._trialLine('all'), trialLineYear: this._trialLine('year'),
-      heroPlanLine: this._trialOffer() ? 'Start with a 7-day free trial — plans from $1.99/month below ↓' : 'Membership from $1.99/month — pick your plan below ↓',
+      heroPlanLine: window.MC_FREE_FOR_ALL ? 'Free — every matchup, every lane. No account, no card, nothing locked.' : (this._trialOffer() ? 'Start with a 7-day free trial — plans from $1.99/month below ↓' : 'Membership from $1.99/month — pick your plan below ↓'),
       laneOptions: ['top', 'jungle', 'mid', 'bot', 'support'].map(r => ({
         label: { top: 'Top', jungle: 'Jungle', mid: 'Mid', bot: 'Bot', support: 'Support' }[r],
         aria: (this._trialOffer() ? 'Start 7-day free trial — ' : 'Get the ') + { top: 'Top', jungle: 'Jungle', mid: 'Mid', bot: 'Bot', support: 'Support' }[r] + ' Lane Pass',
@@ -9348,9 +9339,9 @@ class Component extends DCLogic {
       showIconic: this.iconicTodayList().length > 0,
       // Home: the daily free pick, inside the same section (so plan holders
       // never see it). Three states: signed-out / pick unused / pick used.
-      freePickOut: !this.state.user,
-      freePickOpen: !!this.state.user && !this._freePickToday(),
-      freePickUsed: !!this.state.user && !!this._freePickToday(),
+      freePickOut: !window.MC_FREE_FOR_ALL && !this.state.user,
+      freePickOpen: !window.MC_FREE_FOR_ALL && !!this.state.user && !this._freePickToday(),
+      freePickUsed: !window.MC_FREE_FOR_ALL && !!this.state.user && !!this._freePickToday(),
       freePickLabel: this._freePickLabel(this._freePickToday()),
       chooseFreePick: () => this.chooseFreePick(),
       // Strip shown for 6s after a claim (sheet unlock or auto-claim at signup).
@@ -9845,6 +9836,7 @@ class Component extends DCLogic {
       jgHomeUnlocked: !jgHomeLocked,
       jgLockedCount: jgLockedCount,
       jgUnlock: () => {
+        if (window.MC_FREE_FOR_ALL) return;
         if (!this.state.user) {
           // Keep the purchase intent through signup (pendingPlan), or the new
           // account lands on home with the promised jungle offer lost.

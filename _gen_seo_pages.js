@@ -596,11 +596,12 @@ const FONT_LINKS = `<link rel="preconnect" href="https://fonts.googleapis.com">
 // prices sit underneath where they belong. The link target and rel are unchanged:
 // still the app's /open URL, still nofollow, because robots.txt disallows it.
 // Prices are the live ones and are written in exactly one place, here.
-const PRICES = 'Lane Pass $1.99/mo · All Lanes $3.99/mo · Annual $24.99/yr. Renews automatically — cancel anytime.';
+// 2026-10-19: the site is free, so there is no price line and no checkout reassurance
+// to print. The CTA no longer sells anything — it just opens the interactive version.
 function ctaHtml(openUrl) {
-  return `<a class="cta" rel="nofollow" href="${openUrl}">Unlock this matchup free →</a>
-  <p class="gate-free">A free account unlocks one matchup of your choice every day. Today's five iconic matchups — one per role, both directions — are free for everyone, with no account at all. Members read every matchup from $1.99/month, and a new member's first 7 days are free.</p>
-  <p class="gate-note">🔒 Secure checkout · 💰 7-day free trial for new members, and a 7-day money-back guarantee on your first payment · ✋ Cancel anytime<br>${PRICES}</p>`;
+  return `<a class="cta" rel="nofollow" href="${openUrl}">Open the interactive guide →</a>
+  <p class="gate-free">Free — every matchup, every lane, the full build and rune pages and the enemy jungle tracker. No account, no card, nothing locked.</p>
+  <p class="gate-note">Win rates sampled ${WR_SAMPLED} · <a href="/methodology">how these guides are built</a></p>`;
 }
 
 // ---------- publisher identity ----------

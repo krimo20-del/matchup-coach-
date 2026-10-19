@@ -25,8 +25,16 @@ All 4 lanes: 0 diff inconsistencies, 0 phase-side contradictions. Allowed mirror
 ## Conventions
 - Fonts: Chakra Petch (headers) · Manrope (body). Dark UI: #0d0f16 bg / #11131c cards.
 - Ability colours: Q #46c6f5 · W #9b8cff · E #e8b84b · R #ff5d6c · AA/summoner #c7ccdb.
-- Plans (live): $1.99/mo one lane · $3.99/mo all lanes · $24.99/yr all lanes. The old note here
-  said "$2.99/month after launch, beta users get lifetime free access" — both are stale.
+- **THE SITE IS FREE (2026-10-19, Kris's call).** One switch, `window.MC_FREE_FOR_ALL` in
+  `MatchupCoach.dc.html`, declared next to `MC_GOOGLE_CLIENT_ID`. Every gate reads it instead of
+  having been deleted — `_gated`, `showFounderOffer`, `acShowFree`, `freePick*`, `openPaywall`,
+  `jgHomeLocked`, `jgUnlock`, the post-signup plan pitch — so flipping it to `false` restores the
+  paywall exactly. Static guides carry no price and no checkout copy; `index.html` ld+json
+  advertises a $0 Offer with `isAccessibleForFree`. Terms §4 and the Refund policy carry a notice
+  that no new subscriptions are sold. Stripe and the plan code are deliberately left in place so
+  pre-existing subscribers keep Account and Cancel. Never re-add a price to a page without Kris.
+- Plans (dormant, not sold): $1.99/mo one lane · $3.99/mo all lanes · $24.99/yr all lanes. The old
+  note here said "$2.99/month after launch, beta users get lifetime free access" — both are stale.
   Lifetime is NO LONGER SOLD, but legacy member/founder/champ holders still exist and are
   actively protected: the app mirrors a server repurchase guard so a lifetime founder cannot
   buy a yearly plan and lose lifetime access, and server.js tracks them in founders.json.
